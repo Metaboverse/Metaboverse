@@ -1,0 +1,5 @@
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+/*.pyc
+*__pycache__*
+.DS_Store
