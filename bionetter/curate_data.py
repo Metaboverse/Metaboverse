@@ -18,13 +18,18 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import pandas as pd
+import numpy as np
+from pandas.core.base import PandasObject
 from sklearn import preprocessing
 
-from bionetter.utils import file_path, check_suffix
+from bionetter.utils import file_path, check_suffix, add_data, format_data, format_times, even_spacing, ratio_spacing, sort_columns
 
-# Generate list of dataframes
-# Dataframe is assumed to have columns as sample names and
-class dataContainer:
+# Generate dataframe collection
+# Dataframe is assumed to have columns as sample names and analytes as rows
+# Dataframe is assumed to be library, etc. normalized previously
+# If using riboseq data, TE must already be calculated
+# Base treatment is considered
+class dataContainer():
 
     # Initialize data container with possible dataframes
     def __init__(self):
@@ -34,67 +39,101 @@ class dataContainer:
         self.metabolome = pd.DataFrame
         self.metadata = pd.DataFrame
 
-    # Input data type
-    def add_data(self, file, type):
+    # Add data objects
+    def add_transcriptome(self, file):
 
-        # Check that file has full path
-        file = file_path(file)
+        self.transcriptome = add_data(file)
 
-        # Figure out file type
-        suffix = check_suffix(file)
-        print(suffix)
-        # Import dataframe
-        data = pd.read_csv(
-            file,
-            sep = suffix,
-            header = 0,
-            index_col = 0,
-            low_memory = False
-        )
+    def add_proteome(self, file):
 
-        # Populate dataframe in container based on omics type
-        if type.lower() == 'transcriptome':
-            self.transcriptome = data
+        self.proteome = add_data(file)
 
-        elif type.lower() == 'proteome':
-            self.proteome = data
+    def add_metabolome(self, file):
 
-        elif type.lower() == 'metabolome':
-            self.metabolome = data
+        self.metabolome = add_data(file)
 
-        elif type.lower() == 'metadata':
-            self.metadata = data
+    def add_metadata(self, file):
 
-        else:
-            raise Exception('Invalid data type specified')
+        self.metadata = add_data(file)
 
-    # Organize data in order and group replicates
-    def organize(self):
+    # Format data objects
+    def format_transcriptome(self):
 
-        print('working on it ')
+        self.transcriptome = format_data(self.transcriptome, self.metadata)
+
+    def format_proteome(self):
+
+        self.proteome = format_data(self.proteome, self.metadata)
+
+    def format_metabolome(self):
+
+        self.metabolome = format_data(self.metabolome, self.metadata)
 
     # Normalize dataframes
-    def normalize(self, method=None):
+    def normalize(df, method=None):
 
         if method == None:
             pass
 
-        elif method == 'z-score':
-            self[self.columns] = preprocessing.scale(self[self.columns], axis=1)
+        # Z-score
+        elif method == 'standard':
+            df[df.columns] = preprocessing.scale(df[df.columns], axis=1)
 
-        elif method == 'log2fc':
-            self
-            print('working on it ')
+        # Log2 Fold Change compared to base condition (WT or time 0)
+        elif method == 'fold':
+            df[df.columns] = df[df.columns].div(df[df.columns].iloc[:,0], axis=0)
+            df[df.columns] = np.log2(df[df.columns] + 1e-7)
+            df[df.columns] = df[df.columns].subtract(df[df.columns].iloc[:,0], axis=0)
+
         else:
             raise Exception('Invalid normalization method provided')
 
+    PandasObject.normalize = normalize
+
     # Impute intermediate time-points for time-course data
-    def impute(self, even_spacing=True, iterations=100):
-        print('working on it ')
+    def impute(self, even_spaced=True, total_timepoints=100):
+
+        # Get some metadata
+        #df = sort_columns(df)
+        cols_numeric = [format_times(name) for name in self.columns.tolist()]
+        tp_numbers = len(self.columns)
+        tp_total = total_timepoints - tp_numbers
+        self.columns = cols_numeric
+
+        # Evenly spaced
+        if even_spaced == True:
+
+            print('Calculating the same number of imputations between time points...')
+            self = even_spacing(
+                self,
+                cols_numeric,
+                tp_numbers,
+                tp_total)
+
+        # Ratio spaced
+        else:
+
+            print('Calculating a proportional number of imputations between time points...')
+            self = ratio_spacing(
+                self,
+                cols_numeric,
+                tp_numbers,
+                tp_total)
+
+
+
+    PandasObject.impute = impute
 
 
 
 
+### TEST SPACE ###
 data = dataContainer()
-data.add_data('/Users/jordan/Desktop/cccp_riboseq/cccp_count_table.tsv', 'transcriptome')
-data.transcriptome.normalize
+data.add_transcriptome('/Users/jordan/Desktop/BioNet-Analyzer/tests/test_data/rnaseq_test.txt')
+data.add_metadata('/Users/jordan/Desktop/BioNet-Analyzer/tests/test_data/rnaseq_test_meta.txt')
+data.format_transcriptome()
+data.transcriptome.normalize(method='fold')
+data.transcriptome.impute()
+data.transcriptome = sort_columns(data.transcriptome)
+
+data.transcriptome.head()
