@@ -21,41 +21,27 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 from setuptools import setup
 import re
 import os
+from metabalyzer.__init__ import __version__, __dependencies__
 
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
-"""Get version"""
-with open(str(__path__) + 'xpressplot/__init__.py', 'r') as fd:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                        fd.read(), re.MULTILINE).group(1)
-
 """Setup arguments"""
 setup(
-    name = 'bionetter',
-    version = version,
+    name = 'MetaboNet-Analyzer',
+    version = __version__,
     description = 'A toolkit for navigating and analyzing biological networks',
     long_description = open('README.md').read(),
     long_description_content_type='text/markdown',
     author = 'Jordan Berg',
     author_email = 'jordan.berg@biochem.utah.edu',
-    url = 'https://github.com/j-berg/BioNet-Analyzer',
-    packages = ['bionetter'],
+    url = 'https://github.com/j-berg/MetaboNet-Analyzer',
+    packages = ['metabalyzer'],
     exclude= ['tests','docs','recipes'],
-    package_dir = {'bionetter': 'bionetter'},
+    package_dir = {'metabalyzer': 'metabalyzer'},
     license = 'GPL-3.0',
     zip_safe = False,
 
-    install_requires = [
-        'pandas',
-        'numpy',
-        'scipy',
-        'scikit-learn',
-        'matplotlib<3.0.0,>=2.1.1',
-        'seaborn',
-        'plotly',
-        'plotly_express',
-        'networkx'
-    ],
+    install_requires = __dependencies__,
 
     classifiers=[
         'Development Status :: 3 - Alpha',
