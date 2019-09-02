@@ -1,0 +1,105 @@
+identifier_original	description_original	identifier_novel	description_novel	metanetx	hmdb	isomer	note
+MNXM89598	adenosine 3’,5’-bisphosphate	MNXM45	adenosine 3’,5’-bisphosphate	True			redundant entry in MetaNetX
+MNXM129	L-ascorbate	MNXM89592	L-ascorbate	TRUE			error in Recon 2M.2
+MNXM2645	S-Methyl butanethioate	MNXM681261	S-Methyl butanethioate	TRUE	TRUE		error in Recon 2M.2
+MNXM23683	S-Methyl hexanethioate	MNXM681263	S-Methyl hexanethioate	TRUE	TRUE		error in Recon 2M.2
+MNXM01	H(+)	MNXM1	H(+)	TRUE	TRUE		
+MNXM147447	chenodeoxycholoyl coenzyme a	MNXM834	chenodeoxycholoyl-CoA	TRUE			
+MNXM173	(R)-carnitine	MNXM173	(R)-carnitine	TRUE	TRUE		
+MNXMK_0000	hydroxide ion	MNXM527231	Hydroxide	TRUE	TRUE		
+MNXMK_0001	2,7-decadienoylcoa	MNXMK0001	2,7-decadienoyl-CoA	FALSE	FALSE	FALSE	Recon 2M.2 includes metabolite “2,7-decadienoylcoa”, which participates in reactions of fat beta oxidation. Neither MetaNetX nor HMDB include “2,7-decadienoylcoa”, but do include “2,4-Decadienoyl-CoA” which is also participates in fat beta oxidation. “2,4-Decadienoyl-CoA” is not previously in Recon 2M.2.
+MNXMK_0002	2,7,10,13,16,19-docosahexenoylcoa	MNXM164160	2-trans-7,10,13,16,19-all-cis-docosahexaenoyl-CoA	TRUE			
+MNXMK_0003	2,7,10,13,16-docosapentenoylcoa	MNXM145822	(2E,7Z,10Z,13Z,16Z)-docosapentaenoyl-CoA	TRUE			
+MNXMK_0004	2,6,9-dodecatrienoylcoa	MNXMK0004		FALSE	FALSE		Neither MetaNetX nor HMDB include “2,6,9-dodecatrienoylcoa”.
+MNXMK_0005	2,7,10,13-hexadecatetraenoylcoa	MNXMK0005		FALSE	FALSE		
+MNXMK_0006	2,7,10-hexadecatrienoylcoa	MNXMK0006		FALSE	FALSE		
+MNXMK_0007	2,6,9,12-octadecatetraenoylcoa	MNXMK0007		FALSE	FALSE		
+MNXMK_0008	2,6,9,12,15-octadecapentenoylcoa	MNXMK0008		FALSE	FALSE		
+MNXMK_0009	3-hydroxydodecanoylcarnitine	MNXM150910	3-hydroxydodecanoylcarnitine	TRUE			
+MNXMK_0010	3-hydroxydecanoylcarnitine	MNXM150909	3-hydroxydecanoylcarnitine	TRUE			
+MNXMK_0011	3,7-decadienoylcoa	MNXMK0011		FALSE			
+MNXMK_0012	3,7,10,13,16-docosapentenoylcoa	MNXMK0012		FALSE			
+MNXMK_0013	3,6,9-dodecatrienoylcoa	MNXMK0013		FALSE			
+MNXMK_0014	3-hydroxyhexadecenoylcoa	MNXM149456	(S)-3-hydroxy-(7Z)-hexadecenoyl-CoA	TRUE		TRUE	
+MNXMK_0015	3-hydroxyhexadecanoylcoa	MNXM163183	3-hydroxyhexadecanoylcoa	TRUE			
+MNXMK_0016	3,7,10,13-hexadecatetraenoylcoa	MNXMK0016		FALSE			
+MNXMK_0017	3,7,10-hexadecatrienoylcoa	MNXMK0017		FALSE			
+MNXMK_0018	3-hydroxy-isovaleryl carnitine	MNXM156642	hydroxyisovaleroyl carnitine	TRUE		TRUE	
+MNXMK_0019	3-hydroxyoctadecadienoylcoa	MNXMK0019		FALSE			
+MNXMK_0020	3-hydroxyoctadecadienoylcarnitine	MNXMK0020		FALSE			
+MNXMK_0021	3-hydroxyoctadecanoyl carnitine	MNXM150922	3-hydroxyoctadecanoylcarnitine	TRUE			
+MNXMK_0022	3-hydroxy-octadecenoyl carnitine	MNXM36477	3-Hydroxy-11Z-octadecenoylcarnitine	TRUE	TRUE		
+MNXMK_0023	3,6,9,12-octadecatetraenoylcoa	MNXMK0023		FALSE			
+MNXMK_0024	3,6,9,12,15-octadecapentenoylcoa	MNXMK0024		FALSE			
+MNXMK_0025	3-hydroxy-tetradecanoyl carnitine	MNXM150929	3-hydroxytetradecanoylcarnitine	TRUE			
+MNXMK_0026	3-hydroxy tetradecenoyl-7-coa	MNXMK0026		FALSE			
+MNXMK_0027	3-hydroxy tetradecenoyl-7-carnitine	MNXMK0027		FALSE			
+MNXMK_0028	3-hydroxy trans7,10-hexadecadienoylcoa	MNXMK0028		FALSE			
+MNXMK_0029	3-hydroxy trans7,10-hexadecadienoyl carnitine	MNXMK0029		FALSE			
+MNXMK_0030	3-hydroxy trans5,8tetradecadienoyl coa	MNXM166068	3(S)-hydroxy-5Z,8Z-tetradecadienoyl-CoA	TRUE		TRUE	
+MNXMK_0031	3-hydroxy trans5,8tetradecadienoyl carnitine	MNXMK0031		FALSE	FALSE		
+MNXMK_0032	4,7,10-hexadecatrienoylcoa	MNXMK0032		FALSE			
+MNXMK_0033	5,8,11,14,17-eicosapentenoylcoa	MNXMK0033		FALSE			
+MNXMK_0034	5,8,11-tetradecatrienoylcoa	MNXMK0034		FALSE			
+MNXMK_0035	sebacoyl carnitine; decanedioyl carnitin	MNXM162993	Sebacoyl carnitine; decanedioyl carnitin	TRUE			
+MNXMK_0036	dodecanedioylcoa	MNXMK0036		FALSE	FALSE		Neither MetaNetX nor HMDB include “dodecanedioylcoa”.
+MNXMK_0037	tetradecanedioylcoa	MNXMK0037		FALSE	FALSE		
+MNXMK_0038	succinyl carnitine	MNXM158939	O-succinylcarnitine	TRUE			
+MNXMK_0039	adipoyl carnitine; 5-Carboxypentanoyl carnitine	MNXM162921	Adipoyl carnitine; 5-Carboxypentanoyl carnitine	TRUE			
+MNXMK_0040	cis2trans4decadienoylcoa	MNXM468681	2,4-Decadienoyl-CoA	TRUE	TRUE	TRUE	Both MetaNetX and HMDB include the trans cis but not cis trans isomer.
+MNXMK_0041	5-dodecenoylcoa	MNXMK0041		FALSE	FALSE		Neither MetaNetX nor HMDB include “5-dodecenoylcoa”.
+MNXMK_0042	4,7-decadienoylcoa	MNXM167436	cis,cis-4,7-Decadienoyl-CoA	TRUE		TRUE	
+MNXMK_0043	decadienoylcoa; 2-trans,4-cis-Decadienoyl-Coenzyme A	MNXM481621	2-trans-4-cis-decadienoyl-CoA	TRUE	TRUE		
+MNXMK_0044	2,4,7-decatrienoylcoa	MNXM169258	trans,cis,cis-2,4,7-Decatrienoyl-CoA	TRUE			
+MNXMK_0045	2,4,7,10,13,16-docosahexenoylcoa	MNXMK0045		FALSE	FALSE		
+MNXMK_0046	3,7,10,13,16,19-docosahexenoylcoa	MNXM169278	trans-3,cis-(7,10,13,16,19)-Docosahexenoyl-CoA	TRUE			
+MNXMK_0047	Albumin	MNXM40544	Albumin human (USP)	TRUE	TRUE		
+MNXMK_0048	Antichymotrypsin	MNXMK0048		FALSE	FALSE		Neither MetaNetX nor HMDB include “Antichymotrypsin”.
+MNXMK_0049	Antitrypsin	MNXMK0049		FALSE	FALSE		Neither MetaNetX nor HMDB include “Antitrypsin”.
+MNXMK_0050	ApoA1	MNXM163754	ApoA1	TRUE			
+MNXMK_0051	ApoB100	MNXMK0051		FALSE	FALSE		Neither MetaNetX nor HMDB include “ApoB100”.
+MNXMK_0052	ApoC1	MNXMK0052		FALSE	FALSE		Neither MetaNetX nor HMDB include “ApoC1”.
+MNXMK_0053	ApoC2	MNXMK0053		FALSE	FALSE		
+MNXMK_0054	ApoC3	MNXMK0054		FALSE	FALSE		
+MNXMK_0055	ApoE	MNXMK0055		FALSE	FALSE		
+MNXMK_0056	Haptoglobin	MNXM56689	Human haptoglobin	TRUE	TRUE		
+MNXMK_0057	Plasminogen	MNXM96978	Plasminogen	TRUE			
+MNXMK_0058	Prothrombin	MNXM12792	Prothrombin	TRUE			
+MNXMK_0059	Cholesterol-ester-palmn	MNXM164676	Cholesterol-ester-palmn	TRUE			
+MNXMK_0060	Cholesterol-ester-stearate	MNXM45905	cholesteryl octadecanoate	TRUE	TRUE		
+MNXMK_0061	Cholesterol-ester-ala	MNXM164674	Cholesterol-ester-ala	TRUE			
+MNXMK_0062	Cholesterol-ester-gla	MNXM164675	Cholesterol-ester-gla	TRUE			
+MNXMK_0063	Cholesterol-ester-arach	MNXM163776	Cholesterol-ester-arach	TRUE			
+MNXMK_0064	1-Acylglycerol-3P-palm	MNXM2455	1-hexadecanoyl-sn-glycero-3-phosphate	TRUE	FALSE		
+MNXMK_0065	1-Acylglycerol-3P-palmn	MNXMK0065		FALSE	FALSE		
+MNXMK_0066	1-Acylglycerol-3P-stea	MNXM32950	1-octadecanoyl-sn-glycero-3-phosphate	TRUE	FALSE		
+MNXMK_0067	1-Acylglycerol-3P-ol	MNXM32960	1-(9Z-octadecenoyl)-sn-glycero-3-phosphate	TRUE	FALSE		
+MNXMK_0068	1-Acylglycerol-3P-lin	MNXM32834	1-(9Z,12Z)-octadecadienoyl-sn-glycero-3-phosphate	TRUE	FALSE		
+MNXMK_0069	1-Acylglycerol-3P-arach	MNXM67008	1-(5Z,8Z,11Z,14Z-eicosatetraenoyl)-sn-glycero-3-phosphate	TRUE	FALSE		
+MNXMK_0070	THF-hexaglutamate	MNXM165176	THF-hexaglutamate	TRUE			
+MNXMK_0071	Glycogenin-G7G1	MNXM164816	Glycogenin-G7G1	TRUE			
+MNXMK_0072	glutathionyl-leuc4	MNXM162246	Glutathionyl-leuc4	TRUE			
+MNXMK_0073	S-glutathionyl-2-4-dinitrobenzene	MNXM162247	S-glutathionyl-2-4-dinitrobenzene	TRUE			
+MNXMK_0074	S-glutathionyl-ethacrynic-acid	MNXM162248	S-glutathionyl-ethacrynic-acid	TRUE			
+MNXMK_0075	trans,cis-octadeca-2,9-dienoyl-CoA	MNXM163591	Trans,cis-2,9-octadecadienoyl-CoA	TRUE	FALSE		
+MNXMK_0076	(S)-3-hydroxyoleyleoyl-CoA	MNXMK0076		FALSE	FALSE		
+MNXMK_0077	3-oxooleoyl-CoA	MNXM150997	3-oxo-(9Z-octadecenoyl)-CoA	TRUE	TRUE		
+MNXMK_0078	Malonyl-Carnitin	MNXM173	(R)-carnitine	TRUE	TRUE		
+MNXMK_0079	7,10-hexadecadienoylcoa	MNXMK0079		FALSE			
+MNXMK_0080	7-hexadecenoylcoa	MNXM149511	(7Z)-hexadecenoyl-CoA	TRUE			
+MNXMK_0081	2,4,7,10-hexadecatetraenoylcoa	MNXMK0081		FALSE			
+MNXMK_0082	2,4,7,10,13-hexadecapentaenoylcoa	MNXM165270	(2E,4Z,7Z,10Z,13Z)-Hexadecapentaenoyl-CoA	TRUE			
+MNXMK_0083	7,10,13-hexadecatrienoylcoa	MNXMK0083		FALSE	FALSE		
+MNXMK_0084	mannosyl-3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol (M4A)	MNXM163845	Mannosyl-3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol (M4A)	TRUE			
+MNXMK_0085	5-octenoylcoa	MNXM168741	Octenoyl-CoA	TRUE			
+MNXMK_0086	Suberyl-CoA; octadioyl-CoA	MNXM163582	Suberyl-CoA; octadioyl-CoA	TRUE			
+MNXMK_0087	sebacoylcoa	MNXM10471	Decanedioyl-CoA	TRUE			
+MNXMK_0088	trans2,6dodecadienoylcoa	MNXM2039	(2-trans,6-cis)-dodeca-2,6-dienoyl-CoA	TRUE	TRUE		
+MNXMK_0089	trans4decenoylcoa	MNXM90161	4-cis-decenoyl-CoA	TRUE	TRUE	TRUE	Both MetaNetX and HMDB include the cis but not trans isomer.
+MNXMK_0090	7-tetradecenoylcoa	MNXMK0090		FALSE	FALSE		
+MNXMK_0091	5-tetradecenoylcoa	MNXMK0091		FALSE	FALSE		
+MNXMK_0092	Tetradecadienoyl-CoA	MNXM38081	5-cis-8-cis-Tetradecadienoyl-CoA	TRUE	TRUE	TRUE	Both MetaNetX and HMDB include the cis but not neutral isomer.
+MNXMK_0093	tetradecadienoyl carnitine	MNXM158941	O-tetradecadienoylcarnitine	TRUE			
+MNXMK_0094	trans7,10-hexadecadienoylcoa	MNXMK0094		TRUE			
+MNXMK_0095	2,6,10-trimethyl undecanoylcoa	MNXMK0095		FALSE	FALSE		
+MNXMK_0096	trans5,8tetradecadienoylcoa	MNXM38081	5-cis-8-cis-Tetradecadienoyl-CoA	TRUE	TRUE	TRUE	Both MetaNetX and HMDB include the cis but not trans isomer.

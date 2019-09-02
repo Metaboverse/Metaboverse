@@ -1,0 +1,103 @@
+identifier_original	identifier_novel	name_original	name_novel	custom	metanetx	gene	enzyme
+R169F9B7A	R169F9B7A	ATP:(R)-glycerate 3-phosphotransferase Glycine, serine and threonine metabolism EC:2.7.1.31	Glycerate kinase	TRUE	MNXR100328;MNXR2756	132158	
+R18BE3FA4	R18BE3FA4	glycine oxidase, perixosomal	Hydroxyacid oxidase	TRUE	MNXR100352;MNXR2774;MNXR65806;MNXR83042	54363, 51179	
+R1E73B13F	R1E73B13F	adenosylhomocysteinase	Adenosylhomocysteinase	TRUE	MNXR138021;MNXR578;MNXR68320	10768;191;23382	
+R276A6E5E	R276A6E5E	methionine adenosyltransferase	Methionine adenosyltransferase	TRUE	MNXR101407;MNXR3487	27430;4143;4144	
+R3F5AA716	R3F5AA716	methionine synthase	Methionine synthase	TRUE	MNXR138591;MNXR101481;MNXR3495;MNXR69434	4548	
+R45AF510A	R45AF510A	glycerol kinase	Glycerol kinase	TRUE	MNXR100348;MNXR2771;MNXR69177;MNXR91134	2710;2712	
+R4ED37718	R4ED37718	ATP:(R)-glycerate 3-phosphotransferase Glycine, serine and threonine metabolism EC:2.7.1.31	Glycerate kinase	TRUE	MNXR100328;MNXR2756	132158	
+R56FD9AFB	R56FD9AFB	Glycolate dehydrogenase (NADP), mitochondrial	Glyoxylate reductase	TRUE	MNXR100332;MNXR2760	9380	
+R61E25419	R61E25419	Diphosphoglycerate phosphatase	Phosphoglycerate mutase	TRUE	MNXR126095;MNXR1776;MNXR82391;MNXR97766	5223;5224;669	
+R77447400	R77447400	guanine deaminase	Guanine deaminase	TRUE	MNXR100464;MNXR2844;MNXR83078	9615	
+R83A84BAE	R83A84BAE	Glutathione:cystine oxidoreductase	Cystine oxidoreductase	TRUE	MNXR96999;MNXR1348;MNXR36745;MNXR82087		
+R8D02E99E	R8D02E99E	Glycolate dehydrogenase (NADP)	Glyoxylate reductase	TRUE	MNXR100332;MNXR2760	9380	
+R923AD9F1	R923AD9F1	glycerol kinase	Glycerol kinase	TRUE	MNXR100348;MNXR2771;MNXR69177;MNXR91134	2710	
+RD9DC4FE2	RD9DC4FE2	EC:3.1.1.13	Carboxyl ester lipase	TRUE	MNXR130924	1056;3988	
+RD001A12A	RD001A12A	spermidine synthase	Spermidine synthase	TRUE	MNXR95860;MNXR4892	6723	
+RE5F8030E	RE5F8030E	glycerate kinase	Glycerate kinase	TRUE	MNXR100329;MNXR2757	132158	2.7.1.165;2.7.1.31
+R435A649E	R435A649E	phosphoglycerate mutase	Phosphoglycerate mutase	TRUE	MNXR102547;MNXR4195	5223;5224;669	5.4.2.11;5.4.2.12
+RF7E38329	RF7E38329	Glycerol:NADP+ oxidoreductase Glycerolipid metabolism EC:1.1.1.2 EC:1.1.1.72	Aldo-keto reductase	TRUE	MNXR95711;MNXR642;MNXR68335	10327;231	1.1.1.2;1.1.1.21;1.1.1.372;1.1.1.72
+R4493A9F8	R4493A9F8	D-Glyceraldehyde:NAD+ oxidoreductase Glycerolipid metabolism EC:1.2.1.3	Aldehyde dehydrogenase	TRUE	MNXR100310;MNXR2740	217;219;223;224;501	
+R29CE564	R29CE564	malate dehydrogenase	Malate dehydrogenase	TRUE	MNXR101439;MNXR3464;MNXR91108	4190	1.1.1.299;1.1.1.37
+R323046BA	R323046BA	citrate synthase	Citrate synthase	TRUE	MNXR96920;MNXR1298	1431	2.3.3.1;2.3.3.16;2.3.3.3
+R75E08CB8	R75E08CB8	adenylosuccinate synthase	Adenylosuccinate synthase	TRUE	MNXR95495;MNXR54990;MNXR68295	122622;159	
+R896353BD	R896353BD	adenylosuccinate lyase	Adenylosuccinate lyase	TRUE	MNXR95493;MNXR514	158	
+RAE835873	RAE835873	argininosuccinate synthase	Argininosuccinate synthase	TRUE	MNXR95949	445	
+RC49BA4F1	RC49BA4F1	succinate dehydrogenase	Succinate dehydrogenase	TRUE	MNXR99636;MNXR55430;MNXR69005;MNXR82874	6389;6390;6391;6392	
+R91D86730	R91D86730	arginase	Arginase	TRUE	MNXR95945;MNXR30737;MNXR780	383	
+R32A608F3	R32A608F3	L-Phenylalanine,tetrahydrobiopterin:oxygen oxidoreductase (4-hydroxylating) Phenylalanine, tyrosine and tryptophan biosynthesis EC:1.14.16.1	Phenylalanine hydroxylase	TRUE		5053	
+R3DEA5779	R3DEA5779	L-Asparagine amidohydrolase Alanine and aspartate metabolism / Cyanoamino acid metabolism / Nitrogen metabolism EC:3.5.1.1 EC:3.5.1.38	Asparaginase	TRUE	MNXR96056;MNXR81754;MNXR842	374569	3.5.1.1;3.5.1.38;3.5.5.4
+R255B531B	R255B531B	trimethyllysine dioxygenase	Trimethyllysine hydroxylase	TRUE	MNXR108181;MNXR5104;MNXR66093	55217	
+RA760988D	RA760988D	Ornithine Decarboxylase	Ornithine decarboxylase	TRUE	MNXR102209;MNXR32049;MNXR3986	4953	
+R216A48D1	R216A48D1	Hypoxanthine:oxygen oxidoreductase Purine metabolism EC:1.17.3.2	Xanthine dehydrogenase	TRUE	MNXR105229;MNXR5351;MNXR65923	7498	
+R4FC1EDF1	R4FC1EDF1	xanthine dehydrogenase, peroxisomal	Xanthine dehydrogenase	TRUE	MNXR105225;MNXR26379;MNXR5348;MNXR91561	7498	
+REEF02F76	REEF02F76	UDPglucose pyrophosphohydrolase	Ectonucleotide pyrophosphatase	TRUE	MNXR105070;MNXR70033;MNXR79463	5167;5168;5169	3.6.1.45;3.6.1.8;3.6.1.9
+R2C1CA4E3	R2C1CA4E3	ATP:uridine 5'-phosphotransferase	Uridine-cytidine kinase	TRUE	MNXR105162;MNXR5306	7371;83549	2.7.1.213;2.7.1.48
+R83995EF6	R83995EF6	UDP-GlcNAc:dolichol-phosphate GlcNAc phosphotransferase (uterus)	Dolichyl-phosphate N-acetylglucosaminephosphotransferase	TRUE	MNXR100197;MNXR2659	1798	
+RB70F3C83	RB70F3C83	L-Serine:pyruvate aminotransferase Glycine, serine and threonine metabolism EC:2.6.1.51	Aminotransferase	TRUE	MNXR104504;MNXR4896	189	
+R98D6E3D3	R98D6E3D3	Phosphatidylserine synthase homo sapiens	Phosphatidylserine synthase	TRUE	MNXR103291;MNXR4495	81490	
+RD5D4BE96	RD5D4BE96	phosphoserine phosphatase (L-serine)	Phosphoserine phosphatase	TRUE	MNXR103260;MNXR4486	5723	
+R591EAD1E	R591EAD1E	Nicotinamide N-methyltransferase	Nicotinamide N-methyltransferase	TRUE	MNXR101981;MNXR125142;MNXR3839	4837	
+R52BEA7FF	R52BEA7FF	EC:3.1.1.13	Lipase A	TRUE	MNXR130922	1056;3988	
+R18C95BCB	R18C95BCB	histidine decarboxylase	Histidine decarboxylase	TRUE	MNXR100581;MNXR2964	3067	4.1.1.22;4.1.1.28
+RB2C4651D	RB2C4651D	S-Adenosyl-L-methionine:histamine N-tele-methyltransferase	Histamine N-methyltransferase	TRUE	MNXR104271;MNXR4771;MNXR79544	3176	
+RF357FAE4	RF357FAE4	2-keto-4-methylthiobutyrate transamination	Transaminase	TRUE	MNXR105128;MNXR32570;MNXR70058;MNXR84395		
+R2F995547	R2F995547	2-keto-4-methylthiobutyrate transamination	Transaminase	TRUE	MNXR95923;MNXR32571;MNXR84396		2.6.1.5;2.6.1.57
+R475AB54C	R475AB54C	agmatinase (m)	Agmatinase	TRUE	MNXR95554;MNXR558	79814	
+R83389BE4	R83389BE4	Maltodextrin glucosidase (maltotriose)	Glucosidase alpha	TRUE		2595	
+R5FCF08D6	R5FCF08D6	xanthine oxidase,peroxisomal	Xanthine dehydrogenase	TRUE	MNXR105228;MNXR26459;MNXR5352;MNXR65945	7498	
+R44757C01	R44757C01	purine-nucleoside phosphorylase (Adenosine)	Purine nucleoside phosphorylase	TRUE	MNXR103343;MNXR4522	4860	
+R552B9837	R552B9837	purine-nucleoside phosphorylase (Guanosine)	Purine nucleoside phosphorylase	TRUE	MNXR103345;MNXR4524	4860	2.4.2.1;2.4.2.15
+R4EA4F2F7	R4EA4F2F7	purine-nucleoside phosphorylase (Inosine)	Purine nucleoside phosphorylase	TRUE	MNXR103347;MNXR4526	4860	2.4.2.1;2.4.2.15
+RB5189393	RB5189393	purine-nucleoside phosphorylase (Xanthosine)	Purine nucleoside phosphorylase	TRUE	MNXR103349;MNXR4528	4860	2.4.2.-;2.4.2.1
+RFB2F9386	RFB2F9386	pyrimidine-nucleoside phosphorylase (uracil)	Uridine phosphorylase	TRUE	MNXR103377;MNXR4548	151531;7378	2.4.2.2;2.4.2.3
+RE7E0E79F	RE7E0E79F	phosphopentomutase	Phosphoglucomutase	TRUE	MNXR103115;MNXR69773	5236;55276	5.4.2;5.4.2.2;5.4.2.7
+R5CDE4932	R5CDE4932	hydrolysis of glycylphenylalanine	Aminopeptidase	TRUE	MNXR100357;MNXR29606		3.4.11.2;3.4.13
+RCC9FC4A1	RCC9FC4A1	hydrolysis of Prolylglycine in the small intestine for cellular uptake	Peptidase D	TRUE	MNXR100360;MNXR55045	5184	
+R5714A26	R5714A26	hypoxanthine phosphoribosyltransferase (Hypoxanthine)	Hypoxanthine phosphoribosyltransferase	TRUE	MNXR100752;MNXR55640;MNXR69265	3251	
+R29EE4FAC	R29EE4FAC	glycine hydroxymethyltransferase, reversible, mitochondrial	Serine hydroxymethyltransferase	TRUE	MNXR100142;MNXR2619	6472	
+R661E3BB4	R661E3BB4	alanyl aminopeptidase (cys-gly)	Alanyl aminopeptidase	TRUE	MNXR95828;MNXR718	290	3.4.11.1;3.4.11.2;3.4.11.23;3.4.13.-;3.4.13.18
+R24D5CF3A	R24D5CF3A	alanine-glyoxylate transaminase (irreversible), (peroxisomal)	Aminotransferase	TRUE	MNXR95618;MNXR124339;MNXR574;MNXR91016	189	
+RA090BBD4	RA090BBD4	hydrolysis of Glycylleucine in the small intestine for cellular uptake	Dipeptidase	TRUE	MNXR100349;MNXR29605;MNXR94492	1800;55748	
+R6648B1FA	R6648B1FA	NMN synthetase	Nicotinamide phosphoribosyltransferase	TRUE	MNXR101911;MNXR55769;MNXR69542	10135	
+R3110BD4B	R3110BD4B	glycine amidinotransferase (c)	Glycine amidinotransferase	TRUE	MNXR106585;MNXR2742	2628	
+RC63EFB16	RC63EFB16	glutamine phosphoribosyldiphosphate amidotransferase	Phosphoribosyl pyrophosphate amidotransferase	TRUE	MNXR100287;MNXR55597;MNXR69167	5471	
+RFD36C1CA	RFD36C1CA	glutamine-fructose-6-phosphate transaminase	Glutamine-fructose-6-phosphate transaminase	TRUE		2673;9945	
+RF506038C	RF506038C	phosphoribosylpyrophosphate synthetase	Phosphoribosyl pyrophosphate synthetase	TRUE	MNXR103215;MNXR69797	221823;5631;5634	
+RB87F9B6	RB87F9B6	phosphoribosylglycinamide synthase	Phosphoribosylglycinamide synthetase	TRUE	MNXR103139;MNXR69784	2618	
+R14CBBDC0	R14CBBDC0	leucine transaminase, mitochondrial	Branched chain amino acid transaminase	TRUE	MNXR96229;MNXR31792	587	2.6.1.42;2.6.1.6;2.6.1.67
+R8C012C2B	R8C012C2B	asparagine synthase (glutamine-hydrolysing)	Asparagine synthetase	TRUE	MNXR96059;MNXR33036;MNXR72322;MNXR91100	440	
+RA4E9A3	RA4E9A3	dUTP:uridine 5-phosphotransferase Pyrimidine metabolism EC:2.7.1.48	Uridine-cytidine kinase	TRUE	MNXR97823;MNXR59355;MNXR73896	54963;7371;83549	
+R871545EC	R871545EC	purine-nucleoside phosphorylase	Purine nucleoside phosphorylase	TRUE	MNXR103048;MNXR4360	4860	2.4.2;2.4.2.1
+R9716CFA1	R9716CFA1	Xanthine:NAD+ oxidoreductase Purine metabolism EC:1.17.1.4	Xanthine dehydrogenase	TRUE	MNXR100747;MNXR3054;MNXR91562	7498	
+R7BC7BECC	R7BC7BECC	D-Ribose-5-phosphate ketol-isomerase Pentose phosphate pathway EC:5.3.1.6	Ribose 5-phosphate isomerase	TRUE	MNXR104084;MNXR69867	22934	
+RFD583B4A	RFD583B4A	Glycolysis / Glyconeogenesis EC:2.7.1.1	Glucokinase or Hexokinase	TRUE	MNXR105324;MNXR59180;MNXR73684;MNXR93682	2645;3098;3099;3101	
+RA86CA648	RA86CA648	Nucleoside triphosphate pyrophosphorylase (itp)	Inosine triphosphatase	TRUE	MNXR102056;MNXR3904	3704	3.6.1.-;3.6.1.8;3.6.1.9
+R6E6396A5	R6E6396A5	Glycolysis / Glyconeogenesis EC:2.7.1.1	Hexokinase	TRUE		3098;3099;3101	
+RE83718F8	RE83718F8	Glycolysis / Glyconeogenesis EC:2.7.1.1	Hexokinase	TRUE		3098;3099;3101	
+R56E86DC5	R56E86DC5	isoleucine transaminase, mitochondrial	Branched chain amino acid transaminase	TRUE	MNXR96228;MNXR31743;MNXR79548	587	
+R243155A0	R243155A0	L-Kynurenine:2-oxoglutarate aminotransferase	Kynurenine aminotransferase	TRUE	MNXR107248;MNXR31773	51166;883	
+RC56891AD	RC56891AD	4-aminobutyrate transaminase, reversible (mitochondrial)	4-Aminobutyrate aminotransferase	TRUE	MNXR95186;MNXR30569	18	
+R98D4EF19	R98D4EF19	L-alanine transaminase	Glutamate-pyruvate transaminase	TRUE	MNXR95698;MNXR32635	2875;84706	
+R91A21F83	R91A21F83	phenylalanine transaminase (m)	Tyrosine aminotransferase	TRUE		2806;6898	
+RC867798D	RC867798D	L-Proline,2-oxoglutarate:oxygen oxidoreductase (4-hydroxylating) (ER)	Prolyl 4-hydroxylase	TRUE	MNXR103186;MNXR4440;MNXR65879;MNXR84019	5033;5034;5034;8974	1.14.11;1.14.11.2
+RBA3459C1	RBA3459C1	ornithine transaminase reversible (m)	Ornithine aminotransferase	TRUE	MNXR102220;MNXR32050;MNXR32762	4942	
+R6F0A24B3	R6F0A24B3	(R)-3-Amino-2-methylpropanoate:2-oxoglutarate aminotransferase EC:2.6.1.22	4-Aminobutyrate aminotransferase	TRUE	MNXR94851;MNXR40637;MNXR79535	18	
+RAAA9E61E	RAAA9E61E	L-3-aminoisobutyrate transaminase, mitochondrial	4-Aminobutyrate aminotransferase	TRUE	MNXR125753;MNXR33697	18	
+R7704C52B	R7704C52B	saccharopine dehydrogenase (NADP, L-lysine forming), mitochondrial	Aminoadipate-semialdehyde synthase	TRUE	MNXR104238;MNXR4762	10157	
+R1ADFD471	R1ADFD471	cysteine transaminase (mitochondrial)	Glutamate-oxaloacetate transaminase	TRUE	MNXR96990;MNXR1357;MNXR30967	2806	2.6.1.1;2.6.1.3
+R7F0E3AF7	R7F0E3AF7	tyrosine transaminase	Tyrosine aminotransferase	TRUE	MNXR105000;MNXR32524;MNXR84366	2805;6898	2.6.1.1;2.6.1.5;2.6.1.57;2.6.1.9
+RA39F2479	RA39F2479	L-Histidine:4-aminobutanoate ligase (AMP-forming) Urea cycle and metabolism of amino groups EC:6.3.2.11	Carnosine synthase	TRUE	MNXR105344;MNXR93741	57571	
+R9FDF1009	R9FDF1009	5'-methylthioadenosine phosphorylase	Methylthioadenosine phosphorylase	TRUE	MNXR101745;MNXR3639	4507	
+RA6FDE8D6	RA6FDE8D6	dihydrouracil dehydrogenase (NADP)	Dihydropyrimidine dehydrogenase	TRUE	MNXR97814;MNXR1810	1806	
+RC51D0013	RC51D0013	carbamoyl-phosphate synthase (glutamine-hydrolysing)	Carbamoyl-phosphate synthetase	TRUE		790	
+R60DB9E88	R60DB9E88	Carbamoyl phosphate phosphotransferase, endoplasmic reticulum	Glucose-6-phosphatase	TRUE	MNXR96484;MNXR55139;MNXR68483;MNXR81880	2538;57818;92579	
+RC49EA296	RC49EA296	ornithine carbamoyltransferase, irreversible	Ornithine carbamoyltransferase	TRUE	MNXR102137;MNXR3940;MNXR51003	5009	
+R51DFD2E9	R51DFD2E9	malic enzyme (NAD), mitochondrial	Malic enzyme	TRUE	MNXR101446;MNXR3470	4200	1.1.1.38;1.1.1.39
+R376B95D9	R376B95D9	malic enzyme (NADP)	Malic enzyme	TRUE	MNXM5;MNXM98;MNXM13;MNXM23;MNXM6	4199	
+R940FA4A2	R940FA4A2	malic enzyme (NADP), mitochondrial	Malic enzyme	TRUE	MNXM5;MNXM98;MNXM13;MNXM23;MNXM6	10873	
+RA66A0FC2	RA66A0FC2	fumarase, mitochondrial	Fumarate hydratase	TRUE	MNXR99705;MNXR2338	2271	
+RD23A25BA	RD23A25BA	3-Aminopropanoate:2-oxoglutarate aminotransferase (m)	4-Aminobutyrate aminotransferase	TRUE	MNXR95862;MNXR32735	18	2.6.1.19;2.6.1.55
+R16FBD0E6	R16FBD0E6	valine transaminase	Branched chain amino acid transaminase	TRUE	MNXR96230;MNXR32586	586	2.6.1.42;2.6.1.6
+R115178B9	R115178B9	aspartate transaminase	Glutamate-oxaloacetate transaminase	TRUE	MNXR96079;MNXR32641	2806	
+RE73D2ED2	RE73D2ED2	pyrroline-5-carboxylate reductase (m)	Pyrroline-5-carboxylate reductase	TRUE	MNXR102303;MNXR26331	29920	

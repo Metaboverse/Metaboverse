@@ -1,0 +1,4 @@
+identifier_original	description_original	identifier_novel	description_novel	metanetx	remove	note
+e	extracellular space	e	extracellular region	TRUE	FALSE	
+i	mitochondrial intermembrane space	i	mitochondrial membrane	FALSE	FALSE	
+b	Extra organism	b	model boundary	TRUE	FALSE	

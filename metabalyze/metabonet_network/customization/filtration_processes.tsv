@@ -1,0 +1,113 @@
+identifier	name	relevance
+P1	Transport, extracellular	True
+P2	Exchange/demand reaction	True
+P3	Transport, nuclear	True
+P4	other	True
+P5	Transport, golgi apparatus	True
+P6	Fatty acid oxidation	True
+P7	Transport, mitochondrial	True
+P8	Fatty acid synthesis	True
+P9	Nucleotide interconversion	True
+P10	Glycerophospholipid metabolism	True
+P11	Heparan sulfate degradation	True
+P12	Methionine and cysteine metabolism	True
+P13	Chondroitin synthesis	True
+P14	Transport, endoplasmic reticular	True
+P15	Alanine and aspartate metabolism	True
+P16	Taurine and hypotaurine metabolism	True
+P17	Cysteine Metabolism	True
+P18	Arginine and Proline Metabolism	True
+P19	C5-branched dibasic acid metabolism	True
+P20	Phosphatidylinositol phosphate metabolism	True
+P21	Keratan sulfate degradation	True
+P22	Steroid metabolism	True
+P23	Tetrahydrobiopterin metabolism	True
+P24	Purine synthesis	True
+P25	Bile acid synthesis	True
+P26	Transport, lysosomal	True
+P27	Sphingolipid metabolism	True
+P28	Tyrosine metabolism	True
+P29	Aminosugar metabolism	True
+P30	Eicosanoid metabolism	True
+P31	Transport, peroxisomal	True
+P32	Inositol phosphate metabolism	True
+P33	Cytochrome metabolism	True
+P34	Keratan sulfate synthesis	True
+P35	Valine, leucine, and isoleucine metabolism	True
+P36	Pyrimidine catabolism	True
+P37	N-glycan synthesis	True
+P38	CoA synthesis	True
+P39	Biosynthesis of secondary metabolites	True
+P40	Metabolic pathways	True
+P41	Porphyrin and chlorophyll metabolism	True
+P42	Biotin metabolism	True
+P43	Alkaloid synthesis	True
+P44	Pentose phosphate pathway	True
+P45	Vitamin D metabolism	True
+P46	Tryptophan metabolism	True
+P47	Limonene and pinene degradation	True
+P48	Blood group synthesis	True
+P49	Propanoate metabolism	True
+P50	Glycine, serine, alanine and threonine metabolism	True
+P51	Histidine metabolism	True
+P52	Lysine metabolism	True
+P53	Fructose and mannose metabolism	True
+P54	Hyaluronan metabolism	True
+P55	Vitamin C metabolism	True
+P56	NAD metabolism	True
+P57	Pyrimidine synthesis	True
+P58	Glutathione metabolism	True
+P59	ROS detoxification	True
+P60	Pyruvate metabolism	True
+P61	Triacylglycerol synthesis	True
+P62	Glycolysis/gluconeogenesis	True
+P63	Chondroitin sulfate degradation	True
+P64	Oxidative phosphorylation	True
+P65	beta-Alanine metabolism	True
+P66	Thiamine metabolism	True
+P67	Heme synthesis	True
+P68	Vitamin A metabolism	True
+P69	Starch and sucrose metabolism	True
+P70	Alanine, aspartate and glutamate metabolism	True
+P71	Butanoate metabolism	True
+P72	Microbial metabolism in diverse environments	True
+P73	Biosynthesis of antibiotics	True
+P74	Lysine biosynthesis	True
+P75	Lysine degradation	True
+P77	Miscellaneous	True
+P78	Heme degradation	True
+P79	Urea cycle	True
+P80	Folate metabolism	True
+P81	Squalene and cholesterol synthesis	True
+P82	Nucleotide sugar metabolism	True
+P83	Vitamin B6 metabolism	True
+P84	Galactose metabolism	True
+P85	Phenylalanine metabolism	True
+P86	N-glycan degradation	True
+P87	Pyrimidine metabolism	True
+P88	Citric acid cycle	True
+P89	O-glycan synthesis	True
+P90	Glutamate metabolism	True
+P91	Drug metabolism - other enzymes	True
+P92	Selenoamino acid metabolism	True
+P93	Purine catabolism	True
+P94	Cholesterol metabolism	True
+P95	CoA catabolism	True
+P96	Glyoxylate and dicarboxylate metabolism	True
+P97	Nucleotide salvage pathway	True
+P98	Folate biosynthesis	True
+P99	Ubiquinone synthesis	True
+P100	Streptomycin biosynthesis	True
+P101	Stilbene, coumarine and lignin synthesis	True
+P102	Vitamin B2 metabolism	True
+P103	Glycine, serine and threonine metabolism	True
+P104	Sulfur metabolism	True
+P105	Purine metabolism	True
+P106	D-alanine metabolism	True
+P107	One carbon pool by folate	True
+P108	Vitamin B12 metabolism	True
+P109	Biosynthesis of unsaturated fatty acids	True
+P110	Fatty acid elongation	True
+P111	Metabolism of xenobiotics by cytochrome P450	True
+P112	Steroid hormone biosynthesis	True
+P113	Cysteine and methionine metabolism	True

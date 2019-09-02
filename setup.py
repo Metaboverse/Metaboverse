@@ -17,11 +17,16 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-"""IMPORT DEPENDENCIES"""
+"""Import dependencies
+"""
 from setuptools import setup
 import re
 import os
-from metabalyzer.__init__ import __version__, __dependencies__
+
+"""Import internal dependencies
+"""
+from metabalyze.__init__ import __version__
+from metabalyze.__init__ import __dependencies__
 
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
@@ -35,17 +40,20 @@ setup(
     author = 'Jordan Berg',
     author_email = 'jordan.berg@biochem.utah.edu',
     url = 'https://github.com/j-berg/MetaboNet-Analyzer',
-    packages = ['metabalyzer'],
+    packages = ['metabalyze'],
     exclude= ['tests','docs','recipes'],
-    package_dir = {'metabalyzer': 'metabalyzer'},
+    package_dir = {'metabalyze': 'metabalyze'},
     license = 'GPL-3.0',
     zip_safe = False,
-
     install_requires = __dependencies__,
-
+    entry_points={
+        "console_scripts": [
+            "metabalyze = metabalyze.__main__:main"
+            ]
+        },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Bio-Informatics'
         ]
-)
+    )

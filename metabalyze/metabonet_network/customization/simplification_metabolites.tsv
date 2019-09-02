@@ -1,0 +1,50 @@
+metabolite	name	compartment	omission	replication	default	category	degree_general	degree_compartmental	note
+MNXM1	proton	all	True	False	True	1	1502	1880	small molecules and ions
+MNXM2	water	all	True	False	True	1	1070	1240	small molecules and ions
+MNXM22	hydrogen peroxide	all	True	False	True	1	107	132	small molecules and ions
+MNXM4	dioxygen	all	True	False	True	1	270	300	small molecules and ions
+MNXM13	carbon dioxide	all	True	False	True	1	123	160	small molecules and ions
+MNXM9	phosphate	all	True	False	True	1	189	290	small molecules and ions
+MNXM11	diphosphate	all	True	False	True	1	126	183	small molecules and ions
+MNXM58	sulfate	all	True	False	True	1	109	131	small molecules and ions
+MNXM15	ammonium	all	True	False	True	1	68	84	small molecules and ions
+MNXM27	sodium	all	True	False	True	1	0	20	small molecules and ions
+MNXM60	hydrogen carbonate	all	True	False	True	1	0	0	small molecules and ions
+MNXM527231	hydroxide	all	True	False	True	1	0	0	small molecules and ions
+MNXM105630	sulfite	all	True	False	True	1	7	24	small molecules and ions
+MNXM925	holo-[acyl-carrier protein]	all	False	False	False	2	41	43	threshold degree 50
+MNXM12	coenzyme A	all	True	False	True	2	473	593	threshold degree 50
+MNXM173	(R)-carnitine	all	True	False	True	2	149	276	threshold degree 50
+MNXM5	nicotinamide adenine dinucleotide phosphate	all	True	False	True	2	284	316	threshold degree 50
+MNXM6	nicotinamide adenine dinucleotide phosphate reduced	all	True	False	True	2	282	314	threshold degree 50
+MNXM8	nicotinamide adenine dinucleotide	all	True	False	True	2	349	421	threshold degree 50
+MNXM10	nicotinamide adenine dinucleotide reduced	all	True	False	True	2	345	405	threshold degree 50
+MNXM21	acetyl coenzyme A	all	True	False	True	2	169	215	threshold degree 50
+MNXM33	flavin adenine dinucleotide	all	True	False	True	2	100	112	threshold degree 50
+MNXM38	flavin adenine dinucleotide reduced	all	True	False	True	2	98	106	threshold degree 50
+MNXM80	uridine 5’-monophosphate	all	False	False	False	3	22	86	threshold degree 50
+MNXM121	uridine 5’-triphosphate	all	False	False	False	3	21	33	threshold degree 50
+MNXM220	cytidine 5’-diphosphate	all	False	False	False	3	23	43	threshold degree 50
+MNXM63	cytidine 5-triphosphate	all	False	False	False	3	22	36	threshold degree 50
+MNXM113	guanosine 5’-monophosphate	all	False	False	False	3	9	26	threshold degree 50
+MNXM51	guanosine 5’-triphosphate	all	False	False	False	3	28	51	threshold degree 50
+MNXM125	inosine 5’-monophosphate	all	False	False	False	3	10	11	threshold degree 50
+MNXM495	inosine 5’-diphosphate	all	False	False	False	3	8	14	threshold degree 50
+MNXM423	inosine 5’-triphosphate	all	False	False	False	3	9	15	threshold degree 50
+MNXM374	dADP	all	False	False	False	3	20	59	threshold degree 50
+MNXM411	dCDP	all	False	False	False	3	20	69	threshold degree 50
+MNXM266	dCMP	all	False	False	False	3	20	36	threshold degree 50
+MNXM286	dATP	all	False	False	False	3	18	46	threshold degree 50
+MNXM436	dGDP	all	False	False	False	3	13	52	threshold degree 50
+MNXM344	dGTP	all	False	False	False	3	9	37	threshold degree 50
+MNXM3	adenosine 5’-triphosphate	all	True	False	True	3	245	392	threshold degree 50
+MNXM14	adenosine 5’-monophosphate	all	True	False	True	3	94	137	threshold degree 50
+MNXM7	adenosine 5’-diphosphate	all	True	False	True	3	167	280	threshold degree 50
+MNXM45	adenosine 3',5'-bisphosphate	all	True	False	True	3	55	57	threshold degree 50
+MNXM17	uridine 5’-diphosphate	all	True	False	True	3	164	191	threshold degree 50
+MNXM31	cytidine 5’-monophosphate	all	True	False	True	3	59	83	threshold degree 50
+MNXM30	guanosine 5’-diphosphate	all	True	False	True	3	52	75	threshold degree 50
+MNXM4098	R total	all	True	False	True	4	0	0	presumably part of protein assembly, disassembly, or biomass reactions
+MNXM162247	S-glutathionyl-2-4-dinitrobenzene	all	True	False	True	4	0	0	participates almost exclusively in, transport with extracellular space, resistance-nodulation-cell division (RND)
+MNXM162246	Glutathionyl-leuc4	all	True	False	True	4	0	0	participates almost exclusively in, transport with extracellular space, resistance-nodulation-cell division (RND)
+MNXM162248	S-glutathionyl-ethacrynic-acid	all	True	False	True	4	0	0	participates almost exclusively in, transport with extracellular space, resistance-nodulation-cell division (RND)

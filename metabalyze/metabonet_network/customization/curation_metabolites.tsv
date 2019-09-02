@@ -1,0 +1,860 @@
+identifier_original	identifier_novel	name_original	name_novel	hmdb_novel	hmdb_error	pubchem_novel	pubchem_error	custom	note
+BIOMASS	null							TRUE	
+MNXM46583	MNXM46583	CE(16:0)	Cholesteryl palmitate	HMDB0000885		246520		TRUE	
+MNXM46578	MNXM46578	CE(18:2(9Z,12Z))	1-Linoleoyl-cholesterol	HMDB0000610		5287939		TRUE	identifier for metabolomic measurement data set
+MNXM165	MNXM165	maltose	D-Maltose	HMDB0000163		10991489		TRUE	
+MNXM165	MNXM165	D-Maltose	D-Maltose	HMDB0037138		439341		TRUE	
+MNXM165	MNXM165	D-Maltose	D-Maltose			6255		TRUE	identifier for metabolomic measurement data set
+MNXM165	MNXM165	D-Maltose	D-Maltose			439186		TRUE	identifier for metabolomic measurement data set
+MNXM468	MNXM468	alpha-maltotriose	Maltotriose	HMDB0001262		439586		TRUE	identifier for metabolomic measurement data set
+MNXM461	MNXM461	L-Arabinose	L-Arabinose	HMDB0000646		439195		TRUE	
+MNXM461	MNXM461	L-Arabinose	L-Arabinose			229		TRUE	identifier for metabolomic measurement data set
+MNXM469	MNXM469	Sorbitol	Sorbitol	HMDB0000247		5780		TRUE	
+MNXM469	MNXM469	Sorbitol	Sorbitol			453		TRUE	identifier for metabolomic measurement data set
+MNXM11	MNXM11	Pyrophosphate	Pyrophosphate	HMDB0000250		1023		TRUE	identifier for metabolomic measurement data set
+MNXM11	MNXM11	Pyrophosphate	Pyrophosphate			644102		TRUE	
+MNXM510	MNXM510	D-Xylitol	D-Xylitol	HMDB0002917		6912		TRUE	
+MNXM510	MNXM510	D-Xylitol	D-Xylitol			827		TRUE	identifier for metabolomic measurement data set
+MNXM57	MNXM57	glutathione	Glutathione	HMDB0000125		124886		TRUE	
+MNXM57	MNXM57	Glutathione	Glutathione	HMDB0062697		745		TRUE	
+MNXM57	MNXM57	Glutathione	Glutathione			448106		TRUE	
+MNXM151	MNXM151	glutathione disulfide	Oxidized glutathione	HMDB0003337		975		TRUE	
+MNXM151	MNXM151	Oxidized glutathione	Oxidized glutathione			65359		TRUE	identifier for metabolomic measurement data set
+MNXM730	MNXM730	N-acetyl-L-glutamate(2-)	N-Acetylglutamic acid	HMDB0001138		185		TRUE	
+MNXM730	MNXM730	N-Acetylglutamic acid	N-Acetylglutamic acid			70914		TRUE	identifier for metabolomic measurement data set
+MNXM135	MNXM135	Arachidonic acid	Arachidonic acid	HMDB0001043		444899		TRUE	
+MNXM135	MNXM135	Arachidonic acid	Arachidonic acid	HMDB0060102				TRUE	
+MNXM135	MNXM135	Arachidonic acid	Arachidonic acid			5312542		TRUE	identifier for metabolomic measurement data set
+MNXM292	MNXM292	Squalene	Squalene	HMDB0000256		11975273		TRUE	
+MNXM292	MNXM292	Squalene	Squalene			638072		TRUE	identifier for metabolomic measurement data set
+MNXM118	MNXM118	Putrescine	Putrescine	HMDB0001414		1045		TRUE	identifier for metabolomic measurement data set
+MNXM684	MNXM684	L-Pipecolic acid	L-Pipecolic acid	HMDB0000716		439227		TRUE	
+MNXM684	MNXM684	L-Pipecolic acid	L-Pipecolic acid			736316		TRUE	identifier for metabolomic measurement data set
+MNXM2053	MNXM2053	(S)-3-aminoisobutyric acid zwitterion	(S)-b-aminoisobutyric acid	HMDB0002166		439434		TRUE	
+MNXM2053	MNXM2053	(S)-b-aminoisobutyric acid	(S)-b-aminoisobutyric acid			64956		TRUE	identifier for metabolomic measurement data set
+MNXM786	MNXM786	(R)-3-aminoisobutyric acid zwitterion	(R)-b-aminoisobutyric acid	HMDB0002299		5459822		TRUE	
+MNXM786	MNXM786	(R)-b-aminoisobutyric acid	(R)-b-aminoisobutyric acid			64956		TRUE	identifier for metabolomic measurement data set
+MNXM1034	MNXM1034	3-hydroxy-2-methylpropanoyl-CoA	(S)-3-Hydroxyisobutyryl-CoA	HMDB0001052		88		TRUE	
+MNXM90341	MNXM446	(S)-3-hydroxybutanoyl-CoA	(3S)-hydroxybutanoyl-CoA					TRUE	redundant record in MetaNetX
+MNXM446	MNXM446	(3S)-hydroxybutanoyl-CoA	(3S)-hydroxybutanoyl-CoA		HMDB0001052		88	TRUE	
+MNXM446	MNXM446	(3S)-hydroxybutanoyl-CoA	(S)-3-Hydroxybutyryl-CoA	HMDB0062259		439419		TRUE	
+MNXM446	MNXM446	(S)-3-Hydroxybutyryl-CoA	(S)-3-Hydroxybutyryl-CoA	HMDB0001166		440045		TRUE	
+MNXM1058	MNXM1058	(3R)-hydroxybutanoyl-CoA	(R)-3-Hydroxybutyryl-CoA			45266552		TRUE	
+MNXM1058	MNXM1058	(R)-3-Hydroxybutyryl-CoA	(R)-3-Hydroxybutyryl-CoA	HMDB0001166		440045		TRUE	
+MNXM2063	MNXM2063	D-Myo-inositol 4-phosphate	D-Myo-inositol 4-phosphate	HMDB0001313		440043		TRUE	identifier for metabolomic measurement data set
+MNXM127	MNXM127	myo-Inositol	myo-Inositol	HMDB0000211		892		TRUE	identifier for metabolomic measurement data set
+MNXM66	MNXM66	Glycerol 3-phosphate	Glycerol 3-phosphate	HMDB0000126		439162		TRUE	
+MNXM66	MNXM66	Glycerol 3-phosphate	Glycerol 3-phosphate			754		TRUE	identifier for metabolomic measurement data set
+MNXM364	MNXM364	Pantothenic acid	Pantothenic acid	HMDB0000210		6613		TRUE	identifier for metabolomic measurement data set
+MNXM364	MNXM364	Pantothenic acid	Pantothenic acid			988		TRUE	
+MNXM55	MNXM55	L-Cysteine	L-Cysteine	HMDB0000574		5862		TRUE	
+MNXM55	MNXM55	L-Cysteine	L-Cysteine			594		TRUE	identifier for metabolomic measurement data set
+MNXM147	MNXM147	L-Asparagine	L-Asparagine	HMDB0000168		6267		TRUE	
+MNXM147	MNXM147	L-Asparagine	L-Asparagine			236		TRUE	identifier for metabolomic measurement data set
+MNXM210	MNXM210	Enol-phenylpyruvate	Enol-phenylpyruvate	HMDB0012225		641637		TRUE	
+MNXM210	MNXM210	Enol-phenylpyruvate	Enol-phenylpyruvate			997		TRUE	identifier for metabolomic measurement data set
+MNXM285	MNXM285	D-Lactic acid	D-Lactic acid		HMDB0000190		107689	TRUE	
+MNXM285	MNXM285	D-Lactic acid	D-Lactic acid	HMDB0001311		61503		TRUE	
+MNXM285	MNXM285	D-Lactic acid	D-Lactic acid			612		TRUE	identifier for metabolomic measurement data set
+MNXM179	MNXM179	L-Lactic acid	L-Lactic acid		HMDB0001311		61503	TRUE	
+MNXM179	MNXM179	L-Lactic acid	L-Lactic acid	HMDB0000190		107689		TRUE	
+MNXM179	MNXM179	L-Lactic acid	L-Lactic acid			612		TRUE	identifier for metabolomic measurement data set
+MNXM98	MNXM98	L-Malic acid	L-Malic acid	HMDB0000156		222656		TRUE	
+MNXM98	MNXM98	L-Malic acid	L-Malic acid			525		TRUE	
+MNXM41	MNXM41	D-Glucose	D-Glucose	HMDB0000122		5793		TRUE	
+MNXM41	MNXM41	D-Glucose	D-Glucose			64689		TRUE	identifier for metabolomic measurement data set
+MNXM41	MNXM41	D-Glucose	D-Glucose			107526		TRUE	identifier for metabolomic measurement data set
+MNXM160	MNXM160	Glucose 6-phosphate	Glucose 6-phosphate	HMDB0001401		5958		TRUE	
+MNXM89588	MNXM89588	Glucose 1-phosphate	Glucose 1-phosphate	HMDB0001586		439165		TRUE	
+MNXM89588	MNXM89588	Glucose 1-phosphate	Glucose 1-phosphate			65533		TRUE	identifier for metabolomic measurement data set
+MNXM927	MNXM927	L-Cystine	L-Cystine	HMDB0000192		67678		TRUE	
+MNXM927	MNXM927	L-Cystine	L-Cystine			595		TRUE	identifier for metabolomic measurement data set
+MNXM89661	MNXM89661	Isocitric acid	Isocitric acid	HMDB0000193		1198		TRUE	
+MNXM89661	MNXM89661	Isocitric acid	Isocitric acid			5318532		TRUE	identifier for metabolomic measurement data set
+MNXM94	MNXM94	L-Tryptophan	L-Tryptophan	HMDB0000929		6305		TRUE	
+MNXM94	MNXM94	L-Tryptophan	L-Tryptophan	HMDB0030396		1148		TRUE	
+MNXM94	MNXM94	L-Tryptophan	L-Tryptophan			16217285		TRUE	identifier for metabolomic measurement data set
+MNXM92401	MNXM92401	D-Tagatose	D-Tagatose	HMDB0003418		92092		TRUE	
+MNXM92401	MNXM92401	D-Tagatose	D-Tagatose	HMDB0003418		439312		TRUE	
+MNXM144	MNXM144	beta-alanine	beta-Alanine	HMDB0000056		239		TRUE	avoid confusion of isomers
+MNXM144	MNXM144	beta-alanine	beta-Alanine		HMDB0001310		71080	TRUE	avoid confusion of isomers
+MNXM144	MNXM144	beta-alanine	beta-Alanine		HMDB0000161		5950	TRUE	avoid confusion of isomers
+MNXM144	MNXM144	beta-alanine	beta-Alanine				602	TRUE	avoid confusion of isomers
+MNXM156	MNXM156	D-alanine	D-Alanine	HMDB0001310		71080		TRUE	avoid confusion of isomers
+MNXM156	MNXM156	D-alanine	D-Alanine	HMDB0001310		602		TRUE	avoid confusion of isomers
+MNXM156	MNXM156	D-alanine	D-Alanine		HMDB0000161		5950	TRUE	avoid confusion of isomers
+MNXM156	MNXM156	D-alanine	D-Alanine		HMDB0062251			TRUE	avoid confusion of isomers
+MNXM32	MNXM32	L-alanine	L-Alanine	HMDB0000161		5950		TRUE	avoid confusion of isomers
+MNXM32	MNXM32	L-alanine	L-Alanine	HMDB0062251		602		TRUE	avoid confusion of isomers
+MNXM32	MNXM32	L-alanine	L-Alanine		HMDB0001310		71080	TRUE	avoid confusion of isomers
+MNXM89557	MNXM89557	L-Glutamic acid	L-Glutamic acid	HMDB0000148		33032		TRUE	
+MNXM89557	MNXM89557	L-Glutamic acid	L-Glutamic acid	HMDB0060475		611		TRUE	
+MNXM42	MNXM42	L-Aspartic acid	L-Aspartic acid	HMDB0000191		5960		TRUE	
+MNXM42	MNXM42	L-Aspartic acid	L-Aspartic acid	HMDB0062186		424		TRUE	
+MNXM42	MNXM42	L-Aspartic acid	L-Aspartic acid	HMDB0062501		4519554		TRUE	
+MNXM974	MNXM974	D-Aspartic acid	D-Aspartic acid	HMDB0006483		83887		TRUE	
+MNXM9757	MNXM9757	2,4 dihydroxy nitrophenol	2,4-Dihydroxy-nitrophenol	HMDB0006200		76623		TRUE	
+MNXM6902	MNXM6902	4-oxo-retonoic acid	4-oxo-Retinoic acid	HMDB0006285		6437063		TRUE	
+MNXM646	MNXM646	1D-myo-inositol 1-phosphate	Inositol phosphate	HMDB0002985		107737		TRUE	
+MNXM58377	MNXM58377	13-cis-retinoate	13-cis-Retinoic acid	HMDB0006219		5282379		TRUE	
+MNXM147340	MNXM147340	(S)-Glycerate	L-Glyceric acid	HMDB0006372		6326776		TRUE	
+MNXM100	MNXM100	(2E)-geranyl diphosphate	Geranyl-PP	HMDB0001285		445995		TRUE	
+MNXM1389	MNXM1389	(2E)-hexadecenal	Hexadecenal	HMDB0060482		5280541	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM157161	MNXM157161	Leucyl-leucine	Leucyl-Leucine	HMDB0028933		94244	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM1615	MNXM1615	1-methylpyrrolinium	1-Methylpyrrolinium	HMDB0060253		440932	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM2063	MNXM2063	1D-myo-inositol 4-phosphate	D-Myo-inositol 4-phosphate	HMDB0001313			0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM2473	MNXM2473	2-cis,6-trans,10-trans-geranylgeranyl diphosphate	2-cis,6-trans,10-trans-Geranylgeranyl diphosphate	HMDB0060108		5281909	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM254	MNXM254	hydrogen cyanide	Hydrogen cyanide	HMDB0060292		768	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM36534	MNXM36534	3-hydroxykynurenamine	3-Hydroxykynurenamine	HMDB0060281		440736	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM3867	MNXM3867	4-nitrophenyl phosphate	4-Nitrophenyl phosphate	HMDB0060272		378	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM6691	MNXM6691	2-amino-3-oxoadipic acid	2-Amino-3-oxoadipate	HMDB0060273		440714	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM739	MNXM739	4-hydroxybenzoyl-CoA	4-hydroxybenzoyl-CoA	HMDB0006467		168718	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM739	MNXM739	4-hydroxybenzoyl-CoA	4-hydroxybenzoyl-CoA	HMDB0060140				TRUE	
+MNXM814	MNXM814	cob(II)alamin	Cob(II)alamin	HMDB0006316			0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM9073	MNXM9073	quinoline-4,8-diol	Quinoline-4,8-diol	HMDB0060289		440737	0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM929	MNXM929	1D-myo-inositol 1,3,4,6-tetrakisphosphate	1D-Myo-inositol 1,3,4,6-tetrakisphosphate	HMDB0001187			0	TRUE	HMDB version 4 download includes erroneous references to PubChem
+MNXM78	MNXM78	L-lysine	L-Lysine		HMDB0062809		641599	TRUE	
+MNXM78	MNXM78	L-lysine	L-Lysine	HMDB0000182		5962		TRUE	
+MNXM78	MNXM78	L-lysine	L-Lysine	HMDB0062809		641599		TRUE	
+MNXM659	MNXM659	L-fucose	L-Fucose		HMDB0062489			TRUE	
+MNXM659	MNXM659	L-fucose	L-Fucose	HMDB0000174		25310		TRUE	
+MNXM659	MNXM659	L-fucose	L-Fucose			439650		TRUE	
+MNXM659	MNXM659	L-fucose	L-Fucose			3034656		TRUE	
+MNXM659	MNXM659	L-fucose	L-Fucose			17106		TRUE	
+MNXM659	MNXM659	L-fucose	L-Fucose			94270		TRUE	identifier for metabolomic measurement data set
+MNXM241	MNXM241	D-glucuronate	D-Glucuronic acid	HMDB0000127		444791		TRUE	
+MNXM241	MNXM241	D-glucuronate	D-Glucuronic acid			94715		TRUE	identifier for metabolomic measurement data set
+MNXM15900	MNXM15900	alpha-D-ribose 5-phosphate	D-Ribose 5-phosphate	HMDB0001548		439167		TRUE	
+MNXM126	MNXM126	3-phospho-D-glycerate	3-Phosphoglyceric acid	HMDB0000807		724		TRUE	
+MNXM152361	MNXM129	ascorbate	ascorbate					TRUE	
+MNXM89592	MNXM129	ascorbate	ascorbate					TRUE	
+MNXM129	MNXM129	L-ascorbate	Ascorbic acid	HMDB0000044		54670067		TRUE	identifier for metabolomic measurement data set
+MNXM7478	MNXM7478	L-glyceraldehyde	L-Glyceraldehyde	HMDB0001051		751		TRUE	
+MNXM435	MNXM435	D-glyceraldehyde	D-Glyceraldehyde	HMDB0001051		751		TRUE	
+MNXM74	MNXM74	D-glyceraldehyde 3-phosphate	D-Glyceraldehyde 3-phosphate	HMDB0001112		729		TRUE	
+MNXM89629	MNXM89629	keto-D-fructose 6-phosphate	Fructose 6-phosphate	HMDB0000124		69507		TRUE	
+MNXM89629	MNXM89629	beta-D-fructose 6-phosphate	Fructose 6-phosphate	HMDB0003971		440641		TRUE	
+MNXM417	MNXM417	D-fructose 1,6-bisphosphate	Fructose 1,6-bisphosphate	HMDB0001058		172313		TRUE	
+MNXM417	MNXM417	Fructose 1,6-bisphosphate	Fructose 1,6-bisphosphate	HMDB0060444		10267		TRUE	
+MNXM651	MNXM651	beta-D-fructose 2,6-bisphosphate	D-Fructose 2,6-bisphosphate	HMDB0001047		105021		TRUE	
+MNXM175	MNXM175	D-fructose	D-fructose		HMDB0062538			TRUE	
+MNXM175	MNXM175	D-fructose	D-Fructose	HMDB0000660		5984		TRUE	
+MNXM175	MNXM175	D-fructose	D-Fructose	HMDB0000660		439709		TRUE	
+MNXM167746	MNXM167746	Fructose 1-phosphate	Fructose 1-phosphate	HMDB0001076		10400369		TRUE	
+MNXM167746	MNXM167746	Fructose 1-phosphate	Fructose 1-phosphate			65246		TRUE	identifier for metabolomic measurement data set
+MNXM20	MNXM20	2-oxoglutarate	Oxoglutaric acid	HMDB0000208		51		TRUE	enhancement
+MNXM1062	MNXM1062	2-acetamido-5-oxopentanoate	N-Acetyl-L-glutamate 5-semialdehyde	HMDB0006488		192878		TRUE	
+MNXM114141	MNXM114141	2-hydroxy-3-(4-hydroxyphenyl)-propanoate	Hydroxyphenyllactic acid	HMDB0000755		9378		TRUE	
+MNXM90148	MNXM90148	(S)-3-sulfolactate	(S)-3-sulfolactate			656446		TRUE	
+MNXM11520	MNXM11520	erucic acid	Erucic acid	HMDB0002068		5281116		TRUE	
+MNXM153	MNXM153	3-(4-hydroxyphenyl)pyruvate	4-Hydroxyphenylpyruvic acid	HMDB0000707		979		TRUE	
+MNXM2800	MNXM2800	adipate(2-)	Adipic acid	HMDB0000448		196		TRUE	
+MNXM10881	MNXM10881	CO	Carbon monoxide	HMDB0001361		281		TRUE	
+MNXM2	MNXM2	H2O	Water					TRUE	
+MNXM15	MNXM15	NH4(+)	ammonium					TRUE	
+MNXM246	MNXM246	(S)-carnitine	(S)-carnitine	HMDB0062496		2724480		TRUE	
+MNXM246	MNXM246	(S)-carnitine	(S)-carnitine	HMDB0062496		288		TRUE	
+MNXM173	MNXM173	(R)-carnitine	(R)-carnitine	HMDB0000062		10917		TRUE	
+MNXM173	MNXM173	(R)-carnitine	(R)-carnitine	HMDB0062496		288		TRUE	
+MNXM103	MNXM103	cholesterol			HMDB62453			TRUE	
+MNXM103	MNXM103	cholesterol	Cholesterol	HMDB0000067		5997		TRUE	MetaNetX references HMDB62453, an incorrect record
+MNXM159	MNXM159	2-oxobutanoate	2-oxobutanoate	HMDB0000005				TRUE	
+MNXM423	MNXM423	ITP	inosine 5’-triphosphate	HMDB0000189				TRUE	
+MNXM495	MNXM495	IDP	inosine 5’-diphosphate	HMDB0003335				TRUE	
+MNXM125	MNXM125	IMP	inosine 5’-monophosphate	HMDB0000175				TRUE	
+MNXM89598	MNXM45	adenosine 3’,5’-bisphosphate	adenosine 3’,5’-bisphosphate	HMDB0000061				TRUE	
+MNXM526151	MNXM51	Guanosine triphosphate	guanosine 5’-triphosphate					TRUE	
+MNXM51	MNXM51	guanosine 5’-triphosphate	guanosine 5’-triphosphate	HMDB0001273				TRUE	
+MNXM30	MNXM30	GDP	guanosine 5’-diphosphate	HMDB0001201				TRUE	
+MNXM113	MNXM113	GMP	guanosine 5’-monophosphate	HMDB0001397				TRUE	
+MNXM722415	MNXM121	Uridine triphosphate	Uridine triphosphate					TRUE	
+MNXM121	MNXM121	UTP	uridine 5’-triphosphate	HMDB0000285				TRUE	
+MNXM722410	MNXM17	Uridine 5’-diphosphate	Uridine 5’-diphosphate					TRUE	
+MNXM17	MNXM17	UDP	uridine 5’-diphosphate	HMDB0000295				TRUE	
+MNXM80	MNXM80	UMP	uridine 5’-monophosphate	HMDB0000288				TRUE	
+MNXM63	MNXM63	CTP	cytidine 5’-triphosphate	HMDB0000082				TRUE	
+MNXM220	MNXM220	CDP	Cytidine 5'-diphosphate	HMDB0001546		6132		TRUE	
+MNXM220	MNXM220	Cytidine 5'-diphosphate	Cytidine 5'-diphosphate			290		TRUE	identifier for metabolomic measurement data set
+MNXM31	MNXM31	CMP	Cytidine monophosphate	HMDB0000095		6131		TRUE	identifier for metabolomic measurement data set
+MNXM60	MNXM60	hydrogencarbonate	hydrogen carbonate					TRUE	
+MNXM27	MNXM27	Na(+)	sodium					TRUE	
+MNXM38	MNXM38	FADH2	flavin adenine dinucleotide reduced					TRUE	
+MNXM33	MNXM33	FAD	flavin adenine dinucleotide					TRUE	
+MNXM21	MNXM21	acetyl-CoA	acetyl coenzyme A					TRUE	
+MNXM8	MNXM8	NAD(+)	nicotinamide adenine dinucleotide					TRUE	
+MNXM10	MNXM10	NADH	nicotinamide adenine dinucleotide reduced					TRUE	
+MNXM5	MNXM5	NADP(+)	nicotinamide adenine dinucleotide phosphate					TRUE	
+MNXM6	MNXM6	NADPH	nicotinamide adenine dinucleotide phosphate reduced					TRUE	
+MNXM14	MNXM14	AMP	Adenosine monophosphate	HMDB0000045		6083		TRUE	
+MNXM7	MNXM7	ADP	Adenosine 5'-diphosphate	HMDB0001341				TRUE	
+MNXM3	MNXM3	ATP	adenosine 5’-triphosphate	HMDB0000538				TRUE	
+MNXM12	MNXM12	CoA	Coenzyme A					TRUE	
+MNXM01	MNXM1	H(+)	H(+)					TRUE	
+MNXM1	MNXM1	H(+)	Proton					TRUE	
+MNXM2	MNXM2	H2O	Water					TRUE	
+MNXM4	MNXM4	O2	dioxygen					TRUE	
+MNXM13	MNXM13	CO2	Carbon dioxide					TRUE	
+MNXM22	MNXM22	H2O2	Hydrogen peroxide					TRUE	
+MNXM995	MNXM995	3alpha-hydroxy-5alpha-androstan-17-one	androsterone					TRUE	
+MNXM10053	MNXM10053	Mercplaccys	3-mercaptolactate-cysteine disulfide					FALSE	original name from Recon 2M.2
+MNXM10347	MNXM10347	5adtststerones	5alpha-Dihydrotestosterone sulfate					FALSE	original name from Recon 2M.2
+MNXM10441	MNXM10441	Eaflatoxin	8,9 epxoy aflatoxin B1					FALSE	original name from Recon 2M.2
+MNXM10654	MNXM10654	G1m8mpdol U	alpha-D-Glucosyl-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM10659	MNXM10659	M1mpdol U	alpha-D-mannosyl-beta-D-mannosyl-diacylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM10806	MNXM10806	Mpdol U	beta-D-Mannosyldiacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM10930	MNXM10930	Xolest2 hs	cholesterol ester (from FULLR2)					FALSE	original name from Recon 2M.2
+MNXM10936	MNXM10936	Cs a deg1	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM10937	MNXM10937	Cs a deg4	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 4					FALSE	original name from Recon 2M.2
+MNXM10938	MNXM10938	Cs a deg5	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 5					FALSE	original name from Recon 2M.2
+MNXM10939	MNXM10939	Cs b pre4	chondroitin sulfate B (IdoA2S-GalNAc4S), precursor 4					FALSE	original name from Recon 2M.2
+MNXM10940	MNXM10940	Cs b pre5	chondroitin sulfate B (IdoA2S-GalNAc4s), precursor 5					FALSE	original name from Recon 2M.2
+MNXM10941	MNXM10941	Cs b deg1	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM10942	MNXM10942	Cs b deg3	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM10943	MNXM10943	Cs c deg1	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM10944	MNXM10944	Cs c deg4	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 4					FALSE	original name from Recon 2M.2
+MNXM10945	MNXM10945	Cs c pre2	chondroitin sulfate C (GalNAc6S-GlcA), precursor 2					FALSE	original name from Recon 2M.2
+MNXM10946	MNXM10946	Cs c pre3	chondroitin sulfate C (GalNAc6S-GlcA), precursor 3					FALSE	original name from Recon 2M.2
+MNXM10947	MNXM10947	Cs d pre2	chondroitin sulfate D (GlcNAc6S-GlcA2S) precursor 2					FALSE	original name from Recon 2M.2
+MNXM10948	MNXM10948	Cs d deg1	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM10949	MNXM10949	Cs d deg3	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM10950	MNXM10950	Cs d deg5	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 5					FALSE	original name from Recon 2M.2
+MNXM10951	MNXM10951	Cs d pre3	chondroitin sulfate D (GlcNAc6S-GlcA2S), precursor 3					FALSE	original name from Recon 2M.2
+MNXM10952	MNXM10952	Cs d pre4	chondroitin sulfate D (GlcNAc6S-GlcA2S), precursor 4					FALSE	original name from Recon 2M.2
+MNXM10953	MNXM10953	Cs d pre5	chondroitin sulfate D (GlcNAc6S-GlcA2S), precursor 5					FALSE	original name from Recon 2M.2
+MNXM10954	MNXM10954	Cs e deg1	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM10955	MNXM10955	Cs e deg2	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM10956	MNXM10956	Cs e deg5	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 5					FALSE	original name from Recon 2M.2
+MNXM10957	MNXM10957	Cs e deg6	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 6					FALSE	original name from Recon 2M.2
+MNXM10958	MNXM10958	Cs e pre3	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 3					FALSE	original name from Recon 2M.2
+MNXM10959	MNXM10959	Cs e pre5a	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 5a					FALSE	original name from Recon 2M.2
+MNXM10960	MNXM10960	Cs e pre5b	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 5b					FALSE	original name from Recon 2M.2
+MNXM11301	MNXM11301	N2m2mn	de-Fuc, reducing GlcNAc removed, de-Sia, de-Gal form of PA6 (w/o peptide linkage)					FALSE	original name from Recon 2M.2
+MNXM11315	MNXM11315	Dedoldp U	Dehydrodolichol diphosphate, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM11317	MNXM11317	Dedolp U	Dehydrodolichol phosphate, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM11319	MNXM11319	Dedol U	Dehydrodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM5749	MNXM5749	ferricytochrome	ferricytochrome c					FALSE	original name from Recon 2M.2
+MNXM11408	MNXM11408	DsT antigen	disialyl-T antigen					FALSE	original name from Recon 2M.2
+MNXM11427	MNXM11427	Dcsptn1	docosa-4,7,10,13,16-pentaenoic acid (n-6)					FALSE	original name from Recon 2M.2
+MNXM11435	MNXM11435	Doldp U	Dolichol diphosphate, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM11479	MNXM11479	Etfox	Electron transfer flavoprotein oxidized					FALSE	original name from Recon 2M.2
+MNXM11480	MNXM11480	Etfrd	Electron transfer flavoprotein reduced					FALSE	original name from Recon 2M.2
+MNXM11615	MNXM11615	Galgalthcrm hs	Gal-Gal-Gal-Gal-Glc-Cer (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11616	MNXM11616	Galthcrm hs	Gal-Gal-Gal-Glc-Cer (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11618	MNXM11618	Lxser	Gal-Xyl-L-Ser (protein)					FALSE	original name from Recon 2M.2
+MNXM11641	MNXM11641	Gm1 hs	ganglioside GM1 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11643	MNXM11643	Gm2 hs	ganglioside GM2 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11645	MNXM11645	Gd1b hs	GD1b (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11646	MNXM11646	Gd2 hs	GD2 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11679	MNXM11679	Acglcgalgbside hs	GlcNAc-Gal globoside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11714	MNXM11714	Glygn1	glycogen, structure 1 (glycogenin-11[1,4-Glc])					FALSE	original name from Recon 2M.2
+MNXM11715	MNXM11715	Glygn3	glycogen, structure 3 (glycogenin-7[1,4-Glc])					FALSE	original name from Recon 2M.2
+MNXM11716	MNXM11716	Glygn4	glycogen, structure 4 (glycogenin-1,6-{2[1,4-Glc], [1,4-Glc]})					FALSE	original name from Recon 2M.2
+MNXM11717	MNXM11717	Glygn5	glycogen, structure 5 (glycogenin-2[1,4-Glc])					FALSE	original name from Recon 2M.2
+MNXM11720	MNXM11720	Gpi prot hs	glycophosphatidylinositol (GPI)-anchored protein					FALSE	original name from Recon 2M.2
+MNXM11730	MNXM11730	Gt1c hs	GT1c (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11731	MNXM11731	Gt2 hs	GT2 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM11753	MNXM11753	Hs deg1	heparan sulfate, degradation product 1					FALSE	original name from Recon 2M.2
+MNXM11754	MNXM11754	Hs deg10	heparan sulfate, degradation product 10					FALSE	original name from Recon 2M.2
+MNXM11755	MNXM11755	Hs deg11	heparan sulfate, degradation product 11					FALSE	original name from Recon 2M.2
+MNXM11756	MNXM11756	Hs deg12	heparan sulfate, degradation product 12					FALSE	original name from Recon 2M.2
+MNXM11757	MNXM11757	Hs deg13	heparan sulfate, degradation product 13					FALSE	original name from Recon 2M.2
+MNXM11758	MNXM11758	Hs deg14	heparan sulfate, degradation product 14					FALSE	original name from Recon 2M.2
+MNXM11759	MNXM11759	Hs deg15	heparan sulfate, degradation product 15					FALSE	original name from Recon 2M.2
+MNXM11760	MNXM11760	Hs deg16	heparan sulfate, degradation product 16					FALSE	original name from Recon 2M.2
+MNXM11761	MNXM11761	Hs deg17	heparan sulfate, degradation product 17					FALSE	original name from Recon 2M.2
+MNXM11762	MNXM11762	Hs deg18	heparan sulfate, degradation product 18					FALSE	original name from Recon 2M.2
+MNXM11763	MNXM11763	Hs deg19	heparan sulfate, degradation product 19					FALSE	original name from Recon 2M.2
+MNXM11764	MNXM11764	Hs deg2	heparan sulfate, degradation product 2					FALSE	original name from Recon 2M.2
+MNXM11765	MNXM11765	Hs deg20	heparan sulfate, degradation product 20					FALSE	original name from Recon 2M.2
+MNXM11766	MNXM11766	Hs deg21	heparan sulfate, degradation product 21					FALSE	original name from Recon 2M.2
+MNXM11767	MNXM11767	Hs deg22	heparan sulfate, degradation product 22					FALSE	original name from Recon 2M.2
+MNXM11768	MNXM11768	Hs deg23	heparan sulfate, degradation product 23					FALSE	original name from Recon 2M.2
+MNXM11769	MNXM11769	Hs deg24	heparan sulfate, degradation product 24					FALSE	original name from Recon 2M.2
+MNXM11770	MNXM11770	Hs deg25	heparan sulfate, degradation product 25					FALSE	original name from Recon 2M.2
+MNXM11771	MNXM11771	Hs deg3	heparan sulfate, degradation product 3					FALSE	original name from Recon 2M.2
+MNXM11772	MNXM11772	Hs deg4	heparan sulfate, degradation product 4					FALSE	original name from Recon 2M.2
+MNXM11773	MNXM11773	Hs deg5	heparan sulfate, degradation product 5					FALSE	original name from Recon 2M.2
+MNXM11774	MNXM11774	Hs deg6	heparan sulfate, degradation product 6					FALSE	original name from Recon 2M.2
+MNXM11775	MNXM11775	Hs deg7	heparan sulfate, degradation product 7					FALSE	original name from Recon 2M.2
+MNXM11776	MNXM11776	Hs deg8	heparan sulfate, degradation product 8					FALSE	original name from Recon 2M.2
+MNXM11777	MNXM11777	Hs deg9	heparan sulfate, degradation product 9					FALSE	original name from Recon 2M.2
+MNXM38211	MNXM38211	HS	heparan sulfate, free chain					FALSE	original name from Recon 2M.2
+MNXM11779	MNXM11779	Hs pre1	heparan sulfate, precursor 1					FALSE	original name from Recon 2M.2
+MNXM11780	MNXM11780	Hs pre10	heparan sulfate, precursor 10					FALSE	original name from Recon 2M.2
+MNXM11781	MNXM11781	Hs pre11	heparan sulfate, precursor 11					FALSE	original name from Recon 2M.2
+MNXM11782	MNXM11782	Hs pre12	heparan sulfate, precursor 12					FALSE	original name from Recon 2M.2
+MNXM11783	MNXM11783	Hs pre13	heparan sulfate, precursor 13					FALSE	original name from Recon 2M.2
+MNXM11784	MNXM11784	Hs pre14	heparan sulfate, precursor 14					FALSE	original name from Recon 2M.2
+MNXM11785	MNXM11785	Hs pre15	heparan sulfate, precursor 15					FALSE	original name from Recon 2M.2
+MNXM11786	MNXM11786	Hs pre2	heparan sulfate, precursor 2					FALSE	original name from Recon 2M.2
+MNXM11787	MNXM11787	Hs pre3	heparan sulfate, precursor 3					FALSE	original name from Recon 2M.2
+MNXM11788	MNXM11788	Hs pre4	heparan sulfate, precursor 4					FALSE	original name from Recon 2M.2
+MNXM11789	MNXM11789	Hs pre5	heparan sulfate, precursor 5					FALSE	original name from Recon 2M.2
+MNXM11790	MNXM11790	Hs pre6	heparan sulfate, precursor 6					FALSE	original name from Recon 2M.2
+MNXM11791	MNXM11791	Hs pre7	heparan sulfate, precursor 7					FALSE	original name from Recon 2M.2
+MNXM11792	MNXM11792	Hs pre8	heparan sulfate, precursor 8					FALSE	original name from Recon 2M.2
+MNXM11793	MNXM11793	Hs pre9	heparan sulfate, precursor 9					FALSE	original name from Recon 2M.2
+MNXM11834	MNXM11834	Ha deg1	hyaluronan degradation product 1					FALSE	original name from Recon 2M.2
+MNXM11843	MNXM11843	Htaxol	hydroxylated taxol					FALSE	original name from Recon 2M.2
+MNXM11849	MNXM11849	Galacglcgalacglcgal14acglcgalgluside hs	I-antigen					FALSE	original name from Recon 2M.2
+MNXM11945	MNXM11945	Ksi pre1	keratan sulfate I biosynthesis, precursor 1					FALSE	original name from Recon 2M.2
+MNXM11946	MNXM11946	Ksi pre10	keratan sulfate I biosynthesis, precursor 10					FALSE	original name from Recon 2M.2
+MNXM11947	MNXM11947	Ksi pre11	keratan sulfate I biosynthesis, precursor 11					FALSE	original name from Recon 2M.2
+MNXM11948	MNXM11948	Ksi pre12	keratan sulfate I biosynthesis, precursor 12					FALSE	original name from Recon 2M.2
+MNXM11949	MNXM11949	Ksi pre13	keratan sulfate I biosynthesis, precursor 13					FALSE	original name from Recon 2M.2
+MNXM11950	MNXM11950	Ksi pre14	keratan sulfate I biosynthesis, precursor 14					FALSE	original name from Recon 2M.2
+MNXM11951	MNXM11951	Ksi pre15	keratan sulfate I biosynthesis, precursor 15					FALSE	original name from Recon 2M.2
+MNXM11952	MNXM11952	Ksi pre16	keratan sulfate I biosynthesis, precursor 16					FALSE	original name from Recon 2M.2
+MNXM11953	MNXM11953	Ksi pre17	keratan sulfate I biosynthesis, precursor 17					FALSE	original name from Recon 2M.2
+MNXM11954	MNXM11954	Ksi pre18	keratan sulfate I biosynthesis, precursor 18					FALSE	original name from Recon 2M.2
+MNXM11955	MNXM11955	Ksi pre19	keratan sulfate I biosynthesis, precursor 19					FALSE	original name from Recon 2M.2
+MNXM11956	MNXM11956	Ksi pre2	keratan sulfate I biosynthesis, precursor 2					FALSE	original name from Recon 2M.2
+MNXM11957	MNXM11957	Ksi pre20	keratan sulfate I biosynthesis, precursor 20					FALSE	original name from Recon 2M.2
+MNXM11958	MNXM11958	Ksi pre21	keratan sulfate I biosynthesis, precursor 21					FALSE	original name from Recon 2M.2
+MNXM11959	MNXM11959	Ksi pre22	keratan sulfate I biosynthesis, precursor 22					FALSE	original name from Recon 2M.2
+MNXM11960	MNXM11960	Ksi pre23	keratan sulfate I biosynthesis, precursor 23					FALSE	original name from Recon 2M.2
+MNXM11961	MNXM11961	Ksi pre24	keratan sulfate I biosynthesis, precursor 24					FALSE	original name from Recon 2M.2
+MNXM11962	MNXM11962	Ksi pre25	keratan sulfate I biosynthesis, precursor 25					FALSE	original name from Recon 2M.2
+MNXM11963	MNXM11963	Ksi pre26	keratan sulfate I biosynthesis, precursor 26					FALSE	original name from Recon 2M.2
+MNXM11964	MNXM11964	Ksi pre27	keratan sulfate I biosynthesis, precursor 27					FALSE	original name from Recon 2M.2
+MNXM11965	MNXM11965	Ksi pre28	keratan sulfate I biosynthesis, precursor 28					FALSE	original name from Recon 2M.2
+MNXM11966	MNXM11966	Ksi pre29	keratan sulfate I biosynthesis, precursor 29					FALSE	original name from Recon 2M.2
+MNXM11967	MNXM11967	Ksi pre3	keratan sulfate I biosynthesis, precursor 3					FALSE	original name from Recon 2M.2
+MNXM11968	MNXM11968	Ksi pre30	keratan sulfate I biosynthesis, precursor 30					FALSE	original name from Recon 2M.2
+MNXM11969	MNXM11969	Ksi pre31	keratan sulfate I biosynthesis, precursor 31					FALSE	original name from Recon 2M.2
+MNXM11970	MNXM11970	Ksi pre32	keratan sulfate I biosynthesis, precursor 32					FALSE	original name from Recon 2M.2
+MNXM11971	MNXM11971	Ksi pre33	keratan sulfate I biosynthesis, precursor 33					FALSE	original name from Recon 2M.2
+MNXM11972	MNXM11972	Ksi pre34	keratan sulfate I biosynthesis, precursor 34					FALSE	original name from Recon 2M.2
+MNXM11973	MNXM11973	Ksi pre35	keratan sulfate I biosynthesis, precursor 35					FALSE	original name from Recon 2M.2
+MNXM11974	MNXM11974	Ksi pre36	keratan sulfate I biosynthesis, precursor 36					FALSE	original name from Recon 2M.2
+MNXM11975	MNXM11975	Ksi pre4	keratan sulfate I biosynthesis, precursor 4					FALSE	original name from Recon 2M.2
+MNXM11976	MNXM11976	Ksi pre5	keratan sulfate I biosynthesis, precursor 5					FALSE	original name from Recon 2M.2
+MNXM11977	MNXM11977	Ksi pre6	keratan sulfate I biosynthesis, precursor 6					FALSE	original name from Recon 2M.2
+MNXM11978	MNXM11978	Ksi pre7	keratan sulfate I biosynthesis, precursor 7					FALSE	original name from Recon 2M.2
+MNXM11979	MNXM11979	Ksi pre8	keratan sulfate I biosynthesis, precursor 8					FALSE	original name from Recon 2M.2
+MNXM11980	MNXM11980	Ksi pre9	keratan sulfate I biosynthesis, precursor 9					FALSE	original name from Recon 2M.2
+MNXM11981	MNXM11981	Ksi deg10	keratan sulfate I, degradation product 10					FALSE	original name from Recon 2M.2
+MNXM11982	MNXM11982	Ksi deg13	keratan sulfate I, degradation product 13					FALSE	original name from Recon 2M.2
+MNXM11983	MNXM11983	Ksi deg16	keratan sulfate I, degradation product 16					FALSE	original name from Recon 2M.2
+MNXM11984	MNXM11984	Ksi deg19	keratan sulfate I, degradation product 19					FALSE	original name from Recon 2M.2
+MNXM11985	MNXM11985	Ksi deg2	keratan sulfate I, degradation product 2					FALSE	original name from Recon 2M.2
+MNXM11986	MNXM11986	Ksi deg22	keratan sulfate I, degradation product 22					FALSE	original name from Recon 2M.2
+MNXM11987	MNXM11987	Ksi deg25	keratan sulfate I, degradation product 25					FALSE	original name from Recon 2M.2
+MNXM11988	MNXM11988	Ksi deg28	keratan sulfate I, degradation product 28					FALSE	original name from Recon 2M.2
+MNXM11989	MNXM11989	Ksi deg3	keratan sulfate I, degradation product 3					FALSE	original name from Recon 2M.2
+MNXM11990	MNXM11990	Ksi deg31	keratan sulfate I, degradation product 31					FALSE	original name from Recon 2M.2
+MNXM11991	MNXM11991	Ksi deg34	keratan sulfate I, degradation product 34					FALSE	original name from Recon 2M.2
+MNXM11992	MNXM11992	Ksi deg37	keratan sulfate I, degradation product 37					FALSE	original name from Recon 2M.2
+MNXM11993	MNXM11993	Ksi deg39	keratan sulfate I, degradation product 39					FALSE	original name from Recon 2M.2
+MNXM11994	MNXM11994	Ksi deg4	keratan sulfate I, degradation product 4					FALSE	original name from Recon 2M.2
+MNXM11995	MNXM11995	Ksi deg40	keratan sulfate I, degradation product 40					FALSE	original name from Recon 2M.2
+MNXM11996	MNXM11996	Ksi deg41	keratan sulfate I, degradation product 41					FALSE	original name from Recon 2M.2
+MNXM11997	MNXM11997	Ksi deg5	keratan sulfate I, degradation product 5					FALSE	original name from Recon 2M.2
+MNXM11998	MNXM11998	Ksi deg7	keratan sulfate I, degradation product 7					FALSE	original name from Recon 2M.2
+MNXM11999	MNXM11999	Ksii core2 deg1	keratan sulfate II (core 2-linked), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM12000	MNXM12000	Ksii core2 deg2	keratan sulfate II (core 2-linked), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM12001	MNXM12001	Ksii core2 deg4	keratan sulfate II (core 2-linked), degradation product 4					FALSE	original name from Recon 2M.2
+MNXM12002	MNXM12002	Ksii core2 deg7	keratan sulfate II (core 2-linked), degradation product 7					FALSE	original name from Recon 2M.2
+MNXM12003	MNXM12003	Ksii core2 deg9	keratan sulfate II (core 2-linked), degradation product 9					FALSE	original name from Recon 2M.2
+MNXM12004	MNXM12004	Ksii core4 deg1	keratan sulfate II (core 4-linked), degradation product 1					FALSE	original name from Recon 2M.2
+MNXM12005	MNXM12005	Ksii core4 deg2	keratan sulfate II (core 4-linked), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM12006	MNXM12006	Ksii core4 deg4	keratan sulfate II (core 4-linked), degradation product 4					FALSE	original name from Recon 2M.2
+MNXM12007	MNXM12007	Ksii core2 pre1	keratan sulfate II biosynthesis, precursor 1					FALSE	original name from Recon 2M.2
+MNXM12009	MNXM12009	Ksii core2 pre10	keratan sulfate II biosynthesis, precursor 10					FALSE	original name from Recon 2M.2
+MNXM12011	MNXM12011	Ksii core2 pre2	keratan sulfate II biosynthesis, precursor 2					FALSE	original name from Recon 2M.2
+MNXM12012	MNXM12012	Ksii core2 pre3	keratan sulfate II biosynthesis, precursor 3					FALSE	original name from Recon 2M.2
+MNXM12014	MNXM12014	Ksii core2 pre4	keratan sulfate II biosynthesis, precursor 4					FALSE	original name from Recon 2M.2
+MNXM12016	MNXM12016	Ksii core2 pre5	keratan sulfate II biosynthesis, precursor 5					FALSE	original name from Recon 2M.2
+MNXM12019	MNXM12019	Ksii core2 pre6	keratan sulfate II biosynthesis, precursor 6					FALSE	original name from Recon 2M.2
+MNXM12021	MNXM12021	Ksii core2 pre7	keratan sulfate II biosynthesis, precursor 7					FALSE	original name from Recon 2M.2
+MNXM12023	MNXM12023	Ksii core2 pre8	keratan sulfate II biosynthesis, precursor 8					FALSE	original name from Recon 2M.2
+MNXM12025	MNXM12025	Ksii core2 pre9	keratan sulfate II biosynthesis, precursor 9					FALSE	original name from Recon 2M.2
+MNXM12026	MNXM12026	Ksii core4 pre2	keratan sulfate II boisynthesis, precursor 2					FALSE	original name from Recon 2M.2
+MNXM59	MNXM59	a 1,2-diacyl-sn-glycerol	diacylglycerol					FALSE	original name from Recon 2M.2
+MNXM12324	MNXM12324	Chito2pdol U	N,N'-Diacetylchitobiosyldiphosphodolichol					FALSE	original name from Recon 2M.2
+MNXM12353	MNXM12353	Naglc2p U	N-Acetyl-D-glucosaminyldiphosphodolichol					FALSE	original name from Recon 2M.2
+MNXM12419	MNXM12419	Fn2m2masn	N4-{N-Acetyl-beta-D-glucosaminyl-(1,2)-alpha-D-mannosyl-(1,3)-[N-acetyl-beta-D-glucosaminyl-(1,2)-alpha-D-mannosyl-(1,6)]-beta-D-mannosyl-(1,4)-N-acetyl-beta-D-glucosaminyl-(1,4)-[alpha-L-fucosyl-(1,6)]-N-acetyl-beta-D-glucosaminyl}asparagine					FALSE	original name from Recon 2M.2
+MNXM12471	MNXM12471	Acglcgal14acglcgalgluside hs	nLc5Cer					FALSE	original name from Recon 2M.2
+MNXM12472	MNXM12472	Acglc13galacglcgal14acglcgalgluside hs	nLc7Cer					FALSE	original name from Recon 2M.2
+MNXM12526	MNXM12526	Whddca	omega hydroxy dodecanoate (n-C12:0)					FALSE	original name from Recon 2M.2
+MNXM12527	MNXM12527	Whttdca	omega hydroxy tetradecanoate (n-C14:0)					FALSE	original name from Recon 2M.2
+MNXM12647	MNXM12647	Pgp hs	phosphatidyl glycerol phosphate					FALSE	original name from Recon 2M.2
+MNXM12672	MNXM12672	Dxtrn	phosphorylase-limit dextrin (glycogenin-1,6{4[1,4-Glc], 4[1,4-Glc]})					FALSE	original name from Recon 2M.2
+MNXM127273	MNXM127273	Leu-Gly zwitterion	Leu-Gly					FALSE	original name from Recon 2M.2
+MNXM12747	MNXM12747	Ggn	primed glycogenin (glycogenin-8[1,4-Glc])					FALSE	original name from Recon 2M.2
+MNXM1280	MNXM1280	L-gamma-glutamyl phosphate(2-)	L-glutamyl 5-phosphate					FALSE	original name from Recon 2M.2
+MNXM12840	MNXM12840	R6coa hs	R group 6 Coenzyme A					FALSE	original name from Recon 2M.2
+MNXM1288	MNXM1288	N-formyl-L-kynurenine zwitterion	N-formyl-L-kynurenine					FALSE	original name from Recon 2M.2
+MNXM12937	MNXM12937	ST antigen	sialyl-T antigen					FALSE	original name from Recon 2M.2
+MNXM12938	MNXM12938	Sialyl-Tn antigen	sialyl-Tn antigen					FALSE	original name from Recon 2M.2
+MNXM12953	MNXM12953	Strch2	starch, structure 2 (1,6-{2[1,4-Glc], [1,4-Glc]})					FALSE	original name from Recon 2M.2
+MNXM12955	MNXM12955	Strdnc	stearidonic acid C18:4, n-3					FALSE	original name from Recon 2M.2
+MNXM12967	MNXM12967	Nrpphrsf	Sulfate derivative of norepinephrine					FALSE	original name from Recon 2M.2
+MNXM12985	MNXM12985	Tststerones	testosterone sulfate					FALSE	original name from Recon 2M.2
+MNXM12996	MNXM12996	Tethex3	tetracosahexaenoic acid, n-3					FALSE	original name from Recon 2M.2
+MNXM12997	MNXM12997	Tetpent3	tetracosapentaenoic acid, n-3					FALSE	original name from Recon 2M.2
+MNXM12998	MNXM12998	Tetpent6	tetracosapentaenoic acid, n-6					FALSE	original name from Recon 2M.2
+MNXM12999	MNXM12999	Tettet6	tetracosatetraenoic acid n-6					FALSE	original name from Recon 2M.2
+MNXM13045	MNXM13045	Tmndnc	timnodonic acid C20:5, n-3					FALSE	original name from Recon 2M.2
+MNXM1319	MNXM1319	beta-D-Gal-(1->3)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-Glc-(11')-N-acylsphing-4-enine	beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11)-ceramide					FALSE	original name from Recon 2M.2
+MNXM13247	MNXM13247	Fuc132galacglcgal14acglcgalgluside hs	V3Fuc-nLc6Cer					FALSE	original name from Recon 2M.2
+MNXM1324	MNXM1324	D-tagatofuranose 1,6-bisphosphate	D-tagatose 1,6-bisphosphate					FALSE	original name from Recon 2M.2
+MNXM1334	MNXM1334	O-phosphonato-L-homoserine(2-)	O-phospho-L-homoserine					FALSE	original name from Recon 2M.2
+MNXM13407	MNXM13407	N5m2masn	((N-acetyl-D-glucosaminyl)5-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM13501	MNXM13501	Glc2man	(2)[glucose-1,3]-mannose oligosaccharide					FALSE	original name from Recon 2M.2
+MNXM162526	MNXM162526	bis(beta-glucosyluronate)bilirubin	bilirubin-bisglucuronoside					FALSE	original name from Recon 2M.2
+MNXM13802	MNXM13802	Mem2emgacpail prot hs	({[(mannosyl),(phosphoethanolaminyl)]-dimannosyl},{phosphoethanolaminyl})-mannosyl-glucosaminyl-acylphosphatidylinositol-Protein (M4B)					FALSE	original name from Recon 2M.2
+MNXM13807	MNXM13807	1glyc hs	1 acyl phosphoglycerol					FALSE	original name from Recon 2M.2
+MNXM1383	MNXM1383	mono(glucosyluronic acid)bilirubin(2-)	bilirubin-glucuronoside					FALSE	original name from Recon 2M.2
+MNXM1384	MNXM1384	N-acetyl-L-gamma-glutamyl phosphate(3-)	N-acetyl-L-glutamyl 5-phosphate					FALSE	original name from Recon 2M.2
+MNXM13888	MNXM13888	Dak2gpe hs	1-alkenyl 2-acylglycerol 3-phosphoethanolamine plasmalogen (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM1389	MNXM1389	(2E)-hexadecenal	(2E)-hexadec-2-enal					FALSE	original name from Recon 2M.2
+MNXM13989	MNXM13989	12HPET	12-Hydroperoxyeicosa-5,8,10,14-tetraenoate					FALSE	original name from Recon 2M.2
+MNXM14550	MNXM14550	Dd3coa	3-dodecenoyl CoA					FALSE	original name from Recon 2M.2
+MNXM145923	MNXM145923	Asn X Ser FSLASH Thr	protein-linked asparagine residue (N-glycosylation site)					FALSE	original name from Recon 2M.2
+MNXM146222	MNXM146222	Ser Gly FSLASH Ala X Gly	protein-linked serine residue (glycosaminoglycan attachment site)					FALSE	original name from Recon 2M.2
+MNXM146564	MNXM146564	11 cis retfa	fatty acid 11-cis-retinol					FALSE	original name from Recon 2M.2
+MNXM146565	MNXM146565	9 cis retfa	fatty acid 9-cis-retinol					FALSE	original name from Recon 2M.2
+MNXM146651	MNXM146651	Tyr ggn	Tyr-194 of apo-glycogenin protein (primer for glycogen synthesis)					FALSE	original name from Recon 2M.2
+MNXM146866	MNXM146866	13 cis oretn	13-cis-oxo-retinoic acid					FALSE	original name from Recon 2M.2
+MNXM146867	MNXM146867	13 cis retnglc	13-cis-retinoyl glucuronide					FALSE	original name from Recon 2M.2
+MNXM147044	MNXM147044	ApoC Lys	Apocarboxylase (Lys residue)					FALSE	original name from Recon 2M.2
+MNXM147064	MNXM147064	Cs c,d,e pre1	chondroitin sulfate C (GalNAc6S-GlcA) and D (GlcNAc6S-GlcA2S), precursor 1					FALSE	original name from Recon 2M.2
+MNXM147123	MNXM147123	ApoC Lys btn	Holocarboxylase (biotin covalent bound to Lys residue of apoC)					FALSE	original name from Recon 2M.2
+MNXM147142	MNXM147142	M LPAREN em RPAREN 3gacpail hs	mannosyl-3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol (M4A)					FALSE	original name from Recon 2M.2
+MNXM147296	MNXM147296	Ser FSLASH Thr	protein-linked serine or threonine residue (O-glycosylation site)					FALSE	original name from Recon 2M.2
+MNXM147340	MNXM147340	Glyc S	(S)-Glycerate					FALSE	original name from Recon 2M.2
+MNXM147449	MNXM147449	Cs a,b pre3	chondroitin sulfate A (GalNAc4S-GlcA) and B (IdoA2S-GalNAc4S), precursor 3					FALSE	original name from Recon 2M.2
+MNXM147450	MNXM147450	Cs a,b,e pre1	chondroitin sulfate A (GalNAc4S-GlcA), B (IdoA2S-GalNAc4S), and E (GalNAc4,6diS-GlcA), precursor 1					FALSE	original name from Recon 2M.2
+MNXM147451	MNXM147451	Cs,hs linkage	chondroitin sulfate/heparan sulfate linkage region (GlcA-(Gal)2-Xyl-L-Ser (protein))					FALSE	original name from Recon 2M.2
+MNXM147467	MNXM147467	Dlnlcg	dihomo-gamma-linolenic acid (n-6)					FALSE	original name from Recon 2M.2
+MNXM147791	MNXM147791	3mldz	3-Methylimidazole acetaldehyde					FALSE	original name from Recon 2M.2
+MNXM1479	MNXM1479	Hexacosanoyl CoA n C260CoA	Hexacosanoyl CoA  n C260CoA					FALSE	original name from Recon 2M.2
+MNXM148157	MNXM148157	Cs a,b pre2	chondroitin sulfate A (GalNAc4S-GlcA) and B (IdoA2S-GalNAc4S), precursor 2					FALSE	original name from Recon 2M.2
+MNXM148158	MNXM148158	Retinol cis 13	cis-13-retinol					FALSE	original name from Recon 2M.2
+MNXM148339	MNXM148339	M LPAREN em RPAREN 3gacpail prot hs	mannosyl-3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol-Protein (M4A)					FALSE	original name from Recon 2M.2
+MNXM999	MNXM999	N-acetyl-D-glucosaminylphosphatidylinositol	N-Acetyl-D-glucosaminylphosphatidylinositol					FALSE	original name from Recon 2M.2
+MNXM150922	MNXM150922	3-hydroxyoctadecanoylcarnitine	3-hydroxyoctadecanoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM150929	MNXM150929	3-hydroxytetradecanoylcarnitine	3-hydroxy-tetradecanoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM1543	MNXM1543	beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-Glc-(11')-N-acylsphing-4-enine	beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11)-ceramide					FALSE	original name from Recon 2M.2
+MNXM156642	MNXM156642	hydroxyisovaleroyl carnitine	3-hydroxy-isovaleryl carnitine					FALSE	original name from Recon 2M.2
+MNXM1572	MNXM1572	methylmalonate(2-)	methylmalonate					FALSE	original name from Recon 2M.2
+MNXM158939	MNXM158939	O-succinylcarnitine	succinyl carnitine					FALSE	original name from Recon 2M.2
+MNXM158941	MNXM158941	O-tetradecadienoylcarnitine	tetradecadienoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM162246	MNXM162246	Glutathionyl-leuc4	glutathionyl-leuc4					FALSE	original name from Recon 2M.2
+MNXM163591	MNXM163591	Trans,cis-2,9-octadecadienoyl-CoA	trans,cis-octadeca-2,9-dienoyl-CoA					FALSE	original name from Recon 2M.2
+MNXM16535	MNXM16535	Clpn hs	cardiolipin (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM1665	MNXM1665	Dolp U	Dolichol phosphate, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM16840	MNXM16840	Core5	Core 5					FALSE	original name from Recon 2M.2
+MNXM16841	MNXM16841	Core7	Core 7					FALSE	original name from Recon 2M.2
+MNXM16842	MNXM16842	Core8	Core 8					FALSE	original name from Recon 2M.2
+MNXM168741	MNXM168741	Octenoyl-CoA	5-octenoylcoa					FALSE	original name from Recon 2M.2
+MNXM1714	MNXM1714	5-amino-2-oxopentanoic acid zwitterion	5-amino-2-oxopentanoate					FALSE	original name from Recon 2M.2
+MNXM17161	MNXM17161	Dem2emgacpail prot hs	deacylated-(phosphoethanolaminyl-dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol					FALSE	original name from Recon 2M.2
+MNXM17162	MNXM17162	Dgpi prot hs	deacylated-glycophosphatidylinositol (GPI)-anchored protein					FALSE	original name from Recon 2M.2
+MNXM1727	MNXM1727	Fuc1P	beta-L-fucose 1-phosphate					FALSE	original name from Recon 2M.2
+MNXM18091	MNXM18091	Gncore1	GlcNAc-alpha-1,4-Core 1					FALSE	original name from Recon 2M.2
+MNXM18092	MNXM18092	Gncore2	GlcNAc-alpha-1,4-Core 2					FALSE	original name from Recon 2M.2
+MNXM18136	MNXM18136	Glc3man	glucose-1,2-(2)[glucose-1,3]-mannose oligosaccharide					FALSE	original name from Recon 2M.2
+MNXM1833	MNXM1833	Hexacosanoate n C260	hexacosanoate  n C260					FALSE	original name from Recon 2M.2
+MNXM1848	MNXM1848	Octadecenoyl-CoA (n-C18:1CoA)	Octadecenoyl-CoA					FALSE	original name from Recon 2M.2
+MNXM18595	MNXM18595	AlkylR1oh	hydroxy alkyl chain					FALSE	original name from Recon 2M.2
+MNXM18597	MNXM18597	Hnifedipine	hydroxy nifedipine					FALSE	original name from Recon 2M.2
+MNXM19074	MNXM19074	LneldcACP	linoelaidic acid ACP (all trans)					FALSE	original name from Recon 2M.2
+MNXM19075	MNXM19075	LnlcACP	linoleic acid ACP (all cis)					FALSE	original name from Recon 2M.2
+MNXM2026	MNXM2026	Palmitoyl-ACP (n-C16:0ACP)	Palmitoyl-ACP					FALSE	original name from Recon 2M.2
+MNXM2028	MNXM2028	Pchol hs	Phosphatidylcholine (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM20351	MNXM20351	Pepslys	peptide sans lysine					FALSE	original name from Recon 2M.2
+MNXM2053	MNXM2053	(S)-3-aminoisobutyric acid zwitterion	(S)-3-amino-2-methylpropanoate					FALSE	original name from Recon 2M.2
+MNXM210	MNXM210	enol-phenylpyruvate	3-phenylpyruvate					FALSE	original name from Recon 2M.2
+MNXM21553	MNXM21553	Retinoyl-CoA	retinoyl CoA					FALSE	original name from Recon 2M.2
+MNXM21840	MNXM21840	Strch1	starch, structure 1 (1,6-{7[1,4-Glc], 4[1,4-Glc]})					FALSE	original name from Recon 2M.2
+MNXM21968	MNXM21968	Ts3	Tachysterol 3					FALSE	original name from Recon 2M.2
+MNXM2214	MNXM2214	apo-ACP	apo-[acyl-carrier protein]					FALSE	original name from Recon 2M.2
+MNXM2215	MNXM2215	aquacob(III)alamin	hydroxocobalamin					FALSE	original name from Recon 2M.2
+MNXM22166	MNXM22166	TRI-N-ACETYL-BETA-D-GLUCOSAMINYL	N-acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-(N-acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,6)-(N-acetyl-beta-D-glucosaminyl-1,4)-beta-D-mannosyl-1,4-N-acetyl-beta-D-glucosaminyl-R					FALSE	original name from Recon 2M.2
+MNXM22450	MNXM22450	LeuktrB4wcooh	w-carboxy leukotriene B4					FALSE	original name from Recon 2M.2
+MNXM22451	MNXM22451	Wharachd	w-hydroxyl arachidonic acid					FALSE	original name from Recon 2M.2
+MNXM2278	MNXM2278	R2coa hs	R group 2 Coenzyme A homo sapiens					FALSE	original name from Recon 2M.2
+MNXM4801	MNXM4801	Rtotal2coa	R total Coenzyme A					FALSE	original name from Recon 2M.2
+MNXM23766	MNXM23766	(2E)-Octenoyl-[acp]	2E-octenoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM23842	MNXM23842	trans-Dodec-2-enoyl-[acp]	2E-dodecenoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2416	MNXM2416	Pail hs	phosphatidylinositol (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM24297	MNXM24297	trans-Tetradec-2-enoyl-[acp]	2E-tetradecenoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM24502	MNXM24502	trans-Hex-2-enoyl-[acp]	2E-hexenoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2456	MNXM2456	Pail4p hs	1-Phosphatidyl-1D-myo-inositol 4-phosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM2544	MNXM2544	GLUCOSAMINYL-13-N-ETCETERA-GALACTOSAMINY	N-acetyl-beta-D-glucosaminyl-(1->3)-N-acetyl-D-galactosaminyl group					FALSE	original name from Recon 2M.2
+MNXM25602	MNXM25602	3-Oxohexanoyl-[acp]	3-oxo-hexanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2576	MNXM2576	R-3-hydroxypalmitoyl-acyl-carrierprotein-	(3R)-3-Hydroxypalmitoyl-[acyl-carrier protein]					FALSE	original name from Recon 2M.2
+MNXM25811	MNXM25811	eicosa-5,8,11,14-tetraynoic acid	5,8,11,14-eicosatetraynoate					FALSE	original name from Recon 2M.2
+MNXM26095	MNXM26095	3-Oxotetradecanoyl-[acp]	3-oxo-tetradecanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2621	MNXM2621	5-hydroxykynurenine	5-hydroxy-L-kynurenine					FALSE	original name from Recon 2M.2
+MNXM26616	MNXM26616	3-Oxodecanoyl-[acp]	3-oxo-decanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2667	MNXM2667	Dolmanp U	Dolichyl phosphate D-mannose, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM2668	MNXM2668	dopamine 3-O-sulfate zwitterion	dopamine 3-O-sulfate					FALSE	original name from Recon 2M.2
+MNXM27066	MNXM27066	(R)-3-Hydroxydodecanoyl-[acp]	3R-hydroxy-dodecanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2711	MNXM2711	Pail45p hs	phosphatidylinositol 4,5-bisphosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM28031	MNXM28031	3-Oxooctanoyl-[acp]	3-oxo-octanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM2812	MNXM2812	Crm hs	ceramide (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM28221	MNXM28221	trans-Dec-2-enoyl-[acp]	2E-decenoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM77635	MNXM77635	polycyclic arene	phosphatidic acid					FALSE	original name from Recon 2M.2
+MNXM28933	MNXM28933	3-Oxododecanoyl-[acp]	3-oxo-dodecanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM29072	MNXM29072	trans-Hexadec-2-enoyl-[acp]	2E-hexadecenoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM10881	MNXM10881	CO	carbon monoxide(1+)					FALSE	original name from Recon 2M.2
+MNXM3059	MNXM3059	N-[(R)-pantothenoyl]-L-cysteinate	N-[(R)-pantothenoyl]-L-cysteine					FALSE	original name from Recon 2M.2
+MNXM3074	MNXM3074	O-propanoylcarnitine	O-propanoyl-(R)-carnitine					FALSE	original name from Recon 2M.2
+MNXM3075	MNXM3075	Octadecanoyl-ACP (n-C18:0ACP)	Octadecanoyl-ACP					FALSE	original name from Recon 2M.2
+MNXM3139	MNXM3139	15-oxo-prostaglandin E1	15-keto-prostaglandin E1					FALSE	original name from Recon 2M.2
+MNXM6014	MNXM6014	M2mn	(a-D-mannosyl)2-b-D-mannosyl-N-acetylglucosamine					FALSE	original name from Recon 2M.2
+MNXM3210	MNXM3210	ADP-D-ribose 2'-phosphate(4-)	ADP-D-ribose 2'-phosphate					FALSE	original name from Recon 2M.2
+MNXM32685	MNXM32685	(24R)-1alpha,24,25-trihydroxyvitamin D2 / (24R)-1alpha,24,25-trihydroxyergocalciferol	1-a,24R,25-Trihydroxyvitamin D2					FALSE	original name from Recon 2M.2
+MNXM329	MNXM329	atROL	all-trans-retinol					FALSE	original name from Recon 2M.2
+MNXM3305	MNXM3305	N(2)-phenylacetyl-L-glutaminate	N(2)-phenylacetyl-L-glutamine					FALSE	original name from Recon 2M.2
+MNXM3315	MNXM3315	N-acetylneuraminic acid 9-phosphate	N-acetyl-beta-neuraminate 9-phosphate					FALSE	original name from Recon 2M.2
+MNXM33752	MNXM33752	18-hydroxy-(5Z,8Z,11Z,14Z)-eicosatetraenoate	(5Z,8Z,11Z,14Z)-18-hydroxyeicosatetraenoate					FALSE	original name from Recon 2M.2
+MNXM3383	MNXM3383	vanillylmandelic acid	vanillylmandelate					FALSE	original name from Recon 2M.2
+MNXM3414	MNXM3414	2-aminoprop-2-enoate	(Z)-3-aminoacrylate					FALSE	original name from Recon 2M.2
+MNXM3428	MNXM3428	10fthf5glu	10-formyltetrahydrofolate-[Glu](5)					FALSE	original name from Recon 2M.2
+MNXM3429	MNXM3429	10fthf6glu	10-formyltetrahydrofolate-[Glu](6)					FALSE	original name from Recon 2M.2
+MNXM34616	MNXM34616	(2R,6)-dimethylheptanoyl-CoA	2,6-dimethylheptanoyl-CoA					FALSE	original name from Recon 2M.2
+MNXM3537	MNXM3537	alpha-N-acetylneuraminyl-(2->3)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11')-N-acyl-sphing-4-enine	alpha-N-acetylneuraminyl-(2->3)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11)-ceramide					FALSE	original name from Recon 2M.2
+MNXM3615	MNXM3615	6dhf	haxglutamyl folate (DHF)					FALSE	original name from Recon 2M.2
+MNXM3616	MNXM3616	6thf	hexaglutamyl folate  (THF)					FALSE	original name from Recon 2M.2
+MNXM3634	MNXM3634	alpha-L-iduronic acid	alpha-L-iduronate					FALSE	original name from Recon 2M.2
+MNXM36477	MNXM36477	3-Hydroxy-11Z-octadecenoylcarnitine	3-hydroxy-octadecenoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM3681	MNXM3681	Omeprazole	omeprazole					FALSE	original name from Recon 2M.2
+MNXM3687	MNXM3687	5thf	pentaglutamyl folate (THF)					FALSE	original name from Recon 2M.2
+MNXM3785	MNXM3785	10-hydroxycaprate	10-hydroxydecanoate					FALSE	original name from Recon 2M.2
+MNXM38081	MNXM38081	5-cis-8-cis-Tetradecadienoyl-CoA	trans5,8tetradecadienoylcoa					FALSE	original name from Recon 2M.2
+MNXM388	MNXM388	AIR	5-amino-1-(5-phospho-D-ribosyl)imidazole					FALSE	original name from Recon 2M.2
+MNXM3926	MNXM3926	3-(4-deoxy-beta-D-gluc-4-enuronosyl)-N-acetyl-D-glucosamine	beta-D-4-deoxy-Delta(4)-GlcpA-(1->3)-beta-D-GlcpNAc					FALSE	original name from Recon 2M.2
+MNXM4036	MNXM4036	Lneldccoa	linoelaidyl coenzyme A					FALSE	original name from Recon 2M.2
+MNXM40544	MNXM40544	Albumin human (USP)	Albumin					FALSE	original name from Recon 2M.2
+MNXM4069	MNXM4069	Octadecadienoate n C182	octadecadienoate  n C182					FALSE	original name from Recon 2M.2
+MNXM4080	MNXM4080	5dhf	pentaglutamyl folate (DHF)					FALSE	original name from Recon 2M.2
+MNXM41056	MNXM41056	N-acetyl-alpha-D-galactosaminyl-(1->3)-[alpha-L-fucosyl-(1->2)]-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11')-N-acyl-sphing-4-enine	alpha-D-GalNAc-(1->3)-[alpha-L-Fuc-(1->2)]-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-Glc-(1->1')-Cer					FALSE	original name from Recon 2M.2
+MNXM41358	MNXM41358	alpha-L-fucosyl-(1->2)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-[alpha-L-fucosyl-(1->2)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->6)]-beta-D-galactosyl-(1->4)- N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11')-N-acyl-sphing-4-enine	alpha-L-Fuc-(1->2)-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-[alpha-L-Fuc-(1->2)-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->6)]-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-Glc-(11')-Cer					FALSE	original name from Recon 2M.2
+MNXM41359	MNXM41359	alpha-L-fucosyl-(1->2)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11')-N-acyl-sphing-4-enine	alpha-L-Fuc-(1->2)-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-Glc-(1->1')-Cer					FALSE	original name from Recon 2M.2
+MNXM41360	MNXM41360	alpha-L-fucosyl-(1->2)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11')-N-acyl-sphing-4-enine	alpha-L-Fuc-(1->2)-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-GlcNAc-(1->3)-beta-D-Gal-(1->4)-beta-D-Glc-(1->1')-Cer					FALSE	original name from Recon 2M.2
+MNXM4242	MNXM4242	Pail5p hs	1-Phosphatidyl-1D-myo-inositol 5-phosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM425	MNXM425	all-trans-retinal	retinal					FALSE	original name from Recon 2M.2
+MNXM8331	MNXM8331	Mn	Beta-1,4-mannose-N-acetylglucosamine					FALSE	original name from Recon 2M.2
+MNXM4377	MNXM4377	5'-acetylphosphoadenosine	acetyl AMP					FALSE	original name from Recon 2M.2
+MNXM453	MNXM453	N(2)-formyl-N(1)-(5-phospho-D-ribosyl)glycinamide(2-)	N(2)-formyl-N(1)-(5-phospho-D-ribosyl)glycinamide					FALSE	original name from Recon 2M.2
+MNXM454	MNXM454	pyridoxine 5'-phosphate(2-)	pyridoxine 5'-phosphate					FALSE	original name from Recon 2M.2
+MNXM456	MNXM456	5-formamido-1-(5-phospho-D-ribosyl)imidazole-4-carboxamide(2-)	5-formamido-1-(5-phospho-D-ribosyl)imidazole-4-carboxamide					FALSE	original name from Recon 2M.2
+MNXM45905	MNXM45905	cholesteryl octadecanoate	Cholesterol-ester-stearate					FALSE	original name from Recon 2M.2
+MNXM4598	MNXM4598	Gbside hs	globoside					FALSE	original name from Recon 2M.2
+MNXM463	MNXM463	N(1)-(5-phospho-D-ribosyl)glycinamide(1-)	N(1)-(5-phospho-D-ribosyl)glycinamide					FALSE	original name from Recon 2M.2
+MNXM465	MNXM465	N-carbamoyl-L-aspartate(2-)	N-carbamoyl-L-aspartate					FALSE	original name from Recon 2M.2
+MNXM467	MNXM467	dyspropterin	6-pyruvoyl-5,6,7,8-tetrahydropterin					FALSE	original name from Recon 2M.2
+MNXM468681	MNXM468681	2,4-Decadienoyl-CoA	cis2trans4decadienoylcoa					FALSE	original name from Recon 2M.2
+MNXM4704	MNXM4704	GLUCOSAMINYL-16-ETCETERA-GALACTOSAMINYL-	N-acetyl-beta-D-glucosaminyl-(1->6)-[N-acetyl-beta-D-glucosaminyl-(1->3)]-N-acetyl-D-galactosaminyl group					FALSE	original name from Recon 2M.2
+MNXM4708	MNXM4708	N-acetyl-D-mannosamine 6-phosphate(2-)	N-acetyl-D-mannosamine 6-phosphate					FALSE	original name from Recon 2M.2
+MNXM4799	MNXM4799	R4coa hs	R group 4 Coenzyme A					FALSE	original name from Recon 2M.2
+MNXM4800	MNXM4800	R5coa hs	R group 5 Coenzyme A					FALSE	original name from Recon 2M.2
+MNXM4801	MNXM4801	Rtotal2coa	R total 2 coenzyme A					FALSE	original name from Recon 2M.2
+MNXM4815	MNXM4815	S(6)-acetyldihydrolipoamide	(R)-S(6)-acetyldihydrolipoamide					FALSE	original name from Recon 2M.2
+MNXM1601	MNXM1601	(2-trans,4-cis)-deca-2,4-dienoyl-CoA	decadienoylcoa; 2-trans,4-cis-Decadienoyl-Coenzyme A					FALSE	original name from Recon 2M.2
+MNXM483	MNXM483	N-[(R)-4-phosphopantothenoyl]-L-cysteine	N-[(R)-4-phosphonatopantothenoyl]-L-cysteine					FALSE	original name from Recon 2M.2
+MNXM4868	MNXM4868	Vacccoa	vaccenyl coenzyme A					FALSE	original name from Recon 2M.2
+MNXM4968	MNXM4968	2-hydroxybutyric acid	(2S)-hydroxybutyrate					FALSE	original name from Recon 2M.2
+MNXM4997	MNXM4997	4-(2-amino-3-hydroxyphenyl)-2,4-dioxobutanoic acid	4-(2-amino-3-hydroxyphenyl)-2,4-dioxobutanoate					FALSE	original name from Recon 2M.2
+MNXM5042	MNXM5042	7,10,13,16-docosatetraenoic acid	(7Z,10Z,13Z,16Z)-docosatetraenoate					FALSE	original name from Recon 2M.2
+MNXM51466	MNXM51466	Dodecanedioylcarnitine	O-dodecanedioylcarnitine					FALSE	original name from Recon 2M.2
+MNXM5165	MNXM5165	Galside hs	galactocerebroside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM5169	MNXM5169	Gluside hs	glucocerebroside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM5179	MNXM5179	Galacglcgal14acglcgalgluside hs	i-antigen					FALSE	original name from Recon 2M.2
+MNXM519	MNXM519	orotidine 5'-phosphate(3-)	orotidine 5'-phosphate					FALSE	original name from Recon 2M.2
+MNXM5213	MNXM5213	Lpchol hs	lysophosphatidylcholine (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM521	MNXM521	all-trans-retinoate	retinoate					FALSE	original name from Recon 2M.2
+MNXM5248	MNXM5248	Octadecynoyl ACP n C182ACP	Octadecynoyl ACP  n C182ACP					FALSE	original name from Recon 2M.2
+MNXM5273	MNXM5273	Ps hs	phosphatidylserine (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM5286	MNXM5286	R1coa hs	R group 1 Coenzyme A homo sapiens					FALSE	original name from Recon 2M.2
+MNXM4801	MNXM4801	Rtotal2coa	R total 3 Coenzyme A					FALSE	original name from Recon 2M.2
+MNXM537	MNXM537	Cytochromes-C-Reduced	ferrocytochrome c					FALSE	original name from Recon 2M.2
+MNXM5381	MNXM5381	G1m8masn	(alpha-D-Glucosyl)-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM5382	MNXM5382	M7masnA	(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform A (protein)					FALSE	original name from Recon 2M.2
+MNXM5383	MNXM5383	M2emgacpail hs	(dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosylaminyl-acylphosphatidylinositol (H6)					FALSE	original name from Recon 2M.2
+MNXM5386	MNXM5386	Em2emgacpail hs	(phosphoethanolaminyl-dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol (H7)					FALSE	original name from Recon 2M.2
+MNXM541	MNXM541	3-phosphonooxypyruvate	3-phospho-hydroxypyruvate					FALSE	original name from Recon 2M.2
+MNXM5422	MNXM5422	10fthf7glu	10-formyltetrahydrofolate-[Glu](7)					FALSE	original name from Recon 2M.2
+MNXM5427	MNXM5427	17beta-estradiol 3-O-(beta-D-glucuronate)	17beta-estradiol 3-glucosiduronic acid					FALSE	original name from Recon 2M.2
+MNXM547	MNXM547	preuroporphyrinogen(8-)	hydroxymethylbilane					FALSE	original name from Recon 2M.2
+MNXM55458	MNXM55458	Gly-Sar	glycylsarcosine					FALSE	original name from Recon 2M.2
+MNXM565	MNXM565	N(6)-(1,2-dicarboxylatoethyl)-AMP(4-)	N(6)-(1,2-dicarboxyethyl)-AMP					FALSE	original name from Recon 2M.2
+MNXM5661	MNXM5661	Cdpdag hs	CDP diacylglycerol (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM56689	MNXM56689	Human haptoglobin	Haptoglobin					FALSE	original name from Recon 2M.2
+MNXM568	MNXM568	2-(formamido)-N1-(5-phospho-beta-D-ribosyl)acetamidine	2-(Formamido)-N1-(5-prime-phosphoribosyl)acetamidine					FALSE	original name from Recon 2M.2
+MNXM570	MNXM570	5-hydroxytryptophan	5-hydroxy-L-tryptophan					FALSE	original name from Recon 2M.2
+MNXM5723	MNXM5723	Dodecanoyl-ACP	a dodecanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM5725	MNXM5725	Dolglcp U	Dolichyl beta-D-glucosyl phosphate, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM576	MNXM576	3-hydroxy-L-kynurenine zwitterion	3-hydroxy-L-kynurenine					FALSE	original name from Recon 2M.2
+MNXM5779	MNXM5779	7dhf	heptaglutamyl folate (DHF)					FALSE	original name from Recon 2M.2
+MNXM5780	MNXM5780	7thf	heptaglutamyl folate (THF)					FALSE	original name from Recon 2M.2
+MNXM58377	MNXM58377	13 cis retn	13-cis-retinoate					FALSE	original name from Recon 2M.2
+MNXM5851	MNXM5851	Nrvnccoa	nervonyl coenzyme A					FALSE	original name from Recon 2M.2
+MNXM5881	MNXM5881	Palmitoleoyl-ACPs	a palmitoleoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM5930	MNXM5930	Sphmyln hs	sphingomyelin (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM59473	MNXM59473	L-Lyxonate	L-lyxonate					FALSE	original name from Recon 2M.2
+MNXM59594	MNXM59594	L-xylulose 1-phosphate	D-ribulose 1-phosphate					FALSE	original name from Recon 2M.2
+MNXM5989	MNXM5989	xanthurenic acid	xanthurenate					FALSE	original name from Recon 2M.2
+MNXM6013	MNXM6013	G3m8masn	(alpha-D-Glucosyl)3-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM6015	MNXM6015	M8masn	(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM6017	MNXM6017	Memgacpail hs	(mannosyl),(phosphoethanolaminyl)-mannosyl-glucosylaminyl-acylphosphatidylinositol (B)					FALSE	original name from Recon 2M.2
+MNXM6024	MNXM6024	Mem2emgacpail hs	({[(mannosyl),(phosphoethanolaminyl)]-dimannosyl},{phosphoethanolaminyl})-mannosyl-glucosaminyl-acylphosphatidylinositol (M4B)					FALSE	original name from Recon 2M.2
+MNXM604	MNXM604	3alpha,7alpha,12alpha-trihydroxy-5beta-cholestan-26-oic acid	(25R)-3alpha,7alpha,12alpha-trihydroxy-5beta-cholestan-26-oate					FALSE	original name from Recon 2M.2
+MNXM6054	MNXM6054	Estriolglc	16-Glucuronide-estriol					FALSE	original name from Recon 2M.2
+MNXM6098	MNXM6098	Ahandrostanglc	3alpha-hydroxy-5beta-androstan-17-one 3-glucosiduronic acid					FALSE	original name from Recon 2M.2
+MNXM6163	MNXM6163	Fuc-alpha1->2Gal-beta1->3GlcNAc-beta1->3Gal-beta1->4Glc-beta1-1'Cer	alpha-L-fucosyl-(1->2)-beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-(1->3)-beta-D-galactosyl-(1->4)-beta-D-glucosyl-(11)-ceramide					FALSE	original name from Recon 2M.2
+MNXM6211	MNXM6211	Cspg e	chondroitin sulfate E (GalNAc4,6diS-GlcA) proteoglycan					FALSE	original name from Recon 2M.2
+MNXM6251	MNXM6251	M2gacpail hs	dimannosyl-glucosaminyl-acylphosphatidylinositol (H3)					FALSE	original name from Recon 2M.2
+MNXM6264	MNXM6264	Estroneglc	Estrone glucuronide					FALSE	original name from Recon 2M.2
+MNXM6266	MNXM6266	Retfa	fatty acid retinol					FALSE	original name from Recon 2M.2
+MNXM6274	MNXM6274	Gd3 hs	GD3 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM6282	MNXM6282	Gpi hs	glycophosphatidylinositol (GPI) anchor precursor (3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol) (H8)					FALSE	original name from Recon 2M.2
+MNXM6283	MNXM6283	Gpi sig	glycophosphatidylinositol (GPI) signal sequence (C-terminal peptide)					FALSE	original name from Recon 2M.2
+MNXM6303	MNXM6303	Ksi	keratan sulfate I					FALSE	original name from Recon 2M.2
+MNXM63049	MNXM63049	N(omega)-hydroxy-L-arginine	N(5)-[(hydroxyamino)(imino)methyl]-L-ornithine					FALSE	original name from Recon 2M.2
+MNXM6304	MNXM6304	Ksii core2 deg5	keratan sulfate II (core 2-linked), degradation product 5					FALSE	original name from Recon 2M.2
+MNXM6329	MNXM6329	G00146	mannosyl-glucosaminyl-acylphosphatidylinositiol (H2)					FALSE	original name from Recon 2M.2
+MNXM6332	MNXM6332	Mag hs	monoacylglycerol 2 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM6369	MNXM6369	S2l2fn2m2masn	PA6					FALSE	original name from Recon 2M.2
+MNXM6416	MNXM6416	R3coa hs	R group 3 Coenzyme A homo sapiens					FALSE	original name from Recon 2M.2
+MNXM6447	MNXM6447	Tststeroneglc	testosterone 17-glucosiduronic acid					FALSE	original name from Recon 2M.2
+MNXM6483	MNXM6483	N2m2masn	((N-acetyl-D-glucosaminyl)2-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM65090	MNXM65090	O-(4,8-dimethylnonanoyl)carnitine	O-4,8-dimethylnonanoyl-(R)-carnitine					FALSE	original name from Recon 2M.2
+MNXM6531	MNXM6531	G2m8masn	(alpha-D-Glucosyl)2-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM6534	MNXM6534	M4masn	(alpha-D-mannosyl)4-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM6536	MNXM6536	M5masnB1	(alpha-D-mannosyl)5-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM6539	MNXM6539	M7masnB	(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform B (protein)					FALSE	original name from Recon 2M.2
+MNXM1256	MNXM1256	1-O-alkyl-sn-glycero-3-phosphocholine	1-alkyl 2-lysoglycerol 3-phosphocholine					FALSE	original name from Recon 2M.2
+MNXM6641	MNXM6641	Retinal cis 13	13-cis-retinal					FALSE	original name from Recon 2M.2
+MNXM67008	MNXM67008	1-(5Z,8Z,11Z,14Z-eicosatetraenoyl)-sn-glycero-3-phosphate	1-Acylglycerol-3P-arach					FALSE	original name from Recon 2M.2
+MNXM6764	MNXM6764	2425dhvitd2	24R,25-Dihyoxyvitamin D2					FALSE	original name from Recon 2M.2
+MNXM688	MNXM688	3alpha,7alpha-Dihydroxy-5beta-cholestanate	(25R)-3alpha,7alpha-dihydroxy-5beta-cholestan-26-oate					FALSE	original name from Recon 2M.2
+MNXM6902	MNXM6902	Oretn	4-oxo-retonoic acid					FALSE	original name from Recon 2M.2
+MNXM690	MNXM690	3,3',5'-triiodothyronine	3,3',5'-triiodo-L-thyronine					FALSE	original name from Recon 2M.2
+MNXM6987	MNXM6987	Oagd3 hs	9-O-Acetylated GD3 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM6988	MNXM6988	Oagt3 hs	9-O-Acetylated GT3 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM94364	MNXM94364	acylglycerone phosphate	acyl-dihydroxyacetone phosphate					FALSE	original name from Recon 2M.2
+MNXM7051	MNXM7051	Acgagbside hs	alpha GalNAc globoside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7068	MNXM7068	Andrstrnglc	androsterone 3-glucosiduronic acid					FALSE	original name from Recon 2M.2
+MNXM7077	MNXM7077	ApoC	Apocarboxlase (no lys residue)					FALSE	original name from Recon 2M.2
+MNXM7110	MNXM7110	Acgbgbside hs	beta GalNAc globoside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7161	MNXM7161	Crvnc	cervonic acid, C22:6 n-3					FALSE	original name from Recon 2M.2
+MNXM7169	MNXM7169	Cspg a	chondroitin sulfate A (GalNAc4S-GlcA) proteoglycan					FALSE	original name from Recon 2M.2
+MNXM7170	MNXM7170	Cspg b	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S) proteoglycan					FALSE	original name from Recon 2M.2
+MNXM7172	MNXM7172	Cspg c	chondroitin sulfate C (GalNAc6S-GlcA) proteoglycan					FALSE	original name from Recon 2M.2
+MNXM7173	MNXM7173	Cs c deg5	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 5					FALSE	original name from Recon 2M.2
+MNXM7174	MNXM7174	Cspg d	chondroitin sulfate D (GlcNAc6S-GlcA2S) proteoglycan					FALSE	original name from Recon 2M.2
+MNXM7200	MNXM7200	Core6	N-acetyl-beta-D-glucosaminyl-(1->6)-N-acetyl-alpha-D-galactosaminyl-[glycoprotein]					FALSE	original name from Recon 2M.2
+MNXM7256	MNXM7256	S2l2n2m2masn	de-Fuc form of PA6					FALSE	original name from Recon 2M.2
+MNXM7257	MNXM7257	S2l2n2m2mn	de-Fuc, reducing GlcNAc removed form of PA6 (w/o peptide linkage)					FALSE	original name from Recon 2M.2
+MNXM730	MNXM730	N-acetyl-L-glutamate(2-)	N-acetyl-L-glutamate					FALSE	original name from Recon 2M.2
+MNXM7321	MNXM7321	Dolichol U	Dolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM7370	MNXM7370	Galgbside hs	galactosylgloboside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7380	MNXM7380	G00145	glucosaminyl-acylphosphatidylinositol					FALSE	original name from Recon 2M.2
+MNXM7383	MNXM7383	G1m6masnB1	glucosyl-(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM7384	MNXM7384	G1m7masnB	glucosyl-(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform B (protein)					FALSE	original name from Recon 2M.2
+MNXM7385	MNXM7385	G1m7masnC	glucosyl-(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform C (protein)					FALSE	original name from Recon 2M.2
+MNXM7401	MNXM7401	Pre prot	glycophosphatidylinositol (GPI)-anchored protein precursor					FALSE	original name from Recon 2M.2
+MNXM7405	MNXM7405	Gq1balpha hs	GQ1balpha (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7406	MNXM7406	Gt3 hs	GT3 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7463	MNXM7463	Ksii core2	keratan sulfate II (core 2-linked)					FALSE	original name from Recon 2M.2
+MNXM7464	MNXM7464	Ksii core4	keratan sulfate II (core 4-linked)					FALSE	original name from Recon 2M.2
+MNXM762	MNXM762	thiocyanate	isothiocyanic acid					FALSE	original name from Recon 2M.2
+MNXM7658	MNXM7658	Pail35p hs	phosphatidylinositol-3,5-bisphosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7699	MNXM7699	Pristcoa	pristanoyl coa					FALSE	original name from Recon 2M.2
+MNXM7769	MNXM7769	Acngalgbside hs	sialyl galactosylgloboside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM7789	MNXM7789	Sgalside hs	sulfatide galactocerebroside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM3928	MNXM3928	beta-D-galactosyl-(1->3)-N-acetyl-alpha-D-galactosaminyl group	T antigen (core 1)					FALSE	original name from Recon 2M.2
+MNXM78290	MNXM78290	prostaglandin D1	prostaglandin D1(1-)					FALSE	original name from Recon 2M.2
+MNXM526203	MNXM526203	heme	heme b					FALSE	original name from Recon 2M.2
+MNXM7842	MNXM7842	M3gacpail hs	trimannosyl-glucosaminyl-acylphosphatidylinositol (H4)					FALSE	original name from Recon 2M.2
+MNXM786	MNXM786	(R)-3-aminoisobutyric acid zwitterion	(2R)-3-amino-2-methylpropanoate					FALSE	original name from Recon 2M.2
+MNXM7931	MNXM7931	M4mpdol U	(alpha-D-Mannosyl)4-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM7938	MNXM7938	Galfuc12gal14acglcgalgluside hs	(Gal)3 (Glc)1 (GlcNAc)1 (LFuc)1 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM7939	MNXM7939	Fucgalfucgalacglcgalgluside hs	(Gal)3 (Glc)1 (GlcNAc)1 (LFuc)2 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM7940	MNXM7940	Fucfucfucgalacglcgal14acglcgalgluside hs	(Gal)3 (Glc)1 (GlcNAc)2 (LFuc)3 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM7941	MNXM7941	Galfucgalacglcgal14acglcgalgluside hs	(Gal)4 (Glc)1 (GlcNAc)2 (LFuc)1 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM7942	MNXM7942	Fucfucfucgalacglc13galacglcgal14acglcgalgluside hs	(Gal)4 (Glc)1 (GlcNAc)3 (LFuc)3 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM7949	MNXM7949	M3emgacpail hs	(trimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol (M4C)					FALSE	original name from Recon 2M.2
+MNXM1973	MNXM1973	1-O-alkyl-2-acetyl-sn-glycero-3-phosphocholine	1-alkyl 2-acteylglycerol 3-phosphocholine (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM887	MNXM887	1-O-alkylglycerone 3-phosphate	1-alkyldihydroxyacetone phosphate					FALSE	original name from Recon 2M.2
+MNXM8082	MNXM8082	Acnacngal14acglcgalgluside hs	3',8'-LD1					FALSE	original name from Recon 2M.2
+MNXM808	MNXM808	(5S)-hydroperoxy-(6E,8Z,11Z,14Z)-eicosatetraenoate	(5S,6E,8Z,11Z,14Z)-5-hydroperoxyicosa-6,8,11,14-tetraenoate					FALSE	original name from Recon 2M.2
+MNXM8131	MNXM8131	Cholcoas	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestanoyl-CoA(S)					FALSE	original name from Recon 2M.2
+MNXM3710	MNXM3710	S-succinyldihydrolipoamide	S-succinyl-dihydrolipoamide					FALSE	original name from Recon 2M.2
+MNXM8181	MNXM8181	5adtststeroneglc	5alpha-Dihydrotestosterone glucuronide					FALSE	original name from Recon 2M.2
+MNXM8255	MNXM8255	Adrncrn	Adrenyl carnitine					FALSE	original name from Recon 2M.2
+MNXM827	MNXM827	3alpha,7alpha,12alpha,24-tetrahydroxy-5beta-cholestan-26-oyl-CoA	3alpha,7alpha,12alpha,24-Tetrahydroxy-5beta-cholestanoyl-CoA					FALSE	original name from Recon 2M.2
+MNXM91793	MNXM91793	(R)-3-Hydroxybutanoyl-[acyl-carrier protein]	a (3R)-3-hydroxybutanoyl-[acp]					FALSE	original name from Recon 2M.2
+MNXM834	MNXM834	chenodeoxycholoyl-CoA	chenodeoxycholoyl coenzyme a					FALSE	original name from Recon 2M.2
+MNXM8358	MNXM8358	Arachdcrn	C20:4 carnitine					FALSE	original name from Recon 2M.2
+MNXM8398	MNXM8398	Cs a deg2	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM8399	MNXM8399	Cs a deg3	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM8400	MNXM8400	Cs a	chondroitin sulfate A (GalNAc4S-GlcA), free chain					FALSE	original name from Recon 2M.2
+MNXM8401	MNXM8401	Cs b deg2	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM8402	MNXM8402	Cs b	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), free chain					FALSE	original name from Recon 2M.2
+MNXM8403	MNXM8403	Cs c deg2	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM8404	MNXM8404	Cs c deg3	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM8405	MNXM8405	Cs c	chondroitin sulfate C (GalNAc6S-GlcA), free chain					FALSE	original name from Recon 2M.2
+MNXM8406	MNXM8406	Cs d deg2	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 2					FALSE	original name from Recon 2M.2
+MNXM8407	MNXM8407	Cs d deg4	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 4					FALSE	original name from Recon 2M.2
+MNXM8408	MNXM8408	Cs d deg6	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 6					FALSE	original name from Recon 2M.2
+MNXM8409	MNXM8409	Cs d	chondroitin sulfate D (GlcNAc6S-GlcA2S), free chain					FALSE	original name from Recon 2M.2
+MNXM8410	MNXM8410	Cs e deg3	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM8411	MNXM8411	Cs e deg4	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 4					FALSE	original name from Recon 2M.2
+MNXM8412	MNXM8412	Cs e deg7	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 7					FALSE	original name from Recon 2M.2
+MNXM8413	MNXM8413	Cs e	chondroitin sulfate E (GalNAc4,6diS-GlcA), free chain					FALSE	original name from Recon 2M.2
+MNXM8414	MNXM8414	Cs e pre2	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 2					FALSE	original name from Recon 2M.2
+MNXM8415	MNXM8415	Cs e pre4	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 4					FALSE	original name from Recon 2M.2
+MNXM8416	MNXM8416	Cs pre	chondroitin sulfate precursor (GalNAc-GlcA-(Gal)2-Xyl-L-Ser (protein))					FALSE	original name from Recon 2M.2
+MNXM8440	MNXM8440	ubiquinone-10	coenzyme Q10					FALSE	original name from Recon 2M.2
+MNXM8447	MNXM8447	Core2	beta-D-galactosyl-(1->3)-[N-acetyl-beta-D-glucosaminyl-(1->6)]-N-acetyl-alpha-D-galactosaminyl-[glycoprotein]					FALSE	original name from Recon 2M.2
+MNXM8517	MNXM8517	S2l2n2m2m	de-Fuc form of PA6 (w/o peptide linkage)					FALSE	original name from Recon 2M.2
+MNXM8518	MNXM8518	L2n2m2mn	de-Fuc, reducing GlcNAc removed, de-Sia form of PA6 (w/o peptide linkage)					FALSE	original name from Recon 2M.2
+MNXM8541	MNXM8541	Dlnlcgcrn	dihomo-gamma-linolenyl carnitine					FALSE	original name from Recon 2M.2
+MNXM8543	MNXM8543	Dhcrm hs	dihydroceramide (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8553	MNXM8553	Acnacngalgbside hs	disialyl galactosylgloboside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8574	MNXM8574	Eicostetcrn	Eicosatetranoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM8598	MNXM8598	F1a	F1alpha					FALSE	original name from Recon 2M.2
+MNXM8618	MNXM8618	Fucgalgbside hs	fucosyl galactosylgloboside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8628	MNXM8628	Galgalgalthcrm hs	Gal-Gal-Gal-Gal-Gal-Glc-Cer (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8629	MNXM8629	Galacglcgalgbside hs	Gal-GlcNAc-Gal globoside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8636	MNXM8636	Gm3 hs	ganglioside GM3 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8638	MNXM8638	Gd1b2 hs	GD1beta (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8639	MNXM8639	Gd1c hs	GD1c (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM867	MNXM867	3alpha,7alpha,12alpha-trihydroxy-5beta-cholestan-27-al	(25R)-3alpha,7alpha,12alpha-trihydroxy-5beta-cholestan-26-al					FALSE	original name from Recon 2M.2
+MNXM8681	MNXM8681	Glygn2	glycogen, structure 2 (glycogenin-1,6-{7[1,4-Glc], 4[1,4-Glc]})					FALSE	original name from Recon 2M.2
+MNXM8685	MNXM8685	Gm1b hs	GM1b (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8689	MNXM8689	Gp1c hs	GP1c (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8690	MNXM8690	Gp1calpha hs	GP1c alpha  (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8691	MNXM8691	Gq1b hs	GQ1b (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8692	MNXM8692	Gq1c hs	GQ1c (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8693	MNXM8693	Gt1a hs	GT1a (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8694	MNXM8694	Gt1alpha hs	GT1aalpha (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8695	MNXM8695	Gt1b hs	GT1b (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8716	MNXM8716	Hdcecrn	Hexadecenoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM8725	MNXM8725	Ebastineoh	hydroxylated ebastine					FALSE	original name from Recon 2M.2
+MNXM8728	MNXM8728	Fuc13galacglcgal14acglcgalgluside hs	III3Fuc-nLc6Cer					FALSE	original name from Recon 2M.2
+MNXM8779	MNXM8779	Fucacngalacglcgalgluside hs	IV3-a-Neu5Ac,III4-a-Fuc-Lc4Cer					FALSE	original name from Recon 2M.2
+MNXM8784	MNXM8784	Ksi deg1	keratan sulfate I, degradation product 1					FALSE	original name from Recon 2M.2
+MNXM8785	MNXM8785	Ksi deg11	keratan sulfate I, degradation product 11					FALSE	original name from Recon 2M.2
+MNXM8786	MNXM8786	Ksi deg12	keratan sulfate I, degradation product 12					FALSE	original name from Recon 2M.2
+MNXM8787	MNXM8787	Ksi deg14	keratan sulfate I, degradation product 14					FALSE	original name from Recon 2M.2
+MNXM8788	MNXM8788	Ksi deg15	keratan sulfate I, degradation product 15					FALSE	original name from Recon 2M.2
+MNXM8789	MNXM8789	Ksi deg17	keratan sulfate I, degradation product 17					FALSE	original name from Recon 2M.2
+MNXM8790	MNXM8790	Ksi deg18	keratan sulfate I, degradation product 18					FALSE	original name from Recon 2M.2
+MNXM8791	MNXM8791	Ksi deg20	keratan sulfate I, degradation product 20					FALSE	original name from Recon 2M.2
+MNXM8792	MNXM8792	Ksi deg21	keratan sulfate I, degradation product 21					FALSE	original name from Recon 2M.2
+MNXM8793	MNXM8793	Ksi deg23	keratan sulfate I, degradation product 23					FALSE	original name from Recon 2M.2
+MNXM8794	MNXM8794	Ksi deg24	keratan sulfate I, degradation product 24					FALSE	original name from Recon 2M.2
+MNXM8795	MNXM8795	Ksi deg26	keratan sulfate I, degradation product 26					FALSE	original name from Recon 2M.2
+MNXM8796	MNXM8796	Ksi deg27	keratan sulfate I, degradation product 27					FALSE	original name from Recon 2M.2
+MNXM8797	MNXM8797	Ksi deg29	keratan sulfate I, degradation product 29					FALSE	original name from Recon 2M.2
+MNXM8798	MNXM8798	Ksi deg30	keratan sulfate I, degradation product 30					FALSE	original name from Recon 2M.2
+MNXM8799	MNXM8799	Ksi deg32	keratan sulfate I, degradation product 32					FALSE	original name from Recon 2M.2
+MNXM8800	MNXM8800	Ksi deg33	keratan sulfate I, degradation product 33					FALSE	original name from Recon 2M.2
+MNXM8801	MNXM8801	Ksi deg35	keratan sulfate I, degradation product 35					FALSE	original name from Recon 2M.2
+MNXM8802	MNXM8802	Ksi deg36	keratan sulfate I, degradation product 36					FALSE	original name from Recon 2M.2
+MNXM8803	MNXM8803	Ksi deg38	keratan sulfate I, degradation product 38					FALSE	original name from Recon 2M.2
+MNXM8804	MNXM8804	Ksi deg6	keratan sulfate I, degradation product 6					FALSE	original name from Recon 2M.2
+MNXM8805	MNXM8805	Ksi deg8	keratan sulfate I, degradation product 8					FALSE	original name from Recon 2M.2
+MNXM8806	MNXM8806	Ksi deg9	keratan sulfate I, degradation product 9					FALSE	original name from Recon 2M.2
+MNXM8807	MNXM8807	Ksii core2 deg3	keratan sulfate II (core 2-linked), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM8808	MNXM8808	Ksii core2 deg6	keratan sulfate II (core 2-linked), degradation product 6					FALSE	original name from Recon 2M.2
+MNXM8809	MNXM8809	Ksii core2 deg8	keratan sulfate II (core 2-linked), degradation product 8					FALSE	original name from Recon 2M.2
+MNXM8810	MNXM8810	Ksii core4 deg3	keratan sulfate II (core 4-linked), degradation product 3					FALSE	original name from Recon 2M.2
+MNXM8833	MNXM8833	Fucgal14acglcgalgluside hs	Lacto-N-fucopentaosyl III ceramide					FALSE	original name from Recon 2M.2
+MNXM8835	MNXM8835	Fucfucgalacglcgalgluside hs	Leb glycolipid					FALSE	original name from Recon 2M.2
+MNXM88382	MNXM88382	tyramine sulfate	Tyramine-O-sulfate					FALSE	original name from Recon 2M.2
+MNXM8842	MNXM8842	Lgnccrn	lignoceryl carnitine					FALSE	original name from Recon 2M.2
+MNXM8844	MNXM8844	Lneldc	linoelaidic acid (all trans C18:2)					FALSE	original name from Recon 2M.2
+MNXM8851	MNXM8851	Alpa hs	lysophosphatidic acid (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM8930	MNXM8930	N2m2nm	n2m2nmasn (w/o peptide linkage)					FALSE	original name from Recon 2M.2
+MNXM8956	MNXM8956	Odecrn	O-octadecenoylcarnitine					FALSE	original name from Recon 2M.2
+MNXM8995	MNXM8995	Ptdcacrn	pendtadenoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM90003	MNXM90003	5-phospho-beta-D-ribosylaminium(1-)	5-phospho-beta-D-ribosylamine					FALSE	original name from Recon 2M.2
+MNXM90130	MNXM90130	N-phosphocreatine	creatine-phosphate					FALSE	original name from Recon 2M.2
+MNXM90161	MNXM90161	4-cis-decenoyl-CoA	trans4decenoylcoa					FALSE	original name from Recon 2M.2
+MNXM9017	MNXM9017	Pglyc hs	phosphatidylglycerol (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM9023	MNXM9023	Emgacpail hs	phosphoethanolaminyl-mannosyl-glucosylaminyl-acylphosphatidylinositol (H5)					FALSE	original name from Recon 2M.2
+MNXM9024	MNXM9024	Em3gacpail hs	phosphoethanolaminyl-trimannosyl-glucosaminyl-acylphosphatidylinositol (H6')					FALSE	original name from Recon 2M.2
+MNXM90341	MNXM90341	(S)-3-hydroxybutanoyl-CoA	(S)-3-hydroxyisobutyryl-CoA					FALSE	original name from Recon 2M.2
+MNXM90428	MNXM90428	Pail34p hs	phosphatidylinositol-3,4-bisphosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM90514	MNXM90514	Pail3p hs	1-Phosphatidyl-1D-myo-inositol 3-phosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM90540	MNXM90540	Galgluside hs	galactosyl glucosyl ceramide					FALSE	original name from Recon 2M.2
+MNXM90654	MNXM90654	Pail345p hs	phosphatidylinositol-3,4,5-trisphosphate (Homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM12496	MNXM12496	O-acyl-(R)-carnitine	R total 2 carnitine					FALSE	original name from Recon 2M.2
+MNXM12496	MNXM12496	O-acyl-(R)-carnitine	R total 3 carnitine					FALSE	original name from Recon 2M.2
+MNXM72	MNXM72	a fatty acid	R total 3 position					FALSE	original name from Recon 2M.2
+MNXM12496	MNXM12496	O-acyl-(R)-carnitine	R total carnitine					FALSE	original name from Recon 2M.2
+MNXM9086	MNXM9086	N2m2nmn	reducing GlcNAc removed form of n2m2nmasn (w/o peptide)					FALSE	original name from Recon 2M.2
+MNXM91024	MNXM91024	Tetracosanoyl CoA n C240CoA	tetracosanoyl CoA   n C240CoA					FALSE	original name from Recon 2M.2
+MNXM9107	MNXM9107	Acn13acngalgbside hs	sialyl (1,3) sialyl (2,6) galactosylgloboside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM9108	MNXM9108	Acn23acngalgbside hs	sialyl (2,3) sialyl (2,6) galactosylgloboside (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM162358	MNXM162358	5-(methylthio)-2,3-dioxopentyl phosphate	2,3-diketo-5-methylthio-1-phosphopentane					FALSE	original name from Recon 2M.2
+MNXM9115	MNXM9115	Spc hs	sphingosylphosphorylcholine (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM91318	MNXM91318	Thcrm hs	trihexosyl ceramide (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM91342	MNXM91342	Acglcgalgluside hs	(Gal)1 (Glc)1 (GlcNAc)1 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM9139	MNXM9139	Tetpent3crn	tetracosapentaenoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM91405	MNXM91405	3dpdhb	3-Decaprenyl-4,5-dihdydroxybenzoate					FALSE	original name from Recon 2M.2
+MNXM9141	MNXM9141	Tettet6crn	Tetracosatetraenoyl carnitine					FALSE	original name from Recon 2M.2
+MNXM91432	MNXM91432	3alpha,7alpha-dihydroxy-5beta-cholestan-26-oyl-CoA	3alpha,7alpha-Dihydroxy-5beta-cholestanoyl-CoA					FALSE	original name from Recon 2M.2
+MNXM489	MNXM489	adenosylcob(III)alamin	coenzyme B12					FALSE	original name from Recon 2M.2
+MNXM9158	MNXM9158	Tmndnccrn	Timnodonyl carnitine					FALSE	original name from Recon 2M.2
+MNXM91597	MNXM91597	Ga2 hs	GA2 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM9170	MNXM9170	Tag hs	triacylglycerol (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM91823	MNXM91823	Ak2gp hs	1-alkyl 2-acylglycerol 3-phosphate					FALSE	original name from Recon 2M.2
+MNXM9197	MNXM9197	Acgalfucgalacgalfucgalacglcgal14acglcgalgluside hs	Type IIIAb					FALSE	original name from Recon 2M.2
+MNXM9221	MNXM9221	Fucfuc132galacglcgal14acglcgalgluside hs	V3Fuc,III3Fuc-nLc6Cer					FALSE	original name from Recon 2M.2
+MNXM92326	MNXM92326	Ga1 hs	GA1 (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM92361	MNXM92361	Gm1a hs	GM1alpha (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM92362	MNXM92362	Gm2a hs	GM2alpha (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM9241	MNXM9241	Xser	Xyl-L-Ser (protein)					FALSE	original name from Recon 2M.2
+MNXM9246	MNXM9246	L2fn2m2masn	{[galactosyl-(1,4)-N-Acetyl-glucosaminyl-(1,2)-mannosyl-(1,3)-],[N-acetyl-glucosaminyl-(1,2)-mannosyl-(1,6)-]mannosyl-(1,4)-N-acetyl-glucosaminyl-(1,4)-[fucosyl-(1,6)]-N-acetyl-glucosaminyl}asparagine					FALSE	original name from Recon 2M.2
+MNXM92716	MNXM92716	LeuktrB4woh	w-hydroxyl leukotriene B4					FALSE	original name from Recon 2M.2
+MNXM9347	MNXM9347	N3m2masn	((N-acetyl-D-glucosaminyl)3-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM9348	MNXM9348	N4m2masn	((N-acetyl-D-glucosaminyl)4-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM940	MNXM940	4-(trimethylamino)butanal	4-(trimethylammonio)butanal					FALSE	original name from Recon 2M.2
+MNXM9440	MNXM9440	G2m8mpdol U	(alpha-D-Glucosyl)2-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9442	MNXM9442	G3m8mpdol U	(alpha-D-Glucosyl)3-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9444	MNXM9444	M2mpdol U	(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9446	MNXM9446	M3mpdol U	(alpha-D-mannosyl)3-beta-D-mannosyl-diacetylchitodiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9449	MNXM9449	M5mpdol U	(alpha-D-Mannosyl)5-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9451	MNXM9451	M6masnA	(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM9453	MNXM9453	M6mpdol U	(alpha-D-Mannosyl)6-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9454	MNXM9454	M7masnC	(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform C (protein)					FALSE	original name from Recon 2M.2
+MNXM9456	MNXM9456	M7mpdol U	(alpha-D-Mannosyl)7-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9458	MNXM9458	M8mpdol U	(alpha-D-Mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog					FALSE	original name from Recon 2M.2
+MNXM9469	MNXM9469	Acgalfuc12gal14acglcgalgluside hs	(Gal)2 (GalNAc)1 (Glc)1 (GlcNAc)1 (LFuc)1 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM5514	MNXM5514	3-beta-D-Galactosyl-4-beta-D-galactosyl-O-beta-D-xylosylprotein	(Gal)2-Xyl-L-Ser (protein)					FALSE	original name from Recon 2M.2
+MNXM9474	MNXM9474	Fucfucgalacglcgal14acglcgalgluside hs	(Gal)3 (Glc)1 (GlcNAc)2 (LFuc)2 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM9475	MNXM9475	Acglcgalacglcgal14acglcgalgluside hs	(Gal)3 (Glc)1 (GlcNAc)3 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM9476	MNXM9476	Galacgalfucgalacglcgal14acglcgalgluside hs	(Gal)4 (GalNAc)1 (Glc)1 (GlcNAc)2 (LFuc)1 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM9477	MNXM9477	Fucgalacgalfucgalacglcgal14acglcgalgluside hs	(Gal)4 (GalNAc)1 (Glc)1 (GlcNAc)2 (LFuc)2 (Cer)1					FALSE	original name from Recon 2M.2
+MNXM9489	MNXM9489	Nm2masn	(N-acetyl-D-glucosaminyl-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM9490	MNXM9490	Nm4masn	(N-acetyl-D-glucosaminyl-(alpha-D-mannosyl)4-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)					FALSE	original name from Recon 2M.2
+MNXM9492	MNXM9492	Em2emgacpail prot hs	(phosphoethanolaminyl-dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol					FALSE	original name from Recon 2M.2
+MNXM9493	MNXM9493	Emem2gacpail hs	(phosphoethanolaminyl-mannosyl),(phosphoethanolaminyl)-dimannosyl-glucosaminyl-acylphosphatidylinositol (H7')					FALSE	original name from Recon 2M.2
+MNXM950	MNXM950	Hexadecenoate (n-C16:1)	(9Z)-hexadecenoate					FALSE	original name from Recon 2M.2
+MNXM952	MNXM952	S-formylglutathionate(1-)	S-formylglutathione					FALSE	original name from Recon 2M.2
+MNXM958	MNXM958	2,3-diketogulonate	2,3-dioxo-L-gulonate					FALSE	original name from Recon 2M.2
+MNXM14173	MNXM14173	1-O-alkyl-2-acyl-sn-glycero-3-phosphocholine	1-alkyl 2-acylglycerol 3-phosphocholine					FALSE	original name from Recon 2M.2
+MNXM9591	MNXM9591	Ak2gpe hs	1-alkyl 2-acylglycerol 3-phosphoethanolamine					FALSE	original name from Recon 2M.2
+MNXM9595	MNXM9595	Akgp hs	1-alkylglycerol 3-phosphate (homo sapiens)					FALSE	original name from Recon 2M.2
+MNXM9599	MNXM9599	1a25dhvitd3	1-alpha,25-Dihydroxyvitamin D3					FALSE	original name from Recon 2M.2
+MNXM964	MNXM964	5-oxoproline	5-oxo-L-proline					FALSE	original name from Recon 2M.2
+MNXM966	MNXM966	7alpha,26-dihydroxycholesterol	(25R)-cholest-5-en-3beta,7alpha,26-triol					FALSE	original name from Recon 2M.2
+MNXM531732	MNXM531732	Melanin	eumelanin					FALSE	original name from Recon 2M.2
+MNXM2876	MNXM2876	zymosterone	zymosterol intermediate 2					FALSE	original name from Recon 2M.2
+MNXM97271	MNXM97271	Thbpt4acam	Tetrahydrobiopterin-4a-carbinolamine					FALSE	original name from Recon 2M.2
+MNXM972	MNXM972	N-acylsphing-4-enine 1-phosphate	N-acylsphingosine 1-phosphate					FALSE	original name from Recon 2M.2
+MNXM9757	MNXM9757	24nph	2,4 dihydroxy nitrophenol					FALSE	original name from Recon 2M.2
+MNXM9802	MNXM9802	2dpmhobq	2-Decaprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinone					FALSE	original name from Recon 2M.2
+MNXM9803	MNXM9803	2dp6mobq me	2-Decaprenyl-3-methyl-6-methoxy-1,4-benzoquinone					FALSE	original name from Recon 2M.2
+MNXM9849	MNXM9849	Kdn	2-keto-3-deoxy-D-glycero-D-galactononic acid					FALSE	original name from Recon 2M.2
+MNXM9850	MNXM9850	Kdnp	2-keto-3-deoxy-D-glycero-D-galactononic acid 9-phosphate					FALSE	original name from Recon 2M.2
+MNXM993	MNXM993	7,8-dihydromonapterin	7,8-dihydroneopterin					FALSE	original name from Recon 2M.2
