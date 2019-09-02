@@ -59,11 +59,11 @@ import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from metabalyzer.metabonet-curate.utils import confirm_path_directory
-from metabalyzer.metabonet-curate.utils import prepare_curation_report
-from metabalyzer.metabonet-curate.utils import read_file_table
-from metabalyzer.metabonet-curate.utils import collect_value_from_records
-from metabalyzer.metabonet-curate.utils import search_source # originally called "find"
+from metabalyzer.metabonet-network.utils import confirm_path_directory
+from metabalyzer.metabonet-network.utils import prepare_curation_report
+from metabalyzer.metabonet-network.utils import read_file_table
+from metabalyzer.metabonet-network.utils import collect_value_from_records
+from metabalyzer.metabonet-network.utils import search_source # originally called "find"
 
 """Read data
 Reads and organizes source information from file

@@ -26,8 +26,10 @@ import sys
 """Import internal dependencies
 """
 from .__init__ import __version__
-from .arguments import get_arguments, get_dependencies
-from metabonet-curate.__main__ import curate
+from .arguments import get_arguments
+from .arguments import get_dependencies
+from metabonet-network.__main__ import curate
+from metabonet-preprocess.__main__ import preprocess
 from metabonet-analyze.__main__ import analyze
 
 """Run metabonet-analyzer
@@ -45,6 +47,12 @@ def main(
 
         print('Curating network model...')
         curate(args_dict)
+
+    # Run metabonet-preprocess
+    elif args_dict['cmd'] == 'preprocess':
+
+        print('Preprocessing input data...')
+        preprocess(args_dict)
 
     # Run metabonet-analyze
     elif args_dict['cmd'] == 'analyze':

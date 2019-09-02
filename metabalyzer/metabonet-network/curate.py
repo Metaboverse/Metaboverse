@@ -57,13 +57,13 @@ import pickle
 
 """Import internal dependencies
 """
-from metabalyzer.metabonet-curate.convert import convert_metabolites_text
-from metabalyzer.metabonet-curate.convert import convert_reactions_text
-from metabalyzer.metabonet-curate.utils import confirm_path_directory
-from metabalyzer.metabonet-curate.utils import read_file_table
-from metabalyzer.metabonet-curate.utils import collect_unique_elements
-from metabalyzer.metabonet-curate.utils import collect_value_from_records
-from metabalyzer.metabonet-curate.utils import prepare_curation_report
+from metabalyzer.metabonet-network.convert import convert_metabolites_text
+from metabalyzer.metabonet-network.convert import convert_reactions_text
+from metabalyzer.metabonet-network.utils import confirm_path_directory
+from metabalyzer.metabonet-network.utils import read_file_table
+from metabalyzer.metabonet-network.utils import collect_unique_elements
+from metabalyzer.metabonet-network.utils import collect_value_from_records
+from metabalyzer.metabonet-network.utils import prepare_curation_report
 
 """Reads and organizes source information from file
 arguments:

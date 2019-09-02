@@ -37,13 +37,7 @@ def curate(
 def set_paths(
         args_dict):
 
-    args_dict['reconcile'] = args_dict['output'] + 'reconcile/'
-    args_dict['collect'] = args_dict['output'] + 'collect/'
-    args_dict['extract'] = args_dict['output'] + 'extract/'
-    args_dict['enhance'] = args_dict['output'] + 'enhance/'
-    args_dict['curate'] = args_dict['output'] + 'curate/'
-    args_dict['convert'] = args_dict['output'] + 'convert/'
-    args_dict['measure'] = args_dict['output'] + 'measure/'
+    args_dict['measurements'] = args_dict['output'] + 'measurements/'
 
     # Step 1
 

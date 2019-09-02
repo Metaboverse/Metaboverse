@@ -42,11 +42,13 @@ description_table  =  """\
     Sub-module help can be displayed by executing:
     'metabalyzer sub-module_name --help'
     Sub-module descriptions:
-        +-----------------------+---------------------------------------------------------------------------------------+
-        |    curate             |   Curate network model                                                                |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    analyze            |   Analyze -omics data using network model                                             |
-        +-----------------------+---------------------------------------------------------------------------------------+
+        +-----------------------+--------------------------------------------------------------------------------------+
+        |    curate             |   Curate network model                                                               |
+        |-----------------------|--------------------------------------------------------------------------------------|
+        |    preprocess         |   Preprocess -omics data                                                          |
+        |-----------------------|--------------------------------------------------------------------------------------|
+        |    analyze            |   Analyze -omics data using network model                                            |
+        +-----------------------+--------------------------------------------------------------------------------------+
 """
 
 """Check dependencies
@@ -85,6 +87,10 @@ def check_arguments(
     if args_dict['cmd'] == 'curate':
 
         check_curate(args_dict)
+
+    elif args_dict['cmd'] == 'preprocess':
+
+        check_preprocess(args_dict)
 
     elif args_dict['cmd'] == 'analyze':
 
@@ -207,6 +213,22 @@ def parse_arguments(
         type = int,
         default = DEFAULT_MAX_PROCESSORS,
         required = False)
+
+    # Preprocess parser
+    preprocess_parser = subparser.add_parser(
+        'preprocess',
+        description = 'Preprocess data for network analysis',
+        add_help = False)
+
+    # Preprocess required arguments
+    preprocess_reqs = preprocess_parser.add_argument_group('required arguments')
+
+    # Preprocess optional arguments
+    preprocess_opts = preprocess_parser.add_argument_group('optional arguments')
+    preprocess_opts.add_argument(
+        '-h', '--help',
+        action = 'help',
+        help = 'Show help message and exit')
 
     # Analyze parser
     analyze_parser = subparser.add_parser(

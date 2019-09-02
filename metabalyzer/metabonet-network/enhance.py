@@ -61,15 +61,19 @@ import numpy
 
 """Import internal dependencies
 """
-from metabalyzer.metabonet-curate.convert import x
-from metabalyzer.metabonet-curate.utils import match_hmdb_entries_by_identifiers_names
-from metabalyzer.metabonet-curate.utils import collect_unique_elements
-from metabalyzer.metabonet-curate.utils import progress_bar
-from metabalyzer.metabonet-curate.utils import collect_reaction_participants_value
-from metabalyzer.metabonet-curate.utils import compare_lists_by_mutual_inclusion
-from metabalyzer.metabonet-curate.utils import collect_value_from_records
-from metabalyzer.metabonet-curate.utils import filter_common_elements
-from metabalyzer.metabonet-curate.utils import find_index
+from metabalyzer.metabonet-network.convert import convert_metabolites_text
+from metabalyzer.metabonet-network.convert import convert_reactions_text
+from metabalyzer.metabonet-network.utils import match_hmdb_entries_by_identifiers_names
+from metabalyzer.metabonet-network.utils import collect_unique_elements
+from metabalyzer.metabonet-network.utils import progress_bar
+from metabalyzer.metabonet-network.utils import collect_reaction_participants_value
+from metabalyzer.metabonet-network.utils import compare_lists_by_mutual_inclusion
+from metabalyzer.metabonet-network.utils import collect_value_from_records
+from metabalyzer.metabonet-network.utils import filter_common_elements
+from metabalyzer.metabonet-network.utils import find_index
+from metabalyzer.metabonet-network.utils import confirm_path_directory
+from metabalyzer.metabonet-network.utils import write_file_table
+from metabalyzer.metabonet-network.utils import prepare_curation_report
 
 """Reads and organizes source information from file
 arguments:
@@ -632,7 +636,7 @@ def include_reactions_replications(
             reactions_replicates=reactions_replicates)
         reactions_novel[reaction_novel['identifier']] = reaction_novel
 
-        utility.progress_bar(
+        progress_bar(
             counter,
             total,
             status='Collect reactions replicates')
@@ -712,212 +716,191 @@ def find_index_reactions_replicates_reactants_products(
 
         match_reactants = compare_lists_by_mutual_inclusion(
             list_one=reactants,
-            list_two=record["reactants"])
+            list_two=record['reactants'])
         match_products = compare_lists_by_mutual_inclusion(
             list_one=products,
-            list_two=record["products"])
+            list_two=record['products'])
 
         return match_reactants and match_products
 
     return find_index(match, reactions_replicates)
 
-
+"""Includes information about a reaction's replication
+arguments:
+    reaction_original (dict): information about a reaction
+    reactions_replicates (list<dict>): information about reactions'
+        replications
+returns:
+    (dict): information about a reaction
+"""
 def include_reaction_replication(
-    reaction_original=None, reactions_replicates=None
-):
-    """
-    Includes information about a reaction's replication
-
-    arguments:
-        reaction_original (dict): information about a reaction
-        reactions_replicates (list<dict>): information about reactions'
-            replications
-
-    returns:
-        (dict): information about a reaction
-
-    raises:
-
-    """
+        reaction_original=None,
+        reactions_replicates=None):
 
     # Determine replicate reactions
     index = find_index_reactions_replicates_identifier(
-        identifier=reaction_original["identifier"],
-        reactions_replicates=reactions_replicates
-    )
+        identifier=reaction_original['identifier'],
+        reactions_replicates=reactions_replicates)
+
     if index == -1:
+
         replicates = []
+
     else:
-        replicates = reactions_replicates[index]["reactions"]
+
+        replicates = reactions_replicates[index]['reactions']
+
     # Compile information
     reaction_novel = copy.deepcopy(reaction_original)
-    reaction_novel["replicates"] = replicates
-    reaction_novel["replication"] = len(replicates) > 1
-    # Return information
+    reaction_novel['replicates'] = replicates
+    reaction_novel['replication'] = len(replicates) > 1
+
     return reaction_novel
 
-
+"""Finds index of a record for replicate reactions by identifier
+arguments:
+    identifier (str): identifier of a reaction
+    reactions_replicates (list<dict>): information about reactions'
+        replications
+returns:
+    (int): index of record if it exists or -1 if it does not exist
+"""
 def find_index_reactions_replicates_identifier(
-    identifier=None, reactions_replicates=None
-):
-    """
-    Finds index of a record for replicate reactions by identifier
+        identifier=None,
+        reactions_replicates=None):
 
-    arguments:
-        identifier (str): identifier of a reaction
-        reactions_replicates (list<dict>): information about reactions'
-            replications
+    def match(
+            record=None):
 
-    returns:
-        (int): index of record if it exists or -1 if it does not exist
+        return identifier in record['reactions']
 
-    raises:
+    return find_index(match, reactions_replicates)
 
-    """
-
-    def match (record=None):
-        return identifier in record["reactions"]
-    return utility.find_index(match, reactions_replicates)
-
-
-def filter_reactions(reactions_original=None):
-    """
-    Filters reactions by relevance to contextual metabolic network.
-
-    arguments:
-        reactions (dict<dict>): information about reactions
-
-    returns:
-        (list<dict>): information about reactions
-
-    raises:
-
-    """
+"""Filters reactions by relevance to contextual metabolic network.
+arguments:
+    reactions (dict<dict>): information about reactions
+returns:
+    (list<dict>): information about reactions
+"""
+def filter_reactions(
+        reactions_original=None):
 
     reactions_filter = []
     counter = 1
     total = len(reactions_original)
 
     for reaction in reactions_original.values():
+
         match, record = filter_reaction(reaction=reaction)
+
         if match:
+
             reactions_filter.append(record)
 
-        utility.progress_bar(counter, total, status='Filter reactions')
+        progress_bar(counter, total, status='Filter reactions')
         counter += 1
 
     return reactions_filter
 
-
-def filter_reaction(reaction=None):
-    """
-    Filters a reaction by relevance to contextual metabolic network.
-
-    arguments:
-        reaction (dict): information about a reaction
-
-    returns:
-        (tuple<bool, dict>): whether reaction passes filters, and report
-
-    raises:
-
-    """
+"""Filters a reaction by relevance to contextual metabolic network.
+arguments:
+    reaction (dict): information about a reaction
+returns:
+    (tuple<bool, dict>): whether reaction passes filters, and report
+"""
+def filter_reaction(
+        reaction=None):
 
     # Name.
     # Biomass, protein assembly, and protein degradation are irrelevant.
     name = (
-        (reaction["name"] == "Generic human biomass reaction") or
-        (reaction["name"] == "Protein degradation") or
-        ("Protein assembly" in reaction["name"])
-    )
+        (reaction['name'] == 'Generic human biomass reaction') \
+        or (reaction['name'] == 'Protein degradation') \
+        or ('Protein assembly' in reaction['name']))
+
     # Compartment.
     # Boundary is irrelevant.
-    compartments = utility.collect_value_from_records(
-        key="compartment", records=reaction["participants"]
-    )
-    compartment_boundary = ("BOUNDARY" in compartments)
+    compartments = collect_value_from_records(
+        key='compartment',
+        records=reaction['participants'])
+    compartment_boundary = ('BOUNDARY' in compartments)
+
     # Extracellular region is irrelevant.
-    compartment_exterior = ("MNXC2" in compartments)
+    compartment_exterior = ('MNXC2' in compartments)
+
     # Metabolite.
     # Biomass is irrelevant.
-    metabolites = utility.collect_value_from_records(
-        key="metabolite", records=reaction["participants"]
-    )
-    metabolite = ("BIOMASS" in metabolites)
+    metabolites = collect_value_from_records(
+        key='metabolite',
+        records=reaction['participants'])
+    metabolite = ('BIOMASS' in metabolites)
+
     # Reference.
     # MetaNetX reaction MNXR01 is for a meaningless proton exchange.
-    reference = "MNXR01" in reaction["references"]["metanetx"]
+    reference = 'MNXR01' in reaction['references']['metanetx']
+
     # Determine whether reaction passes filters.
     filter = (
-        name or
-        compartment_boundary or
-        compartment_exterior or
-        metabolite or
-        reference
-    )
+        name \
+        or compartment_boundary \
+        or compartment_exterior \
+        or metabolite \
+        or reference)
+
     # Prepare report.
     record = {
-        "identifier_original": reaction["identifier"],
-        "identifier_novel": "null",
-        "name_original": reaction["name"],
-        "name_novel": reaction["name"],
-        "custom": False,
-    }
-    # Return information.
+        'identifier_original': reaction['identifier'],
+        'identifier_novel': 'null',
+        'name_original': reaction['name'],
+        'name_novel': reaction['name'],
+        'custom': False}
+
     return (filter, record)
 
-
-def write_product(directory=None, information=None):
-    """
-    Writes product information to file
-
-    arguments:
-        directory (str): directory for product files
-        information (object): information to write to file
-
-    raises:
-
-    returns:
-
-    """
+"""Writes product information to file
+arguments:
+    directory (str): directory for product files
+    information (object): information to write to file
+"""
+def write_product(
+        directory,
+        information=None):
 
     # Specify directories and files.
-    path = os.path.join(directory, "enhancement")
-    utility.confirm_path_directory(path)
-    path_compartments = os.path.join(path, "compartments.pickle")
-    path_processes = os.path.join(path, "processes.pickle")
-    path_reactions = os.path.join(path, "reactions.pickle")
-    path_metabolites = os.path.join(path, "metabolites.pickle")
-    path_metabolites_report = os.path.join(path, "metabolites.tsv")
-    path_reactions_report = os.path.join(path, "reactions.tsv")
-    path_reactions_filter = os.path.join(path, "reactions_filter.tsv")
+    confirm_path_directory(directory)
+    path_compartments = os.path.join(directory, 'compartments.pickle')
+    path_processes = os.path.join(directory, 'processes.pickle')
+    path_reactions = os.path.join(directory, 'reactions.pickle')
+    path_metabolites = os.path.join(directory, 'metabolites.pickle')
+    path_metabolites_report = os.path.join(directory, 'metabolites.tsv')
+    path_reactions_report = os.path.join(directory, 'reactions.tsv')
+    path_reactions_filter = os.path.join(directory, 'reactions_filter.tsv')
+
     # Write information to file.
-    with open(path_compartments, "wb") as file_product:
-        pickle.dump(information["compartments"], file_product)
-    with open(path_processes, "wb") as file_product:
-        pickle.dump(information["processes"], file_product)
-    with open(path_reactions, "wb") as file_product:
-        pickle.dump(information["reactions"], file_product)
-    with open(path_metabolites, "wb") as file_product:
-        pickle.dump(information["metabolites"], file_product)
-    utility.write_file_table(
-        information=information["metabolites_report"],
+    with open(path_compartments, 'wb') as file_product:
+        pickle.dump(information['compartments'], file_product)
+    with open(path_processes, 'wb') as file_product:
+        pickle.dump(information['processes'], file_product)
+    with open(path_reactions, 'wb') as file_product:
+        pickle.dump(information['reactions'], file_product)
+    with open(path_metabolites, 'wb') as file_product:
+        pickle.dump(information['metabolites'], file_product)
+
+    write_file_table(
+        information=information['metabolites_report'],
         path_file=path_metabolites_report,
-        names=information["metabolites_report"][0].keys(),
-        delimiter="\t"
-    )
-    utility.write_file_table(
-        information=information["reactions_report"],
+        names=information['metabolites_report'][0].keys(),
+        delimiter='\t')
+    write_file_table(
+        information=information['reactions_report'],
         path_file=path_reactions_report,
-        names=information["reactions_report"][0].keys(),
-        delimiter="\t"
-    )
-    utility.write_file_table(
-        information=information["reactions_filter"],
+        names=information['reactions_report'][0].keys(),
+        delimiter='\t')
+    write_file_table(
+        information=information['reactions_filter'],
         path_file=path_reactions_filter,
-        names=information["reactions_filter"][0].keys(),
-        delimiter="\t"
-    )
+        names=information['reactions_filter'][0].keys(),
+        delimiter='\t')
 
 """Function to execute module's main behavior.
 The purpose of this procedure is to curate information about metabolic
@@ -937,39 +920,39 @@ def execute_procedure(
     print('Step 1/8: Enhancing metabolites...')
     metabolites = enhance_metabolites(
         metabolites_original=source["metabolites"],
-        summary_hmdb=source["summary_hmdb"]
-    )
+        summary_hmdb=source["summary_hmdb"])
+
     # Include information about reactions' behavior.
     print('Step 2/8: Including reactions\' behaviors...')
     reactions_behavior = include_reactions_behaviors(
-        reactions_original=source["reactions"]
-    )
+        reactions_original=source["reactions"])
+
     # Include transport reactions in processes.
     print('Step 3/8: Including reactions transport processes...')
     reactions_process = include_reactions_transport_processes(
-        reactions_original=reactions_behavior
-    )
+        reactions_original=reactions_behavior)
+
     # Include information about reactions' replicates.
     print('Step 4/8: Including reactions replications...')
     reactions_replication = include_reactions_replications(
-        reactions_original=reactions_process
-    )
+        reactions_original=reactions_process)
+
     # Prepare reports of information for review.
     print('Step 5/8: Converting metabolites text...')
-    convert_one = metabonet.metabocurator.conversion.convert_metabolites_text
+    convert_one = convert_metabolites_text
     metabolites_report = convert_one(
-        metabolites=metabolites
-    )
+        metabolites=metabolites)
+
     print('Step 6/8: Converting reactions text...')
-    convert_two = metabonet.metabocurator.conversion.convert_reactions_text
+    convert_two = convert_reactions_text
     reactions_report = convert_two(
-        reactions=reactions_replication
-    )
+        reactions=reactions_replication)
+
     # Filter reactions.
     print('Step 7/8: Filtering reactions...')
     reactions_filter = filter_reactions(
-        reactions_original=reactions_replication
-    )
+        reactions_original=reactions_replication)
+
     # Compile information.
     information = {
         "compartments": source["compartments"],
@@ -978,16 +961,18 @@ def execute_procedure(
         "reactions": reactions_replication,
         "metabolites_report": metabolites_report,
         "reactions_report": reactions_report,
-        "reactions_filter": reactions_filter
-    }
+        "reactions_filter": reactions_filter}
+
     #Write product information to file.
     print('Step 8/8: Writing outputs...')
-    write_product(directory=directory, information=information)
+    write_product(
+        args_dict['enhance'],
+        information=information)
+
     # Report.
-    report = utility.prepare_curation_report(
+    report = prepare_curation_report(
         compartments=source["compartments"],
         processes=source["processes"],
         reactions=reactions_replication,
-        metabolites=metabolites
-    )
+        metabolites=metabolites)
     print(report)

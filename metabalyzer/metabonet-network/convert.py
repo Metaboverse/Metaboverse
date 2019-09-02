@@ -59,12 +59,12 @@ import json
 
 """Import internal dependencies
 """
-from metabalyzer.metabonet-curate.utils import collect_values_from_records
-from metabalyzer.metabonet-curate.utils import collect_unique_elements
-from metabalyzer.metabonet-curate.utils import confirm_path_directory
-from metabalyzer.metabonet-curate.utils import collect_values_from_records_in_reference
-from metabalyzer.metabonet-curate.utils import collect_reaction_participants_value
-from metabalyzer.metabonet-curate.utils import write_file_table
+from metabalyzer.metabonet-network.utils import collect_values_from_records
+from metabalyzer.metabonet-network.utils import collect_unique_elements
+from metabalyzer.metabonet-network.utils import confirm_path_directory
+from metabalyzer.metabonet-network.utils import collect_values_from_records_in_reference
+from metabalyzer.metabonet-network.utils import collect_reaction_participants_value
+from metabalyzer.metabonet-network.utils import write_file_table
 
 """Reads and organizes source information from file
 arguments:

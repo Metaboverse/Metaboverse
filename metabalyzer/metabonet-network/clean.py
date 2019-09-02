@@ -55,7 +55,7 @@ import os
 """Import internal dependencies
 """
 from metabalyzer.utils import progress_bar
-from metabalyzer.metabonet-curate.utils import remove_file, remove_directory
+from metabalyzer.metabonet-network.utils import remove_file, remove_directory
 
 """Clean intermediate data files
 """
