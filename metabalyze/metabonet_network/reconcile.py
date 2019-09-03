@@ -62,9 +62,30 @@ import copy
 from metabalyze.metabonet_network.utils import confirm_file
 from metabalyze.metabonet_network.utils import read_file_table
 from metabalyze.metabonet_network.utils import confirm_path_directory
-from metabalyze.metabonet_network.collect import copy_interpret_content_recon2m2
+from metabalyze.metabonet_network.collect import get_recon_references
 
+"""Globals
+"""
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
+
+id_attribute = 'id'
+species_attribute = 'species'
+compartment_attribute = 'compartment'
+name_attribute = 'name'
+species_reference_id = 'speciesReference'
+novel_metabolite_id = r'_[eciglmnrx]_boundary'
+prefix_searcher = r'^M_'
+prefix_hash_searcher = r'^#M_'
+boundary_id = 'boundary'
+species_finder = 'version:species'
+reaction_finder = 'version:reaction'
+compartment_finder = 'version:compartment'
+description_original = 'description_original'
+description_novel = 'description_novel'
+identifier_original = 'identifier_original'
+identifier_novel = 'identifier_novel'
+annotation_searcher = 'description'
+about_searcher = 'about'
 
 """Reads and organizes source information from file
 arguments:
@@ -108,89 +129,45 @@ returns:
     (object): content with changes
 """
 def change_model_boundary(
-        content):
-
-    # Copy and interpret content
-    reference = copy_interpret_content_recon(
-        content=content)
+        reference):
 
     # Correct designation of model's boundary in metabolites
     for metabolite in reference['metabolites'].findall(
-            'version:species',
+            species_finder,
             reference['space']):
 
         # Determine whether metabolite's compartment is model's boundary
-        if 'boundary' in metabolite.attrib['id']:
+        if boundary_id in metabolite.attrib[id_attribute]:
 
-            novel_identifier = re.sub(r'_[eciglmnrx]_boundary', '_b', metabolite.attrib['id'])
-            metabolite.attrib['id'] = novel_identifier
-            novel_compartment = 'b'
-            metabolite.attrib['compartment'] = novel_compartment
+            # Give novel identifier
+            metabolite.attrib[id_attribute] = re.sub(
+                novel_metabolite_id,
+                '_b',
+                metabolite.attrib[id_attribute])
+
+            # Give novel compartment info
+            metabolite.attrib[compartment_attribute] = 'b'
 
     # Correct designation of model's boundary in reactions.
     for reaction in reference['reactions'].findall(
-            'version:reaction', reference['space']):
+            reaction_finder,
+            reference['space']):
 
         # Search reaction's metabolites.
-        """
-        Remove this hard-coding
-        """
-        for metabolite in reaction.iter(
-                '{http://www.sbml.org/sbml/level2/version4}speciesReference'):
+        iter_seacher = '{' + reference['space']['version'] + '}' + species_reference_id
+
+        for metabolite in reaction.iter(iter_seacher):
 
             # Determine whether metabolite's compartment is model's boundary.
-            if 'boundary' in metabolite.attrib['species']:
+            if boundary_id in metabolite.attrib[species_attribute]:
 
                 novel_identifier = re.sub(
-                    r'_[eciglmnrx]_boundary',
+                    novel_metabolite_id,
                     '_b',
-                    metabolite.attrib['species'])
-                metabolite.attrib['species'] = novel_identifier
+                    metabolite.attrib[species_attribute])
+                metabolite.attrib[species_attribute] = novel_identifier
 
-    return reference['content']
-
-"""Counts compartments, reactions, and metabolites in model.
-arguments:
-    content (object): content from file in Systems Biology Markup Language
-        (XML)
-returns:
-    (dict<int>): summary
-"""
-def count_model_sets_entities(
-        content=None):
-
-    # Copy and interpret content.
-    reference = copy_interpret_content_recon2m2(
-        content=content)
-
-    # Count compartments.
-    compartments = 0
-
-    for compartment in reference['compartments'].findall(
-            'version:compartment', reference['space']):
-
-        compartments = compartments + 1
-
-    # Count reactions.
-    reactions = 0
-
-    for reaction in reference['reactions'].findall(
-            'version:reaction', reference['space']):
-
-        reactions = reactions + 1
-
-    # Count metabolites.
-    metabolites = 0
-
-    for metabolite in reference['metabolites'].findall(
-            'version:species', reference['space']):
-
-        metabolites = metabolites + 1
-
-    return {
-        'compartments': compartments,
-        'reactions': reactions,
-        'metabolites': metabolites}
+    return reference
 
 """Changes annotations for a model's compartments
 This function changes annotations of a model's compartments.
@@ -202,72 +179,66 @@ arguments:
 returns:
     (object): content with changes
 """
+### ---> continue to remove hard coded variables
 def change_model_compartments(
         curation_compartments=None,
-        content=None):
+        reference=None):
 
-    # Copy and interpret content.
-    reference = copy_interpret_content_recon2m2(
-        content=content)
-
-    # Change content for each combination of original and novel information.
+    # Change content for each combination of original and novel information
     for row in curation_compartments:
 
-        # Detmerine whether to change compartment's name.
-        if row['description_original'] != row['description_novel']:
+        # Detmerine whether to change compartment's name
+        if row[description_original] != row[description_novel]:
 
-            # Change information in compartments.
+            # Change information in compartments
             for compartment in reference['compartments'].findall(
-                    'version:compartment', reference['space']):
+                    compartment_finder,
+                    reference['space']):
 
-                if compartment.attrib['id'] == row['identifier_original']:
+                if compartment.attrib[id_attribute] == row[identifier_original]:
 
-                    compartment.attrib['name'] = row['description_novel']
+                    compartment.attrib[name_attribute] = row[description_novel]
 
-        # Determine whether to change compartment's identifier.
-        if row['identifier_original'] != row['identifier_novel']:
+        # Determine whether to change compartment's identifier
+        if row[identifier_original] != row[identifier_novel]:
 
-            # Construct targets to recognize original and novel identifiers.
-            # Use underscore prefix to match complete identifiers.
-            original_elements = ['_', row['identifier_original']]
-            original_target = ''.join(original_elements)
-            novel_elements = ['_', row['identifier_novel']]
-            novel_target = ''.join(novel_elements)
+            # Construct targets to recognize original and novel identifiers
+            # Use underscore prefix to match complete identifiers
+            original_target = ''.join(['_', row[identifier_original]])
+            novel_target = ''.join(['_', row[identifier_novel]])
 
-            # Change information in metabolites.
-            # Change identifiers of metabolites.
+            # Change information in metabolites
+            # Change identifiers of metabolites
             for metabolite in reference['metabolites'].findall(
-                    'version:species', reference['space']):
+                    species_finder,
+                    reference['space']):
 
-                # Determine whether to change metabolite's identifier.
-                if original_target in metabolite.attrib['id']:
+                # Determine whether to change metabolite's identifier
+                if original_target in metabolite.attrib[id_attribute]:
 
-                    metabolite.attrib['id'] = metabolite.attrib['id'].replace(
+                    metabolite.attrib[id_attribute] = metabolite.attrib[id_attribute].replace(
                         original_target,
                         novel_target)
 
-            # Change information in reactions' metabolites.
-            # Change identifiers of reactions' metabolites.
+            # Change information in reactions' metabolites
+            # Change identifiers of reactions' metabolites
             for reaction in reference['reactions'].findall(
-                    'version:reaction', reference['space']):
+                    reaction_finder,
+                    reference['space']):
 
-                # Search reaction's metabolites.
-                """
-                Remove hard-coding
-                """
+                # Search reaction's metabolites
                 for metabolite in reaction.iter(
-                    '{http://www.sbml.org/sbml/level2/version4}'
-                    'speciesReference'):
+                    '{' + reference['space']['version'] + '}'
+                    species_reference_id):
 
                     # Determine whether to change metabolite's identifier.
-                    if original_target in metabolite.attrib['species']:
+                    if original_target in metabolite.attrib[species_attribute]:
 
-                        metabolite.attrib['species'] = (
-                            metabolite.attrib['species'].replace(
+                        metabolite.attrib[species_attribute] = metabolite.attrib[species_attribute].replace(
                                 original_target,
-                                novel_target))
+                                novel_target)
 
-    return reference['content']
+    return reference
 
 """Removes unnecessary prefixes from identifiers for model's entities
 This function removes unnecessary prefixes from identifiers for
@@ -279,44 +250,48 @@ returns:
     (object): content with changes
 """
 def remove_model_metabolite_prefix(
-        content=None):
-
-    # Copy and interpret content.
-    reference = copy_interpret_content_recon2m2(
-        content=content)
+        reference=None):
 
     # Remove prefixes from identifiers for metabolites.
     for metabolite in reference['metabolites'].findall(
-            'version:species', reference['space']):
+            species_finder,
+            reference['space']):
 
         # Remove prefix from metabolite's identifier.
-        novel_identifier = re.sub(r'^M_', '', metabolite.attrib['id'])
-        metabolite.attrib['id'] = novel_identifier
+        novel_identifier = re.sub(
+            prefix_searcher,
+            '',
+            metabolite.attrib[id_attribute])
+        metabolite.attrib[id_attribute] = novel_identifier
 
         # Search metabolite's annotation.
         for description in metabolite.iter(
-                '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}description'):
+                '{' + reference['space']['syntax'] + '}' + annotation_searcher):
 
             # Remove prefix from metabolite's identifier.
             novel_identifier = re.sub(
-                r'^#M_',
+                prefix_hash_searcher,
                 '#',
-                description.attrib['{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about'])
-            description.attrib['{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about'] = novel_identifier
+                description.attrib['{' + reference['space']['syntax'] + '}' + about_searcher])
+            description.attrib['{' + reference['space']['syntax'] + '}' + about_searcher] = novel_identifier
 
     # Remove prefixes from identifiers for reactions' metabolites.
     for reaction in reference['reactions'].findall(
-            'version:reaction', reference['space']):
+            reaction_finder,
+            reference['space']):
 
         # Search reaction's metabolites.
         for metabolite in reaction.iter(
-                '{http://www.sbml.org/sbml/level2/version4}speciesReference'):
+                '{' + reference['space']['version'] + '}' + species_reference_id):
 
             # Remove prefix from metabolite's identifier.
-            novel_identifier = re.sub(r'^M_', '', metabolite.attrib['species'])
-            metabolite.attrib['species'] = novel_identifier
+            novel_identifier = re.sub(
+                prefix_searcher,
+                '',
+                metabolite.attrib[species_attribute])
+            metabolite.attrib[species_attribute] = novel_identifier
 
-    return reference['content']
+    return reference
 
 """Changes metabolites' identifiers
 This function changes metabolites' identifiers according to information
@@ -331,51 +306,87 @@ returns:
 """
 def change_model_metabolites(
         curation_metabolites=None,
-        content=None):
-
-    # Copy and interpret content.
-    reference = copy_interpret_content_recon2m2(
-        content=content)
+        reference=None):
 
     # Change content for each combination of original and novel identifiers.
     for row in curation_metabolites:
 
         # Construct targets to recognize original and novel identifiers.
         # Use trailing underscore to match complete identifiers.
-        original_elements = [row['identifier_original'], '_']
-        original_target = ''.join(original_elements)
-        novel_elements = [row['identifier_novel'], '_']
-        novel_target = ''.join(novel_elements)
+        original_target = ''.join([row[identifier_original], '_'])
+        novel_target = ''.join([row[identifier_novel], '_'])
 
         # Change identifiers of metabolites.
         for metabolite in reference['metabolites'].findall(
-                'version:species',
+                species_finder,
                 reference['space']):
 
             # Determine whether to change metabolite's identifier.
-            if original_target in metabolite.attrib['id']:
-                metabolite.attrib['id'] = metabolite.attrib['id'].replace(
+            if original_target in metabolite.attrib[id_attribute]:
+                metabolite.attrib[id_attribute] = metabolite.attrib[id_attribute].replace(
                     original_target,
                     novel_target)
 
         # Change identifiers of reactions' metabolites.
         for reaction in reference['reactions'].findall(
-                'version:reaction',
+                reaction_finder,
                 reference['space']):
 
             # Search reaction's metabolites.
             for metabolite in reaction.iter(
-                    '{http://www.sbml.org/sbml/level2/version4}speciesReference'):
+                    '{' + reference['space']['version'] + '}' + species_reference_id):
 
                 # Determine whether to change metabolite's identifier.
-                if original_target in metabolite.attrib['species']:
+                if original_target in metabolite.attrib[species_attribute]:
 
-                    metabolite.attrib['species'] = (
-                        metabolite.attrib['species'].replace(
+                    metabolite.attrib[species_attribute] = (
+                        metabolite.attrib[species_attribute].replace(
                             original_target,
                             novel_target))
 
-    return reference['content']
+    return reference
+
+"""Counts compartments, reactions, and metabolites in model.
+arguments:
+    content (object): content from file in Systems Biology Markup Language
+        (XML)
+returns:
+    (dict<int>): summary
+"""
+def count_model_sets_entities(
+        reference=None):
+
+    # Count compartments.
+    compartments = 0
+
+    for compartment in reference['compartments'].findall(
+            compartment_finder,
+            reference['space']):
+
+        compartments = compartments + 1
+
+    # Count reactions.
+    reactions = 0
+
+    for reaction in reference['reactions'].findall(
+            reaction_finder,
+            reference['space']):
+
+        reactions = reactions + 1
+
+    # Count metabolites.
+    metabolites = 0
+
+    for metabolite in reference['metabolites'].findall(
+            species_finder,
+            reference['space']):
+
+        metabolites = metabolites + 1
+
+    return {
+        'compartments': compartments,
+        'reactions': reactions,
+        'metabolites': metabolites}
 
 """Writes product information to file
 arguments:
@@ -383,17 +394,15 @@ arguments:
     information (object): information to write to file
 """
 def write_product(
-        directory,
-        information=None):
+        output=None,
+        reference=None):
 
     # Specify directories and files.
-    confirm_path_directory(directory)
-    path_file = os.path.join(
-        directory,
-        'recon2m2_reconciliation.xml')
+    confirm_path_directory(output)
+    path_file = output + 'recon_reconciled.xml')
 
     # Write information to file.
-    information.write(
+    reference['content'].write(
         path_file,
         xml_declaration=False)
 
@@ -410,26 +419,30 @@ def __main__(
     recon = read_source(
         args_dict['recon'])
 
+    # Copy and interpret content
+    recon_reference = get_recon_references(
+        recon)
+
     # Change model's content and correct content where necessary
-    content_boundary = change_model_boundary(
-        content=recon['content'])
-    content_compartments = change_model_compartments(
+    reference_updated_boundary = change_model_boundary(
+        reference=recon_reference)
+    reference_updated_compartments = change_model_compartments(
         curation_compartments=recon['curation_compartments'],
-        content=content_boundary)
-    content_prefix = remove_model_metabolite_prefix(
-        content=content_compartments)
-    content_metabolites = change_model_metabolites(
+        reference=reference_updated_boundary)
+    reference_prefix_removed = remove_model_metabolite_prefix(
+        reference=reference_updated_compartments)
+    reference_update_metabolites = change_model_metabolites(
         curation_metabolites=recon['curation_metabolites'],
-        content=content_prefix)
+        reference=reference_prefix_removed)
 
     #Write product information to file.
     write_product(
-        args_dict['reconcile'],
-        information=content_metabolites)
+        output=args_dict['reconcile'],
+        reference=reference_update_metabolites)
 
     # Summary.
     summary = count_model_sets_entities(
-        content=content_metabolites)
+        reference=reference_update_metabolites)
 
     # Report.
     print('compartments: ' + str(summary['compartments']))

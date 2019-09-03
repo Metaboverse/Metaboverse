@@ -39,15 +39,25 @@ def set_paths(
 
 """Step 0 -- reconcile
 """
-def _reconcile():
+def _reconcile(
+        args_dict):
 
-    print('Reconciling information in human metabolic model...')
+    print('\nReconciling information in human metabolic model...')
+
     run_reconcile(
         args_dict)
 
+    # Print instructions
+    print('')
+    print('--> Recon reconiliation for MetaNetX found at: ' + args_dict['reconcile'] + 'recon_reconciled.xml')
+    print('--> Please upload this file to https://www.metanetx.org/cgi-bin/mnxweb/import_mnet and run Import')
+    print('--> Output files need to be loaded into ' + args_dict['reconcile'] + ' with the prefix \"metanetx\"')
+
+    print('=== Reconiliation complete ===')
+
 """Step 1 -- collect
 """
-def _collect():
+def _collect(args_dict):
 
     print('Collecting relevant information from metabolic model about compartments, processes, reactions, and metabolites...')
 
@@ -86,5 +96,7 @@ def __main__(
     args_dict = set_paths(args_dict)
 
     # Move start files to args_dict['output'] sub-directory 'source' for downstream use
+    _reconcile(args_dict)
+    _collect(args_dict)
 
     return args_dict

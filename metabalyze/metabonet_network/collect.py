@@ -140,32 +140,92 @@ Language (XML).
 returns:
     (object): references to definition of name space and sections within
         content
+Previously called: copy_interpret_content_recon
 """
-def copy_interpret_content_recon(
-        content=None):
+def get_recon_references(
+        content,
+        range_limit=10):
 
     # Copy content
     content_copy = copy.deepcopy(content)
 
-    # Get xml file smdb and xml encoding
-    space = {
-        "version": "http://www.sbml.org/sbml/level2/version4", # Get this automatically from file
-        "syntax": "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # Get this automatically from file
-    }
+    # Init content definitions dictionary
+    recon_references = {}
+    recon_references['content'] = content
 
-    # Set references to sections within content
+    # Set references to overall model
     model = content_copy.getroot()[0]
-    compartments = model[1]
-    metabolites = model[2]
-    reactions = model[3]
+    recon_references['model'] = model
 
-    return {
-        'space': space,
-        'content': content,
-        'model': model,
-        'compartments': compartments,
-        'metabolites': metabolites,
-        'reactions': reactions}
+    # Set references to data types
+    for x in content_copy:
+
+        if 'listOfCompartments' in x.tag:
+            recon_references['compartments'] = x
+
+        elif 'listOfSpecies' in x.tag:
+            recon_references['metabolites'] = x
+
+        elif 'listOfReactions' in x.tag:
+            recon_references['reactions'] = x
+
+        else:
+            pass
+
+    # Check that references were filled
+    if not 'compartments' in recon_references.keys():
+        raiseException('Compartments information not found in Recon XML file')
+
+    if not 'metabolites' in recon_references.keys():
+        raiseException('Metabolites information not found in Recon XML file')
+
+    if not 'reactions' in recon_references.keys():
+        raiseException('Reactions information not found in Recon XML file')
+
+    # Get smbl version tag
+    version = ''
+    version = re.search('{(.*)}', model.tag).group(1)
+
+    # Get syntax tag
+    syntax = ''
+    test_group = recon_references['compartments']
+
+    for x in range(0,range_limit):
+
+        for y in range(0,range_limit):
+
+            for z in range(0,range_limit):
+
+                try:
+                    t = test_group[x][y][z]
+                    t_find = re.search('{(.*)}', t.tag).group(1)
+
+                    if 'syntax' in t_find:
+                        syntax = t_find
+                        break
+
+                    else:
+                        pass
+
+                except:
+                    pass
+            else:
+                continue # Continue if the inner loop wasn't broken
+        else:
+            continue # Continue if the inner loop wasn't broken
+
+        break # Inner loop was broken, break the outer.
+
+    if version != '' and syntax != '':
+        recon_references['space'] = {
+            'version' = version,
+            'syntax' = syntax}
+
+    else:
+        raiseException('Could not find version or syntax information from Recon XML file')
+
+    return recon_references
+
 
 """Extracts information from source about compartments
 arguments:
