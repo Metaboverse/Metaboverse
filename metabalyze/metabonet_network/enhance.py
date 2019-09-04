@@ -61,11 +61,11 @@ import numpy
 
 """Import internal dependencies
 """
+from metabalyze.utils import progress_bar
 from metabalyze.metabonet_network.convert import convert_metabolites_text
 from metabalyze.metabonet_network.convert import convert_reactions_text
 from metabalyze.metabonet_network.utils import match_hmdb_entries_by_identifiers_names
 from metabalyze.metabonet_network.utils import collect_unique_elements
-from metabalyze.metabonet_network.utils import progress_bar
 from metabalyze.metabonet_network.utils import collect_reaction_participants_value
 from metabalyze.metabonet_network.utils import compare_lists_by_mutual_inclusion
 from metabalyze.metabonet_network.utils import collect_value_from_records
