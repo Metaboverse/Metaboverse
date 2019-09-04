@@ -99,56 +99,55 @@ arguments:
 returns:
     (dict<dict>): information from HMDB
 """
-# Can't find event_start_ns or namespace ever, not grabbing elements and parsing
-# Try using Cameron's method that has hanging variables
 def extract_hmdb_summary(
         hmdb_file):
 
     # Collect references to name space
-    spaces = {}
+    name_space = ''
 
     # Collect information about metabolites
-    summary_hmdb = {}
+    hmdb_summary = {}
 
     # Count records
     count = 0
+    counter = 0
 
-    for record, hmdb_element in et.iterparse(
+    for record_type, hmdb_element in et.iterparse(
             hmdb_file,
             events=event_types):
-        print(record)
-        # Populate name space dictionary
-        if record == event_start_ns:
+
+        if record_type == event_start_ns:
             name_space = hmdb_element[1]
-        else:
-            name_space = 'NameSpaceNotFound'
 
-        # Populate summary dictionary
-        if record == event_end:
-            element_tag = make_tag(
+        if record_type == event_end:
+
+            if hmdb_element.tag == make_tag(
                 tag=metabolite_tag,
-                name_space=name_space)
-
-            if hmdb_element.tag == element_tag:
+                name_space=name_space):
 
                 # Extract information from record.
-                extracted_record = extract_hmdb_record_summary(
+                record = extract_hmdb_record_summary(
                     hmdb_element=hmdb_element,
                     name_space=name_space)
-                summary_hmdb[extracted_record[record_id]] = extracted_record
+                hmdb_summary[record['identifier']] = record
 
-                # Clear memory and count
-                element.clear()
+                # Clear memory.
+                hmdb_element.clear()
                 count += 1
-                progress_counter(
-                    count,
-                    status='metabolites extracted')
 
+        counter += 1
 
-    # Report.
-    print('Extraction complete for ' + str(count) + ' metabolites.')
+        if counter % 50000 == 0:
+            progress_counter(
+                counter,
+                status='HMDB records parsed')
 
-    return summary_hmdb
+    # Report
+    print('Processed ' + str(counter) + ' HMDB records    ')
+    print('Extracted ' + str(count) + ' metabolite records    \n')
+
+    return hmdb_summary
+
 
 """Extracts information about a metabolite from Human Metabolome Database
 (HMDB).
@@ -162,6 +161,8 @@ returns:
 def extract_hmdb_record_summary(
         hmdb_element,
         name_space):
+
+    record = {}
 
     # HMDB identifiers.
     hmdb_primary = extract_subelement_value(
@@ -179,13 +180,14 @@ def extract_hmdb_record_summary(
     references_hmdb_values.append(hmdb_primary)
     references_hmdb = collect_unique_elements(references_hmdb_values)
 
-    # Name.
+    record['identifier'] = hmdb_primary
+    record['references_hmdb'] = references_hmdb
+
+    # Synonyms
     name = extract_subelement_value(
         element=hmdb_element,
         tag=name_tag,
         name_space=name_space)
-
-    # Synonyms.
     synonyms_element = extract_subelement(
         element=hmdb_element,
         tag=synonyms_tag,
@@ -197,39 +199,40 @@ def extract_hmdb_record_summary(
     synonyms_values.append(name)
     synonyms = collect_unique_elements(synonyms_values)
 
-    # References.
+    record['synonyms'] = synonyms
+    record['name'] = name
+
+    # Pubchem references
     pubchem_tentative = extract_subelement_value(
         element=hmdb_element,
         tag=pubchem_tag,
         name_space=name_space)
 
-    # Multiple entries have references to identifier '0' for PubChem.
-    # This identifier is nonsense and erroneous.
     if pubchem_tentative is not None \
     and pubchem_tentative == '0':
+
+        # Remove non-sense identifier '0' for PubChem records
         reference_pubchem = None
 
     else:
         reference_pubchem = pubchem_tentative
 
+    record['reference_pubchem'] = reference_pubchem
+
+    # Extract other source information
     reference_chebi = extract_subelement_value(
         element=hmdb_element,
         tag=chebi_tag,
         name_space=name_space)
+
+    record['reference_chebi'] = reference_chebi
+
     reference_kegg = extract_subelement_value(
         element=hmdb_element,
         tag=kegg_tag,
         name_space=name_space)
 
-    # Compile and return information.
-    record = {
-        'identifier': hmdb_primary,
-        'name': name,
-        'synonyms': synonyms,
-        'references_hmdb': references_hmdb,
-        'reference_pubchem': reference_pubchem,
-        'reference_chebi': reference_chebi,
-        'reference_kegg': reference_kegg}
+    record['reference_kegg'] = reference_kegg
 
     return record
 
