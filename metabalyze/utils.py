@@ -69,7 +69,7 @@ def progress_counter(
         counter,
         status=''):
 
-    sys.stdout.write('%s %s\r' % (counter, status))
+    sys.stdout.write('    %s %s\r' % (counter, status))
     sys.stdout.flush()
 
 """Check directory formatting
