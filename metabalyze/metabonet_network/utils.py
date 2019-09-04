@@ -21,6 +21,10 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
+import csv
+import copy
+import re
+from textwrap import dedent
 
 """Remove file if it exists
 """
@@ -126,9 +130,9 @@ def prepare_curation_report(
     percentage_four = round((proportion_four * 100), 2)
 
     # Compile information.
-    report = textwrap.dedent("""\
+    report = dedent("""\
+        Curation report:
         --------------------------------------------------
-        curation report
         compartments: {count_compartments}
         processes: {count_processes}
         reactions: {count_reactions}
@@ -184,7 +188,7 @@ arguments:
     path (str): path to directory
 """
 def remove_empty_directory(
-        path=None):
+        path):
 
     if (os.path.exists(path)) \
     and (len(os.listdir(path)) < 1):
@@ -201,9 +205,9 @@ returns:
     (list<dict>): tabular information from file
 """
 def read_file_table(
-        path_file=None,
-        names=None,
-        delimiter=None):
+        path_file,
+        names,
+        delimiter):
 
     # Read information from file
     with open(path_file, 'r') as file_source:
@@ -212,9 +216,9 @@ def read_file_table(
             file_source,
             fieldnames=names,
             delimiter=delimiter)
-        information = list(map(lambda row: dict(row), list(reader)))
+        table = list(map(lambda row: dict(row), list(reader)))
 
-    return information
+    return table
 
 """Writes information to file
 arguments:
@@ -224,10 +228,10 @@ arguments:
     delimiter (str): delimiter between values in the table
 """
 def write_file_table(
-        information=None,
-        path_file=None,
-        names=None,
-        delimiter=None):
+        information,
+        path_file,
+        names,
+        delimiter):
 
     # Write information to file
     #with open(out_file_path_model, "w") as out_file:
@@ -812,3 +816,95 @@ def filter_reaction_participants(
         return match_metabolite and match_compartment and match_role
 
     return list(filter(match, participants))
+
+"""Copies and interprets content from Recon
+This function copies and interprets content from a metabolic model in
+Systems Biology Markup Language (SBML), a form of Extensible Markup
+Language (XML).
+returns:
+    (object): references to definition of name space and sections within
+        content
+Previously called: copy_interpret_content_recon
+"""
+def get_recon_references(
+        reference,
+        range_limit=10):
+
+    # Copy content
+    reference_copy = copy.deepcopy(reference)
+
+    # Init content definitions dictionary
+    recon_references = {}
+    recon_references['content'] = reference
+
+    # Set references to overall model
+    recon_references['model'] = reference_copy.getroot()[0]
+
+    # Set references to data types
+    for x in recon_references['model']:
+
+        if 'listOfCompartments' in x.tag:
+            recon_references['compartments'] = x
+
+        elif 'listOfSpecies' in x.tag:
+            recon_references['metabolites'] = x
+
+        elif 'listOfReactions' in x.tag:
+            recon_references['reactions'] = x
+
+        else:
+            pass
+
+    # Check that references were filled
+    if not 'compartments' in recon_references.keys():
+        raise Exception('Compartments information not found in Recon XML file')
+
+    if not 'metabolites' in recon_references.keys():
+        raise Exception('Metabolites information not found in Recon XML file')
+
+    if not 'reactions' in recon_references.keys():
+        raise Exception('Reactions information not found in Recon XML file')
+
+    # Get smbl version tag
+    version = ''
+    version = re.search('{(.*)}', recon_references['model'].tag).group(1)
+
+    # Get syntax tag
+    syntax = ''
+    test_group = recon_references['compartments']
+
+    for x in range(0,range_limit):
+
+        for y in range(0,range_limit):
+
+            for z in range(0,range_limit):
+
+                try:
+                    t = test_group[x][y][z]
+                    t_find = re.search('{(.*)}', t.tag).group(1)
+
+                    if 'syntax' in t_find:
+                        syntax = t_find
+                        break
+
+                    else:
+                        pass
+
+                except:
+                    pass
+            else:
+                continue # Continue if the inner loop wasn't broken
+        else:
+            continue # Continue if the inner loop wasn't broken
+
+        break # Inner loop was broken, break the outer.
+
+    if version != '' and syntax != '':
+        recon_references['space'] = {
+            'version': version,
+            'syntax': syntax}
+
+    else:
+        raise Exception('Could not find version or syntax information from Recon XML file')
+
+    return recon_references
