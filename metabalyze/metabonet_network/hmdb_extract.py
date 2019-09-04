@@ -51,35 +51,46 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
-import shutil
-import csv
 import copy
 import pickle
 import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from metabalyze.metabonet_network.utils import  write_file_table
+from metabalyze.metabonet_network.utils import write_file_table
 from metabalyze.metabonet_network.utils import collect_unique_elements
 from metabalyze.metabonet_network.utils import confirm_path_directory
+from metabalyze.utils import progress_counter
 
-"""Reads and organizes source information from file
-arguments:
-    directory (str): directory of source files
-returns:
-    (object): source information
+"""Set globals
 """
-def read_source(
-        directory):
+event_start_ns = 'start-ns'
+event_end = 'end'
+event_types = (
+    'start',
+    event_end,
+    event_start_ns,
+    'end-ns')
 
-    # Specify directories and files.
-    path_hmdb = os.path.join(directory, 'hmdb_metabolites.xml')
+metabolite_tag = 'metabolite'
+record_id = 'identifier'
+accession_tag = 'accession'
+secondary_accessions_tag = 'secondary_accessions'
+name_tag = 'name'
+synonyms_tag = 'synonyms'
+synonym_tag = 'synonym'
+pubchem_tag = 'pubchem_compound_id'
+chebi_tag = 'chebi_id'
+kegg_tag = 'kegg_id'
 
-    # Read information from file.
-    #hmdb = et.parse(path_hmdb)
+"""Make HMDB tag
+"""
+def make_tag(
+        tag,
+        name_space):
 
-    return {
-        'hmdb': path_hmdb}
+    return '{' + name_space + '}' + tag
+
 
 """Extracts information about metabolites from Human Metabolome Database
 (HMDB).
@@ -88,72 +99,56 @@ arguments:
 returns:
     (dict<dict>): information from HMDB
 """
+# Can't find event_start_ns or namespace ever, not grabbing elements and parsing
+# Try using Cameron's method that has hanging variables
 def extract_hmdb_summary(
-        hmdb=None):
+        hmdb_file):
 
-    # Collect references to name space.
+    # Collect references to name space
     spaces = {}
 
-    # Collect information about metabolites.
+    # Collect information about metabolites
     summary_hmdb = {}
 
-    # Count records.
+    # Count records
     count = 0
 
-    for event, element in et.iterparse(
-            hmdb,
-            events=(
-                'start',
-                'end',
-                'start-ns',
-                'end-ns')):
+    for record, hmdb_element in et.iterparse(
+            hmdb_file,
+            events=event_types):
+        print(record)
+        # Populate name space dictionary
+        if record == event_start_ns:
+            name_space = hmdb_element[1]
+        else:
+            name_space = 'NameSpaceNotFound'
 
-        if event == 'start-ns':
+        # Populate summary dictionary
+        if record == event_end:
+            element_tag = make_tag(
+                tag=metabolite_tag,
+                name_space=name_space)
 
-            space = element[0]
-            reference = element[1]
-            spaces[space] = reference
-
-        if event == 'end':
-
-            if element.tag == construct_tag(
-                    tag='metabolite',
-                    space=space,
-                    spaces=spaces):
-
-                # Parse complete for a new metabolite.
-                # Count.
-                count = count + 1
+            if hmdb_element.tag == element_tag:
 
                 # Extract information from record.
-                record = extract_hmdb_record_summary(
-                    element=element,
-                    space=space,
-                    spaces=spaces)
-                summary_hmdb[record['identifier']] = record
+                extracted_record = extract_hmdb_record_summary(
+                    hmdb_element=hmdb_element,
+                    name_space=name_space)
+                summary_hmdb[extracted_record[record_id]] = extracted_record
 
-                # Clear memory.
+                # Clear memory and count
                 element.clear()
+                count += 1
+                progress_counter(
+                    count,
+                    status='metabolites extracted')
+
 
     # Report.
     print('Extraction complete for ' + str(count) + ' metabolites.')
 
     return summary_hmdb
-
-"""Constructs complete tag for name space in Extensible Markup Language (XML).
-arguments:
-    tag (str): name of element's tag
-    space (str): name of specific name space within XML document
-    spaces (dict<str>): name spaces within XML document
-returns:
-    (str): complete name of tag
-"""
-def construct_tag(
-        tag=None,
-        space=None,
-        spaces=None):
-
-    return "{" + spaces[space] + "}" + tag
 
 """Extracts information about a metabolite from Human Metabolome Database
 (HMDB).
@@ -165,78 +160,66 @@ returns:
     (dict<str>): information about a metabolite from HMDB
 """
 def extract_hmdb_record_summary(
-        element=None,
-        space=None,
-        spaces=None):
+        hmdb_element,
+        name_space):
 
     # HMDB identifiers.
     hmdb_primary = extract_subelement_value(
-        element=element,
-        tag='accession',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=accession_tag,
+        name_space=name_space)
     hmdb_secondary = extract_subelement(
-        element=element,
-        tag='secondary_accessions',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=secondary_accessions_tag,
+        name_space=name_space)
     references_hmdb_values = extract_subelement_values(
         element=hmdb_secondary,
-        tag='accession',
-        space=space,
-        spaces=spaces)
+        tag=accession_tag,
+        name_space=name_space)
     references_hmdb_values.append(hmdb_primary)
     references_hmdb = collect_unique_elements(references_hmdb_values)
 
     # Name.
     name = extract_subelement_value(
-        element=element,
-        tag='name',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=name_tag,
+        name_space=name_space)
 
     # Synonyms.
     synonyms_element = extract_subelement(
-        element=element,
-        tag='synonyms',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=synonyms_tag,
+        name_space=name_space)
     synonyms_values = extract_subelement_values(
         element=synonyms_element,
-        tag='synonym',
-        space=space,
-        spaces=spaces)
+        tag=synonym_tag,
+        name_space=name_space)
     synonyms_values.append(name)
     synonyms = collect_unique_elements(synonyms_values)
 
     # References.
     pubchem_tentative = extract_subelement_value(
-        element=element,
-        tag='pubchem_compound_id',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=pubchem_tag,
+        name_space=name_space)
 
     # Multiple entries have references to identifier '0' for PubChem.
     # This identifier is nonsense and erroneous.
-    if ((pubchem_tentative is not None) \
-    and (pubchem_tentative == '0')):
-
+    if pubchem_tentative is not None \
+    and pubchem_tentative == '0':
         reference_pubchem = None
 
     else:
-
         reference_pubchem = pubchem_tentative
 
     reference_chebi = extract_subelement_value(
-        element=element,
-        tag='chebi_id',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=chebi_tag,
+        name_space=name_space)
     reference_kegg = extract_subelement_value(
-        element=element,
-        tag='kegg_id',
-        space=space,
-        spaces=spaces)
+        element=hmdb_element,
+        tag=kegg_tag,
+        name_space=name_space)
 
     # Compile and return information.
     record = {
@@ -260,15 +243,13 @@ returns:
     (object): element within XML tree
 """
 def extract_subelement(
-        element=None,
-        tag=None,
-        space=None,
-        spaces=None):
+        element,
+        tag,
+        name_space):
 
-    tag_complete = construct_tag(
+    tag_complete = make_tag(
         tag=tag,
-        space=space,
-        spaces=spaces)
+        name_space=name_space)
 
     return element.find(tag_complete)
 
@@ -283,25 +264,19 @@ returns:
     (str): text content of element
 """
 def extract_subelement_value(
-        element=None,
-        tag=None,
-        space=None,
-        spaces=None):
-
-    #name = element.find("{http://www.hmdb.ca}name").text
+        element,
+        tag,
+        name_space):
 
     subelement = extract_subelement(
-        element=element,
-        tag=tag,
-        space=space,
-        spaces=spaces)
+        element,
+        tag,
+        name_space)
 
     if subelement is not None:
-
         return subelement.text
 
     else:
-
         return None
 
 """Extracts the text contents of multiple elements within another element in
@@ -315,15 +290,13 @@ returns:
     (list<str>): text contents of elements
 """
 def extract_subelement_values(
-        element=None,
-        tag=None,
-        space=None,
-        spaces=None):
+        element,
+        tag,
+        name_space):
 
-    tag_complete = construct_tag(
+    tag_complete = make_tag(
         tag=tag,
-        space=space,
-        spaces=spaces)
+        name_space=name_space)
 
     values = []
 
@@ -340,14 +313,14 @@ arguments:
 """
 def write_product(
         directory,
-        information=None):
+        information):
 
-    # Specify directories and files.
+    # Specify directories and files
     confirm_path_directory(directory)
-    path_pickle = os.path.join(directory, 'hmdb_summary.pickle')
-    path_text = os.path.join(directory, 'hmdb_summary.tsv')
+    path_pickle = directory + 'hmdb_summary.pickle'
+    path_text = directory + 'hmdb_summary.tsv'
 
-    # Write information to file.
+    # Write information to file
     with open(path_pickle, 'wb') as file_product:
         pickle.dump(information['summary_object'], file_product)
 
@@ -363,16 +336,12 @@ Human Metabolome Database.
 arguments:
     directory (str): path to directory for source and product files
 """
-def execute_procedure(
+def __main__(
         args_dict):
-
-    # Read source information from file.
-    source = read_source(
-        args_dict['source'])
 
     # Extract information from Human Metabolome Database.
     summary_hmdb = extract_hmdb_summary(
-        hmdb=source['hmdb'])
+        hmdb_file=args_dict['hmdb'])
 
     # Compile information.
     information = {
@@ -381,5 +350,5 @@ def execute_procedure(
 
     #Write product information to file
     write_product(
-        args_dict['extract'],
+        directory=args_dict['extract'],
         information=information)

@@ -51,18 +51,15 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
-import shutil
 import re
-import csv
 import xml.etree.ElementTree as et
-import copy
 
 """Import internal dependencies
 """
 from metabalyze.metabonet_network.utils import confirm_file
 from metabalyze.metabonet_network.utils import read_file_table
 from metabalyze.metabonet_network.utils import confirm_path_directory
-from metabalyze.metabonet_network.collect import get_recon_references
+from metabalyze.metabonet_network.utils import get_recon_references
 
 """Globals
 """
@@ -103,7 +100,7 @@ def read_source(
 
     # Read in recon database
     confirm_file(recon_xml)
-    recon_content = et.parse(recon_xml)
+    recon_reference = et.parse(recon_xml)
 
     curation_compartments = read_file_table(
         path_file=path_compartments,
@@ -115,7 +112,7 @@ def read_source(
         delimiter='\t')
 
     return {
-        'content': recon_content,
+        'reference': recon_reference,
         'curation_compartments': curation_compartments,
         'curation_metabolites': curation_metabolites}
 
@@ -179,7 +176,6 @@ arguments:
 returns:
     (object): content with changes
 """
-### ---> continue to remove hard coded variables
 def change_model_compartments(
         curation_compartments=None,
         reference=None):
@@ -228,7 +224,7 @@ def change_model_compartments(
 
                 # Search reaction's metabolites
                 for metabolite in reaction.iter(
-                    '{' + reference['space']['version'] + '}'
+                    '{' + reference['space']['version'] + '}',
                     species_reference_id):
 
                     # Determine whether to change metabolite's identifier.
@@ -399,7 +395,7 @@ def write_product(
 
     # Specify directories and files.
     confirm_path_directory(output)
-    path_file = output + 'recon_reconciled.xml')
+    path_file = output + 'recon_reconciled.xml'
 
     # Write information to file.
     reference['content'].write(
@@ -421,7 +417,7 @@ def __main__(
 
     # Copy and interpret content
     recon_reference = get_recon_references(
-        recon)
+        recon['reference'])
 
     # Change model's content and correct content where necessary
     reference_updated_boundary = change_model_boundary(
@@ -445,6 +441,9 @@ def __main__(
         reference=reference_update_metabolites)
 
     # Report.
+    print('Metabolic model summary:')
+    print('--------------------------------------------------')
     print('compartments: ' + str(summary['compartments']))
     print('reactions: ' + str(summary['reactions']))
     print('metabolites: ' + str(summary['metabolites']))
+    print('--------------------------------------------------')
