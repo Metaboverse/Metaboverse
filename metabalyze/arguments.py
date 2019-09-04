@@ -32,6 +32,8 @@ from metabalyze.__init__ import __dependencies__
 from metabalyze.utils import check_directories
 from metabalyze.utils import check_curate
 from metabalyze.utils import check_analyze
+from metabalyze.utils import generate_log
+from metabalyze.utils import argument_checks
 
 """Set global variables
 """
@@ -82,19 +84,7 @@ def check_arguments(
         args_dict):
 
     # Run general checks
-    # Check user-provided directory formatting
-    for key, value in args_dict.items():
-
-        if key == 'cmd':
-            pass
-
-        elif os.path.isdir(str(value)) == True:
-            args_dict[key] = check_directories(
-                args_dict[key],
-                key)
-
-        else:
-            pass
+    args_dict = argument_checks(args_dict)
 
     # Run sub-module specific checks
     if args_dict['cmd'] == 'curate':
@@ -109,6 +99,8 @@ def check_arguments(
     else:
         raise Exception('Invalid sub-module selected')
 
+    args_dict = generate_log(args_dict)
+
     # Print out user commands to log file
     os.system(
         'echo \"======================\nUser commands summary:\n======================\"'
@@ -121,7 +113,7 @@ def check_arguments(
     print('MetaboNet-Analyzer version: ' + str(__version__))
 
     for key, value in args_dict.items():
-        
+
         os.system(
             'echo \"' + str(key) + ': ' + str(value) + '\"'
             + str(args_dict['log']))
@@ -169,6 +161,18 @@ def parse_arguments(
 
     # Curate required arguments
     curate_reqs = curate_parser.add_argument_group('required arguments')
+    curate_reqs.add_argument(
+        '--recon',
+        help = 'Path and filename of Recon database',
+        metavar = '<path/filename>',
+        type = str,
+        required = True)
+    curate_reqs.add_argument(
+        '--hmdb',
+        help = 'Path and filename of HMDB database',
+        metavar = '<path/filename>',
+        type = str,
+        required = True)
 
     # Curate optional arguments
     curate_opts = curate_parser.add_argument_group('optional arguments')
@@ -181,40 +185,6 @@ def parse_arguments(
         help = 'Path to output directory (default: current working directory)',
         metavar = '<path>',
         type = str,
-        required = False)
-    curate_opts.add_argument(
-        '--recon',
-        help = 'Path and filename of Recon database',
-        metavar = '<path/filename>',
-        type = str,
-        required = False)
-    curate_opts.add_argument(
-        '--hmdb',
-        help = 'Path and filename of HMDB database',
-        metavar = '<path/filename>',
-        type = str,
-        required = False)
-    curate_opts.add_argument(
-        '--reactome',
-        help = 'Path and filename of Reactome database',
-        metavar = '<path/filename>',
-        type = str,
-        required = False)
-    curate_opts.add_argument(
-        '--compartments',
-        help = 'Model network with compartments',
-        action = 'store_true',
-        required = False)
-    curate_opts.add_argument(
-        '--hubs',
-        help = 'Model network with hubs',
-        action = 'store_true',
-        required = False)
-    curate_opts.add_argument(
-        '--hub_stringency',
-        help = 'Change connectedness degree for hub cut-off (default: %s)' % DEFAULT_HUB_STRINGENCY,
-        default = DEFAULT_HUB_STRINGENCY,
-        type = int,
         required = False)
     curate_opts.add_argument(
         '-m', '--max_processors',
@@ -306,6 +276,22 @@ def parse_arguments(
         help = 'Normalization to perform on data',
         metavar = '<type>',
         type = str,
+        required = False)
+    analyze_opts.add_argument(
+        '--compartments',
+        help = 'Model network with compartments',
+        action = 'store_true',
+        required = False)
+    analyze_opts.add_argument(
+        '--hubs',
+        help = 'Model network with hubs',
+        action = 'store_true',
+        required = False)
+    analyze_opts.add_argument(
+        '--hub_stringency',
+        help = 'Change connectedness degree for hub cut-off (default: %s)' % DEFAULT_HUB_STRINGENCY,
+        default = DEFAULT_HUB_STRINGENCY,
+        type = int,
         required = False)
     analyze_opts.add_argument(
         '-m', '--max_processors',
