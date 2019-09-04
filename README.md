@@ -5,7 +5,7 @@ Biological and Metabolic Networks Analyzer
 
 ## What does MetaboNet-Analyzer do?
 ### tl;dr
-- Curates metabolic model
+- Curates metabolic model (currently only for human)
 - Maps networks or sub-networks interactively
 - Overlays selected network with transcriptomics, proteomics, and/or metabolomics data
 - Performs trend analysis across networks
@@ -40,3 +40,19 @@ pip install MetaboNet-Analyzer
 Requires:
 - tab- or comma-separated library-normalized data table
 - samples metadata table
+
+If using Recon2M.2 (or similar):
+```
+$ curl -L -O https://zenodo.org/record/583326/files/Recon2M.2_MNX_Entrez_Gene.xml
+```
+
+If using current HMDB:
+```
+$ curl -L -O http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip
+$ unzip hmdb_metabolites.zip
+```
+
+## To Do:
+- Network curation:
+1. Add log file prints
+2. Decide if both recon and hmdb are required inputs each time
