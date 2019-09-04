@@ -45,6 +45,7 @@ from __future__ import print_function
 import os
 import sys
 import time
+import datetime
 
 """Print out progress bar for long steps
 """
@@ -62,15 +63,24 @@ def progress_bar(
     sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
     sys.stdout.flush()
 
+"""Print number of records read in
+"""
+def progress_counter(
+        counter,
+        status=''):
+
+    sys.stdout.write('%s %s\r' % (counter, status))
+    sys.stdout.flush()
+
 """Check directory formatting
 """
 def check_directories(
         input,
-        type=None):
+        argument):
 
     # Check that a file wasn't passed in
     if os.path.isdir(input) != True:
-        raise Exception(str(input) + ' is not a directory')
+        raise Exception(str(argument) + ': ' + str(input) + ' is not a directory')
 
     # Check input directory name is formatted correctly and fix if necessary
     input = os.path.abspath(input)
@@ -79,6 +89,21 @@ def check_directories(
         pass
     else:
         input += '/'
+
+    return input
+
+"""Check file formatting
+"""
+def check_files(
+        input,
+        argument):
+
+    # Check that a file wasn't passed in
+    if os.path.isfile(input) != True:
+        raise Exception(str(argument) + ': ' + str(input) + ' is not a file')
+
+    # Check input directory name is formatted correctly and fix if necessary
+    input = os.path.abspath(input)
 
     return input
 
@@ -95,3 +120,68 @@ def check_analyze(
         args_dict):
 
     print('coming soon')
+
+"""Make log file for metabonet module
+"""
+def generate_log(
+        args_dict):
+
+    if 'experiment' in args_dict \
+    and args_dict['experiment'] != None:
+        args_dict['log'] = ' >> ' + str(args_dict['output']) + str(args_dict['experiment']) + '.log 2>&1'
+        args_dict['log_file'] = str(args_dict['output']) + str(args_dict['experiment']) + '.log'
+
+    else:
+        cdt = datetime.datetime.now()
+        args_dict['experiment'] = (
+            str(args_dict['cmd'])
+            + '_' + str(cdt.year)
+            + '_' + str(cdt.month)
+            + '_' + str(cdt.day)
+            + '_' + str(cdt.hour)
+            + 'h_' + str(cdt.minute)
+            + 'm_' + str(cdt.second)
+            + 's')
+        args_dict['log'] = (
+            ' >> '
+            + str(args_dict['output'])
+            + str(args_dict['experiment'])
+            + '.log 2>&1')
+        args_dict['log_file'] = (
+            str(args_dict['output'])
+            + str(args_dict['experiment'])
+            + '.log')
+
+    return args_dict
+
+"""Run general checks on arguments
+Not sub-module-specific
+"""
+def argument_checks(
+        args_dict):
+
+    # Check output file
+    if 'output' in args_dict \
+    and args_dict['output'] == None:
+        args_dict['output'] = os.getcwd() + '/'
+
+    # Check user-provided directory formatting
+    for key, value in args_dict.items():
+
+        if key == 'cmd':
+            pass
+
+        elif os.path.isdir(str(value)) == True:
+            args_dict[key] = check_directories(
+                args_dict[key],
+                key)
+
+        elif os.path.isfile(str(value)) == True:
+            args_dict[key] = check_files(
+            args_dict[key],
+            key)
+
+        else:
+            pass
+
+    return args_dict
