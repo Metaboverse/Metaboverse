@@ -25,6 +25,7 @@ import csv
 import copy
 import re
 from textwrap import dedent
+import string
 
 """Remove file if it exists
 """
@@ -32,7 +33,6 @@ def remove_file(
         path=None):
 
     if os.path.exists(path):
-
         os.remove(path)
 
 """Remove directory if it exists
@@ -42,7 +42,6 @@ def remove_directory(
 
     if (os.path.exists(path)) \
     and (len(os.listdir(path)) < 1):
-
         os.rmdir(path)
 
 """Confirms that a path to a directory exists.
@@ -54,7 +53,6 @@ def confirm_path_directory(
         path):
 
     if not os.path.exists(path):
-
         os.makedirs(path)
 
 """Confirms that a path to a directory exists.
@@ -178,7 +176,6 @@ def convert_string_low_alpha_num(
     for character in characters_lower:
         if ((character not in string.ascii_letters) \
         and (character not in string.digits)):
-
             characters_novel = characters_novel.replace(character, '')
 
     return characters_novel
@@ -192,7 +189,6 @@ def remove_empty_directory(
 
     if (os.path.exists(path)) \
     and (len(os.listdir(path)) < 1):
-
         os.rmdir(path)
 
 """Reads and organizes source information from file
@@ -260,7 +256,6 @@ def find_match(
     for element in sequence:
 
         if match(element):
-
             return element
 
     return None
@@ -279,7 +274,6 @@ def find_index(
     for index, element in enumerate(sequence):
 
         if match(element):
-
             # Element matches condition
             # Return element's index
             return index
@@ -305,11 +299,9 @@ def find_all(
     for element in sequence:
 
         if match(element):
-
             matches.append(element)
 
     if len(matches) > 0:
-
         return matches
 
     else:
@@ -330,7 +322,6 @@ def collect_unique_elements(
     for element in elements_original:
 
         if element not in elements_novel:
-
             elements_novel.append(element)
 
     return elements_novel
@@ -459,7 +450,6 @@ def collect_records_targets_by_categories(
 
         # Determine whether collection includes the category's value.
         if category_value in collection_novel.keys():
-
             # Collection includes the category's value.
             target_values = collection_novel[category_value]
             target_values.append(target_value)
@@ -468,7 +458,6 @@ def collect_records_targets_by_categories(
             collection_novel[category_value] = target_values
 
         else:
-
             # Collection does not include the category's value.
             # Include category's value and target's value in collection.
             collection_novel[category_value] = [target_value]
@@ -492,7 +481,6 @@ def collect_records_targets_by_categories(
                     collection_original=collection)
 
         else:
-
             category_value = category_values
             collection = collect_record_target_by_category(
                 target_value=target_value,
@@ -538,7 +526,6 @@ def filter_nonempty_elements(
     for element in elements_original:
 
         if len(str(element)) > 0:
-
             elements_novel.append(element)
 
     return elements_novel
@@ -559,7 +546,6 @@ def filter_entries_identifiers(
     for entry in entries_original.values():
 
         if entry['identifier'] in identifiers:
-
             entries_novel[entry['identifier']] = entry
 
     return entries_novel
@@ -580,21 +566,12 @@ def match_hmdb_entries_by_identifiers_names(
         names=None,
         summary_hmdb=None):
 
-    # Test.
-    #hmdb_keys = utility.match_hmdb_entries_by_identifiers_names(
-    #    identifiers=[],
-    #    names=["pyruvate"],
-    #    summary_hmdb=source["summary_hmdb"]
-    #)
-    # HMDB0000243
-
     # Ensure identifiers and names are not empty.
     identifiers_valid = filter_nonempty_elements(identifiers)
     names_valid = filter_nonempty_elements(names)
 
     # Determine whether measurement's record include reference to HMDB.
     if (len(identifiers_valid) > 0):
-
         # Measurement's record includes references to HMDB.
         # Match measurement's record to a entries in HMDB.
         # Match by identifier.
@@ -603,7 +580,6 @@ def match_hmdb_entries_by_identifiers_names(
             summary_hmdb=summary_hmdb)
 
     elif (len(names_valid) > 0):
-
         # Measurement's record does not include reference to HMDB.
         # Match measurement's record to an entry in HMDB.
         # Attempt to match by name.
@@ -612,7 +588,6 @@ def match_hmdb_entries_by_identifiers_names(
             summary_hmdb=summary_hmdb)
 
     else:
-
         hmdb_keys = []
 
     return hmdb_keys
@@ -645,7 +620,6 @@ def filter_hmdb_entries_by_identifiers(
             checks.append(check)
 
         if any(checks):
-
             # The entry matches the metabolite's references.
             keys.append(key)
 
@@ -686,7 +660,6 @@ def filter_hmdb_entries_by_synonyms(
             checks.append(check)
 
         if any(checks):
-
             # The entry matches the metabolite's references
             keys.append(key)
 
@@ -716,7 +689,6 @@ def filter_hmdb_entries_by_references(
         match = reference_entry in identifiers
 
         if match:
-
             # The entry matches the metabolite's references.
             keys.append(key)
 
@@ -745,11 +717,9 @@ def count_entities_with_references(
             if reference in entity['references'].keys():
 
                 if len(entity['references'][reference]) > 0:
-
                     matches.append(True)
 
         if any(matches):
-
             count += 1
 
     return count
@@ -763,9 +733,9 @@ returns:
     (list<str>): values from a reaction's participants
 """
 def collect_reaction_participants_value(
-        key=None,
-        criteria=None,
-        participants=None):
+        key,
+        criteria,
+        participants):
 
     participants_match = filter_reaction_participants(
         criteria=criteria,
@@ -783,34 +753,28 @@ returns:
     (list<dict>): information about a reaction's participants
 """
 def filter_reaction_participants(
-        criteria=None,
-        participants=None):
+        criteria,
+        participants):
 
     def match(
             participant):
 
         if "metabolites" in criteria:
-
             match_metabolite = (participant["metabolite"] in criteria["metabolites"])
 
         else:
-
             match_metabolite = True
 
         if "compartments" in criteria:
-
             match_compartment = (participant["compartment"] in criteria["compartments"])
 
         else:
-
             match_compartment = True
 
         if "roles" in criteria:
-
             match_role = participant["role"] in criteria["roles"]
 
         else:
-
             match_role = True
 
         return match_metabolite and match_compartment and match_role

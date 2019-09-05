@@ -51,19 +51,20 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
-import sys
-import time
-import shutil
 import csv
 import copy
 import pickle
-import numpy
+from functools import partial
+import numpy as np
 
 """Import internal dependencies
 """
 from metabalyze.utils import progress_bar
-from metabalyze.metabonet_network.convert import convert_metabolites_text
-from metabalyze.metabonet_network.convert import convert_reactions_text
+from metabalyze.utils import get_cores
+from metabalyze.utils import run_chunks
+from metabalyze.utils import split_dictionary
+from metabalyze.metabonet_network.model import convert_metabolites_text
+from metabalyze.metabonet_network.model import convert_reactions_text
 from metabalyze.metabonet_network.utils import match_hmdb_entries_by_identifiers_names
 from metabalyze.metabonet_network.utils import collect_unique_elements
 from metabalyze.metabonet_network.utils import collect_reaction_participants_value
@@ -75,6 +76,17 @@ from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import write_file_table
 from metabalyze.metabonet_network.utils import prepare_curation_report
 
+"""Set globals
+"""
+hmdb_pickle = 'hmdb_summary.pickle'
+compartment_pickle = 'compartments.pickle'
+process_pickle = 'processes.pickle'
+reaction_pickle = 'reactions.pickle'
+metabolite_pickle = 'metabolites.pickle'
+metabolites_file = 'metabolites.tsv'
+reactions_file = 'reactions.tsv'
+filtered_reactions_file = 'reactions_filter.tsv'
+
 """Reads and organizes source information from file
 arguments:
     directory (str): directory of source files
@@ -82,34 +94,27 @@ returns:
     (object): source information
 """
 def read_source(
-        directory):
+        path_hmdb,
+        path_recon):
 
-    # Specify directories and files.
-    path_hmdb = directory + 'extraction/hmdb_summary.pickle'
-    path = directory + 'collection/'
-    path_compartments = path + 'compartments.pickle'
-    path_processes = path + 'processes.pickle'
-    path_reactions = path + 'reactions.pickle'
-    path_metabolites = path + 'metabolites.pickle'
-
-    # Read information from file.
-    with open(path_hmdb, 'rb') as file_source:
-        summary_hmdb = pickle.load(file_source)
-    with open(path_compartments, 'rb') as file_source:
+    # Read information from files
+    with open(path_hmdb + hmdb_pickle, 'rb') as file_source:
+        hmdb = pickle.load(file_source)
+    with open(path_recon + compartment_pickle, 'rb') as file_source:
         compartments = pickle.load(file_source)
-    with open(path_processes, 'rb') as file_source:
+    with open(path_recon + process_pickle, 'rb') as file_source:
         processes = pickle.load(file_source)
-    with open(path_reactions, 'rb') as file_source:
+    with open(path_recon + reaction_pickle, 'rb') as file_source:
         reactions = pickle.load(file_source)
-    with open(path_metabolites, 'rb') as file_source:
+    with open(path_recon + metabolite_pickle, 'rb') as file_source:
         metabolites = pickle.load(file_source)
 
     return {
-        'summary_hmdb': summary_hmdb,
-        'compartments': compartments,
-        'processes': processes,
-        'reactions': reactions,
-        'metabolites': metabolites}
+        'hmdb': hmdb,
+        'recon_compartments': compartments,
+        'recon_processes': processes,
+        'recon_reactions': reactions,
+        'recon_metabolites': metabolites}
 
 """Enhances information about metabolites
 arguments:
@@ -119,16 +124,15 @@ arguments:
 returns:
     (dict<dict>): information about metabolites
 """
-def enhance_metabolites(
-        metabolites_original=None,
-        summary_hmdb=None):
+def run_metabolite_enhance(
+        metabolite_chunk,
+        summary_hmdb):
 
     metabolites_novel = {}
     counter = 1
-    total = len(metabolites_original)
+    total = len(metabolite_chunk.values()) + 1
 
-    # Iterate on records for metabolites.
-    for metabolite in metabolites_original.values():
+    for metabolite in metabolite_chunk.values():
 
         # Enhance information about metabolite.
         metabolite_novel = enhance_metabolite(
@@ -143,9 +147,37 @@ def enhance_metabolites(
             counter,
             total,
             status='Enhance metabolites')
+
         counter += 1
 
     return metabolites_novel
+
+def enhance_metabolites(
+        metabolites_recon,
+        hmdb,
+        args_dict):
+
+    # Get cores and chunks
+    cores = get_cores(args_dict)
+
+    # Chunk data based on core #
+    chunks = split_dictionary(
+        data=metabolites_recon,
+        cores=cores)
+    func = partial(
+        run_metabolite_enhance,
+        summary_hmdb=hmdb)
+    metabolites_novel = run_chunks(
+        func,
+        chunks,
+        cores)
+
+    # Join dictionary chunks
+    metabolites_result = {}
+    for dictionary_chunk in metabolites_novel:
+        metabolites_result.update(dictionary_chunk)
+
+    return metabolites_result
 
 """Enhances information about a metabolite
 arguments:
@@ -156,22 +188,21 @@ returns:
     (dict): information about a metabolite
 """
 def enhance_metabolite(
-        metabolite_original=None,
-        summary_hmdb=None):
+        metabolite_original,
+        summary_hmdb):
 
-    # Copy information.
+    # Copy information
     metabolite_novel = copy.deepcopy(metabolite_original)
 
-    # Enhance metabolite's references.
+    # Enhance metabolite's references
     references_novel = enhance_metabolite_references(
         name=metabolite_novel['name'],
-        references_original=metabolite_novel['references'],
+        references_novel=metabolite_novel['references'],
         summary_hmdb=summary_hmdb)
     metabolite_novel['references'] = references_novel
 
-    # Use name from HMDB.
+    # Use name from HMDB
     if len(references_novel['hmdb']) > 0:
-
         identifier_hmdb = references_novel['hmdb'][0]
         name = summary_hmdb[identifier_hmdb]['name']
         metabolite_novel['name'] = name
@@ -188,17 +219,14 @@ returns:
     (dict): references about a metabolite
 """
 def enhance_metabolite_references(
-        name=None,
-        references_original=None,
-        summary_hmdb=None):
+        name,
+        references_novel,
+        summary_hmdb):
 
-    # Copy information.
-    references_novel = copy.deepcopy(references_original)
-
-    # Enhance references to HMDB.
-    references_hmdb_original = references_novel['hmdb']
+    # Enhance references to HMDB
+    references_hmdb_novel = references_novel['hmdb']
     references_hmdb_novel = match_hmdb_entries_by_identifiers_names(
-        identifiers=references_hmdb_original,
+        identifiers=references_hmdb_novel,
         names=[name],
         summary_hmdb=summary_hmdb)
 
@@ -211,11 +239,11 @@ def enhance_metabolite_references(
     references_novel['hmdb'] = collect_unique_elements(
         hmdb_references['hmdb'])
     references_novel['pubchem'] = collect_unique_elements(
-        references_original['pubchem'] + hmdb_references['pubchem'])
+        references_novel['pubchem'] + hmdb_references['pubchem'])
     references_novel['chebi'] = collect_unique_elements(
-        references_original['chebi'] + hmdb_references['chebi'])
+        references_novel['chebi'] + hmdb_references['chebi'])
     references_novel['kegg'] = collect_unique_elements(
-        references_original['kegg'] + hmdb_references['kegg'])
+        references_novel['kegg'] + hmdb_references['kegg'])
 
     return references_novel
 
@@ -228,8 +256,8 @@ returns:
     (dict<list<str>>): references
 """
 def collect_hmdb_entries_references(
-        keys=None,
-        summary_hmdb=None):
+        keys,
+        summary_hmdb):
 
     references_hmdb = []
     references_pubchem = []
@@ -248,15 +276,12 @@ def collect_hmdb_entries_references(
         kegg = record['reference_kegg']
 
         if (pubchem is not None) and (len(pubchem) > 0):
-
             references_pubchem.append(pubchem)
 
         if (chebi is not None) and (len(chebi) > 0):
-
             references_chebi.append(chebi)
 
         if (kegg is not None) and (len(kegg) > 0):
-
             references_kegg.append(kegg)
 
     return {
@@ -271,26 +296,42 @@ arguments:
 returns:
     (dict<dict>): information about reactions
 """
-def include_reactions_behaviors(
-        reactions_original=None):
+def run_reaction_behavior(
+        reactions_chunk):
 
     reactions_novel = {}
-    counter = 1
-    total = len(reactions_original)
 
-    for reaction_original in reactions_original.values():
+    for reaction_original in reactions_chunk.values():
 
         reaction_novel = include_reaction_behavior(
             reaction_original=reaction_original)
         reactions_novel[reaction_novel['identifier']] = reaction_novel
 
-        progress_bar(
-            counter,
-            total,
-            status='Include reaction behavior')
-        counter += 1
-
     return reactions_novel
+
+def include_reactions_behaviors(
+        reactions_recon,
+        args_dict):
+
+    # Get cores and chunks
+    cores = get_cores(args_dict)
+
+    # Chunk data based on core #
+    chunks = split_dictionary(
+        data=reactions_recon,
+        cores=cores)
+
+    reactions_novel = run_chunks(
+        run_reaction_behavior,
+        chunks,
+        cores)
+
+    # Join dictionary chunks
+    reactions_result = {}
+    for dictionary_chunk in reactions_novel:
+        reactions_result.update(dictionary_chunk)
+
+    return reactions_result
 
 """Includes information about a reaction's behavior
 arguments:
@@ -299,7 +340,7 @@ returns:
     (dict): information about a reaction
 """
 def include_reaction_behavior(
-        reaction_original=None):
+        reaction_original):
 
     # Determine whether reaction involves chemical conversion between reactants
     # and products
@@ -335,7 +376,7 @@ returns:
     (bool): whether the reaction involves chemical conversion
 """
 def determine_reaction_conversion(
-        reaction=None):
+        reaction):
 
     reactant_metabolites = collect_reaction_participants_value(
         key='metabolite',
@@ -358,7 +399,7 @@ returns:
         multiple compartments
 """
 def determine_reaction_dispersal(
-        reaction=None):
+        reaction):
 
     compartments = collect_value_from_records(
         key='compartment',
@@ -377,7 +418,7 @@ returns:
     (list<dict>): information about a reaction's transports
 """
 def collect_reaction_transports(
-        reaction=None):
+        reaction):
 
     metabolites_reactant = collect_reaction_participants_value(
         key='metabolite',
@@ -418,7 +459,6 @@ def collect_reaction_transports(
             list_two=compartments_product)
 
         if transport:
-
             compartments = compartments_reactant + compartments_product
             compartments_unique = collect_unique_elements(
                 elements_original=compartments)
@@ -435,37 +475,56 @@ arguments:
 returns:
     (dict<dict>): information about reactions
 """
-def include_reactions_transport_processes(
-        reactions_original=None):
-
-    # Collect information about compartments in which each metabolite
-    # participates in each process
-    processes_dispersal = collect_processes_metabolites_compartments(
-        reactions=reactions_original)
-
-    # Filter information for prospective transports of metabolites between
-    # compartments in processes
-    processes_transports = filter_processes_transports(
-        processes_dispersal=processes_dispersal)
+def run_reactions_transport(
+        reactions_chunk,
+        processes_transports):
 
     reactions_novel = {}
-    counter = 1
-    total = len(reactions_original)
 
-    for reaction_original in reactions_original.values():
+    for reaction_original in reactions_chunk.values():
 
         reaction_novel = include_reaction_transport_processes(
             reaction_original=reaction_original,
             processes_transports=processes_transports)
         reactions_novel[reaction_novel["identifier"]] = reaction_novel
 
-        progress_bar(
-            counter,
-            total,
-            status='Including reactions and transport processes')
-        counter += 1
-
     return reactions_novel
+
+def include_reactions_transport_processes(
+        reactions_behavior,
+        args_dict):
+
+    # Collect information about compartments in which each metabolite
+    # participates in each process
+    processes_dispersal = collect_processes_metabolites_compartments(
+        reactions=reactions_behavior)
+
+    # Filter information for prospective transports of metabolites between
+    # compartments in processes
+    processes_transports = filter_processes_transports(
+        processes_dispersal=processes_dispersal)
+
+    # Get cores and chunks
+    cores = get_cores(args_dict)
+
+    # Chunk data based on core #
+    chunks = split_dictionary(
+        data=reactions_behavior,
+        cores=cores)
+    func = partial(
+        run_reactions_transport,
+        processes_transports=processes_transports)
+    reactions_novel = run_chunks(
+        func,
+        chunks,
+        cores)
+
+    # Join dictionary chunks
+    reactions_result = {}
+    for dictionary_chunk in reactions_novel:
+        reactions_result.update(dictionary_chunk)
+
+    return reactions_result
 
 """Collects information about processes' metabolites and compartments
 arguments:
@@ -486,7 +545,6 @@ def collect_processes_metabolites_compartments(
         for process in processes:
 
             if process not in collection:
-
                 collection[process] = {}
 
             metabolites = collect_reaction_participants_value(
@@ -497,7 +555,6 @@ def collect_processes_metabolites_compartments(
             for metabolite in metabolites:
 
                 if metabolite not in collection[process]:
-
                     collection[process][metabolite] = []
 
                 compartments = collect_reaction_participants_value(
@@ -508,7 +565,6 @@ def collect_processes_metabolites_compartments(
                 for compartment in compartments:
 
                     if compartment not in collection[process][metabolite]:
-
                         collection[process][metabolite].append(compartment)
 
     return collection
@@ -534,7 +590,6 @@ def filter_processes_transports(
             compartments = processes_dispersal[process][metabolite]
 
             if len(compartments) > 1:
-
                 collection[process][metabolite] = copy.copy(compartments)
 
     return collection
@@ -548,8 +603,8 @@ returns:
     (dict): information about a reaction
 """
 def include_reaction_transport_processes(
-        reaction_original=None,
-        processes_transports=None):
+        reaction_original,
+        processes_transports):
 
     # Determine processes in which reaction participates by transport
     processes_transport = collect_reaction_transport_processes(
@@ -575,8 +630,8 @@ returns:
     (list<str>): identifiers of processes
 """
 def collect_reaction_transport_processes(
-        reaction=None,
-        processes_transports=None):
+        reaction,
+        processes_transports):
 
     transports_reaction = reaction['transports']
     processes_transport = []
@@ -593,7 +648,6 @@ def collect_reaction_transport_processes(
             compartments_reaction = transport_reaction['compartments']
 
             if metabolite_reaction in metabolites_process.keys():
-
                 compartments_process = metabolites_process[metabolite_reaction]
 
                 # Determine whether multiple compartments match between the
@@ -603,7 +657,6 @@ def collect_reaction_transport_processes(
                     list_two=compartments_process)
 
                 if len(compartments) > 1:
-
                     # Reaction participates in the process by transport
                     processes_transport.append(process)
 
@@ -619,17 +672,15 @@ arguments:
 returns:
     (dict<dict>): information about reactions
 """
-def include_reactions_replications(
-        reactions_original=None):
+def run_reactions_replication(
+        reactions_chunk,
+        reactions_replicates):
 
-    # Collect information about replicate reactions
-    reactions_replicates = collect_reactions_replicates(
-        reactions=reactions_original)
     reactions_novel = {}
     counter = 1
-    total = len(reactions_original)
+    total = len(reactions_chunk.values()) + 1
 
-    for reaction_original in reactions_original.values():
+    for reaction_original in reactions_chunk.values():
 
         reaction_novel = include_reaction_replication(
             reaction_original=reaction_original,
@@ -639,10 +690,41 @@ def include_reactions_replications(
         progress_bar(
             counter,
             total,
-            status='Collect reactions replicates')
+            status='Include replicates')
         counter += 1
 
     return reactions_novel
+
+def include_reactions_replications(
+        reactions_process,
+        args_dict):
+
+    # Collect information about replicate reactions
+    reactions_replicates = collect_reactions_replicates(
+        reactions=reactions_process)
+
+    # Get cores and chunks
+    cores = get_cores(args_dict)
+
+    # Chunk data based on core #
+    chunks = split_dictionary(
+        data=reactions_process,
+        cores=cores)
+    func = partial(
+        run_reactions_replication,
+        reactions_replicates=reactions_replicates)
+    reactions_novel = run_chunks(
+        func,
+        chunks,
+        cores)
+
+    # Join dictionary chunks
+    reactions_result = {}
+    for dictionary_chunk in reactions_novel:
+        reactions_result.update(dictionary_chunk)
+
+    return reactions_result
+
 
 """Collects information about reactions' replications
 arguments:
@@ -651,7 +733,7 @@ returns:
     (list<dict>): information about reactions' replications
 """
 def collect_reactions_replicates(
-        reactions=None):
+        reactions):
 
     reactions_replicates = []
 
@@ -678,7 +760,6 @@ def collect_reactions_replicates(
             reactions_replicates=reactions_replicates)
 
         if index == -1:
-
             # Record does not exist
             # Create novel record
             record = {
@@ -688,7 +769,6 @@ def collect_reactions_replicates(
             reactions_replicates.append(record)
 
         else:
-
             # Record exists
             # Include reaction in record
             reactions_replicates[index]['reactions'].append(identifier)
@@ -707,9 +787,9 @@ returns:
     (int): index of record if it exists or -1 if it does not exist
 """
 def find_index_reactions_replicates_reactants_products(
-        reactants=None,
-        products=None,
-        reactions_replicates=None):
+        reactants,
+        products,
+        reactions_replicates):
 
     def match (
             record=None):
@@ -734,8 +814,8 @@ returns:
     (dict): information about a reaction
 """
 def include_reaction_replication(
-        reaction_original=None,
-        reactions_replicates=None):
+        reaction_original,
+        reactions_replicates):
 
     # Determine replicate reactions
     index = find_index_reactions_replicates_identifier(
@@ -743,11 +823,9 @@ def include_reaction_replication(
         reactions_replicates=reactions_replicates)
 
     if index == -1:
-
         replicates = []
 
     else:
-
         replicates = reactions_replicates[index]['reactions']
 
     # Compile information
@@ -766,8 +844,8 @@ returns:
     (int): index of record if it exists or -1 if it does not exist
 """
 def find_index_reactions_replicates_identifier(
-        identifier=None,
-        reactions_replicates=None):
+        identifier,
+        reactions_replicates):
 
     def match(
             record=None):
@@ -783,22 +861,16 @@ returns:
     (list<dict>): information about reactions
 """
 def filter_reactions(
-        reactions_original=None):
+        reactions_original):
 
     reactions_filter = []
-    counter = 1
-    total = len(reactions_original)
 
     for reaction in reactions_original.values():
 
         match, record = filter_reaction(reaction=reaction)
 
         if match:
-
             reactions_filter.append(record)
-
-        progress_bar(counter, total, status='Filter reactions')
-        counter += 1
 
     return reactions_filter
 
@@ -809,7 +881,7 @@ returns:
     (tuple<bool, dict>): whether reaction passes filters, and report
 """
 def filter_reaction(
-        reaction=None):
+        reaction):
 
     # Name.
     # Biomass, protein assembly, and protein degradation are irrelevant.
@@ -863,20 +935,20 @@ arguments:
     information (object): information to write to file
 """
 def write_product(
-        directory,
-        information=None):
+        output,
+        information):
 
-    # Specify directories and files.
-    confirm_path_directory(directory)
-    path_compartments = os.path.join(directory, 'compartments.pickle')
-    path_processes = os.path.join(directory, 'processes.pickle')
-    path_reactions = os.path.join(directory, 'reactions.pickle')
-    path_metabolites = os.path.join(directory, 'metabolites.pickle')
-    path_metabolites_report = os.path.join(directory, 'metabolites.tsv')
-    path_reactions_report = os.path.join(directory, 'reactions.tsv')
-    path_reactions_filter = os.path.join(directory, 'reactions_filter.tsv')
+    # Specify directories and files
+    confirm_path_directory(output)
+    path_compartments = output + compartment_pickle
+    path_processes = output + process_pickle
+    path_reactions = output + reaction_pickle
+    path_metabolites = output + metabolite_pickle
+    path_metabolites_report = output + metabolites_file
+    path_reactions_report = output + reactions_file
+    path_reactions_filter = output + filtered_reactions_file
 
-    # Write information to file.
+    # Write information to file
     with open(path_compartments, 'wb') as file_product:
         pickle.dump(information['compartments'], file_product)
     with open(path_processes, 'wb') as file_product:
@@ -908,71 +980,74 @@ entities and sets.
 arguments:
     directory (str): path to directory for source and product files
 """
-def execute_procedure(
+def __main__(
         args_dict):
 
-    # Read source information from file.
-    source = read_source(
-        args_dict['source'])
-
-    # Enhance metabolites' references.
+    # Read source information from file
     print('Step 0/8: Starting enhancement. This may take a while...')
-    print('Step 1/8: Enhancing metabolites...')
+    source = read_source(
+        path_hmdb=args_dict['extract'],
+        path_recon=args_dict['collect'])
+
+    # Enhance metabolites' references
+    print('Step 1/8: Enhancing information about metabolites...')
     metabolites = enhance_metabolites(
-        metabolites_original=source["metabolites"],
-        summary_hmdb=source["summary_hmdb"])
+        metabolites_recon=source['recon_metabolites'],
+        hmdb=source['hmdb'],
+        args_dict=args_dict)
 
-    # Include information about reactions' behavior.
-    print('Step 2/8: Including reactions\' behaviors...')
+    # Include information about reactions' behavior
+    print('\nStep 2/8: Including reactions\' behaviors...')
     reactions_behavior = include_reactions_behaviors(
-        reactions_original=source["reactions"])
+        reactions_recon=source['recon_reactions'],
+        args_dict=args_dict)
 
-    # Include transport reactions in processes.
+    # Include transport reactions in processes
     print('Step 3/8: Including reactions transport processes...')
     reactions_process = include_reactions_transport_processes(
-        reactions_original=reactions_behavior)
+        reactions_behavior=reactions_behavior,
+        args_dict=args_dict)
 
-    # Include information about reactions' replicates.
+    # Include information about reactions' replicates
     print('Step 4/8: Including reactions replications...')
     reactions_replication = include_reactions_replications(
-        reactions_original=reactions_process)
+        reactions_process=reactions_process,
+        args_dict=args_dict)
 
-    # Prepare reports of information for review.
-    print('Step 5/8: Converting metabolites text...')
-    convert_one = convert_metabolites_text
-    metabolites_report = convert_one(
+    # Prepare reports of information for review
+    print('\nStep 5/8: Converting metabolites text...')
+    metabolites_report = convert_metabolites_text(
         metabolites=metabolites)
 
     print('Step 6/8: Converting reactions text...')
-    convert_two = convert_reactions_text
-    reactions_report = convert_two(
+    reactions_report = convert_reactions_text(
         reactions=reactions_replication)
 
-    # Filter reactions.
+    # Filter reactions
     print('Step 7/8: Filtering reactions...')
     reactions_filter = filter_reactions(
         reactions_original=reactions_replication)
 
-    # Compile information.
+    # Compile information
     information = {
-        "compartments": source["compartments"],
-        "processes": source["processes"],
-        "metabolites": metabolites,
-        "reactions": reactions_replication,
-        "metabolites_report": metabolites_report,
-        "reactions_report": reactions_report,
-        "reactions_filter": reactions_filter}
+        'compartments': source['recon_compartments'],
+        'processes': source['recon_processes'],
+        'metabolites': metabolites,
+        'reactions': reactions_replication,
+        'metabolites_report': metabolites_report,
+        'reactions_report': reactions_report,
+        'reactions_filter': reactions_filter}
 
-    #Write product information to file.
-    print('Step 8/8: Writing outputs...')
+    #Write product information to file
+    print('Step 8/8: Writing outputs...\n')
     write_product(
-        args_dict['enhance'],
+        output=args_dict['enhance'],
         information=information)
 
-    # Report.
+    # Report
     report = prepare_curation_report(
-        compartments=source["compartments"],
-        processes=source["processes"],
+        compartments=source['recon_compartments'],
+        processes=source['recon_processes'],
         reactions=reactions_replication,
         metabolites=metabolites)
     print(report)

@@ -44,8 +44,12 @@ from __future__ import print_function
 """
 import os
 import sys
+import gc
 import time
 import datetime
+from multiprocessing import cpu_count
+from multiprocessing import Pool
+import itertools
 
 """Print out progress bar for long steps
 """
@@ -112,14 +116,21 @@ def check_files(
 def check_curate(
         args_dict):
 
-    print('coming soon')
+    print('Curate sub-module argument checks coming soon...')
+
+"""Check preprocess arguments
+"""
+def check_preprocess(
+        args_dict):
+
+    print('Preprocess sub-module argument checks coming soon...')
 
 """Check analysis arguments
 """
 def check_analyze(
         args_dict):
 
-    print('coming soon')
+    print('Analyze sub-module argument checks coming soon...')
 
 """Make log file for metabonet module
 """
@@ -185,3 +196,64 @@ def argument_checks(
             pass
 
     return args_dict
+
+"""Multiprocess array of data
+"""
+def get_cores(
+        args_dict):
+
+    # Set number chunks and processors
+    if 'max_processors' in args_dict \
+    and args_dict['max_processors'] != None \
+    and isinstance(args_dict['max_processors'], int) \
+    and args_dict['max_processors'] <= cpu_count():
+        cores = int(args_dict['max_processors'])
+
+    elif 'max_processors' in args_dict \
+    and args_dict['max_processors'] == None:
+        cores = cpu_count() # Number of CPU cores on your system
+
+    elif 'max_processors' in args_dict \
+    and args_dict['max_processors'] != None \
+    and args_dict['max_processors'] < 1:
+        print('Warning: Indicated less than 1 CPU, setting to 1')
+        cores = 1
+
+    else:
+        print('No multiprocessing capabilities specified, setting to 1')
+        cores = 1
+
+    return cores
+
+def run_chunks(
+        func,
+        chunks,
+        cores):
+
+    # Remove any empty dataframes
+    chunks = [x for x in chunks if x is not None]
+
+    # Initialize workers
+    pool = Pool(cores)
+
+    # Run function on chunks
+    chunks = pool.map(func, chunks)
+    pool.close()
+    pool.join()
+    gc.collect()
+
+    return chunks
+
+def split_dictionary(
+        data,
+        cores):
+
+    i = itertools.cycle(range(cores))
+
+    split = [dict() for _ in range(cores)]
+
+    for key, value in data.items():
+
+        split[next(i)][key] = value
+
+    return split

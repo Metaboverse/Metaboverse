@@ -61,7 +61,7 @@ from metabalyze.metabonet_network.utils import read_file_table
 from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import get_recon_references
 
-"""Globals
+"""Set globals
 """
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 

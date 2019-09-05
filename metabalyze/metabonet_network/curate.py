@@ -51,19 +51,40 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
+import sys
 import csv
 import copy
 import pickle
+import numpy as np
+from functools import partial
 
 """Import internal dependencies
 """
-from metabalyze.metabonet_network.convert import convert_metabolites_text
-from metabalyze.metabonet_network.convert import convert_reactions_text
+from metabalyze.metabonet_network.model import convert_metabolites_text
+from metabalyze.metabonet_network.model import convert_reactions_text
 from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import read_file_table
 from metabalyze.metabonet_network.utils import collect_unique_elements
 from metabalyze.metabonet_network.utils import collect_value_from_records
 from metabalyze.metabonet_network.utils import prepare_curation_report
+from metabalyze.utils import progress_bar
+from metabalyze.utils import get_cores
+from metabalyze.utils import run_chunks
+
+"""Set globals
+"""
+__customization__  =  os.path.dirname(os.path.realpath(__file__)) + '/customization/'
+
+custom_compartments = 'curation_compartments.tsv'
+custom_processes = 'curation_processes.tsv'
+custom_reactions = 'curation_reactions.tsv'
+custom_metabolites = 'curation_metabolites.tsv'
+
+hmdb_pickle = 'hmdb_summary.pickle'
+compartment_pickle = 'compartments.pickle'
+process_pickle = 'processes.pickle'
+reaction_pickle = 'reactions.pickle'
+metabolite_pickle = 'metabolites.pickle'
 
 """Reads and organizes source information from file
 arguments:
@@ -74,19 +95,16 @@ returns:
 def read_source(
         directory):
 
-    # Specify directories and files.
-    path_customization = directory + 'customization/'
-    path_compartments_curation = path_customization + 'curation_compartments.tsv'
-    path_processes_curation = path_customization + 'curation_processes.tsv'
-    path_reactions_curation = path_customization + 'curation_reactions.tsv'
-    path_metabolites_curation = path_customization + 'curation_metabolites.tsv'
-    path_reactions_interest = path_customization + 'interest_reactions.tsv'
+    # Specify directories and files
+    path_compartments_curation = __customization__ + custom_compartments
+    path_processes_curation = __customization__ + custom_processes
+    path_reactions_curation = __customization__ + custom_reactions
+    path_metabolites_curation = __customization__ + custom_metabolites
 
-    path_customization = directory + 'enhancement/'
-    path_compartments = path_customization + 'compartments.pickle'
-    path_processes = path_customization + 'processes.pickle'
-    path_reactions = path_customization + 'reactions.pickle'
-    path_metabolites = path_customization + 'metabolites.pickle'
+    path_compartments = directory + compartment_pickle
+    path_processes = directory + process_pickle
+    path_reactions = directory + reaction_pickle
+    path_metabolites = directory + metabolite_pickle
 
     # Read information from file.
     with open(path_compartments, 'rb') as file_source:
@@ -114,10 +132,6 @@ def read_source(
         path_file=path_metabolites_curation,
         names=None,
         delimiter='\t')
-    reactions_interest = read_file_table(
-        path_file=path_reactions_interest,
-        names=None,
-        delimiter='\t')
 
     return {
         'compartments': compartments,
@@ -127,8 +141,7 @@ def read_source(
         'compartments_curation': compartments_curation,
         'processes_curation': processes_curation,
         'reactions_curation': reactions_curation,
-        'metabolites_curation': metabolites_curation,
-        'reactions_interest': reactions_interest}
+        'metabolites_curation': metabolites_curation}
 
 """Curates information about specific compartments and relevant reactions.
 arguments:
@@ -140,11 +153,11 @@ returns:
     (dict<dict<dict>>): information about compartments and reactions
 """
 def curate_compartments(
-        compartments_curation=None,
-        compartments_original=None,
-        reactions_original=None):
+        compartments_curation,
+        compartments_original,
+        reactions_original):
 
-    # Copy information.
+    # Copy information
     compartments_novel = copy.deepcopy(compartments_original)
     reactions_novel = copy.deepcopy(reactions_original)
 
@@ -181,8 +194,6 @@ def curate_compartments(
                         reaction=record_reaction)
 
                     if match:
-
-                        # Remove
                         removals.append(key)
 
                 for removal in removals:
@@ -193,8 +204,10 @@ def curate_compartments(
 
             # Change name.
             if identifier_original in compartments_novel:
-
                 compartments_novel[identifier_original]['name'] = name_novel
+
+        else:
+            pass
 
     return {
         'compartments': compartments_novel,
@@ -208,15 +221,14 @@ returns:
     (bool): whether any of reaction's participants are in the compartment
 """
 def determine_reaction_compartment(
-        compartment=None,
-        reaction=None):
+        compartment,
+        reaction):
 
     participants = reaction['participants']
 
     for participant in participants:
 
         if participant['compartment'] == compartment:
-
             return True
 
     return False
@@ -231,33 +243,32 @@ returns:
     (dict<dict<dict>>): information about processes and reactions
 """
 def curate_processes(
-        processes_curation=None,
-        processes_original=None,
-        reactions_original=None):
+        processes_curation,
+        processes_original,
+        reactions_original):
 
-    # Copy information.
+    # Copy information
     processes_novel = copy.deepcopy(processes_original)
     reactions_novel = copy.deepcopy(reactions_original)
 
     for record in processes_curation:
 
-        # Interpretation.
+        # Interpretation
         identifier_original = record['identifier_original']
         identifier_novel = record['identifier_novel']
         name_original = record['name_original']
         name_novel = record['name_novel']
 
-        # Determine method to change information.
+        # Determine method to change information
         match_identifiers = identifier_original == identifier_novel
         match_names = name_original == name_novel
 
         if identifier_novel == 'null':
 
             if identifier_original in processes_novel:
+                del processes_novel[identifier_original] # remove process
 
-                # Remove process.
-                del processes_novel[identifier_original]
-
+                # carry-over from original:
                 # TODO: also remove the process from any reactions' processes
                 # Removal of a process does not justify removal of any
                 # reactions that participate in that process.
@@ -266,13 +277,12 @@ def curate_processes(
 
             if not match_identifiers:
 
-                # Change identifier.
-                # Remove original.
+                # Change identifier
+                # Remove original
                 if identifier_original in processes_novel:
-
                     del processes_novel[identifier_original]
 
-                # Replace with novel.
+                # Replace with novel
                 if identifier_novel in processes_novel:
 
                     for reaction in reactions_novel.values():
@@ -284,7 +294,6 @@ def curate_processes(
                             for index, process in enumerate(processes):
 
                                 if process == identifier_original:
-
                                     processes[index] = identifier_novel
 
                             # Collect unique values.
@@ -295,9 +304,8 @@ def curate_processes(
 
             if not match_names:
 
-                # Change name.
+                # Change name
                 if identifier_novel in processes_novel:
-
                     processes_novel[identifier_novel]['name'] = name_novel
 
     return {
@@ -314,31 +322,29 @@ returns:
     (dict<dict<dict>>): information about metabolites and reactions
 """
 def curate_metabolites(
-        metabolites_curation=None,
-        metabolites_original=None,
-        reactions_original=None):
+        metabolites_curation,
+        metabolites_original,
+        reactions_original):
 
-    # Copy information.
+    # Copy information
     metabolites_novel = copy.deepcopy(metabolites_original)
     reactions_novel = copy.deepcopy(reactions_original)
 
     for record in metabolites_curation:
 
-        # Interpretation.
+        # Interpretation
         identifier_original = record['identifier_original']
         identifier_novel = record['identifier_novel']
         name_original = record['name_original']
         name_novel = record['name_novel']
 
-        # Determine method to change information.
+        # Determine method to change information
         if identifier_novel == 'null':
 
             if identifier_original in metabolites_novel:
+                del metabolites_novel[identifier_original] # Remove metabolite
 
-                # Remove metabolite.
-                del metabolites_novel[identifier_original]
-
-                # Remove metabolite from relevant reactions.
+                # Remove metabolite from relevant reactions
                 reactions_novel = change_reactions_participants_metabolite(
                     reactions_original=reactions_novel,
                     metabolite_original=identifier_original,
@@ -383,7 +389,6 @@ def curate_metabolites(
 
                 # Change name.
                 if identifier_novel in metabolites_novel:
-
                     metabolites_novel[identifier_novel]['name'] = name_novel
 
             # Curate metabolite's references.
@@ -404,22 +409,18 @@ returns:
     (dict<dict>): information about metabolites
 """
 def curate_metabolites_references(
-        metabolite_curation=None,
-        metabolites=None):
+        metabolite_curation,
+        metabolites):
 
-    def match_hmdb(
-            reference,
-            hmdb_error):
+    def match_items(
+            match_list):
 
-        return reference != hmdb_error
+        try:
+            return match_list[0] != match_list[1]
+        except:
+            return True
 
-    def match_pubchem(
-            reference,
-            pubchem_error):
-
-        return reference != pubchem_error
-
-    # Interpretation.
+    # Interpretation
     identifier = metabolite_curation['identifier_novel']
     hmdb_novel = metabolite_curation['hmdb_novel']
     hmdb_error = metabolite_curation['hmdb_error']
@@ -429,31 +430,27 @@ def curate_metabolites_references(
     if identifier in metabolites.keys():
 
         if len(hmdb_novel) > 0:
-
             references_original = metabolites[identifier]['references']['hmdb']
             references_original.append(hmdb_novel)
-            references_novel = utility.collect_unique_elements(
+            references_novel = collect_unique_elements(
                 references_original)
             metabolites[identifier]['references']['hmdb'] = references_novel
 
         if len(hmdb_error) > 0:
-
             references_original = metabolites[identifier]['references']['hmdb']
-            references_novel = list(filter(match_hmdb, references_original, hmdb_error))
+            references_novel = list(filter(match_items, [references_original, hmdb_error]))
             metabolites[identifier]['references']['hmdb'] = references_novel
 
         if len(pubchem_novel) > 0:
-
             references_original = metabolites[identifier]['references']['pubchem']
             references_original.append(pubchem_novel)
-            references_novel = utility.collect_unique_elements(
+            references_novel = collect_unique_elements(
                 references_original)
             metabolites[identifier]['references']['pubchem'] = references_novel
 
         if len(pubchem_error) > 0:
-
             references_original = metabolites[identifier]['references']['pubchem']
-            references_novel = list(filter(match_pubchem, references_original, pubchem_error))
+            references_novel = list(filter(match_items, [references_original, pubchem_error]))
             metabolites[identifier]['references']['pubchem'] = references_novel
 
     return metabolites
@@ -469,11 +466,11 @@ returns:
     (dict<dict>): information about reactions
 """
 def change_reactions_participants_metabolite(
-        reactions_original=None,
-        metabolite_original=None,
-        metabolite_novel=None,
-        remove=None,
-        replace=None):
+        reactions_original,
+        metabolite_original,
+        metabolite_novel,
+        remove,
+        replace):
 
     reactions_novel = {}
 
@@ -485,18 +482,14 @@ def change_reactions_participants_metabolite(
         for party in participants_original:
 
             if party['metabolite'] != metabolite_original:
-
                 participants_novel.append(party)
 
             else:
 
                 if remove:
-
-                    # Omit participant.
-                    pass
+                    pass # Omit participant
 
                 elif replace:
-
                     party['metabolite'] = metabolite_novel
                     participants_novel.append(party)
 
@@ -513,14 +506,15 @@ arguments:
 returns:
     (dict<dict>): information about reactions
 """
-def curate_reactions(
-        reactions_curation=None,
-        reactions_original=None):
+def run_curate_reactions(
+        reactions_curation_chunk,
+        reactions_original,
+        reactions_novel):
 
-    # Copy information.
-    reactions_novel = copy.deepcopy(reactions_original)
+    counter = 1
+    total = len(reactions_curation_chunk) + 1
 
-    for record in reactions_curation:
+    for record in reactions_curation_chunk:
 
         # Interpretation.
         identifier_original = record['identifier_original']
@@ -535,15 +529,12 @@ def curate_reactions(
         if identifier_novel == 'null':
 
             if identifier_original in reactions_novel:
-
-                # Remove reaction.
-                del reactions_novel[identifier_original]
+                del reactions_novel[identifier_original] # Remove reaction
 
         elif not match_names:
 
-            # Change name.
+            # Change name
             if identifier_original in reactions_novel:
-
                 reactions_novel[identifier_original]['name'] = name_novel
 
         # Filter references to replicate reactions.
@@ -551,7 +542,40 @@ def curate_reactions(
         reactions_replicates = filter_reaction_replicates(
             reactions_original=reactions_novel)
 
+        progress_bar(
+            counter,
+            total,
+            status='Curate reactions')
+        counter += 1
+
     return reactions_replicates
+
+def curate_reactions(
+        reactions_curation,
+        reactions_original,
+        args_dict):
+
+    # Copy information
+    reactions_novel = copy.deepcopy(reactions_original)
+
+    # Get cores and chunks
+    cores = get_cores(args_dict)
+
+    # Chunk data based on core #
+    chunks = np.array_split(
+        reactions_curation,
+        cores)
+    func = partial(
+        run_curate_reactions,
+        reactions_original=reactions_original,
+        reactions_novel=reactions_novel)
+    reactions_replicates = run_chunks(
+        func,
+        chunks,
+        cores)
+
+    return reactions_replicates
+
 
 """Filters references to replicate reactions.
 arguments:
@@ -560,23 +584,21 @@ returns:
     (dict<dict>): information about reactions
 """
 def filter_reaction_replicates(
-        reactions_original=None):
+        reactions_original):
 
-    def match_reaction(
-            identifier,
-            reactions_novel):
+    reactions_novel = copy.deepcopy(reactions_original)
+
+    def match(
+            identifier):
 
         return identifier in reactions_novel.keys()
-
-    # Copy information.
-    reactions_novel = copy.deepcopy(reactions_original)
 
     for key in reactions_novel.keys():
 
         reaction = reactions_novel[key]
-        replicates_original = reaction['replicates']
-        replicates_novel = list(filter(match_reaction, replicates_original, reactions_novel))
-        reactions_novel[key]['replicates'] = replicates_novel
+        replicates_original = reaction["replicates"]
+        replicates_novel = list(filter(match, replicates_original))
+        reactions_novel[key]["replicates"] = replicates_novel
 
     return reactions_novel
 
@@ -591,11 +613,11 @@ returns:
         samples
 """
 def access_reactions_summary(
-        reactions_interest=None,
-        reactions=None,
-        directory=None):
+        reactions_interest,
+        reactions,
+        directory):
 
-    # Collect information about reactions of interest.
+    # Collect information about reactions of interest
     identifiers = collect_value_from_records(
         key='identifier',
         records=reactions_interest)
@@ -627,9 +649,9 @@ arguments:
 """
 def write_product(
         directory,
-        information=None):
+        information):
 
-    # Specify directories and files.
+    # Specify directories and files
     confirm_path_directory(directory)
     path_compartments = directory + "compartments.pickle"
     path_processes = directory + "processes.pickle"
@@ -639,7 +661,7 @@ def write_product(
     path_metabolites_report = directory + "metabolites.tsv"
     path_reactions_report = directory + "reactions.tsv"
 
-    # Write information to file.
+    # Write information to file
     with open(path_compartments, "wb") as file_product:
         pickle.dump(information["compartments"], file_product)
     with open(path_processes, "wb") as file_product:
@@ -649,18 +671,18 @@ def write_product(
     with open(path_metabolites, "wb") as file_product:
         pickle.dump(information["metabolites"], file_product)
 
-    write_file_table(
-        information=information["metabolites_report"],
-        path_file=path_metabolites_report,
-        names=information["metabolites_report"][0].keys(),
-        delimiter="\t")
-    write_file_table(
-        information=information["reactions_report"],
-        path_file=path_reactions_report,
-        names=information["reactions_report"][0].keys(),
-        delimiter="\t")
-
-    if False:
+    try:
+        write_file_table(
+            information=information["metabolites_report"],
+            path_file=path_metabolites_report,
+            names=information["metabolites_report"][0].keys(),
+            delimiter="\t")
+        write_file_table(
+            information=information["reactions_report"],
+            path_file=path_reactions_report,
+            names=information["reactions_report"][0].keys(),
+            delimiter="\t")
+    except:
         write_file_table(
             information=information["reactions_summary"],
             path_file=path_reactions_summary,
@@ -673,71 +695,69 @@ entities and sets.
 arguments:
     directory (str): path to directory for source and product files
 """
-def execute_procedure(
+def __main__(
         args_dict):
 
-    # Read source information from file.
+    # Read source information from file
+    print('Step 0/6: Reading in source data...')
     source = read_source(
-        args_dict['source'])
+        directory=args_dict['enhance'])
 
     # Change procedures allow custom changes to metabolites and reactions
-    # Curate information about compartments.
+    # Curate information about compartments
+    print('Step 1/6: Curating compartments...')
     compartments_reactions = curate_compartments(
         compartments_curation=source['compartments_curation'],
         compartments_original=source['compartments'],
         reactions_original=source['reactions'])
 
-    # Curate information about processes.
+    # Curate information about processes
+    print('Step 2/6: Curating processes...')
     processes_reactions = curate_processes(
         processes_curation=source['processes_curation'],
         processes_original=source['processes'],
         reactions_original=compartments_reactions['reactions'])
 
-    # Curate information about metabolites.
+    # Curate information about metabolites
+    print('Step 3/6: Curating metabolites...')
     metabolites_reactions = curate_metabolites(
         metabolites_curation=source['metabolites_curation'],
         metabolites_original=source['metabolites'],
         reactions_original=processes_reactions['reactions'])
 
-    # Curate information about reactions.
+    # Curate information about reactions
+    print('Step 4/6: Curating reactions...')
     reactions = curate_reactions(
         reactions_curation=source['reactions_curation'],
-        reactions_original=metabolites_reactions['reactions'])
+        reactions_original=metabolites_reactions['reactions'],
+        args_dict=args_dict)
 
-    # Extract information for curation of reactions.
-    # This summary is primarily useful for preparing information for custom
-    # curation of reactions.
-    #reactions_summary = access_reactions_summary(
-    #    reactions_interest=source['reactions_interest'],
-    #    reactions=reactions,
-    #    directory=directory)
-
-    # Prepare reports of information for review.
+    # Prepare reports of information for review
+    print('\nStep 5/6: Converting text...')
     metabolites_report = convert_metabolites_text(
         metabolites=metabolites_reactions['metabolites'])
     reactions_report = convert_reactions_text(
         reactions=reactions)
 
-    # Compile information.
+    # Compile information
     information = {
         'compartments': compartments_reactions['compartments'],
         'processes': processes_reactions['processes'],
         'metabolites': metabolites_reactions['metabolites'],
         'reactions': reactions,
-        #'reactions_summary': reactions_summary,
         'metabolites_report': metabolites_report,
         'reactions_report': reactions_report}
 
-    #Write product information to file.
+    #Write product information to file
+    print('Step 6/6: Writing output...\n')
     write_product(
-        args_dict['curate'],
+        directory=args_dict['curate'],
         information=information)
 
-    # Report.
+    # Report
     report = prepare_curation_report(
         compartments=compartments_reactions['compartments'],
         processes=processes_reactions['processes'],
         reactions=reactions,
         metabolites=metabolites_reactions['metabolites'])
-
     print(report)
