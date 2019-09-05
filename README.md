@@ -70,3 +70,6 @@ $ metabalyze preprocess -d dataset.tsv -t transcriptomics
 - Network curation:
 1. Add log file prints
 2. Decide if both recon and hmdb are required inputs each time
+3. Directionality
+4. Allostery via Brenda?
+5. Build in network customization at correct spot (curation or analysis?)
