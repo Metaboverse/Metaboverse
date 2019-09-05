@@ -29,6 +29,11 @@ import shutil
 from metabalyze.metabonet_network.recon_reconcile import __main__ as run_reconcile
 from metabalyze.metabonet_network.recon_collect import __main__ as run_collect
 from metabalyze.metabonet_network.hmdb_extract import __main__ as run_extract
+from metabalyze.metabonet_network.enhance import __main__ as run_enhance
+from metabalyze.metabonet_network.curate import __main__ as run_curate
+from metabalyze.metabonet_network.model import __main__ as make_model
+from metabalyze.metabonet_network.prune import __main__ as run_prune
+from metabalyze.metabonet_network.network import __main__ as build_network
 
 """Set globals
 """
@@ -48,13 +53,15 @@ def set_paths(
     args_dict['extract'] = args_dict['output'] + 'extract/'
     args_dict['enhance'] = args_dict['output'] + 'enhance/'
     args_dict['curate'] = args_dict['output'] + 'curate/'
-    args_dict['convert'] = args_dict['output'] + 'convert/'
-    args_dict['provision'] = args_dict['output'] + 'provision/'
+    args_dict['model'] = args_dict['output'] + 'model/'
+    args_dict['prune'] = args_dict['output'] + 'prune/'
+    args_dict['network'] = args_dict['output'] + '_network/'
 
     return args_dict
 
 """Remove intermediate network model files and directories
 """
+# Figure out which files are relevant downstream and should be saved and which can be tossed
 def remove_intermediates(
         args_dict):
 
@@ -68,8 +75,7 @@ def remove_intermediates(
     shutil.rmtree(args_dict['extract'])
     shutil.rmtree(args_dict['enhance'])
     shutil.rmtree(args_dict['curate'])
-    shutil.rmtree(args_dict['convert'])
-    shutil.rmtree(args_dict['provision'])
+    shutil.rmtree(args_dict['model'])
 
 """Check all members of file list exist
 """
@@ -85,8 +91,6 @@ def check_file_list(
             missing = True
 
     return missing
-
-
 
 """Check reconciliation files from metanetx have been added
 """
@@ -180,6 +184,11 @@ def _enhance(
 
     print('Enhancing information about metabolites and reactions from Recon and HMDB...\n')
 
+    run_enhance(
+        args_dict)
+
+    print('=== Enhancement complete ===\n')
+
 """Step 4 -- curate
 """
 def _curate(
@@ -187,12 +196,22 @@ def _curate(
 
     print('Curating information about compartments, processes, reactions, and metabolites...\n')
 
+    run_curate(
+        args_dict)
+
+    print('=== Curation complete ===\n')
+
 """Step 5 -- convert
 """
-def _convert(
+def _model(
         args_dict):
 
     print('Converting information about compartments, processes, reactions, and metabolites to versatile formats...\n')
+
+    make_model(
+        args_dict)
+
+    print('=== Modeling complete ===')
 
 """Curate network model
 Required inputs:
@@ -230,27 +249,35 @@ def __main__(
         print('Skipping reconciliation, no Recon files found...')
 
     # Collect
-    if 'recon' in args_dict \
-    and args_dict['recon'] != None:
-        _collect(args_dict)
+    #if 'recon' in args_dict \
+    #and args_dict['recon'] != None:
+    #    _collect(args_dict)
 
     # Extract
-    if 'hmdb' in args_dict \
-    and args_dict['hmdb'] != None:
-        _extract(args_dict)
+    #if 'hmdb' in args_dict \
+    #and args_dict['hmdb'] != None:
+    #    _extract(args_dict)
 
     # Enhance
-    _enhance(args_dict)
+    #_enhance(args_dict)
 
     # Curate
     _curate(args_dict)
 
-    # Convert
-    _convert(args_dict)
+    # Model
+    _model(args_dict)
 
-    # Provision?
+    # Prune
+
+    # Network
 
     # Clean up intermediate files
     #remove_intermediates(args_dict)
 
+    # Print notice and exit
+    print('')
+    print('+-----------------------------+')
+    print('|  Network modeling complete  |')
+    print('+-----------------------------+')
+    print('')
     sys.exit(1)
