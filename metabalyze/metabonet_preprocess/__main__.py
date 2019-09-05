@@ -45,6 +45,12 @@ def __main__(
 
     args_dict = set_paths(args_dict)
 
-    # Move start files to args_dict['output'] sub-directory 'source' for downstream use
+    # Set standards for each omic datatype for input
+    # - transcriptomics = counts
+    # - translatomics = counts formatted for easy TE calculation
+    # - proteomics = raw quant
+    # - metabolomics = raw quant
+
+    # Run basic quality control on data after normalized
 
     return args_dict
