@@ -187,6 +187,11 @@ def parse_arguments(
         type = str,
         required = False)
     curate_opts.add_argument(
+        '-c', '--component',
+        help = 'Provide argument if you wish to only select the main network component for output',
+        action = 'store_true',
+        required = False)
+    curate_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
