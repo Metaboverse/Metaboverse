@@ -58,7 +58,6 @@ import xml.etree.ElementTree as et
 """
 from metabalyze.metabonet_network.utils import confirm_file
 from metabalyze.metabonet_network.utils import read_file_table
-from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import get_recon_references
 
 """Set globals
@@ -393,8 +392,7 @@ def write_product(
         output=None,
         reference=None):
 
-    # Specify directories and files.
-    confirm_path_directory(output)
+    # Specify directories and files
     path_file = output + 'recon_reconciled.xml'
 
     # Write information to file.

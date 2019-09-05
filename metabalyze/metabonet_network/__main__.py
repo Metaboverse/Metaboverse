@@ -34,6 +34,7 @@ from metabalyze.metabonet_network.curate import __main__ as run_curate
 from metabalyze.metabonet_network.model import __main__ as make_model
 from metabalyze.metabonet_network.prune import __main__ as run_prune
 from metabalyze.metabonet_network.network import __main__ as build_network
+from metabalyze.metabonet_network.utils import confirm_path_directory
 
 """Set globals
 """
@@ -54,28 +55,38 @@ def set_paths(
     args_dict['enhance'] = args_dict['output'] + 'enhance/'
     args_dict['curate'] = args_dict['output'] + 'curate/'
     args_dict['model'] = args_dict['output'] + 'model/'
-    args_dict['prune'] = args_dict['output'] + 'prune/'
+    args_dict['candidates'] = args_dict['model'] + 'candidates/'
     args_dict['network'] = args_dict['output'] + '_network/'
+    args_dict['components'] = args_dict['network'] + 'components/'
+
+    # Create path here if not already existing
+    confirm_path_directory(args_dict['reconcile'])
+    confirm_path_directory(args_dict['collect'])
+    confirm_path_directory(args_dict['extract'])
+    confirm_path_directory(args_dict['enhance'])
+    confirm_path_directory(args_dict['curate'])
+    confirm_path_directory(args_dict['model'])
+    confirm_path_directory(args_dict['candidates'])
+    confirm_path_directory(args_dict['network'])
+    confirm_path_directory(args_dict['components'])
 
     return args_dict
 
 """Remove intermediate network model files and directories
 """
-# Figure out which files are relevant downstream and should be saved and which can be tossed
 def remove_intermediates(
         args_dict):
 
-    # Move final files to args_dict['output']
-    input = ''
-    shutil.move(input, args_dict['output'] + 'curated_model.xml')
-
     # Delete all intermediate folders
+    print('\nCleaning intermediate files...\n')
     shutil.rmtree(args_dict['reconcile'])
     shutil.rmtree(args_dict['collect'])
     shutil.rmtree(args_dict['extract'])
     shutil.rmtree(args_dict['enhance'])
     shutil.rmtree(args_dict['curate'])
     shutil.rmtree(args_dict['model'])
+
+    print('=== Cleaning complete ===\n')
 
 """Check all members of file list exist
 """
@@ -201,7 +212,7 @@ def _curate(
 
     print('=== Curation complete ===\n')
 
-"""Step 5 -- convert
+"""Step 5 -- model
 """
 def _model(
         args_dict):
@@ -211,7 +222,31 @@ def _model(
     make_model(
         args_dict)
 
-    print('=== Modeling complete ===')
+    print('\n=== Modeling complete ===\n')
+
+"""Step 6 -- prune
+"""
+def _prune(
+        args_dict):
+
+    print('Evaluate the candidacy of metabolites and reactions for representation in a network...\n')
+
+    run_prune(
+        args_dict)
+
+    print('\n=== Pruning complete ===\n')
+
+"""Step 7 -- network
+"""
+def _network(
+        args_dict):
+
+    print('Building network for NetworkX modeling...\n')
+
+    build_network(
+        args_dict)
+
+    print('\n=== Network build complete ===')
 
 """Curate network model
 Required inputs:
@@ -262,19 +297,28 @@ def __main__(
     #_enhance(args_dict)
 
     # Curate
-    _curate(args_dict)
+    #_curate(args_dict)
 
     # Model
-    _model(args_dict)
+    #_model(args_dict)
 
     # Prune
+    #_prune(args_dict)
 
     # Network
+    _network(args_dict)
 
     # Clean up intermediate files
-    #remove_intermediates(args_dict)
+    remove_intermediates(args_dict)
 
     # Print notice and exit
+    print('')
+    print('NetworkX model available at:')
+    print('')
+    os.system('tree ' + args_dict['network'])
+    print('')
+    print('--> Use file network.pickle for analyze step to build NetworkX model')
+    print('--> dymetabonet.json is provided as a supplement for other modeling applications')
     print('')
     print('+-----------------------------+')
     print('|  Network modeling complete  |')

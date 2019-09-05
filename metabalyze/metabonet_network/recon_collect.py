@@ -56,7 +56,6 @@ import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import prepare_curation_report
 from metabalyze.metabonet_network.utils import read_file_table
 from metabalyze.metabonet_network.utils import write_file_table
@@ -937,8 +936,7 @@ def write_product(
         directory,
         information):
 
-    # Specify directories and files.
-    confirm_path_directory(directory)
+    # Specify directories and files
     path_compartments = directory + 'compartments.pickle'
     path_processes = directory + 'processes.pickle'
     path_reactions = directory + 'reactions.pickle'

@@ -72,7 +72,6 @@ from metabalyze.metabonet_network.utils import compare_lists_by_mutual_inclusion
 from metabalyze.metabonet_network.utils import collect_value_from_records
 from metabalyze.metabonet_network.utils import filter_common_elements
 from metabalyze.metabonet_network.utils import find_index
-from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import write_file_table
 from metabalyze.metabonet_network.utils import prepare_curation_report
 
@@ -939,7 +938,6 @@ def write_product(
         information):
 
     # Specify directories and files
-    confirm_path_directory(output)
     path_compartments = output + compartment_pickle
     path_processes = output + process_pickle
     path_reactions = output + reaction_pickle

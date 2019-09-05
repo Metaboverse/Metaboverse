@@ -62,7 +62,6 @@ import json
 from metabalyze.metabonet_network.utils import collect_values_from_records
 from metabalyze.metabonet_network.utils import collect_value_from_records
 from metabalyze.metabonet_network.utils import collect_unique_elements
-from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.metabonet_network.utils import collect_values_from_records_in_reference
 from metabalyze.metabonet_network.utils import collect_reaction_participants_value
 from metabalyze.metabonet_network.utils import write_file_table
@@ -122,12 +121,15 @@ def convert_text(
 
     records = []
 
-    for compartment in data.values():
+    for value in data.values():
 
-        record = {
-            'identifier': data['identifier'],
-            'name': data['name']}
-        records.append(record)
+        try:
+            record = {
+                'identifier': value['identifier'],
+                'name': value['name']}
+            records.append(record)
+        except:
+            print(value)
 
     return records
 
@@ -318,15 +320,18 @@ arguments:
 """
 def write_product(
         directory,
-        information):
+        information,
+        final_directory):
 
     # Specify directories and files
-    confirm_path_directory(directory)
     path_dymetabonet = directory + dymetabonet
+    final_dymetabonet = final_directory + dymetabonet
+
     path_compartments = directory + compartment_pickle
     path_processes = directory + process_pickle
     path_reactions = directory + reaction_pickle
     path_metabolites = directory + metabolite_pickle
+
     path_compartments_text = directory + compartment_file
     path_processes_text = directory + process_file
     path_reactions_text = directory + reaction_file
@@ -335,6 +340,9 @@ def write_product(
     # Write information to file
     with open(path_dymetabonet, 'w') as file_product:
         json.dump(information['dymetabonet'], file_product)
+    with open(final_dymetabonet, 'w') as file_product:
+        json.dump(information['dymetabonet'], file_product)
+
     with open(path_compartments, 'wb') as file_product:
         pickle.dump(information['compartments'], file_product)
     with open(path_processes, 'wb') as file_product:
@@ -373,10 +381,12 @@ def __main__(
         args_dict):
 
     # Read source information from file
+    print('Step 0/2: Reading in source data...')
     source = read_source(
         directory=args_dict['curate'])
 
     # Initialize information for export to DyMetaboNet
+    print('Step 1/2: Converting network model to dynamic interface format...')
     dymetabonet = {
         'compartments': source['compartments'],
         'processes': source['processes'],
@@ -406,6 +416,8 @@ def __main__(
         'metabolites_text': metabolites_text}
 
     #Write product information to file
+    print('Step 2/2: Writing model to file...')
     write_product(
         directory=args_dict['model'],
-        information=information)
+        information=information,
+        final_directory=args_dict['network'])

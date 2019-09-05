@@ -59,7 +59,6 @@ import xml.etree.ElementTree as et
 """
 from metabalyze.metabonet_network.utils import write_file_table
 from metabalyze.metabonet_network.utils import collect_unique_elements
-from metabalyze.metabonet_network.utils import confirm_path_directory
 from metabalyze.utils import progress_counter
 
 """Set globals
@@ -319,7 +318,6 @@ def write_product(
         information):
 
     # Specify directories and files
-    confirm_path_directory(directory)
     path_pickle = directory + 'hmdb_summary.pickle'
     path_text = directory + 'hmdb_summary.tsv'
 

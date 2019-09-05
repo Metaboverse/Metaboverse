@@ -27,6 +27,10 @@ import re
 from textwrap import dedent
 import string
 
+"""Import internal dependencies
+"""
+from metabalyze.utils import progress_bar
+
 """Remove file if it exists
 """
 def remove_file(
@@ -466,6 +470,9 @@ def collect_records_targets_by_categories(
 
     collection = {}
 
+    counter = 1
+    total = len(records)
+
     for record in records:
 
         target_value = record[target]
@@ -486,6 +493,12 @@ def collect_records_targets_by_categories(
                 target_value=target_value,
                 category_value=category_value,
                 collection_original=collection)
+
+        progress_bar(
+            counter,
+            total,
+            status='Collecting records')
+        counter += 1
 
     return collection
 
