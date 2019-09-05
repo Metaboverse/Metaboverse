@@ -12,21 +12,21 @@ Biological and Metabolic Networks Analyzer
 
 ### For those more details focused
 ```
-Metabolism is a complex network of chemical and enzymatic reactions; however, the past century has seen a
-largely reductionist approach to tackling this system. While for decades this was necessary due to
+Metabolism is a complex network of chemical and enzymatic reactions; however, the past century has seen
+a largely reductionist approach to tackling this system. While for decades this was necessary due to
 technological limitations, we are now living in the computer age, where entire cells and populations of
 cells can be modeled and explored. While scientific fields, such as RNA biology and metabolism, have
 experienced massive strides in recent decades with advent of RNA-seq and metabolomics, our ability to
-contextualize these massive amounts of data continues to lag. This is problematic as these experiments are
-often expensive and time-consuming to produce, yet we only use a fraction of the total data made available
-by the experiment. In order to address these limitations, we introduce MetaboNet-Analyzer, a computational
-analysis framework for contextualizing -omics datasets within customizable metabolic network
-representations. This framework will allow for static and dynamic time-course exploration of these
-datasets, and importantly will help contextualize the role of low-expressed analytes within a network that
-are normally ignored due to their classification as not “differentially expressed” by most algorithms.
-This tool will revolutionize our ability to more holistically understand temporal metabolic shifts and
-gene-metabolite inter-cooperativity, as well as ensure we are obtaining the maximum information from these
-datasets as possible.
+contextualize these massive amounts of data continues to lag. This is problematic as these experiments
+are often expensive and time-consuming to produce, yet we only use a fraction of the total data made
+available by the experiment. In order to address these limitations, we introduce MetaboNet-Analyzer, a
+computational analysis framework for contextualizing -omics datasets within customizable metabolic
+network representations. This framework will allow for static and dynamic time-course exploration of
+these datasets, and importantly will help contextualize the role of low-expressed analytes within a
+network that are normally ignored due to their classification as not “differentially expressed” by most
+algorithms. This tool will revolutionize our ability to more holistically understand temporal metabolic
+shifts and gene-metabolite inter-cooperativity, as well as ensure we are obtaining the maximum
+information from these datasets as possible.
 ```
 
 ## Getting started
@@ -37,20 +37,34 @@ pip install MetaboNet-Analyzer
 ```
 
 ### Getting Started
-Requires:
-- tab- or comma-separated library-normalized data table
-- samples metadata table
 
-If using Recon2M.2 (or similar):
+#### Network Model Curation
+- Requires the Recon and HMDB models
+  - If using Recon2M.2 (or similar):
+  ```
+  $ curl -L -O https://zenodo.org/record/583326/files/Recon2M.2_MNX_Entrez_Gene.xml
+  ```
+  - If using current HMDB:
+  ```
+  $ curl -L -O http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip
+  $ unzip hmdb_metabolites.zip
+  ```
+- Run as:
 ```
-$ curl -L -O https://zenodo.org/record/583326/files/Recon2M.2_MNX_Entrez_Gene.xml
+$ metabalyze curate --recon recon2m2.xml --hmdb hmdb_metabolites.xml
 ```
 
-If using current HMDB:
+#### Data Curation
+- Requires properly formatted and normalized -omics data
+  - tab-separated library-normalized data table
+  - samples metadata table
+- For example, with transcriptomics data, run as:
 ```
-$ curl -L -O http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip
-$ unzip hmdb_metabolites.zip
+$ metabalyze preprocess -d dataset.tsv -t transcriptomics
 ```
+
+#### Network Analysis
+
 
 ## To Do:
 - Network curation:
