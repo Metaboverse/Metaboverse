@@ -16,3 +16,45 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+from __future__ import print_function
+
+"""Import dependencies
+"""
+import pandas as pd
+import numpy as np
+import networkx
+import pickle
+
+"""Import internal dependencies
+"""
+
+"""Set globals
+"""
+
+"""Read in networkx-formatted pickle file from curation step
+"""
+def read_network(
+        file):
+
+    with open(file, 'rb') as network_file:
+        network = pickle.load(network_file)
+
+    return network
+
+"""Build custom metabolic model for use in analyses
+"""
+def __main__(
+        args_dict):
+
+    # Read in network file
+    network_file = args_dict['model']
+    network = read_network(
+        file=args_dict['model'])
+
+    return network
+
+
+
+args_dict = {'model': '/Users/jordan/Desktop/_network/network.pickle'}
+network = __main__(args_dict)
