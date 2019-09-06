@@ -70,6 +70,82 @@ $ metabalyze preprocess -d dataset.tsv -t transcriptomics
 - Network curation:
 1. Add log file prints
 2. Decide if both recon and hmdb are required inputs each time
-3. Directionality
+3. Directionality?
 4. Allostery via Brenda?
 5. Build in network customization at correct spot (curation or analysis?)
+6. To network model for analysis, add:
+  - Allostery dictionary with name and interaction type
+  - If reaction involves protein or complex, mapping for genes
+    - i.e. {'complexA': ['gene1', 'gene2', 'gene3']}
+    - then take the average for complex expression, with ability to draw out each individual gene
+    - maybe add this data to actual data as a re-naming for mapping?
+7. Re-write enhancement in C, Cython, or Julia? (too slow)
+8. Remove intermediate files from curation to just pass model_dict var between modules
+
+
+
+
+
+
+#### node_type 1: Reactions
+reaction_name: {
+  reactants:,
+  products:,
+  enzymes:,
+  directionality:,
+  compartments:,
+  processes:,
+}
+
+
+#### node_type 2: Metabolite
+
+
+
+#### edge_type: metabolite-reaction relations
+- remove high-degree nodes (over 50, i.e. proton to reduce tangle)
+-
+
+
+#### analysis
+- for de novo analysis, cycle through all processes and generate graphs, ping if interesting pattern
+- allow toggling of compartments and hubs, but by default
+  - compartments = false
+  - hubs = remove any node with more than 50 relations
+- needs to be in networkx pickle object
+nodes
+  - metabolite
+  - reaction
+edges
+  - reaction-Metabolite
+  - metabolite-metabolite
+  - reaction-reaction
+
+
+
+
+metabonet-analyze v1.0
+metabowalks
+metabosteps
+metabo-traverse
+
+- manually curate the central carbon network as proof of principle
+  - metabolites
+  - complexes (name)
+    - components (gene_id, protein_id)
+  - relationships
+  - allostery
+  - highlight breakpoints
+    - stats and other analytical tools
+    - spatial representation
+  - analyze a bunch of metabolomic datasets and use tool to gain better insight
+  - noise
+  - predictive modeling project
+- bioRxiv
+- cell systems or better
+  - cell metabolism if OA
+
+metabonet-analyze v2.0
+- Rehash curator to allow for full model curation with proper format and info 
+- cycle through each process and
+- try to deliver by time of bioRxiv?
