@@ -23,6 +23,7 @@ from __future__ import print_function
 
 """Analyze data on network model
 """
-def __main__(args_dict):
+def __main__(
+        args_dict):
 
     print('...')

@@ -62,7 +62,7 @@ from metabalyze.metabonet_network.utils import get_recon_references
 
 """Set globals
 """
-__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
+__customization__  =  os.path.dirname(os.path.realpath(__file__)) + '/customization'
 
 id_attribute = 'id'
 species_attribute = 'species'
@@ -83,6 +83,9 @@ identifier_novel = 'identifier_novel'
 annotation_searcher = 'description'
 about_searcher = 'about'
 
+reconcile_compartment = 'reconciliation_compartments.tsv'
+reconcile_metabolites = 'reconciliation_metabolites.tsv'
+
 """Reads and organizes source information from file
 arguments:
     directory (str): directory of source files
@@ -93,9 +96,8 @@ def read_source(
         recon_xml):
 
     # Specify customization directories and files
-    path_customization = __path__ + 'customization'
-    path_compartments = os.path.join(path_customization, 'reconciliation_compartments.tsv')
-    path_metabolites = os.path.join(path_customization, 'reconciliation_metabolites.tsv')
+    path_compartments = __customization__ + reconcile_compartment
+    path_metabolites = __customization__ + reconcile_metabolites
 
     # Read in recon database
     confirm_file(recon_xml)

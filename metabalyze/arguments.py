@@ -223,6 +223,18 @@ def parse_arguments(
 
     # Analyze required arguments
     analyze_reqs = analyze_parser.add_argument_group('required arguments')
+    analyze_reqs.add_argument(
+        '-d', '--model',
+        help = 'Path to metabonet network model for NetworkX (should be at output_dir/_network/network.pickle)',
+        metavar = '<path/filename>',
+        type = str,
+        required = True)
+    analyze_reqs.add_argument(
+        '-t', '--metadata',
+        help = 'Path and filename of metadata -- refer to documentation for details on formatting',
+        metavar = '<path/filename>',
+        type = str,
+        required = True)
 
     # Analyze optional arguments
     analyze_opts = analyze_parser.add_argument_group('optional arguments')
@@ -230,12 +242,6 @@ def parse_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
-    analyze_opts.add_argument(
-        '-d', '--model',
-        help = 'Path to metabonet network model',
-        metavar = '<path>',
-        type = str,
-        required = False)
     analyze_opts.add_argument(
         '-r', '--rnaseq',
         help = 'Path and filename of RNA-Seq data -- refer to documentation for details on formatting',
@@ -251,12 +257,6 @@ def parse_arguments(
     analyze_opts.add_argument(
         '-b', '--metabolomics',
         help = 'Path and filename of metabolomics data -- refer to documentation for details on formatting',
-        metavar = '<path/filename>',
-        type = str,
-        required = False)
-    analyze_opts.add_argument(
-        '-t', '--metadata',
-        help = 'Path and filename of metadata -- refer to documentation for details on formatting',
         metavar = '<path/filename>',
         type = str,
         required = False)
