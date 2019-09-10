@@ -1,7 +1,7 @@
 """
-BioNet-Analyzer
+Metabo-verse
 A toolkit for navigating and analyzing gene expression datasets
-alias: bionetter
+alias: metaboverse
 Copyright (C) 2019  Jordan A. Berg
 jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -32,23 +32,23 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
 """Setup arguments"""
 setup(
-    name = 'MetaboNet-Analyzer',
+    name = 'Metabo-verse',
     version = __version__,
     description = 'A toolkit for navigating and analyzing biological networks',
     long_description = open('README.md').read(),
     long_description_content_type='text/markdown',
     author = 'Jordan Berg',
     author_email = 'jordan.berg@biochem.utah.edu',
-    url = 'https://github.com/j-berg/MetaboNet-Analyzer',
-    packages = ['metabalyze'],
+    url = 'https://github.com/j-berg/Metabo-verse',
+    packages = ['metaboverse'],
     exclude= ['tests','docs','recipes'],
-    package_dir = {'metabalyze': 'metabalyze'},
+    package_dir = {'metaboverse': 'metaboverse'},
     license = 'GPL-3.0',
     zip_safe = False,
     install_requires = __dependencies__,
     entry_points={
         "console_scripts": [
-            "metabalyze = metabalyze.__main__:main"
+            "metaboverse = metaboverse.__main__:main"
             ]
         },
     classifiers=[

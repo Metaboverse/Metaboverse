@@ -1,7 +1,7 @@
 """License Information
-MetaboNet-Analyzer:
+Metabo-verse:
     A toolkit for navigating and analyzing gene expression datasets
-    alias: metabalyze
+    alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
     jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -27,13 +27,13 @@ from textwrap import dedent
 
 """Import internal dependencies
 """
-from metabalyze.__init__ import __version__
-from metabalyze.__init__ import __dependencies__
-from metabalyze.utils import check_directories
-from metabalyze.utils import check_curate
-from metabalyze.utils import check_analyze
-from metabalyze.utils import generate_log
-from metabalyze.utils import argument_checks
+from metaboverse.__init__ import __version__
+from metaboverse.__init__ import __dependencies__
+from metaboverse.utils import check_directories
+from metaboverse.utils import check_curate
+from metaboverse.utils import check_analyze
+from metaboverse.utils import generate_log
+from metaboverse.utils import argument_checks
 
 """Set global variables
 """
@@ -41,13 +41,13 @@ DEFAULT_MAX_PROCESSORS = None
 DEFAULT_HUB_STRINGENCY = 50
 
 __path__  =  os.path.dirname(os.path.realpath(__file__))
-url = 'https://raw.githubusercontent.com/j-berg/MetaboNet-Analyzer/master/metabalyzer/__init__.py'
+url = 'https://raw.githubusercontent.com/j-berg/Metabo-verse/master/metaboverse/__init__.py'
 
 description_table  =  """\
-    The metabonet-analyzer sub-modules can be accessed by executing:
-        'metabalyzer sub-module_name arg1 arg2 ...'
+    The Metabo-verse sub-modules can be accessed by executing:
+        'metaboverse sub-module_name arg1 arg2 ...'
     Sub-module help can be displayed by executing:
-    'metabalyzer sub-module_name --help'
+    'metaboverse sub-module_name --help'
     Sub-module descriptions:
         +-----------------------+--------------------------------------------------------------------------------------+
         |    curate             |   Curate network model                                                               |
@@ -161,18 +161,6 @@ def parse_arguments(
 
     # Curate required arguments
     curate_reqs = curate_parser.add_argument_group('required arguments')
-    curate_reqs.add_argument(
-        '--recon',
-        help = 'Path and filename of Recon database',
-        metavar = '<path/filename>',
-        type = str,
-        required = True)
-    curate_reqs.add_argument(
-        '--hmdb',
-        help = 'Path and filename of HMDB database',
-        metavar = '<path/filename>',
-        type = str,
-        required = True)
 
     # Curate optional arguments
     curate_opts = curate_parser.add_argument_group('optional arguments')
@@ -185,11 +173,6 @@ def parse_arguments(
         help = 'Path to output directory (default: current working directory)',
         metavar = '<path>',
         type = str,
-        required = False)
-    curate_opts.add_argument(
-        '-c', '--component',
-        help = 'Provide argument if you wish to only select the main network component for output',
-        action = 'store_true',
         required = False)
     curate_opts.add_argument(
         '-m', '--max_processors',
@@ -225,7 +208,7 @@ def parse_arguments(
     analyze_reqs = analyze_parser.add_argument_group('required arguments')
     analyze_reqs.add_argument(
         '-d', '--model',
-        help = 'Path to metabonet network model for NetworkX (should be at output_dir/_network/network.pickle)',
+        help = 'Path to metaboverse network model for NetworkX (should be at output_dir/_network/network.pickle)',
         metavar = '<path/filename>',
         type = str,
         required = True)
@@ -314,7 +297,7 @@ def parse_arguments(
     # Parse arguments into NameSpace
     args = parser.parse_args(args)
 
-    # Collect subargs and package, add metabonet-analyzer script path to parameter dictionary
+    # Collect subargs and package, add metaboverse script path to parameter dictionary
     args_dict = vars(args)
     args_dict['path'] = str(__path__) + '/'
 

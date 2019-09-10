@@ -1,7 +1,7 @@
 """License Information
-MetaboNet-Analyzer:
+Metabo-verse:
     A toolkit for navigating and analyzing gene expression datasets
-    alias: metabalyze
+    alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
     jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -25,15 +25,15 @@ import sys
 
 """Import internal dependencies
 """
-from metabalyze.__init__ import __version__
-from metabalyze.__init__ import __dependencies__
-from metabalyze.arguments import parse_arguments
-from metabalyze.arguments import get_dependencies
-from metabalyze.metabonet_network.__main__ import __main__ as curate
-from metabalyze.metabonet_preprocess.__main__ import __main__ as preprocess
-from metabalyze.metabonet_analyze.__main__ import __main__ as analyze
+from metaboverse.__init__ import __version__
+from metaboverse.__init__ import __dependencies__
+from metaboverse.arguments import parse_arguments
+from metaboverse.arguments import get_dependencies
+from metaboverse.metaboverse_network.__main__ import __main__ as curate
+from metaboverse.metaboverse_preprocess.__main__ import __main__ as preprocess
+from metaboverse.metaboverse_analyze.__main__ import __main__ as analyze
 
-"""Run metabonet-analyzer
+"""Run metaboverse
 """
 def main(
         args=None):
@@ -43,19 +43,19 @@ def main(
         args,
         __version__)
 
-    # Run metabonet-curate
+    # Run metaboverse-curate
     if args_dict['cmd'] == 'curate':
 
         print('Curating network model...')
         curate(args_dict)
 
-    # Run metabonet-preprocess
+    # Run metaboverse-preprocess
     elif args_dict['cmd'] == 'preprocess':
 
         print('Preprocessing input data...')
         preprocess(args_dict)
 
-    # Run metabonet-analyze
+    # Run metaboverse-analyze
     elif args_dict['cmd'] == 'analyze':
 
         print('Analyzing data in context of network model...')

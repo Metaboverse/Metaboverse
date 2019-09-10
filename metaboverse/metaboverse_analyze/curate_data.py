@@ -1,20 +1,20 @@
-"""
-MetaboNet-Analyzer
-A toolkit for navigating and analyzing gene expression datasets
-alias: metabalyze
-Copyright (C) 2019  Jordan A. Berg
-jordan <dot> berg <at> biochem <dot> utah <dot> edu
+"""License Information
+Metabo-verse:
+    A toolkit for navigating and analyzing gene expression datasets
+    alias: metaboverse
+    Copyright (C) 2019  Jordan A. Berg
+    jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
+    This program is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free Software
+    Foundation, either version 3 of the License, or (at your option) any later
+    version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <https://www.gnu.org/licenses/>.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License along with
+    this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 
@@ -27,14 +27,14 @@ from sklearn import preprocessing
 
 """Import internal dependencies
 """
-from from metabalyze.metabonet_analyze.utils import import file_path
-from from metabalyze.metabonet_analyze.utils import check_suffix
-from from metabalyze.metabonet_analyze.utils import add_data
-from from metabalyze.metabonet_analyze.utils import format_data
-from from metabalyze.metabonet_analyze.utils import format_times
-from from metabalyze.metabonet_analyze.utils import even_spacing
-from from metabalyze.metabonet_analyze.utils import ratio_spacing
-from from metabalyze.metabonet_analyze.utils import sort_columns
+from metaboverse.metaboverse_analyze.utils import import file_path
+from metaboverse.metaboverse_analyze.utils import check_suffix
+from metaboverse.metaboverse_analyze.utils import add_data
+from metaboverse.metaboverse_analyze.utils import format_data
+from metaboverse.metaboverse_analyze.utils import format_times
+from metaboverse.metaboverse_analyze.utils import even_spacing
+from metaboverse.metaboverse_analyze.utils import ratio_spacing
+from metaboverse.metaboverse_analyze.utils import sort_columns
 
 # Generate dataframe collection
 # Dataframe is assumed to have columns as sample names and analytes as rows

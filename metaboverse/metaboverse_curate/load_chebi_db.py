@@ -1,3 +1,23 @@
+"""License Information
+Metabo-verse:
+    A toolkit for navigating and analyzing gene expression datasets
+    alias: metaboverse
+    Copyright (C) 2019  Jordan A. Berg
+    jordan <dot> berg <at> biochem <dot> utah <dot> edu
+
+    This program is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free Software
+    Foundation, either version 3 of the License, or (at your option) any later
+    version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License along with
+    this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+from __future__ import print_function
+
 """Import dependencies
 """
 import pandas as pd
@@ -57,7 +77,7 @@ def __main__(
 
     all_levels = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_All_Levels.txt',
+        url='https://reactome.org/download/current/ChEBI2Reactome_All_Levels.txt',
         column_names=[
             'source_id',
             'analyte_id',
@@ -68,7 +88,7 @@ def __main__(
 
     pe_all_levels = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_All_Levels.txt',
+        url='https://reactome.org/download/current/ChEBI2Reactome_PE_All_Levels.txt',
         column_names=[
             'source_id',
             'analyte_id',
@@ -81,7 +101,7 @@ def __main__(
 
     pe_pathways = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_Pathway.txt',
+        url='https://reactome.org/download/current/ChEBI2Reactome_PE_Pathway.txt',
         column_names=[
             'source_id',
             'analyte_id',
@@ -94,7 +114,7 @@ def __main__(
 
     pe_reactions = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_Reactions.txt',
+        url='https://reactome.org/download/current/ChEBI2Reactome_PE_Reactions.txt',
         column_names=[
             'source_id',
             'analyte_id',
@@ -107,7 +127,7 @@ def __main__(
 
     reactome = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome.txt',
+        url='https://reactome.org/download/current/ChEBI2Reactome.txt',
         column_names=[
             'source_id',
             'process_id',
@@ -118,7 +138,7 @@ def __main__(
 
     reactome_reactions = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2ReactomeReactions.txt',
+        url='https://reactome.org/download/current/ChEBI2ReactomeReactions.txt',
         column_names=[
             'source_id',
             'process_id',
@@ -128,23 +148,23 @@ def __main__(
             'organism'])
 
     return {
-        'uniprot_all_levels': all_levels,
-        'uniprot_pe_all_levels': pe_all_levels,
-        'uniprot_pe_pathways': pe_pathways,
-        'uniprot_pe_reactions': pe_reactions,
-        'uniprot_reactome': reactome,
-        'uniprot_reactome_reactions': reactome_reactions}
+        'chebi_all_levels': all_levels,
+        'chebi_pe_all_levels': pe_all_levels,
+        'chebi_pe_pathways': pe_pathways,
+        'chebi_pe_reactions': pe_reactions,
+        'chebi_reactome': reactome,
+        'chebi_reactome_reactions': reactome_reactions}
 
 
 
 output_dir = '/Users/jordan/Desktop/reactome_test/'
-uniprot = __main__(
+chebi = __main__(
     output_dir)
 
 
-uniprot['uniprot_all_levels'].shape
-uniprot['uniprot_pe_all_levels'].shape
-uniprot['uniprot_pe_pathways'].shape
-uniprot['uniprot_pe_reactions'].shape
+chebi['chebi_all_levels'].shape
+chebi['chebi_pe_all_levels'].shape
+chebi['chebi_pe_pathways'].shape
+chebi['chebi_pe_reactions'].shape
 
-uniprot['uniprot_pe_all_levels'].loc[uniprot['uniprot_pe_all_levels']['analyte_name'].str.contains('DPM3')]
+chebi['chebi_pe_all_levels'].head()

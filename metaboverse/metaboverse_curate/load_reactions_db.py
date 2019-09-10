@@ -1,3 +1,23 @@
+"""License Information
+Metabo-verse:
+    A toolkit for navigating and analyzing gene expression datasets
+    alias: metaboverse
+    Copyright (C) 2019  Jordan A. Berg
+    jordan <dot> berg <at> biochem <dot> utah <dot> edu
+
+    This program is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free Software
+    Foundation, either version 3 of the License, or (at your option) any later
+    version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License along with
+    this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+from __future__ import print_function
+
 """Import dependencies
 """
 import os
@@ -22,8 +42,24 @@ def test():
             reaction_dir='/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml',
             output_dir='/Users/jordan/Desktop/reactome_test')
 
+    reactions.keys()
     reactions['R-HSA-2562578']['reactome_id']
     reactions['R-HSA-2562578']['pathway_name']
+
+
+
+
+    # Search all reaction in compartment
+
+    # Search all reactions in pathway
+
+    # Search all reactions with x reactant
+
+    # Search all reactions with x product
+
+    # Search all reaction with x modifier
+
+
 
     reactions['R-HSA-2562578']['reactions'].keys()
     reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['name']
@@ -85,6 +121,40 @@ def get_reactions(
     reactions_list = [f.split('.')[:-1][0] for f in reactions_list]
 
     return reactions_list
+
+"""Get pathway names
+"""
+def add_pathways(
+        database):
+
+    pathways = ()
+
+    # Cycle through processes
+    for x in database.keys():
+
+        # Cycle through reactions
+        for y in x['reactions'].keys():
+
+            pathways.update(y['name'])
+
+    return pathways
+
+"""Get compartments
+"""
+def add_compartments(
+        database):
+
+    compartments = ()
+
+    # Cycle through processes
+    for x in database.keys():
+
+        # Cycle through reactions
+        for y in x['reactions'].keys():
+
+            compartments.update(y['compartment'])
+
+    return compartments
 
 """Curate database for all reactions and processes for an organism
 """
@@ -302,24 +372,6 @@ def populate_modifiers(
 
     return modifiers_dict
 
-"""Write reactions database to pickle file
-"""
-def write_database(
-        output,
-        file,
-        database):
-
-    # Check provided path exists
-    if not os.path.isdir(output):
-        os.makedirs(output)
-
-    # Clean up path
-    dir = os.path.abspath(output) + '/'
-
-    # Write information to file
-    with open(dir + file, 'wb') as file_product:
-        pickle.dump(database, file_product)
-
 """Load tarballed sbml reactome reaction files from reactome site
 """
 def unpack_reactions(
@@ -342,22 +394,26 @@ def unpack_reactions(
 """Fetch all reactions for a given organism
 """
 def __main__(
-        species_id,
-        reaction_dir,
-        output_dir):
+        species_id, # HSA for human, SCE for yeast, etc. See reactome for other identifiers
+        reaction_dir, # Path to reactome reactions sbml files
+        output_dir): # Location to output database file
 
+    # Get list of reaction files to use for populating database
     reactions_list = get_reactions(
         species_id=species_id,
         reaction_dir=reaction_dir)
 
+    # Curate reactions database for organism of interest
     reactions_database = curate_reactions(
         reaction_dir=reaction_dir,
         reactions_list=reactions_list,
         species_id=species_id)
 
-    write_database(
-        output=output_dir,
-        file=species_id + '_reactome_reactions.pickle',
-        database=reactions_database)
+    # Add lists of available pathways and compartments found in the database
+    reactions_database['pathways'] = add_pathways(
+        reactions_database)
+
+    reactions_database['compartments'] = add_compartments(
+        reactions_database)
 
     return reactions_database

@@ -1,7 +1,7 @@
 """License Information
-MetaboNet-Analyzer:
+Metabo-verse:
     A toolkit for navigating and analyzing gene expression datasets
-    alias: metabalyze
+    alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
     jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -132,7 +132,7 @@ def check_analyze(
 
     print('Analyze sub-module argument checks coming soon...')
 
-"""Make log file for metabonet module
+"""Make log file for metaboverse module
 """
 def generate_log(
         args_dict):

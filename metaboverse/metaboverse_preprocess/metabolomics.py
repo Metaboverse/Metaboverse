@@ -1,37 +1,7 @@
 """License Information
-MetaboNet:
-
-    Thomas Cameron Waller
-    tcameronwaller@gmail.com
-    Department of Biochemistry
-    University of Utah
-    Room 4100, Emma Eccles Jones Medical Research Building
-    15 North Medical Drive East
-    Salt Lake City, Utah 84112
-    United States of America
-
-    Portions of this code are modified from MetaboNet
-    (https://github.com/tcameronwaller/metabonet/).
-
-    MetaboNet supports definition and analysis of custom metabolic networks.
-    Copyright (C) 2019 Thomas Cameron Waller
-
-    MetaboNet is free software: you can redistribute it and/or modify it
-    under the terms of the GNU General Public License as published by the Free
-    Software Foundation, either version 3 of the License, or (at your option)
-    any later version.
-
-    MetaboNet is distributed in the hope that it will be useful, but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-    FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-    more details.
-
-    You should have received a copy of the GNU General Public License along
-    with MetaboNet. If not, see <http://www.gnu.org/licenses/>.
-
-MetaboNet-Analyzer:
+Metabo-verse:
     A toolkit for navigating and analyzing gene expression datasets
-    alias: metabalyze
+    alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
     jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -62,15 +32,8 @@ import scipy.stats
 
 """Import internal dependencies
 """
-from metabalyze.metabonet_network.utils import read_file_table
-from metabalyze.metabonet_network.utils import match_hmdb_entries_by_identifiers_names
-from metabalyze.metabonet_network.utils import collect_unique_elements
-from metabalyze.metabonet_network.utils import filter_common_elements
-from metabalyze.metabonet_network.utils import convert_string_low_alpha_num
-from metabalyze.metabonet_network.utils import find_match
-from metabalyze.metabonet_network.utils import collect_value_from_records
-from metabalyze.metabonet_network.utils import confirm_path_directory
-from metabalyze.metabonet_network.utils import write_file_table
+# This will all need to be adapted from original for automated pre-processing
+# If using metabonet code, add license
 
 """Reads and organizes source information from file
 arguments:

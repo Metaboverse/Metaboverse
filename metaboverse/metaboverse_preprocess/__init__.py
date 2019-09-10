@@ -1,7 +1,7 @@
 """License Information
-MetaboNet-Analyzer:
+Metabo-verse:
     A toolkit for navigating and analyzing gene expression datasets
-    alias: metabalyze
+    alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
     jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -16,18 +16,3 @@ MetaboNet-Analyzer:
     You should have received a copy of the GNU General Public License along with
     this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from __future__ import print_function
-
-__version__ = '0.0.0-alpha'
-
-__dependencies__ = [
-    'pandas',
-    'numpy',
-    'scipy',
-    'scikit-learn',
-    'matplotlib<3.0.0,>=2.1.1',
-    'seaborn',
-    'plotly',
-    'plotly_express',
-    'networkx'
-    ]

@@ -1,9 +1,9 @@
-# MetaboNet-Analyzer
+# Metabo-verse
 Biological and Metabolic Networks Analyzer
 
 `WARNING: This repository is currently under development. When the software is complete and stable, the beta tag will be removed.`
 
-## What does MetaboNet-Analyzer do?
+## What does Metabo-verse do?
 ### tl;dr
 - Curates metabolic model (currently only for human)
 - Maps networks or sub-networks interactively
@@ -19,7 +19,7 @@ cells can be modeled and explored. While scientific fields, such as RNA biology 
 experienced massive strides in recent decades with advent of RNA-seq and metabolomics, our ability to
 contextualize these massive amounts of data continues to lag. This is problematic as these experiments
 are often expensive and time-consuming to produce, yet we only use a fraction of the total data made
-available by the experiment. In order to address these limitations, we introduce MetaboNet-Analyzer, a
+available by the experiment. In order to address these limitations, we introduce Metabo-verse, a
 computational analysis framework for contextualizing -omics datasets within customizable metabolic
 network representations. This framework will allow for static and dynamic time-course exploration of
 these datasets, and importantly will help contextualize the role of low-expressed analytes within a
@@ -33,25 +33,16 @@ information from these datasets as possible.
 
 ### Installation
 ```
-pip install MetaboNet-Analyzer
+pip install metabo-verse
 ```
 
 ### Getting Started
 
 #### Network Model Curation
-- Requires the Recon and HMDB models
-  - If using Recon2M.2 (or similar):
-  ```
-  $ curl -L -O https://zenodo.org/record/583326/files/Recon2M.2_MNX_Entrez_Gene.xml
-  ```
-  - If using current HMDB:
-  ```
-  $ curl -L -O http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip
-  $ unzip hmdb_metabolites.zip
-  ```
+- Requires the reactome database files (will download most current automatically)
 - Run as:
 ```
-$ metabalyze curate --recon recon2m2.xml --hmdb hmdb_metabolites.xml
+$ metaboverse curate --output /path/to/output
 ```
 
 #### Data Curation
@@ -60,7 +51,7 @@ $ metabalyze curate --recon recon2m2.xml --hmdb hmdb_metabolites.xml
   - samples metadata table
 - For example, with transcriptomics data, run as:
 ```
-$ metabalyze preprocess -d dataset.tsv -t transcriptomics
+$ metaboverse preprocess -d dataset.tsv -t transcriptomics
 ```
 
 #### Network Analysis
@@ -123,11 +114,7 @@ edges
 
 
 
-
-metabonet-analyze v1.0
-metabowalks
-metabosteps
-metabo-traverse
+metaboverse v1.0
 
 - manually curate the central carbon network as proof of principle
   - metabolites
@@ -145,7 +132,7 @@ metabo-traverse
 - cell systems or better
   - cell metabolism if OA
 
-metabonet-analyze v2.0
-- Rehash curator to allow for full model curation with proper format and info 
+metaboverse v2.0
+- Rehash curator to allow for full model curation with proper format and info
 - cycle through each process and
 - try to deliver by time of bioRxiv?

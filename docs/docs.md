@@ -1,4 +1,4 @@
-# Documentation for BioNet-Analyzer
+# Documentation for Metabo-verse
 
 ## Data container
 
