@@ -37,13 +37,24 @@ def get_table(
     file = unpack_table(
             url=url,
             output_dir=output_dir)
+
+    if isinstance(column_names, list):
+        header_type = None
+    else:
+        header_type = column_names
+
     data = pd.read_csv(
         file,
         sep='\t',
-        header=None)
-    data.columns = column_names
-    data_organism = data.loc[data[organism_key] == organism]
+        header=header_type,
+        low_memory=False)
 
+    if isinstance(column_names, list):
+        data.columns = column_names
+        data_organism = data.loc[data[organism_key] == organism]
+    else:
+        data_organism = data
+        
     return data_organism
 
 """Open reactome table from web

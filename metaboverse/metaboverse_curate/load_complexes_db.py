@@ -34,32 +34,13 @@ def __main__(
     complex_participants = get_table(
         output_dir=output_dir,
         url='https://reactome.org/download/current/ComplexParticipantsPubMedIdentifiers_human.txt',
-        header=0)
+        column_names=0)
 
     complex_pathway = get_table(
         output_dir=output_dir,
         url='https://reactome.org/download/current/Complex_2_Pathway_human.txt',
-        header=0)
+        column_names=0)
 
     return {
         'complex_participants': complex_participants,
         'complex_pathway': complex_pathway}
-
-
-
-output_dir = '/Users/jordan/Desktop/reactome_test/'
-complex = __main__(
-    output_dir)
-
-
-complex['complex_participants'].shape
-complex['complex_pathway'].shape
-
-
-complex['complex_participants'].head()
-
-complex['complex_participants'].loc[complex['complex_participants']['name'].str.contains('MPC')]
-
-
-
-complex['complex_pathway'].head()

@@ -110,17 +110,3 @@ def __main__(
         'uniprot_pe_reactions': pe_reactions,
         'uniprot_reactome': reactome,
         'uniprot_reactome_reactions': reactome_reactions}
-
-
-
-output_dir = '/Users/jordan/Desktop/reactome_test/'
-uniprot = __main__(
-    output_dir)
-
-
-uniprot['uniprot_all_levels'].shape
-uniprot['uniprot_pe_all_levels'].shape
-uniprot['uniprot_pe_pathways'].shape
-uniprot['uniprot_pe_reactions'].shape
-
-uniprot['uniprot_pe_all_levels'].loc[uniprot['uniprot_pe_all_levels']['analyte_name'].str.contains('DPM3')]

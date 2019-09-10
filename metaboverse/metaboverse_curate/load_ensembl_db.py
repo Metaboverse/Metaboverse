@@ -110,22 +110,3 @@ def __main__(
         'ensembl_pe_reactions': pe_reactions,
         'ensembl_reactome': reactome,
         'ensembl_reactome_reactions': reactome_reactions}
-
-
-
-output_dir = '/Users/jordan/Desktop/reactome_test/'
-ensembl = __main__(
-    output_dir)
-
-
-ensembl['ensembl_all_levels'].shape
-ensembl['ensembl_pe_all_levels'].shape
-ensembl['ensembl_pe_pathways'].shape
-ensembl['ensembl_pe_reactions'].shape
-
-id = 'R-HSA-162825'
-ensembl['ensembl_pe_pathways'].loc[ensembl['ensembl_pe_pathways']['analyte_id'] == id]
-ensembl['ensembl_pe_pathways'].loc[ensembl['ensembl_pe_pathways']['reaction_id'] == id]
-
-
-ensembl['ensembl_all_levels'].loc[ensembl['ensembl_all_levels']['analyte_id'] == 'R-HSA-71406']

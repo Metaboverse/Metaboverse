@@ -110,17 +110,3 @@ def __main__(
         'mirbase_pe_reactions': pe_reactions,
         'mirbase_reactome': reactome,
         'mirbase_reactome_reactions': reactome_reactions}
-
-
-
-output_dir = '/Users/jordan/Desktop/reactome_test/'
-mirbase = __main__(
-    output_dir)
-
-
-mirbase['mirbase_all_levels'].shape
-mirbase['mirbase_pe_all_levels'].shape
-mirbase['mirbase_pe_pathways'].shape
-mirbase['mirbase_pe_reactions'].shape
-
-mirbase['mirbase_pe_all_levels'].head()

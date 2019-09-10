@@ -110,18 +110,3 @@ def __main__(
         'ncbi_pe_reactions': pe_reactions,
         'ncbi_reactome': reactome,
         'ncbi_reactome_reactions': reactome_reactions}
-
-
-
-output_dir = '/Users/jordan/Desktop/reactome_test/'
-ncbi = __main__(
-    output_dir)
-
-
-ncbi['ncbi_all_levels'].shape
-ncbi['ncbi_pe_all_levels'].shape
-ncbi['ncbi_pe_pathways'].shape
-ncbi['ncbi_pe_reactions'].shape
-
-ncbi['ncbi_pe_all_levels'].iloc[0]
-ncbi['ncbi_pe_all_levels'].iloc[0]['url']

@@ -110,17 +110,3 @@ def __main__(
         'chebi_pe_reactions': pe_reactions,
         'chebi_reactome': reactome,
         'chebi_reactome_reactions': reactome_reactions}
-
-
-
-output_dir = '/Users/jordan/Desktop/reactome_test/'
-chebi = __main__(
-    output_dir)
-
-
-chebi['chebi_all_levels'].shape
-chebi['chebi_pe_all_levels'].shape
-chebi['chebi_pe_pathways'].shape
-chebi['chebi_pe_reactions'].shape
-
-chebi['chebi_pe_all_levels'].head()
