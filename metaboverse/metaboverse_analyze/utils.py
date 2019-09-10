@@ -165,3 +165,14 @@ def ratio_spacing(
 
     data = sort_columns(data)
     return data
+
+
+# Search all reaction in compartment
+
+# Search all reactions in pathway
+
+# Search all reactions with x reactant
+
+# Search all reactions with x product
+
+# Search all reaction with x modifier

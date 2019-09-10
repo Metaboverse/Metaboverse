@@ -18,10 +18,20 @@ Metabo-verse:
 """
 from __future__ import print_function
 
+"""Import dependencies
+"""
+import os 
+import pickle
+
+"""Import internal dependencies
+"""
+from metaboverse.metaboverse_curate.load_reactions_db import __main__ as load_reactions
+
+"""Plan
+"""
 # This file will run loading of reactions database, chebi, ensemble, uniprot, complex, etc.
 # Will then create interface dictionary for metabolites, proteins, etc relation info, name to id, etc.
 # Output total network as pickle
-
 
 """Write reactions database to pickle file
 """
@@ -41,14 +51,20 @@ def write_database(
     with open(dir + file, 'wb') as file_product:
         pickle.dump(database, file_product)
 
-
-"""
+"""Curate reactome database
 """
 def __main__(
-        ):
+        args_dict):
+
+    # Load reactions
+    reactions_database = load_reactions(
+        species_id=args_dict['species'],
+        output_dir=args_dict['output'])
+
+    # Add interfacing information to reactions database
 
     # Write database to file
     write_database(
-        output=output_dir,
-        file=species_id + '_metaboverse_db.pickle',
+        output=args_dict['output'],
+        file=args_dict['species'] + '_metaboverse_db.pickle',
         database=reactions_database)

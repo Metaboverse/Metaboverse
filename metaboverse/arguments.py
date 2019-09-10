@@ -108,9 +108,9 @@ def check_arguments(
     print('======================\nUser commands summary:\n======================')
 
     os.system(
-        'echo \"MetaboNet-Analyzer version: ' + str(__version__) + '\"'
+        'echo \"Metabo-verse version: ' + str(__version__) + '\"'
         + str(args_dict['log']))
-    print('MetaboNet-Analyzer version: ' + str(__version__))
+    print('Metabo-verse version: ' + str(__version__))
 
     for key, value in args_dict.items():
 
@@ -173,6 +173,13 @@ def parse_arguments(
         help = 'Path to output directory (default: current working directory)',
         metavar = '<path>',
         type = str,
+        required = False)
+    curate_opts.add_argument(
+        '-s', '--species',
+        help = 'Reactome species ID',
+        metavar = '<species_id>',
+        type = str,
+        default = 'HSA',
         required = False)
     curate_opts.add_argument(
         '-m', '--max_processors',

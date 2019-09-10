@@ -22,13 +22,13 @@ from __future__ import print_function
 """
 import os
 import sys
+import shutil
 import time
-import pickle
 import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from metabalyze.utils import progress_bar
+from metaboverse.utils import progress_bar
 
 """Set globals
 """
@@ -39,27 +39,11 @@ analyte_prefix='R-ALL-'
 def test():
     reactions = __main__(
             species_id='HSA',
-            reaction_dir='/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml',
             output_dir='/Users/jordan/Desktop/reactome_test')
 
     reactions.keys()
     reactions['R-HSA-2562578']['reactome_id']
     reactions['R-HSA-2562578']['pathway_name']
-
-
-
-
-    # Search all reaction in compartment
-
-    # Search all reactions in pathway
-
-    # Search all reactions with x reactant
-
-    # Search all reactions with x product
-
-    # Search all reaction with x modifier
-
-
 
     reactions['R-HSA-2562578']['reactions'].keys()
     reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['name']
@@ -117,7 +101,8 @@ def get_reactions(
 
     # Get list of files and their reaction name
     file_list = os.listdir(dir)
-    reactions_list = [f for f in file_list if species_id in f]
+    print(file_list)
+    reactions_list = [str(f) for str(f) in file_list if species_id in str(f)]
     reactions_list = [f.split('.')[:-1][0] for f in reactions_list]
 
     return reactions_list
@@ -130,12 +115,12 @@ def add_pathways(
     pathways = ()
 
     # Cycle through processes
-    for x in database.keys():
+    for key_x, value_x in database.items():
 
         # Cycle through reactions
-        for y in x['reactions'].keys():
+        for key_y, value_y in key_x['reactions'].items():
 
-            pathways.update(y['name'])
+            compartments.update(key_y['name'])
 
     return pathways
 
@@ -147,12 +132,12 @@ def add_compartments(
     compartments = ()
 
     # Cycle through processes
-    for x in database.keys():
+    for key_x, value_x in database.items():
 
         # Cycle through reactions
-        for y in x['reactions'].keys():
+        for key_y, value_y in key_x['reactions'].items():
 
-            compartments.update(y['compartment'])
+            compartments.update(key_y['compartment'])
 
     return compartments
 
@@ -376,7 +361,7 @@ def populate_modifiers(
 """
 def unpack_reactions(
         output_dir,
-        url='https://reactome.org/download/current/homo_sapiens.3.1.sbml.tgz'):
+        url='https://reactome.org/download/current/all_species.3.1.sbml.tgz'):
 
     if output_dir[-1] != '/':
         output_dir = output_dir + '/'
@@ -386,26 +371,36 @@ def unpack_reactions(
     os.system('curl -L ' + url + ' -o ' + file)
 
     reactions_dir = file[:-4] + '/'
+    if os.path.exists(reactions_dir):
+        shutil.rmtree(reactions_dir)
     os.makedirs(reactions_dir)
     os.system('tar -zxvf ' + file + ' -C ' + reactions_dir)
+    os.remove(reactions_dir + file.split('/')[-1])
 
     return reactions_dir
 
 """Fetch all reactions for a given organism
 """
 def __main__(
-        species_id, # HSA for human, SCE for yeast, etc. See reactome for other identifiers
-        reaction_dir, # Path to reactome reactions sbml files
+        species_id,
         output_dir): # Location to output database file
+
+    species_id='HSA',
+    output_dir='/Users/jordan/Desktop/reactome_test'
+    # Get reaction files
+    reactions_dir = unpack_reactions(
+        output_dir=output_dir)
+
+    reactions_dir
 
     # Get list of reaction files to use for populating database
     reactions_list = get_reactions(
         species_id=species_id,
-        reaction_dir=reaction_dir)
+        reaction_dir=reactions_dir)
 
     # Curate reactions database for organism of interest
     reactions_database = curate_reactions(
-        reaction_dir=reaction_dir,
+        reaction_dir=reactions_dir,
         reactions_list=reactions_list,
         species_id=species_id)
 
