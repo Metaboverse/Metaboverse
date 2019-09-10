@@ -101,8 +101,7 @@ def get_reactions(
 
     # Get list of files and their reaction name
     file_list = os.listdir(dir)
-    print(file_list)
-    reactions_list = [str(f) for str(f) in file_list if species_id in str(f)]
+    reactions_list = [f for f in file_list if species_id in f]
     reactions_list = [f.split('.')[:-1][0] for f in reactions_list]
 
     return reactions_list
@@ -112,15 +111,15 @@ def get_reactions(
 def add_pathways(
         database):
 
-    pathways = ()
+    pathways = set()
 
     # Cycle through processes
-    for key_x, value_x in database.items():
+    for key_x in database.keys():
 
         # Cycle through reactions
-        for key_y, value_y in key_x['reactions'].items():
+        for key_y in database[key_x]['reactions']:
 
-            compartments.update(key_y['name'])
+            pathways.update(database[key_x]['reactions'][key_y]['name'])
 
     return pathways
 
@@ -129,15 +128,15 @@ def add_pathways(
 def add_compartments(
         database):
 
-    compartments = ()
+    compartments = set()
 
     # Cycle through processes
-    for key_x, value_x in database.items():
+    for key_x in database.keys():
 
         # Cycle through reactions
-        for key_y, value_y in key_x['reactions'].items():
+        for key_y in database[key_x]['reactions'].keys():
 
-            compartments.update(key_y['compartment'])
+            compartments.update(database[key_x]['reactions'][key_y]['compartment'])
 
     return compartments
 
@@ -385,13 +384,15 @@ def __main__(
         species_id,
         output_dir): # Location to output database file
 
-    species_id='HSA',
+    species_id='HSA'
     output_dir='/Users/jordan/Desktop/reactome_test'
     # Get reaction files
     reactions_dir = unpack_reactions(
         output_dir=output_dir)
 
-    reactions_dir
+    reactions_dir = '/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml/'
+
+    reactome_database = {}
 
     # Get list of reaction files to use for populating database
     reactions_list = get_reactions(
@@ -399,16 +400,16 @@ def __main__(
         reaction_dir=reactions_dir)
 
     # Curate reactions database for organism of interest
-    reactions_database = curate_reactions(
+    reactome_database['pathways'] = curate_reactions(
         reaction_dir=reactions_dir,
         reactions_list=reactions_list,
         species_id=species_id)
 
     # Add lists of available pathways and compartments found in the database
-    reactions_database['pathways'] = add_pathways(
-        reactions_database)
+    reactome_database['pathways_types'] = add_pathways(
+        reactome_database['pathways'])
 
-    reactions_database['compartments'] = add_compartments(
-        reactions_database)
+    reactome_database['compartments_types'] = add_compartments(
+        reactome_database['pathways'])
 
-    return reactions_database
+    return reactome_database
