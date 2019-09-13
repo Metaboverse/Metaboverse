@@ -1,5 +1,5 @@
 """
-Metabo-verse
+Metaboverse
 A toolkit for navigating and analyzing gene expression datasets
 alias: metaboverse
 Copyright (C) 2019  Jordan A. Berg
@@ -32,14 +32,14 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
 """Setup arguments"""
 setup(
-    name = 'Metabo-verse',
+    name = 'Metaboverse',
     version = __version__,
     description = 'A toolkit for navigating and analyzing biological networks',
     long_description = open('README.md').read(),
     long_description_content_type='text/markdown',
     author = 'Jordan Berg',
     author_email = 'jordan.berg@biochem.utah.edu',
-    url = 'https://github.com/j-berg/Metabo-verse',
+    url = 'https://github.com/j-berg/Metaboverse',
     packages = ['metaboverse'],
     exclude= ['tests','docs','recipes'],
     package_dir = {'metaboverse': 'metaboverse'},

@@ -1,5 +1,5 @@
 """License Information
-Metabo-verse:
+Metaboverse:
     A toolkit for navigating and analyzing gene expression datasets
     alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
@@ -41,10 +41,10 @@ DEFAULT_MAX_PROCESSORS = None
 DEFAULT_HUB_STRINGENCY = 50
 
 __path__  =  os.path.dirname(os.path.realpath(__file__))
-url = 'https://raw.githubusercontent.com/j-berg/Metabo-verse/master/metaboverse/__init__.py'
+url = 'https://raw.githubusercontent.com/j-berg/Metaboverse/master/metaboverse/__init__.py'
 
 description_table  =  """\
-    The Metabo-verse sub-modules can be accessed by executing:
+    The Metaboverse sub-modules can be accessed by executing:
         'metaboverse sub-module_name arg1 arg2 ...'
     Sub-module help can be displayed by executing:
     'metaboverse sub-module_name --help'
@@ -108,9 +108,9 @@ def check_arguments(
     print('======================\nUser commands summary:\n======================')
 
     os.system(
-        'echo \"Metabo-verse version: ' + str(__version__) + '\"'
+        'echo \"Metaboverse version: ' + str(__version__) + '\"'
         + str(args_dict['log']))
-    print('Metabo-verse version: ' + str(__version__))
+    print('Metaboverse version: ' + str(__version__))
 
     for key, value in args_dict.items():
 

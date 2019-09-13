@@ -1,4 +1,4 @@
-# Documentation for Metabo-verse
+# Documentation for Metaboverse
 
 ## Data container
 

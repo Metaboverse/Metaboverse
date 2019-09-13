@@ -1,5 +1,5 @@
 """License Information
-Metabo-verse:
+Metaboverse:
     A toolkit for navigating and analyzing gene expression datasets
     alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
@@ -54,7 +54,7 @@ def get_table(
         data_organism = data.loc[data[organism_key] == organism]
     else:
         data_organism = data
-        
+
     return data_organism
 
 """Open reactome table from web

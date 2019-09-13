@@ -1,5 +1,5 @@
 """License Information
-Metabo-verse:
+Metaboverse:
     A toolkit for navigating and analyzing gene expression datasets
     alias: metaboverse
     Copyright (C) 2019  Jordan A. Berg
