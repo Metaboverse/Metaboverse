@@ -66,8 +66,8 @@ def parse_table(
             'reaction_name']
 
     reference_parsed = reference[key][column_names].copy()
-    reference_parsed['analyte'] = reference_parsed['analyte_name'].str.split('[').str[0]
-    reference_parsed['compartment'] = reference_parsed['analyte_name'].str.split('[').str[1].str.split(']').str[0]
+    reference_parsed['analyte'] = reference_parsed['analyte_name'].str.split(' [').str[0]
+    reference_parsed['compartment'] = reference_parsed['analyte_name'].str.split(' [').str[1].str.split(']').str[0]
 
     reference_dictionary = {}
 
@@ -106,8 +106,8 @@ def parse_complexes(
         'participants',
         'participatingComplex']
     complexes_information = reference['complex_participants'][column_names].copy()
-    complexes_information['complex'] = complexes_information['name'].str.split('[').str[0]
-    complexes_information['compartment'] = complexes_information['name'].str.split('[').str[1].str.split(']').str[0]
+    complexes_information['complex'] = complexes_information['name'].str.split(' [').str[0]
+    complexes_information['compartment'] = complexes_information['name'].str.split(' [').str[1].str.split(']').str[0]
 
     complex_dictionary = {}
 
@@ -151,6 +151,32 @@ def parse_complexes(
                 pass
 
     return complex_dictionary
+
+"""
+"""
+def make_master(
+        database):
+
+    master_reference = {}
+
+    reference_list = [
+        'chebi_reference',
+        'uniprot_reference',
+        'ensembl_reference',
+        'ncbi_reference',
+        'mirbase_reference']
+
+    for x in reference_list:
+
+        for key in database[x].keys():
+
+            master_reference[database[x][key]['analyte_id']] = database[x][key]['analyte']
+
+    for key in database['complexes_reference'].keys():
+
+        master_reference[database['complexes_reference'][key]['complex_id']] = database['complexes_reference'][key]['complex_name']
+
+    return master_reference
 
 """Write reactions database to pickle file
 """
@@ -227,6 +253,9 @@ def __main__(
     print('Parsing complex database...')
     reactions_database['complexes_reference'] = parse_complexes(
             complexes_reference)
+
+    reactions_database['master_reference'] = make_master(
+        reactions_database)
 
     # Write database to file
     print('Writing metaboverse database to file...')
