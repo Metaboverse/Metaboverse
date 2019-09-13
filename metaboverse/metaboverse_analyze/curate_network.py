@@ -47,34 +47,7 @@ def __main__(
         args_dict):
 
     # Read in network file
-    network_file = args_dict['model']
     network = read_network(
         file=args_dict['model'])
 
     return network
-
-
-
-args_dict = {'model': '/Users/jordan/Desktop/_network/network.pickle'}
-network = __main__(args_dict)
-
-p = []
-for k, v in network['nodes_reactions'].items():
-    p.append(network['nodes_reactions'][k]['processes'])
-
-central_carb = [
-    'glycolysis',
-    'pyruvate oxidation',
-    'citric acid cycle',
-    'tca cycle',
-    'krebs cycle',
-    'pentose phosphate pathway'
-
-
-    'pyruvate metabolism',
-
-]
-
-
-p = set(p)
-p
