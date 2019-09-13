@@ -437,4 +437,6 @@ def __main__(
     reactome_database['compartment_types'] = add_compartments(
         reactome_database['pathways'])
 
+    shutil.rmtree(reactions_dir) 
+
     return reactome_database

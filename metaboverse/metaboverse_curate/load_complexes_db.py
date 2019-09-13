@@ -20,6 +20,7 @@ from __future__ import print_function
 
 """Import dependencies
 """
+import os
 import pandas as pd
 
 """Import internal dependencies
@@ -35,11 +36,13 @@ def __main__(
         output_dir=output_dir,
         url='https://reactome.org/download/current/ComplexParticipantsPubMedIdentifiers_human.txt',
         column_names=0)
+    os.remove(output_dir + 'ComplexParticipantsPubMedIdentifiers_human.txt')
 
     complex_pathway = get_table(
         output_dir=output_dir,
         url='https://reactome.org/download/current/Complex_2_Pathway_human.txt',
         column_names=0)
+    os.remove(output_dir + 'Complex_2_Pathway_human.txt')
 
     return {
         'complex_participants': complex_participants,

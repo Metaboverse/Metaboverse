@@ -20,6 +20,7 @@ from __future__ import print_function
 
 """Import dependencies
 """
+import os
 import pandas as pd
 
 """Import internal dependencies
@@ -41,6 +42,7 @@ def __main__(
             'reaction_id',
             'go_evidence', #TAS = traceable author statement, IEA = electrong annotation not manually reviewed
             'organism'])
+    os.remove(output_dir + 'UniProt2Reactome_All_Levels.txt')
 
     pe_all_levels = get_table(
         output_dir=output_dir,
@@ -54,6 +56,7 @@ def __main__(
             'reaction_name',
             'go_evidence',
             'organism'])
+    os.remove(output_dir + 'UniProt2Reactome_PE_All_Levels.txt')
 
     pe_pathways = get_table(
         output_dir=output_dir,
@@ -67,6 +70,7 @@ def __main__(
             'reaction_name',
             'go_evidence',
             'organism'])
+    os.remove(output_dir + 'UniProt2Reactome_PE_Pathway.txt')
 
     pe_reactions = get_table(
         output_dir=output_dir,
@@ -80,6 +84,7 @@ def __main__(
             'reaction_name',
             'go_evidence',
             'organism'])
+    os.remove(output_dir + 'UniProt2Reactome_PE_Reactions.txt')
 
     reactome = get_table(
         output_dir=output_dir,
@@ -91,6 +96,7 @@ def __main__(
             'reaction_name',
             'go_evidence',
             'organism'])
+    os.remove(output_dir + 'UniProt2Reactome.txt')
 
     reactome_reactions = get_table(
         output_dir=output_dir,
@@ -102,6 +108,7 @@ def __main__(
             'reaction_name',
             'go_evidence',
             'organism'])
+    os.remove(output_dir + 'UniProt2ReactomeReactions.txt')
 
     return {
         'uniprot_all_levels': all_levels,
