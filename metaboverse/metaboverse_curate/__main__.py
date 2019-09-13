@@ -40,6 +40,13 @@ from metaboverse.metaboverse_curate.load_complexes_db import __main__ as load_co
 # Will then create interface dictionary for metabolites, proteins, etc relation info, name to id, etc.
 # Output total network as pickle
 
+def test():
+
+    __main__(
+        {'output':'/Users/jordan/Desktop/reactome_test/',
+        'species':'HSA'}
+    )
+
 def parse_table(
         reference,
         key):
