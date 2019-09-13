@@ -24,6 +24,7 @@ import os
 import sys
 import shutil
 import time
+import hashlib
 import xml.etree.ElementTree as et
 
 """Import internal dependencies
@@ -79,10 +80,6 @@ def test():
                 print(reactions[k]['reactome_id'])
                 print(reactions[k]['pathway_name'])
 
-
-
-
-
     unpack_reactions(
         output_dir='/Users/jordan/Desktop/')
 
@@ -111,15 +108,43 @@ def get_reactions(
 def add_pathways(
         database):
 
-    pathways = set()
+    pathways = {}
 
     # Cycle through processes
-    for key_x in database.keys():
+    for key in database.keys():
 
-        # Cycle through reactions
-        for key_y in database[key_x]['reactions']:
+        if database[key]['pathway_name'] in pathways.keys():
+            pathways[database[key]['pathway_name']].append(database[key]['reactome_id'])
 
-            pathways.update(database[key_x]['reactions'][key_y]['name'])
+        else:
+            pathways[database[key]['pathway_name']] = [database[key]['reactome_id']]
+
+    # Check for duplicate processes
+    for key, value in pathways.items():
+
+        if len(value) > 1:
+
+            reactions = []
+
+            for v in value:
+
+                reactions.append(list(database[v]['reactions'].keys()))
+
+            # Convert lists of reactions to hashes for comparison
+            hashes = []
+
+            for r in reactions:
+
+                text_hashed = hashlib.sha256(
+                    bytes(
+                        str(r),
+                        encoding='utf8')
+                        ).hexdigest()
+                hashes.append(text_hashed)
+
+            # If a list of lists contain identical reactions, keep the first reaction name
+            if len(set(hashes)) == 1:
+                pathways[key] = [value[0]]
 
     return pathways
 
@@ -128,7 +153,7 @@ def add_pathways(
 def add_compartments(
         database):
 
-    compartments = set()
+    compartments = []
 
     # Cycle through processes
     for key_x in database.keys():
@@ -136,9 +161,9 @@ def add_compartments(
         # Cycle through reactions
         for key_y in database[key_x]['reactions'].keys():
 
-            compartments.update(database[key_x]['reactions'][key_y]['compartment'])
+            compartments.append(database[key_x]['reactions'][key_y]['compartment'])
 
-    return compartments
+    return set(compartments)
 
 """Curate database for all reactions and processes for an organism
 """
@@ -406,10 +431,10 @@ def __main__(
         species_id=species_id)
 
     # Add lists of available pathways and compartments found in the database
-    reactome_database['pathways_types'] = add_pathways(
+    reactome_database['pathway_types'] = add_pathways(
         reactome_database['pathways'])
 
-    reactome_database['compartments_types'] = add_compartments(
+    reactome_database['compartment_types'] = add_compartments(
         reactome_database['pathways'])
 
     return reactome_database
