@@ -121,7 +121,7 @@ G.add_edge('Gene_B', 'R-ALL-113557', len="3")
 G.add_edge('Gene_C', 'R-ALL-113557', len="3")
 
 plt.figure(121,figsize=(10,8))
-#pos = nx.circular_layout(G)
+pos = nx.circular_layout(G)
 
 edges = G.edges()
 edge_colors = []
@@ -131,6 +131,8 @@ for u,v in edges:
         edge_colors.append('green')
     elif u == 'inhibitor':
         edge_colors.append('red')
+    elif 'Gene' in u:
+        edge_colors.append('purple')
     else:
         edge_colors.append('grey')
 
@@ -140,14 +142,12 @@ for u in nodes:
 
     if '=>' in u:
         node_colors.append('grey')
-    elif 'Gene' in u:
-        node_colors.append('purple')
     else:
         node_colors.append('lightblue')
 
 nx.draw(
     G,
-    #pos, # add if using pos = nx.circular_layout(G)
+    pos, # add if using pos = nx.circular_layout(G)
     nodes=nodes,
     node_color=node_colors,
     edges=edges,
