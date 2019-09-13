@@ -26,6 +26,7 @@ import networkx as nx
 import pickle
 import matplotlib
 import matplotlib.pyplot as plt
+from math import sqrt
 
 """Import internal dependencies
 """
@@ -235,7 +236,7 @@ master_reference['R-HSA-8949570']
 
 # init
 species_id = 'R-HSA-'
-process_name = 'Cristae formation'
+process_name = 'Citric acid cycle (TCA cycle)'
 pathway_key = network['pathways_types'][process_name]
 database = network['pathways']
 analyte_list = []
@@ -326,9 +327,6 @@ for key in process['reactions'].keys():
 
         else:
             product_name = product
-
-        print(product)
-        print(product_name)
 
         if product_name in black_list:
             pass
@@ -429,9 +427,9 @@ e_c = [x[1] for x in edge_colors]
 plt.figure(121,figsize=(20,15))
 pos = nx.spring_layout(
     G,
-    k=2.5,
-    iterations=150,
-    scale=2)
+    k=(3/sqrt(len(n))),
+    iterations=20,
+    scale=10)
 nx.draw(
     G,
     pos,
@@ -443,7 +441,7 @@ nx.draw(
     with_labels=True,
     font_weight='bold',
     arrowsize=20,
-    font_size=8, )
+    font_size=8)
 ax = plt.gca() # to get the current axis
 ax.collections[0].set_edgecolor('black')
-plt.savefig('/Users/jordan/Desktop/reactome_test/metaboverse_examples/metaboverse_prototype_cristae_formation.pdf', dpi = 600, bbox_inches='tight')
+plt.savefig('/Users/jordan/Desktop/reactome_test/metaboverse_examples/metaboverse_prototype_TCA.pdf', dpi = 600, bbox_inches='tight')
