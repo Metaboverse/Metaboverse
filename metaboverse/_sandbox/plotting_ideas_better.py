@@ -242,6 +242,8 @@ database = network['pathways']
 analyte_list = []
 cmap = matplotlib.cm.get_cmap('RdYlBu')
 
+cmap
+
 if len(pathway_key) == 1:
     process = database[pathway_key[0]]
 
@@ -249,15 +251,15 @@ if len(pathway_key) == 1:
 G = nx.DiGraph()
 
 # cycle through reactions in process
-node_colors = []
-edge_colors = []
-
 for key in process['reactions'].keys():
 
     # add reaction node
     reaction = process['reactions'][key]['name']
     G.add_node(reaction)
-    node_colors.append(['reaction', reaction, 'grey', 1000])
+    G.node()[reaction]['type'] = 'reaction'
+    G.node()[reaction]['color'] = 'grey'
+    G.node()[reaction]['size'] = 1000
+    G.node()[reaction]['stoichiometry'] = 'N/A'
 
     # Add reactant nodes and edges
     for sub_key in process['reactions'][key]['reactants'].keys():
@@ -281,6 +283,8 @@ for key in process['reactions'].keys():
 
             # Add node and edge to reaction
             G.add_node(reactant_name)
+            G.node()[reactant_name]['type'] = 'reactant'
+            G.node()[reactant_name]['stoichiometry'] = process['reactions'][key]['reactants'][sub_key]['stoichiometry']
 
             # Add color for analyte (dark blue, light blue, yellow, orange, red)
             if reactant_name in test_data.index:
@@ -288,30 +292,32 @@ for key in process['reactions'].keys():
                 value = test_data.loc[reactant_name][0]
                 position = (value + max_value) / (2 * max_value)
                 color_value = cmap(position)
-                node_colors.append(['reactant', reactant_name, color_value, 500])
+                G.node()[reactant_name]['color'] = color_value
 
             # If not in user data, color white
             else:
-                node_colors.append(['reactant', reactant_name, 'white', 500])
+                G.node()[reactant_name]['color'] = 'white'
+
+            G.node()[reactant_name]['size'] = 500
 
             if '>' in reaction and '<' in reaction:
                 G.add_edges_from([
                     (reactant_name, reaction)])
-                edge_colors.append([(reactant_name, reaction), 'grey'])
+                G.edges()[(reactant_name, reaction)]['color'] = 'grey'
 
                 G.add_edges_from([
                     (reaction, reactant_name)])
-                edge_colors.append([(reaction, reactant_name), 'grey'])
+                G.edges()[(reaction, reactant_name)]['color'] = 'grey'
 
             elif '<' in reaction:
                 G.add_edges_from([
                     (reaction, reactant_name)])
-                edge_colors.append([(reaction, reactant_name), 'grey'])
+                G.edges()[(reaction, reactant_name)]['color'] = 'grey'
 
             else:
                 G.add_edges_from([
                     (reactant_name, reaction)])
-                edge_colors.append([(reactant_name, reaction), 'grey'])
+                G.edges()[(reactant_name, reaction)]['color'] = 'grey'
 
     # Add product nodes and edges
     for sub_key in process['reactions'][key]['products'].keys():
@@ -336,36 +342,40 @@ for key in process['reactions'].keys():
 
             # Add node and edge to reaction
             G.add_node(product_name)
+            G.node()[product_name]['type'] = 'product'
+            G.node()[product_name]['stoichiometry'] = process['reactions'][key]['products'][sub_key]['stoichiometry']
 
             if product_name in test_data.index:
                 max_value = max(abs(test_data[0]))
                 value = test_data.loc[product_name][0]
                 position = (value + max_value) / (2 * max_value)
                 color_value = cmap(position)
-                node_colors.append(['product', product_name, color_value, 500])
+                G.node()[product_name]['color'] = color_value
 
             # If not in user data, color white
             else:
-                node_colors.append(['product', product_name, 'white', 500])
+                G.node()[product_name]['color'] = 'white'
+
+            G.node()[product_name]['size'] = 500
 
             if '>' in reaction and '<' in reaction:
                 G.add_edges_from([
                     (reaction, product_name)])
-                edge_colors.append([(reaction, product_name), 'grey'])
+                G.edges()[(reaction, product_name)]['color'] = 'grey'
 
                 G.add_edges_from([
                     (product_name, reaction)])
-                edge_colors.append([(product_name, reaction), 'grey'])
+                G.edges()[(product_name, reaction)]['color'] = 'grey'
 
             elif '<' in reaction:
                 G.add_edges_from([
                     (product_name, reaction)])
-                edge_colors.append([(product_name, reaction), 'grey'])
+                G.edges()[(product_name, reaction)]['color'] = 'grey'
 
             else:
                 G.add_edges_from([
                     (reaction, product_name)])
-                edge_colors.append([(reaction, product_name), 'grey'])
+                G.edges()[(reaction, product_name)]['color'] = 'grey'
 
     # Add catalyst and inhibitor nodes and edges
     for sub_key in process['reactions'][key]['modifiers'].keys():
@@ -391,45 +401,58 @@ for key in process['reactions'].keys():
 
             # Add node and edge to reaction
             G.add_node(modifier_name)
+            G.node()[modifier_name]['type'] = type.lower() # This will be overwritten if another process uses this as a reactant for example
+            G.node()[modifier_name]['stoichiometry'] = process['reactions'][key]['modifiers'][sub_key]['stoichiometry']
 
             if modifier_name in test_data.index:
                 max_value = max(abs(test_data[0]))
                 value = test_data.loc[modifier_name][0]
                 position = (value + max_value) / (2 * max_value)
                 color_value = cmap(position)
-                node_colors.append(['modifier', modifier_name, color_value, 300])
+                G.node()[modifier_name]['color'] = color_value
 
             # If not in user data, color white
             else:
-                node_colors.append(['modifier', modifier_name, 'white', 300])
+                G.node()[modifier_name]['color'] = 'white'
 
-            if type.lower() == 'catalyst' or type.lower() == 'positiveregulator':
-                edge_colors.append([(modifier_name, reaction), 'green'])
-
-            elif type.lower() == 'inhibitor' or type.lower() == 'negativeregulator':
-                edge_colors.append([(modifier_name, reaction), 'red'])
-
-            else:
-                edge_colors.append([(modifier_name, reaction), 'lightblue'])
+            G.node()[modifier_name]['size'] = 300
 
             G.add_edges_from([
                 (modifier_name, reaction)])
 
+            if type.lower() == 'catalyst' or type.lower() == 'positiveregulator':
+                G.edges()[(modifier_name, reaction)]['color'] = 'green'
+
+            elif type.lower() == 'inhibitor' or type.lower() == 'negativeregulator':
+                G.edges()[(modifier_name, reaction)]['color'] = 'red'
+
+            else:
+                G.edges()[(modifier_name, reaction)]['color'] = 'lightblue'
+
+
+
     # Add protein complex nodes and edges
+node_list = []
+node_color = []
+node_size = []
+for n in G.nodes():
 
-n = [x[1] for x in node_colors]
-n_c = [x[2] for x in node_colors]
-n_s = [x[3] for x in node_colors]
+    node_list.append(n)
+    node_color.append(G.nodes()[n]['color'])
+    node_size.append(G.nodes()[n]['size'])
 
-e = [x[0] for x in edge_colors]
-e_c = [x[1] for x in edge_colors]
+edge_list = []
+edge_color = []
+for e in G.edges():
+
+    edge_list.append(e)
+    edge_color.append(G.edges()[e]['color'])
 
 pos = nx.spring_layout(
     G,
-    k=(3/sqrt(len(n))),
+    k=(3/sqrt(len(node_list))),
     iterations=20,
     scale=10)
-
 
 fig, axes = plt.subplots(
         nrows = 1,
@@ -440,18 +463,19 @@ nx.draw(
     G,
     pos,
     ax=axes,
-    nodelist=n,
-    node_color=n_c,
-    node_size=n_s,
-    edgelist=e,
-    edge_color=e_c,
+    nodelist=node_list,
+    node_color=node_color,
+    node_size=node_size,
+    edgelist=edge_list,
+    edge_color=edge_color,
     with_labels=True,
     font_weight='bold',
     arrowsize=20,
     font_size=8)
 axes.collections[0].set_edgecolor('black')
+plt.savefig('/Users/jordan/Desktop/reactome_test/metaboverse_examples/metaboverse_prototype_TCA.pdf', dpi = 600, bbox_inches='tight')
 
-G.nodes
+
 """
 G.nodes
 name = id
@@ -466,10 +490,8 @@ stoichiometry = #
 Only run D3 for networks user wants to viz
 For unbiased analysis, make network, analyze breakpoints, display interesting break point hubs
 """
-
-
-
-
-
-
-plt.savefig('/Users/jordan/Desktop/reactome_test/metaboverse_examples/metaboverse_prototype_TCA.pdf', dpi = 600, bbox_inches='tight')
+import json
+from networkx.readwrite import json_graph
+data = json_graph.node_link_data(G)
+with open('/Users/jordan/Desktop/Metaboverse/metaboverse/_sandbox/graph.json', 'w') as f:
+    json.dump(data, f, indent=4)
