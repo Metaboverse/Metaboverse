@@ -1,0 +1,1485 @@
+{
+    "directed": true,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Formation of Ragulator complex"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "LAMTOR4 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "LAMTOR3 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "LAMTOR2 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "LAMTOR1 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "LAMTOR5 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "Ragulator "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "AKT1S1 (PRAS40) binds mTORC1"
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "catalyst",
+            "id": "Active mTORC1 complex "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "AKT1S1 "
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "negativeregulator",
+            "id": "mTORC1:RHEB:GTP:AKT1S1 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "LKB1 forms a trimeric complex with STRAD and MO25"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "STK11 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "R-ALL-380975"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "R-ALL-380963"
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "catalyst",
+            "id": "LKB1:STRAD:MO25 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "mTORC1 phosphorylates AKT1S1"
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "positiveregulator",
+            "id": "mTORC1:p-T246-AKT1S1:YWHAB "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": [
+                0.9707035755478662,
+                0.5274125336409072,
+                0.3088811995386389,
+                1.0
+            ],
+            "expression_value": -2.513972501174969,
+            "id": "ATP "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": [
+                0.9859284890426759,
+                0.6373702422145328,
+                0.35963091118800455,
+                1.0
+            ],
+            "expression_value": -2.08084193614011,
+            "id": "ADP "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "mTORC1:RHEB:GTP:p-S183,T246-AKT1S1:YWHAB "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "AMPK is dephosphorylated"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-AMPK heterotrimer "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": [
+                0.2259900038446752,
+                0.31833910034602103,
+                0.6367550941945408,
+                1.0
+            ],
+            "expression_value": 4.403686837860935,
+            "id": "Pi "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "AMPK heterotrimer "
+        },
+        {
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "id": "PPM1A "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Formation of active mTORC1 complex"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "RHEB:GTP "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "mTORC1:Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "SLC38A9 binds Ragulator:Rag dimers"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "SLC38A9 "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "Ragulator:RagA,B:GTP:RagC,D:GDP "
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "catalyst",
+            "id": "Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "mTORC1 phosphorylation of RPS6KB1 (S6K)"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "RPS6KB1 "
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "catalyst",
+            "id": "p-S371,T389-RPS6KB1 "
+        },
+        {
+            "type": "product",
+            "sub_type": "negativeregulator",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "mTORC1 with p-S722,S792-RPTOR:Ragulator:Rag:GNP:RHEB:GTP "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "AMPK phosphorylates Raptor in the mTORC1 complex"
+        },
+        {
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-AMPK heterotrimer:AMP "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylated AKT1S1:mTORC1 binds YWHAB"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "mTORC1:RHEB:GTP:p-T246-AKT1S1 "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "YWHAB "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "GTP loading by Rheb"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": [
+                0.9610149942329873,
+                0.45743944636678197,
+                0.2765859284890427,
+                1.0
+            ],
+            "expression_value": -2.7853760002966235,
+            "id": "GTP "
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "RHEB:GDP "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": [
+                0.6663590926566707,
+                0.8475970780469052,
+                0.9118800461361016,
+                1.0
+            ],
+            "expression_value": 1.9428969751212222,
+            "id": "GDP "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Ragulator:Rag dimers:SLC38A9 bind mTORC1"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "mTORC1 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylated AMPK binds AMP"
+        },
+        {
+            "type": "modifier",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "sub_type": "positiveregulator",
+            "id": "AMP "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Activated Akt1 phosphorylates AKT1S1 (PRAS40)"
+        },
+        {
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-T308,S473-AKT1 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation and activation of eIF4G by activated S6K1"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "EIF4G1 "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-S1108,S1148,S1192-EIF4G1 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "RHEB in mTORC1:RHEB:GTP hydrolyses GTP"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "mTORC1:Ragulator:Rag:GNP:RHEB:GDP "
+        },
+        {
+            "type": "product",
+            "sub_type": "positiveregulator",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "TSC1:p-S1387-TSC2 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation and inactivation of eEF2K by activated S6K1"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "EEF2K "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-S366-EEF2K "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Ragulator binds Rag dimers"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "RagA,B:GTP:RagC,D:GDP "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation of TSC2 by PKB"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "TSC2 "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-S939,S1130,T1462-TSC2 "
+        },
+        {
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "node_size": 300,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-T309,S474-AKT2:PIP3 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation and activation of eIF4B by activated S6K1"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "EIF4B "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-S422-EIF4B "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation of Ribosomal protein S6 by activated S6K1"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "RPS6 "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-5S-RPS6 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Dissociation of phosphorylated 4EBP1 from eIF4E"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "eIF4E:4E-BP1-P "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "p-T37,T46-EIF4EBP1 "
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "EIF4E "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "p-AMPK phosphorylates TSC1:TSC2"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "TSC1:TSC2 "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation of complexed TSC2 by PKB"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "TSC1:Inhibited TSC2-1-P "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "SLC38A9 transports L-Arg from lysosomal lumen to cytosol"
+        },
+        {
+            "type": "product",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "L-Arg "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Phosphorylation of 4E-BP1 by activated mTORC1"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "eIF4E:4E-BP "
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Activation of cytosolic AMPK by phosphorylation"
+        },
+        {
+            "type": "reaction",
+            "color": "grey",
+            "expression_value": null,
+            "node_size": 1000,
+            "stoichiometry": null,
+            "id": "Rag dimer formation"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "R-ALL-5653946"
+        },
+        {
+            "type": "reactant",
+            "stoichiometry": "1",
+            "node_size": 500,
+            "color": "white",
+            "expression_value": null,
+            "id": "R-ALL-5653964"
+        }
+    ],
+    "links": [
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Formation of Ragulator complex",
+            "target": "Ragulator "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "LAMTOR4 ",
+            "target": "Formation of Ragulator complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "LAMTOR3 ",
+            "target": "Formation of Ragulator complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "LAMTOR2 ",
+            "target": "Formation of Ragulator complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "LAMTOR1 ",
+            "target": "Formation of Ragulator complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "LAMTOR5 ",
+            "target": "Formation of Ragulator complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "Ragulator ",
+            "target": "Ragulator binds Rag dimers"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "AKT1S1 (PRAS40) binds mTORC1",
+            "target": "mTORC1:RHEB:GTP:AKT1S1 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "Active mTORC1 complex ",
+            "target": "AKT1S1 (PRAS40) binds mTORC1"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "Active mTORC1 complex ",
+            "target": "mTORC1 phosphorylation of RPS6KB1 (S6K)"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "Active mTORC1 complex ",
+            "target": "AMPK phosphorylates Raptor in the mTORC1 complex"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "Active mTORC1 complex ",
+            "target": "RHEB in mTORC1:RHEB:GTP hydrolyses GTP"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "Active mTORC1 complex ",
+            "target": "Phosphorylation of 4E-BP1 by activated mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "AKT1S1 ",
+            "target": "AKT1S1 (PRAS40) binds mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "mTORC1:RHEB:GTP:AKT1S1 ",
+            "target": "Activated Akt1 phosphorylates AKT1S1 (PRAS40)"
+        },
+        {
+            "color": "red",
+            "type": "inhibitor",
+            "source": "mTORC1:RHEB:GTP:AKT1S1 ",
+            "target": "Phosphorylation of 4E-BP1 by activated mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "LKB1 forms a trimeric complex with STRAD and MO25",
+            "target": "LKB1:STRAD:MO25 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "STK11 ",
+            "target": "LKB1 forms a trimeric complex with STRAD and MO25"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "R-ALL-380975",
+            "target": "LKB1 forms a trimeric complex with STRAD and MO25"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "R-ALL-380963",
+            "target": "LKB1 forms a trimeric complex with STRAD and MO25"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "LKB1:STRAD:MO25 ",
+            "target": "Activation of cytosolic AMPK by phosphorylation"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "mTORC1 phosphorylates AKT1S1",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "mTORC1 phosphorylates AKT1S1",
+            "target": "mTORC1:RHEB:GTP:p-S183,T246-AKT1S1:YWHAB "
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "mTORC1:p-T246-AKT1S1:YWHAB ",
+            "target": "mTORC1 phosphorylates AKT1S1"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "mTORC1:p-T246-AKT1S1:YWHAB ",
+            "target": "mTORC1 phosphorylation of RPS6KB1 (S6K)"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "mTORC1:p-T246-AKT1S1:YWHAB ",
+            "target": "Phosphorylation of 4E-BP1 by activated mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "mTORC1 phosphorylates AKT1S1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "mTORC1 phosphorylation of RPS6KB1 (S6K)"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "AMPK phosphorylates Raptor in the mTORC1 complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Activated Akt1 phosphorylates AKT1S1 (PRAS40)"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation and activation of eIF4G by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation and inactivation of eEF2K by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation of TSC2 by PKB"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation and activation of eIF4B by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation of Ribosomal protein S6 by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "p-AMPK phosphorylates TSC1:TSC2"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation of complexed TSC2 by PKB"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Phosphorylation of 4E-BP1 by activated mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "ATP ",
+            "target": "Activation of cytosolic AMPK by phosphorylation"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "AMPK is dephosphorylated",
+            "target": "Pi "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "AMPK is dephosphorylated",
+            "target": "AMPK heterotrimer "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "p-AMPK heterotrimer ",
+            "target": "AMPK is dephosphorylated"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "p-AMPK heterotrimer ",
+            "target": "Phosphorylated AMPK binds AMP"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "AMPK heterotrimer ",
+            "target": "Activation of cytosolic AMPK by phosphorylation"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "PPM1A ",
+            "target": "AMPK is dephosphorylated"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Formation of active mTORC1 complex",
+            "target": "Active mTORC1 complex "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "RHEB:GTP ",
+            "target": "Formation of active mTORC1 complex"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "mTORC1:Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 ",
+            "target": "Formation of active mTORC1 complex"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "SLC38A9 binds Ragulator:Rag dimers",
+            "target": "Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "SLC38A9 ",
+            "target": "SLC38A9 binds Ragulator:Rag dimers"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "Ragulator:RagA,B:GTP:RagC,D:GDP ",
+            "target": "SLC38A9 binds Ragulator:Rag dimers"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 ",
+            "target": "Ragulator:Rag dimers:SLC38A9 bind mTORC1"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 ",
+            "target": "SLC38A9 transports L-Arg from lysosomal lumen to cytosol"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "mTORC1 phosphorylation of RPS6KB1 (S6K)",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "mTORC1 phosphorylation of RPS6KB1 (S6K)",
+            "target": "p-S371,T389-RPS6KB1 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "RPS6KB1 ",
+            "target": "mTORC1 phosphorylation of RPS6KB1 (S6K)"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-S371,T389-RPS6KB1 ",
+            "target": "Phosphorylation and activation of eIF4G by activated S6K1"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-S371,T389-RPS6KB1 ",
+            "target": "Phosphorylation and inactivation of eEF2K by activated S6K1"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-S371,T389-RPS6KB1 ",
+            "target": "Phosphorylation and activation of eIF4B by activated S6K1"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-S371,T389-RPS6KB1 ",
+            "target": "Phosphorylation of Ribosomal protein S6 by activated S6K1"
+        },
+        {
+            "color": "red",
+            "type": "inhibitor",
+            "source": "mTORC1 with p-S722,S792-RPTOR:Ragulator:Rag:GNP:RHEB:GTP ",
+            "target": "mTORC1 phosphorylation of RPS6KB1 (S6K)"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "AMPK phosphorylates Raptor in the mTORC1 complex",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "AMPK phosphorylates Raptor in the mTORC1 complex",
+            "target": "mTORC1 with p-S722,S792-RPTOR:Ragulator:Rag:GNP:RHEB:GTP "
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-AMPK heterotrimer:AMP ",
+            "target": "AMPK phosphorylates Raptor in the mTORC1 complex"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-AMPK heterotrimer:AMP ",
+            "target": "p-AMPK phosphorylates TSC1:TSC2"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylated AKT1S1:mTORC1 binds YWHAB",
+            "target": "mTORC1:p-T246-AKT1S1:YWHAB "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "mTORC1:RHEB:GTP:p-T246-AKT1S1 ",
+            "target": "Phosphorylated AKT1S1:mTORC1 binds YWHAB"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "YWHAB ",
+            "target": "Phosphorylated AKT1S1:mTORC1 binds YWHAB"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "GTP loading by Rheb",
+            "target": "GDP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "GTP loading by Rheb",
+            "target": "RHEB:GTP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "GTP ",
+            "target": "GTP loading by Rheb"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "RHEB:GDP ",
+            "target": "GTP loading by Rheb"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Ragulator:Rag dimers:SLC38A9 bind mTORC1",
+            "target": "mTORC1:Ragulator:RagA,B:GTP:RagC,D:GDP:SLC38A9 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "mTORC1 ",
+            "target": "Ragulator:Rag dimers:SLC38A9 bind mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylated AMPK binds AMP",
+            "target": "p-AMPK heterotrimer:AMP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "AMP ",
+            "target": "Phosphorylated AMPK binds AMP"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "AMP ",
+            "target": "Activation of cytosolic AMPK by phosphorylation"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Activated Akt1 phosphorylates AKT1S1 (PRAS40)",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Activated Akt1 phosphorylates AKT1S1 (PRAS40)",
+            "target": "mTORC1:RHEB:GTP:p-T246-AKT1S1 "
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-T308,S473-AKT1 ",
+            "target": "Activated Akt1 phosphorylates AKT1S1 (PRAS40)"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation and activation of eIF4G by activated S6K1",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation and activation of eIF4G by activated S6K1",
+            "target": "p-S1108,S1148,S1192-EIF4G1 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "EIF4G1 ",
+            "target": "Phosphorylation and activation of eIF4G by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "RHEB in mTORC1:RHEB:GTP hydrolyses GTP",
+            "target": "Pi "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "RHEB in mTORC1:RHEB:GTP hydrolyses GTP",
+            "target": "mTORC1:Ragulator:Rag:GNP:RHEB:GDP "
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "TSC1:p-S1387-TSC2 ",
+            "target": "RHEB in mTORC1:RHEB:GTP hydrolyses GTP"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation and inactivation of eEF2K by activated S6K1",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation and inactivation of eEF2K by activated S6K1",
+            "target": "p-S366-EEF2K "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "EEF2K ",
+            "target": "Phosphorylation and inactivation of eEF2K by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Ragulator binds Rag dimers",
+            "target": "Ragulator:RagA,B:GTP:RagC,D:GDP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "RagA,B:GTP:RagC,D:GDP ",
+            "target": "Ragulator binds Rag dimers"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of TSC2 by PKB",
+            "target": "p-S939,S1130,T1462-TSC2 "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of TSC2 by PKB",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "TSC2 ",
+            "target": "Phosphorylation of TSC2 by PKB"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-T309,S474-AKT2:PIP3 ",
+            "target": "Phosphorylation of TSC2 by PKB"
+        },
+        {
+            "color": "green",
+            "type": "catalyst",
+            "source": "p-T309,S474-AKT2:PIP3 ",
+            "target": "Phosphorylation of complexed TSC2 by PKB"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation and activation of eIF4B by activated S6K1",
+            "target": "p-S422-EIF4B "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation and activation of eIF4B by activated S6K1",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "EIF4B ",
+            "target": "Phosphorylation and activation of eIF4B by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of Ribosomal protein S6 by activated S6K1",
+            "target": "p-5S-RPS6 "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of Ribosomal protein S6 by activated S6K1",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "RPS6 ",
+            "target": "Phosphorylation of Ribosomal protein S6 by activated S6K1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Dissociation of phosphorylated 4EBP1 from eIF4E",
+            "target": "p-T37,T46-EIF4EBP1 "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Dissociation of phosphorylated 4EBP1 from eIF4E",
+            "target": "EIF4E "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "eIF4E:4E-BP1-P ",
+            "target": "Dissociation of phosphorylated 4EBP1 from eIF4E"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "p-AMPK phosphorylates TSC1:TSC2",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "p-AMPK phosphorylates TSC1:TSC2",
+            "target": "TSC1:p-S1387-TSC2 "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "TSC1:TSC2 ",
+            "target": "p-AMPK phosphorylates TSC1:TSC2"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "TSC1:TSC2 ",
+            "target": "Phosphorylation of complexed TSC2 by PKB"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of complexed TSC2 by PKB",
+            "target": "TSC1:Inhibited TSC2-1-P "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of complexed TSC2 by PKB",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "SLC38A9 transports L-Arg from lysosomal lumen to cytosol",
+            "target": "L-Arg "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "L-Arg ",
+            "target": "SLC38A9 transports L-Arg from lysosomal lumen to cytosol"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of 4E-BP1 by activated mTORC1",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Phosphorylation of 4E-BP1 by activated mTORC1",
+            "target": "eIF4E:4E-BP1-P "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "eIF4E:4E-BP ",
+            "target": "Phosphorylation of 4E-BP1 by activated mTORC1"
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Activation of cytosolic AMPK by phosphorylation",
+            "target": "ADP "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Activation of cytosolic AMPK by phosphorylation",
+            "target": "p-AMPK heterotrimer "
+        },
+        {
+            "color": "grey",
+            "type": "reaction -> product",
+            "source": "Rag dimer formation",
+            "target": "RagA,B:GTP:RagC,D:GDP "
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "R-ALL-5653946",
+            "target": "Rag dimer formation"
+        },
+        {
+            "color": "grey",
+            "type": "reactant -> reaction",
+            "source": "R-ALL-5653964",
+            "target": "Rag dimer formation"
+        }
+    ]
+}

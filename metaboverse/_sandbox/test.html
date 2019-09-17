@@ -75,37 +75,571 @@
 
 // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
 var links = [
-  {source: "Microsoft", target: "Amazon", type: "reaction"},
-  {source: "Apple", target: "Amazon", type: "reaction"},
-  {source: "Microsoft", target: "HTC", type: "product"},
-  {source: "Samsung", target: "Apple", type: "product"},
-  {source: "Motorola", target: "Apple", type: "product"},
-  {source: "Nokia", target: "Apple", type: "inhibitor"},
-  {source: "HTC", target: "Apple", type: "reactant"},
-  {source: "Kodak", target: "Apple", type: "reactant"},
-  {source: "Microsoft", target: "Barnes & Noble", type: "reaction"},
-  {source: "Microsoft", target: "Foxconn", type: "reaction"},
-  {source: "Oracle", target: "Google", type: "reactant"},
-  {source: "Apple", target: "HTC", type: "reactant"},
-  {source: "Microsoft", target: "Inventec", type: "reaction"},
-  {source: "Samsung", target: "Kodak", type: "inhibitor"},
-  {source: "LG", target: "Kodak", type: "inhibitor"},
-  {source: "LG", target: "Inventec", type: "inhibitor"},
-  {source: "RIM", target: "Kodak", type: "gene_component"},
-  {source: "Sony", target: "LG", type: "reactant"},
-  {source: "Kodak", target: "LG", type: "inhibitor"},
-  {source: "Kodak", target: "Foxconn", type: "inhibitor"},
-  {source: "Apple", target: "Nokia", type: "inhibitor"},
-  {source: "Qualcomm", target: "Nokia", type: "catalyst"},
-  {source: "Apple", target: "Motorola", type: "catalyst"},
-  {source: "Microsoft", target: "Motorola", type: "reaction"},
-  {source: "Motorola", target: "Microsoft", type: "reactant"},
-  {source: "Huawei", target: "ZTE", type: "inhibitor"},
-  {source: "Ericsson", target: "ZTE", type: "inhibitor"},
-  {source: "Kodak", target: "Samsung", type: "inhibitor"},
-  {source: "Apple", target: "Samsung", type: "reactant"},
-  {source: "Kodak", target: "RIM", type: "reactant"},
-  {source: "Nokia", target: "Qualcomm", type: "reactant"}
+    {
+        type: "reactant",
+        source: "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA",
+        target: "CoA-SH "
+    },
+    {
+        type: "reactant",
+        source: "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA",
+        target: "CIT "
+    },
+    {
+        type: "reactant",
+        source: "Ac-CoA ",
+        target: "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "OAA ",
+        target: "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "OAA ",
+        target: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+    },
+    {
+        type: "reactant",
+        source: "OAA ",
+        target: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "OAA ",
+        target: "FAHD1:Zn2+ dimer hydrolyses OA to PYR"
+    },
+    {
+        type: "reactant",
+        source: "CoA-SH ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "CoA-SH ",
+        target: "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "CoA-SH ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "CIT ",
+        target: "isocitrate <=> citrate"
+    },
+    {
+        type: "reactant",
+        source: "CIT ",
+        target: "citrate <=> isocitrate"
+    },
+    {
+        type: "catalyst",
+        source: "CS dimer ",
+        target: "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+        target: "NADH "
+    },
+    {
+        type: "reactant",
+        source: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+        target: "OAA "
+    },
+    {
+        type: "reactant",
+        source: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+        target: "MAL "
+    },
+    {
+        type: "reactant",
+        source: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+        target: "NAD+ "
+    },
+    {
+        type: "reactant",
+        source: "NADH ",
+        target: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+    },
+    {
+        type: "reactant",
+        source: "NADH ",
+        target: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "MAL ",
+        target: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+    },
+    {
+        type: "reactant",
+        source: "MAL ",
+        target: "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "MAL ",
+        target: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "MAL ",
+        target: "(S)-Malate <=> Fumarate + H2O"
+    },
+    {
+        type: "reactant",
+        source: "MAL ",
+        target: "Fumarate + H2O <=> (S)-Malate"
+    },
+    {
+        type: "reactant",
+        source: "MAL ",
+        target: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "NAD+ ",
+        target: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+    },
+    {
+        type: "reactant",
+        source: "NAD+ ",
+        target: "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]"
+    },
+    {
+        type: "reactant",
+        source: "NAD+ ",
+        target: "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "NAD+ ",
+        target: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "NAD+ ",
+        target: "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+    },
+    {
+        type: "reactant",
+        source: "NAD+ ",
+        target: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "catalyst",
+        source: "MDH2 dimer ",
+        target: "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+    },
+    {
+        type: "catalyst",
+        source: "MDH2 dimer ",
+        target: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+        target: "PYR "
+    },
+    {
+        type: "reactant",
+        source: "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+        target: "NADPH "
+    },
+    {
+        type: "reactant",
+        source: "NADP+ ",
+        target: "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "NADP+ ",
+        target: "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]"
+    },
+    {
+        type: "reactant",
+        source: "NADPH ",
+        target: "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]"
+    },
+    {
+        type: "catalyst",
+        source: "ME3:Mg2+ tetramer ",
+        target: "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]",
+        target: "NADP+ "
+    },
+    {
+        type: "reactant",
+        source: "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]",
+        target: "NADH "
+    },
+    {
+        type: "catalyst",
+        source: "NNT dimer ",
+        target: "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]"
+    },
+    {
+        type: "reactant",
+        source: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+        target: "SUCC-CoA "
+    },
+    {
+        type: "reactant",
+        source: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+        target: "Pi "
+    },
+    {
+        type: "reactant",
+        source: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+        target: "ADP "
+    },
+    {
+        type: "reactant",
+        source: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+        target: "CoA-SH "
+    },
+    {
+        type: "reactant",
+        source: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+        target: "ATP "
+    },
+    {
+        type: "reactant",
+        source: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+        target: "SUCCA "
+    },
+    {
+        type: "reactant",
+        source: "SUCC-CoA ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "SUCC-CoA ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "Pi ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "Pi ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "ADP ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "catalyst",
+        source: "ADP ",
+        target: "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+    },
+    {
+        type: "reactant",
+        source: "ATP ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "inhibitor",
+        source: "ATP ",
+        target: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "SUCCA ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "SUCCA ",
+        target: "Succinate <=> Fumarate (with FAD redox reaction on enzyme)"
+    },
+    {
+        type: "reactant",
+        source: "SUCCA ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "catalyst",
+        source: "SUCLA2:SUCLG1 ",
+        target: "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+        target: "SUCC-CoA "
+    },
+    {
+        type: "reactant",
+        source: "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+        target: "NADH "
+    },
+    {
+        type: "reactant",
+        source: "2OG ",
+        target: "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+    },
+    {
+        type: "catalyst",
+        source: "lipo-aKGDH ",
+        target: "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+    },
+    {
+        type: "reactant",
+        source: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+        target: "MAL "
+    },
+    {
+        type: "reactant",
+        source: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+        target: "NAD+ "
+    },
+    {
+        type: "reactant",
+        source: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+        target: "NADH "
+    },
+    {
+        type: "reactant",
+        source: "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+        target: "OAA "
+    },
+    {
+        type: "reactant",
+        source: "isocitrate <=> citrate",
+        target: "ISCIT "
+    },
+    {
+        type: "reactant",
+        source: "isocitrate <=> citrate",
+        target: "CIT "
+    },
+    {
+        type: "reactant",
+        source: "ISCIT ",
+        target: "isocitrate <=> citrate"
+    },
+    {
+        type: "reactant",
+        source: "ISCIT ",
+        target: "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+    },
+    {
+        type: "reactant",
+        source: "ISCIT ",
+        target: "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]"
+    },
+    {
+        type: "reactant",
+        source: "ISCIT ",
+        target: "citrate <=> isocitrate"
+    },
+    {
+        type: "catalyst",
+        source: "ACO2 ",
+        target: "isocitrate <=> citrate"
+    },
+    {
+        type: "catalyst",
+        source: "ACO2 ",
+        target: "citrate <=> isocitrate"
+    },
+    {
+        type: "reactant",
+        source: "(S)-Malate <=> Fumarate + H2O",
+        target: "MAL "
+    },
+    {
+        type: "reactant",
+        source: "(S)-Malate <=> Fumarate + H2O",
+        target: "FUMA "
+    },
+    {
+        type: "reactant",
+        source: "FUMA ",
+        target: "(S)-Malate <=> Fumarate + H2O"
+    },
+    {
+        type: "reactant",
+        source: "FUMA ",
+        target: "Fumarate + H2O <=> (S)-Malate"
+    },
+    {
+        type: "catalyst",
+        source: "FUMA ",
+        target: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "FUMA ",
+        target: "Succinate <=> Fumarate (with FAD redox reaction on enzyme)"
+    },
+    {
+        type: "catalyst",
+        source: "FH tetramer ",
+        target: "(S)-Malate <=> Fumarate + H2O"
+    },
+    {
+        type: "catalyst",
+        source: "FH tetramer ",
+        target: "Fumarate + H2O <=> (S)-Malate"
+    },
+    {
+        type: "reactant",
+        source: "Fumarate + H2O <=> (S)-Malate",
+        target: "FUMA "
+    },
+    {
+        type: "reactant",
+        source: "Fumarate + H2O <=> (S)-Malate",
+        target: "MAL "
+    },
+    {
+        type: "reactant",
+        source: "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+        target: "2OG "
+    },
+    {
+        type: "reactant",
+        source: "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+        target: "NADH "
+    },
+    {
+        type: "catalyst",
+        source: "IDH3 complex ",
+        target: "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+    },
+    {
+        type: "reactant",
+        source: "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+        target: "2OG "
+    },
+    {
+        type: "reactant",
+        source: "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+        target: "NADPH "
+    },
+    {
+        type: "catalyst",
+        source: "IDH2 dimer ",
+        target: "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]"
+    },
+    {
+        type: "reactant",
+        source: "FAHD1:Zn2+ dimer hydrolyses OA to PYR",
+        target: "PYR "
+    },
+    {
+        type: "catalyst",
+        source: "FAHD1:Mg2+ dimer ",
+        target: "FAHD1:Zn2+ dimer hydrolyses OA to PYR"
+    },
+    {
+        type: "reactant",
+        source: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+        target: "PYR "
+    },
+    {
+        type: "reactant",
+        source: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+        target: "NADH "
+    },
+    {
+        type: "catalyst",
+        source: "ME2:Mg2+ tetramer ",
+        target: "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+    },
+    {
+        type: "reactant",
+        source: "citrate <=> isocitrate",
+        target: "CIT "
+    },
+    {
+        type: "reactant",
+        source: "citrate <=> isocitrate",
+        target: "ISCIT "
+    },
+    {
+        type: "reactant",
+        source: "Succinate <=> Fumarate (with FAD redox reaction on enzyme)",
+        target: "SUCCA "
+    },
+    {
+        type: "reactant",
+        source: "Succinate <=> Fumarate (with FAD redox reaction on enzyme)",
+        target: "FUMA "
+    },
+    {
+        type: "catalyst",
+        source: "SDH complex (ox.) ",
+        target: "Succinate <=> Fumarate (with FAD redox reaction on enzyme)"
+    },
+    {
+        type: "reactant",
+        source: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+        target: "SUCC-CoA "
+    },
+    {
+        type: "reactant",
+        source: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+        target: "Pi "
+    },
+    {
+        type: "reactant",
+        source: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+        target: "GDP "
+    },
+    {
+        type: "reactant",
+        source: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+        target: "CoA-SH "
+    },
+    {
+        type: "reactant",
+        source: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+        target: "GTP "
+    },
+    {
+        type: "reactant",
+        source: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+        target: "SUCCA "
+    },
+    {
+        type: "reactant",
+        source: "GDP ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "reactant",
+        source: "GTP ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "catalyst",
+        source: "SUCLG1:SUCLG2 ",
+        target: "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+    },
+    {
+        type: "gene_component",
+        source: "SUCLG1 ",
+        target: "SUCLG1:SUCLG2 "
+    },
+    {
+        type: "gene_component",
+        source: "SUCLG2 ",
+        target: "SUCLG1:SUCLG2 "
+    }
 ];
 
 var nodes = {};
@@ -116,8 +650,8 @@ links.forEach(function(link) {
   link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
 });
 
-var width = 960,
-    height = 500;
+var width = window.innerWidth;
+var height = window.innerHeight;
 
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
@@ -128,9 +662,16 @@ var force = d3.layout.force()
     .on("tick", tick)
     .start();
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("body")
+    .append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .call(d3.behavior.zoom().on("zoom", function () {
+        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+      }))
+    .append("g");
+
+
 
 // Per-type markers, as they don't inherit styles.
 svg.append("defs").selectAll("marker")
@@ -189,5 +730,10 @@ function linkArc(d) {
 function transform(d) {
   return "translate(" + d.x + "," + d.y + ")";
 }
+
+$(window).resize(function() {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+});
 
 </script>

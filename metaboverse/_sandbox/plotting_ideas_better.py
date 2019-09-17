@@ -61,7 +61,7 @@ args_dict = {'model': '/Users/jordan/Desktop/reactome_test/HSA_metaboverse_db.pi
 network = __main__(args_dict)
 
 for x in list(network['pathways_types'].keys()):
-    if 'tca' in x.lower():
+    if 'cristae' in x.lower():
         print(x)
 
 """ Test blacklisting metabolites
@@ -236,13 +236,11 @@ master_reference['R-HSA-8949570']
 
 # init
 species_id = 'R-HSA-'
-process_name = 'Citric acid cycle (TCA cycle)'
+process_name = 'Cristae formation'
 pathway_key = network['pathways_types'][process_name]
 database = network['pathways']
 analyte_list = []
 cmap = matplotlib.cm.get_cmap('RdYlBu')
-
-cmap
 
 if len(pathway_key) == 1:
     process = database[pathway_key[0]]
@@ -258,8 +256,9 @@ for key in process['reactions'].keys():
     G.add_node(reaction)
     G.node()[reaction]['type'] = 'reaction'
     G.node()[reaction]['color'] = 'grey'
-    G.node()[reaction]['size'] = 1000
-    G.node()[reaction]['stoichiometry'] = 'N/A'
+    G.node()[reaction]['expression_value'] = None
+    G.node()[reaction]['node_size'] = 1000
+    G.node()[reaction]['stoichiometry'] = None
 
     # Add reactant nodes and edges
     for sub_key in process['reactions'][key]['reactants'].keys():
@@ -285,6 +284,7 @@ for key in process['reactions'].keys():
             G.add_node(reactant_name)
             G.node()[reactant_name]['type'] = 'reactant'
             G.node()[reactant_name]['stoichiometry'] = process['reactions'][key]['reactants'][sub_key]['stoichiometry']
+            G.node()[reactant_name]['node_size'] = 500
 
             # Add color for analyte (dark blue, light blue, yellow, orange, red)
             if reactant_name in test_data.index:
@@ -293,31 +293,35 @@ for key in process['reactions'].keys():
                 position = (value + max_value) / (2 * max_value)
                 color_value = cmap(position)
                 G.node()[reactant_name]['color'] = color_value
+                G.node()[reactant_name]['expression_value'] = value
 
             # If not in user data, color white
             else:
                 G.node()[reactant_name]['color'] = 'white'
-
-            G.node()[reactant_name]['size'] = 500
+                G.node()[reactant_name]['expression_value'] = None
 
             if '>' in reaction and '<' in reaction:
                 G.add_edges_from([
                     (reactant_name, reaction)])
                 G.edges()[(reactant_name, reaction)]['color'] = 'grey'
+                G.edges()[(reactant_name, reaction)]['type'] = 'reactant -> reaction'
 
                 G.add_edges_from([
                     (reaction, reactant_name)])
                 G.edges()[(reaction, reactant_name)]['color'] = 'grey'
+                G.edges()[(reaction, reactant_name)]['type'] = 'reaction -> reaction'
 
             elif '<' in reaction:
                 G.add_edges_from([
                     (reaction, reactant_name)])
                 G.edges()[(reaction, reactant_name)]['color'] = 'grey'
+                G.edges()[(reaction, reactant_name)]['type'] = 'reaction -> reaction'
 
             else:
                 G.add_edges_from([
                     (reactant_name, reaction)])
                 G.edges()[(reactant_name, reaction)]['color'] = 'grey'
+                G.edges()[(reactant_name, reaction)]['type'] = 'reactant -> reaction'
 
     # Add product nodes and edges
     for sub_key in process['reactions'][key]['products'].keys():
@@ -344,6 +348,7 @@ for key in process['reactions'].keys():
             G.add_node(product_name)
             G.node()[product_name]['type'] = 'product'
             G.node()[product_name]['stoichiometry'] = process['reactions'][key]['products'][sub_key]['stoichiometry']
+            G.node()[product_name]['node_size'] = 500
 
             if product_name in test_data.index:
                 max_value = max(abs(test_data[0]))
@@ -351,31 +356,35 @@ for key in process['reactions'].keys():
                 position = (value + max_value) / (2 * max_value)
                 color_value = cmap(position)
                 G.node()[product_name]['color'] = color_value
+                G.node()[product_name]['expression_value'] = value
 
             # If not in user data, color white
             else:
                 G.node()[product_name]['color'] = 'white'
-
-            G.node()[product_name]['size'] = 500
+                G.node()[product_name]['expression_value'] = None
 
             if '>' in reaction and '<' in reaction:
                 G.add_edges_from([
                     (reaction, product_name)])
                 G.edges()[(reaction, product_name)]['color'] = 'grey'
+                G.edges()[(reaction, product_name)]['type'] = 'reaction -> product'
 
                 G.add_edges_from([
                     (product_name, reaction)])
                 G.edges()[(product_name, reaction)]['color'] = 'grey'
+                G.edges()[(reaction, product_name)]['type'] = 'product -> reaction'
 
             elif '<' in reaction:
                 G.add_edges_from([
                     (product_name, reaction)])
                 G.edges()[(product_name, reaction)]['color'] = 'grey'
+                G.edges()[(reaction, product_name)]['type'] = 'product -> reaction'
 
             else:
                 G.add_edges_from([
                     (reaction, product_name)])
                 G.edges()[(reaction, product_name)]['color'] = 'grey'
+                G.edges()[(reaction, product_name)]['type'] = 'reaction -> product'
 
     # Add catalyst and inhibitor nodes and edges
     for sub_key in process['reactions'][key]['modifiers'].keys():
@@ -401,8 +410,10 @@ for key in process['reactions'].keys():
 
             # Add node and edge to reaction
             G.add_node(modifier_name)
-            G.node()[modifier_name]['type'] = type.lower() # This will be overwritten if another process uses this as a reactant for example
+            G.node()[modifier_name]['type'] = 'modifier'
+            G.node()[modifier_name]['sub_type'] = type.lower() # This will be overwritten if another process uses this as a reactant for example
             G.node()[modifier_name]['stoichiometry'] = process['reactions'][key]['modifiers'][sub_key]['stoichiometry']
+            G.node()[modifier_name]['node_size'] = 300
 
             if modifier_name in test_data.index:
                 max_value = max(abs(test_data[0]))
@@ -410,25 +421,27 @@ for key in process['reactions'].keys():
                 position = (value + max_value) / (2 * max_value)
                 color_value = cmap(position)
                 G.node()[modifier_name]['color'] = color_value
+                G.node()[modifier_name]['expression_value'] = value
 
             # If not in user data, color white
             else:
                 G.node()[modifier_name]['color'] = 'white'
-
-            G.node()[modifier_name]['size'] = 300
+                G.node()[modifier_name]['expression_value'] = None
 
             G.add_edges_from([
                 (modifier_name, reaction)])
 
             if type.lower() == 'catalyst' or type.lower() == 'positiveregulator':
                 G.edges()[(modifier_name, reaction)]['color'] = 'green'
+                G.edges()[(modifier_name, reaction)]['type'] = 'catalyst'
 
             elif type.lower() == 'inhibitor' or type.lower() == 'negativeregulator':
                 G.edges()[(modifier_name, reaction)]['color'] = 'red'
+                G.edges()[(modifier_name, reaction)]['type'] = 'inhibitor'
 
             else:
                 G.edges()[(modifier_name, reaction)]['color'] = 'lightblue'
-
+                G.edges()[(modifier_name, reaction)]['type'] = 'other_modifier'
 
 
     # Add protein complex nodes and edges
@@ -439,7 +452,7 @@ for n in G.nodes():
 
     node_list.append(n)
     node_color.append(G.nodes()[n]['color'])
-    node_size.append(G.nodes()[n]['size'])
+    node_size.append(G.nodes()[n]['node_size'])
 
 edge_list = []
 edge_color = []
@@ -475,23 +488,8 @@ nx.draw(
 axes.collections[0].set_edgecolor('black')
 plt.savefig('/Users/jordan/Desktop/reactome_test/metaboverse_examples/metaboverse_prototype_TCA.pdf', dpi = 600, bbox_inches='tight')
 
-
-"""
-G.nodes
-name = id
-type = reaction/reactant/product, etc -> reactions names are not displayed natively, need hover
-source = Origin entity
-target = target entity
-shading = grey or white or expression
-edge_type = reaction, genes, catalyst, inhibitor
-size = size type
-stoichiometry = #
-
-Only run D3 for networks user wants to viz
-For unbiased analysis, make network, analyze breakpoints, display interesting break point hubs
-"""
 import json
 from networkx.readwrite import json_graph
 data = json_graph.node_link_data(G)
-with open('/Users/jordan/Desktop/Metaboverse/metaboverse/_sandbox/graph.json', 'w') as f:
+with open('/Users/jordan/Desktop/Metaboverse/metaboverse/_sandbox/graph_human_cristae_formation.json', 'w') as f:
     json.dump(data, f, indent=4)
