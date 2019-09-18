@@ -1,12 +1,21 @@
 # Documentation for Metaboverse
 
+
 ## Data container
+- User must provide normalized datasets
+  - Talk how-to
+  - Talk formatting
 
 
 ## Network container
+  - List of organisms and their IDs
 
 
+## Analysis
+  - List of pathways
 
+
+## Viz
 
 
 ## Notes:
