@@ -20,6 +20,7 @@ from __future__ import print_function
 
 """Import dependencies
 """
+import sys
 import pandas as pd
 import numpy as np
 from pandas.core.base import PandasObject
@@ -44,66 +45,78 @@ from metaboverse.metaboverse_analyze.utils import sort_columns
 class dataContainer():
 
     # Initialize data container with possible dataframes
-    def __init__(self):
+    def __init__(
+            self):
 
         self.transcriptome = pd.DataFrame
         self.proteome = pd.DataFrame
         self.metabolome = pd.DataFrame
         self.metadata = pd.DataFrame
+        self.combined = pd.DataFrame
 
     # Add data objects
-    def add_transcriptome(self, file):
+    def add_transcriptome(
+            self,
+            file):
 
         self.transcriptome = add_data(file)
 
-    def add_proteome(self, file):
+    def add_proteome(
+            self,
+            file):
 
         self.proteome = add_data(file)
 
-    def add_metabolome(self, file):
+    def add_metabolome(
+            self,
+            file):
 
         self.metabolome = add_data(file)
 
-    def add_metadata(self, file):
+    def add_metadata(
+            self,
+            file):
 
         self.metadata = add_data(file)
 
     # Format data objects
-    def format_transcriptome(self):
+    def format_transcriptome(
+            self):
 
         self.transcriptome = format_data(self.transcriptome, self.metadata)
 
-    def format_proteome(self):
+    def format_proteome(
+            self):
 
         self.proteome = format_data(self.proteome, self.metadata)
 
-    def format_metabolome(self):
+    def format_metabolome(
+            self):
 
         self.metabolome = format_data(self.metabolome, self.metadata)
 
     # Normalize dataframes
-    def normalize(df, method=None):
-
-        if method == None:
-            pass
+    def normalize(
+            df,
+            method=None):
 
         # Z-score
-        elif method == 'standard':
+        if method == 'standard':
             df[df.columns] = preprocessing.scale(df[df.columns], axis=1)
 
         # Log2 Fold Change compared to base condition (WT or time 0)
-        elif method == 'fold':
+        else:
             df[df.columns] = df[df.columns].div(df[df.columns].iloc[:,0], axis=0)
             df[df.columns] = np.log2(df[df.columns] + 1e-7)
             df[df.columns] = df[df.columns].subtract(df[df.columns].iloc[:,0], axis=0)
 
-        else:
-            raise Exception('Invalid normalization method provided')
-
     PandasObject.normalize = normalize
 
     # Impute intermediate time-points for time-course data
-    def impute(self, even_spaced=True, total_timepoints=100):
+    def impute(
+            self,
+            even_spaced=True,
+            total_timepoints=100):
 
         # Get some metadata
         #df = sort_columns(df)
@@ -114,7 +127,6 @@ class dataContainer():
 
         # Evenly spaced
         if even_spaced == True:
-
             print('Calculating the same number of imputations between time points...')
             self = even_spacing(
                 self,
@@ -124,7 +136,6 @@ class dataContainer():
 
         # Ratio spaced
         else:
-
             print('Calculating a proportional number of imputations between time points...')
             self = ratio_spacing(
                 self,
@@ -134,16 +145,111 @@ class dataContainer():
 
     PandasObject.impute = impute
 
+def prep_metadata(
+        args_dict,
+        data):
 
+    if 'metadata' in args_dict \
+    and args_dict['rnaseq'] != None:
+        data.add_metadata(args_dict['metadata'])
 
+    else:
+        print('Metadata required. Exiting...')
+        sys.exit(1)
 
-### TEST SPACE ###
-data = dataContainer()
-data.add_transcriptome('/Users/jordan/Desktop/BioNet-Analyzer/tests/test_data/rnaseq_test.txt')
-data.add_metadata('/Users/jordan/Desktop/BioNet-Analyzer/tests/test_data/rnaseq_test_meta.txt')
-data.format_transcriptome()
-data.transcriptome.normalize(method='fold')
-data.transcriptome.impute()
-data.transcriptome = sort_columns(data.transcriptome)
+    return data
 
-data.transcriptome.head()
+def prep_rnaseq(
+        args_dict,
+        data):
+
+    if 'rnaseq' in args_dict \
+    and args_dict['rnaseq'] != None:
+        data.add_transcriptome(args_dict['rnaseq'])
+        data.format_transcriptome()
+
+    return data
+
+def prep_proteomics(
+        args_dict,
+        data):
+
+    if 'proteomics' in args_dict \
+    and args_dict['proteomics'] != None:
+        data.add_proteomics(args_dict['proteomics'])
+        data.format_proteome()
+
+    return data
+
+def prep_metabolomics(
+        args_dict,
+        data):
+
+    if 'metabolomics' in args_dict \
+    and args_dict['metabolomics'] != None:
+        data.add_metabolomics(args_dict['metabolomics'])
+        data.format_metabolome()
+
+    return data
+
+def combine_data(
+        args_dict,
+        data):
+
+    # Combine data
+    frames = [
+        data.transcriptome,
+        data.proteome,
+        data.metabolome]
+    data.combined = pd.concat(frames)
+
+    # Normalize
+    if 'normalize' in args_dict \
+    and args_dict['normalize'] == True:
+        data.combined.normalize(
+            method='standard')
+    else:
+        data.combined.normalize(
+            method='fold')
+
+    if 'time' in args_dict \
+    and args_dict['time'] != None:
+        data.combined.impute()
+        data.combined = sort_columns(data.combined)
+
+    return data.combined
+
+def __main__(
+        metadata,
+        transcriptomics,
+        proteomics,
+        metabolomics):
+
+    # Init data container
+    data = dataContainer()
+
+    data = prep_metadata(
+        args_dict=args_dict,
+        data=data)
+
+    # Import RNA-seq/ribo-seq data, if exists
+    data = prep_rnaseq(
+        args_dict=args_dict,
+        data=data)
+
+    # Import proteomics data, if exists
+    data = prep_proteomics(
+        args_dict=args_dict,
+        data=data)
+
+    # Import metabolomics data, if exists
+    data = prep_metabolomics(
+        args_dict=args_dict,
+        data=data)
+
+    # Compile data to single table
+    data_combined = combine_data(
+        args_dict=args_dict,
+        data=data)
+
+    return data_combined

@@ -178,6 +178,101 @@ def make_master(
 
     return master_reference
 
+"""
+"""
+def prepare_mappers(
+        databases):
+
+    mappers = {}
+
+    mappers['ensembl'] = {}
+    for key in databases['ensembl_reference'].keys():
+
+        mappers['ensembl'][databases['ensembl_reference'][key]['source_id']] = databases['ensembl_reference'][key]['analyte_id']
+
+    mappers['mirbase'] = {}
+    for key in databases['mirbase_reference'].keys():
+
+        mappers['mirbase'][databases['mirbase_reference'][key]['source_id']] = databases['mirbase_reference'][key]['analyte_id']
+
+    mappers['uniprot'] = {}
+    for key in databases['uniprot_reference'].keys():
+
+        mappers['uniprot'][databases['uniprot_reference'][key]['source_id']] = databases['uniprot_reference'][key]['analyte_id']
+
+    mappers['chebi'] = {}
+    for key in databases['chebi_reference'].keys():
+
+        mappers['chebi'][databases['chebi_reference'][key]['source_id']] = databases['chebi_reference'][key]['analyte_id']
+
+    return mappers
+
+"""Map complex names to lists of component genes
+"""
+def map_complexes_genes(
+        complex_participants,
+        databases):
+
+    complex_mapper = {}
+
+    mappers = prepare_mappers(
+        databases=databases)
+
+    for index, row in complex_participants.iterrows():
+
+        id = row[0]
+        participants = row[2].split('|')
+        partner_complexes = row[3].split('|')
+
+        participants_ids = []
+
+        for x in participants:
+
+            if x.split(':')[0] == 'ensembl':
+                try:
+                    id = mappers['ensembl'][x.split(':')[1]]
+                    participants_ids.append(id)
+
+                except:
+                    print('Could not find', x)
+
+            elif x.split(':')[0] == 'mirbase':
+                try:
+                    id = mappers['mirbase'][x.split(':')[1]]
+                    participants_ids.append(id)
+
+                except:
+                    print('Could not find', x)
+
+            elif x.split(':')[0] == 'ncbi':
+                print('Skipping NCBI records...')
+
+            elif x.split(':')[0] == 'uniprot':
+                try:
+                    id = mappers['uniprot'][x.split(':')[1]]
+                    participants_ids.append(id)
+
+                except:
+                    print('Could not find', x)
+
+            elif x.split(':')[0] == 'chebi':
+                try:
+                    id = mappers['chebi'][x.split(':')[1]]
+                    participants_ids.append(id)
+
+                except:
+                    print('Could not find', x)
+
+            else:
+                print('Warning: Unable to find', x, 'in database')
+
+        complex_mapper[id] = {
+            'id': id,
+            'participants': participants_ids,
+            'partner_complexes': partner_complexes}
+
+    return complex_mapper
+
 """Write reactions database to pickle file
 """
 def write_database(
@@ -256,6 +351,10 @@ def __main__(
 
     reactions_database['master_reference'] = make_master(
         reactions_database)
+
+    reactions_database['complex_mapper'] = map_complexes_genes(
+        complex_participants=reactions_database['complexes_reference']['complex_participants'],
+        databases=reactions_database)
 
     # Write database to file
     print('Writing metaboverse database to file...')

@@ -166,13 +166,85 @@ def ratio_spacing(
     data = sort_columns(data)
     return data
 
+"""Curate pathway names to analyze
+"""
+def retrieve_pathways(
+        args_dict,
+        network):
 
-# Search all reaction in compartment
+    all_pathways = []
 
-# Search all reactions in pathway
+    for p in list(network['pathway_types'].keys()):
+        all_pathways.append(p)
 
-# Search all reactions with x reactant
+    sorted_pathways = sort(all_pathways)
 
-# Search all reactions with x product
+    if 'pathway' in args_dict \
+    and args_dict['pathway'] != None:
+        if args_dict['pathway'].upper() == 'PROVIDE':
 
-# Search all reaction with x modifier
+            counter = 1
+            index = {}
+            for p in sorted_pathways:
+
+                print(counter, ': ', p)
+                index[counter] = p
+                counter += 1
+
+            print('')
+            pathway_index = input('Please provide the index number for the pathway you would like to analyze: ')
+            pathways = index[pathway_index]
+
+        else:
+            if args_dict['pathway'] in sorted_pathways:
+                pathways = args_dict['pathway']
+            else:
+                print(args_dict['pathway'], 'not found in available pathways')
+
+    else:
+        pathways = sorted_pathways
+
+    return pathways
+
+"""Map Reactome-friendly IDs to dataset to analyze
+"""
+def map_ids(
+        data,
+        network):
+
+    # Generate name converter
+    reference_list = [
+        'chebi_reference',
+        'uniprot_reference',
+        'ensembl_reference',
+        'ncbi_reference',
+        'mirbase_reference']
+
+    mapper = {}
+
+    for x in reference_list:
+
+        for key in network[x].keys():
+
+            full_source_id = x.split('_')[0] + ':' + str(network[x][key]['source_id'])
+            mapper[full_source_id] = str(network[x][key]['analyte_id'])
+            mapper[str(network[x][key]['source_id'])] = str(network[x][key]['analyte_id'])
+            mapper[str(network[x][key]['analyte'])] = str(network[x][key]['analyte_id'])
+
+    # Remap data names
+    data_mapped = data.copy()
+
+    data_index = data_mapped.index.tolist()
+    data_names = []
+
+    for x in data_index:
+
+        if x in mapper.keys():
+            data_names.append(mapper[x])
+
+        else:
+            data_names.append(x)
+
+    data_mapped.index = data_names
+
+    return data_mapped
