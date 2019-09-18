@@ -38,7 +38,21 @@ from metaboverse.utils import argument_checks
 """Set global variables
 """
 DEFAULT_MAX_PROCESSORS = None
-DEFAULT_HUB_STRINGENCY = 50
+DEFAULT_BLACKLIST = [
+    'H+', # proton
+    'H2O', # water
+    'O2', # dioxygen
+    # phosphate
+    # diphosphate
+    'CO2', # carbon dioxide
+    # sulfate
+    # hydrogen peroxide
+    # ammonium
+    # sulfite
+    # sodium
+    # hydrogen carbonate
+    # hydroxide
+    ]
 
 __path__  =  os.path.dirname(os.path.realpath(__file__))
 url = 'https://raw.githubusercontent.com/j-berg/Metaboverse/master/metaboverse/__init__.py'
@@ -233,20 +247,27 @@ def parse_arguments(
         action = 'help',
         help = 'Show help message and exit')
     analyze_opts.add_argument(
+        '-s', '--species',
+        help = 'Provide Reactome species ID (default: HSA for human)',
+        metavar = '<id>',
+        type = str,
+        default = 'HSA',
+        required = False)
+    analyze_opts.add_argument(
         '-r', '--rnaseq',
-        help = 'Path and filename of RNA-Seq data -- refer to documentation for details on formatting',
+        help = 'Path and filename of RNA-Seq data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
         required = False)
     analyze_opts.add_argument(
         '-p', '--proteomics',
-        help = 'Path and filename of proteomics data -- refer to documentation for details on formatting',
+        help = 'Path and filename of proteomics data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
         required = False)
     analyze_opts.add_argument(
         '-b', '--metabolomics',
-        help = 'Path and filename of metabolomics data -- refer to documentation for details on formatting',
+        help = 'Path and filename of metabolomics data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
         required = False)
@@ -261,32 +282,22 @@ def parse_arguments(
         action = 'store_true',
         required = False)
     analyze_opts.add_argument(
+        '--normalize',
+        help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
+        action = 'store_true',
+        required = False)
+    analyze_opts.add_argument(
         '--pathway',
-        help = 'Name of pathway to analyze',
+        help = 'Name of pathway to analyze. If not provided, will analyze all available pathways. Use the parameter PROVIDE to print a list of available pathways to analyze',
         metavar = '<pathway name>',
         type = str,
         required = False)
     analyze_opts.add_argument(
-        '-n', '--normalization',
-        help = 'Normalization to perform on data',
-        metavar = '<type>',
+        '--blacklist',
+        help = 'Provide space-seperated list of analytes to blacklist',
+        default = DEFAULT_BLACKLIST,
         type = str,
-        required = False)
-    analyze_opts.add_argument(
-        '--compartments',
-        help = 'Model network with compartments',
-        action = 'store_true',
-        required = False)
-    analyze_opts.add_argument(
-        '--hubs',
-        help = 'Model network with hubs',
-        action = 'store_true',
-        required = False)
-    analyze_opts.add_argument(
-        '--hub_stringency',
-        help = 'Change connectedness degree for hub cut-off (default: %s)' % DEFAULT_HUB_STRINGENCY,
-        default = DEFAULT_HUB_STRINGENCY,
-        type = int,
+        nargs = '+',
         required = False)
     analyze_opts.add_argument(
         '-m', '--max_processors',
