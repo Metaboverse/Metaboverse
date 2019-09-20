@@ -17,5 +17,3 @@ Metaboverse:
     this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
-
-__reactome_version__ = 70 # Updated 19 Sep 2019

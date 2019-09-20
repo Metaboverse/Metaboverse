@@ -49,9 +49,11 @@ def get_table(
         header=header_type,
         low_memory=False)
 
-    if isinstance(column_names, list):
+    if isinstance(column_names, list) \
+    or organism == None:
         data.columns = column_names
         data_organism = data.loc[data[organism_key] == organism]
+
     else:
         data_organism = data
 

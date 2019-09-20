@@ -18,4 +18,13 @@ Metaboverse:
 """
 from __future__ import print_function
 
-__reactome_version__ = 70 # Updated 19 Sep 2019
+"""Import internal dependencies
+"""
+from metaboverse.metaboverse_curate.load_reactions_db import __main__ as load_reactions
+from metaboverse.metaboverse_curate.load_chebi_db import __main__ as load_chebi
+from metaboverse.metaboverse_curate.load_uniprot_db import __main__ as load_uniprot
+from metaboverse.metaboverse_curate.load_ensembl_db import __main__ as load_ensembl
+from metaboverse.metaboverse_curate.load_ncbi_db import __main__ as load_ncbi
+from metaboverse.metaboverse_curate.load_mirbase_db import __main__ as load_mirbase
+from metaboverse.metaboverse_curate.load_complexes_db import __main__ as load_complexes
+from metaboverse.metaboverse_curate.__main__ import __main__ as curate

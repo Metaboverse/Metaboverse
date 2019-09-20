@@ -66,8 +66,8 @@ def parse_table(
             'reaction_name']
 
     reference_parsed = reference[key][column_names].copy()
-    reference_parsed['analyte'] = reference_parsed['analyte_name'].str.split(' [').str[0]
-    reference_parsed['compartment'] = reference_parsed['analyte_name'].str.split(' [').str[1].str.split(']').str[0]
+    reference_parsed['analyte'] = reference_parsed['analyte_name'].str.split(' \[').str[0]
+    reference_parsed['compartment'] = reference_parsed['analyte_name'].str.split(' \[').str[1].str.split('\]').str[0]
 
     reference_dictionary = {}
 
