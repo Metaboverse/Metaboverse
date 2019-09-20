@@ -106,8 +106,8 @@ def parse_complexes(
         'participants',
         'participatingComplex']
     complexes_information = reference['complex_participants'][column_names].copy()
-    complexes_information['complex'] = complexes_information['name'].str.split(' [').str[0]
-    complexes_information['compartment'] = complexes_information['name'].str.split(' [').str[1].str.split(']').str[0]
+    complexes_information['complex'] = complexes_information['name'].str.split(' \[').str[0]
+    complexes_information['compartment'] = complexes_information['name'].str.split(' \[').str[1].str.split('\]').str[0]
 
     complex_dictionary = {}
 
@@ -220,7 +220,7 @@ def map_complexes_genes(
 
     for index, row in complex_participants.iterrows():
 
-        id = row[0]
+        complex_id = row[0]
         participants = row[2].split('|')
         partner_complexes = row[3].split('|')
 
@@ -266,8 +266,8 @@ def map_complexes_genes(
             else:
                 print('Warning: Unable to find', x, 'in database')
 
-        complex_mapper[id] = {
-            'id': id,
+        complex_mapper[complex_id] = {
+            'id': complex_id,
             'participants': participants_ids,
             'partner_complexes': partner_complexes}
 

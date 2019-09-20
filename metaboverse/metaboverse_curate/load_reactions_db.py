@@ -35,54 +35,6 @@ from metaboverse.utils import progress_bar
 """
 analyte_prefix='R-ALL-'
 
-"""Run tests
-"""
-def test():
-    reactions = __main__(
-            species_id='HSA',
-            output_dir='/Users/jordan/Desktop/reactome_test')
-
-    reactions.keys()
-    reactions['R-HSA-2562578']['reactome_id']
-    reactions['R-HSA-2562578']['pathway_name']
-
-    reactions['R-HSA-2562578']['reactions'].keys()
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['name']
-
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['id']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['name']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['reversible']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['fast']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['compartment']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['reactants'].keys()
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['products'].keys()
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['products']['R-ALL-2562577']['species_id']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['products']['R-ALL-2562577']['type']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['products']['R-ALL-2562577']['constant']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['products']['R-ALL-2562577']['stoichiometry']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['modifiers'].keys()
-
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['reactants']['R-ALL-2562542']
-    reactions['R-HSA-2562578']['reactions']['R-HSA-2562564']['modifiers']['R-ALL-2562542']
-
-
-    id = 'R-HSA-162865'
-    for k in reactions.keys():
-        if id in k:
-            print('1')
-            print(reactions[k]['reactome_id'])
-            print(reactions[k]['pathway_name'])
-        for kk in reactions[k]['reactions'].keys():
-            if id in reactions[k]['reactions'][kk]['reactants'].keys() \
-            or id in reactions[k]['reactions'][kk]['products'].keys() \
-            or id in reactions[k]['reactions'][kk]['modifiers'].keys():
-                print('2')
-                print(reactions[k]['reactome_id'])
-                print(reactions[k]['pathway_name'])
-
-    unpack_reactions(
-        output_dir='/Users/jordan/Desktop/')
-
 """Get list of reactions to parse
 """
 def get_reactions(
@@ -437,6 +389,6 @@ def __main__(
     reactome_database['compartment_types'] = add_compartments(
         reactome_database['pathways'])
 
-    shutil.rmtree(reactions_dir) 
+    shutil.rmtree(reactions_dir)
 
     return reactome_database
