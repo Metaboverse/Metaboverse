@@ -38,22 +38,17 @@ from metaboverse.metaboverse_curate.__main__ import prepare_mappers
 from metaboverse.metaboverse_curate.__main__ import map_complexes_genes
 from metaboverse.metaboverse_curate.__main__ import write_database
 
-test_get_reactions
-test_add_pathways
-test_add_compartments
-test_curate_reactions
-test_get_database
-test_get_process_information
-test_get_reaction_information
-test_populate_reactants
-test_populate_products
-test_populate_modifiers
+from metaboverse.metaboverse_curate.load_reactions_db import get_reactions
 from metaboverse.metaboverse_curate.load_reactions_db import unpack_reactions
+from metaboverse.metaboverse_curate.load_reactions_db import get_database
+from metaboverse.metaboverse_curate.load_reactions_db import curate_reactions
+from metaboverse.metaboverse_curate.load_reactions_db import add_pathways
+from metaboverse.metaboverse_curate.load_reactions_db import add_compartments
 
 """Set globals
 """
 __path__ = os.path.dirname(os.path.realpath(__file__)) + '/'
-__path__ = '/Users/jordan/Desktop/Metaboverse/tests/curation_tests/'
+#__path__ = '/Users/jordan/Desktop/Metaboverse/tests/curation_tests/'
 
 """Test that staple species were grabbed from species list
 """
@@ -477,7 +472,7 @@ def __main__():
     reference['pathways'] = curate_reactions(
         reaction_dir=__path__,
         reactions_list=[file],
-        species_id='HSA'))
+        species_id='HSA')
     reference['pathway_types'] = add_pathways(
         reference['pathways'])
     reference['compartment_types'] = add_compartments(
@@ -495,4 +490,8 @@ def __main__():
         'R-HSA-984'}
     assert compartments == reference['compartment_types'], 'Unable to extract correct compartments'
 
-    reference
+    assert reference['pathways']['R-HSA-realtest']['reactome_id'] == 'R-HSA-realtest', 'Unable to extract reactome id'
+    assert reference['pathways']['R-HSA-realtest']['pathway_name'] == 'Virus Assembly and Release', 'Unable to extract pathway name'
+    assert reference['pathways']['R-HSA-realtest']['reactions']['R-HSA-168875']['id'] == 'R-HSA-168875'
+    assert reference['pathways']['R-HSA-realtest']['reactions']['R-HSA-168858']['name'] == 'Palmitoylation of cysteine residues on HA in the cis-Golgi network', 'Unable to extract reaction name'
+    assert reference['pathways']['R-HSA-realtest']['reactions']['R-HSA-168858']['reactants']['R-ALL-195819']['species_id'] == 'R-ALL-195819', 'Unable to extract sub-reaction level information'

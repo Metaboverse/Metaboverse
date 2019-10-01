@@ -18,13 +18,31 @@ Metaboverse:
 """
 from __future__ import print_function
 
+"""Import dependencies
+"""
+import os
+import pickle
+
 """Import internal dependencies
 """
-from metaboverse.metaboverse_curate.load_reactions_db import __main__ as load_reactions
-from metaboverse.metaboverse_curate.load_chebi_db import __main__ as load_chebi
-from metaboverse.metaboverse_curate.load_uniprot_db import __main__ as load_uniprot
-from metaboverse.metaboverse_curate.load_ensembl_db import __main__ as load_ensembl
-from metaboverse.metaboverse_curate.load_ncbi_db import __main__ as load_ncbi
-from metaboverse.metaboverse_curate.load_mirbase_db import __main__ as load_mirbase
-from metaboverse.metaboverse_curate.load_complexes_db import __main__ as load_complexes
 from metaboverse.metaboverse_curate.__main__ import __main__ as curate
+
+"""Set globals
+"""
+__path__ = os.path.dirname(os.path.realpath(__file__)) + '/'
+#__path__ = '/Users/jordan/Desktop/Metaboverse/tests/curation_tests/'
+
+args_dict = {
+    'species': 'SCE',
+    'output': __path__}
+
+curate(
+    args_dict=args_dict)
+
+with open(__path__ + 'SCE_metaboverse_db.pickle', 'rb') as network_file:
+    reactome_database = pickle.load(network_file)
+
+assert reactome_database['master_reference']['R-ALL-389536'] == 'CO2', 'Unable to extract element from master reference'
+assert reactome_database['pathways']['R-HSA-2562578']['reactions']['R-HSA-2562541']['name'] == 'TLR4-induced ripoptosome assembly', 'Unable to extract reaction name'
+
+os.remove(__path__ + 'SCE_metaboverse_db.pickle')

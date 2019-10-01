@@ -31,7 +31,14 @@ information from these datasets as possible.
 
 ## Getting started
 
+### Requirements
+- An internet connection for network curation
+- An internet browser
+- Python
+- PyPi
+
 ### Installation
+From the command line, execute the following:
 ```
 pip install metaboverse
 ```

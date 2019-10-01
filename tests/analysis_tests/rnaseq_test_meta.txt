@@ -1,0 +1,5 @@
+	Replicate	Condition
+10m_treat_rna_rep1	1	10m
+10m_treat_rna_rep2	2	10m
+00m_treat_rna_rep1	1	00m
+00m_treat_rna_rep2	2	00m

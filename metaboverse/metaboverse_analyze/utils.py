@@ -23,14 +23,17 @@ from __future__ import print_function
 import os
 import re
 import pandas as pd
+from math import floor
 
 # Check input is contains full path address
-def file_path(input):
+def file_path(
+        input):
 
     return os.path.abspath(input)
 
 # Get file suffix
-def check_suffix(file):
+def check_suffix(
+        file):
 
     if file.split('.')[-1] == 'csv':
         suffix = ','
@@ -44,60 +47,71 @@ def check_suffix(file):
     return suffix
 
 # Input data type
-def add_data(file):
+def add_data(
+        file):
 
     # Check that file has full path
     file = file_path(file)
 
     # Figure out file type
     suffix = check_suffix(file)
-    print(suffix)
+
     # Import dataframe
     data = pd.read_csv(
         file,
         sep = suffix,
         header = 0,
         index_col = 0,
-        low_memory = False
-    )
+        low_memory = False)
 
     return data
 
 # Organize data in order and group replicates
-def format_data(data, metadata):
+def format_data(
+        data,
+        metadata):
+
+    data_c = data.copy()
 
     # Find replicates information
     replicates_col = [x for x in metadata.columns.tolist() if 'replicate' in x.lower()]
+
     if len(replicates_col) != 1:
         raise Exception('Could not find a single column in metadata with \'replicate\' label')
+
     replicates_col = replicates_col[0]
 
+    # Find condition information
     condition_col = [x for x in metadata.columns.tolist() if 'condition' in x.lower()]
+
     if len(condition_col) != 1:
         raise Exception('Could not find a single column in metadata with \'condition\' label')
+
     condition_col = condition_col[0]
 
     # Map treatment name to columns of data
     label_dictionary = pd.Series(metadata[condition_col].values, index=metadata.index).to_dict()
-    data.columns = data.columns.map(label_dictionary.get)
+    data_c.columns = data_c.columns.map(label_dictionary.get)
 
     # Collapse by same name
-    data = data.groupby(data.columns, axis=1).mean()
+    data_c = data_c.groupby(data_c.columns, axis=1).mean()
 
     # Sort alphabetically
-    data = data.reindex(sorted(data.columns), axis=1)
+    data_c = data_c.reindex(sorted(data_c.columns), axis=1)
 
-    return data
+    return data_c
 
 # Remove all non-number characters from column names
-def format_times(name):
+def format_times(
+        name):
 
     name = re.sub("[^0-9]", "", name)
     name = int(name)
 
     return name
 
-def sort_columns(data):
+def sort_columns(
+        data):
 
     # Make column names strings and sort time points
     data = data.sort_index(axis=1)
@@ -107,10 +121,10 @@ def sort_columns(data):
 
 # Smoothen time-course data with same amount of imputations between time points
 def even_spacing(
-    data,
-    cols_numeric,
-    tp_numbers,
-    tp_total):
+        data,
+        cols_numeric,
+        tp_numbers,
+        tp_total):
 
     tp_each = int(tp_total / (tp_numbers - 1)) + 1 # Get number of imputed time points between each measured time point
 
@@ -131,24 +145,30 @@ def even_spacing(
             last_data = last_data + next_data
             data[last_name] = last_data
 
+    data = sort_columns(data)
+
     return data
 
 # Smoothen time-course data with proportional amount of imputations between time points based on distance between times
 def ratio_spacing(
-    data,
-    cols_numeric,
-    tp_numbers,
-    tp_total):
+        data,
+        cols_numeric,
+        tp_numbers,
+        tp_total):
 
     # Get the total time scale for the time course
     total_time = max(cols_numeric) - min(cols_numeric)
+    intervals = total_time / tp_total
+
+
+
 
     # Impute time points between each time pair
     for i in range(len(cols_numeric) - 1):
 
         # For each time set, calculate its relative contribution of time, factor total imputations it gets
         diff = cols_numeric[i + 1] - cols_numeric[i] # per pair of time-points, get the difference in time
-        balance = int(diff / total_time)
+        balance = diff / total_time
 
         next_name = diff / balance # break time difference into increment size to add to each time name imputed
         next_data = (data[cols_numeric[i + 1]] - data[cols_numeric[i]]) / balance # get the amount to add each time
@@ -164,6 +184,7 @@ def ratio_spacing(
             data[last_name] = last_data
 
     data = sort_columns(data)
+
     return data
 
 """Curate pathway names to analyze

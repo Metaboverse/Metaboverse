@@ -172,9 +172,9 @@ def make_master(
 
             master_reference[database[x][key]['analyte_id']] = database[x][key]['analyte']
 
-    for key in database['complexes_reference'].keys():
+    for key in database['complexes_reference']['complex_dictionary'].keys():
 
-        master_reference[database['complexes_reference'][key]['complex_id']] = database['complexes_reference'][key]['complex_name']
+        master_reference[database['complexes_reference']['complex_dictionary'][key]['complex_id']] = database['complexes_reference']['complex_dictionary'][key]['complex_name']
 
     return master_reference
 
@@ -297,6 +297,8 @@ def __main__(
         args_dict):
 
     # Load reactions
+    print('Curating Reactome network database. Please be patient, this will take several minutes...')
+    print('Loading reactions...')
     reactions_database = load_reactions(
         species_id=args_dict['species'],
         output_dir=args_dict['output'])
@@ -343,18 +345,18 @@ def __main__(
         key='mirbase_pe_all_levels')
 
     print('Loading complex database...')
-    complexes_reference = load_complexes(
+    reactions_database['complexes_reference'] = load_complexes(
         output_dir=args_dict['output'])
     print('Parsing complex database...')
-    reactions_database['complexes_reference'] = parse_complexes(
-            complexes_reference)
+    reactions_database['complexes_reference']['complex_dictionary'] = parse_complexes(
+            reactions_database['complexes_reference'])
+
+    reactions_database['complexes_reference']['complex_mapper'] = map_complexes_genes(
+        complex_participants=reactions_database['complexes_reference']['complex_participants'],
+        databases=reactions_database)
 
     reactions_database['master_reference'] = make_master(
         reactions_database)
-
-    reactions_database['complex_mapper'] = map_complexes_genes(
-        complex_participants=reactions_database['complexes_reference']['complex_participants'],
-        databases=reactions_database)
 
     # Write database to file
     print('Writing metaboverse database to file...')
