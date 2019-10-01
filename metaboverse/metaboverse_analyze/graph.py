@@ -24,13 +24,14 @@ import os
 import pandas as pd
 import numpy as np
 from math import sqrt
+from ast import literal_eval
 import json
 import pickle
 import networkx as nx
 from networkx.readwrite import json_graph
 import matplotlib
 import matplotlib.pyplot as plt
-cmap = matplotlib.cm.get_cmap('RdYlBu')
+cmap = matplotlib.cm.get_cmap('seismic')
 
 """Set output directory for graph files
 """
@@ -44,264 +45,53 @@ def create_graph_output(
 
     return graph_directory
 
-"""Add expression average of upstream nodes to single node
-"""
-def add_expression_average(
-        graph,
-        max_value,
-        expression_average,
-        analyte):
-
-    if expression_average != None:
-        position = (expression_average + max_value) / (2 * max_value)
-        color_value = cmap(position)
-        graph.node()[analyte]['color'] = color_value
-        graph.node()[analyte]['expression_value'] = expression_average
-
-    else:
-        graph.node()[analyte]['color'] = 'white'
-        graph.node()[analyte]['expression_value'] = None
-
-    return graph, expression_average
-
-"""Add single expression value to node
-"""
-def add_expression_value(
-        graph,
-        data,
-        analyte,
-        analyte_id):
-
-    if analyte_id in data.index and str(data.loc[analyte_id][0]) != 'nan' and data.loc[analyte_id][0] != None:
-        max_value = max(abs(data[0])) # Get absolute max value in dataset, may want to do this omic to omic
-        value = data.loc[analyte_id][0]
-        position = (value + max_value) / (2 * max_value)
-        color_value = cmap(position)
-        graph.node()[analyte]['color'] = color_value
-        graph.node()[analyte]['expression_value'] = value
-
-    # If not in user data, color white
-    else:
-        value = None
-        graph.node()[analyte]['color'] = 'white'
-        graph.node()[analyte]['expression_value'] = None
-
-    return graph, value
-
-"""
-"""
-def add_component_node_edge(
-        graph,
-        master_reference,
-        species_id,
-        data,
-        analyte,
-        complex_component):
-
-    component_name, component_id = fetch_analyte_info(
-        master_reference=master_reference,
-        species_id=species_id,
-        analyte=analyte)
-
-    graph.add_node(complex_component)
-    graph.node()[complex_component]['type'] = 'complex_component'
-    graph.node()[complex_component]['stoichiometry'] = None
-
-    graph.add_edges_from([
-        (component_name, analyte)])
-    graph.edges()[(component_name, analyte)]['color'] = 'purple'
-    graph.edges()[(component_name, analyte)]['type'] = 'complex_component'
-
-    graph, expression_value = add_expression_value(
-        graph=graph,
-        data=data,
-        analyte=component_name,
-        analyte_id=component_id)
-
-    return graph, expression_value
-
-def fetch_analyte_info(
-        master_reference,
-        species_id,
-        analyte):
-
-    if analyte in master_reference.keys():
-        analyte_name = master_reference[analyte]
-        analyte_id = analyte
-
-    elif species_id + analyte.split('-')[-1] in master_reference.keys():
-        analyte_name = master_reference[species_id + analyte.split('-')[-1]]
-        analyte_id = species_id + analyte.split('-')[-1]
-
-    else:
-        analyte_name = analyte
-        analyte_id = analyte
-
-    return analyte_name, analyte_id
-
-def add_node_edge(
-        graph,
-        reaction_name,
+def build_graph(
         sub_network,
         master_reference,
         complex_reference,
-        data,
         species_id,
-        type,
         black_list):
 
-    for key in sub_network['reactions'][reaction_name][type].keys():
+    G = nx.DiGraph()
 
-        # Get analyte name if possible
-        analyte = sub_network['reactions'][reaction_name][type][key]['species_id']
+    # cycle through reactions in process
+    for reaction_id in sub_network['reactions'].keys():
 
-        analyte_name, analyte_id = fetch_analyte_info(
+        G = process_reactions(
+            graph=G,
+            reaction_id=reaction_id,
+            sub_network=sub_network,
             master_reference=master_reference,
+            complex_reference=complex_reference,
             species_id=species_id,
-            analyte=analyte)
+            black_list=black_list)
 
-        if analyte_name in black_list:
-            pass
-
-        else:
-
-            # Add node and edge to reaction
-            graph.add_node(analyte_name)
-            graph.node()[analyte_name]['type'] = type[:-1] # trim off plurality of type name
-            graph.node()[analyte_name]['stoichiometry'] = sub_network['reactions'][reaction_name][type][key]['stoichiometry']
-
-            if type == 'modifiers':
-
-                mod_type = process['reactions'][reaction_name][type][key]['type']
-                graph.node()[analyte_name]['sub_type'] = mod_type.lower()
-                graph.node()[analyte_name]['node_size'] = 300
-
-            else:
-                graph.node()[analyte_name]['node_size'] = 500
-
-            # Add color for analyte (dark blue, light blue, yellow, orange, red)
-            graph, expression_value = add_expression_value(
-                graph=graph,
-                data=data,
-                analyte=analyte_name,
-                analyte_id=analyte_id)
-
-            if type == 'modifiers':
-
-                mod_type = process['reactions'][reaction_name][type][key]['type']
-
-                graph.add_edges_from([
-                    (analyte_name, reaction_name)])
-
-                if mod_type.lower() == 'catalyst' or mod_type.lower() == 'positiveregulator':
-                    graph.edges()[(analyte_name, reaction_name)]['color'] = 'green'
-                    graph.edges()[(analyte_name, reaction_name)]['type'] = 'catalyst'
-
-                elif mod_type.lower() == 'inhibitor' or mod_type.lower() == 'negativeregulator':
-                    graph.edges()[(analyte_name, reaction_name)]['color'] = 'red'
-                    graph.edges()[(analyte_name, reaction_name)]['type'] = 'inhibitor'
-
-                else:
-                    graph.edges()[(analyte_name, reaction_name)]['color'] = 'lightblue'
-                    graph.edges()[(analyte_name, reaction_name)]['type'] = 'other_modifier'
-
-            elif '>' in reaction_name and '<' in reaction_name:
-                graph.add_edges_from([
-                    (analyte_name, reaction_name)])
-                graph.edges()[(analyte_name, reaction_name)]['color'] = 'grey'
-                graph.edges()[(analyte_name, reaction_name)]['type'] = type[:-1] + ' -> reaction'
-
-                graph.add_edges_from([
-                    (reactant_name, analyte_name)])
-                graph.edges()[(reactant_name, analyte_name)]['color'] = 'grey'
-                graph.edges()[(reactant_name, analyte_name)]['type'] = 'reaction -> ' + type[:-1]
-
-            elif '<' in reaction_name:
-                graph.add_edges_from([
-                    (reactant_name, analyte_name)])
-                graph.edges()[(reaction_name, analyte_name)]['color'] = 'grey'
-                graph.edges()[(reaction_name, analyte_name)]['type'] = 'reaction -> ' + type[:-1]
-
-            else:
-                graph.add_edges_from([
-                    (analyte_name, reaction_name)])
-                graph.edges()[(analyte_name, reaction_name)]['color'] = 'grey'
-                graph.edges()[(analyte_name, reaction_name)]['type'] = type[:-1] + ' -> reaction'
-
-        # Add protein complex nodes and edges
-        # Need to figure out mapping here
-        if analyte_id in complex_reference.keys():
-
-            value_list = []
-
-            for complex_component in complex_reference[analyte_id]['participants']:
-
-                graph, expression_value = add_component_node_edge(
-                    graph=graph,
-                    master_reference=master_reference,
-                    species_id=species_id,
-                    data=data,
-                    analyte=analyte_id,
-                    complex_component=complex_component)
-                value_list.append(expression_value)
-
-            if len(value_list) > 0:
-                expression_average = sum(value_list) / len(value_list)
-
-            else:
-                expression_average = None
-
-            max_value = max(abs(data[0]))
-            graph, expression_value = add_expression_average(
-                graph=graph,
-                max_value=max_value,
-                expression_average=expression_average,
-                analyte=component_name)
-
-            #for complex_partner in complex_reference[analyte_id]['partner_complexes']:
-            # maybe add this in the future
-
-    return graph
-
-def add_reaction_node(
-        graph,
-        sub_network,
-        reaction_name):
-
-    reaction = sub_network['reactions'][reaction_name]['name']
-    graph.add_node(reaction)
-    graph.node()[reaction]['type'] = 'reaction'
-    graph.node()[reaction]['color'] = 'grey'
-    graph.node()[reaction]['expression_value'] = None
-    graph.node()[reaction]['node_size'] = 1000
-    graph.node()[reaction]['stoichiometry'] = None
-
-    return graph, reaction
+    return G
 
 def process_reactions(
         graph,
-        reaction_name,
+        reaction_id,
         sub_network,
         master_reference,
         complex_reference,
-        data,
         species_id,
         black_list):
 
-    # add reaction node
-    graph, reaction = add_reaction_node(
+    reaction_name = sub_network['reactions'][reaction_id]['name']
+
+    # Add reaction node
+    graph = add_reaction_node(
         graph=graph,
-        sub_network=sub_network,
+        reaction_id=reaction_id,
         reaction_name=reaction_name)
 
     # Add reactant nodes and edges
     graph = add_node_edge(
         graph=graph,
         reaction_name=reaction_name,
-        sub_network=sub_network,
+        sub_network=sub_network['reactions'][reaction_id],
         master_reference=master_reference,
         complex_reference=complex_reference,
-        data=data,
         species_id=species_id,
         type='reactants',
         black_list=black_list)
@@ -310,10 +100,9 @@ def process_reactions(
     graph = add_node_edge(
         graph=graph,
         reaction_name=reaction_name,
-        sub_network=sub_network,
+        sub_network=sub_network['reactions'][reaction_id],
         master_reference=master_reference,
         complex_reference=complex_reference,
-        data=data,
         species_id=species_id,
         type='products',
         black_list=black_list)
@@ -322,41 +111,349 @@ def process_reactions(
     graph = add_node_edge(
         graph=graph,
         reaction_name=reaction_name,
-        sub_network=sub_network,
+        sub_network=sub_network['reactions'][reaction_id],
         master_reference=master_reference,
         complex_reference=complex_reference,
-        data=data,
         species_id=species_id,
         type='modifiers',
         black_list=black_list)
 
     return graph
 
-def build_graph(
-        sub_network,
+"""Add reaction node config information
+"""
+def add_reaction_node(
+        graph,
+        reaction_id,
+        reaction_name):
+
+    graph.add_node(reaction_name)
+    graph.nodes()[reaction_name]['name'] = reaction_name
+    graph.nodes()[reaction_name]['id'] = reaction_id
+    graph.nodes()[reaction_name]['type'] = 'reaction'
+    graph.nodes()[reaction_name]['stoichiometry'] = None
+
+    return graph
+
+"""Add analyte node config information and relationships
+"""
+def add_node_edge(
+        graph,
+        reaction_name, # Use this to link edge back to reaction
+        sub_network, # This starts at the reaction level
         master_reference,
         complex_reference,
-        data,
         species_id,
+        type,
         black_list):
 
-    G = nx.DiGraph()
+    # Will cycle through all the analytes within a given analyte type: i.e., reactant, product, modifier
+    for analyte_id in sub_network[type].keys():
 
-    # cycle through reactions in process
-    for key in sub_network['reactions'].keys():
-
-        G = process_reactions(
-            graph=G,
-            reaction_name=key,
-            sub_network=sub_network,
+        # Get analyte name and check ID
+        analyte_name, analyte_id_update = fetch_analyte_info(
             master_reference=master_reference,
-            complex_reference=complex_reference,
-            data=data,
-            species_id=species_id,
-            black_list=black_list)
+            analyte_id=analyte_id,
+            species_id=species_id)
 
-    return G
+        # Add node and edge to reaction
+        if analyte_name not in black_list:
 
+            # Add analyte node
+            try:
+                graph = add_analyte_node(
+                    graph=graph,
+                    sub_network=sub_network,
+                    analyte_name=analyte_name,
+                    analyte_id=analyte_id,
+                    type=type)
+            except:
+                graph = add_analyte_node(
+                    graph=graph,
+                    sub_network=sub_network,
+                    analyte_name=analyte_name,
+                    analyte_id=analyte_id_update,
+                    type=type)
+
+            graph = add_analyte_edge(
+                graph=graph,
+                sub_network=sub_network,
+                analyte_name=analyte_name,
+                reaction_name=reaction_name)
+
+            # Check if analyte is a complex
+            if analyte_id_update in complex_reference.keys():
+                analyte_complex = analyte_id_update
+
+            elif analyte_id in complex_reference.keys():
+                analyte_complex = analyte_id
+
+            else:
+                analyte_complex = None
+
+            # If a valid complex ID is pinged, search for complex componenets
+            if analyte_complex != None:
+
+                # If analyte is a complex, map all participants
+                for complex_component in complex_reference[analyte_complex]['participants']:
+
+                    component_name, component_id = fetch_analyte_info(
+                        master_reference=master_reference,
+                        analyte_id=complex_component,
+                        species_id=species_id)
+
+                    if '(' in component_name \
+                    and ')' in component_name:
+                        component_name = component_name.split('(')[0]
+
+                    # Add node and edge for participant
+                    graph = add_complex_entity(
+                        graph=graph,
+                        component_name=component_name,
+                        component_id=component_id,
+                        complex_name=analyte_name)
+
+    return graph
+
+"""Add analyte node
+"""
+def add_analyte_node(
+        graph,
+        sub_network, # This starts at the reaction level
+        analyte_name,
+        analyte_id,
+        type):
+
+    graph.add_node(analyte_name) # -> figure out why graph object is turning to tuple and not graph
+
+    graph.nodes()[analyte_name]['name'] = analyte_name
+    graph.nodes()[analyte_name]['id'] = analyte_id
+    graph.nodes()[analyte_name]['type'] = str(type[:-1]) # trim off plurality of type name
+
+    if type == 'modifiers':
+        graph.nodes()[analyte_name]['sub_type'] = sub_network[type][analyte_id]['type']
+
+    else:
+        graph.node()[analyte_name]['sub_type'] = None
+
+    graph.nodes()[analyte_name]['stoichiometry'] = sub_network[type][analyte_id]['stoichiometry']
+
+    return graph
+
+"""Add analyte edge
+"""
+def add_analyte_edge(
+        graph,
+        sub_network, # This starts at the reaction level
+        analyte_name,
+        reaction_name):
+
+    # Add modifier edge and sub-type ID
+    if graph.nodes()[analyte_name]['sub_type'] != None:
+        graph.add_edges_from([
+            (analyte_name, reaction_name)])
+        graph.edges()[(analyte_name, reaction_name)]['type'] = graph.node()[analyte_name]['sub_type']
+
+    # Add reactant edge
+    elif graph.nodes()[analyte_name]['type'] == 'reactant':
+        graph.add_edges_from([
+            (analyte_name, reaction_name)])
+        graph.edges()[(analyte_name, reaction_name)]['type'] = graph.node()[analyte_name]['type']
+
+        # Add reversible reaction bi-directional edges
+        if '>' in reaction_name and '<' in reaction_name:
+            graph.add_edges_from([
+                (reaction_name, analyte_name)])
+            graph.edges()[(reaction_name, analyte_name)]['type'] = graph.node()[analyte_name]['type']
+
+    # Add product edge
+    elif graph.nodes()[analyte_name]['type'] == 'product':
+        graph.add_edges_from([
+            (reaction_name, analyte_name)])
+        graph.edges()[(reaction_name, analyte_name)]['type'] = graph.node()[analyte_name]['type']
+
+        # Add reversible reaction bi-directional edges
+        if '>' in reaction_name and '<' in reaction_name:
+            graph.add_edges_from([
+                (analyte_name, reaction_name)])
+            graph.edges()[(analyte_name, reaction_name)]['type'] = graph.node()[analyte_name]['type']
+
+    # All others
+    else:
+        graph.add_edges_from([
+            (analyte_name, reaction_name)])
+        graph.edges()[(analyte_name, reaction_name)]['type'] = 'other'
+
+    return graph
+
+"""Add complex entity node and edge
+"""
+def add_complex_entity(
+        graph,
+        component_name,
+        component_id,
+        complex_name):
+
+    graph.add_node(component_name)
+    graph.nodes()[component_name]['name'] = component_name
+    graph.nodes()[component_name]['id'] = component_id
+    graph.nodes()[component_name]['type'] = 'complex_component'
+    graph.nodes()[component_name]['sub_type'] = None
+    graph.nodes()[component_name]['stoichiometry'] = None
+
+    graph.add_edges_from([
+        (component_name, complex_name)])
+    graph.edges()[(component_name, complex_name)]['type'] = 'complex_component'
+
+    return graph
+
+"""Get analyte info from master reference
+"""
+def fetch_analyte_info(
+        master_reference,
+        analyte_id,
+        species_id):
+
+    if species_id + analyte_id.split('-')[-1] in master_reference.keys():
+        analyte_name = master_reference[species_id + analyte_id.split('-')[-1]]
+        analyte_id = species_id + analyte_id.split('-')[-1]
+
+    elif analyte_id in master_reference.keys():
+        analyte_name = master_reference[analyte_id]
+
+    else:
+        analyte_name = species_id + analyte_id.split('-')[-1]
+        print('Error: Could not find analyte', analyte_name, 'in databases')
+
+    return analyte_name, analyte_id
+
+"""Map node and edge colors and attributes
+"""
+def map_graph_attributes(
+        graph,
+        data):
+
+    # Get max value in dataframe, may want to do this omic to omic
+    max_value = max(abs(data[0]))
+
+    # Map node color, size
+    for node in graph.nodes():
+
+        # Get node color values
+        if graph.nodes()[node]['type'] == 'reaction':
+            expression_value = None
+            color = 'grey'
+            rgba = (0.75, 0.75, 0.75, 1)
+
+        else:
+
+            if node in data.index \
+            and str(data.loc[node][0]) != 'nan' \
+            and data.loc[node][0] != None:
+                expression_value = data.loc[node][0]
+                color, rgba = extract_value(
+                    expression_value=expression_value,
+                    max_value=max_value)
+
+            else:
+                expression_value = None
+                color = 'white'
+                rgba = (1, 1, 1, 1)
+
+        # Add attributes
+        graph = add_node_attributes(
+            graph=graph,
+            node=node,
+            color=color,
+            rgba=rgba,
+            expression_value=expression_value)
+
+    # Map edge color, size
+    for edge in graph.edges():
+
+        edge = add_edge_attributes(
+            graph=graph,
+            edge_id=edge)
+
+    return graph
+
+"""Extract expression value
+"""
+def extract_value(
+        expression_value,
+        max_value):
+
+    position = (expression_value + max_value) / (2 * max_value)
+    rgba = cmap(position)
+
+    return 'custom', rgba
+
+"""Add node attributes
+"""
+def add_node_attributes(
+        graph,
+        node,
+        color,
+        rgba,
+        expression_value):
+
+    if graph.nodes()[node]['type'] == 'reaction':
+        graph.nodes()[node]['color'] = 'grey'
+        graph.nodes()[node]['rgba'] = (0.75, 0.75, 0.75, 1)
+        graph.nodes()[node]['rgba_js'] = convert_rgba(graph.nodes()[node]['rgba'])
+        graph.nodes()[node]['expression'] = None
+        graph.nodes()[node]['size'] = str(1000)
+
+    elif graph.nodes()[node]['type'] == 'reactant' \
+    or graph.nodes()[node]['type'] == 'product':
+        graph.nodes()[node]['color'] = [color]
+        graph.nodes()[node]['rgba'] = rgba
+        graph.nodes()[node]['rgba_js'] = convert_rgba(graph.nodes()[node]['rgba'])
+        graph.nodes()[node]['expression'] = str(expression_value)
+        graph.nodes()[node]['size'] = str(500)
+
+    else:
+        graph.nodes()[node]['color'] = color
+        graph.nodes()[node]['rgba'] = rgba
+        graph.nodes()[node]['rgba_js'] = convert_rgba(graph.nodes()[node]['rgba'])
+        graph.nodes()[node]['expression'] = str(expression_value)
+        graph.nodes()[node]['size'] = str(300)
+
+    return graph
+
+"""Add edge attributes
+"""
+def add_edge_attributes(
+        graph,
+        edge_id):
+
+    # Set color attributes
+    if graph.edges()[edge_id]['type'] == 'catalyst'\
+    or graph.edges()[edge_id]['type'] == 'positiveregulator':
+        graph.edges()[edge_id]['color'] = 'green'
+        graph.edges()[edge_id]['rgba'] = (0, .5, 0, 1)
+        graph.edges()[edge_id]['rgba_js'] = convert_rgba(graph.edges()[edge_id]['rgba'])
+
+    elif graph.edges()[edge_id]['type'] == 'inhibitor' \
+    or graph.edges()[edge_id]['type'] == 'negativeregulator':
+        graph.edges()[edge_id]['color'] = 'red'
+        graph.edges()[edge_id]['rgba'] = (1, 0, 0, 1)
+        graph.edges()[edge_id]['rgba_js'] = convert_rgba(graph.edges()[edge_id]['rgba'])
+
+    elif graph.edges()[edge_id]['type'] == 'complex_component':
+        graph.edges()[edge_id]['color'] = 'purple'
+        graph.edges()[edge_id]['rgba'] = (0.5, 0, 0.5, 0.9)
+        graph.edges()[edge_id]['rgba_js'] = convert_rgba(graph.edges()[edge_id]['rgba'])
+
+    else:
+        graph.edges()[edge_id]['color'] = 'grey'
+        graph.edges()[edge_id]['rgba'] = (0.75, 0.75, 0.75, 1)
+        graph.edges()[edge_id]['rgba_js'] = convert_rgba(graph.edges()[edge_id]['rgba'])
+
+    return graph
+
+"""Output graph information to JSON file
+"""
 def output_graph(
         graph,
         output_name):
@@ -366,6 +463,22 @@ def output_graph(
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4)
 
+"""Convert python RGBA tuple to web-friendly tuple for later viz
+"""
+def convert_rgba(
+        rgba_tuple):
+
+    rgba_list = list(rgba_tuple)
+
+    rgba_new = []
+    for x in rgba_list[:3]:
+        rgba_new.append(int(x * 255))
+
+    rgba_new.append(rgba_list[3])
+    return tuple(rgba_new)
+
+"""Format graph attributes for networkX plotting
+"""
 def layout_graph(
         graph):
 
@@ -375,27 +488,29 @@ def layout_graph(
 
     for node in graph.nodes():
 
-        try:
-            node_list.append(node)
-            node_color.append(graph.nodes()[node]['color'])
-            node_size.append(graph.nodes()[node]['node_size'])
-            print(graph.nodes()[node]['color'])
-        except:
-            node_list.append(node)
-            node_color.append('red')
-            node_size.append(5)
+        node_list.append(node)
+        node_color.append(
+            literal_eval(
+                strip_string(graph.nodes()[node]['rgba'])))
+        node_size.append(
+            literal_eval(
+                strip_string(graph.nodes()[node]['size'])))
 
     edge_list = []
     edge_color = []
 
-    for e in graph.edges():
+    for edge in graph.edges():
 
-        edge_list.append(e)
-        edge_color.append(graph.edges()[e]['color'])
+        edge_list.append(edge)
+        edge_color.append(
+            literal_eval(
+                strip_string(graph.edges()[edge]['rgba'])))
+
+    k_value = float(3 / sqrt(len(node_list)))
 
     node_positions = nx.spring_layout(
         graph,
-        k=(3/sqrt(len(node_list))),
+        k=k_value,
         iterations=20,
         scale=10)
 
@@ -413,6 +528,15 @@ def layout_graph(
 
     return node_positions, position_reference
 
+"""Unlist a string from list format required for JSON export of graph
+"""
+def strip_string(
+        __str__):
+
+    return str(__str__).strip('[]').replace('\'', '')
+
+"""Plot graph using networkX
+"""
 def plot_graph(
         graph,
         output):
@@ -446,26 +570,20 @@ def plot_graph(
         dpi=600,
         bbox_inches='tight')
 
+"""Run graph generation
+TODO:
+- How to handle metabolite and gene with same name?
+    - MAL is metabolite and gene abbreviation
+"""
 def __main__(
-        data,
+        data, # Assumed to already be name mapped
         network,
         pathways,
         species_id,
         output,
-        black_list,
-        plot=False):
-
-    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/HSA_metaboverse_db.pickle'
-    with open(output, 'rb') as network_file:
-        reference = pickle.load(network_file)
-    network = reference
-    pathways = ['Urea cycle']
-    species_id = 'HSA'
-    data = pd.DataFrame()
-    data[0] = [15, None, 10]
-    data.index = ['L-Arg','Urea','What']
-    black_list = ['What']
-    plot = True
+        black_list=[],
+        plot=False,
+        graph_name='name'):
 
     # Get output directory for graphs
     graph_directory = create_graph_output(
@@ -485,45 +603,89 @@ def __main__(
 
         for k in pathway_key:
 
-            process = network['pathways'][k]
+            subnetwork = network['pathways'][k]
 
-            name = 'graph_' + species_id + '_' + process['reactome_id']
-            graph_name = graph_directory + name + '.json'
-            plot_name = graph_directory + name + '.pdf'
+            name = 'graph-' + subnetwork['reactome_id']
 
-            species_id = 'R-' + species_id + '-'
+            if graph_name == 'reactome':
+                graph_name = graph_directory + name + '.json'
+                plot_name = graph_directory + name + '.pdf'
 
+            else:
+                graph_name = graph_directory + p.replace(' ', '_') + '.json'
+                plot_name = graph_directory + p.replace(' ', '_') + '.pdf'
+
+            species_accession = 'R-' + species_id + '-'
+
+            # Build Graph
+                # Add reactions
+                # Add analytes
+                # Add edges
             G = build_graph(
-                sub_network=process,
+                sub_network=subnetwork,
                 master_reference=master_reference,
                 complex_reference=complex_reference,
-                data=data,
-                species_id=species_id,
+                species_id=species_accession,
                 black_list=black_list)
 
+            # Add node and edge colors and size -> inside runs a function for node and for edge coloring
+            G = map_graph_attributes(
+                graph=G,
+                data=data)
+
+            # Output graph
             output_graph(
                 graph=G,
                 output_name=graph_name)
 
+            # Plot graph
             if plot != False:
-                print('wat')
                 plot_graph(
                     graph=G,
                     output=plot_name)
 
+"""Test data
+"""
+def test():
 
+    ################
+    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
+    with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
+        reference = pickle.load(network_file)
+    network = reference
 
-network['pathway_types']['Urea cycle']
-network['pathways']['R-HSA-70635']['reactions']['R-HSA-70573']['products']
+    for x in network['pathway_types'].keys():
+        if 'glutamate' in x.lower():
+            print(x)
 
+    pathways = [
+        'Urea cycle',
+        'Citric acid cycle (TCA cycle)',
+        'Alanine metabolism',
+        'Glutamate and glutamine metabolism']
+    species_id = 'HSA'
 
-complex_reference['R-HSA-1006173']
+    trans = pd.read_csv(
+        '/Users/jordan/Desktop/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
+        sep='\t',
+        index_col=2)
+    del trans.index.name
+    trans = trans[['log2FoldChange']]
+    trans.columns = [0]
+    trans.head()
 
+    metabol = pd.read_csv(
+        '/Users/jordan/Desktop/danielle_seq/PGC1_beta_metabolomics.txt',
+        sep='\t',
+        index_col=0)
+    metabol = metabol[['log2foldchange']]
+    metabol.columns = [0]
+    metabol
 
+    data = pd.concat([trans, metabol])
+    data = data.dropna()
 
-for x in G.edges():
-    print(x)
-    print(G.edges()[('L-Arg', 'R-HSA-452036')])
-
-type(G)
-G.node()['L-Arg']
+    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
+    plot = True
+    graph_name='name'
+    #################

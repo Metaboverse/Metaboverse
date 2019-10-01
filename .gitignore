@@ -3,3 +3,5 @@
 /*.pyc
 *__pycache__*
 .DS_Store
+tests/analysis_tests/graphs
+tests/analysis_tests/*pickle
