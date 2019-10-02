@@ -458,10 +458,10 @@ def output_graph(
         graph,
         output_name):
 
-    data = json_graph.node_link_data(graph)
+    data = json_graph.node_link_data(G)
 
     with open(output_name, 'w') as f:
-        json.dump(data, f, indent=4)
+        json.dump([data], f, indent=4) # Parse out as array for javascript
 
 """Convert python RGBA tuple to web-friendly tuple for later viz
 """

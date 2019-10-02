@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<style>
+
+  .link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+  }
+
+  #catalyst {
+  fill: green;
+  }
+  .link.catalyst {
+  stroke: green;
+  }
+
+  #inhibitor {
+  fill: red;
+  }
+  .link.inhibitor {
+  stroke: red;
+  }
+
+  #complex_component {
+  fill: rgba(165, 55, 253, 1);
+  }
+  .link.complex_component {
+  stroke: rgba(165, 55, 253, 1);
+  stroke-dasharray: 0,2 1;
+  }
+
+  #reaction {
+  fill: grey;
+  }
+  .link.reaction {
+  stroke: grey;
+  }
+
+  #reactant {
+  fill: grey;
+  }
+  .link.reactant {
+  stroke: grey;
+  }
+
+  #product {
+  fill: grey;
+  }
+  .link.product {
+  stroke: grey;
+  }
+
+
+  circle {
+  fill: var(--node_color);
+  stroke: #333;
+  stroke-width: 1.5px;
+  }
+
+  text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  }
+
+</style>
+
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+// Based on http://bl.ocks.org/mbostock/1153292
+
+d3.json("Urea_cycle.json", function(data) {
+
+  // Check that links var set
+  var links = data[0].links;
+
+  // Set nodes up
+  var nodex = {}
+  var nodes = data[0].nodes;
+
+  // Make dictionary of node color values and types
+  node_dict = {}
+  type_dict = {}
+  nodes.forEach(function(node) {
+
+    node_dict[node['name']] = node['rgba_js']
+    type_dict[node['name']] = node['type']
+
+  });
+
+  // Compute the distinct nodes from the links.
+  links.forEach(function(link) {
+
+    // Add pertinent node information
+    link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
+    link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
+    nodex[link.source["name"]]["color"] = node_dict[link.source["name"]];
+    nodex[link.target["name"]]["color"] = node_dict[link.target["name"]];
+
+    // Prioritize reaction nodes in layout
+    if (type_dict[link.source["name"]] == "reaction") {
+      nodex[link.source["name"]]["weight"] = 100;
+    } else {
+      nodex[link.source["name"]]["weight"] = 1;
+    };
+
+    if (type_dict[link.target["name"]] == "reaction") {
+      nodex[link.target["name"]]["weight"] = 100;
+    } else {
+      nodex[link.target["name"]]["weight"] = 1;
+    };
+
+  });
+
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  var force = d3.layout.force()
+      .nodes(d3.values(nodex))
+      .links(links)
+      .size([width, height])
+      .linkDistance(60)
+      .charge(-300)
+      .on("tick", tick)
+      .start();
+
+  var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .call(d3.behavior.zoom().on("zoom", function () {
+        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+      }))
+    .append("g");
+
+  // Per-type markers, as they don't inherit styles.
+  //svg.style("cursor", "move");
+  svg.append("defs").selectAll("marker")
+      .data([
+        "reaction",
+        "reactant",
+        "product",
+        "inhibitor",
+        "catalyst",
+        "complex_component"])
+    .enter()
+    .append("marker")
+      .attr("id", function(d) { return d; })
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 15)
+      .attr("refY", -1.5)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      //.attr('--element-height', )
+      .attr("orient", "auto")
+    .append("path")
+      .attr("d", "M0,-5L10,0L0,5");
+
+  var path = svg.append("g").selectAll("path")
+      .data(force.links())
+    .enter().append("path")
+      .attr("class", function(d) { return "link " + d.type; })
+      .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+
+  var circle = svg.append("g").selectAll("circle")
+      .data(force.nodes())
+      .enter().append("circle")
+      .style("--node_color", function(d) { return "rgba(" + d.color + ")"; })
+      .attr("r", 6)
+      .call(force.drag)
+
+  var text = svg.append("g").selectAll("text")
+      .data(force.nodes())
+    .enter().append("text")
+      .attr("x", 8)
+      .attr("y", ".31em")
+      .text(function(d) { return d.name; });
+
+  // Use elliptical arc path segments to doubly-encode directionality.
+  function tick() {
+    path.attr("d", linkArc);
+    circle.attr("transform", transform);
+    text.attr("transform", transform);
+  }
+
+  function linkArc(d) {
+    var dx = d.target.x - d.source.x,
+        dy = d.target.y - d.source.y,
+        dr = Math.sqrt(dx * dx + dy * dy);
+    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+  }
+
+  function transform(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  }
+
+
+});
+
+</script>

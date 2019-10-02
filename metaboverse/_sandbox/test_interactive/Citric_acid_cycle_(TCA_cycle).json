@@ -1,0 +1,3866 @@
+{
+    "directed": true,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "name": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA",
+            "id": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "Ac-CoA",
+            "id": "Ac-CoA",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "OAA",
+            "id": "OAA",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "CoA-SH",
+            "id": "CoA-SH",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "CIT",
+            "id": "CIT",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                0.6470588235294118,
+                0.6470588235294118,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                165,
+                165,
+                255,
+                1.0
+            ],
+            "expression": "-1.199664847",
+            "size": "500"
+        },
+        {
+            "name": "CS dimer",
+            "id": "CS dimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "CS",
+            "id": "CS",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.9764705882352941,
+                0.9764705882352941,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                249,
+                249,
+                255,
+                1.0
+            ],
+            "expression": "-0.064253137",
+            "size": "300"
+        },
+        {
+            "name": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+            "id": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "NADH",
+            "id": "NADH",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "MAL",
+            "id": "MAL",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                0.9764705882352941,
+                0.9764705882352941,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                249,
+                249,
+                255,
+                1.0
+            ],
+            "expression": "-0.080932529",
+            "size": "500"
+        },
+        {
+            "name": "NAD+",
+            "id": "NAD+",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "MDH2 dimer",
+            "id": "MDH2 dimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "MDH2",
+            "id": "MDH2",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8823529411764706,
+                0.8823529411764706,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                225,
+                225,
+                255,
+                1.0
+            ],
+            "expression": "-0.3935824120000001",
+            "size": "300"
+        },
+        {
+            "name": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "id": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "NADP+",
+            "id": "NADP+",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "PYR",
+            "id": "PYR",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "NADPH",
+            "id": "NADPH",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "CO2",
+            "id": "CO2",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "ME3:Mg2+ tetramer",
+            "id": "ME3:Mg2+ tetramer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ME3",
+            "id": "ME3",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.33333333333333337,
+                0.33333333333333337,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                85,
+                85,
+                1.0
+            ],
+            "expression": "2.231463081",
+            "size": "300"
+        },
+        {
+            "name": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]",
+            "id": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "NNT dimer",
+            "id": "NNT dimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "NNT",
+            "id": "NNT",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+            "id": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "SUCC-CoA",
+            "id": "SUCC-CoA",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "Pi",
+            "id": "Pi",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "SUCCA",
+            "id": "SUCCA",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                1.0,
+                0.803921568627451,
+                0.803921568627451,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                205,
+                205,
+                1.0
+            ],
+            "expression": "0.656354087",
+            "size": "500"
+        },
+        {
+            "name": "SUCLA2:SUCLG1",
+            "id": "SUCLA2:SUCLG1",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "SUCLA2",
+            "id": "SUCLA2",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.9764705882352941,
+                0.9764705882352941,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                249,
+                249,
+                1.0
+            ],
+            "expression": "0.096822617",
+            "size": "300"
+        },
+        {
+            "name": "SUCLG1",
+            "id": "SUCLG1",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8823529411764706,
+                0.8823529411764706,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                225,
+                225,
+                255,
+                1.0
+            ],
+            "expression": "-0.373075996",
+            "size": "300"
+        },
+        {
+            "name": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+            "id": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "2OG",
+            "id": "2OG",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "lipo-aKGDH",
+            "id": "lipo-aKGDH",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "OGDH",
+            "id": "OGDH",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.8666666666666667,
+                0.8666666666666667,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                221,
+                221,
+                1.0
+            ],
+            "expression": "0.460023289",
+            "size": "300"
+        },
+        {
+            "name": "DLST",
+            "id": "DLST",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8352941176470589,
+                0.8352941176470589,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                213,
+                213,
+                255,
+                1.0
+            ],
+            "expression": "-0.532636893",
+            "size": "300"
+        },
+        {
+            "name": "DLD",
+            "id": "DLD",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.9921568627450981,
+                0.9921568627450981,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                253,
+                253,
+                1.0
+            ],
+            "expression": "0.036139268",
+            "size": "300"
+        },
+        {
+            "name": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+            "id": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "isocitrate <=> citrate",
+            "id": "isocitrate <=> citrate",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "ISCIT",
+            "id": "ISCIT",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "ACO2",
+            "id": "ACO2",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8352941176470589,
+                0.8352941176470589,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                213,
+                213,
+                255,
+                1.0
+            ],
+            "expression": "-0.56900753",
+            "size": "300"
+        },
+        {
+            "name": "(S)-Malate <=> Fumarate + H2O",
+            "id": "(S)-Malate <=> Fumarate + H2O",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "FUMA",
+            "id": "FUMA",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                1.0,
+                0.9921568627450981,
+                0.9921568627450981,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                253,
+                253,
+                1.0
+            ],
+            "expression": "0.01419846",
+            "size": "500"
+        },
+        {
+            "name": "FH tetramer",
+            "id": "FH tetramer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "FH",
+            "id": "FH",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.7254901960784313,
+                0.7254901960784313,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                185,
+                185,
+                255,
+                1.0
+            ],
+            "expression": "-0.938651827",
+            "size": "300"
+        },
+        {
+            "name": "Fumarate + H2O <=> (S)-Malate",
+            "id": "Fumarate + H2O <=> (S)-Malate",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+            "id": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "IDH3 complex",
+            "id": "IDH3 complex",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "IDH3B",
+            "id": "IDH3B",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.9921568627450981,
+                0.9921568627450981,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                253,
+                253,
+                255,
+                1.0
+            ],
+            "expression": "-0.040956141",
+            "size": "300"
+        },
+        {
+            "name": "IDH3A",
+            "id": "IDH3A",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.9921568627450981,
+                0.9921568627450981,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                253,
+                253,
+                1.0
+            ],
+            "expression": "0.041734569",
+            "size": "300"
+        },
+        {
+            "name": "IDH3G",
+            "id": "IDH3G",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.8509803921568627,
+                0.8509803921568627,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                217,
+                217,
+                1.0
+            ],
+            "expression": "0.5163273820000001",
+            "size": "300"
+        },
+        {
+            "name": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+            "id": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "IDH2 dimer",
+            "id": "IDH2 dimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "AcK-IDH2",
+            "id": "AcK-IDH2",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "FAHD1:Zn2+ dimer hydrolyses OA to PYR",
+            "id": "FAHD1:Zn2+ dimer hydrolyses OA to PYR",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "FAHD1:Mg2+ dimer",
+            "id": "FAHD1:Mg2+ dimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "FAHD1",
+            "id": "FAHD1",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.8196078431372549,
+                0.8196078431372549,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                209,
+                209,
+                1.0
+            ],
+            "expression": "0.627154557",
+            "size": "300"
+        },
+        {
+            "name": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "id": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "ME2:Mg2+ tetramer",
+            "id": "ME2:Mg2+ tetramer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ME2",
+            "id": "ME2",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.9294117647058824,
+                0.9294117647058824,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                237,
+                237,
+                255,
+                1.0
+            ],
+            "expression": "-0.226837808",
+            "size": "300"
+        },
+        {
+            "name": "citrate <=> isocitrate",
+            "id": "citrate <=> isocitrate",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)",
+            "id": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "SDH complex (ox.)",
+            "id": "SDH complex (ox.)",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "SDHA",
+            "id": "SDHA",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8823529411764706,
+                0.8823529411764706,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                225,
+                225,
+                255,
+                1.0
+            ],
+            "expression": "-0.372137912",
+            "size": "300"
+        },
+        {
+            "name": "SDHB",
+            "id": "SDHB",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.9294117647058824,
+                0.9294117647058824,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                237,
+                237,
+                255,
+                1.0
+            ],
+            "expression": "-0.25670328",
+            "size": "300"
+        },
+        {
+            "name": "SDHD",
+            "id": "SDHD",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8666666666666667,
+                0.8666666666666667,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                221,
+                221,
+                255,
+                1.0
+            ],
+            "expression": "-0.447043401",
+            "size": "300"
+        },
+        {
+            "name": "SDHC",
+            "id": "SDHC",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.9607843137254902,
+                0.9607843137254902,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                245,
+                245,
+                1.0
+            ],
+            "expression": "0.113665375",
+            "size": "300"
+        },
+        {
+            "name": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+            "id": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "SUCLG1:SUCLG2",
+            "id": "SUCLG1:SUCLG2",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "SUCLG2",
+            "id": "SUCLG2",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8352941176470589,
+                0.8352941176470589,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                213,
+                213,
+                255,
+                1.0
+            ],
+            "expression": "-0.556000468",
+            "size": "300"
+        }
+    ],
+    "links": [
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA",
+            "target": "CoA-SH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA",
+            "target": "CIT"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Ac-CoA",
+            "target": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "OAA",
+            "target": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "OAA",
+            "target": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "OAA",
+            "target": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "OAA",
+            "target": "FAHD1:Zn2+ dimer hydrolyses OA to PYR"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "CoA-SH",
+            "target": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "CoA-SH",
+            "target": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "CoA-SH",
+            "target": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "CIT",
+            "target": "isocitrate <=> citrate"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "CIT",
+            "target": "citrate <=> isocitrate"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "CS dimer",
+            "target": "Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "CS",
+            "target": "CS dimer"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+            "target": "NADH"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+            "target": "OAA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+            "target": "MAL"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+",
+            "target": "NAD+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADH",
+            "target": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADH",
+            "target": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "MAL",
+            "target": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "MAL",
+            "target": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "MAL",
+            "target": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "MAL",
+            "target": "(S)-Malate <=> Fumarate + H2O"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "MAL",
+            "target": "Fumarate + H2O <=> (S)-Malate"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "MAL",
+            "target": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NAD+",
+            "target": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NAD+",
+            "target": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NAD+",
+            "target": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NAD+",
+            "target": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NAD+",
+            "target": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NAD+",
+            "target": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "MDH2 dimer",
+            "target": "Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "MDH2 dimer",
+            "target": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "MDH2",
+            "target": "MDH2 dimer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "target": "PYR"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "target": "NADPH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "target": "CO2"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADP+",
+            "target": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADP+",
+            "target": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADPH",
+            "target": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ME3:Mg2+ tetramer",
+            "target": "ME3:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "ME3",
+            "target": "ME3:Mg2+ tetramer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]",
+            "target": "NADP+"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]",
+            "target": "NADH"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "NNT dimer",
+            "target": "NADPH + NAD+ + H+ [cytosol] => NADP+ + NADH + H+ [mitochondrial matrix]"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "NNT",
+            "target": "NNT dimer"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+            "target": "SUCC-CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+            "target": "Pi"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+            "target": "CoA-SH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA",
+            "target": "SUCCA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "SUCC-CoA",
+            "target": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "SUCC-CoA",
+            "target": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Pi",
+            "target": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Pi",
+            "target": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "SUCCA",
+            "target": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "SUCCA",
+            "target": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "SUCCA",
+            "target": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "SUCLA2:SUCLG1",
+            "target": "ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SUCLA2",
+            "target": "SUCLA2:SUCLG1"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SUCLG1",
+            "target": "SUCLA2:SUCLG1"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SUCLG1",
+            "target": "SUCLG1:SUCLG2"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+            "target": "SUCC-CoA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+            "target": "NADH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+",
+            "target": "CO2"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "2OG",
+            "target": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "lipo-aKGDH",
+            "target": "alpha-ketoglutarate + CoASH + NAD+ => succinyl-CoA + CO2 + NADH + H+"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "OGDH",
+            "target": "lipo-aKGDH"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "DLST",
+            "target": "lipo-aKGDH"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "DLD",
+            "target": "lipo-aKGDH"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+            "target": "MAL"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+            "target": "NAD+"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+            "target": "NADH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+",
+            "target": "OAA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate <=> citrate",
+            "target": "ISCIT"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate <=> citrate",
+            "target": "CIT"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ISCIT",
+            "target": "isocitrate <=> citrate"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ISCIT",
+            "target": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ISCIT",
+            "target": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ISCIT",
+            "target": "citrate <=> isocitrate"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ACO2",
+            "target": "isocitrate <=> citrate"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ACO2",
+            "target": "citrate <=> isocitrate"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "(S)-Malate <=> Fumarate + H2O",
+            "target": "MAL"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "(S)-Malate <=> Fumarate + H2O",
+            "target": "FUMA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "FUMA",
+            "target": "(S)-Malate <=> Fumarate + H2O"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "FUMA",
+            "target": "Fumarate + H2O <=> (S)-Malate"
+        },
+        {
+            "type": "positiveregulator",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "FUMA",
+            "target": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "FUMA",
+            "target": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "FH tetramer",
+            "target": "(S)-Malate <=> Fumarate + H2O"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "FH tetramer",
+            "target": "Fumarate + H2O <=> (S)-Malate"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "FH",
+            "target": "FH tetramer"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Fumarate + H2O <=> (S)-Malate",
+            "target": "FUMA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Fumarate + H2O <=> (S)-Malate",
+            "target": "MAL"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+            "target": "2OG"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+            "target": "NADH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]",
+            "target": "CO2"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "IDH3 complex",
+            "target": "isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+ [IDH3]"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "IDH3B",
+            "target": "IDH3 complex"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "IDH3A",
+            "target": "IDH3 complex"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "IDH3G",
+            "target": "IDH3 complex"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+            "target": "2OG"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+            "target": "NADPH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]",
+            "target": "CO2"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "IDH2 dimer",
+            "target": "isocitrate + NADP+ => alpha-ketoglutarate + CO2 + NADPH + H+ [IDH2]"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "AcK-IDH2",
+            "target": "IDH2 dimer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "FAHD1:Zn2+ dimer hydrolyses OA to PYR",
+            "target": "PYR"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "FAHD1:Zn2+ dimer hydrolyses OA to PYR",
+            "target": "CO2"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "FAHD1:Mg2+ dimer",
+            "target": "FAHD1:Zn2+ dimer hydrolyses OA to PYR"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "FAHD1",
+            "target": "FAHD1:Mg2+ dimer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "target": "PYR"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "target": "NADH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR",
+            "target": "CO2"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ME2:Mg2+ tetramer",
+            "target": "ME2:Mg2+ tetramer oxidatively decarboxylates MAL to PYR"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "ME2",
+            "target": "ME2:Mg2+ tetramer"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "citrate <=> isocitrate",
+            "target": "CIT"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "citrate <=> isocitrate",
+            "target": "ISCIT"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)",
+            "target": "SUCCA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)",
+            "target": "FUMA"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "SDH complex (ox.)",
+            "target": "Succinate <=> Fumarate (with FAD redox reaction on enzyme)"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SDHA",
+            "target": "SDH complex (ox.)"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SDHB",
+            "target": "SDH complex (ox.)"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SDHD",
+            "target": "SDH complex (ox.)"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SDHC",
+            "target": "SDH complex (ox.)"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+            "target": "SUCC-CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+            "target": "Pi"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+            "target": "CoA-SH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA",
+            "target": "SUCCA"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "SUCLG1:SUCLG2",
+            "target": "GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "SUCLG2",
+            "target": "SUCLG1:SUCLG2"
+        }
+    ]
+}

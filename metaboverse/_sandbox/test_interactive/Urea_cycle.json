@@ -1,0 +1,1773 @@
+[{
+    "directed": true,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "name": "arginine + H2O => ornithine + urea [ARG2]",
+            "id": "arginine + H2O => ornithine + urea [ARG2]",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "L-Arg",
+            "id": "L-Arg",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                1.0,
+                0.6313725490196078,
+                0.6313725490196078,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                161,
+                161,
+                1.0
+            ],
+            "expression": "1.22963185",
+            "size": "500"
+        },
+        {
+            "name": "Urea",
+            "id": "Urea",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "L-Orn",
+            "id": "L-Orn",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "ARG2 trimer",
+            "id": "ARG2 trimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ARG2",
+            "id": "ARG2",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.9607843137254902,
+                0.9607843137254902,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                245,
+                245,
+                255,
+                1.0
+            ],
+            "expression": "-0.110197889",
+            "size": "300"
+        },
+        {
+            "name": "carbamoyl phosphate + ornithine => citrulline + orthophosphate",
+            "id": "carbamoyl phosphate + ornithine => citrulline + orthophosphate",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "CAP",
+            "id": "CAP",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "L-Cit",
+            "id": "L-Cit",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                1.0,
+                0.6941176470588235,
+                0.6941176470588235,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                177,
+                177,
+                1.0
+            ],
+            "expression": "1.018129674",
+            "size": "500"
+        },
+        {
+            "name": "Pi",
+            "id": "Pi",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "OTC trimer",
+            "id": "OTC trimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "OTC",
+            "id": "OTC",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.7411764705882353,
+                0.7411764705882353,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                189,
+                189,
+                255,
+                1.0
+            ],
+            "expression": "-0.8657558559999999",
+            "size": "300"
+        },
+        {
+            "name": "arginine + H2O => ornithine + urea [ARG1]",
+            "id": "arginine + H2O => ornithine + urea [ARG1]",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "ARG1 trimer",
+            "id": "ARG1 trimer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ARG1",
+            "id": "ARG1",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.615686274509804,
+                0.615686274509804,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                157,
+                157,
+                255,
+                1.0
+            ],
+            "expression": "-1.286459208",
+            "size": "300"
+        },
+        {
+            "name": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+            "id": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "L-Asp",
+            "id": "L-Asp",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                1.0,
+                0.9450980392156862,
+                0.9450980392156862,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                241,
+                241,
+                1.0
+            ],
+            "expression": "0.18985480300000002",
+            "size": "500"
+        },
+        {
+            "name": "PPi",
+            "id": "PPi",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "ARSUA",
+            "id": "ARSUA",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                0.6,
+                0.6,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                153,
+                153,
+                255,
+                1.0
+            ],
+            "expression": "-1.356831406",
+            "size": "500"
+        },
+        {
+            "name": "AMP",
+            "id": "AMP",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "ASS1 tetramer:NMRAL1 dimer:NADPH",
+            "id": "ASS1 tetramer:NMRAL1 dimer:NADPH",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "NMRAL1",
+            "id": "NMRAL1",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.8509803921568627,
+                0.8509803921568627,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                217,
+                217,
+                255,
+                1.0
+            ],
+            "expression": "-0.489337951",
+            "size": "300"
+        },
+        {
+            "name": "ASS1",
+            "id": "ASS1",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.6784313725490196,
+                0.6784313725490196,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                173,
+                173,
+                255,
+                1.0
+            ],
+            "expression": "-1.065365108",
+            "size": "300"
+        },
+        {
+            "name": "glutamate + acetyl CoA => N-acetyl glutamate + CoA",
+            "id": "glutamate + acetyl CoA => N-acetyl glutamate + CoA",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "Ac-CoA",
+            "id": "Ac-CoA",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "L-Glu",
+            "id": "L-Glu",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "CoA-SH",
+            "id": "CoA-SH",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "NAcGlu",
+            "id": "NAcGlu",
+            "type": "modifier",
+            "sub_type": "positiveregulator",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "NAGS(19-534)",
+            "id": "NAGS(19-534)",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)",
+            "id": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "R-HSA-374018",
+            "id": "R-HSA-374018",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]",
+            "id": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "NH4+",
+            "id": "NH4+",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "HCO3-",
+            "id": "HCO3-",
+            "type": "reactant",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "white"
+            ],
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "500"
+        },
+        {
+            "name": "CPS1",
+            "id": "CPS1",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                1.0,
+                0.9921568627450981,
+                0.9921568627450981,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                253,
+                253,
+                1.0
+            ],
+            "expression": "0.014041465",
+            "size": "300"
+        },
+        {
+            "name": "argininosuccinate <=> fumarate + arginine",
+            "id": "argininosuccinate <=> fumarate + arginine",
+            "type": "reaction",
+            "stoichiometry": null,
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "expression": null,
+            "size": "1000"
+        },
+        {
+            "name": "FUMA",
+            "id": "FUMA",
+            "type": "product",
+            "sub_type": null,
+            "stoichiometry": "1",
+            "color": [
+                "custom"
+            ],
+            "rgba": [
+                1.0,
+                0.9921568627450981,
+                0.9921568627450981,
+                1.0
+            ],
+            "rgba_js": [
+                255,
+                253,
+                253,
+                1.0
+            ],
+            "expression": "0.01419846",
+            "size": "500"
+        },
+        {
+            "name": "ASL tetramer",
+            "id": "ASL tetramer",
+            "type": "modifier",
+            "sub_type": "catalyst",
+            "stoichiometry": null,
+            "color": "white",
+            "rgba": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "rgba_js": [
+                255,
+                255,
+                255,
+                1
+            ],
+            "expression": "None",
+            "size": "300"
+        },
+        {
+            "name": "ASL",
+            "id": "ASL",
+            "type": "complex_component",
+            "sub_type": null,
+            "stoichiometry": null,
+            "color": "custom",
+            "rgba": [
+                0.9137254901960782,
+                0.9137254901960782,
+                1.0,
+                1.0
+            ],
+            "rgba_js": [
+                232,
+                232,
+                255,
+                1.0
+            ],
+            "expression": "-0.285780284",
+            "size": "300"
+        }
+    ],
+    "links": [
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "arginine + H2O => ornithine + urea [ARG2]",
+            "target": "Urea"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "arginine + H2O => ornithine + urea [ARG2]",
+            "target": "L-Orn"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Arg",
+            "target": "arginine + H2O => ornithine + urea [ARG2]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Arg",
+            "target": "arginine + H2O => ornithine + urea [ARG1]"
+        },
+        {
+            "type": "positiveregulator",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "L-Arg",
+            "target": "glutamate + acetyl CoA => N-acetyl glutamate + CoA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Arg",
+            "target": "argininosuccinate <=> fumarate + arginine"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Orn",
+            "target": "carbamoyl phosphate + ornithine => citrulline + orthophosphate"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Orn",
+            "target": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ARG2 trimer",
+            "target": "arginine + H2O => ornithine + urea [ARG2]"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "ARG2",
+            "target": "ARG2 trimer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "carbamoyl phosphate + ornithine => citrulline + orthophosphate",
+            "target": "L-Cit"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "carbamoyl phosphate + ornithine => citrulline + orthophosphate",
+            "target": "Pi"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "CAP",
+            "target": "carbamoyl phosphate + ornithine => citrulline + orthophosphate"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Cit",
+            "target": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Cit",
+            "target": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "OTC trimer",
+            "target": "carbamoyl phosphate + ornithine => citrulline + orthophosphate"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "OTC",
+            "target": "OTC trimer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "arginine + H2O => ornithine + urea [ARG1]",
+            "target": "Urea"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "arginine + H2O => ornithine + urea [ARG1]",
+            "target": "L-Orn"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ARG1 trimer",
+            "target": "arginine + H2O => ornithine + urea [ARG1]"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "ARG1",
+            "target": "ARG1 trimer"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+            "target": "PPi"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+            "target": "ARSUA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+            "target": "AMP"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Asp",
+            "target": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ARSUA",
+            "target": "argininosuccinate <=> fumarate + arginine"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ASS1 tetramer:NMRAL1 dimer:NADPH",
+            "target": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "NMRAL1",
+            "target": "ASS1 tetramer:NMRAL1 dimer:NADPH"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "ASS1",
+            "target": "ASS1 tetramer:NMRAL1 dimer:NADPH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "glutamate + acetyl CoA => N-acetyl glutamate + CoA",
+            "target": "CoA-SH"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "glutamate + acetyl CoA => N-acetyl glutamate + CoA",
+            "target": "NAcGlu"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "Ac-CoA",
+            "target": "glutamate + acetyl CoA => N-acetyl glutamate + CoA"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "L-Glu",
+            "target": "glutamate + acetyl CoA => N-acetyl glutamate + CoA"
+        },
+        {
+            "type": "positiveregulator",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "NAcGlu",
+            "target": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "NAGS(19-534)",
+            "target": "glutamate + acetyl CoA => N-acetyl glutamate + CoA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)",
+            "target": "L-Orn"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)",
+            "target": "L-Cit"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "R-HSA-374018",
+            "target": "ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]",
+            "target": "Pi"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]",
+            "target": "CAP"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "NH4+",
+            "target": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "HCO3-",
+            "target": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "CPS1",
+            "target": "2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]"
+        },
+        {
+            "type": "reactant",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "argininosuccinate <=> fumarate + arginine",
+            "target": "ARSUA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "argininosuccinate <=> fumarate + arginine",
+            "target": "L-Arg"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "argininosuccinate <=> fumarate + arginine",
+            "target": "FUMA"
+        },
+        {
+            "type": "product",
+            "color": "grey",
+            "rgba": [
+                0.75,
+                0.75,
+                0.75,
+                1
+            ],
+            "rgba_js": [
+                191,
+                191,
+                191,
+                1
+            ],
+            "source": "FUMA",
+            "target": "argininosuccinate <=> fumarate + arginine"
+        },
+        {
+            "type": "catalyst",
+            "color": "green",
+            "rgba": [
+                0,
+                0.5,
+                0,
+                1
+            ],
+            "rgba_js": [
+                0,
+                127,
+                0,
+                1
+            ],
+            "source": "ASL tetramer",
+            "target": "argininosuccinate <=> fumarate + arginine"
+        },
+        {
+            "type": "complex_component",
+            "color": "purple",
+            "rgba": [
+                0.5,
+                0,
+                0.5,
+                0.9
+            ],
+            "rgba_js": [
+                127,
+                0,
+                127,
+                0.9
+            ],
+            "source": "ASL",
+            "target": "ASL tetramer"
+        }
+    ]
+}]
