@@ -74,7 +74,9 @@
 
 // Based on http://bl.ocks.org/mbostock/1153292
 
-d3.json("Urea_cycle.json", function(data) {
+var file = "Urea_cycle.json";
+
+d3.json(file, function(data) {
 
   // Check that links var set
   var links = data[0].links;
