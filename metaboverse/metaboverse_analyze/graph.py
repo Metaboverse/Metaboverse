@@ -608,11 +608,11 @@ def __main__(
             name = 'graph-' + subnetwork['reactome_id']
 
             if graph_name == 'reactome':
-                graph_name = graph_directory + name + '.json'
+                graph_name = graph_directory + name + 'fake.json'
                 plot_name = graph_directory + name + '.pdf'
 
             else:
-                graph_name = graph_directory + p.replace(' ', '_') + '.json'
+                graph_name = graph_directory + p.replace(' ', '_') + 'fake.json'
                 plot_name = graph_directory + p.replace(' ', '_') + '.pdf'
 
             species_accession = 'R-' + species_id + '-'
@@ -672,6 +672,16 @@ def test():
     del trans.index.name
     trans = trans[['log2FoldChange']]
     trans.columns = [0]
+
+    trans.head()
+
+    from random import randint
+
+    addi = []
+    for x in range(len(trans[0].tolist())):
+        addi.append(randint(-1,1))
+
+    trans[0] = trans[0] + addi
     trans.head()
 
     metabol = pd.read_csv(
@@ -680,6 +690,9 @@ def test():
         index_col=0)
     metabol = metabol[['log2foldchange']]
     metabol.columns = [0]
+    metabol[0] = [0.053, 1.537, -1.114, -2.709, -1.67, 0.89, -0.3]
+    metabol.loc['CAP'] = [1.2]
+    metabol.loc['Urea'] = [3]
     metabol
 
     data = pd.concat([trans, metabol])
