@@ -7,14 +7,21 @@ Save as markdown in repo
 
 
 1. Exec file
-- launch server
-- open home page
+- X launch server (jordan: see metaboverse/visualize/make.sh)
+- X open home page
+	(jordan)
+	- -> see run.sh in home dir for example, launched home page (application/source/index.html)
 - outputs: none
 
 2. Metaboverse home page (index.html)
+- (jordan)
+ - -> Build outline, needs work with actually capturing user dragged folder and file
+ - -> Would be nice if organization of page would stay consistent if user drags and resizes window
+
 - Get user output location
 	- Create output location if not available
 	- Create output /tmp folder
+
 - Get info on new curation or use old
 	- Button option to import old
 	- If not old,
@@ -32,8 +39,10 @@ Save as markdown in repo
 		- Get system info
 		- Append to output/tmp/variables.json
 		- Or write to output/tmp/system.json
+
 - Launch curate.py
 	- Show loading bar
+
 - After curate.py, run Metaboverse options page (vars.html)
 - Have links for docs, etc, other external info for user
 
