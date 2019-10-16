@@ -29,9 +29,7 @@ Changes:
   - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
   - Modified plotting functions to allow for the differential shading of nodes
   - All other components are original
-Source:
-http://bl.ocks.org/mbostock/1153292
-https://bl.ocks.org/mbostock/1212215
+Source: http://bl.ocks.org/mbostock/1153292
 -->
 
 <!DOCTYPE html>
@@ -89,38 +87,18 @@ https://bl.ocks.org/mbostock/1212215
   stroke: grey;
   }
 
-  .node circle {
-    fill: var(--node_color);
-    stroke: black;
-    stroke-width: 1px;
-    r: 6;
+  circle {
+  fill: var(--node_color);
+  stroke: black;
+  stroke-width: 1px;
   }
 
-  .node text {
-    display: none;
-    font: 12px sans-serif;
-    text-shadow: 0 1px 0 white,
-                 1px 0 0 white,
-                 0 -1px 0 white,
-                 -1px 0 0 white;
-  }
-
-  .node:hover circle {
-    r: 12;
-  }
-
-  .node:hover text {
-    display: inline;
-    font: 12px sans-serif;
-    text-shadow: 0 1px 0 white,
-                 1px 0 0 white,
-                 0 -1px 0 white,
-                 -1px 0 0 white;
-  }
-
-  .cell {
-    fill: none;
-    pointer-events: all;
+  text {
+  font: 10px sans-serif;
+  text-shadow: 0 1px 0 white,
+               1px 0 0 white,
+               0 -1px 0 white,
+               -1px 0 0 white;
   }
 
   .dot {
@@ -174,10 +152,8 @@ https://bl.ocks.org/mbostock/1212215
     <p><font size="2.5">- Press Alt to pan and zoom</font></p>
     <p><font size="2.5">- Click and drag to pan</font></p>
     <p><font size="2.5">- Use mouse wheel to zoom</font></p>
-    <p><font size="2.5"><button id="toggleAnalytes">Toggle Feature Labels</button></font></p>
-    <p><font size="2.5"><button id="toggleReactions">Toggle Reaction Labels</button></font></p>
-      <p><font size="2.5"><input type="number" id="gravity-value" value=0.1>Gravity</input></font></p>
-
+    <p><font size="2.5"><button onclick="showReactionNames()">Show reaction names</button></font></p>
+    <p><font size="2.5"><button onclick="hideReactionNames()">Hide reaction names</button></font></p>
 
     <p></p>
     <p></p>
@@ -2010,38 +1986,43 @@ https://bl.ocks.org/mbostock/1212215
   var width = window.innerWidth;
   var height = window.innerHeight;
 
-  var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .call(d3.behavior.zoom()
-      .on("zoom", activate_zoom));
-
+  // Initialize force graph object
   var force = d3.layout.force()
-      .gravity(0.1)
+      .nodes(d3.values(nodex))
+      .links(links)
+      .size([width, height])
       .linkDistance(60)
-      .charge(-500)
+      .charge(-300)
       .on("tick", tick)
-      .size([width, height]);
+      .start();
 
-  d3.select("#gravity").on("input", function() {
+  // Initialize plot area
+  var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .call(d3.behavior.zoom()
+        .on("zoom", activate_zoom))
+    .append("g");
 
-    console.log(this.value);
 
+  // Toggle zoom and pan by pressing the Alt key
+  // This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
+  var toggle_zoom = false;
+  function activate_zoom() {
+    if (toggle_zoom) {
+      svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+      }
+    };
+
+  d3.select("body").on("keydown", function () {
+      toggle_zoom = d3.event.altKey;
   });
 
-  var voronoi = d3.geom.voronoi()
-      .x(function(d) { return d.x; })
-      .y(function(d) { return d.y; })
-      .clipExtent([[0, 0], [width, height]]);
+  d3.select("body").on("keyup", function () {
+       toggle_zoom = false;
+  });
+  // End of adaption of code by Pedro Tabacof
 
-  // Initialize force graph object
-  var g_nodes = d3.values(nodex);
-
-  // Build graph
-  force
-      .nodes(g_nodes)
-      .links(links)
-      .start();
 
   // Generate edges with style attributes
   svg.append("defs").selectAll("marker")
@@ -2070,23 +2051,76 @@ https://bl.ocks.org/mbostock/1212215
       .attr("class", function(d) { return "link " + d.type; })
       .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
-  var node = svg.selectAll(".node")
-      .data(g_nodes)
-    .enter().append("g")
-      .attr("class", "node")
+  // Generate nodes with style attributes and colors based on expression from JSON graph file
+  var circle = svg.append("g").selectAll("circle")
+      .data(force.nodes())
+      .enter().append("circle")
       .style("--node_color", function(d) { return "rgba(" + d.color + ")"; })
-      .call(force.drag);
+      .attr("r", 6)
+      .call(force.drag)
+      .on("drag", dragged)
+      .on('mouseover', function(d, i) {
+        if (type_dict[d.name] === "reaction") { //change to reaction to hide labels
+          console.log("mouseover", d.name);
+          d3.select(this).attr({
+              r: 12
+            });
 
-  var circle = node.append("circle")
-      .attr("r", 6);
+            svg.append("text").attr({
+                 id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
+                  x: d.x,
+                  y: d.y
+              })
+              .text(function() {
+                return d.name;  // Value of the text
+              });
 
-  var text = node.append("text")
-      .attr("x", 16)
-      .attr("y", ".31em")
-      .text(function(d) { return d.name; });
+        } else {}
 
-  var cell = node.append("path")
-      .attr("class", "cell");
+    })
+    .on('mouseout', function(d, i) {
+      if (type_dict[d.name] === "reaction") { //change to reaction to hide labels
+        console.log("mouseout", i);
+        d3.select(this)
+        .attr({r: 6});
+        console.log(d3.select("#t" + d.x + "-" + d.y + "-" + i)) // Remove text location
+
+      } else {}
+    })
+
+
+  var text = svg.append("g").selectAll("text")
+        .data(force.nodes())
+      .enter().append("text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .text(function(d) {
+          if (type_dict[d.name] === "reaction") { //change to reaction to hide labels
+          } else {
+            return d.name;
+          };
+        });
+
+
+        function dragged(d) {
+          d3.select(this).attr("transform","translate("+(d.x = d3.event.x)+','+(d.y = d3.event.y)+')' );
+        }
+
+    function mouseover(d) {
+        d3.select(this).append("text")
+            .attr("class", "hover")
+            .attr('transform', function(d){
+                return 'translate(5, -10)';
+            })
+            .text(d.name);
+    }
+
+    // Toggle children on click.
+    function mouseout(d) {
+        d3.select(this).select("text.hover").remove();
+    }
+
+
 
   // Draw curved edges
   function tick() {
@@ -2096,96 +2130,15 @@ https://bl.ocks.org/mbostock/1212215
   }
 
   function linkArc(d) {
-
     var dx = d.target.x - d.source.x,
         dy = d.target.y - d.source.y,
         dr = Math.sqrt(dx * dx + dy * dy);
-
     return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-
   }
 
   function transform(d) {
-
     return "translate(" + d.x + "," + d.y + ")";
-
   }
-
-  // Toggle zoom and pan by pressing the Alt key
-  // This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
-
-  var toggle_zoom = false;
-
-  function activate_zoom() {
-
-    if (toggle_zoom === true) {
-
-      svg.attr(
-        "transform",
-        "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
-
-        );
-      }
-    };
-
-  d3.select("body")
-    .on("keydown", function () {
-
-      toggle_zoom = d3.event.altKey;
-
-    });
-
-  d3.select("body")
-    .on("keyup", function () {
-
-      toggle_zoom = false;
-
-    });
-  // End of adaption of code by Pedro Tabacof
-
-  toggle_a = false
-  d3.select("#toggleAnalytes").on("click", function() {
-    if (toggle_a === false) {
-
-      toggle_a = true;
-      console.log(text)
-      var text = svg.append("g").selectAll("text")
-        .data(force.nodes())
-        .attr("class", "update")
-        .enter().append("text")
-          .attr("class", "enter")
-          .attr("x", function(d, i) { return i * 32; })
-          .attr("dy", ".35em")
-        .merge(text)
-          .text(function(d) { return d.name; });
-
-    } else {
-
-      toggle_a = false;
-
-    }
-
-    console.log(toggle_a)
-
-  });
-
-
-  toggle_r = false
-  d3.select("#toggleReactions").on("click", function() {
-
-    if (toggle_r === false) {
-
-      toggle_r = true;
-
-    } else {
-
-      toggle_r = false;
-
-    }
-
-    console.log('HELLO')
-
-  });
 
 </script>
 </body>
