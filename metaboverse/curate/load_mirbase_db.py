@@ -25,7 +25,7 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_curate.utils import get_table
+from metaboverse.curate.utils import get_table
 
 """Get tables
 """

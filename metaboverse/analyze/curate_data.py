@@ -28,14 +28,14 @@ from sklearn import preprocessing
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_analyze.utils import import file_path
-from metaboverse.metaboverse_analyze.utils import check_suffix
-from metaboverse.metaboverse_analyze.utils import add_data
-from metaboverse.metaboverse_analyze.utils import format_data
-from metaboverse.metaboverse_analyze.utils import format_times
-from metaboverse.metaboverse_analyze.utils import even_spacing
-from metaboverse.metaboverse_analyze.utils import ratio_spacing
-from metaboverse.metaboverse_analyze.utils import sort_columns
+from metaboverse.analyze.utils import import file_path
+from metaboverse.analyze.utils import check_suffix
+from metaboverse.analyze.utils import add_data
+from metaboverse.analyze.utils import format_data
+from metaboverse.analyze.utils import format_times
+from metaboverse.analyze.utils import even_spacing
+from metaboverse.analyze.utils import ratio_spacing
+from metaboverse.analyze.utils import sort_columns
 
 # Generate dataframe collection
 # Dataframe is assumed to have columns as sample names and analytes as rows

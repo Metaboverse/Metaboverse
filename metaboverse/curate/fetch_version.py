@@ -25,7 +25,7 @@ from urllib.request import Request, urlopen
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_curate.__init__ import __reactome_version__
+from metaboverse.curate.__init__ import __reactome_version__
 
 """Set globals
 """

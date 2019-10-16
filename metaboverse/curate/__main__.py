@@ -26,13 +26,13 @@ import pickle
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_curate.load_reactions_db import __main__ as load_reactions
-from metaboverse.metaboverse_curate.load_chebi_db import __main__ as load_chebi
-from metaboverse.metaboverse_curate.load_uniprot_db import __main__ as load_uniprot
-from metaboverse.metaboverse_curate.load_ensembl_db import __main__ as load_ensembl
-from metaboverse.metaboverse_curate.load_ncbi_db import __main__ as load_ncbi
-from metaboverse.metaboverse_curate.load_mirbase_db import __main__ as load_mirbase
-from metaboverse.metaboverse_curate.load_complexes_db import __main__ as load_complexes
+from metaboverse.curate.load_reactions_db import __main__ as load_reactions
+from metaboverse.curate.load_chebi_db import __main__ as load_chebi
+from metaboverse.curate.load_uniprot_db import __main__ as load_uniprot
+from metaboverse.curate.load_ensembl_db import __main__ as load_ensembl
+from metaboverse.curate.load_ncbi_db import __main__ as load_ncbi
+from metaboverse.curate.load_mirbase_db import __main__ as load_mirbase
+from metaboverse.curate.load_complexes_db import __main__ as load_complexes
 
 """Plan
 """

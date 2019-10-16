@@ -90,6 +90,9 @@ HTML:
 	- Read in JSON file from output/tmp/path.json
 	- Draw graph (JORDAN)
 	- Drawing features (JORDAN)
+		- Buttons to toggle names
+		- Input boxes for modifying graph settings
+		- Display colorbar
 	- Options to save current user view
 	- Other user button options
 - If user exits page, erase JSON file for pathway

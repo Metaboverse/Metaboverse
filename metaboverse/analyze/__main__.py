@@ -23,11 +23,11 @@ from __future__ import print_function
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_analyze.curate_data import __main__ as curate_data
-from metaboverse.metaboverse_analyze.curate_network import __main__ as curate_network
-from metaboverse.metaboverse_analyze.graph import __main__ as graph
-from metaboverse.metaboverse_analyze.utils import map_ids
-from metaboverse.metaboverse_analyze.utils import retrieve_pathways
+from metaboverse.analyze.curate_data import __main__ as curate_data
+from metaboverse.analyze.curate_network import __main__ as curate_network
+from metaboverse.analyze.graph import __main__ as graph
+from metaboverse.analyze.utils import map_ids
+from metaboverse.analyze.utils import retrieve_pathways
 
 """Analyze data on network model
 """

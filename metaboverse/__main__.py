@@ -29,9 +29,9 @@ from metaboverse.__init__ import __version__
 from metaboverse.__init__ import __dependencies__
 from metaboverse.arguments import parse_arguments
 from metaboverse.arguments import get_dependencies
-from metaboverse.metaboverse_network.__main__ import __main__ as curate
-from metaboverse.metaboverse_preprocess.__main__ import __main__ as preprocess
-from metaboverse.metaboverse_analyze.__main__ import __main__ as analyze
+from metaboverse.network.__main__ import __main__ as curate
+from metaboverse.preprocess.__main__ import __main__ as preprocess
+from metaboverse.analyze.__main__ import __main__ as analyze
 
 """Run metaboverse
 """
