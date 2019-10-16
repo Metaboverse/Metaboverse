@@ -1,0 +1,137 @@
+<!--
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8">
+<title>Metaboverse</title>
+
+<html>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="network.css">
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="util.js"></script>
+
+
+
+  <head>
+
+
+
+    <!-- menu -->
+    <menu>
+      <font size=3.25px>
+        <menuItem style="float:right"><a href="contact.html">Contact Us</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/">Documentation</a></menuItem>
+        <menuItem style="float:right"><a href="faqs.html">FAQs</a></menuItem>
+        <menuItem style="float:right"><a href="about.html">About</a></menuItem>
+      </font>
+    </menu>
+
+    <div id="graph" align="center"></div>
+    <script src="network.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="title">
+
+      <font style="font-family: sans-serif">
+      <font size="48">
+        <b>
+          <center>
+            Metaboverse
+          </center>
+        </b>
+      </font>
+
+      <p>
+        <font size="2">
+          <center>
+            &copy; 2019
+          </center>
+        </font>
+      </p>
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <center>
+        <font size="3">
+      Welcome to Metaboverse. Let's get started...
+        </font>
+      </center>
+
+      <br>
+
+      <p>
+        <center>
+          <font size="3">
+            1. Drag and drop a folder where you would like data output.
+          </font>
+          <p></p>
+          <div id="output" ondrop="dropFolder(event);" ondragover="dragOver(event);">
+            <font size="3">Drop output folder</font>
+          </div>
+        </center>
+      </p>
+
+      <br>
+
+      <p>
+        <center>
+          <font size="3">
+            2. Drag and drop a pre-existing pathway database (optional).
+          </font>
+          <p></p>
+          <div id="database" ondrop="dropFile(event);" ondragover="dragOver(event);">
+            <font size="3">Drop database file</font>
+          </div>
+        </center>
+      </p>
+
+      <br>
+      <br>
+
+      <p>
+        <center>
+          <div id="continue" ondrop="continue(event);" ondragover="dragOver(event);">
+            <font size="3">Proceed</font>
+          </div>
+        </center>
+      </p>
+
+
+
+    </div>
+
+  </body>
+
+
+
+
+</html>
