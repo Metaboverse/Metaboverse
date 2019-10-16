@@ -119,3 +119,4 @@ HTML:
 7. Other
 - Organize repo for this restructuring to help team effort (JORDAN)
 - Timecourse (JORDAN)
+- On home page, have link for its my first time and link to walkthrough video or choose-your-own-adventure thingy

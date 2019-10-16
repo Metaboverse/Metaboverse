@@ -25,11 +25,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <html>
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="network.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/network.css">
 
   <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="util.js"></script>
+  <script src="js/util.js"></script>
 
 
 
@@ -43,12 +43,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues">Contact Us</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/">Documentation</a></menuItem>
         <menuItem style="float:right"><a href="faqs.html">FAQs</a></menuItem>
+        <menuItem style="float:right"><a href="firsttime.html">First Time?</a></menuItem>
         <menuItem style="float:right"><a href="about.html">About</a></menuItem>
       </font>
     </menu>
 
     <div id="graph" align="center"></div>
-    <script src="network.js"></script>
+    <script src="js/network.js"></script>
 
   </head>
 
@@ -119,9 +120,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
       <p>
         <center>
-          <div id="continue" ondrop="continue(event);" ondragover="dragOver(event);">
-            <font size="3">Proceed</font>
-          </div>
+          <a href="curate.html">
+            <div id="continue">
+              <font size="3">Proceed</font>
+            </div>
+          </a>
         </center>
       </p>
 
@@ -130,8 +133,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 
   </body>
-
-
 
 
 </html>

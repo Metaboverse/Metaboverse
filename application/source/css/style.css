@@ -33,7 +33,7 @@ menu {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #343d46;
 }
 menuItem {
   float: left;
@@ -116,4 +116,22 @@ text {
 #continue:hover {
     background: #7CC08E;
     text-shadow: none;
+}
+
+a {
+   text-decoration: none;
+   color: black;
+}
+
+
+img {
+    max-width: 100%;
+    max-height: 90vh;
+    margin: auto;
+    display: block;
+    position: fixed;
+    top: 50px;
+    left: 40px;
+    overflow-x: hidden;
+
 }
