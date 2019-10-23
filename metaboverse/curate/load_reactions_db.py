@@ -361,13 +361,13 @@ def __main__(
         species_id,
         output_dir): # Location to output database file
 
-    species_id='HSA'
-    output_dir='/Users/jordan/Desktop/reactome_test'
+    #species_id='HSA'
+    #output_dir='/Users/jordan/Desktop/reactome_test'
     # Get reaction files
     reactions_dir = unpack_reactions(
         output_dir=output_dir)
 
-    reactions_dir = '/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml/'
+    #reactions_dir = '/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml/'
 
     reactome_database = {}
 

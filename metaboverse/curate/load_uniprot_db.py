@@ -32,17 +32,17 @@ from metaboverse.curate.utils import get_table
 def __main__(
         output_dir):
 
-    all_levels = get_table(
-        output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_All_Levels.txt',
-        column_names=[
-            'source_id',
-            'analyte_id',
-            'url',
-            'reaction_id',
-            'go_evidence', #TAS = traceable author statement, IEA = electrong annotation not manually reviewed
-            'organism'])
-    os.remove(output_dir + 'UniProt2Reactome_All_Levels.txt')
+    #all_levels = get_table(
+    #    output_dir=output_dir,
+    #    url='https://reactome.org/download/current/UniProt2Reactome_All_Levels.txt',
+    #    column_names=[
+    #        'source_id',
+    #        'analyte_id',
+    #        'url',
+    #        'reaction_id',
+    #        'go_evidence', #TAS = traceable author statement, IEA = electrong annotation not manually reviewed
+    #        'organism'])
+    #os.remove(output_dir + 'UniProt2Reactome_All_Levels.txt')
 
     pe_all_levels = get_table(
         output_dir=output_dir,
@@ -58,62 +58,62 @@ def __main__(
             'organism'])
     os.remove(output_dir + 'UniProt2Reactome_PE_All_Levels.txt')
 
-    pe_pathways = get_table(
-        output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_Pathway.txt',
-        column_names=[
-            'source_id',
-            'analyte_id',
-            'analyte_name',
-            'reaction_id',
-            'url',
-            'reaction_name',
-            'go_evidence',
-            'organism'])
-    os.remove(output_dir + 'UniProt2Reactome_PE_Pathway.txt')
+    #pe_pathways = get_table(
+    #    output_dir=output_dir,
+    #    url='https://reactome.org/download/current/UniProt2Reactome_PE_Pathway.txt',
+    #    column_names=[
+    #        'source_id',
+    #        'analyte_id',
+    #        'analyte_name',
+    #        'reaction_id',
+    #        'url',
+    #        'reaction_name',
+    #        'go_evidence',
+    #        'organism'])
+    #os.remove(output_dir + 'UniProt2Reactome_PE_Pathway.txt')
 
-    pe_reactions = get_table(
-        output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_Reactions.txt',
-        column_names=[
-            'source_id',
-            'analyte_id',
-            'analyte_name',
-            'reaction_id',
-            'url',
-            'reaction_name',
-            'go_evidence',
-            'organism'])
-    os.remove(output_dir + 'UniProt2Reactome_PE_Reactions.txt')
+    #pe_reactions = get_table(
+    #    output_dir=output_dir,
+    #    url='https://reactome.org/download/current/UniProt2Reactome_PE_Reactions.txt',
+    #    column_names=[
+    #        'source_id',
+    #        'analyte_id',
+    #        'analyte_name',
+    #        'reaction_id',
+    #        'url',
+    #        'reaction_name',
+    #        'go_evidence',
+    #        'organism'])
+    #os.remove(output_dir + 'UniProt2Reactome_PE_Reactions.txt')
 
-    reactome = get_table(
-        output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome.txt',
-        column_names=[
-            'source_id',
-            'process_id',
-            'url',
-            'reaction_name',
-            'go_evidence',
-            'organism'])
-    os.remove(output_dir + 'UniProt2Reactome.txt')
+    #reactome = get_table(
+    #    output_dir=output_dir,
+    #    url='https://reactome.org/download/current/UniProt2Reactome.txt',
+    #    column_names=[
+    #        'source_id',
+    #        'process_id',
+    #        'url',
+    #        'reaction_name',
+    #        'go_evidence',
+    #        'organism'])
+    #os.remove(output_dir + 'UniProt2Reactome.txt')
 
-    reactome_reactions = get_table(
-        output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2ReactomeReactions.txt',
-        column_names=[
-            'source_id',
-            'process_id',
-            'url',
-            'reaction_name',
-            'go_evidence',
-            'organism'])
-    os.remove(output_dir + 'UniProt2ReactomeReactions.txt')
+    #reactome_reactions = get_table(
+    #    output_dir=output_dir,
+    #    url='https://reactome.org/download/current/UniProt2ReactomeReactions.txt',
+    #    column_names=[
+    #        'source_id',
+    #        'process_id',
+    #        'url',
+    #        'reaction_name',
+    #        'go_evidence',
+    #        'organism'])
+    #os.remove(output_dir + 'UniProt2ReactomeReactions.txt')
 
     return {
-        'uniprot_all_levels': all_levels,
-        'uniprot_pe_all_levels': pe_all_levels,
-        'uniprot_pe_pathways': pe_pathways,
-        'uniprot_pe_reactions': pe_reactions,
-        'uniprot_reactome': reactome,
-        'uniprot_reactome_reactions': reactome_reactions}
+        #'uniprot_all_levels': all_levels,
+        'uniprot_pe_all_levels': pe_all_levels}
+        #'uniprot_pe_pathways': pe_pathways,
+        #'uniprot_pe_reactions': pe_reactions,
+        #'uniprot_reactome': reactome,
+        #'uniprot_reactome_reactions': reactome_reactions}
