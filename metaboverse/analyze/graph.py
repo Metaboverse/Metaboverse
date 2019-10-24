@@ -33,6 +33,67 @@ import matplotlib
 import matplotlib.pyplot as plt
 cmap = matplotlib.cm.get_cmap('seismic')
 
+
+"""Test data
+"""
+def test():
+
+    ################
+    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
+    with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
+        reference = pickle.load(network_file)
+    network = reference
+
+    for x in network['pathway_types'].keys():
+        if 'glutamate' in x.lower():
+            print(x)
+
+    pathways = [
+        'Urea cycle',
+        'Citric acid cycle (TCA cycle)',
+        'Alanine metabolism',
+        'Glutamate and glutamine metabolism']
+    species_id = 'HSA'
+
+    trans = pd.read_csv(
+        '/Users/jordan/Desktop/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
+        sep='\t',
+        index_col=2)
+    del trans.index.name
+    trans = trans[['log2FoldChange']]
+    trans.columns = [0]
+
+    trans.head()
+
+    from random import randint
+
+    addi = []
+    for x in range(len(trans[0].tolist())):
+        addi.append(randint(-1,1))
+
+    trans[0] = trans[0] + addi
+    trans.head()
+
+    metabol = pd.read_csv(
+        '/Users/jordan/Desktop/danielle_seq/PGC1_beta_metabolomics.txt',
+        sep='\t',
+        index_col=0)
+    metabol = metabol[['log2foldchange']]
+    metabol.columns = [0]
+    metabol[0] = [0.053, 1.537, -1.114, -2.709, -1.67, 0.89, -0.3]
+    metabol.loc['CAP'] = [1.2]
+    metabol.loc['Urea'] = [3]
+    metabol
+
+    data = pd.concat([trans, metabol])
+    data = data.dropna()
+
+    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
+    plot = True
+    graph_name='name'
+    #################
+
+
 """Set output directory for graph files
 """
 def create_graph_output(
@@ -336,44 +397,53 @@ def map_graph_attributes(
     # Get max value in dataframe, may want to do this omic to omic
     max_value = max(abs(data[0]))
 
-    # Map node color, size
-    for node in graph.nodes():
+    for col in data.columns.tolist():
 
-        # Get node color values
-        if graph.nodes()[node]['type'] == 'reaction':
-            expression_value = None
-            color = 'grey'
-            rgba = (0.75, 0.75, 0.75, 1)
+        current_data = data[[col]]
+        graph.nodes()[node]['color'] = {}
+        graph.nodes()[node]['rgba'] = {}
+        graph.nodes()[node]['rgba_js'] = {}
+        graph.nodes()[node]['expression'] = {}
 
-        else:
+        # Map node color, size
+        for node in graph.nodes():
 
-            if node in data.index \
-            and str(data.loc[node][0]) != 'nan' \
-            and data.loc[node][0] != None:
-                expression_value = data.loc[node][0]
-                color, rgba = extract_value(
-                    expression_value=expression_value,
-                    max_value=max_value)
+            # Get node color values
+            if graph.nodes()[node]['type'] == 'reaction':
+                expression_value = None
+                color = 'grey'
+                rgba = (0.75, 0.75, 0.75, 1)
 
             else:
-                expression_value = None
-                color = 'white'
-                rgba = (1, 1, 1, 1)
 
-        # Add attributes
-        graph = add_node_attributes(
-            graph=graph,
-            node=node,
-            color=color,
-            rgba=rgba,
-            expression_value=expression_value)
+                if node in current_data.index \
+                and str(current_data.loc[node][0]) != 'nan' \
+                and current_data.loc[node][0] != None:
+                    expression_value = current_data.loc[node][0]
+                    color, rgba = extract_value(
+                        expression_value=expression_value,
+                        max_value=max_value)
 
-    # Map edge color, size
-    for edge in graph.edges():
+                else:
+                    expression_value = None
+                    color = 'white'
+                    rgba = (1, 1, 1, 1)
 
-        edge = add_edge_attributes(
-            graph=graph,
-            edge_id=edge)
+            # Add attributes
+            graph = add_node_attributes(
+                graph=graph,
+                node=node,
+                color=color,
+                rgba=rgba,
+                expression_value=expression_value,
+                current_sample=col)
+
+        # Map edge color, size
+        for edge in graph.edges():
+
+            edge = add_edge_attributes(
+                graph=graph,
+                edge_id=edge)
 
     return graph
 
@@ -395,28 +465,29 @@ def add_node_attributes(
         node,
         color,
         rgba,
-        expression_value):
+        expression_value,
+        current_sample=0):
 
     if graph.nodes()[node]['type'] == 'reaction':
-        graph.nodes()[node]['color'] = 'grey'
-        graph.nodes()[node]['rgba'] = (0.75, 0.75, 0.75, 1)
-        graph.nodes()[node]['rgba_js'] = convert_rgba(graph.nodes()[node]['rgba'])
-        graph.nodes()[node]['expression'] = None
+        graph.nodes()[node]['color'][str(current_sample)] = 'grey'
+        graph.nodes()[node]['rgba'][str(current_sample)] = (0.75, 0.75, 0.75, 1)
+        graph.nodes()[node]['rgba_js'][str(current_sample)] = convert_rgba(graph.nodes()[node]['rgba'][str(current_sample)])
+        graph.nodes()[node]['expression'][str(current_sample)] = None
         graph.nodes()[node]['size'] = str(1000)
 
     elif graph.nodes()[node]['type'] == 'reactant' \
     or graph.nodes()[node]['type'] == 'product':
-        graph.nodes()[node]['color'] = [color]
-        graph.nodes()[node]['rgba'] = rgba
-        graph.nodes()[node]['rgba_js'] = convert_rgba(graph.nodes()[node]['rgba'])
-        graph.nodes()[node]['expression'] = str(expression_value)
+        graph.nodes()[node]['color'][str(current_sample)] = [color]
+        graph.nodes()[node]['rgba'][str(current_sample)] = rgba
+        graph.nodes()[node]['rgba_js'][str(current_sample)] = convert_rgba(graph.nodes()[node]['rgba'][str(current_sample)])
+        graph.nodes()[node]['expression'][str(current_sample)] = str(expression_value)
         graph.nodes()[node]['size'] = str(500)
 
     else:
-        graph.nodes()[node]['color'] = color
-        graph.nodes()[node]['rgba'] = rgba
-        graph.nodes()[node]['rgba_js'] = convert_rgba(graph.nodes()[node]['rgba'])
-        graph.nodes()[node]['expression'] = str(expression_value)
+        graph.nodes()[node]['color'][str(current_sample)] = color
+        graph.nodes()[node]['rgba'][str(current_sample)] = rgba
+        graph.nodes()[node]['rgba_js'][str(current_sample)] = convert_rgba(graph.nodes()[node]['rgba'][str(current_sample)])
+        graph.nodes()[node]['expression'][str(current_sample)] = str(expression_value)
         graph.nodes()[node]['size'] = str(300)
 
     return graph
@@ -643,62 +714,3 @@ def __main__(
                 plot_graph(
                     graph=G,
                     output=plot_name)
-
-"""Test data
-"""
-def test():
-
-    ################
-    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
-    with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
-        reference = pickle.load(network_file)
-    network = reference
-
-    for x in network['pathway_types'].keys():
-        if 'glutamate' in x.lower():
-            print(x)
-
-    pathways = [
-        'Urea cycle',
-        'Citric acid cycle (TCA cycle)',
-        'Alanine metabolism',
-        'Glutamate and glutamine metabolism']
-    species_id = 'HSA'
-
-    trans = pd.read_csv(
-        '/Users/jordan/Desktop/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
-        sep='\t',
-        index_col=2)
-    del trans.index.name
-    trans = trans[['log2FoldChange']]
-    trans.columns = [0]
-
-    trans.head()
-
-    from random import randint
-
-    addi = []
-    for x in range(len(trans[0].tolist())):
-        addi.append(randint(-1,1))
-
-    trans[0] = trans[0] + addi
-    trans.head()
-
-    metabol = pd.read_csv(
-        '/Users/jordan/Desktop/danielle_seq/PGC1_beta_metabolomics.txt',
-        sep='\t',
-        index_col=0)
-    metabol = metabol[['log2foldchange']]
-    metabol.columns = [0]
-    metabol[0] = [0.053, 1.537, -1.114, -2.709, -1.67, 0.89, -0.3]
-    metabol.loc['CAP'] = [1.2]
-    metabol.loc['Urea'] = [3]
-    metabol
-
-    data = pd.concat([trans, metabol])
-    data = data.dropna()
-
-    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
-    plot = True
-    graph_name='name'
-    #################
