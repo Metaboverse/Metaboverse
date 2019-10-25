@@ -3,6 +3,8 @@ Biological and Metabolic Networks Analyzer
 
 `WARNING: This repository is currently under development. When the software is complete and stable, the beta tag will be removed.`
 
+[![Build Status](https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.org/Metaboverse/Metaboverse)
+
 ## What does Metaboverse do?
 ### tl;dr
 - Curates metabolic model (currently only for human)
