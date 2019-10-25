@@ -132,8 +132,8 @@ HTML:
 - Compile omics data in preprocessing, then normalize/prep (JORDAN)
 	- Implement DESeq2 wrapper
 	- Automated processing of proteomics/metabolomics data? (Talk to Ahmad and Alex)
-- Integrate Travis CI, add badges
-- Implement docs pages
+- X Integrate Travis CI, add badges
+- X Implement docs pages
 - On home page, have link for its my first time and link to walkthrough video or choose-your-own-adventure thingy
 - Make metabolite name mapper
 	- Way to standardize?
