@@ -41,7 +41,8 @@ https://bl.ocks.org/mbostock/1212215
 <html>
 
   <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+
   </head>
 
   <body>
@@ -49,8 +50,10 @@ https://bl.ocks.org/mbostock/1212215
     <div class="sidebar">
       <font style="font-family: sans-serif">
 
+        <!-- Menu title -->
         <font size="5.5"><b>Metaboverse</b></font>
 
+        <!-- Pathway title -->
         <p><b>Pathway: Urea Cycle</b></p>
 
         <p><span class="dot" style="--dot_color: grey"></span>  Reaction</p>
@@ -67,9 +70,12 @@ https://bl.ocks.org/mbostock/1212215
         <p><font size="2.5">- Press Alt to pan and zoom</font></p>
         <p><font size="2.5">- Click and drag to pan</font></p>
         <p><font size="2.5">- Use mouse wheel to zoom</font></p>
+        <p><font size="2.5">- Hover to display name</font></p>
 
+        <!--<p><font size="2.5"><button id="toggleTimecourse">Play</button></font></p>-->
         <p><font size="2.5"><button id="toggleAnalytes">Toggle Feature Labels</button></font></p>
         <p><font size="2.5"><button id="toggleReactions">Toggle Reaction Labels</button></font></p>
+        <p><font size="2.5"><button id="toggleExpression">Toggle Expression</button></font></p>
         <p><font size="2.5"><input type="number" id="gravity-value" value=0.1>Gravity</input></font></p>
 
         <p></p>
@@ -80,10 +86,10 @@ https://bl.ocks.org/mbostock/1212215
       </font>
 
     </div>
-
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="graph.js"></script>
-
+    <script src="js/graph.js"></script>
+    <!--<script src="http://d3js.org/d3.v5.min.js"></script>
+    <script src="js/graph_test.js"></script>-->
   </body>
 
 </html>

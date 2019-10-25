@@ -9,12 +9,12 @@ Save as markdown in repo
 1. Exec file
 - X launch server (jordan: see metaboverse/visualize/make.sh)
 - X open home page
-	(jordan)
-	- -> see run.sh in home dir for example, launched home page (application/source/index.html)
+	(JORDAN)
+	- X -> see run.sh in home dir for example, launched home page (application/source/index.html)
 - outputs: none
 
 2. Metaboverse home page (index.html)
-- (jordan)
+- (JORDAN)
  - -> Build outline, needs work with actually capturing user dragged folder and file
  - -> Would be nice if organization of page would stay consistent if user drags and resizes window
 
@@ -117,6 +117,27 @@ HTML:
 
 
 7. Other
-- Organize repo for this restructuring to help team effort (JORDAN)
+- X Organize repo for this restructuring to help team effort (JORDAN)
 - Timecourse (JORDAN)
+	- Viz
+		- https://bl.ocks.org/steveharoz/8c3e2524079a8c440df60c1ab72b5d03
+		- http://bl.ocks.org/pranitar/01305d9ad0eba73dbf80
+		- https://bl.ocks.org/jrladd/c76799aa63efd7176bd9006f403e854d
+		- https://bl.ocks.org/mbostock/6452972
+		- https://bl.ocks.org/officeofjane/47d2b0bfeecfcb41d2212d06d095c763
+		- Colorbar
+			- Need to output in graph info range, color scale, etc
+			- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
+			- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
+- Compile omics data in preprocessing, then normalize/prep (JORDAN)
+	- Implement DESeq2 wrapper
+	- Automated processing of proteomics/metabolomics data? (Talk to Ahmad and Alex)
+- Integrate Travis CI, add badges
+- Implement docs pages
 - On home page, have link for its my first time and link to walkthrough video or choose-your-own-adventure thingy
+- Make metabolite name mapper
+	- Way to standardize?
+- Analyte search
+	- Plug in analyte and return list of all pathways with that analyte
+	- How to handle cross pathway information?
+	- Be able to combine motif search with analytes focus search
