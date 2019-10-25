@@ -20,14 +20,14 @@ from __future__ import print_function
 
 """Import dependencies
 """
-from metaboverse.tests.curation_tests.unit_tests import __main__ as curation_tests_unit
-from metaboverse.tests.curation_tests.module_tests import __main__ as curation_tests_module
-from metaboverse.tests.preprocessing_tests.unit_tests import __main__ as preprocessing_tests_unit
-from metaboverse.tests.preprocessing_tests.module_tests import __main__ as preprocessing_tests_module
-from metaboverse.tests.analysis_tests.unit_tests import __main__ as analysis_tests_unit
-from metaboverse.tests.analysis_tests.module_tests import __main__ as analysis_tests_module
-from metaboverse.tests.viz_tests.unit_tests import __main__ as viz_tests_unit
-from metaboverse.tests.viz_tests.module_tests import __main__ as viz_tests_module
+from tests.curation_tests.unit_tests import __main__ as curation_tests_unit
+from tests.curation_tests.module_tests import __main__ as curation_tests_module
+from tests.preprocessing_tests.unit_tests import __main__ as preprocessing_tests_unit
+from tests.preprocessing_tests.module_tests import __main__ as preprocessing_tests_module
+from tests.analysis_tests.unit_tests import __main__ as analysis_tests_unit
+from tests.analysis_tests.module_tests import __main__ as analysis_tests_module
+from tests.viz_tests.unit_tests import __main__ as viz_tests_unit
+from tests.viz_tests.module_tests import __main__ as viz_tests_module
 
 def run_curation_tests():
 
