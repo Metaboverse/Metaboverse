@@ -36,11 +36,11 @@ cmap = matplotlib.cm.get_cmap('seismic')
 
 """Test data
 """
-def test():
+def test_yeast():
 
     ################
-    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
-    with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
+    output = '/Users/jordan/Desktop/'
+    with open(output + 'SCE_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
     network = reference
 
@@ -53,10 +53,58 @@ def test():
         'Citric acid cycle (TCA cycle)',
         'Alanine metabolism',
         'Glutamate and glutamine metabolism']
+    species_id = 'SCE'
+
+    metabol = pd.read_csv(
+        '/Users/jordan/Desktop/mct1_3hr.txt',
+        sep='\t',
+        header=None,
+        index_col=0)
+
+    del metabol.index.name
+    metabol.columns = ['log2FoldChange']
+    metabol.columns = [0]
+    metabol = np.log2(metabol)
+    metabol.head()
+
+    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
+    plot = True
+    graph_name='name'
+
+    __main__(
+        data=metabol, # Assumed to already be name mapped
+        network=network,
+        pathways=pathways,
+        species_id='SCE',
+        output=output,
+        black_list=black_list,
+        plot=False,
+        graph_name='name')
+
+
+
+
+
+
+    #################
+
+def test():
+
+    ################
+    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
+    with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
+        reference = pickle.load(network_file)
+    network = reference
+
+
+    pathways = []
+    for x in network['pathway_types'].keys():
+        pathways.append(x)
+
     species_id = 'HSA'
 
     trans = pd.read_csv(
-        '/Users/jordan/Desktop/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
+        '/Users/jordan/Desktop/collaborations/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
         sep='\t',
         index_col=2)
     del trans.index.name
@@ -75,7 +123,7 @@ def test():
     trans.head()
 
     metabol = pd.read_csv(
-        '/Users/jordan/Desktop/danielle_seq/PGC1_beta_metabolomics.txt',
+        '/Users/jordan/Desktop/collaborations/danielle_seq/PGC1_beta_metabolomics.txt',
         sep='\t',
         index_col=0)
     metabol = metabol[['log2foldchange']]
@@ -93,6 +141,16 @@ def test():
     graph_name='name'
     #################
 
+
+    __main__(
+        data=metabol, # Assumed to already be name mapped
+        network=network,
+        pathways=pathways,
+        species_id='HSA',
+        output=output,
+        black_list=black_list,
+        plot=False,
+        graph_name='name')
 
 """Set output directory for graph files
 """
@@ -400,13 +458,14 @@ def map_graph_attributes(
     for col in data.columns.tolist():
 
         current_data = data[[col]]
-        graph.nodes()[node]['color'] = {}
-        graph.nodes()[node]['rgba'] = {}
-        graph.nodes()[node]['rgba_js'] = {}
-        graph.nodes()[node]['expression'] = {}
 
         # Map node color, size
         for node in graph.nodes():
+
+            graph.nodes()[node]['color'] = {}
+            graph.nodes()[node]['rgba'] = {}
+            graph.nodes()[node]['rgba_js'] = {}
+            graph.nodes()[node]['expression'] = {}
 
             # Get node color values
             if graph.nodes()[node]['type'] == 'reaction':
@@ -529,7 +588,7 @@ def output_graph(
         graph,
         output_name):
 
-    data = json_graph.node_link_data(G)
+    data = json_graph.node_link_data(graph)
 
     with open(output_name, 'w') as f:
         json.dump([data], f, indent=4) # Parse out as array for javascript
@@ -666,9 +725,11 @@ def __main__(
 
     # Generate graph
     # Input list of pathway names
+    total = len(pathways)
+    counter = 0
     for p in pathways:
-
-        print('Analyzing', p)
+        counter += 1
+        print('Analyzing ' + str(p) + ' (' + str(counter) + '/' + str(total) + ')')
 
         pathway_key = network['pathway_types'][p]
 
@@ -676,15 +737,15 @@ def __main__(
 
             subnetwork = network['pathways'][k]
 
-            name = 'graph-' + subnetwork['reactome_id']
+            name = 'graph-' + subnetwork['reactome_id'].replace('/','_')
 
             if graph_name == 'reactome':
-                graph_name = graph_directory + name + 'fake.json'
+                graph_name = graph_directory + name + '.json'
                 plot_name = graph_directory + name + '.pdf'
 
             else:
-                graph_name = graph_directory + p.replace(' ', '_') + 'fake.json'
-                plot_name = graph_directory + p.replace(' ', '_') + '.pdf'
+                graph_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.json'
+                plot_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.pdf'
 
             species_accession = 'R-' + species_id + '-'
 
