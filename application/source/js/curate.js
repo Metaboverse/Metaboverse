@@ -20,8 +20,6 @@ $.getJSON(reactome_api, function(data) {
   });
   speciesList.unshift("Select an organism..."); // Add select prompt to menu bar
 
-  console.log(speciesList)
-
   // Generate drop-down menu for species select
   var menu = document.getElementById("speciesMenu");
   for (var i = 0; i < speciesList.length; i++) {
