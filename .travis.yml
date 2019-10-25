@@ -15,23 +15,20 @@ install:
 - pip install .
 - python setup.py install
 
-# Code for MATPLOTLIB backend from Seaborn (https://github.com/mwaskom/seaborn)
 before_script:
-  - cp tests/mpl_agg matplotlibrc
 
 script:
-#- curl -L https://sourceforge.net/projects/xpressplot/files/GPL570.txt/download -o tests/GPL570.txt
-#- coverage run tests/fetch_test.py
+- coverage run tests/__main__.py
 #- coverage run -a tests/format_test.py
 
-after_success:
-- codecov
+#after_success:
+#- codecov
 
-deploy:
-  provider: pypi
-  user: j-berg
-  password:
-    secure: oZuySPt9+eDt95IAV4ks9yr0kO16muev1d5O9Pxzk/IZ3trvTeMDgt8IVbdg1pixjtMS5PkQraPSK4SJhozHNDZ3aXHYPBBI5QZodv3zcpX1T1umoD4/dQPZvOtcZ6XjhVrAcEag7hRZbRjndd8TgorEvAxP4t5egbFDTSIBeQ/cJjwof1PE4+wnTrZT87Xex08WdAiGGJc1hIxOd9G82rY7iMxmf6hqn3WzSIQrcxPfjOgIZC1rv3QKZtjtFhoNR7xvqBYwlZRw2CZhEy9d1IO79aYgy9RHJxsERLa3wOfzcOxqrdM0AyjxyAMOUVLfPRSkyWyal/yzo0pR40njwi5J7BYXVQ3IhZJlr/9fX+eafG1cCvDkP3uBUG5ru6vv8L3E4OVrqIxOfxaEnfUIRJNhzdTFY86bgyQ4fEduPFRgAencLi0BkZyoZL/KJxwE5uQLJtuHu/jqhXsCwEYa+90ZyqYjg0SpjbXCJXInreSYvTArv+atJkhXSGx5SD+06FCIb1S+b4Xgcxkau5dGDYV/gFRbb6kAfO//DdNyzJ6pSlgxOytjjyc1DnsvsLPj69XqXaGtvpqtGDBIdCxQWHwtAX4Pwt9OORa3M6yhWVZuE5Nvxm6LAPFE5ihjqicEGF69uEPOBpn0DJMvcPSVxrf12dQ/hTjinqSagcm04Xw=
-  skip_existing: true
-  on:
-    tags: true
+#deploy:
+#  provider: pypi
+#  user: j-berg
+#  password:
+#    secure:
+#  skip_existing: true
+#  on:
+#    tags: true

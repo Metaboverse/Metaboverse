@@ -55,3 +55,5 @@ def __main__():
     run_preprocessing_tests()
     run_analysis_tests()
     run_viz_tests()
+
+__main__()
