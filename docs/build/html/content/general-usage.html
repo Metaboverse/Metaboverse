@@ -8,12 +8,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>General Usage &mdash; XPRESSpipe 0.2.4-beta documentation</title>
+  <title>General Usage &mdash; Metaboverse 0.0.0-alpha documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../_static/xpressyourself.png"/>
+    <link rel="shortcut icon" href="../_static/metaboverse_cartoon.png"/>
   
   
   
@@ -27,7 +27,6 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -39,7 +38,7 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Curating References" href="reference-building.html" />
+    <link rel="next" title="Beginner’s Manual" href="beginner.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
@@ -54,12 +53,12 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> XPRESSpipe
+            <a href="../index.html" class="icon icon-home"> Metaboverse
           
 
           
             
-            <img src="../_static/xpressyourself.png" class="logo" alt="Logo"/>
+            <img src="../_static/metaboverse_cartoon.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -88,29 +87,14 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">XPRESSpipe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Metaboverse</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">General Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#file-naming">File Naming</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#data-output">Data Output</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">General Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
@@ -127,7 +111,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">XPRESSpipe</a>
+          <a href="../index.html">Metaboverse</a>
         
       </nav>
 
@@ -180,30 +164,7 @@
   <div class="section" id="general-usage">
 <span id="general-link"></span><h1>General Usage<a class="headerlink" href="#general-usage" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">XPRESSpipe can be run essentially from beginning to end as a pipeline, or as individual sub-modules. We will describe each option in more detail in each section of the documentation. The purpose of XPRESSpipe is to automate the alignment, quality control, and initial analysis of single-end (SE), paired-end (PE), and ribosome profiling data. It is intended that input data is in its own directory and that each file is a properly formatted <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> file. However, the suffix for these files can be <code class="xref py py-data docutils literal notranslate"><span class="pre">fq</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">txt</span></code> as well. They can be zipped (<code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code>) or unzipped. When using intermediate sub-modules, such as <code class="xref py py-data docutils literal notranslate"><span class="pre">align</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">readDistribution</span></code>, input will vary and is explicated</div>
-</div>
-<p>in the <code class="xref py py-data docutils literal notranslate"><span class="pre">--help</span></code> menu for each sub-module.</p>
-<div class="line-block">
-<div class="line">Further analysis on the resulting datasets can be performed using <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSplot">XPRESSplot</a>.</div>
-</div>
-<div class="section" id="file-naming">
-<h2>File Naming<a class="headerlink" href="#file-naming" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">In order for many of the XPRESSpipe functions to perform properly and for the output to be reliable after alignment (except for generation of a raw counts table), file naming conventions must be followed.</div>
-<div class="line">1. Download your raw sequence data and place in a folder – this folder should contain all the sequence data and nothing else.</div>
-</div>
-<div class="line-block">
-<div class="line">2. If you are working with single-end data, the files must be a FASTQ-formatted file and end with the suffix <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq.gz</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">fq</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">fq.gz</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">txt</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">txt.gz</span></code>. We recommend the <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq.gz</span></code> suffix.</div>
-</div>
-<div class="line-block">
-<div class="line">3. If you are working with paired-end data, the rules from <code class="xref py py-data docutils literal notranslate"><span class="pre">Step</span> <span class="pre">2</span></code> apply, but must the suffix must be prefaced by the paired read group number as below:</div>
-</div>
-<p>or</p>
-</div>
-<div class="section" id="data-output">
-<h2>Data Output<a class="headerlink" href="#data-output" title="Permalink to this headline">¶</a></h2>
-<p>Running <code class="xref py py-data docutils literal notranslate"><span class="pre">seRNAseq</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">peRNAseq</span></code>, or <code class="xref py py-data docutils literal notranslate"><span class="pre">riboseq</span></code> will output all intermediate and final data files as shown in this schematic:</p>
-<a class="reference internal image-reference" href="../_images/xpresspipe_overview.png"><img alt="../_images/xpresspipe_overview.png" class="align-center" src="../_images/xpresspipe_overview.png" style="width: 600px;" /></a>
+<div class="line">Coming soon…</div>
 </div>
 </div>
 
@@ -215,7 +176,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="reference-building.html" class="btn btn-neutral float-right" title="Curating References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="beginner.html" class="btn btn-neutral float-right" title="Beginner’s Manual" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -227,7 +188,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jordan A. Berg
+        &copy; Copyright 2019, Jordan A. Berg, et. al.
 
     </p>
   </div> 

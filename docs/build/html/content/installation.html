@@ -8,12 +8,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; XPRESSpipe 0.2.4-beta documentation</title>
+  <title>Installation &mdash; Metaboverse 0.0.0-alpha documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../_static/xpressyourself.png"/>
+    <link rel="shortcut icon" href="../_static/metaboverse_cartoon.png"/>
   
   
   
@@ -27,7 +27,6 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -40,7 +39,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="General Usage" href="general-usage.html" />
-    <link rel="prev" title="Beginner’s Guide" href="beginner.html" /> 
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -54,12 +53,12 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> XPRESSpipe
+            <a href="../index.html" class="icon icon-home"> Metaboverse
           
 
           
             
-            <img src="../_static/xpressyourself.png" class="logo" alt="Logo"/>
+            <img src="../_static/metaboverse_cartoon.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -88,29 +87,14 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">XPRESSpipe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Metaboverse</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#install-xpresspipe">Install XPRESSpipe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker-container">Docker Container</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
@@ -127,7 +111,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">XPRESSpipe</a>
+          <a href="../index.html">Metaboverse</a>
         
       </nav>
 
@@ -179,79 +163,8 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="install-xpresspipe">
-<h2>Install XPRESSpipe<a class="headerlink" href="#install-xpresspipe" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">- Let’s enter the command line.</div>
-<div class="line">1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)</div>
-<div class="line">2. Type “Terminal” into the search bar and click on the app icon</div>
-</div>
-<div class="line-block">
-<div class="line">- Great! Now we are in the command line interface. As a review, anything followed by a “$” in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, <strong>space and characters must be typed exactly and commands are case-sensitive</strong>.</div>
-<div class="line">- First, let’s install <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/">conda</a>, a package manager that will help us download all required dependencies.</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># If on a MacOS</span>
-$ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-
-<span class="c1"># If on a LinuxOS</span>
-$ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-$ bash ~/Miniconda3-latest-MacOSX-x86_64.sh
-
-<span class="c1"># Enter yes for all successive prompts and allow the script to install Conda into your path</span>
-<span class="c1"># After installation, the install script can be removed</span>
-rm ~/Miniconda3-latest-MacOSX-x86_64.sh
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">- Let’s get the latest version of XPRESSpipe by executing the lines of code in the code block below. Replace the URL for the version of XPRESSpipe for whatever version you want (these can be found under the <code class="xref py py-data docutils literal notranslate"><span class="pre">releases</span></code> tab on the <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe/releases">XPRESSpipe GitHub repository</a>).</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~
-$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.2.1b0.tar.gz
-$ tar xvzf v0.2.1b0.tar.gz
-$ <span class="nb">cd</span> XPRESSpipe-0.2.1b0
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">- Now we can give Conda the dependency file to process for us from XPRESSpipe:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda env create --name xpresspipe -f requirements.yml
-<span class="c1"># conda activate xpresspipe</span>
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">- This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type <code class="xref py py-data docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">xpresspipe</span></code> to use XPRESSpipe</div>
-<div class="line">- Let’s install XPRESSpipe and test that the installation was successful by executing the following:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python setup.py install
-$ xpresspipe <span class="nb">test</span>
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">- If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!</div>
-<div class="line">- You can run <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">--help</span></code> to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">&lt;module_name&gt;</span> <span class="pre">--help</span></code>.</div>
-</div>
-</div>
-<div class="section" id="docker-container">
-<h2>Docker Container<a class="headerlink" href="#docker-container" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">NOTE: The Docker containerization is still under development.</div>
-<div class="line">XPRESSpipe is available as a fully independent <a class="reference external" href="https://www.docker.com/">Docker</a> container. By downloading the Docker software and using the below command, a image of XPRESSpipe and all associated dependencies localized to a single file for ease of use.</div>
-</div>
-<div class="line-block">
-<div class="line">1. Download XPRESSpipe Docker image:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker image pull jordanberg/xpresspipe:latest
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">2. Run XPRESSpipe:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker run jordanberg/xpresspipe --help
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">If the help menu prints, XPRESSpipe if functioning properly and you can replace the <code class="xref py py-data docutils literal notranslate"><span class="pre">--help</span></code> option with the appropriate sub-module and arguments.</div>
-</div>
+<div class="line">Coming soon…</div>
 </div>
 </div>
 
@@ -266,7 +179,7 @@ $ xpresspipe <span class="nb">test</span>
         <a href="general-usage.html" class="btn btn-neutral float-right" title="General Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="beginner.html" class="btn btn-neutral float-left" title="Beginner’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -275,7 +188,7 @@ $ xpresspipe <span class="nb">test</span>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jordan A. Berg
+        &copy; Copyright 2019, Jordan A. Berg, et. al.
 
     </p>
   </div> 

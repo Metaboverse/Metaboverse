@@ -23,20 +23,9 @@ Table of contents
 
    content/overview
    content/quickstart
-   content/beginner
    content/installation
    content/general-usage
-   content/reference-building
-   content/seRNAseq
-   content/peRNAseq
-   content/riboseq
-   content/quality-control
-   content/analysis
-   content/trim
-   content/align
-   content/count
-   content/normalization
-   content/other-features
+   content/beginner
    content/faqs
    content/updates
 
