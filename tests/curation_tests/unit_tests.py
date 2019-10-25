@@ -25,25 +25,25 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_curate.fetch_species import fetch_species
-from metaboverse.metaboverse_curate.fetch_version import check_reactome_version
+from metaboverse.curate.fetch_species import fetch_species
+from metaboverse.curate.fetch_version import check_reactome_version
 
-from metaboverse.metaboverse_curate.utils import get_table
-from metaboverse.metaboverse_curate.utils import unpack_table
+from metaboverse.curate.utils import get_table
+from metaboverse.curate.utils import unpack_table
 
-from metaboverse.metaboverse_curate.__main__ import parse_table
-from metaboverse.metaboverse_curate.__main__ import parse_complexes
-from metaboverse.metaboverse_curate.__main__ import make_master
-from metaboverse.metaboverse_curate.__main__ import prepare_mappers
-from metaboverse.metaboverse_curate.__main__ import map_complexes_genes
-from metaboverse.metaboverse_curate.__main__ import write_database
+from metaboverse.curate.__main__ import parse_table
+from metaboverse.curate.__main__ import parse_complexes
+from metaboverse.curate.__main__ import make_master
+from metaboverse.curate.__main__ import prepare_mappers
+from metaboverse.curate.__main__ import map_complexes_genes
+from metaboverse.curate.__main__ import write_database
 
-from metaboverse.metaboverse_curate.load_reactions_db import get_reactions
-from metaboverse.metaboverse_curate.load_reactions_db import unpack_reactions
-from metaboverse.metaboverse_curate.load_reactions_db import get_database
-from metaboverse.metaboverse_curate.load_reactions_db import curate_reactions
-from metaboverse.metaboverse_curate.load_reactions_db import add_pathways
-from metaboverse.metaboverse_curate.load_reactions_db import add_compartments
+from metaboverse.curate.load_reactions_db import get_reactions
+from metaboverse.curate.load_reactions_db import unpack_reactions
+from metaboverse.curate.load_reactions_db import get_database
+from metaboverse.curate.load_reactions_db import curate_reactions
+from metaboverse.curate.load_reactions_db import add_pathways
+from metaboverse.curate.load_reactions_db import add_compartments
 
 """Set globals
 """

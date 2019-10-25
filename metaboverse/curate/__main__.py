@@ -47,8 +47,6 @@ def test():
         'species':'SCE'}
     )
 
-test()
-
 def parse_table(
         reference,
         key):

@@ -25,7 +25,7 @@ import pickle
 
 """Import internal dependencies
 """
-from metaboverse.metaboverse_curate.__main__ import __main__ as curate
+from metaboverse.curate.__main__ import __main__ as curate
 
 """Set globals
 """

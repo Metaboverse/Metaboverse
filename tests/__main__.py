@@ -20,14 +20,14 @@ from __future__ import print_function
 
 """Import dependencies
 """
-from tests.curation_tests.unit_tests import __main__ as curation_tests_unit
-from tests.curation_tests.module_tests import __main__ as curation_tests_module
-from tests.preprocessing_tests.unit_tests import __main__ as preprocessing_tests_unit
-from tests.preprocessing_tests.module_tests import __main__ as preprocessing_tests_module
-from tests.analysis_tests.unit_tests import __main__ as analysis_tests_unit
-from tests.analysis_tests.module_tests import __main__ as analysis_tests_module
-from tests.viz_tests.unit_tests import __main__ as viz_tests_unit
-from tests.viz_tests.module_tests import __main__ as viz_tests_module
+from curation_tests.unit_tests import __main__ as curation_tests_unit
+from curation_tests.module_tests import __main__ as curation_tests_module
+from preprocessing_tests.unit_tests import __main__ as preprocessing_tests_unit
+from preprocessing_tests.module_tests import __main__ as preprocessing_tests_module
+from analysis_tests.unit_tests import __main__ as analysis_tests_unit
+from analysis_tests.module_tests import __main__ as analysis_tests_module
+from viz_tests.unit_tests import __main__ as viz_tests_unit
+from viz_tests.module_tests import __main__ as viz_tests_module
 
 def run_curation_tests():
 
