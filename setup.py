@@ -25,8 +25,8 @@ import os
 
 """Import internal dependencies
 """
-from metabalyze.__init__ import __version__
-from metabalyze.__init__ import __dependencies__
+from metaboverse.__init__ import __version__
+from metaboverse.__init__ import __dependencies__
 
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 

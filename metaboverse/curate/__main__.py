@@ -43,9 +43,11 @@ from metaboverse.curate.load_complexes_db import __main__ as load_complexes
 def test():
 
     __main__(
-        {'output':'/Users/jordan/Desktop/reactome_test/',
-        'species':'HSA'}
+        {'output':'/Users/jordan/Desktop/',
+        'species':'SCE'}
     )
+
+test()
 
 def parse_table(
         reference,
@@ -364,3 +366,4 @@ def __main__(
         output=args_dict['output'],
         file=args_dict['species'] + '_metaboverse_db.pickle',
         database=reactions_database)
+    print('Metaboverse database curation complete.')
