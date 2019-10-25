@@ -1,10 +1,13 @@
-$.getJSON('https://reactome.org/ContentService/data/species/all', function(data) {
+// Initialize species list
+var reactome_api = "https://reactome.org/ContentService/data/species/all";
+
+$.getJSON(reactome_api, function(data) {
 
   // Get species name and ID from Reactome API
   var abbreviation_dict = {}
   data.forEach(function(datum) {
 
-      abbreviation_dict[datum['displayName']] = datum['abbreviation']
+      abbreviation_dict[datum["displayName"]] = datum["abbreviation"]
 
 
   });
@@ -20,12 +23,20 @@ $.getJSON('https://reactome.org/ContentService/data/species/all', function(data)
   console.log(speciesList)
 
   // Generate drop-down menu for species select
-  var menu = document.getElementById('speciesMenu');
+  var menu = document.getElementById("speciesMenu");
   for (var i = 0; i < speciesList.length; i++) {
-    var option = document.createElement('option');
+    var option = document.createElement("option");
     option.innerHTML = speciesList[i];
     option.value = speciesList[i];
     menu.appendChild(option);
-}
+  };
 
 });
+
+// Change user selection based on input
+function selectOrganism() {
+
+  var selection = document.getElementById("speciesMenu").value;
+  console.log(selection)
+
+};
