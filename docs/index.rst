@@ -1,0 +1,63 @@
+##############
+Metaboverse
+##############
+|build-status| |docs|
+
+=================
+About
+=================
+| `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ allows for the interactive exploration of metabolic pathways, integrating transcriptomics, translatomics, proteomics, metabolomics data and more.
+|
+| Please refer to the :ref:`overview_link` page for more details regarding functionality.
+
+=================
+Table of contents
+=================
+.. toctree::
+   :hidden:
+
+   self
+
+.. toctree::
+   :maxdepth: 1
+
+   content/overview
+   content/quickstart
+   content/beginner
+   content/installation
+   content/general-usage
+   content/reference-building
+   content/seRNAseq
+   content/peRNAseq
+   content/riboseq
+   content/quality-control
+   content/analysis
+   content/trim
+   content/align
+   content/count
+   content/normalization
+   content/other-features
+   content/faqs
+   content/updates
+
+=======
+License
+=======
+| `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.
+|
+| `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ is perpetually open source under a GNU General Public License (v3.0).
+
+==========
+Questions?
+==========
+| If you have questions, requests, or bugs to report, please use the `Metaboverse issues forum <https://github.com/Metaboverse/Metaboverse/issues>`_.
+
+
+
+.. |build-status| image:: https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master
+    :target: https://travis-ci.org/Metaboverse/Metaboverse
+    :alt: Build Status
+
+.. |docs| image:: https://readthedocs.org/projects/metaboverse/badge/?version=latest
+    :target: https://metaboverse.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status

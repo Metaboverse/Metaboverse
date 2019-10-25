@@ -5,6 +5,8 @@ Biological and Metabolic Networks Analyzer
 
 [![Build Status](https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.org/Metaboverse/Metaboverse)
 
+[![Documentation Status](https://readthedocs.org/projects/metaboverse/badge/?version=latest)](https://metaboverse.readthedocs.io/en/latest/?badge=latest)
+
 ## What does Metaboverse do?
 ### tl;dr
 - Curates metabolic model (currently only for human)
