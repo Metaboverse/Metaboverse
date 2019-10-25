@@ -131,7 +131,13 @@ HTML:
 			- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
 - Compile omics data in preprocessing, then normalize/prep (JORDAN)
 	- Implement DESeq2 wrapper
-	- Processing of proteomics/metabolomics data?
+	- Automated processing of proteomics/metabolomics data? (Talk to Ahmad and Alex)
 - Integrate Travis CI, add badges
 - Implement docs pages
 - On home page, have link for its my first time and link to walkthrough video or choose-your-own-adventure thingy
+- Make metabolite name mapper
+	- Way to standardize?
+- Analyte search
+	- Plug in analyte and return list of all pathways with that analyte
+	- How to handle cross pathway information?
+	- Be able to combine motif search with analytes focus search
