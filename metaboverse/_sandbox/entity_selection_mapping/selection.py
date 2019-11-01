@@ -10,6 +10,10 @@ def get_list_all_analytes():
     return
 
 # Allow for variable naming of analytes for Metaboverse plotting
+# Use CAS database, or KEGG name as dictionary to map
+# If not included, make note and have user manually convert name (once entered, check dictionary)
+# If not converted, will be left out of analysis
+# Check two studies from metabolomics workbench from different labs (one known, one unknown, and compare naming to see in DB requires standardization)
 def map_name_to_standard(
         name):
 
@@ -20,7 +24,7 @@ def map_name_to_standard(
 # UI will have drop-down menu with list of analytes to choose from (full name (abbreviation))
 # Map entity name to all IDs
 # Find all pathways with entity involved
-# Return list of pathways
+# Return list of pathways with hyperlinks for user to then viz
 def target_analyte(
         name,
         reference):
@@ -64,14 +68,33 @@ def target_analyte(
     return set(pathway_names), set(pathway_ids)
 
 
-
-def test():
+# Test entity mapping and selection
+def test_target():
 
     output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
     with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
 
     target = 'H+'
-    target_analyte(
+    pathway_names, pathway_ids = target_analyte(
         name=target,
         reference=reference)
+
+def test_map():
+
+    test_file = '/Users/jordan/Desktop/test.txt'
+    data = pd.read_csv(
+        test_file,
+        sep='\t',
+        header=None,
+        index_col=0)
+    del data.index.name
+    data
+
+for x in reference['master_reference'].keys():
+    if 'ENS' in reference['master_reference'][x]:
+        print(x)
+        print(reference['master_reference'][x])
+
+
+reference['master_reference']
