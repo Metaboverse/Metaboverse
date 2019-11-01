@@ -91,15 +91,10 @@ def test_yeast():
 def test():
 
     ################
-    output = '/Users/jordan/Desktop/Metaboverse/tests/analysis_tests/'
+    output = '/Users/jordan/Desktop/'
     with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
     network = reference
-
-
-    pathways = []
-    for x in network['pathway_types'].keys():
-        pathways.append(x)
 
     species_id = 'HSA'
 
@@ -145,12 +140,12 @@ def test():
     __main__(
         data=metabol, # Assumed to already be name mapped
         network=network,
-        pathways=pathways,
         species_id='HSA',
         output=output,
         black_list=black_list,
         plot=False,
-        graph_name='name')
+        graph_name='name',
+        global_reactions=True)
 
 """Set output directory for graph files
 """
@@ -169,21 +164,36 @@ def build_graph(
         master_reference,
         complex_reference,
         species_id,
-        black_list):
+        black_list,
+        all_reactions=False):
 
     G = nx.DiGraph()
 
     # cycle through reactions in process
-    for reaction_id in sub_network['reactions'].keys():
+    if all_reactions == False:
 
-        G = process_reactions(
-            graph=G,
-            reaction_id=reaction_id,
-            sub_network=sub_network,
-            master_reference=master_reference,
-            complex_reference=complex_reference,
-            species_id=species_id,
-            black_list=black_list)
+        for reaction_id in sub_network['reactions'].keys():
+
+            G = process_reactions(
+                graph=G,
+                reaction_id=reaction_id,
+                sub_network=sub_network['reactions'],
+                master_reference=master_reference,
+                complex_reference=complex_reference,
+                species_id=species_id,
+                black_list=black_list)
+
+    else:
+        for reaction_id in sub_network.keys():
+
+            G = process_reactions(
+                graph=G,
+                reaction_id=reaction_id,
+                sub_network=sub_network,
+                master_reference=master_reference,
+                complex_reference=complex_reference,
+                species_id=species_id,
+                black_list=black_list)
 
     return G
 
@@ -196,7 +206,7 @@ def process_reactions(
         species_id,
         black_list):
 
-    reaction_name = sub_network['reactions'][reaction_id]['name']
+    reaction_name = sub_network[reaction_id]['name']
 
     # Add reaction node
     graph = add_reaction_node(
@@ -208,7 +218,7 @@ def process_reactions(
     graph = add_node_edge(
         graph=graph,
         reaction_name=reaction_name,
-        sub_network=sub_network['reactions'][reaction_id],
+        sub_network=sub_network[reaction_id],
         master_reference=master_reference,
         complex_reference=complex_reference,
         species_id=species_id,
@@ -219,7 +229,7 @@ def process_reactions(
     graph = add_node_edge(
         graph=graph,
         reaction_name=reaction_name,
-        sub_network=sub_network['reactions'][reaction_id],
+        sub_network=sub_network[reaction_id],
         master_reference=master_reference,
         complex_reference=complex_reference,
         species_id=species_id,
@@ -230,7 +240,7 @@ def process_reactions(
     graph = add_node_edge(
         graph=graph,
         reaction_name=reaction_name,
-        sub_network=sub_network['reactions'][reaction_id],
+        sub_network=sub_network[reaction_id],
         master_reference=master_reference,
         complex_reference=complex_reference,
         species_id=species_id,
@@ -700,20 +710,62 @@ def plot_graph(
         dpi=600,
         bbox_inches='tight')
 
+"""Process all graph building tasks
+"""
+def process_graph(
+        subnetwork,
+        master_reference,
+        complex_reference,
+        species_accession,
+        graph_name,
+        data,
+        black_list=[],
+        plot_name=False,
+        process_all=False):
+
+    # Build Graph
+        # Add reactions
+        # Add analytes
+        # Add edges
+    G = build_graph(
+        sub_network=subnetwork,
+        master_reference=master_reference,
+        complex_reference=complex_reference,
+        species_id=species_accession,
+        black_list=black_list,
+        all_reactions=process_all)
+
+    # Add node and edge colors and size -> inside runs a function for node and for edge coloring
+    G = map_graph_attributes(
+        graph=G,
+        data=data)
+
+    # Output graph
+    output_graph(
+        graph=G,
+        output_name=graph_name)
+
+    # Plot graph
+    if plot_name != False:
+        plot_graph(
+            graph=G,
+            output=plot_name)
+
 """Run graph generation
 TODO:
 - How to handle metabolite and gene with same name?
     - MAL is metabolite and gene abbreviation
 """
 def __main__(
-        data, # Assumed to already be name mapped
         network,
-        pathways,
         species_id,
         output,
+        pathways=[],
+        data=None, # Assumed to already be name mapped
         black_list=[],
         plot=False,
-        graph_name='name'):
+        graph_name='name',
+        global_reactions=False):
 
     # Get output directory for graphs
     graph_directory = create_graph_output(
@@ -722,56 +774,57 @@ def __main__(
     # Make master reference
     master_reference = network['master_reference']
     complex_reference = network['complexes_reference']['complex_mapper']
+    species_accession = 'R-' + species_id + '-'
 
     # Generate graph
     # Input list of pathway names
-    total = len(pathways)
-    counter = 0
-    for p in pathways:
-        counter += 1
-        print('Analyzing ' + str(p) + ' (' + str(counter) + '/' + str(total) + ')')
+    if global_reactions == False:
 
-        pathway_key = network['pathway_types'][p]
+        total = len(pathways)
+        counter = 0
+        for p in pathways:
+            counter += 1
+            print('Analyzing ' + str(p) + ' (' + str(counter) + '/' + str(total) + ')')
 
-        for k in pathway_key:
+            pathway_key = network['pathway_types'][p]
 
-            subnetwork = network['pathways'][k]
+            for k in pathway_key:
 
-            name = 'graph-' + subnetwork['reactome_id'].replace('/','_')
+                subnetwork = network['pathways'][k]
 
-            if graph_name == 'reactome':
-                graph_name = graph_directory + name + '.json'
-                plot_name = graph_directory + name + '.pdf'
+                name = 'graph-' + subnetwork['reactome_id'].replace('/','_')
 
-            else:
-                graph_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.json'
-                plot_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.pdf'
+                if graph_name == 'reactome':
+                    graph_name = graph_directory + name + '.json'
+                    plot_name = graph_directory + name + '.pdf'
 
-            species_accession = 'R-' + species_id + '-'
+                else:
+                    graph_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.json'
+                    plot_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.pdf'
 
-            # Build Graph
-                # Add reactions
-                # Add analytes
-                # Add edges
-            G = build_graph(
-                sub_network=subnetwork,
-                master_reference=master_reference,
-                complex_reference=complex_reference,
-                species_id=species_accession,
-                black_list=black_list)
+                process_graph(
+                    subnetwork=subnetwork,
+                    master_reference=master_reference,
+                    complex_reference=complex_reference,
+                    species_accession=species_accession,
+                    graph_name=graph_name,
+                    data=data,
+                    black_list=black_list,
+                    plot_name=plot_name)
 
-            # Add node and edge colors and size -> inside runs a function for node and for edge coloring
-            G = map_graph_attributes(
-                graph=G,
-                data=data)
+    else:
 
-            # Output graph
-            output_graph(
-                graph=G,
-                output_name=graph_name)
+        global_database = network['global_reactions']
+        graph_name = graph_directory + species_id + '_global_reactions.json'
+        plot_name = graph_directory + species_id + '_global_reactions.pdf'
 
-            # Plot graph
-            if plot != False:
-                plot_graph(
-                    graph=G,
-                    output=plot_name)
+        process_graph(
+            subnetwork=global_database,
+            master_reference=master_reference,
+            complex_reference=complex_reference,
+            species_accession=species_accession,
+            graph_name=graph_name,
+            data=data,
+            black_list=black_list,
+            plot_name=False,
+            process_all=True)
