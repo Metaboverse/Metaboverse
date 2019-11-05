@@ -27,7 +27,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 <html>
 
   <link rel="stylesheet" href="css/style.css">
+<!--
+  <link rel="stylesheet" href="css/network.css">
 
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="js/util.js"></script>
+-->
   <head>
 
 
@@ -44,13 +49,17 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       </font>
     </menu>
 
+<!--
+    <div id="graph" align="center"></div>
+    <script src="js/network.js"></script>
+-->
+
   </head>
 
   <body>
 
 
-  <img src="images/organisms.png" alt="organisms" align="right">
-
+      <img src="images/organisms.png" alt="organisms" align="right">
     <!--
     <div class="title">
 
@@ -96,25 +105,30 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
 
       <!-- Demo of metabolic pathway dropdown, actual dropdown will be dependent on species seleciton above -->
-      <center>
-        <form>
-          <p>Select metabolic pathway...</p>
-           <select name = "dropdown">
-              <option value = "glycolysis" selected>Glycolysis</option>
-              <option value = "krebs">Citric Acid Cycle</option>
-              <option value = "oxphospho">Oxidative Phosphorylation</option>
-              <option value = "gluconeo">Gluconeogenesis</option>
-           </select>
-        </form>
-      </center>
+      <div id="secondary" style="display:none">
+        <center>
+          <form>
+            <p>Select metabolic pathway...</p>
+             <select name = "dropdown" onchange="toggleVis1()">
+                <option value = "glycolysis" selected>Glycolysis</option>
+                <option value = "krebs">Citric Acid Cycle</option>
+                <option value = "oxphospho">Oxidative Phosphorylation</option>
+                <option value = "gluconeo">Gluconeogenesis</option>
+             </select>
+          </form>
+        </center>
+      </div>
 
-      <center>
-      <input type="checkbox" name="check" value="pathways"> Check to run all pathways<br>
-      </center>
+      <div id="tertiary" style="display:none" onchange="toggleVis1()">
+        <center>
+        <input type="checkbox" name="check" value="pathways"> Check to run all pathways<br>
+        </center>
+      </div>
 
       <br>
       <br>
       <!-- Display drag & drop area and file upload button for user -->
+      <div id="quaternary" style="display:none">
         <div id="drop-area">
           <form class="my-form">
             <p>Input transcriptomics data</p>
@@ -144,6 +158,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
 
+
+<!-- Wrapping this altogether for now, the below will need to be wrapped in modular div elements
+    <div id="quinary" style="display:none"> -->
         <br>
         <center>
           <font size="5">
@@ -196,6 +213,26 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </center>
         <br><br><br>
 
+        <p>
+          <center>
+            <a href="index.html">
+              <div id="back">
+                <font size="3">Back</font>
+              </div>
+            </a>
+          </center>
+        </p>
+
+        <p>
+          <center>
+            <a href="analyze.html">
+              <div id="continue">
+                <font size="3">Proceed</font>
+              </div>
+            </a>
+          </center>
+        </p>
+    </div>
 
   </body>
 

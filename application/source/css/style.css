@@ -59,8 +59,10 @@ text {
 
 .title {
     position: absolute;
-    top: 60%;
+    top: 100%;
     left: 50%;
+    text-align: center;
+    width: 100%;
     -moz-transform: translateX(-50%) translateY(-60%);
     -webkit-transform: translateX(-50%) translateY(-60%);
     transform: translateX(-50%) translateY(-60%);
@@ -118,6 +120,22 @@ text {
     text-shadow: none;
 }
 
+#back {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+}
+
+#back:hover {
+    background: #cc0000;
+    text-shadow: none;
+}
+
 a {
    text-decoration: none;
    color: black;
@@ -134,4 +152,101 @@ img {
     left: 40px;
     overflow-x: hidden;
 
+}
+
+.note {
+width: 500px;
+margin: 50px auto;
+font-size: 2.0em;
+color: #CD5C5C;
+text-align: justify;
+}
+
+#drop-area {
+border: 2px dashed #0E8886;
+border-radius: 20px;
+width: 200px;
+margin: 30px auto;
+padding: 10px;
+align-content: justify;
+
+}
+
+#drop-area.highlight {
+border-color: purple;
+}
+
+.my-form {
+margin-bottom: 10px;
+}
+
+.button {
+display: inline-block;
+padding: 10px;
+background: #16CDCA;
+cursor: pointer;
+border-radius: 4px;
+border: 2px solid #0E8886;
+}
+
+.button:hover {
+background: #0F9A98;
+}
+
+#fileElem {
+display: none;
+}
+
+#dropdown2 {
+/*
+  float:right;
+  width:25%;
+*/
+}
+
+#pathway {
+float:left;
+width:33%;
+height:80px;
+margin:0 0 0 100px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#motifs{
+float:left;
+width:33%;
+height:80px;
+margin:0 0 0 -50px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#score{
+float:right;
+width:33%;
+height:80px;
+margin:0 0 0 -50px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#backButton {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+  position: absolute;
+  right:0;
+  bottom:0;
+  margin:0 50 50 0px;
+}
+
+#backButton:hover {
+    background: #cc0000;
+    text-shadow: none;
 }
