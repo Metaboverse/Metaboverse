@@ -21,20 +21,13 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
+import eel
 
 """Set globals
 """
-__path__  =  os.path.dirname(os.path.realpath(__file__))
+__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
-"""Launch home page
-"""
-def __main__():
-
-    url = str(__path__) + '/source/index.html'
-    os.system('open ' + str(url))
-
-"""Run main script
-"""
 if __name__ == '__main__':
 
-    __main__()
+    eel.init(__path__ + 'source')
+    eel.start('index.html')
