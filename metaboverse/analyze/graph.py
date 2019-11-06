@@ -33,12 +33,10 @@ import matplotlib
 import matplotlib.pyplot as plt
 cmap = matplotlib.cm.get_cmap('seismic')
 
-
 """Test data
 """
 def test_yeast():
 
-    ################
     output = '/Users/jordan/Desktop/'
     with open(output + 'SCE_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
@@ -81,16 +79,8 @@ def test_yeast():
         plot=False,
         graph_name='name')
 
-
-
-
-
-
-    #################
-
 def test():
 
-    ################
     output = '/Users/jordan/Desktop/'
     with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
@@ -134,9 +124,7 @@ def test():
     black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
     plot = True
     graph_name='name'
-    #################
-
-
+    
     __main__(
         data=metabol, # Assumed to already be name mapped
         network=network,

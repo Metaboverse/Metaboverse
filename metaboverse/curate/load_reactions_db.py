@@ -385,6 +385,21 @@ def add_global_reactions(
 
     return global_reactions
 
+"""Generate pathway and reaction id dictionary for accessing from global network
+"""
+def add_pathway_dictionary(
+        pathways):
+
+    pathway_dictionary = {}
+    pathways=reactome_database['pathways']
+    for x in pathways.keys():
+
+        id = pathways[x]['reactome_id']
+        reactions = list(pathways[x]['reactions'].keys())
+        pathway_dictionary[id] = reactions
+
+    return pathway_dictionary
+
 """Fetch all reactions for a given organism
 """
 def __main__(
@@ -420,7 +435,10 @@ def __main__(
         reactome_database['pathways'])
 
     reactome_database['global_reactions'] = add_global_reactions(
-            pathways=reactome_database['pathways'])
+        pathways=reactome_database['pathways'])
+
+    reactome_database['pathway_dictionary'] = add_pathway_dictionary(
+        pathways=reactome_database['pathways'])
 
     shutil.rmtree(reactions_dir)
 
