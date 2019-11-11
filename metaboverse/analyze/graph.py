@@ -81,7 +81,7 @@ def test_yeast():
 
 def test():
 
-    output = '/Users/jordan/Desktop/'
+    output = '/Users/jordan/Desktop/reactome_test/'
     with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
     network = reference
@@ -124,7 +124,7 @@ def test():
     black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
     plot = True
     graph_name='name'
-    
+
     __main__(
         data=metabol, # Assumed to already be name mapped
         network=network,
