@@ -1,58 +1,16 @@
-function dropFile(event) {
+window.addEventListener("load", function() {
 
-  event.preventDefault();
+  document.getElementById("element-upload").onchange = function(event) {
 
-  if (event.dataTransfer.items) {
+    var reader = new FileReader();
+    reader.readAsDataURL(event.srcElement.files[0]);
 
-    for (var i = 0; i < event.dataTransfer.items.length; i++) {
+    reader.onload = function () {
 
-      if (event.dataTransfer.items[i].kind === 'file') {
+      var fileContent = reader.result;
 
-        var file = event.dataTransfer.items[i].getAsFile();
-        console.log('... file[' + i + '].name = ' + file.name);
-
-      }
-    }
-
-  } else {
-
-    for (var i = 0; i < event.dataTransfer.files.length; i++) {
-      console.log('... file[' + i + '].name = ' + event.dataTransfer.files[i].name);
+	  console.log(fileContent);
 
     }
-  }
-}
 
-// Prevent file drop on hover alone
-function dragOver(event) {
-
-  event.preventDefault();
-
-}
-
-
-
-function dropFolder(event) {
-
-  event.preventDefault();
-
-  if (event.dataTransfer.items) {
-
-    for (var i = 0; i < event.dataTransfer.items.length; i++) {
-
-      if (event.dataTransfer.items[i].kind === 'file') {
-
-        var file = event.dataTransfer.items[i].getAsFile();
-        console.log('... file[' + i + '].name = ' + file.name);
-
-      }
-    }
-
-  } else {
-
-    for (var i = 0; i < event.dataTransfer.folders.length; i++) {
-      console.log('... file[' + i + '].name = ' + event.dataTransfer.folders[i].name);
-
-    }
-  }
-}
+}});

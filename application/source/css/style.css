@@ -116,7 +116,14 @@ text {
 #continue:hover {
     background: #7CC08E;
     text-shadow: none;
+
 }
+
+#element-upload {
+  font: 16px sans-serif;
+  margin-left: 220px;
+}
+
 
 a {
    text-decoration: none;
