@@ -105,7 +105,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
     node_dict[node['name']] = node['rgba_js']
     type_dict[node['name']] = node['type']
-    expression_dict[node['name']] = node['expression']
+    expression_dict[node['name']] = node['expression'][0]
 
     if (node['type'] === 'reaction') {
       display_analytes_dict[node['name']] = 'none'
@@ -117,7 +117,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
   });
 
-  return node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict;
+  return [node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict];
 
 };
 
@@ -147,7 +147,7 @@ function initialize_links(links, nodex, node_dict, type_dict) {
 
   });
 
-  return nodex, node_dict;
+  return [nodex, node_dict];
 
 };
 
@@ -164,40 +164,6 @@ function activate_zoom() {
 
         );
     }
-};
-
-function initialize_graph() {
-
-  // Allow flexible window dimensions based on initial window size when opened
-  var width = window.innerWidth;
-  var height = window.innerHeight;
-
-  var svg = d3
-      .select("body")
-      .append("svg")
-          .attr("width", width)
-          .attr("height", height)
-      .call(d3.behavior.zoom()
-      .on("zoom", activate_zoom));
-
-  var force = d3.layout.force()
-      .gravity(0.1)
-      .linkDistance(60)
-      .charge(-500)
-      .on("tick", tick)
-      .size([width, height]);
-
-  return svg, force;
-
-};
-
-// Draw curved edges
-function tick() {
-
-  path.attr("d", linkArc);
-  circle.attr("transform", transform);
-  text.attr("transform", transform);
-
 };
 
 function linkArc(d) {
@@ -225,14 +191,50 @@ function parse_pathway(data, reactions) {
   var nodes = data[0].nodes;
 
   var master = data[0].master_reference;
-  var pathways = data[0].pathway_dictionary;
+  var reactions_dictionary = data[0].reactions_dictionary;
 
-  console.log("===")
-  console.log(reactions)
-  console.log(links)
-  console.log(nodes)
-  console.log(pathways['R-HSA-70555'])
-  console.log(master['R-HSA-70555'])
+  // Parse through each reaction listed and get the component parts
+  var components = [];
+  for (rxn in reactions) {
+
+    var target_rxns = reactions_dictionary[reactions[rxn]];
+    for (x in target_rxns) {
+
+      components.push(target_rxns[x]);
+      components.push(master[target_rxns[x]]);
+
+    };
+
+  };
+
+  // Parse the nodes of interest
+  var new_nodes = [];
+  var node_components = [];
+  nodes.forEach(function(node) {
+
+    if (components.includes(node['entity_id']) || components.includes(node['name'])) {
+
+      new_nodes.push(node)
+      node_components.push(node["name"])
+
+    };
+
+  });
+
+  // Parse out links of interest
+  var new_links = [];
+  links.forEach(function(link) {
+
+    // Add pertinent node information
+    if (node_components.includes(link.source) && node_components.includes(link.target)) {
+
+      new_links.push(link)
+
+    };
+
+  });
+
+  return [new_nodes, new_links];
 
 };
 
@@ -246,188 +248,187 @@ d3.json("data/HSA_global_reactions.json", function(data) {
   function change() {
 
     var selection = document.getElementById("pathwayMenu").value;
-    var reactions = pathway_dict[selection]['reactions'];
 
-    var nodes, links = parse_pathway(data, reactions);
+    var reactions = pathway_dict[selection]['reactions'];
+    var elements = parse_pathway(data, reactions);
+    var nodes = elements[0];
+    var links = elements[1];
 
     // Initialize variables
     var nodex = {};
     var node_dict = {};
     var type_dict = {};
 
-    var node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict = initialize_nodes(nodes, node_dict, type_dict);
-    var nodex, node_dict = initialize_links(links, nodex, node_dict, type_dict);
+    var node_elements = initialize_nodes(nodes, node_dict, type_dict);
+    var node_dict = node_elements[0];
+    var type_dict = node_elements[1];
+    var expression_dict = node_elements[2];
+    var display_analytes_dict = node_elements[3];
+    var display_reactions_dict = node_elements[4];
+
+    var link_elements = initialize_links(links, nodex, node_dict, type_dict);
+    var nodex = link_elements[0];
+    var node_dict = link_elements[1];
+
+    // Allow flexible window dimensions based on initial window size when opened
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    // Restart graph
+    d3.select("svg").remove();
+    d3.select("force").remove();
+    d3.select("g_nodes").remove();
+
+    console.log(nodes)
 
     // Initialize force graph object
-    //var svg, force = initialize_graph();
-    //var g_nodes = d3.values(nodex);
+    var svg = d3
+      .select("body")
+      .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+      .call(d3.behavior.zoom()
+      .on("zoom", activate_zoom));
+
+    var force = d3.layout.force()
+      .gravity(0.1)
+      .linkDistance(60)
+      .charge(-500)
+      .on("tick", tick)
+      .size([width, height]);
+
+    var g_nodes = d3.values(nodex);
 
     // Build graph
-    //force
-    //    .nodes(g_nodes)
-    //    .links(links)
-    //    .start();
+    force
+      .nodes(g_nodes)
+      .links(links)
+      .start();
 
+    // Generate edges with style attributes
+    svg.append("defs").selectAll("marker")
+      .data([
+        "reaction",
+        "reactant",
+        "product",
+        "inhibitor",
+        "catalyst",
+        "complex_component"])
+      .enter()
+      .append("marker")
+        .attr("id", function(d) { return d; })
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 15)
+        .attr("refY", -1.5)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+      .append("path")
+        .attr("d", "M0, -5L10, 0L0, 5");
 
+    var path = svg.append("g").selectAll("path")
+      .data(force.links())
+      .enter().append("path")
+        .attr("class", function(d) { return "link " + d.type; })
+        .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
+    var node = svg.selectAll(".node")
+      .data(g_nodes)
+      .enter().append("g")
+        .attr("class", "node")
+      .style("--node_color", function(d) { return "rgba(" + d.color[0].toString() + ")"; })
+      .call(force.drag);
 
+    var circle = node
+      .append("circle")
+        .attr("r", 6);
 
+    var text = node
+      .append("text")
+        .attr("x", 16)
+        .attr("y", ".31em")
+      .text(function(d) {
 
-    d3.select("body")
-        .on("keydown", function () {
+        if (type_dict[d.name] === "reaction") {
 
-            toggle_zoom = d3.event.altKey;
+          // If reaction node, do not display expression value
+          return d.name;
 
-        });
+        } else {
 
-    d3.select("body")
-        .on("keyup", function () {
+          // Label other nodes with expression value in parentheses
+          return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
 
-        toggle_zoom = false;
+        }
+      });
 
-    });
+    // Not working right now
+    toggle_e = false;
+    d3.select("#toggleExpression")
+      .on("click", function() {
 
-  };
+        if (toggle_e === false) {
 
+          toggle_e = true;
+          text.text(function(d) {
 
-}); //end of json import
+            if (type_dict[d.name] === "reaction") {
 
-   /*
+              // If reaction node, do not display expression value
+              return d.name;
 
+            } else {
 
+              // Label other nodes with expression value in parentheses
+              return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
 
+            }
 
+          });
 
+        } else {
+          toggle_e = false;
+          text.text(function(d) { return d.name });
+        }
 
+     });
 
+    toggle_a = false;
+    toggle_r = false;
+    text.style("--node_display", function(d) { return "none"; });
 
-   // Generate edges with style attributes
-   svg.append("defs").selectAll("marker")
-       .data([
-          "reaction",
-          "reactant",
-          "product",
-          "inhibitor",
-          "catalyst",
-          "complex_component"])
-       .enter()
-       .append("marker")
-           .attr("id", function(d) { return d; })
-           .attr("viewBox", "0 -5 10 10")
-           .attr("refX", 15)
-           .attr("refY", -1.5)
-           .attr("markerWidth", 6)
-           .attr("markerHeight", 6)
-           .attr("orient", "auto")
-       .append("path")
-           .attr("d", "M0, -5L10, 0L0, 5");
+    d3.select("#toggleAnalytes")
+      .on("click", function() {
 
-   var path = svg.append("g").selectAll("path")
-       .data(force.links())
-       .enter().append("path")
-           .attr("class", function(d) { return "link " + d.type; })
-           .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+        if (toggle_a === false) {
 
-   var node = svg.selectAll(".node")
-       .data(g_nodes)
-       .enter().append("g")
-           .attr("class", "node")
-       .style("--node_color", function(d) { return "rgba(" + d.color + ")"; })
-       .call(force.drag);
+          toggle_a = true;
+          determine_displays(toggle_a, toggle_r);
 
-   var circle = node
-       .append("circle")
-           .attr("r", 6);
+        } else {
 
-   var text = node
-       .append("text")
-           .attr("x", 16)
-           .attr("y", ".31em")
-       .text(function(d) {
+          toggle_a = false;
+          determine_displays(toggle_a, toggle_r);
+        }
 
-         if (type_dict[d.name] === "reaction") {
+      });
 
-           // If reaction node, do not display expression value
-           return d.name;
+    d3.select("#toggleReactions")
+      .on("click", function() {
 
-         } else {
+        if (toggle_r === false) {
 
-           // Label other nodes with expression value in parentheses
-           return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
+          toggle_r = true;
+          determine_displays(toggle_a, toggle_r);
 
-         }
-       });
+        } else {
 
+          toggle_r = false;
+          determine_displays(toggle_a, toggle_r);
 
-       // Not working right now
-       toggle_e = false;
-       d3.select("#toggleExpression")
-           .on("click", function() {
+        }
 
-               if (toggle_e === false) {
-                 toggle_e = true;
-                 text.text(function(d) {
-
-                   if (type_dict[d.name] === "reaction") {
-
-                     // If reaction node, do not display expression value
-                     return d.name;
-
-                   } else {
-
-                     // Label other nodes with expression value in parentheses
-                     return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
-
-                   }
-                 });
-               } else {
-                 toggle_e = false;
-                 text.text(function(d) { return d.name });
-               }
-
-            });
-
-
-
-
-
-       toggle_a = false;
-       toggle_r = false;
-       text.style("--node_display", function(d) { return "none"; });
-
-       d3.select("#toggleAnalytes")
-           .on("click", function() {
-
-               if (toggle_a === false) {
-
-                   toggle_a = true;
-                   determine_displays(toggle_a, toggle_r);
-
-               } else {
-
-                   toggle_a = false;
-                   determine_displays(toggle_a, toggle_r);
-               }
-
-           });
-
-
-       d3.select("#toggleReactions")
-           .on("click", function() {
-
-               if (toggle_r === false) {
-
-                   toggle_r = true;
-                  determine_displays(toggle_a, toggle_r);
-
-               } else {
-
-                   toggle_r = false;
-                   determine_displays(toggle_a, toggle_r);
-
-               }
-
-           });
+      });
 
     function determine_displays(toggle_a, toggle_r) {
 
@@ -471,18 +472,33 @@ d3.json("data/HSA_global_reactions.json", function(data) {
 
     };
 
+    var cell = node
+      .append("path")
+        .attr("class", "cell");
 
+    d3.select("body")
+      .on("keydown", function () {
 
+        toggle_zoom = d3.event.altKey;
 
+      });
 
+    d3.select("body")
+      .on("keyup", function () {
 
+        toggle_zoom = false;
 
+      });
 
-   var cell = node
-       .append("path")
-           .attr("class", "cell");
+    // Draw curved edges
+    function tick() {
 
+      path.attr("d", linkArc);
+      circle.attr("transform", transform);
+      text.attr("transform", transform);
 
+    };
 
+  };
 
-   */
+});
