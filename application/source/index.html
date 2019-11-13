@@ -28,7 +28,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/network.css">
 
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="js/util.js"></script>
 
 
@@ -96,9 +96,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             1. Drag and drop a folder where you would like data output.
           </font>
           <p></p>
-          <div id="output" ondrop="dropFolder(event);" ondragover="dragOver(event);">
-            <font size="3">Drop output folder</font>
-          </div>
+          <input id="element-upload" type="file">
+
         </center>
       </p>
 
@@ -107,12 +106,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <p>
         <center>
           <font size="3">
-            2. Drag and drop a pre-existing pathway database (optional).
+            2. Drag and drop a pre-existing pathway database (optional; file will end in ".json").
           </font>
           <p></p>
-          <div id="database" ondrop="dropFile(event);" ondragover="dragOver(event);">
-            <font size="3">Drop database file</font>
-          </div>
+          <input id="element-upload" type="file" accept=".json">
+
         </center>
       </p>
 

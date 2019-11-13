@@ -355,6 +355,51 @@ def unpack_reactions(
 
     return reactions_dir
 
+"""Extract global reactions
+"""
+def add_global_reactions(
+        pathways):
+
+    global_reactions = {}
+
+    # Parse through each pathway to extract its reactions
+    for pathway in pathways.keys():
+
+        pathway_id = pathways[pathway]['reactome_id']
+        pathway_name = pathways[pathway]['pathway_name']
+
+        # Parse out reactions to global reaction dictionary, keep same structure, but add pathway membership
+        for reaction in pathways[pathway]['reactions'].keys():
+
+            global_reactions[reaction] = {}
+            global_reactions[reaction]['pathway_id'] = pathway_id
+            global_reactions[reaction]['pathway_name'] = pathway_name
+            global_reactions[reaction]['id'] = pathways[pathway]['reactions'][reaction]['id']
+            global_reactions[reaction]['name'] = pathways[pathway]['reactions'][reaction]['name']
+            global_reactions[reaction]['reversible'] = pathways[pathway]['reactions'][reaction]['reversible']
+            global_reactions[reaction]['fast'] = pathways[pathway]['reactions'][reaction]['fast']
+            global_reactions[reaction]['compartment'] = pathways[pathway]['reactions'][reaction]['compartment']
+            global_reactions[reaction]['reactants'] = pathways[pathway]['reactions'][reaction]['reactants']
+            global_reactions[reaction]['products'] = pathways[pathway]['reactions'][reaction]['products']
+            global_reactions[reaction]['modifiers'] = pathways[pathway]['reactions'][reaction]['modifiers']
+
+    return global_reactions
+
+"""Generate pathway and reaction id dictionary for accessing from global network
+"""
+def add_pathway_dictionary(
+        pathways):
+
+    pathway_dictionary = {}
+    pathways=reactome_database['pathways']
+    for x in pathways.keys():
+
+        id = pathways[x]['reactome_id']
+        reactions = list(pathways[x]['reactions'].keys())
+        pathway_dictionary[id] = reactions
+
+    return pathway_dictionary
+
 """Fetch all reactions for a given organism
 """
 def __main__(
@@ -388,6 +433,12 @@ def __main__(
 
     reactome_database['compartment_types'] = add_compartments(
         reactome_database['pathways'])
+
+    reactome_database['global_reactions'] = add_global_reactions(
+        pathways=reactome_database['pathways'])
+
+    reactome_database['pathway_dictionary'] = add_pathway_dictionary(
+        pathways=reactome_database['pathways'])
 
     shutil.rmtree(reactions_dir)
 

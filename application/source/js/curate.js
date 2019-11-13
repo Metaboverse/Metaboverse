@@ -108,3 +108,5 @@ function toggleVis1() {
 function toggleVis2() {
   quinary.style.display = 'block';
 }
+
+// ****************** Progress Bar starts here ****************

@@ -1,3 +1,4 @@
+eel
 pandas
 numpy
 scipy

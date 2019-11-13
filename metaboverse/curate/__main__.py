@@ -296,6 +296,10 @@ def write_database(
 def __main__(
         args_dict):
 
+    #args_dict = {
+    #    'output':'/Users/jordan/Desktop/',
+    #    'species':'HSA'}
+
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
