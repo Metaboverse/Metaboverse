@@ -33,7 +33,7 @@ from metaboverse.utils import progress_bar
 
 """Set globals
 """
-analyte_prefix='R-ALL-'
+analyte_prefix = 'R-ALL-'
 
 """Get list of reactions to parse
 """
@@ -391,7 +391,7 @@ def add_pathway_dictionary(
         pathways):
 
     pathway_dictionary = {}
-    pathways=reactome_database['pathways']
+
     for x in pathways.keys():
 
         id = pathways[x]['reactome_id']
@@ -399,6 +399,41 @@ def add_pathway_dictionary(
         pathway_dictionary[id] = reactions
 
     return pathway_dictionary
+
+"""
+"""
+def add_reactions_dictionary(
+        pathways):
+
+    counter = 0
+    total = len(list(pathways.keys()))
+
+    reactions_dictionary = {}
+    for key in pathways.keys():
+
+        for reaction_id in pathways[key]['reactions'].keys():
+
+            components = []
+
+            reactants = list(pathways[key]['reactions'][reaction_id]['reactants'].keys())
+            products = list(pathways[key]['reactions'][reaction_id]['products'].keys())
+            modifiers = list(pathways[key]['reactions'][reaction_id]['modifiers'].keys())
+
+            components.append(reaction_id)
+            for x in [reactants, products, modifiers]:
+
+                for y in x:
+                    components.append(y)
+
+            reactions_dictionary[reaction_id] = components
+
+        progress_bar(
+            counter,
+            total,
+            status='Processing reactions for dictionary')
+        counter += 1
+
+    return reactions_dictionary
 
 """Fetch all reactions for a given organism
 """
@@ -438,6 +473,9 @@ def __main__(
         pathways=reactome_database['pathways'])
 
     reactome_database['pathway_dictionary'] = add_pathway_dictionary(
+        pathways=reactome_database['pathways'])
+
+    reactome_database['reactions_dictionary'] = add_reactions_dictionary(
         pathways=reactome_database['pathways'])
 
     shutil.rmtree(reactions_dir)
