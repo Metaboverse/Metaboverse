@@ -124,6 +124,12 @@ text {
   margin-left: 220px;
 }
 
+#pathwayMenu {
+  font: 16px sans-serif;
+  margin-left: 260px;
+  margin-top: 35px;
+}
+
 
 a {
    text-decoration: none;

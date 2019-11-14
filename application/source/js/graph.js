@@ -99,6 +99,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   var expression_dict = {};
   var display_analytes_dict = {};
   var display_reactions_dict = {};
+  var entity_id_dict = {};
 
   // Make dictionary of node color values and types
   nodes.forEach(function(node) {
@@ -106,6 +107,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
     node_dict[node['name']] = node['rgba_js']
     type_dict[node['name']] = node['type']
     expression_dict[node['name']] = node['expression'][0]
+    entity_id_dict[node['name']] = node['entity_id']
 
     if (node['type'] === 'reaction') {
       display_analytes_dict[node['name']] = 'none'
@@ -117,7 +119,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
   });
 
-  return [node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict];
+  return [node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict, entity_id_dict];
 
 };
 
@@ -149,21 +151,6 @@ function initialize_links(links, nodex, node_dict, type_dict) {
 
   return [nodex, node_dict];
 
-};
-
-// Toggle zoom and pan by pressing the Alt key
-// This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
-var toggle_zoom = false;
-function activate_zoom() {
-
-    if (toggle_zoom === true) {
-
-        svg.attr(
-            "transform",
-            "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
-
-        );
-    }
 };
 
 function linkArc(d) {
@@ -238,6 +225,33 @@ function parse_pathway(data, reactions) {
 
 };
 
+function nearest_neighbors(data, entity_id) {
+
+  console.log("----")
+  console.log(entity_id)
+  console.log("----")
+
+  // Give a button to determine the number of NN to use based on user (default 2)
+
+  // Get kNN to node of interest
+
+  // Save old graph in burner variable
+
+  // Recurate the graph
+
+  // Remove old plot and plot this one
+
+  // Provide a go back button to get back to the graph they made previously
+
+
+  var nodes = 0;
+  var links = 0;
+
+  return nodes, links;
+
+};
+
+// MAIN
 d3.json("data/HSA_global_reactions.json", function(data) {
 
   var pathway_dict = make_pathway_dictionary(data);
@@ -254,6 +268,8 @@ d3.json("data/HSA_global_reactions.json", function(data) {
     var nodes = elements[0];
     var links = elements[1];
 
+    console.log(nodes)
+
     // Initialize variables
     var nodex = {};
     var node_dict = {};
@@ -265,6 +281,7 @@ d3.json("data/HSA_global_reactions.json", function(data) {
     var expression_dict = node_elements[2];
     var display_analytes_dict = node_elements[3];
     var display_reactions_dict = node_elements[4];
+    var entity_id_dict = node_elements[5];
 
     var link_elements = initialize_links(links, nodex, node_dict, type_dict);
     var nodex = link_elements[0];
@@ -278,8 +295,6 @@ d3.json("data/HSA_global_reactions.json", function(data) {
     d3.select("svg").remove();
     d3.select("force").remove();
     d3.select("g_nodes").remove();
-
-    console.log(nodes)
 
     // Initialize force graph object
     var svg = d3
@@ -337,11 +352,21 @@ d3.json("data/HSA_global_reactions.json", function(data) {
       .enter().append("g")
         .attr("class", "node")
       .style("--node_color", function(d) { return "rgba(" + d.color[0].toString() + ")"; })
+      .style("--node_radius", function(d) { return 6; })
       .call(force.drag);
 
     var circle = node
       .append("circle")
-        .attr("r", 6);
+        .attr("r", 6)
+      .on("dblclick", function(d) {
+
+        console.log(entity_id_dict[d["name"]])
+        var neighbor_info = nearest_neighbors(data, entity_id_dict[d["name"]]);
+        var nodes = neighbor_info[0]
+        var links = neighbor_info[1]
+
+
+      });
 
     var text = node
       .append("text")
@@ -363,7 +388,7 @@ d3.json("data/HSA_global_reactions.json", function(data) {
       });
 
     // Not working right now
-    toggle_e = false;
+    toggle_e = true;
     d3.select("#toggleExpression")
       .on("click", function() {
 
@@ -497,6 +522,21 @@ d3.json("data/HSA_global_reactions.json", function(data) {
       circle.attr("transform", transform);
       text.attr("transform", transform);
 
+    };
+
+    // Toggle zoom and pan by pressing the Alt key
+    // This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
+    var toggle_zoom = false;
+    function activate_zoom() {
+
+        if (toggle_zoom === true) {
+
+            svg.attr(
+                "transform",
+                "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
+
+            );
+        }
     };
 
   };
