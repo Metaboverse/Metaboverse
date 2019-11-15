@@ -117,7 +117,7 @@ def test():
     data = pd.concat([trans, metabol])
     data = data.dropna()
 
-    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
+    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP', 'CO2']
     plot = True
     graph_name='name'
 
