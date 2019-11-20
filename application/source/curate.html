@@ -104,114 +104,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <br>
 
-      <!-- Demo of metabolic pathway dropdown, actual dropdown will be dependent on species seleciton above -->
-      <div id="secondary" style="display:none">
-        <center>
-          <form>
-            <p>Select metabolic pathway...</p>
-             <select name = "dropdown" onchange="toggleVis1()">
-                <option value = "glycolysis" selected>Glycolysis</option>
-                <option value = "krebs">Citric Acid Cycle</option>
-                <option value = "oxphospho">Oxidative Phosphorylation</option>
-                <option value = "gluconeo">Gluconeogenesis</option>
-             </select>
-          </form>
-        </center>
-      </div>
 
-      <div id="tertiary" style="display:none" onchange="toggleVis1()">
-        <center>
-        <input type="checkbox" name="check" value="pathways"> Check to run all pathways<br>
-        </center>
-      </div>
-
-      <br>
-      <br>
-      <!-- Display drag & drop area and file upload button for user -->
-      <div id="quaternary" style="display:none">
-        <div id="drop-area">
-          <form class="my-form">
-            <p>Input transcriptomics data</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-        </div>
-
-        <div id="drop-area">
-          <form class="my-form">
-            <p>Input proteomics data</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-        </div>
-
-        <div id="drop-area">
-          <form class="my-form">
-            <p>Input metabolomics data</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-        </div>
-
-        <div id="drop-area">
-          <form class="my-form">
-            <p>Input metadata table</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-        </div>
-
-
-
-<!-- Wrapping this altogether for now, the below will need to be wrapped in modular div elements
-    <div id="quinary" style="display:none"> -->
-        <br>
-        <center>
-          <font size="5">
-        <p>Options</p>
-        </center>
-
-        <center>
-        <form>
-          <font size="3">
-          <p>Experiment Type:</p>
-           <select name = "dropdown">
-              <option value = "expType1" selected>Experiment Type 1</option>
-              <option value = "expType2">Experiment Type 2</option>
-              <option value = "expType3">Experiment Type 3</option>
-           </select>
-        </form>
-        <br>
-
-        <form>
-          <p>Normalization:</p>
-           <select name = "dropdown">
-              <option value = "normType1" selected>Normalization Type 1</option>
-              <option value = "normType2">Normalization Type 2</option>
-              <option value = "normType3">Normalization Type 3</option>
-           </select>
-        </form>
-
-        <form>
-          <p>Pathway:</p>
-           <select name = "dropdown">
-              <option value = "pathType1" selected>Pathway Type 1</option>
-              <option value = "pathType2">Pathway Type 2</option>
-              <option value = "pathType3">Pathway Type 3</option>
-           </select>
-        </form>
-        <br><br>
-        </center>
-
-        <center>
-        <details>
-          <font size="5">
-          <summary>Documentation</summary>
-          <font size="3">
-          <p>
-              https://github.com/Metaboverse/Metaboverse<br>
-              https://github.com/Metaboverse/Metaboverse/blob/master/LICENSE<br>
-              Metaboverse was written by Jordan Berg (Ian was primarily there for moral support).
-          </p>
-        </details>
-        </center>
-        <br><br><br>
 
 <<<<<<< HEAD
         <p>
@@ -228,7 +121,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <center>
             <a href="analyze.html">
               <div id="continue">
-                <font size="3">Proceed</font>
+                <font size="3">Curate</font>
               </div>
             </a>
           </center>

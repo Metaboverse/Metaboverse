@@ -111,6 +111,7 @@ text {
   width: 200px;
   height: 25px;
   text-align: center;
+  display: inline-block;
   line-height: 25px;
   text-shadow: none;
 }
@@ -118,12 +119,72 @@ text {
 #continue:hover {
     background: #7CC08E;
     text-shadow: none;
-
 }
+
+#info_icon {
+	background-color:#373e4a;
+	border-radius:28px;
+	border:1px solid #050505;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Georgia;
+	font-size:12px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #283966;
+}
+#info_icon:hover {
+	background-color:#121314;
+}
+#info_icon:active {
+	position:relative;
+	top:1px;
+}
+
 
 #element-upload {
   font: 16px sans-serif;
   margin-left: 220px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #3DA3EA;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  top: -5px;
+  left: 115%;
+  opacity: 0;
+  transition: opacity 1s;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 75%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #3DA3EA transparent transparent;
 }
 
 <<<<<<< HEAD
