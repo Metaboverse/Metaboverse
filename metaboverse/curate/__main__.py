@@ -44,7 +44,7 @@ def test():
 
     __main__(
         {'output':'/Users/jordan/Desktop/',
-        'species':'SCE'}
+        'species':'HSA'}
     )
 
 def parse_table(
@@ -175,6 +175,11 @@ def make_master(
     for key in database['complexes_reference']['complex_dictionary'].keys():
 
         master_reference[database['complexes_reference']['complex_dictionary'][key]['complex_id']] = database['complexes_reference']['complex_dictionary'][key]['complex_name']
+
+    # Add pathway id to name mapping
+    for key in database['global_reactions'].keys():
+
+        master_reference[database['global_reactions'][key]['pathway_id']] = database['global_reactions'][key]['pathway_name']
 
     return master_reference
 

@@ -87,7 +87,7 @@ stroke: grey;
   fill: var(--node_color);
   stroke: black;
   stroke-width: 1px;
-  r: 6;
+  r: var(--node_radius);
 }
 
 .node text {
@@ -100,7 +100,7 @@ stroke: grey;
 }
 
 .node:hover circle {
-  r: 12;
+  r: 16;
 }
 
 .node:hover text {
@@ -128,15 +128,42 @@ border-radius: 50%;
 display: inline-block;
 }
 
-arrow {
-  border: solid var(--arrow_color);
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
+#pathwayMenu {
+  font: 16px sans-serif;
+  margin-left: 260px;
+  margin-top: 35px;
 }
 
+#kNN_button {
+  border-radius: 5px;
+}
+
+.arrow {
+  width: 30px;
+}
+
+.line {
+  margin-top: 14px;
+  width: 15px;
+  background: var(--arrow_color);
+  height: 5px;
+  float: left;
+}
+
+.point {
+  margin-top: 7px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 15px solid var(--arrow_color);
+  float: right;
+}
+
+div
+   {
+     display: inline-block;
+   }
 
 .sidebar {
   height: 100%;

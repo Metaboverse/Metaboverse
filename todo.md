@@ -1,10 +1,22 @@
-Save as markdown in repo
+# Planned Features (in order of perceived priority)
+
+1. Drop-down menu during visualization to shift between different pathways
+2. Plot kNNs of metabolite of interest
+3. Generate graph from only those metabolites with known values
+4. BRENDA database incorporation
+5. Timecourse/flux capabilities
+6. Node links to other pathways
+7. Show pathway illustration in window to give people classical view
+8. Show p-value, etc information along with metabolite of interest
+
+
+
+# Instructions for to-do list
+0. Save as markdown in repo
 - if someone starts working on task, just put name in parenthesis next to task
 - If ready for review, turn dash into X
 - Once reviewed and merged, strikethrough
 - FORK THE REPO
-
-
 
 1. Exec file
 - X launch server (jordan: see metaboverse/visualize/make.sh)
@@ -112,9 +124,6 @@ HTML:
 - Write to output citation info, user variables, etc
 - Clear tmp folder
 - Exit
-
-
-
 
 7. Other
 - X Organize repo for this restructuring to help team effort (JORDAN)

@@ -81,52 +81,24 @@ def test_yeast():
 
 def test():
 
-    output = '/Users/jordan/Desktop/reactome_test/'
+    output = '/Users/jordan/Desktop/'
     with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
         reference = pickle.load(network_file)
     network = reference
 
     species_id = 'HSA'
 
-    trans = pd.read_csv(
-        '/Users/jordan/Desktop/collaborations/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
-        sep='\t',
-        index_col=2)
-    del trans.index.name
-    trans = trans[['log2FoldChange']]
-    trans.columns = [0]
+    data = pd.read_csv("/Users/jordan/Desktop/hits_update.tsv",sep='\t', index_col=0)
+    data = data[['log2_fc']]
+    data.columns = [0]
+    data.head()
 
-    trans.head()
-
-    from random import randint
-
-    addi = []
-    for x in range(len(trans[0].tolist())):
-        addi.append(randint(-1,1))
-
-    trans[0] = trans[0] + addi
-    trans.head()
-
-    metabol = pd.read_csv(
-        '/Users/jordan/Desktop/collaborations/danielle_seq/PGC1_beta_metabolomics.txt',
-        sep='\t',
-        index_col=0)
-    metabol = metabol[['log2foldchange']]
-    metabol.columns = [0]
-    metabol[0] = [0.053, 1.537, -1.114, -2.709, -1.67, 0.89, -0.3]
-    metabol.loc['CAP'] = [1.2]
-    metabol.loc['Urea'] = [3]
-    metabol
-
-    data = pd.concat([trans, metabol])
-    data = data.dropna()
-
-    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
+    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP', 'CO2']
     plot = True
     graph_name='name'
 
     __main__(
-        data=metabol, # Assumed to already be name mapped
+        data=data, # Assumed to already be name mapped
         network=network,
         species_id='HSA',
         output=output,
@@ -172,6 +144,7 @@ def build_graph(
                 black_list=black_list)
 
     else:
+
         for reaction_id in sub_network.keys():
 
             G = process_reactions(
@@ -246,7 +219,7 @@ def add_reaction_node(
 
     graph.add_node(reaction_name)
     graph.nodes()[reaction_name]['name'] = reaction_name
-    graph.nodes()[reaction_name]['id'] = reaction_id
+    graph.nodes()[reaction_name]['entity_id'] = reaction_id
     graph.nodes()[reaction_name]['type'] = 'reaction'
     graph.nodes()[reaction_name]['stoichiometry'] = None
 
@@ -344,7 +317,7 @@ def add_analyte_node(
     graph.add_node(analyte_name) # -> figure out why graph object is turning to tuple and not graph
 
     graph.nodes()[analyte_name]['name'] = analyte_name
-    graph.nodes()[analyte_name]['id'] = analyte_id
+    graph.nodes()[analyte_name]['entity_id'] = analyte_id
     graph.nodes()[analyte_name]['type'] = str(type[:-1]) # trim off plurality of type name
 
     if type == 'modifiers':
@@ -413,7 +386,7 @@ def add_complex_entity(
 
     graph.add_node(component_name)
     graph.nodes()[component_name]['name'] = component_name
-    graph.nodes()[component_name]['id'] = component_id
+    graph.nodes()[component_name]['entity_id'] = component_id
     graph.nodes()[component_name]['type'] = 'complex_component'
     graph.nodes()[component_name]['sub_type'] = None
     graph.nodes()[component_name]['stoichiometry'] = None
@@ -445,6 +418,7 @@ def fetch_analyte_info(
     return analyte_name, analyte_id
 
 """Map node and edge colors and attributes
+If more than one value exists for an analyte, will take the mean
 """
 def map_graph_attributes(
         graph,
@@ -473,10 +447,16 @@ def map_graph_attributes(
 
             else:
 
-                if node in current_data.index \
-                and str(current_data.loc[node][0]) != 'nan' \
-                and current_data.loc[node][0] != None:
-                    expression_value = current_data.loc[node][0]
+                if '(' in node and ')' in node:
+                    node_fix = node.split('(')[0]
+                else:
+                    node_fix = node
+
+                if node_fix in current_data.index \
+                and str(current_data.loc[node_fix][0]) != 'nan' \
+                and current_data.loc[node_fix][0] != None:
+
+                    expression_value = current_data.loc[node_fix].mean()
                     color, rgba = extract_value(
                         expression_value=expression_value,
                         max_value=max_value)
@@ -488,12 +468,13 @@ def map_graph_attributes(
 
             # Add attributes
             graph = add_node_attributes(
-                graph=graph,
-                node=node,
-                color=color,
-                rgba=rgba,
-                expression_value=expression_value,
-                current_sample=col)
+                    graph=graph,
+                    node=node,
+                    color=color,
+                    rgba=rgba,
+                    expression_value=expression_value,
+                    current_sample=col)
+
 
         # Map edge color, size
         for edge in graph.edges():
@@ -584,9 +565,15 @@ def add_edge_attributes(
 """
 def output_graph(
         graph,
+        pathway_dictionary,
+        reaction_dictionary,
+        master_reference,
         output_name):
 
     data = json_graph.node_link_data(graph)
+    data['pathway_dictionary'] = pathway_dictionary
+    data['reactions_dictionary'] = reaction_dictionary
+    data['master_reference'] = master_reference
 
     with open(output_name, 'w') as f:
         json.dump([data], f, indent=4) # Parse out as array for javascript
@@ -703,6 +690,8 @@ def plot_graph(
 def process_graph(
         subnetwork,
         master_reference,
+        pathway_dictionary,
+        reaction_dictionary,
         complex_reference,
         species_accession,
         graph_name,
@@ -731,6 +720,9 @@ def process_graph(
     # Output graph
     output_graph(
         graph=G,
+        pathway_dictionary=pathway_dictionary,
+        reaction_dictionary=reaction_dictionary,
+        master_reference=master_reference,
         output_name=graph_name)
 
     # Plot graph
@@ -756,6 +748,7 @@ def __main__(
         global_reactions=False):
 
     # Get output directory for graphs
+    #output='/Users/jordan/Desktop/'
     graph_directory = create_graph_output(
         output)
 
@@ -793,6 +786,8 @@ def __main__(
                 process_graph(
                     subnetwork=subnetwork,
                     master_reference=master_reference,
+                    pathway_dictionary=network['pathway_dictionary'],
+                    reaction_dictionary=network['reactions_dictionary'],
                     complex_reference=complex_reference,
                     species_accession=species_accession,
                     graph_name=graph_name,
@@ -809,6 +804,8 @@ def __main__(
         process_graph(
             subnetwork=global_database,
             master_reference=master_reference,
+            pathway_dictionary=network['pathway_dictionary'],
+            reaction_dictionary=network['reactions_dictionary'],
             complex_reference=complex_reference,
             species_accession=species_accession,
             graph_name=graph_name,

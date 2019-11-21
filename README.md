@@ -1,7 +1,7 @@
 # Metaboverse
 Biological and Metabolic Networks Analyzer
 
-`WARNING: This repository is currently under development. When the software is complete and stable, the beta tag will be removed.`
+`WARNING: This repository is currently under development. When the software is complete and stable enough for beta testing, the alpha tag will be removed.`
 To receive updates, join our mailing list by emailing `metaboverse@gmail.com`
 
 [![Build Status](https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.org/Metaboverse/Metaboverse)
@@ -9,12 +9,13 @@ To receive updates, join our mailing list by emailing `metaboverse@gmail.com`
 
 ## What does Metaboverse do?
 ### tl;dr
-- Curates metabolic model (currently only for human)
+- Curates metabolic model
 - Maps networks or sub-networks interactively
 - Overlays selected network with transcriptomics, proteomics, and/or metabolomics data
 - Performs trend analysis across networks
+- Performs nearest-neighbor analysis
 
-### For those more details focused
+### !tl;dr
 ```
 Metabolism is a complex network of chemical and enzymatic reactions; however, the past century has seen
 a largely reductionist approach to tackling this system. While for decades this was necessary due to
@@ -37,40 +38,22 @@ information from these datasets as possible.
 
 ### Requirements
 - An internet connection for network curation
-- An internet browser
+- An internet browser (Chrome browser preferred)
 - Python
 - PyPi
 
 ### Installation
-From the command line, execute the following:
+0. For alpha-testing, download from this address:
 ```
-pip install metaboverse
+https://github.com/Metaboverse/Metaboverse/archive/master.zip
 ```
+1. Navigate to the following web address:
+```
+https://github.com/Metaboverse/Metaboverse/releases
+```
+2. Download the latest `.zip` release
+3. Unzip the downloaded folder
+4. Navigate into the folder and double-click the file named `RUN`
 
-### Getting Started
-
-#### Network Model Curation
-- Requires the reactome database files (will download most current automatically)
-- Run as:
-```
-$ metaboverse curate --output /path/to/output
-```
-
-#### Data Curation
-- Requires properly formatted and normalized -omics data
-  - tab-separated library-normalized data table
-  - samples metadata table
-- For example, with transcriptomics data, run as:
-```
-$ metaboverse preprocess -d dataset.tsv -t transcriptomics
-```
-
-#### Network Analysis
-```
-$ metaboverse analyze -d dataset.tsv -t transcriptomics
-```
-
-#### Network Visualization
-```
-$ metaboverse viz -d dataset.tsv -t transcriptomics
-```
+### Other information
+- If a page seems to be malfunctioning during the alpha release stage, please press `Ctrl + r` to refresh the page, then try the operation again
