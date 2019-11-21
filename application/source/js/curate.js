@@ -36,5 +36,77 @@ function selectOrganism() {
 
   var selection = document.getElementById("speciesMenu").value;
   console.log(selection)
+  secondary.style.display = 'block';
+  tertiary.style.display = 'block';
 
 };
+
+
+// ********************** Drag & drop starts here ********************
+
+let dropArea = document.getElementById("drop-area")
+
+// Prevent default drag behaviors
+;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+dropArea.addEventListener(eventName, preventDefaults, false)
+document.body.addEventListener(eventName, preventDefaults, false)
+})
+
+// Highlight drop area when item is dragged over it
+;['dragenter', 'dragover'].forEach(eventName => {
+dropArea.addEventListener(eventName, highlight, false)
+})
+
+;['dragleave', 'drop'].forEach(eventName => {
+dropArea.addEventListener(eventName, unhighlight, false)
+})
+
+// Handle dropped files
+dropArea.addEventListener('drop', handleDrop, false)
+
+function preventDefaults (e) {
+e.preventDefault()
+e.stopPropagation()
+}
+
+function highlight(e) {
+dropArea.classList.add('highlight')
+}
+
+function unhighlight(e) {
+dropArea.classList.remove('active')
+}
+
+function handleDrop(e) {
+var dt = e.dataTransfer
+var files = dt.files
+
+handleFiles(files)
+}
+
+function handleFiles(files) {
+files = [...files]
+initializeProgress(files.length)
+files.forEach(uploadFile)
+quinary.style.display = 'block';
+}
+
+function uploadFile(file, i) {
+var xhr = new XMLHttpRequest()
+var formData = new FormData()
+xhr.open('POST', url, true)
+xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+
+}
+
+// ******************** Hide/Show starts here ******************
+
+function toggleVis1() {
+  quaternary.style.display = 'block';
+}
+
+function toggleVis2() {
+  quinary.style.display = 'block';
+}
+
+// ****************** Progress Bar starts here ****************

@@ -59,8 +59,10 @@ text {
 
 .title {
     position: absolute;
-    top: 60%;
+    top: 100%;
     left: 50%;
+    text-align: center;
+    width: 100%;
     -moz-transform: translateX(-50%) translateY(-60%);
     -webkit-transform: translateX(-50%) translateY(-60%);
     transform: translateX(-50%) translateY(-60%);
@@ -109,6 +111,7 @@ text {
   width: 200px;
   height: 25px;
   text-align: center;
+  display: inline-block;
   line-height: 25px;
   text-shadow: none;
 }
@@ -116,12 +119,88 @@ text {
 #continue:hover {
     background: #7CC08E;
     text-shadow: none;
-
 }
+
+#info_icon {
+	background-color:#373e4a;
+	border-radius:28px;
+	border:1px solid #050505;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Georgia;
+	font-size:12px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #283966;
+}
+#info_icon:hover {
+	background-color:#121314;
+}
+#info_icon:active {
+	position:relative;
+	top:1px;
+}
+
 
 #element-upload {
   font: 16px sans-serif;
   margin-left: 220px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #3DA3EA;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  top: -5px;
+  left: 115%;
+  opacity: 0;
+  transition: opacity 1s;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 75%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #3DA3EA transparent transparent;
+}
+
+#back {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+}
+
+#back:hover {
+    background: #cc0000;
+    text-shadow: none;
 }
 
 a {
@@ -140,4 +219,101 @@ img {
     left: 40px;
     overflow-x: hidden;
 
+}
+
+.note {
+width: 500px;
+margin: 50px auto;
+font-size: 2.0em;
+color: #CD5C5C;
+text-align: justify;
+}
+
+#drop-area {
+border: 2px dashed #0E8886;
+border-radius: 20px;
+width: 200px;
+margin: 30px auto;
+padding: 10px;
+align-content: justify;
+
+}
+
+#drop-area.highlight {
+border-color: purple;
+}
+
+.my-form {
+margin-bottom: 10px;
+}
+
+.button {
+display: inline-block;
+padding: 10px;
+background: #16CDCA;
+cursor: pointer;
+border-radius: 4px;
+border: 2px solid #0E8886;
+}
+
+.button:hover {
+background: #0F9A98;
+}
+
+#fileElem {
+display: none;
+}
+
+#dropdown2 {
+/*
+  float:right;
+  width:25%;
+*/
+}
+
+#pathway {
+float:left;
+width:33%;
+height:80px;
+margin:0 0 0 100px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#motifs{
+float:left;
+width:33%;
+height:80px;
+margin:0 0 0 -50px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#score{
+float:right;
+width:33%;
+height:80px;
+margin:0 0 0 -50px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#backButton {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+  position: absolute;
+  right:0;
+  bottom:0;
+  margin:0 50 50 0px;
+}
+
+#backButton:hover {
+    background: #cc0000;
+    text-shadow: none;
 }
