@@ -59,10 +59,8 @@ text {
 
 .title {
     position: absolute;
-    top: 100%;
+    top: 60%;
     left: 50%;
-    text-align: center;
-    width: 100%;
     -moz-transform: translateX(-50%) translateY(-60%);
     -webkit-transform: translateX(-50%) translateY(-60%);
     transform: translateX(-50%) translateY(-60%);
@@ -230,7 +228,7 @@ text-align: justify;
 }
 
 #drop-area {
-border: 2px dashed #0E8886;
+border: 2px dashed black;
 border-radius: 20px;
 width: 200px;
 margin: 30px auto;

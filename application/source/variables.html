@@ -66,77 +66,70 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <!-- Display drag & drop area and file upload button for user -->
       <div id="quaternary"> <!--style="display:none"-->
         <div id="drop-area">
+          <center>
           <form class="my-form">
             <p>Input transcriptomics data</p>
             <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
             <label class="button" for="fileElem">Select a file</label>
-        </div>
 
-        <p>
-          <center>
             <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
               <div id="info_icon">
                 i
               </div>
             </a>
           </center>
-        </p>
+        </div>
 
         <div id="drop-area">
+          <center>
           <form class="my-form">
             <p>Input proteomics data</p>
             <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
             <label class="button" for="fileElem">Select a file</label>
-        </div>
 
-        <p>
-          <center>
             <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
               <div id="info_icon">
                 i
               </div>
             </a>
           </center>
-        </p>
+        </div>
 
         <div id="drop-area">
+          <center>
           <form class="my-form">
             <p>Input metabolomics data</p>
             <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
             <label class="button" for="fileElem">Select a file</label>
-        </div>
 
-        <p>
-          <center>
             <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
               <div id="info_icon">
                 i
               </div>
             </a>
-          </center>
-        </p>
+            </center>
+        </div>
+
 
         <div id="drop-area">
-          <form class="my-form">
-            <p>Input metadata table</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
+          <center>
+            <form class="my-form">
+              <p>Input metadata table</p>
+              <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+              <label class="button" for="fileElem">Select a file</label>
+
+              <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+                <div id="info_icon">
+                  i
+                </div>
+              </a>
+          </center>
         </div>
 
-        <p>
-          <center>
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-          </center>
-        </p>
 
 
       <!-- Wrapping this altogether for now, the below will need to be wrapped in modular div elements
       <div id="quinary" style="display:none"> -->
-        <br>
         <center>
           <font size="5">
         <p>Options</p>
@@ -152,17 +145,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
               <option value = "expType3">Flux Balance</option>
               <option value = "expType4">Multiple Conditions</option>
            </select>
+           <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+             <div id="info_icon">
+               i
+             </div>
+           </a>
         </form>
-
-        <p>
-          <center>
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-          </center>
-        </p>
 
         <form>
           <p>Normalization:</p>
@@ -171,39 +159,17 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
               <option value = "normType2">Log Scale</option>
               <option value = "normType3">Z Score</option>
            </select>
+           <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+             <div id="info_icon">
+               i
+             </div>
+           </a>
         </form>
 
-        <p>
-          <center>
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-          </center>
-        </p>
 
-        <form>
-          <p>Pathway:</p>
-           <select name = "dropdown">
-              <option value = "pathType1" selected>Pathway Type 1</option>
-              <option value = "pathType2">Pathway Type 2</option>
-              <option value = "pathType3">Pathway Type 3</option>
-           </select>
-        </form>
-
-        <p>
-          <center>
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-          </center>
-        </p>
 
         <br><br>
-        </center>
+
 
         <div>
           <center>
