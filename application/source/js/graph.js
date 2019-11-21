@@ -124,33 +124,34 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
 };
 
-function initialize_links(init_links, nodex, node_dict, type_dict) {
+function initialize_links(links, nodex, node_dict) {
 
+  console.log(">>>>>>>>>")
+  console.log(links)
   // Populate node object with relevant information and data
-  init_links.forEach(function(link) {
+  links.forEach(function(link) {
 
     // Add pertinent node information
+    console.log(link)
+    console.log(nodex)
+    console.log("+++++")
+
+    //link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
+    //link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
+
     link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
     link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
+
+    console.log(link)
+    console.log(nodex)
+    console.log("=====")
+
     nodex[link.source["name"]]["color"] = node_dict[link.source["name"]];
     nodex[link.target["name"]]["color"] = node_dict[link.target["name"]];
 
-    // Prioritize reaction nodes in layout
-    if (type_dict[link.source["name"]] == "reaction") {
-        nodex[link.source["name"]]["weight"] = 100;
-    } else {
-        nodex[link.source["name"]]["weight"] = 1;
-    };
-
-    if (type_dict[link.target["name"]] == "reaction") {
-        nodex[link.target["name"]]["weight"] = 100;
-    } else {
-        nodex[link.target["name"]]["weight"] = 1;
-    };
-
   });
 
-  return [nodex, node_dict];
+  return nodex;
 
 };
 
@@ -215,22 +216,20 @@ function get_nodes_links(data, components) {
 
   });
 
-  console.log("===>")
-  console.log(node_components)
-  console.log(links)
-  console.log("===>")
-
   // Parse out links of interest
   var new_links = [];
   links.forEach(function(link) {
 
-    if (node_components.includes(link.source) && node_components.includes(link.target)) {
-
+    if ((node_components.includes(link.source) && node_components.includes(link.target)) ||
+        (node_components.includes(link.source["name"]) && node_components.includes(link.target["name"]))) {
+      console.log("relinking")
       new_links.push(link);
 
     };
 
   });
+
+  console.log(new_links)
 
   return [new_nodes, new_links];
 
@@ -264,9 +263,11 @@ function nearest_neighbors(data, entity_id) {
   var display_reactions_dict = node_elements[4];
   var entity_id_dict = node_elements[5];
 
-  var link_elements = initialize_links(new_links, nodex, node_dict, type_dict);
-  var nodex = link_elements[0];
-  var node_dict = link_elements[1];
+  console.log("?????????????????????????????")
+  console.log(new_links)
+  console.log("?????????????????????????????")
+
+  var nodex = initialize_links(new_links, nodex, node_dict);
 
   make_graph(
       data,
@@ -634,9 +635,11 @@ d3.json("data/HSA_global_reactions.json", function(data) {
     var display_reactions_dict = node_elements[4];
     var entity_id_dict = node_elements[5];
 
-    var link_elements = initialize_links(new_links, nodex, node_dict, type_dict);
-    var nodex = link_elements[0];
-    var node_dict = link_elements[1];
+    console.log("?????????????????????????????")
+    console.log(new_links)
+    console.log("?????????????????????????????")
+
+    var nodex = initialize_links(new_links, nodex, node_dict);
 
     make_graph(
         data,
