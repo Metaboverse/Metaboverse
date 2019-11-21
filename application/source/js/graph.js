@@ -99,6 +99,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   var expression_dict = {};
   var display_analytes_dict = {};
   var display_reactions_dict = {};
+  var entity_id_dict = {};
 
   // Make dictionary of node color values and types
   nodes.forEach(function(node) {
@@ -106,6 +107,8 @@ function initialize_nodes(nodes, node_dict, type_dict) {
     node_dict[node['name']] = node['rgba_js']
     type_dict[node['name']] = node['type']
     expression_dict[node['name']] = node['expression'][0]
+    entity_id_dict[node['name']] = node['entity_id']
+    entity_id_dict[node['entity_id']] = node['name']
 
     if (node['type'] === 'reaction') {
       display_analytes_dict[node['name']] = 'none'
@@ -117,53 +120,39 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
   });
 
-  return [node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict];
+  return [node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict, entity_id_dict];
 
 };
 
-function initialize_links(links, nodex, node_dict, type_dict) {
+function initialize_links(links, nodex, node_dict) {
 
+  console.log(">>>>>>>>>")
+  console.log(links)
   // Populate node object with relevant information and data
   links.forEach(function(link) {
 
     // Add pertinent node information
+    console.log(link)
+    console.log(nodex)
+    console.log("+++++")
+
+    //link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
+    //link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
+
     link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
     link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
+
+    console.log(link)
+    console.log(nodex)
+    console.log("=====")
+
     nodex[link.source["name"]]["color"] = node_dict[link.source["name"]];
     nodex[link.target["name"]]["color"] = node_dict[link.target["name"]];
 
-    // Prioritize reaction nodes in layout
-    if (type_dict[link.source["name"]] == "reaction") {
-        nodex[link.source["name"]]["weight"] = 100;
-    } else {
-        nodex[link.source["name"]]["weight"] = 1;
-    };
-
-    if (type_dict[link.target["name"]] == "reaction") {
-        nodex[link.target["name"]]["weight"] = 100;
-    } else {
-        nodex[link.target["name"]]["weight"] = 1;
-    };
-
   });
 
-  return [nodex, node_dict];
+  return nodex;
 
-};
-
-// Toggle zoom and pan by pressing the Alt key
-// This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
-var toggle_zoom = false;
-function activate_zoom() {
-
-    if (toggle_zoom === true) {
-
-        svg.attr(
-            "transform",
-            "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
-
-        );
-    }
 };
 
 function linkArc(d) {
@@ -184,12 +173,6 @@ function transform(d) {
 
 function parse_pathway(data, reactions) {
 
-  // Extract links links from data for downstream use
-  var links = data[0].links;
-
-  // Set nodes variables up and extract node data
-  var nodes = data[0].nodes;
-
   var master = data[0].master_reference;
   var reactions_dictionary = data[0].reactions_dictionary;
 
@@ -207,6 +190,17 @@ function parse_pathway(data, reactions) {
 
   };
 
+  var new_elements = get_nodes_links(data, components);
+
+  return new_elements;
+
+};
+
+function get_nodes_links(data, components) {
+
+  var nodes = data[0].nodes;
+  var links = data[0].links;
+
   // Parse the nodes of interest
   var new_nodes = [];
   var node_components = [];
@@ -216,6 +210,7 @@ function parse_pathway(data, reactions) {
 
       new_nodes.push(node)
       node_components.push(node["name"])
+      node_components.push(node["entity_id"])
 
     };
 
@@ -225,19 +220,392 @@ function parse_pathway(data, reactions) {
   var new_links = [];
   links.forEach(function(link) {
 
-    // Add pertinent node information
-    if (node_components.includes(link.source) && node_components.includes(link.target)) {
-
-      new_links.push(link)
+    if ((node_components.includes(link.source) && node_components.includes(link.target)) ||
+        (node_components.includes(link.source["name"]) && node_components.includes(link.target["name"]))) {
+      console.log("relinking")
+      new_links.push(link);
 
     };
 
   });
 
+  console.log(new_links)
+
   return [new_nodes, new_links];
 
 };
 
+function nearest_neighbors(data, entity_id) {
+
+  var master = data[0].master_reference;
+
+  // Get current nearest neighbors value
+  var kNN = document.getElementById("kNN_button").value;
+
+  // Curate kNN to node of interest
+  var nn_elements = parse_kNN_pathway(data, entity_id, kNN);
+  var new_nodes = nn_elements[0];
+  var new_links = nn_elements[1];
+
+  // Save old graph in burner variable
+
+  // Recurate the graph
+  // Initialize variables
+  var nodex = {};
+  var node_dict = {};
+  var type_dict = {};
+
+  var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+  var node_dict = node_elements[0];
+  var type_dict = node_elements[1];
+  var expression_dict = node_elements[2];
+  var display_analytes_dict = node_elements[3];
+  var display_reactions_dict = node_elements[4];
+  var entity_id_dict = node_elements[5];
+
+  console.log("?????????????????????????????")
+  console.log(new_links)
+  console.log("?????????????????????????????")
+
+  var nodex = initialize_links(new_links, nodex, node_dict);
+
+  make_graph(
+      data,
+      nodex,
+      new_links,
+      type_dict,
+      node_dict,
+      entity_id_dict,
+      expression_dict,
+      display_analytes_dict,
+      display_reactions_dict)
+
+
+
+  // Remove old plot and plot this one
+
+  // Provide a go back button to get back to the graph they made previously
+  // Run by dblclick on node of interest
+  // Make node of interest bigger than others
+
+};
+
+function parse_kNN_pathway(data, entity_id, kNN) {
+
+  var master = data[0].master_reference;
+  var reactions_dictionary = data[0].reactions_dictionary;
+
+  // Parse through each reaction where entity is a component
+  var components = [];
+
+  //Return all reactions that contain the entity
+  nn_components = [entity_id];
+  for (reaction in reactions_dictionary) {
+
+    if (reactions_dictionary[reaction].includes(entity_id)) {
+
+      for (entity in reactions_dictionary[reaction]) {
+
+        nn_components.push(reactions_dictionary[reaction][entity]);
+
+      };
+
+    };
+
+  };
+
+  var new_elements = get_nodes_links(data, nn_components);
+
+  return new_elements;
+
+};
+
+function kNN_input(d) {
+
+  var knn_value = document.getElementById("kNN_button").value;
+  console.log(knn_value)
+};
+
+
+
+
+
+function make_graph(
+    data,
+    nodex,
+    new_links,
+    type_dict,
+    node_dict,
+    entity_id_dict,
+    expression_dict,
+    display_analytes_dict,
+    display_reactions_dict) {
+
+  // Allow flexible window dimensions based on initial window size when opened
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  // Restart graph
+  d3.select("svg").remove();
+  d3.select("force").remove();
+  d3.select("g_nodes").remove();
+
+  // Initialize force graph object
+  var svg = d3
+    .select("body")
+    .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .call(d3.behavior.zoom()
+    .on("zoom", activate_zoom));
+
+  var force = d3.layout.force()
+    .gravity(0.1)
+    .linkDistance(60)
+    .charge(-500)
+    .on("tick", tick)
+    .size([width, height]);
+
+  var g_nodes = d3.values(nodex);
+
+  // Build graph
+  force
+    .nodes(g_nodes)
+    .links(new_links)
+    .start();
+
+  // Generate edges with style attributes
+  svg.append("defs").selectAll("marker")
+    .data([
+      "reaction",
+      "reactant",
+      "product",
+      "inhibitor",
+      "catalyst",
+      "complex_component"])
+    .enter()
+    .append("marker")
+      .attr("id", function(d) { return d; })
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 15)
+      .attr("refY", -1.5)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+    .append("path")
+      .attr("d", "M0, -5L10, 0L0, 5");
+
+  var path = svg.append("g").selectAll("path")
+    .data(force.links())
+    .enter().append("path")
+      .attr("class", function(d) { return "link " + d.type; })
+      .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+
+  var node = svg.selectAll(".node")
+    .data(g_nodes)
+    .enter().append("g")
+      .attr("class", "node")
+    .style("--node_color", function(d) {
+      try {
+        return "rgba(" + d.color[0].toString() + ")";
+      } catch (e) {
+        return "rgba(" + d.name.color[0].toString() + ")";
+      }})
+    .style("--node_radius", function(d) { return 6; })
+    .call(force.drag);
+
+  var circle = node
+    .append("circle")
+      .attr("r", 6)
+    .on("dblclick", function(d) {
+
+      if ((type_dict[entity_id_dict[d["name"]]] === "reaction") || (type_dict[d["name"]] === "reaction")) {
+
+        console.log("Selected a reaction, will not perform kNN graphing")
+
+      } else {
+
+        console.log(entity_id_dict[d["name"]])
+        nearest_neighbors(data, entity_id_dict[d["name"]]);
+
+
+      };
+
+    });
+
+  var text = node
+    .append("text")
+      .attr("x", 16)
+      .attr("y", ".31em")
+    .text(function(d) {
+
+      if (type_dict[d.name] === "reaction") {
+
+        // If reaction node, do not display expression value
+        return d.name;
+
+      } else {
+
+        // Label other nodes with expression value in parentheses
+        return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
+
+      }
+    });
+
+  // Not working right now
+  toggle_e = true;
+  d3.select("#toggleExpression")
+    .on("click", function() {
+
+      if (toggle_e === false) {
+
+        toggle_e = true;
+        text.text(function(d) {
+
+          if (type_dict[d.name] === "reaction") {
+
+            // If reaction node, do not display expression value
+            return d.name;
+
+          } else {
+
+            // Label other nodes with expression value in parentheses
+            return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
+
+          }
+
+        });
+
+      } else {
+        toggle_e = false;
+        text.text(function(d) { return d.name });
+      }
+
+   });
+
+  toggle_a = false;
+  toggle_r = false;
+  text.style("--node_display", function(d) { return "none"; });
+
+  d3.select("#toggleAnalytes")
+    .on("click", function() {
+
+      if (toggle_a === false) {
+
+        toggle_a = true;
+        determine_displays(toggle_a, toggle_r);
+
+      } else {
+
+        toggle_a = false;
+        determine_displays(toggle_a, toggle_r);
+      }
+
+    });
+
+  d3.select("#toggleReactions")
+    .on("click", function() {
+
+      if (toggle_r === false) {
+
+        toggle_r = true;
+        determine_displays(toggle_a, toggle_r);
+
+      } else {
+
+        toggle_r = false;
+        determine_displays(toggle_a, toggle_r);
+
+      }
+
+    });
+
+  function determine_displays(toggle_a, toggle_r) {
+
+    if ((toggle_a === false) && (toggle_r === false)) {
+      var display_labels = "none";
+    }
+    else if ((toggle_a === false) && (toggle_r === true)) {
+      var display_labels = "reactions";
+    }
+    else if ((toggle_a === true) && (toggle_r === false)) {
+      var display_labels = "analytes";
+    }
+    else if ((toggle_a === true) && (toggle_r === true)) {
+      var display_labels = "all";
+    }
+    else {
+      var display_labels = "none";
+    }
+
+    // options:
+
+    // none -> all labels hidden until hovered
+    if (display_labels === "none") {
+      text.style("--node_display", function(d) { return "none"; })
+    }
+    // analytes -> analytes shown, reactions hovered
+    else if (display_labels === "analytes") {
+      text.style("--node_display", function(d) { return display_analytes_dict[d.name]; })
+    }
+    // reactions -> reactions shown, analytes hovered
+    else if (display_labels === "reactions") {
+      text.style("--node_display", function(d) { return display_reactions_dict[d.name]; })
+    }
+    // analytes + reactions -> all -> all shown
+    else if (display_labels === "all") {
+      text.style("--node_display", function(d) { return "inline"; })
+    }
+    else {
+      text.style("--node_display", function(d) { return "none"; })
+    }
+
+  };
+
+  var cell = node
+    .append("path")
+      .attr("class", "cell");
+
+  d3.select("body")
+    .on("keydown", function () {
+
+      toggle_zoom = d3.event.altKey;
+
+    });
+
+  d3.select("body")
+    .on("keyup", function () {
+
+      toggle_zoom = false;
+
+    });
+
+  // Draw curved edges
+  function tick() {
+
+    path.attr("d", linkArc);
+    circle.attr("transform", transform);
+    text.attr("transform", transform);
+
+  };
+
+  // Toggle zoom and pan by pressing the Alt key
+  // This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
+  var toggle_zoom = false;
+  function activate_zoom() {
+
+      if (toggle_zoom === true) {
+
+        svg.attr(
+          "transform",
+          "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
+
+        );
+      }
+  };
+};
+
+// MAIN
 d3.json("data/HSA_global_reactions.json", function(data) {
 
   var pathway_dict = make_pathway_dictionary(data);
@@ -251,254 +619,39 @@ d3.json("data/HSA_global_reactions.json", function(data) {
 
     var reactions = pathway_dict[selection]['reactions'];
     var elements = parse_pathway(data, reactions);
-    var nodes = elements[0];
-    var links = elements[1];
+    var new_nodes = elements[0];
+    var new_links = elements[1];
 
     // Initialize variables
     var nodex = {};
     var node_dict = {};
     var type_dict = {};
 
-    var node_elements = initialize_nodes(nodes, node_dict, type_dict);
+    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
     var node_dict = node_elements[0];
     var type_dict = node_elements[1];
     var expression_dict = node_elements[2];
     var display_analytes_dict = node_elements[3];
     var display_reactions_dict = node_elements[4];
+    var entity_id_dict = node_elements[5];
 
-    var link_elements = initialize_links(links, nodex, node_dict, type_dict);
-    var nodex = link_elements[0];
-    var node_dict = link_elements[1];
+    console.log("?????????????????????????????")
+    console.log(new_links)
+    console.log("?????????????????????????????")
 
-    // Allow flexible window dimensions based on initial window size when opened
-    var width = window.innerWidth;
-    var height = window.innerHeight;
+    var nodex = initialize_links(new_links, nodex, node_dict);
 
-    // Restart graph
-    d3.select("svg").remove();
-    d3.select("force").remove();
-    d3.select("g_nodes").remove();
-
-    console.log(nodes)
-
-    // Initialize force graph object
-    var svg = d3
-      .select("body")
-      .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-      .call(d3.behavior.zoom()
-      .on("zoom", activate_zoom));
-
-    var force = d3.layout.force()
-      .gravity(0.1)
-      .linkDistance(60)
-      .charge(-500)
-      .on("tick", tick)
-      .size([width, height]);
-
-    var g_nodes = d3.values(nodex);
-
-    // Build graph
-    force
-      .nodes(g_nodes)
-      .links(links)
-      .start();
-
-    // Generate edges with style attributes
-    svg.append("defs").selectAll("marker")
-      .data([
-        "reaction",
-        "reactant",
-        "product",
-        "inhibitor",
-        "catalyst",
-        "complex_component"])
-      .enter()
-      .append("marker")
-        .attr("id", function(d) { return d; })
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 15)
-        .attr("refY", -1.5)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-      .append("path")
-        .attr("d", "M0, -5L10, 0L0, 5");
-
-    var path = svg.append("g").selectAll("path")
-      .data(force.links())
-      .enter().append("path")
-        .attr("class", function(d) { return "link " + d.type; })
-        .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
-
-    var node = svg.selectAll(".node")
-      .data(g_nodes)
-      .enter().append("g")
-        .attr("class", "node")
-      .style("--node_color", function(d) { return "rgba(" + d.color[0].toString() + ")"; })
-      .call(force.drag);
-
-    var circle = node
-      .append("circle")
-        .attr("r", 6);
-
-    var text = node
-      .append("text")
-        .attr("x", 16)
-        .attr("y", ".31em")
-      .text(function(d) {
-
-        if (type_dict[d.name] === "reaction") {
-
-          // If reaction node, do not display expression value
-          return d.name;
-
-        } else {
-
-          // Label other nodes with expression value in parentheses
-          return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
-
-        }
-      });
-
-    // Not working right now
-    toggle_e = false;
-    d3.select("#toggleExpression")
-      .on("click", function() {
-
-        if (toggle_e === false) {
-
-          toggle_e = true;
-          text.text(function(d) {
-
-            if (type_dict[d.name] === "reaction") {
-
-              // If reaction node, do not display expression value
-              return d.name;
-
-            } else {
-
-              // Label other nodes with expression value in parentheses
-              return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
-
-            }
-
-          });
-
-        } else {
-          toggle_e = false;
-          text.text(function(d) { return d.name });
-        }
-
-     });
-
-    toggle_a = false;
-    toggle_r = false;
-    text.style("--node_display", function(d) { return "none"; });
-
-    d3.select("#toggleAnalytes")
-      .on("click", function() {
-
-        if (toggle_a === false) {
-
-          toggle_a = true;
-          determine_displays(toggle_a, toggle_r);
-
-        } else {
-
-          toggle_a = false;
-          determine_displays(toggle_a, toggle_r);
-        }
-
-      });
-
-    d3.select("#toggleReactions")
-      .on("click", function() {
-
-        if (toggle_r === false) {
-
-          toggle_r = true;
-          determine_displays(toggle_a, toggle_r);
-
-        } else {
-
-          toggle_r = false;
-          determine_displays(toggle_a, toggle_r);
-
-        }
-
-      });
-
-    function determine_displays(toggle_a, toggle_r) {
-
-      if ((toggle_a === false) && (toggle_r === false)) {
-        var display_labels = "none";
-      }
-      else if ((toggle_a === false) && (toggle_r === true)) {
-        var display_labels = "reactions";
-      }
-      else if ((toggle_a === true) && (toggle_r === false)) {
-        var display_labels = "analytes";
-      }
-      else if ((toggle_a === true) && (toggle_r === true)) {
-        var display_labels = "all";
-      }
-      else {
-        var display_labels = "none";
-      }
-
-      // options:
-
-      // none -> all labels hidden until hovered
-      if (display_labels === "none") {
-        text.style("--node_display", function(d) { return "none"; })
-      }
-      // analytes -> analytes shown, reactions hovered
-      else if (display_labels === "analytes") {
-        text.style("--node_display", function(d) { return display_analytes_dict[d.name]; })
-      }
-      // reactions -> reactions shown, analytes hovered
-      else if (display_labels === "reactions") {
-        text.style("--node_display", function(d) { return display_reactions_dict[d.name]; })
-      }
-      // analytes + reactions -> all -> all shown
-      else if (display_labels === "all") {
-        text.style("--node_display", function(d) { return "inline"; })
-      }
-      else {
-        text.style("--node_display", function(d) { return "none"; })
-      }
+    make_graph(
+        data,
+        nodex,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        expression_dict,
+        display_analytes_dict,
+        display_reactions_dict)
 
     };
 
-    var cell = node
-      .append("path")
-        .attr("class", "cell");
-
-    d3.select("body")
-      .on("keydown", function () {
-
-        toggle_zoom = d3.event.altKey;
-
-      });
-
-    d3.select("body")
-      .on("keyup", function () {
-
-        toggle_zoom = false;
-
-      });
-
-    // Draw curved edges
-    function tick() {
-
-      path.attr("d", linkArc);
-      circle.attr("transform", transform);
-      text.attr("transform", transform);
-
-    };
-
-  };
-
-});
+  });

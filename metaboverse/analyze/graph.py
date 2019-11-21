@@ -88,41 +88,17 @@ def test():
 
     species_id = 'HSA'
 
-    trans = pd.read_csv(
-        '/Users/jordan/Desktop/collaborations/danielle_seq/analysis/danielle_count_table_summed_diffx_named.tsv',
-        sep='\t',
-        index_col=2)
-    del trans.index.name
-    trans = trans[['log2FoldChange']]
-    trans.columns = [0]
+    data = pd.read_csv("/Users/jordan/Desktop/hits_update.tsv",sep='\t', index_col=0)
+    data = data[['log2_fc']]
+    data.columns = [0]
+    data.head()
 
-    from random import randint
-
-    addi = []
-    for x in range(len(trans[0].tolist())):
-        addi.append(randint(-1,1))
-
-    trans[0] = trans[0] + addi
-
-    metabol = pd.read_csv(
-        '/Users/jordan/Desktop/collaborations/danielle_seq/PGC1_beta_metabolomics.txt',
-        sep='\t',
-        index_col=0)
-    metabol = metabol[['log2foldchange']]
-    metabol.columns = [0]
-    metabol[0] = [0.053, 1.537, -1.114, -2.709, -1.67, 0.89, -0.3]
-    metabol.loc['CAP'] = [1.2]
-    metabol.loc['Urea'] = [3]
-
-    data = pd.concat([trans, metabol])
-    data = data.dropna()
-
-    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP']
+    black_list = ['H2O', 'ATP', 'ADP', 'H+', 'GDP', 'GTP', 'CO2']
     plot = True
     graph_name='name'
 
     __main__(
-        data=metabol, # Assumed to already be name mapped
+        data=data, # Assumed to already be name mapped
         network=network,
         species_id='HSA',
         output=output,
