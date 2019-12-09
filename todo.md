@@ -129,7 +129,8 @@
 	- Fix issue (in curation?) where
 
 - Significance
-	- see jActiveModules methodology
+	- See jActiveModules methodology
+	- See M-K trend analysis
 
 - Reaction collapser
 	- For reactions with missing data, collapse into bridged reaction for all others
@@ -141,3 +142,8 @@
 - Implement pipeline, DESeq2 wrappers, etc.
 - Travis CI tests
 - Docs
+
+5. Validation
+- MPC flux
+- MetaboNet datasets
+- Time-course data 
