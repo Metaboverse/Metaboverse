@@ -995,15 +995,15 @@ Source: http://bl.ocks.org/mbostock/1153292
                       "custom"
                   ],
                   "rgba": [
-                      0.5372549019607841,
-                      0.5372549019607841,
                       1.0,
+                      0.16078431372549018,
+                      0.16078431372549018,
                       1.0
                   ],
                   "rgba_js": [
-                      136,
-                      136,
                       255,
+                      40,
+                      40,
                       1.0
                   ],
                   "expression": "-1.67",
@@ -2066,14 +2066,7 @@ Source: http://bl.ocks.org/mbostock/1153292
               r: 12
             });
 
-            svg.append("text").attr({
-                 id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
-                  x: d.x,
-                  y: d.y
-              })
-              .text(function() {
-                return d.name;  // Value of the text
-              });
+            
 
         } else {}
 
