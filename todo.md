@@ -11,7 +11,7 @@
 - Clear tmp files
 
 1. Front-to-back-end communicaton
-	- Variables python to html/js and vice versa
+	- <b><i>Variables python to html/js and vice versa</i></b>
 		- Store as JSON formatted variables dictionary?
 		```
 		var_dict = {
@@ -110,7 +110,7 @@
 		- ???
 	- Ideas:
 		- https://bl.ocks.org/steveharoz/8c3e2524079a8c440df60c1ab72b5d03
-		- http://bl.ocks.org/pranitar/01305d9ad0eba73dbf80
+		- https://bl.ocks.org/pranitar/01305d9ad0eba73dbf80
 		- https://bl.ocks.org/jrladd/c76799aa63efd7176bd9006f403e854d
 		- https://bl.ocks.org/mbostock/6452972
 		- https://bl.ocks.org/officeofjane/47d2b0bfeecfcb41d2212d06d095c763
@@ -126,7 +126,8 @@
 - k-NN
 	- Allow for recursive neighborhood searches
 	- Allow custom expansion
-	- Fix issue (in curation?) where
+	- Fix issue (in curation?) where network data variable is mutated  
+	- Fix hanging object node
 
 - Significance
 	- See jActiveModules methodology
@@ -146,4 +147,8 @@
 5. Validation
 - MPC flux
 - MetaboNet datasets
-- Time-course data 
+- Time-course data
+
+
+6. Other  
+- Cartesian distortion?
