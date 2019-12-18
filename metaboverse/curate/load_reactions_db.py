@@ -351,7 +351,7 @@ def unpack_reactions(
         shutil.rmtree(reactions_dir)
     os.makedirs(reactions_dir)
     os.system('tar -zxvf ' + file + ' -C ' + reactions_dir)
-    os.remove(reactions_dir + file.split('/')[-1])
+    os.remove(file)
 
     return reactions_dir
 
