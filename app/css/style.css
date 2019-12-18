@@ -1,0 +1,339 @@
+/*
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+/*Main Menu
+*/
+menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #343d46;
+}
+menuItem {
+  float: left;
+}
+menuItem a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+menuItem a:hover {
+  background-color: #111;
+}
+
+text {
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white,
+               1px 0 0 white,
+               0 -1px 0 white,
+               -1px 0 0 white;
+}
+
+.title {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-60%);
+    -webkit-transform: translateX(-50%) translateY(-60%);
+    transform: translateX(-50%) translateY(-60%);
+    text-shadow: 0 2px 0 white,
+                 2px 0 0 white,
+                 0 -2px 0 white,
+                 -2px 0 0 white;
+}
+
+#output {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+}
+
+#output:hover {
+    background: #d3d3d3;
+    text-shadow: none;
+}
+
+#database {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+}
+
+#database:hover {
+    background: #d3d3d3;
+    text-shadow: none;
+}
+
+#continue {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  display: inline-block;
+  line-height: 25px;
+  text-shadow: none;
+}
+
+#continue:hover {
+    background: #7CC08E;
+    text-shadow: none;
+}
+
+#getOutput {
+    width: 100px;
+    height: 80px;
+    margin: 0 auto;
+    margin-top: 50px;
+    position: relative;
+    background-color: #0F9FCD;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.59);
+}
+
+#getOutput:before {
+    content: '';
+    width: 40%;
+    height: 50px;
+    border-radius: 12px 12px 0 0;
+    background-color: #0D83A9;
+    position: absolute;
+    top: -12px;
+    left: 0px;
+    z-index: -5;
+}
+
+#getOutput:hover {
+    background-color: 10AEE1;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.59);
+}
+
+#info_icon {
+	background-color:#373e4a;
+	border-radius:28px;
+	border:1px solid #050505;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Georgia;
+	font-size:12px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #283966;
+}
+#info_icon:hover {
+	background-color:#121314;
+}
+#info_icon:active {
+	position:relative;
+	top:1px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #3DA3EA;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  top: -5px;
+  left: 115%;
+  opacity: 0;
+  transition: opacity 1s;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 75%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #3DA3EA transparent transparent;
+}
+
+#back {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+}
+
+#back:hover {
+    background: #cc0000;
+    text-shadow: none;
+}
+
+a {
+   text-decoration: none;
+   color: black;
+}
+
+
+img {
+    max-width: 100%;
+    max-height: 90vh;
+    margin: auto;
+    display: block;
+    position: fixed;
+    top: 50px;
+    left: 40px;
+    overflow-x: hidden;
+
+}
+
+.note {
+width: 500px;
+margin: 50px auto;
+font-size: 2.0em;
+color: #CD5C5C;
+text-align: justify;
+}
+
+#drop-area {
+border: 2px dashed black;
+border-radius: 20px;
+width: 200px;
+margin: 30px auto;
+padding: 10px;
+align-content: justify;
+
+}
+
+#drop-area.highlight {
+border-color: purple;
+}
+
+.my-form {
+margin-bottom: 10px;
+}
+
+.button {
+display: inline-block;
+padding: 10px;
+background: #16CDCA;
+cursor: pointer;
+border-radius: 4px;
+border: 2px solid #0E8886;
+}
+
+.button:hover {
+background: #0F9A98;
+}
+
+#fileElem {
+display: none;
+}
+
+#dropdown2 {
+/*
+  float:right;
+  width:25%;
+*/
+}
+
+#pathway {
+float:left;
+width:33%;
+height:80px;
+margin:0 0 0 100px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#motifs{
+float:left;
+width:33%;
+height:80px;
+margin:0 0 0 -50px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#score{
+float:right;
+width:33%;
+height:80px;
+margin:0 0 0 -50px;
+font-size:20;
+font-family: sans-serif;
+}
+
+#backButton {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 2px solid black;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  text-shadow: none;
+  position: absolute;
+  right:0;
+  bottom:0;
+  margin:0 50 50 0px;
+}
+
+#backButton:hover {
+    background: #cc0000;
+    text-shadow: none;
+}

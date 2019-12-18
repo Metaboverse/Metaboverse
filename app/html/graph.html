@@ -1,0 +1,177 @@
+<!--
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8">
+
+<title>Metaboverse</title>
+
+<html>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/graph.css">
+
+  <head>
+
+
+
+    <!-- menu -->
+    <menu>
+      <font size=3.25px>
+        <menuItem style="float:right">
+          <a href="https://github.com/Metaboverse/Metaboverse/issues">Contact Us</a>
+        </menuItem>
+        <menuItem style="float:right">
+          <a href="https://metaboverse.readthedocs.io/en/latest/">Documentation</a>
+        </menuItem>
+        <menuItem style="float:right">
+          <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html">FAQs</a>
+        </menuItem>
+        <menuItem style="float:right">
+          <a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html">First Time?</a>
+        </menuItem>
+        <menuItem style="float:right">
+          <a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html">About</a>
+        </menuItem>
+        <menuItem style="float:left">
+          <a href="index.html">Metaboverse</a>
+        </menuItem>
+        <menuItem style="float:left">
+          <a href="variables.html">Back</a>
+        </menuItem>
+      </font>
+    </menu>
+
+  </head>
+
+  <body>
+
+    <div class="sidebar">
+      <font style="font-family: sans-serif">
+
+        <!-- Pathway title -->
+        <p>
+          <b>
+            Legend:
+          </b>
+        </p>
+
+        <p>
+          <span class="dot" style="--dot_color: grey"></span>
+          Reaction
+        </p>
+        <p>
+          <span class="dot" style="--dot_color: white"></span>
+          No expression value
+        </p>
+        <p>
+          <span class="dot" style="--dot_color: #5757e7"></span>
+          Low expression
+        </p>
+        <p>
+          <span class="dot" style="--dot_color: #e75757"></span>
+          High expression
+        </p>
+
+        <p>
+          <div class="arrow">
+            <div class="line" style="--arrow_color: green"></div>
+            <div class="point" style="--arrow_color: green">Catalyst</div>
+          </div>
+        </p>
+        <p>
+          <div class="arrow">
+            <div class="line" style="--arrow_color: red"></div>
+            <div class="point" style="--arrow_color: red">Inhibitor</div>
+          </div>
+        </p>
+        <p>
+          <div class="arrow">
+            <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
+            <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">Gene Component</div>
+          </div>
+        </p>
+        </br>
+        <p></p>
+
+        <p>
+          <font size="2.5">- Press Alt to pan and zoom</font>
+        </p>
+        <p>
+          <font size="2.5">- Click and drag to pan</font>
+        </p>
+        <p>
+          <font size="2.5">- Use mouse wheel to zoom</font>
+        </p>
+        <p>
+          <font size="2.5">- Hover to display name</font>
+        </p>
+
+        <!--<p><font size="2.5"><button id="toggleTimecourse">Play</button></font></p>-->
+        <p>
+          <font size="2.5"><button id="toggleAnalytes">Toggle Feature Labels</button>
+          </font>
+        </p>
+        <p>
+          <font size="2.5"><button id="toggleReactions">Toggle Reaction Labels</button>
+          </font>
+        </p>
+        <p>
+          <font size="2.5">
+            <button id="toggleExpression">Toggle Expression</button>
+          </font>
+        </p>
+
+        <p>
+          <b>
+            <u>
+              Options
+            </u>
+          </b>
+        </p>
+        <p>
+          <font size="2.5">
+            # Nearest neighbors:
+            <input type="number" name="kNN_button" id="kNN_button" onchange="kNN_input()" min="1" max="3" value="1">
+          </font>
+        </p>
+
+        <p></p>
+        <p></p>
+
+        <p>
+          <font size="2">
+            &copy; 2019
+          </font>
+        </p>
+
+      </font>
+
+    </div>
+
+    <select id="pathwayMenu" onchange="selectPathway()"></select>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="js/graph.js"></script>
+
+  </body>
+
+</html>

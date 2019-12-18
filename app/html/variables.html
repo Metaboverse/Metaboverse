@@ -1,0 +1,254 @@
+<!--
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8">
+
+<title>Metaboverse</title>
+
+<html>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="js/curate.js"></script>
+
+  <head>
+
+    <!-- menu -->
+    <menu>
+      <font size=3.25px>
+        <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues">Contact Us</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/">Documentation</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html">FAQs</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html">First Time?</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html">About</a></menuItem>
+        <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left"><a href="curate.html">Back</a></menuItem>
+      </font>
+    </menu>
+
+  </head>
+
+  <body>
+
+      <p>
+        <font size="48">
+        <font style="font-family: sans-serif">
+          <b>
+            <center>
+              Variables and Data
+            </center>
+          </b>
+      </p>
+
+      <font size="3">
+
+      <br>
+      <br>
+      <!-- Display drag & drop area and file upload button for user -->
+      <div id="quaternary"> <!--style="display:none"-->
+        <div id="drop-area">
+          <center>
+          <form class="my-form">
+            <p>Input transcriptomics data</p>
+            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+            <label class="button" for="fileElem">Select a file</label>
+
+            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+              <div id="info_icon">
+                i
+              </div>
+            </a>
+          </center>
+        </div>
+
+        <div id="drop-area">
+          <center>
+          <form class="my-form">
+            <p>Input proteomics data</p>
+            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+            <label class="button" for="fileElem">Select a file</label>
+
+            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+              <div id="info_icon">
+                i
+              </div>
+            </a>
+          </center>
+        </div>
+
+        <div id="drop-area">
+          <center>
+          <form class="my-form">
+            <p>Input metabolomics data</p>
+            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+            <label class="button" for="fileElem">Select a file</label>
+
+            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+              <div id="info_icon">
+                i
+              </div>
+            </a>
+            </center>
+        </div>
+
+
+        <div id="drop-area">
+          <center>
+            <form class="my-form">
+              <p>Input metadata table</p>
+              <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+              <label class="button" for="fileElem">Select a file</label>
+
+              <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+                <div id="info_icon">
+                  i
+                </div>
+              </a>
+          </center>
+        </div>
+
+
+
+      <!-- Wrapping this altogether for now, the below will need to be wrapped in modular div elements
+      <div id="quinary" style="display:none"> -->
+        <center>
+          <font size="5">
+        <p>Options</p>
+        </center>
+
+        <center>
+        <form>
+          <font size="3">
+          <p>Experiment Type:</p>
+           <select name = "dropdown">
+              <option value = "expType1" selected>Default</option>
+              <option value = "expType2">Time Course</option>
+              <option value = "expType3">Flux Balance</option>
+              <option value = "expType4">Multiple Conditions</option>
+           </select>
+           <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+             <div id="info_icon">
+               i
+             </div>
+           </a>
+        </form>
+
+        <form>
+          <p>Normalization:</p>
+           <select name = "dropdown">
+              <option value = "normType1" selected>No Normalization</option>
+              <option value = "normType2">Log Scale</option>
+              <option value = "normType3">Z Score</option>
+           </select>
+           <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
+             <div id="info_icon">
+               i
+             </div>
+           </a>
+        </form>
+
+
+
+        <br><br>
+
+
+        <div>
+          <center>
+            <a href="table.html">
+              <div id="continue">
+                <font size="3">Run Motif Search</font>
+              </div>
+            </a>
+
+            <a href="graph.html">
+              <div id="continue">
+                <font size="3">Visualize</font>
+              </div>
+            </a>
+          </center>
+        </div>
+
+        <br><br><br>
+
+        <center>
+        <details>
+          <font size="5">
+          <summary>Documentation</summary>
+          <font size="3">
+          <p>
+              https://github.com/Metaboverse/Metaboverse<br>
+              https://github.com/Metaboverse/Metaboverse/blob/master/LICENSE<br>
+          </p>
+        </details>
+        </center>
+        <br><br><br>
+
+
+  </body>
+
+
+</html>
+
+<!--
+<div class="tooltip"><a href><img src="info-icon-open-source.png" style="width:30px; height:30px"></a>
+
+<br><br>
+<font size="3">
+<div class="tooltip">(i)
+  <span class="tooltiptext">Put lots of text here to see how the pop-up deals with it.</span>
+</div>
+<br><br>
+-->
+
+
+<!-- Removing "Select pathway" from the variables page, just starting with everything on page
+      </br>
+      <font size="3">
+      <div id="secondary">
+        <center>
+          <form>
+            <p>Select metabolic pathway...</p>
+             <select name = "dropdown" onchange="toggleVis1()">
+                <option value = "glycolysis" selected>Glycolysis</option>
+                <option value = "krebs">Citric Acid Cycle</option>
+                <option value = "oxphospho">Oxidative Phosphorylation</option>
+                <option value = "gluconeo">Gluconeogenesis</option>
+             </select>
+          </form>
+        </center>
+      </div>
+
+      <div id="tertiary">
+        <center>
+        <input type="checkbox" name="check" value="pathways"> Check to run all pathways<br>
+        </center>
+      </div>
+
+      <div id="info_icon">
+        <center>
+          <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank"><img border="0" src="General-Get-Info-icon.png" width="20" height="20"></a>
+        </center>
+      </div>
+
+-->
+
+  <!--<a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">(i)</a>-->

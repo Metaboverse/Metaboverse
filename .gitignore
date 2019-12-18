@@ -5,3 +5,4 @@
 .DS_Store
 tests/analysis_tests/graphs
 tests/analysis_tests/*pickle
+app/node_modules

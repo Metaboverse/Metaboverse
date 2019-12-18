@@ -1,0 +1,17 @@
+{
+  "database_url": null,
+  "organism": null,
+  "output": null,
+  "transcriptomics": null,
+	"proteomics": null,
+	"metabolomics": null,
+	"metadata": null,
+	"timecourse": false,
+	"flux": false,
+	"blacklist": [],
+	"collapse_missing_reactions": false,
+	"split_duplicate_nodes": false,
+	"data_min": -5,
+	"data_max": 5,
+  "colorbar": null
+}

@@ -1,0 +1,178 @@
+/*
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+Portions of the force graphing below based on or adapted from code from Mike Bostock
+The original code is under the GNU General Public License v3.0, allowing for modification
+and distribution
+License and copyright notice: GNU General Public License v3.0
+Changes:
+  - Heavily modified and added to the style CSS for more flexibility in plotting
+  - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
+  - Modified plotting functions to allow for the differential shading of nodes
+  - All other components are original
+Source:
+http://bl.ocks.org/mbostock/1153292
+https://bl.ocks.org/mbostock/1212215
+*/
+
+.link {
+fill: none;
+stroke: #666;
+stroke-width: 1.5px;
+}
+
+#catalyst {
+fill: green;
+}
+.link.catalyst {
+stroke: green;
+}
+
+#inhibitor {
+fill: red;
+}
+.link.inhibitor {
+stroke: red;
+}
+
+#complex_component {
+fill: rgba(165, 55, 253, 1);
+}
+.link.complex_component {
+stroke: rgba(165, 55, 253, 1);
+stroke-dasharray: 0,2 1;
+}
+
+#reaction {
+fill: grey;
+}
+.link.reaction {
+stroke: grey;
+}
+
+#reactant {
+fill: grey;
+}
+.link.reactant {
+stroke: grey;
+}
+
+#product {
+fill: grey;
+}
+.link.product {
+stroke: grey;
+}
+
+.node circle {
+  fill: var(--node_color);
+  stroke: black;
+  stroke-width: 1px;
+  r: var(--node_radius);
+}
+
+.node text {
+  display: var(--node_display);;
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white,
+               1px 0 0 white,
+               0 -1px 0 white,
+               -1px 0 0 white;
+}
+
+.node:hover circle {
+  r: 16;
+}
+
+.node:hover text {
+  display: inline;
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white,
+               1px 0 0 white,
+               0 -1px 0 white,
+               -1px 0 0 white;
+}
+
+.cell {
+  fill: none;
+  pointer-events: all;
+}
+
+.dot {
+height: 12px;
+width: 12px;
+border-style: solid;
+border-width: thin;
+background-color: var(--dot_color);
+stroke: black;
+border-radius: 50%;
+display: inline-block;
+}
+
+#pathwayMenu {
+  font: 16px sans-serif;
+  margin-left: 260px;
+  margin-top: 35px;
+}
+
+#kNN_button {
+  border-radius: 5px;
+}
+
+.arrow {
+  width: 30px;
+}
+
+.line {
+  margin-top: 14px;
+  width: 15px;
+  background: var(--arrow_color);
+  height: 5px;
+  float: left;
+}
+
+.point {
+  margin-top: 7px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 15px solid var(--arrow_color);
+  float: right;
+}
+
+div
+   {
+     display: inline-block;
+   }
+
+.sidebar {
+  height: 100%;
+  width: 225px;
+  position: fixed;
+  top: 38px;
+  left: 0;
+  background-color: lightgrey;
+  overflow-x: hidden;
+  padding-top: 20px;
+  padding-left: 10px;
+}

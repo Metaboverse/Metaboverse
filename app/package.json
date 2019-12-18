@@ -1,0 +1,25 @@
+{
+  "name": "metaboverse",
+  "version": "0.0.1",
+  "description": "A metabolic network explorer",
+  "main": "main.js",
+  "scripts": {
+    "test": "No tests developed yet.",
+    "start": "electron ."
+  },
+  "repository": "https://github.com/Metaboverse/metaboverse",
+  "keywords": [
+    "metabolism",
+    "automation",
+    "metabolites",
+    "genes",
+    "proteins"
+  ],
+  "author": "Jordan A. Berg",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "d3": "^5.14.2",
+    "electron": "^7.1.5",
+    "jquery": "^3.4.1"
+  }
+}
