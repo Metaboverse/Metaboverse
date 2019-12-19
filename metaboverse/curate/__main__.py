@@ -299,7 +299,8 @@ def write_database(
 """Curate reactome database
 """
 def __main__(
-        args_dict):
+        args_dict,
+        log_file):
 
     #args_dict = {
     #    'output':'/Users/jordan/Desktop/',

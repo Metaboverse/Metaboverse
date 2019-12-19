@@ -27,26 +27,32 @@ var fs = require('fs')
 
 var $ = require('jquery')
 
-var i = 0;
-function move(_callback) {
-  if (i == 0) {
-    i = 1;
-    var elem = document.getElementById("progressBar");
-    var width = 10;
-    var id = setInterval(frame, 10);
-    function frame() {
-      if (width >= 100) {
-        clearInterval(id);
-        i = 0;
-        _callback();
-      } else {
-        width++;
-        elem.style.width = width + "%";
-        elem.innerHTML = width + "%";
-      }
-    }
+var progressFile = "data/progress_log.json"
+fs.copyFile('data/progress_log_template.json', 'data/progress_log.json', (err) => {
+  if (err) throw err;
+  console.log('Progress log file was copied for this session');
+});
+
+fs.watch(progressFile, function (event, filename, _callback) {
+
+  var elem = document.getElementById("progressBar");
+  var sum_values = 0
+
+  var session = JSON.parse(fs.readFileSync(progressFile).toString());
+  console.log(session)
+  for (j in session) {  //loop through the array
+
+    sum_values += session[j];  //Do the math!
   }
-}
+  console.log(sum_values)
+  elem.style.width = sum_values + "%";
+  elem.innerHTML = sum_values + "%";
+
+  if (sum_values >= 100) {
+    sum_values = 0;
+    displayOptions()
+  }
+});
 
 var transcriptomics = false;
 var proteomics = false;
@@ -68,13 +74,14 @@ if (m_val !== null) {
   metabolomics = true;
 }
 
-function curateNetwork() {
+// Run Python CLI
+// Assemble parameters based on available session data 
+// Pass progress_log file for updates for each section of processing
 
-  // Replace with Metaboverse orbiting network with load bar in the middle
-  move(() => displayOptions())
-  // Run curation here with available session data
 
-}
+
+
+
 
 function displayOptions() {
 
