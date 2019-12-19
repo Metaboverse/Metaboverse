@@ -27,29 +27,6 @@ var fs = require('fs')
 
 var $ = require('jquery')
 
-var transcriptomics = false;
-var proteomics = false;
-var metabolomics = false;
-
-function curate_data() {
-
-  // Replace with Metaboverse orbiting network with load bar in the middle
-  //$('#content').append('<br><br><br><br><br><br><br><br><br><br>')
-
-  // Run curation here with available session data
-
-
-  if (transcriptomics === true | proteomics === true | metabolomics === true) {
-
-    $('#content').replaceWith('<a href="motif.html"><div id="continue"><font size="3">Run Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>')
-
-  } else {
-
-    $('#content').replaceWith('<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>')
-
-  }
-}
-
 window.addEventListener('load', function(event) {
 
   document.getElementById("dropTranscriptomics").onchange = function (event) {

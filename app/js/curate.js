@@ -27,10 +27,12 @@ var fs = require('fs')
 var $ = require('jquery')
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
+
+var abbreviation_dict = {}
 $.getJSON(reactome_api, function(data) {
 
   // Get species name and ID from Reactome API
-  var abbreviation_dict = {}
+
   data.forEach(function(datum) {
 
     abbreviation_dict[datum["displayName"]] = datum["abbreviation"]
@@ -60,8 +62,8 @@ $.getJSON(reactome_api, function(data) {
 function selectOrganism() {
 
   var selection = document.getElementById("speciesMenu").value;
-  console.log("User selected:", selection)
-  update_session_info("organism", selection)
+  console.log("User selected:", abbreviation_dict[selection])
+  update_session_info("organism", selection, abbrev_dict=abbreviation_dict)
   species_change = true;
   check_changes();
 

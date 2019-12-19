@@ -33,7 +33,7 @@ function write_json(session_data) {
   );
 };
 
-function update_session_info(key_update, value_update) {
+function update_session_info(key_update, value_update, abbrev_dict=null) {
 
   var session = JSON.parse(fs.readFileSync(session_file).toString());
   session[key_update] = value_update
@@ -42,6 +42,10 @@ function update_session_info(key_update, value_update) {
   if (key_update === "database_url") {
     path = value_update.substring(0, value_update.lastIndexOf("/"));
     session["output"] = path + "/"
+  }
+
+  if (abbrev_dict !== null & key_update === "organism") {
+    session["organism_id"] = abbrev_dict[value_update]
   }
 
   write_json(session)

@@ -1,7 +1,8 @@
 {
   "database_url": null,
-  "organism": null,
   "output": null,
+  "organism": null,
+  "organism_id": null,
   "transcriptomics": null,
 	"proteomics": null,
 	"metabolomics": null,

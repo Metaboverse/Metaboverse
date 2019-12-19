@@ -330,3 +330,20 @@ font-family: sans-serif;
     background: #cc0000;
     text-shadow: none;
 }
+
+/* Load bar */
+#progressBar {
+  width: 0%;
+  height: 30px;
+  border-radius: 10px;
+  background-color: #0F81A5;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+#progressRange {
+  width: 50%;
+  background-color: white;
+  border-radius: 10px;
+}
