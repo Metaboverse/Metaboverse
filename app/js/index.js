@@ -18,25 +18,9 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-Portions of the force graphing below based on or adapted from code from Mike Bostock
-The original code is under the GNU General Public License v3.0, allowing for modification
-and distribution
-License and copyright notice: GNU General Public License v3.0
-Changes:
-  - Heavily modified and added to the style CSS for more flexibility in plotting
-  - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
-  - Modified plotting functions to allow for the differential shading of nodes
-  - All other components are original
-Source:
-http://bl.ocks.org/mbostock/1153292
-https://bl.ocks.org/mbostock/1212215
 */
-
 const {app, BrowserWindow} = require('electron')
 const {ipcRenderer, remote} = require('electron')
-
 var $ = require('jquery')
 
 // Drop pre-existing metabolic network database for further analysis
@@ -47,7 +31,7 @@ window.addEventListener('load', function(event) {
   event.preventDefault()
   event.stopPropagation()
 
-  var inputVal = document.getElementById("dropDatabase").value.toLowerCase().split(".")
+  var inputVal = document.getElementById("dropDatabase").value.split(".")
 
   if (inputVal[inputVal.length-1] !== "json") {
     alert('Input is not a .json file. You must upload the correct file type for the analyses to work. Restarting page...')
@@ -61,7 +45,7 @@ window.addEventListener('load', function(event) {
 
       update_session_info("database_url", path)
 
-      $('#content').replaceWith('<a href="table.html"><div id="continue"><font size="3">Run Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="graph.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>')
+      $('#content').replaceWith('<a href="../html/motif.html"><div id="continue"><font size="3">Run Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>')
 
     } catch (error) {
       console.log(error)

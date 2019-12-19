@@ -18,22 +18,8 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-Portions of the force graphing below based on or adapted from code from Mike Bostock
-The original code is under the GNU General Public License v3.0, allowing for modification
-and distribution
-License and copyright notice: GNU General Public License v3.0
-Changes:
-  - Heavily modified and added to the style CSS for more flexibility in plotting
-  - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
-  - Modified plotting functions to allow for the differential shading of nodes
-  - All other components are original
-Source:
-http://bl.ocks.org/mbostock/1153292
-https://bl.ocks.org/mbostock/1212215
 */
-
+var $ = require('jquery')
 var fs = require('fs')
 const session_file = "data/session_data.json"
 
@@ -51,6 +37,53 @@ function update_session_info(key_update, value_update) {
 
   var session = JSON.parse(fs.readFileSync(session_file).toString());
   session[key_update] = value_update
+
+  // Where database output location is, make this the output location
+  if (key_update === "database_url") {
+    path = value_update.substring(0, value_update.lastIndexOf("/"));
+    session["output"] = path + "/"
+  }
+
   write_json(session)
 
 };
+
+function get_session_info(key_update) {
+
+  var session = JSON.parse(fs.readFileSync(session_file).toString());
+  value = session[key_update]
+
+  return value
+
+};
+
+// http://www.alessioatzeni.com/blog/simple-tooltip-with-jquery-only-text/
+$(document).ready(function() {
+// Tooltip only Text
+$('.info').hover(function(){
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        $('<p class="tooltip"></p>')
+        .text(title)
+        .appendTo('body')
+        .fadeIn('slow');
+}, function() {
+        // Hover out code
+        $(this).attr('title', $(this).data('tipText'));
+        $('.tooltip').remove();
+}).mousemove(function(e) {
+        var mousex = e.pageX + 20; //Get X coordinates
+        var mousey = e.pageY - 25; //Get Y coordinates
+        $('.tooltip')
+        .css({ top: mousey, left: mousex })
+});
+});
+
+function getDefault(key) {
+
+  var session = JSON.parse(fs.readFileSync(session_file).toString());
+  value = session[key]
+
+  return value;
+}

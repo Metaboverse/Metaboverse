@@ -54,7 +54,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <body>
 
-    <img src="../data/organisms.png" alt="organisms" align="right" style="width: 230px">
+    <img src="../data/organisms.png" alt="organisms" align="right" style="width: 230px; margin-top: 60px;">
 
     <br>
     <br>
@@ -73,39 +73,27 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br>
     <br>
 
-    <font size="3">
-
     <center>
       <font size="3">
         <p>What organism you would like to analyze?</p>
         <select id="speciesMenu" onchange="selectOrganism()"></select>
-        <!--Get menu to maintain size-->
-        <!--Get menu to display default option at beginning so it doesn't lag on resizing initial window-->
         <br>
         <br>
         <br>
+        <p>Click on the folder to select output location:
+          <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
+        </p>
 
-
-
-
-
-        <p>Click on the folder to select output location:</p>
-        <font size="2"><p>This location will also be used as the default<br>
-          output location for other files. If you would like<br>
-          these files output in a separate folder, the file<br>
-          creation prompt will allow for creation of a new folder.</p></font>
-        <!--<button id="getOutput" onclick="clickButton()"><font size="2"></font></button>-->
         <button id="selectOutput">Select Output File Name</button>
 
       </font>
-    </center>
-
-    <br>
-    <br>
-    <center>
+      <br>
+      <br>
       <div id="content"></div>
+      <script>
+        $('#content').append('')
+      </script>
     </center>
-
 
   </body>
 

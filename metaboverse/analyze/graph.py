@@ -576,7 +576,7 @@ def output_graph(
     data['master_reference'] = master_reference
 
     with open(output_name, 'w') as f:
-        json.dump([data], f, indent=4) # Parse out as array for javascript
+        json.dump(data, f, indent=4) # Parse out as array for javascript
 
 """Convert python RGBA tuple to web-friendly tuple for later viz
 """

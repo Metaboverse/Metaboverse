@@ -12,42 +12,25 @@
 
 1. Front-to-back-end communicaton
 	- <b><i>Variables python to html/js and vice versa</i></b>
-		- Store as JSON formatted variables dictionary?
-		```
-		var_dict = {
-			"transcriptomics": None,
-			"proteomics": None,
-			"metabolomics": None,
-			"output": None,
-			"metadata": None,
-			"timecourse": false,
-			"flux": false,
-			"blacklist": [],
-			"collapse_missing_reactions": false,
-			"split_duplicate_nodes": false,
-			"data_min": -5,
-			"data_max": 5
-		}		
-		```
-		- https://www.fullstackpython.com/flask.html
+		- <del>Store as JSON formatted variables dictionary?</del>
 	- How to store information when running online (no output doc, AWS bucket?)
 
 2. Front-end
 - General
 	- Get drop in bars to save and import data
-	- Get pages to scale correctly
+	- <del>Get pages to scale correctly</del>
 	- Get metadata to be saved page to page per session
 	- Output log of user actions
-	- <i><b>(i)</b></i> icons linking to docs
+	- <del><i><b>(i)</b></i> icons linking to docs</del>
 
 - Home page
-	- If curation database given, skip curation page
+	- <del>If curation database given, skip curation page</del>
 	- Allow for input of just the network, or network with dataset already integrated
 
 - Curation page
-	- Get to run curation based on user input
 
 - Variables page
+	- Run curation with loading bar
 	- Run motif search or exploration based on user input
 
 - Motif search page

@@ -18,28 +18,12 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-Portions of the force graphing below based on or adapted from code from Mike Bostock
-The original code is under the GNU General Public License v3.0, allowing for modification
-and distribution
-License and copyright notice: GNU General Public License v3.0
-Changes:
-  - Heavily modified and added to the style CSS for more flexibility in plotting
-  - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
-  - Modified plotting functions to allow for the differential shading of nodes
-  - All other components are original
-Source:
-http://bl.ocks.org/mbostock/1153292
-https://bl.ocks.org/mbostock/1212215
 */
 
 const {app, BrowserWindow} = require('electron')
 const {ipcRenderer, ipcMain, remote} = require('electron')
 const { dialog } = require('electron').remote
 var fs = require('fs')
-
-
 var $ = require('jquery')
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
@@ -78,6 +62,8 @@ function selectOrganism() {
   var selection = document.getElementById("speciesMenu").value;
   console.log("User selected:", selection)
   update_session_info("organism", selection)
+  species_change = true;
+  check_changes();
 
 };
 
@@ -88,7 +74,7 @@ window.addEventListener('load', function(event) {
 
     filename = dialog.showSaveDialog(
       {
-        "defaultPath": "./",
+        "defaultPath": "../../",
         "properties": ["createDirectory"],
         "filters": [
           {
@@ -107,12 +93,26 @@ window.addEventListener('load', function(event) {
       console.log(filename)
       update_session_info("database_url", filename)
 
-      //path = filename.substring(0, filename.lastIndexOf("/"));
-      update_session_info("output", "try")
       console.log("hello")
     }).catch(err => {
       console.log(err)
     })
 
+    output_change = true;
+    check_changes();
+
   }
 })
+
+var output_change = false;
+var species_change = false;
+
+function check_changes() {
+
+  if (output_change === true & species_change === true) {
+
+    $('#content').replaceWith('<a href="../html/variables.html"><div id="continue"><font size="3">Continue</font></div></a>')
+
+  }
+
+}

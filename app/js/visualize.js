@@ -18,21 +18,8 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-Portions of the force graphing below based on or adapted from code from Mike Bostock
-The original code is under the GNU General Public License v3.0, allowing for modification
-and distribution
-License and copyright notice: GNU General Public License v3.0
-Changes:
-  - Heavily modified and added to the style CSS for more flexibility in plotting
-  - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
-  - Modified plotting functions to allow for the differential shading of nodes
-  - All other components are original
-Source:
-http://bl.ocks.org/mbostock/1153292
-https://bl.ocks.org/mbostock/1212215
 */
+const d3 = require('d3')
 
 // Change user selection based on input
 var selection = null;
@@ -606,52 +593,57 @@ function make_graph(
 };
 
 // MAIN
-d3.json("data/HSA_global_reactions.json", function(data) {
 
-  var pathway_dict = make_pathway_dictionary(data);
-  make_menu(pathway_dict);
-  d3.select("#pathwayMenu").on("change", change);
 
-  // Graphing
-  function change() {
+database_url = get_session_info("database_url")
+console.log(database_url)
 
-    var selection = document.getElementById("pathwayMenu").value;
+var data = JSON.parse(fs.readFileSync(database_url).toString());
 
-    var reactions = pathway_dict[selection]['reactions'];
-    var elements = parse_pathway(data, reactions);
-    var new_nodes = elements[0];
-    var new_links = elements[1];
+console.log(data)
 
-    // Initialize variables
-    var nodex = {};
-    var node_dict = {};
-    var type_dict = {};
+var pathway_dict = make_pathway_dictionary(data);
+make_menu(pathway_dict);
+d3.select("#pathwayMenu").on("change", change);
 
-    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
-    var node_dict = node_elements[0];
-    var type_dict = node_elements[1];
-    var expression_dict = node_elements[2];
-    var display_analytes_dict = node_elements[3];
-    var display_reactions_dict = node_elements[4];
-    var entity_id_dict = node_elements[5];
+// Graphing
+function change() {
 
-    console.log("?????????????????????????????")
-    console.log(new_links)
-    console.log("?????????????????????????????")
+  var selection = document.getElementById("pathwayMenu").value;
 
-    var nodex = initialize_links(new_links, nodex, node_dict);
+  var reactions = pathway_dict[selection]['reactions'];
+  var elements = parse_pathway(data, reactions);
+  var new_nodes = elements[0];
+  var new_links = elements[1];
 
-    make_graph(
-        data,
-        nodex,
-        new_links,
-        type_dict,
-        node_dict,
-        entity_id_dict,
-        expression_dict,
-        display_analytes_dict,
-        display_reactions_dict)
+  // Initialize variables
+  var nodex = {};
+  var node_dict = {};
+  var type_dict = {};
 
-    };
+  var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+  var node_dict = node_elements[0];
+  var type_dict = node_elements[1];
+  var expression_dict = node_elements[2];
+  var display_analytes_dict = node_elements[3];
+  var display_reactions_dict = node_elements[4];
+  var entity_id_dict = node_elements[5];
 
-  });
+  console.log("?????????????????????????????")
+  console.log(new_links)
+  console.log("?????????????????????????????")
+
+  var nodex = initialize_links(new_links, nodex, node_dict);
+
+  make_graph(
+      data,
+      nodex,
+      new_links,
+      type_dict,
+      node_dict,
+      entity_id_dict,
+      expression_dict,
+      display_analytes_dict,
+      display_reactions_dict)
+
+  };

@@ -26,9 +26,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <html>
 
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="js/curate.js"></script>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/variables.js"></script>
+  <script src="../js/utils.js"></script>
 
   <head>
 
@@ -49,206 +49,130 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <body>
 
-      <p>
-        <font size="48">
-        <font style="font-family: sans-serif">
-          <b>
-            <center>
-              Variables and Data
-            </center>
-          </b>
-      </p>
+    <img src="../data/variables.png" alt="variables" align="right" style="width: 200px; margin-top: 90px;">
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size="48" style="font-family: sans-serif">
+      <b>
+        <center>
+          Variables and Data
+        </center>
+      </b>
+    <br>
+    </font>
+    <font size="5">
+      <b>
+        <center>
+          <u>Input data (optional)</u>
+        </center>
+      </b>
+    <br>
+    </font>
+    <center>
       <font size="3">
+        Drag and drop transcriptomics data:
+          <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to gene identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+        <br>
+        <br>
+        <input id="dropTranscriptomics" type="file" accept="[*.tsv,*.txt]">
+
+        <br>
+        <br>
+        <br>
+        Drag and drop proteomics data:
+          <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to protein identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+        <br>
+        <br>
+        <input id="dropProteomics" type="file" accept="[*.tsv,*.txt]">
+
+        <br>
+        <br>
+        <br>
+        Drag and drop metabolomics data:
+          <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to metabolite identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+        <br>
+        <br>
+        <input id="dropMetabolomics" type="file" accept="[*.tsv,*.txt]">
+
+        <br>
+        <br>
+        <br>
+        Drag and drop metadata table:
+          <button class="info" title="This datatype will accept any tab-delimited metadata table. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+        <br>
+        <br>
+        <input id="dropMetadata" type="file" accept="[*.tsv,*.txt]">
+      </font>
 
       <br>
       <br>
-      <!-- Display drag & drop area and file upload button for user -->
-      <div id="quaternary"> <!--style="display:none"-->
-        <div id="drop-area">
-          <center>
-          <form class="my-form">
-            <p>Input transcriptomics data</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-          </center>
-        </div>
-
-        <div id="drop-area">
-          <center>
-          <form class="my-form">
-            <p>Input proteomics data</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-          </center>
-        </div>
-
-        <div id="drop-area">
-          <center>
-          <form class="my-form">
-            <p>Input metabolomics data</p>
-            <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Select a file</label>
-
-            <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-              <div id="info_icon">
-                i
-              </div>
-            </a>
-            </center>
-        </div>
-
-
-        <div id="drop-area">
-          <center>
-            <form class="my-form">
-              <p>Input metadata table</p>
-              <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-              <label class="button" for="fileElem">Select a file</label>
-
-              <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-                <div id="info_icon">
-                  i
-                </div>
-              </a>
-          </center>
-        </div>
-
-
-
-      <!-- Wrapping this altogether for now, the below will need to be wrapped in modular div elements
-      <div id="quinary" style="display:none"> -->
-        <center>
-          <font size="5">
-        <p>Options</p>
-        </center>
-
-        <center>
+      <br>
+      <br>
+      <font size="5">
+        <b><u>Other Options</u></b>
+      </font>
+      <br>
+      <br>
+      <font size="3">
         <form>
-          <font size="3">
-          <p>Experiment Type:</p>
-           <select name = "dropdown">
-              <option value = "expType1" selected>Default</option>
-              <option value = "expType2">Time Course</option>
-              <option value = "expType3">Flux Balance</option>
-              <option value = "expType4">Multiple Conditions</option>
-           </select>
-           <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-             <div id="info_icon">
-               i
-             </div>
-           </a>
+          Experiment Type:
+            <button class="info" title="Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter."><i>i</i></button>
+            <br>
+            <br>
+            <select name="dropdown" id="updateExperiment">
+              <option value="expType1" selected>Default</option>
+              <option value="expType2">Time-Course (coming soon)</option>
+              <option value="expType3">Flux Balance (coming soon)</option>
+              <option value="expType4">Multiple Conditions (coming soon)</option>
+            </select>
         </form>
-
+        <br>
         <form>
-          <p>Normalization:</p>
-           <select name = "dropdown">
-              <option value = "normType1" selected>No Normalization</option>
-              <option value = "normType2">Log Scale</option>
-              <option value = "normType3">Z Score</option>
-           </select>
-           <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">
-             <div id="info_icon">
-               i
-             </div>
-           </a>
+          Normalization:
+          <button class="info" title="Select the normalization type you would like to perform. Please see the documentation for more information on selecting this parameter."><i>i</i></button>
+          <br>
+          <br>
+          <select name="dropdown" id="updateNormalization">
+            <option value="normType1" selected>No Normalization</option>
+            <option value="normType2">Log Scale (coming soon)</option>
+            <option value="normType3">Z-Score (coming soon)</option>
+          </select>
         </form>
+        <br>
 
+        <input type="checkbox" id="updateCollapse">Collapse entities with missing data
+        <button class="info" title="Check this box to collapse entities for which there is no expression/abundance data."><i>i</i></button>
+        <br>
 
+        <br>
+        <input type="checkbox" id="updateSplit">Split duplicate entities
+        <button class="info" title="Check this box to split duplicate entities within a pathway view into seperate entities. See the documentation for more information."><i>i</i></button>
+        <br>
 
-        <br><br>
+        <br>
+        <br>
+        Drag and drop blacklist list:
+          <button class="info" title="Provide a tab-delimited table with no column names and the first column filled with a list of entities to ignore in pathway drawing. See the documentation for more information."><i>i</i></button>
+        <br>
+        <br>
+        <input id="dropBlacklist" type="file" accept="[*.tsv,*.txt]">
 
+      </font>
 
-        <div>
-          <center>
-            <a href="table.html">
-              <div id="continue">
-                <font size="3">Run Motif Search</font>
-              </div>
-            </a>
+      <br>
+      <br>
+      <br>
+      <div id="content"></div>
+      <script>
+        $('#content').append('<div id="continue" onclick="curate_data()"><font size="3">Curate</font></div>')
+      </script>
 
-            <a href="graph.html">
-              <div id="continue">
-                <font size="3">Visualize</font>
-              </div>
-            </a>
-          </center>
-        </div>
-
-        <br><br><br>
-
-        <center>
-        <details>
-          <font size="5">
-          <summary>Documentation</summary>
-          <font size="3">
-          <p>
-              https://github.com/Metaboverse/Metaboverse<br>
-              https://github.com/Metaboverse/Metaboverse/blob/master/LICENSE<br>
-          </p>
-        </details>
-        </center>
-        <br><br><br>
-
-
+      <br>
+      <br>
+      <br>
+      </center>
   </body>
-
-
 </html>
-
-<!--
-<div class="tooltip"><a href><img src="info-icon-open-source.png" style="width:30px; height:30px"></a>
-
-<br><br>
-<font size="3">
-<div class="tooltip">(i)
-  <span class="tooltiptext">Put lots of text here to see how the pop-up deals with it.</span>
-</div>
-<br><br>
--->
-
-
-<!-- Removing "Select pathway" from the variables page, just starting with everything on page
-      </br>
-      <font size="3">
-      <div id="secondary">
-        <center>
-          <form>
-            <p>Select metabolic pathway...</p>
-             <select name = "dropdown" onchange="toggleVis1()">
-                <option value = "glycolysis" selected>Glycolysis</option>
-                <option value = "krebs">Citric Acid Cycle</option>
-                <option value = "oxphospho">Oxidative Phosphorylation</option>
-                <option value = "gluconeo">Gluconeogenesis</option>
-             </select>
-          </form>
-        </center>
-      </div>
-
-      <div id="tertiary">
-        <center>
-        <input type="checkbox" name="check" value="pathways"> Check to run all pathways<br>
-        </center>
-      </div>
-
-      <div id="info_icon">
-        <center>
-          <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank"><img border="0" src="General-Get-Info-icon.png" width="20" height="20"></a>
-        </center>
-      </div>
-
--->
-
-  <!--<a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">(i)</a>-->

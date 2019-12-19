@@ -18,20 +18,6 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-Portions of the force graphing below based on or adapted from code from Mike Bostock
-The original code is under the GNU General Public License v3.0, allowing for modification
-and distribution
-License and copyright notice: GNU General Public License v3.0
-Changes:
-  - Heavily modified and added to the style CSS for more flexibility in plotting
-  - Adapted general D3 plotting functions and commands to work with input data and accept flexibility
-  - Modified plotting functions to allow for the differential shading of nodes
-  - All other components are original
-Source:
-http://bl.ocks.org/mbostock/1153292
-https://bl.ocks.org/mbostock/1212215
 */
 
 // Modules to control application life and create native browser window
@@ -48,8 +34,10 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 700,
+    width: 1000,
+    height: 750,
+    minWidth: 1000,
+    minHeight: 750,
     webPreferences: {
       preload: path.join(__dirname, 'js/preload.js'),
       nodeIntegration: true

@@ -34,10 +34,15 @@ menu {
   padding: 0;
   overflow: hidden;
   background-color: #343d46;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
+
 menuItem {
   float: left;
 }
+
 menuItem a {
   display: block;
   color: white;
@@ -45,6 +50,7 @@ menuItem a {
   padding: 10px 16px;
   text-decoration: none;
 }
+
 menuItem a:hover {
   background-color: #111;
 }
@@ -147,32 +153,19 @@ text {
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.59);
 }
 
-#info_icon {
-	background-color:#373e4a;
-	border-radius:28px;
-	border:1px solid #050505;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Georgia;
-	font-size:12px;
-	font-weight:bold;
-	padding:6px 10px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #283966;
-}
-#info_icon:hover {
-	background-color:#121314;
-}
-#info_icon:active {
-	position:relative;
-	top:1px;
+.info {
+  border-radius:28px;
+  border: 1px solid grey;
 }
 
+
 .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
+  border-radius:5px;
+  border: 1px solid grey;
+  position: absolute;
+  padding: 5px;
+  font-size:12px;
+  background-color: white;
 }
 
 .tooltip .tooltiptext {
