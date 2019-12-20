@@ -20,10 +20,9 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {app, BrowserWindow} = require('electron')
 const {ipcRenderer, ipcMain, remote} = require('electron')
 const { dialog } = require('electron').remote
-var fs = require('fs')
+
 var $ = require('jquery')
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
@@ -95,7 +94,6 @@ window.addEventListener('load', function(event) {
       console.log(filename)
       update_session_info("database_url", filename)
 
-      console.log("hello")
     }).catch(err => {
       console.log(err)
     })

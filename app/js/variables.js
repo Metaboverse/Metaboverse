@@ -20,9 +20,6 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {app, BrowserWindow} = require('electron')
-const {ipcRenderer, ipcMain, remote} = require('electron')
-const { dialog } = require('electron').remote
 var fs = require('fs')
 
 var $ = require('jquery')

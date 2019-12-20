@@ -20,11 +20,8 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {app, BrowserWindow} = require('electron')
-const {ipcRenderer, ipcMain, remote} = require('electron')
-const { dialog } = require('electron').remote
+var path = require("path");
 var fs = require('fs')
-
 var $ = require('jquery')
 
 var progressFile = "data/progress_log.json"
@@ -33,7 +30,7 @@ fs.copyFile('data/progress_log_template.json', 'data/progress_log.json', (err) =
   console.log('Progress log file was copied for this session');
 });
 
-fs.watch(progressFile, function (event, filename, _callback) {
+fs.watch(progressFile, function (event, filename) {
 
   var elem = document.getElementById("progressBar");
   var sum_values = 0
@@ -75,10 +72,72 @@ if (m_val !== null) {
 }
 
 // Run Python CLI
-// Assemble parameters based on available session data 
+// Assemble parameters based on available session data
 // Pass progress_log file for updates for each section of processing
+function runPreprocess(input) {
+    $.ajax({
+        type: "POST",
+        url: "../../metaboverse/__main__.py",
+        data: {
+          "cmd": "preprocess",
+          "output": getDefault("output"),
+          "transcriptomics": getDefault("transcriptomics"),
+          "proteomics": getDefault("proteomics"),
+          "metabolomics": getDefault("metabolomics"),
+          "method": getDefault("normalize")
+        },
+        success: _callback
+    });
+}
 
+function runCurate(input) {
+    $.ajax({
+        type: "POST",
+        url: "../../metaboverse/__main__.py",
+        data: {
+          "cmd": "curate",
+          "output": getDefault("output"),
+          "species": getDefault("organism_id")
+        },
+        success: _callback
+    });
+}
 
+function runLayer(input) {
+    $.ajax({
+        type: "POST",
+        url: "../../metaboverse/__main__.py",
+        data: {
+          "cmd": "analyze",
+          "output": getDefault("output"),
+          "output_file": getDefault("database_url"),
+          "model": getDefault("output") + getDefault("organism_id") + "_metaboverse_db.pickle",
+          "metadata": getDefault("metadata"),
+          "transcriptomics": getDefault("transcriptomics"),
+          "proteomics": getDefault("proteomics"),
+          "metabolomics": getDefault("metabolomics"),
+          "species": getDefault("organism_id"),
+          "blacklist": getDefault("blacklist"),
+          "experiment": getDefault("experiment"),
+          "collapse_missing_reactions": getDefault("collapse_missing_reactions"),
+          "split_duplicate_nodes": getDefault("split_duplicate_nodes"),
+          "session_data": path.resolve("data/session_data.json"),
+          "progress_log": path.resolve("data/progress_log.json")
+        },
+        success: _callback
+    });
+}
+
+function _callback(response) {
+    console.log();
+}
+
+// generate parameter strings for python
+if (getDefault("normalize") !== null) {
+  runPreprocess();
+}
+runCurate();
+runLayer();
 
 
 

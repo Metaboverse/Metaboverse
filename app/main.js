@@ -52,12 +52,9 @@ function createWindow () {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
+
     mainWindow = null
   })
-
 }
 
 // This method will be called when Electron has finished
@@ -82,7 +79,9 @@ app.on('activate', function () {
 // code. You can also put them in separate files and require them here.
 
 // Copy session info template each time the app is launched
-fs.copyFile('data/session_data_template.json', 'data/session_data.json', (err) => {
+var session_file = 'data/session_data.json'
+fs.copyFile('data/session_data_template.json', session_file, (err) => {
+
   if (err) throw err;
   console.log('Session data file was copied for this session');
 });

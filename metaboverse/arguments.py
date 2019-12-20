@@ -254,7 +254,7 @@ def parse_arguments(
         default = 'HSA',
         required = False)
     analyze_opts.add_argument(
-        '-r', '--rnaseq',
+        '-r', '--transcriptomics',
         help = 'Path and filename of RNA-Seq data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
