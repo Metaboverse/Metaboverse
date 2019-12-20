@@ -26,13 +26,14 @@ import pickle
 
 """Import internal dependencies
 """
-from metaboverse.curate.load_reactions_db import __main__ as load_reactions
-from metaboverse.curate.load_chebi_db import __main__ as load_chebi
-from metaboverse.curate.load_uniprot_db import __main__ as load_uniprot
-from metaboverse.curate.load_ensembl_db import __main__ as load_ensembl
-from metaboverse.curate.load_ncbi_db import __main__ as load_ncbi
-from metaboverse.curate.load_mirbase_db import __main__ as load_mirbase
-from metaboverse.curate.load_complexes_db import __main__ as load_complexes
+from app.python.curate.load_reactions_db import __main__ as load_reactions
+from app.python.curate.load_chebi_db import __main__ as load_chebi
+from app.python.curate.load_uniprot_db import __main__ as load_uniprot
+from app.python.curate.load_ensembl_db import __main__ as load_ensembl
+from app.python.curate.load_ncbi_db import __main__ as load_ncbi
+from app.python.curate.load_mirbase_db import __main__ as load_mirbase
+from app.python.curate.load_complexes_db import __main__ as load_complexes
+from app.python.utils import progress_feed
 
 """Plan
 """
@@ -49,7 +50,8 @@ def test():
 
 def parse_table(
         reference,
-        key):
+        key,
+        args_dict=None):
 
     if 'source_id' in reference[key].columns.tolist():
         column_names = [
@@ -71,6 +73,12 @@ def parse_table(
 
     reference_dictionary = {}
 
+    counter = 0
+    total = len(reference_parsed.index.tolist())
+    print("====")
+    print(total)
+    print("====")
+
     for index, row in reference_parsed.iterrows():
 
         reference_dictionary[row[0]] = {}
@@ -86,6 +94,11 @@ def parse_table(
         else:
             reference_dictionary[row[0]]['analyte'] = row[4]
             reference_dictionary[row[0]]['compartment'] = row[5]
+
+        if int(counter % (total / 15)) == 0 and args_dict != None:
+            progress_feed(args_dict, "reactions")
+
+        counter += 1
 
     return reference_dictionary
 
@@ -309,57 +322,90 @@ def __main__(
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
+    progress_feed(args_dict, "reactions")
     reactions_database = load_reactions(
         species_id=args_dict['species'],
-        output_dir=args_dict['output'])
+        output_dir=args_dict['output'],
+        args_dict=args_dict)
+    for x in range(10):
+        progress_feed(args_dict, "reactions")
 
     # Add interfacing information to reactions database
     print('\nLoading ChEBI database...')
+    progress_feed(args_dict, "chebi")
     chebi_reference = load_chebi(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "chebi")
     print('Parsing ChEBI database...')
     reactions_database['chebi_reference'] = parse_table(
         reference=chebi_reference,
-        key='chebi_pe_all_levels')
+        key='chebi_pe_all_levels',
+        args_dict=args_dict)
+    for x in range(10):
+        progress_feed(args_dict, "chebi")
 
     print('Loading UniProt database...')
+    progress_feed(args_dict, "uniprot")
     uniprot_reference = load_uniprot(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "uniprot")
     print('Parsing UniProt database...')
     reactions_database['uniprot_reference'] = parse_table(
         reference=uniprot_reference,
-        key='uniprot_pe_all_levels')
+        key='uniprot_pe_all_levels',
+        args_dict=args_dict)
+    for x in range(10):
+        progress_feed(args_dict, "uniprot")
 
     print('Loading Ensembl database...')
+    progress_feed(args_dict, "ensembl")
     ensembl_reference = load_ensembl(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "ensembl")
     print('Parsing Ensembl database...')
     reactions_database['ensembl_reference'] = parse_table(
         reference=ensembl_reference,
-        key='ensembl_pe_all_levels')
+        key='ensembl_pe_all_levels',
+        args_dict=args_dict)
+    for x in range(10):
+        progress_feed(args_dict, "ensembl")
 
     print('Loading NCBI database...')
+    progress_feed(args_dict, "ncbi")
     ncbi_reference = load_ncbi(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "ncbi")
     print('Parsing NCBI database...')
     reactions_database['ncbi_reference'] = parse_table(
         reference=ncbi_reference,
-        key='ncbi_pe_all_levels')
+        key='ncbi_pe_all_levels',
+        args_dict=args_dict)
+    for x in range(10):
+        progress_feed(args_dict, "ncbi")
 
     print('Loading miRBase database...')
+    progress_feed(args_dict, "mirbase")
     mirbase_reference = load_mirbase(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "mirbase")
     print('Parsing miRBase database...')
     reactions_database['mirbase_reference'] = parse_table(
         reference=mirbase_reference,
-        key='mirbase_pe_all_levels')
+        key='mirbase_pe_all_levels',
+        args_dict=args_dict)
+    for x in range(10):
+        progress_feed(args_dict, "mirbase")
 
     print('Loading complex database...')
+    progress_feed(args_dict, "complex")
     reactions_database['complexes_reference'] = load_complexes(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "complex")
     print('Parsing complex database...')
     reactions_database['complexes_reference']['complex_dictionary'] = parse_complexes(
-            reactions_database['complexes_reference'])
+        reactions_database['complexes_reference'])
+    for x in range(10):
+        progress_feed(args_dict, "complex")
 
     reactions_database['complexes_reference']['complex_mapper'] = map_complexes_genes(
         complex_participants=reactions_database['complexes_reference']['complex_participants'],
@@ -367,6 +413,8 @@ def __main__(
 
     reactions_database['master_reference'] = make_master(
         reactions_database)
+    for x in range(10):
+        progress_feed(args_dict, "master")
 
     # Write database to file
     print('Writing metaboverse database to file...')
@@ -374,4 +422,6 @@ def __main__(
         output=args_dict['output'],
         file=args_dict['species'] + '_metaboverse_db.pickle',
         database=reactions_database)
+    for x in range(10):
+        progress_feed(args_dict, "write")
     print('Metaboverse database curation complete.')

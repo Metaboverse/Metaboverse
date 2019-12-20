@@ -25,7 +25,7 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from metaboverse.curate.utils import get_table
+from app.python.curate.utils import get_table
 
 """Get tables
 """
@@ -34,7 +34,7 @@ def __main__(
 
     #all_levels = get_table(
     #    output_dir=output_dir,
-    #    url='https://reactome.org/download/current/UniProt2Reactome_All_Levels.txt',
+    #    url='https://reactome.org/download/current/NCBI2Reactome_All_Levels.txt',
     #    column_names=[
     #        'source_id',
     #        'analyte_id',
@@ -42,11 +42,11 @@ def __main__(
     #        'reaction_id',
     #        'go_evidence', #TAS = traceable author statement, IEA = electrong annotation not manually reviewed
     #        'organism'])
-    #os.remove(output_dir + 'UniProt2Reactome_All_Levels.txt')
+    #os.remove(output_dir + 'NCBI2Reactome_All_Levels.txt')
 
     pe_all_levels = get_table(
         output_dir=output_dir,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_All_Levels.txt',
+        url='https://reactome.org/download/current/NCBI2Reactome_PE_All_Levels.txt',
         column_names=[
             'source_id',
             'analyte_id',
@@ -56,11 +56,11 @@ def __main__(
             'reaction_name',
             'go_evidence',
             'organism'])
-    os.remove(output_dir + 'UniProt2Reactome_PE_All_Levels.txt')
+    os.remove(output_dir + 'NCBI2Reactome_PE_All_Levels.txt')
 
     #pe_pathways = get_table(
     #    output_dir=output_dir,
-    #    url='https://reactome.org/download/current/UniProt2Reactome_PE_Pathway.txt',
+    #    url='https://reactome.org/download/current/NCBI2Reactome_PE_Pathway.txt',
     #    column_names=[
     #        'source_id',
     #        'analyte_id',
@@ -70,11 +70,11 @@ def __main__(
     #        'reaction_name',
     #        'go_evidence',
     #        'organism'])
-    #os.remove(output_dir + 'UniProt2Reactome_PE_Pathway.txt')
+    #os.remove(output_dir + 'NCBI2Reactome_PE_Pathway.txt')
 
     #pe_reactions = get_table(
     #    output_dir=output_dir,
-    #    url='https://reactome.org/download/current/UniProt2Reactome_PE_Reactions.txt',
+    #    url='https://reactome.org/download/current/NCBI2Reactome_PE_Reactions.txt',
     #    column_names=[
     #        'source_id',
     #        'analyte_id',
@@ -84,11 +84,11 @@ def __main__(
     #        'reaction_name',
     #        'go_evidence',
     #        'organism'])
-    #os.remove(output_dir + 'UniProt2Reactome_PE_Reactions.txt')
+    #os.remove(output_dir + 'NCBI2Reactome_PE_Reactions.txt')
 
     #reactome = get_table(
     #    output_dir=output_dir,
-    #    url='https://reactome.org/download/current/UniProt2Reactome.txt',
+    #    url='https://reactome.org/download/current/NCBI2Reactome.txt',
     #    column_names=[
     #        'source_id',
     #        'process_id',
@@ -96,11 +96,11 @@ def __main__(
     #        'reaction_name',
     #        'go_evidence',
     #        'organism'])
-    #os.remove(output_dir + 'UniProt2Reactome.txt')
+    #os.remove(output_dir + 'NCBI2Reactome.txt')
 
     #reactome_reactions = get_table(
     #    output_dir=output_dir,
-    #    url='https://reactome.org/download/current/UniProt2ReactomeReactions.txt',
+    #    url='https://reactome.org/download/current/NCBI2ReactomeReactions.txt',
     #    column_names=[
     #        'source_id',
     #        'process_id',
@@ -108,12 +108,12 @@ def __main__(
     #        'reaction_name',
     #        'go_evidence',
     #        'organism'])
-    #os.remove(output_dir + 'UniProt2ReactomeReactions.txt')
+    #os.remove(output_dir + 'NCBI2ReactomeReactions.txt')
 
     return {
-        #'uniprot_all_levels': all_levels,
-        'uniprot_pe_all_levels': pe_all_levels}
-        #'uniprot_pe_pathways': pe_pathways,
-        #'uniprot_pe_reactions': pe_reactions,
-        #'uniprot_reactome': reactome,
-        #'uniprot_reactome_reactions': reactome_reactions}
+        #'ncbi_all_levels': all_levels,
+        'ncbi_pe_all_levels': pe_all_levels}
+        #'ncbi_pe_pathways': pe_pathways,
+        #'ncbi_pe_reactions': pe_reactions,
+        #'ncbi_reactome': reactome,
+        #'ncbi_reactome_reactions': reactome_reactions}

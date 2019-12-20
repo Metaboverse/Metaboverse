@@ -50,6 +50,24 @@ import datetime
 from multiprocessing import cpu_count
 from multiprocessing import Pool
 import itertools
+import json
+
+"""JS progress feed
+"""
+def progress_feed(args_dict, process=None):
+
+    feed_file = args_dict['progress_log']
+
+    if os.path.exists(feed_file) and process != None:
+
+        with open(feed_file) as json_file:
+            data = json.load(json_file)
+
+            if data[process] < 10:
+                data[process] += 1
+
+        with open(feed_file, 'w') as outfile:
+            json.dump(data, outfile)
 
 """Print out progress bar for long steps
 """
@@ -116,7 +134,24 @@ def check_files(
 def check_curate(
         args_dict):
 
-    print('Curate sub-module argument checks coming soon...')
+    should_exit = False
+
+    if args_dict['species'] == None \
+    or args_dict['species'].lower() == 'none' \
+    or args_dict['species'].lower() == 'null':
+
+        print('\nIncorrect species identifier provided: ' + args_dict['species'])
+        print('Please refer to https://reactome.org/ContentService/data/species/all for a valid list of organisms')
+        should_exit = True
+
+    if args_dict['output'] == None \
+    or not os.path.exists(os.path.dirname(args_dict['output'])):
+
+        print('\nIncorrect output parameter provided: ' + args_dict['output'])
+        should_exit = True
+
+    if should_exit == True:
+        sys.exit(1)
 
 """Check preprocess arguments
 """

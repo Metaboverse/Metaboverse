@@ -27,13 +27,13 @@ from textwrap import dedent
 
 """Import internal dependencies
 """
-from metaboverse.__init__ import __version__
-from metaboverse.__init__ import __dependencies__
-from metaboverse.utils import check_directories
-from metaboverse.utils import check_curate
-from metaboverse.utils import check_analyze
-from metaboverse.utils import generate_log
-from metaboverse.utils import argument_checks
+from app.python.__init__ import __version__
+from app.python.__init__ import __dependencies__
+from app.python.utils import check_directories
+from app.python.utils import check_curate
+from app.python.utils import check_analyze
+from app.python.utils import generate_log
+from app.python.utils import argument_checks
 
 """Set global variables
 """
@@ -194,6 +194,12 @@ def parse_arguments(
         metavar = '<species_id>',
         type = str,
         default = 'HSA',
+        required = False)
+    curate_opts.add_argument(
+        '-p', '--progress_log',
+        help = 'Path to progress file',
+        metavar = '</path/to/file.json>',
+        type = str,
         required = False)
     curate_opts.add_argument(
         '-m', '--max_processors',

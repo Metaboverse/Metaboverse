@@ -29,7 +29,7 @@ import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from metaboverse.utils import progress_bar
+from app.python.utils import progress_feed
 
 """Set globals
 """
@@ -123,7 +123,8 @@ def curate_reactions(
         reaction_dir,
         reactions_list,
         species_id,
-        species_key='species'):
+        species_key='species',
+        args_dict=None):
 
     species_tag = 'R-' + species_id + '-'
 
@@ -203,10 +204,9 @@ def curate_reactions(
                                 else:
                                     pass
 
-        progress_bar(
-            counter,
-            total,
-            status='Processing reactions')
+        if int(counter % (total / 5)) == 0 and args_dict != None:
+            progress_feed(args_dict, "reactions")
+
         counter += 1
 
     return reactions
@@ -405,9 +405,6 @@ def add_pathway_dictionary(
 def add_reactions_dictionary(
         pathways):
 
-    counter = 0
-    total = len(list(pathways.keys()))
-
     reactions_dictionary = {}
     for key in pathways.keys():
 
@@ -427,40 +424,37 @@ def add_reactions_dictionary(
 
             reactions_dictionary[reaction_id] = components
 
-        progress_bar(
-            counter,
-            total,
-            status='Processing reactions for dictionary')
-        counter += 1
-
     return reactions_dictionary
 
 """Fetch all reactions for a given organism
 """
 def __main__(
         species_id,
-        output_dir): # Location to output database file
+        output_dir,
+        args_dict): # Location to output database file
 
     #species_id='HSA'
     #output_dir='/Users/jordan/Desktop/reactome_test'
     # Get reaction files
     reactions_dir = unpack_reactions(
         output_dir=output_dir)
+    progress_feed(args_dict, "reactions")
 
     #reactions_dir = '/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml/'
-
     reactome_database = {}
 
     # Get list of reaction files to use for populating database
     reactions_list = get_reactions(
         species_id=species_id,
         reaction_dir=reactions_dir)
+    progress_feed(args_dict, "reactions")
 
     # Curate reactions database for organism of interest
     reactome_database['pathways'] = curate_reactions(
         reaction_dir=reactions_dir,
         reactions_list=reactions_list,
-        species_id=species_id)
+        species_id=species_id,
+        args_dict=args_dict)
 
     # Add lists of available pathways and compartments found in the database
     reactome_database['pathway_types'] = add_pathways(
@@ -477,6 +471,7 @@ def __main__(
 
     reactome_database['reactions_dictionary'] = add_reactions_dictionary(
         pathways=reactome_database['pathways'])
+    progress_feed(args_dict, "reactions")
 
     shutil.rmtree(reactions_dir)
 

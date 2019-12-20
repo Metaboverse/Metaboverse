@@ -20,6 +20,7 @@
   "devDependencies": {
     "d3": "^5.14.2",
     "electron": "^7.1.5",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "zerorpc": "^0.9.8"
   }
 }

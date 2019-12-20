@@ -25,19 +25,19 @@ import sys
 
 """Import internal dependencies
 """
-from metaboverse.__init__ import __version__
-from metaboverse.__init__ import __dependencies__
-from metaboverse.arguments import parse_arguments
-from metaboverse.arguments import get_dependencies
-from metaboverse.network.__main__ import __main__ as curate
-from metaboverse.preprocess.__main__ import __main__ as preprocess
-from metaboverse.analyze.__main__ import __main__ as analyze
+from app.python.__init__ import __version__
+from app.python.__init__ import __dependencies__
+from app.python.arguments import parse_arguments
+from app.python.arguments import get_dependencies
+from app.python.preprocess.__main__ import __main__ as preprocess
+from app.python.curate.__main__ import __main__ as curate
+from app.python.analyze.__main__ import __main__ as analyze
+from app.python.utils import progress_feed
 
 """Run metaboverse
 """
 def main(
         args=None):
-
     # Read in arguments
     args, args_dict = parse_arguments(
         args,
@@ -47,7 +47,7 @@ def main(
     if args_dict['cmd'] == 'curate':
 
         print('Curating network model...')
-        curate(args_dict)
+        curate(args_dict, args_dict['log_file'])
 
     # Run metaboverse-preprocess
     elif args_dict['cmd'] == 'preprocess':
@@ -67,10 +67,11 @@ def main(
 
     # Exit
     # Check log file for errors and exceptions
-    get_dependencies(args_dict)
+    #get_dependencies(args_dict)
+    sys.stdout.flush()
 
 """Run main
 """
 if __name__ == '__main__':
-
+    print("WHAT")
     sys.exit(main() or 0)
