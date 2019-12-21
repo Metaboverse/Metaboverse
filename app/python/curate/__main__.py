@@ -45,7 +45,7 @@ def test():
 
     __main__(
         {'output':'/Users/jordan/Desktop/',
-        'species':'HSA'}
+        'transcriptomics':'HSA'}
     )
 
 def parse_table(
@@ -312,19 +312,18 @@ def write_database(
 """Curate reactome database
 """
 def __main__(
-        args_dict,
-        log_file):
+        args_dict):
 
     #args_dict = {
     #    'output':'/Users/jordan/Desktop/',
-    #    'species':'HSA'}
+    #    ['transcriptomics']:'HSA'}
 
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
     progress_feed(args_dict, "reactions")
     reactions_database = load_reactions(
-        species_id=args_dict['species'],
+        species_id=args_dict['species_id'],
         output_dir=args_dict['output'],
         args_dict=args_dict)
     for x in range(10):
@@ -420,7 +419,7 @@ def __main__(
     print('Writing metaboverse database to file...')
     write_database(
         output=args_dict['output'],
-        file=args_dict['species'] + '_metaboverse_db.pickle',
+        file=args_dict['species_id'] + '_metaboverse_db.pickle',
         database=reactions_database)
     for x in range(10):
         progress_feed(args_dict, "write")

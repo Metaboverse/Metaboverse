@@ -107,18 +107,6 @@ def test():
         graph_name='name',
         global_reactions=True)
 
-"""Set output directory for graph files
-"""
-def create_graph_output(
-        output):
-
-    graph_directory = output + 'graphs/'
-
-    if not os.path.exists(graph_directory):
-        os.makedirs(graph_directory)
-
-    return graph_directory
-
 def build_graph(
         sub_network,
         master_reference,
@@ -425,7 +413,12 @@ def map_graph_attributes(
         data):
 
     # Get max value in dataframe, may want to do this omic to omic
-    max_value = max(abs(data[0]))
+    if data != None:
+        max_value = max(abs(data[0]))
+    else:
+        data = pd.DataFrame()
+        data['test'] = 0
+        max_value = 5
 
     for col in data.columns.tolist():
 
@@ -474,7 +467,6 @@ def map_graph_attributes(
                     rgba=rgba,
                     expression_value=expression_value,
                     current_sample=col)
-
 
         # Map edge color, size
         for edge in graph.edges():
@@ -739,18 +731,19 @@ TODO:
 def __main__(
         network,
         species_id,
-        output,
-        pathways=[],
+        output_file,
         data=None, # Assumed to already be name mapped
         black_list=[],
         plot=False,
-        graph_name='name',
-        global_reactions=False):
+        graph_name='name'):
 
     # Get output directory for graphs
     #output='/Users/jordan/Desktop/'
-    graph_directory = create_graph_output(
-        output)
+
+    if output_file[-5:].lower() == '.json':
+        graph_name = output_file
+    else:
+        graph_name = output_file + species_id + '_global_reactions.json'
 
     # Make master reference
     master_reference = network['master_reference']
@@ -759,57 +752,17 @@ def __main__(
 
     # Generate graph
     # Input list of pathway names
-    if global_reactions == False:
+    global_database = network['global_reactions']
 
-        total = len(pathways)
-        counter = 0
-        for p in pathways:
-            counter += 1
-            print('Analyzing ' + str(p) + ' (' + str(counter) + '/' + str(total) + ')')
-
-            pathway_key = network['pathway_types'][p]
-
-            for k in pathway_key:
-
-                subnetwork = network['pathways'][k]
-
-                name = 'graph-' + subnetwork['reactome_id'].replace('/','_')
-
-                if graph_name == 'reactome':
-                    graph_name = graph_directory + name + '.json'
-                    plot_name = graph_directory + name + '.pdf'
-
-                else:
-                    graph_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.json'
-                    plot_name = graph_directory + p.replace(' ', '_').replace('/','_') + '.pdf'
-
-                process_graph(
-                    subnetwork=subnetwork,
-                    master_reference=master_reference,
-                    pathway_dictionary=network['pathway_dictionary'],
-                    reaction_dictionary=network['reactions_dictionary'],
-                    complex_reference=complex_reference,
-                    species_accession=species_accession,
-                    graph_name=graph_name,
-                    data=data,
-                    black_list=black_list,
-                    plot_name=plot_name)
-
-    else:
-
-        global_database = network['global_reactions']
-        graph_name = graph_directory + species_id + '_global_reactions.json'
-        plot_name = graph_directory + species_id + '_global_reactions.pdf'
-
-        process_graph(
-            subnetwork=global_database,
-            master_reference=master_reference,
-            pathway_dictionary=network['pathway_dictionary'],
-            reaction_dictionary=network['reactions_dictionary'],
-            complex_reference=complex_reference,
-            species_accession=species_accession,
-            graph_name=graph_name,
-            data=data,
-            black_list=black_list,
-            plot_name=False,
-            process_all=True)
+    process_graph(
+        subnetwork=global_database,
+        master_reference=master_reference,
+        pathway_dictionary=network['pathway_dictionary'],
+        reaction_dictionary=network['reactions_dictionary'],
+        complex_reference=complex_reference,
+        species_accession=species_accession,
+        graph_name=graph_name,
+        data=data,
+        black_list=black_list,
+        plot_name=False,
+        process_all=True)

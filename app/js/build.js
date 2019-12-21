@@ -26,6 +26,8 @@ var fs = require('fs')
 var $ = require('jquery')
 
 var progressFile = "data/progress_log.json"
+var scriptFilename = path.join(__dirname, '../python', '__main__.py');
+
 fs.copyFile('data/progress_log_template.json', 'data/progress_log.json', (err) => {
   if (err) throw err;
   console.log('Progress log file was copied for this session');
@@ -37,12 +39,11 @@ fs.watch(progressFile, function (event, filename) {
   var sum_values = 0
 
   var session = JSON.parse(fs.readFileSync(progressFile).toString());
-  console.log(session)
+
   for (j in session) {  //loop through the array
 
     sum_values += session[j];  //Do the math!
   }
-  console.log(sum_values)
   elem.style.width = sum_values + "%";
   elem.innerHTML = sum_values + "%";
 
@@ -80,32 +81,37 @@ function parseCommand(args_dict) {
   var commandString = "";
   for (key in args_dict) {
 
-    commandString = commandString + " --" + key + " " + args_dict[key]
+    if (args_dict[key] === false) {
+
+    } else if (args_dict[key] === true) {
+      commandString = commandString + " --" + key
+    } else {
+      commandString = commandString + " --" + key + " " + args_dict[key]
+    }
   }
 
   return commandString;
 }
 
+function callback() {
+
+  console.log("finished")
+}
+
 function execute(command, callback) {
-  exec(command, (error, stdout, stderr) => {
-      callback(stdout);
-  });
+
+    exec(command, (error, stdout, stderr) => {
+        callback(stdout);
+        callback(stderr);
+    });
+
 };
 
-function runBuild() {
-
-  var scriptFilename = path.join(__dirname, '../python', '__main__.py');
-
-  // call the functions
-  if (getDefault("normalize") === true) {
-    execute('python ' + scriptFilename + ' preprocess -h', (output) => {
-        console.log(output);
-    });
-  }
+runCurate = function(_callback) {
 
   var curateDictionary = {
-    "output": getDefault("output"),
-    "species": getDefault("organism_id"),
+    "output": getArgument("output"),
+    "species_id": getArgument("organism_id"),
     "progress_log": path.resolve("data/progress_log.json")
   }
 
@@ -114,22 +120,26 @@ function runBuild() {
   execute("python " + scriptFilename + " curate " + cmd, (output) => {
       console.log(output);
   });
+  console.log("Hello")
+  return _callback
 
+}
+
+runAnalysis = function() {
 
   graphDictionary = {
-    "output": getDefault("output"),
-    "output_file": getDefault("database_url"),
-    "model": getDefault("output") + getDefault("organism_id") + "_metaboverse_db.pickle",
-    "metadata": getDefault("metadata"),
-    "transcriptomics": getDefault("transcriptomics"),
-    "proteomics": getDefault("proteomics"),
-    "metabolomics": getDefault("metabolomics"),
-    "species": getDefault("organism_id"),
-    "blacklist": getDefault("blacklist"),
-    "experiment": getDefault("experiment"),
-    "collapse_missing_reactions": getDefault("collapse_missing_reactions"),
-    "split_duplicate_nodes": getDefault("split_duplicate_nodes"),
-    "session_data": path.resolve("data/session_data.json"),
+    "output": getArgument("output"),
+    "output_file": getArgument("database_url"),
+    "model": getArgument("output") + getArgument("organism_id") + "_metaboverse_db.pickle",
+    "metadata": getArgument("metadata"),
+    "transcriptomics": getArgument("transcriptomics"),
+    "proteomics": getArgument("proteomics"),
+    "metabolomics": getArgument("metabolomics"),
+    "species_id": getArgument("organism_id"),
+    "blacklist": getArgument("blacklist"),
+    "experiment": getArgument("experiment"),
+    "collapse_missing_reactions": getArgument("collapse_missing_reactions"),
+    "split_duplicate_nodes": getArgument("split_duplicate_nodes"),
     "progress_log": path.resolve("data/progress_log.json")
   }
   var cmd = parseCommand(graphDictionary)
@@ -138,6 +148,18 @@ function runBuild() {
       console.log(output);
   });
 
+}
+
+function runBuild() {
+
+  // call the functions
+  if (getArgument("normalize") === true) {
+    execute('python ' + scriptFilename + ' preprocess -h', (output) => {
+        console.log(output);
+    });
+  }
+
+  runAnalysis()
 }
 
 function displayOptions() {

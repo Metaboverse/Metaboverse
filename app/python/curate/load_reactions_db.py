@@ -351,7 +351,10 @@ def unpack_reactions(
         shutil.rmtree(reactions_dir)
     os.makedirs(reactions_dir)
     os.system('tar -zxvf ' + file + ' -C ' + reactions_dir)
-    os.remove(file)
+    try:
+        os.remove(file)
+    except:
+        print('Could not find file: ' + file)
 
     return reactions_dir
 

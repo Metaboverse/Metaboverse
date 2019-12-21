@@ -91,3 +91,15 @@ function getDefault(key) {
 
   return value;
 }
+
+function getArgument(key) {
+
+  var session = JSON.parse(fs.readFileSync(session_file).toString());
+  value = session[key]
+
+  if (value === null) {
+    value = "None"
+  }
+
+  return value;
+}

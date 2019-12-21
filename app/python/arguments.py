@@ -113,6 +113,11 @@ def check_arguments(
     else:
         raise Exception('Invalid sub-module selected')
 
+    if 'output' not in args_dict \
+    or args_dict['output'] == None \
+    or args_dict['output'].lower() == 'none':
+        args_dict['output'] = args_dict['output_file'].rsplit('/', 1)[0] + '/'
+
     args_dict = generate_log(args_dict)
 
     # Print out user commands to log file
@@ -189,7 +194,7 @@ def parse_arguments(
         type = str,
         required = False)
     curate_opts.add_argument(
-        '-s', '--species',
+        '-s', '--species_id',
         help = 'Reactome species ID',
         metavar = '<species_id>',
         type = str,
@@ -253,9 +258,15 @@ def parse_arguments(
         action = 'help',
         help = 'Show help message and exit')
     analyze_opts.add_argument(
-        '-s', '--species',
+        '--output_file',
+        help = 'Path and filename to save curated model to. If not provided, will save as a generic file to directory where the model is found, followed by the species ID and _metaboverse_db.json',
+        metavar = '<path/filename>',
+        type = str,
+        required = False)
+    analyze_opts.add_argument(
+        '-s', '--species_id',
         help = 'Provide Reactome species ID (default: HSA for human)',
-        metavar = '<id>',
+        metavar = '<species_id>',
         type = str,
         default = 'HSA',
         required = False)
@@ -278,25 +289,20 @@ def parse_arguments(
         type = str,
         required = False)
     analyze_opts.add_argument(
-        '--time',
-        help = 'Analyze timecourse data',
-        action = 'store_true',
+        '--experiment',
+        help = 'Specify experiment type',
+        metavar = '<default/timecourse/flux/multi-condition>',
+        type = str,
         required = False)
     analyze_opts.add_argument(
-        '--static',
-        help = 'Analyze static data (two conditions allowed)',
-        action = 'store_true',
-        required = False)
-    analyze_opts.add_argument(
-        '--normalize',
+        '--collapse_missing_reactions',
         help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
         action = 'store_true',
         required = False)
     analyze_opts.add_argument(
-        '--pathway',
-        help = 'Name of pathway to analyze. If not provided, will analyze all available pathways. Use the parameter PROVIDE to print a list of available pathways to analyze',
-        metavar = '<pathway name>',
-        type = str,
+        '--split_duplicate_nodes',
+        help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
+        action = 'store_true',
         required = False)
     analyze_opts.add_argument(
         '--blacklist',
@@ -304,6 +310,18 @@ def parse_arguments(
         default = DEFAULT_BLACKLIST,
         type = str,
         nargs = '+',
+        required = False)
+    analyze_opts.add_argument(
+        '--session_data',
+        help = 'Path and filename to session data file',
+        metavar = '<path/filename>',
+        type = str,
+        required = False)
+    analyze_opts.add_argument(
+        '--progress_log',
+        help = 'Path and filename to progress log file',
+        metavar = '<path/filename>',
+        type = str,
         required = False)
     analyze_opts.add_argument(
         '-m', '--max_processors',

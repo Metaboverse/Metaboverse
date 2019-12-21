@@ -35,8 +35,8 @@ function selectPathway() {
 function make_pathway_dictionary(data) {
 
   // Get pathway name and ID
-  var master = data[0].master_reference;
-  var pathways = data[0].pathway_dictionary;
+  var master = data.master_reference;
+  var pathways = data.pathway_dictionary;
   var pathway_dict = {}
   for (var key in pathways) {
 
@@ -160,8 +160,8 @@ function transform(d) {
 
 function parse_pathway(data, reactions) {
 
-  var master = data[0].master_reference;
-  var reactions_dictionary = data[0].reactions_dictionary;
+  var master = data.master_reference;
+  var reactions_dictionary = data.reactions_dictionary;
 
   // Parse through each reaction listed and get the component parts
   var components = [];
@@ -185,8 +185,8 @@ function parse_pathway(data, reactions) {
 
 function get_nodes_links(data, components) {
 
-  var nodes = data[0].nodes;
-  var links = data[0].links;
+  var nodes = data.nodes;
+  var links = data.links;
 
   // Parse the nodes of interest
   var new_nodes = [];
@@ -224,7 +224,7 @@ function get_nodes_links(data, components) {
 
 function nearest_neighbors(data, entity_id) {
 
-  var master = data[0].master_reference;
+  var master = data.master_reference;
 
   // Get current nearest neighbors value
   var kNN = document.getElementById("kNN_button").value;
@@ -279,8 +279,8 @@ function nearest_neighbors(data, entity_id) {
 
 function parse_kNN_pathway(data, entity_id, kNN) {
 
-  var master = data[0].master_reference;
-  var reactions_dictionary = data[0].reactions_dictionary;
+  var master = data.master_reference;
+  var reactions_dictionary = data.reactions_dictionary;
 
   // Parse through each reaction where entity is a component
   var components = [];

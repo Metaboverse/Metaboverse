@@ -187,46 +187,6 @@ def ratio_spacing(
 
     return data
 
-"""Curate pathway names to analyze
-"""
-def retrieve_pathways(
-        args_dict,
-        network):
-
-    all_pathways = []
-
-    for p in list(network['pathway_types'].keys()):
-        all_pathways.append(p)
-
-    sorted_pathways = sort(all_pathways)
-
-    if 'pathway' in args_dict \
-    and args_dict['pathway'] != None:
-        if args_dict['pathway'].upper() == 'PROVIDE':
-
-            counter = 1
-            index = {}
-            for p in sorted_pathways:
-
-                print(counter, ': ', p)
-                index[counter] = p
-                counter += 1
-
-            print('')
-            pathway_index = input('Please provide the index number for the pathway you would like to analyze: ')
-            pathways = index[pathway_index]
-
-        else:
-            if args_dict['pathway'] in sorted_pathways:
-                pathways = args_dict['pathway']
-            else:
-                print(args_dict['pathway'], 'not found in available pathways')
-
-    else:
-        pathways = sorted_pathways
-
-    return pathways
-
 """Map Reactome-friendly IDs to dataset to analyze
 """
 def map_ids(

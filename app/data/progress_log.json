@@ -1,12 +1,1 @@
-{
-  "reactions": 0,
-  "chebi": 0,
-  "uniprot": 0,
-  "ensembl": 0,
-  "ncbi": 0,
-  "mirbase": 0,
-  "complex": 0,
-  "master": 0,
-  "write": 0,
-  "graph": 0
-}
+{"reactions": 10, "chebi": 10, "uniprot": 10, "ensembl": 10, "ncbi": 10, "mirbase": 10, "complex": 10, "master": 10, "write": 10, "graph": 10}

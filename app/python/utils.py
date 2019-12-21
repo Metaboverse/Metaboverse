@@ -136,11 +136,11 @@ def check_curate(
 
     should_exit = False
 
-    if args_dict['species'] == None \
-    or args_dict['species'].lower() == 'none' \
-    or args_dict['species'].lower() == 'null':
+    if args_dict['species_id'] == None \
+    or args_dict['species_id'].lower() == 'none' \
+    or args_dict['species_id'].lower() == 'null':
 
-        print('\nIncorrect species identifier provided: ' + args_dict['species'])
+        print('\nIncorrect species identifier provided: ' + args_dict['species_id'])
         print('Please refer to https://reactome.org/ContentService/data/species/all for a valid list of organisms')
         should_exit = True
 

@@ -27,7 +27,6 @@ from app.python.analyze.curate_data import __main__ as curate_data
 from app.python.analyze.curate_network import __main__ as curate_network
 from app.python.analyze.graph import __main__ as graph
 from app.python.analyze.utils import map_ids
-from app.python.analyze.utils import retrieve_pathways
 from app.python.utils import progress_feed
 
 """Analyze data on network model
@@ -42,32 +41,37 @@ def __main__(
     progress_feed(args_dict, "graph")
 
     # Read in data
-    data = curate_data(
-        metadata=args_dict['metadata'],
-        transcriptomics=args_dict['rnaseq'],
-        proteomics=args_dict['proteomics'],
-        metabolomics=args_dict['metabolomics'])
-    progress_feed(args_dict, "graph")
+    if args_dict['transcriptomics'].lower() != 'none' \
+    or args_dict['proteomics'].lower() != 'none' \
+    or args_dict['metabolomics'].lower() != 'none':
 
-    # Map names to work with what metaboverse expects
-    data_mapped = map_ids(
-        data=data,
-        network=network)
-    progress_feed(args_dict, "graph")
+        data = curate_data(
+            metadata=args_dict['metadata'],
+            transcriptomics=args_dict['transcriptomics'],
+            proteomics=args_dict['proteomics'],
+            metabolomics=args_dict['metabolomics'],
+            args_dict=args_dict)
+        progress_feed(args_dict, "graph")
 
-    # Get list of pathway to analyze
-    pathways = retrieve_pathways(
-        args_dict=args_dict,
-        network=network)
-    progress_feed(args_dict, "graph")
+        # Map names to work with what metaboverse expects
+        data_mapped = map_ids(
+            data=data,
+            network=network)
+        progress_feed(args_dict, "graph")
+
+    else:
+        data_mapped = None
+        progress_feed(args_dict, "graph")
+        progress_feed(args_dict, "graph")
 
     # Generate graph(s)
+    progress_feed(args_dict, "graph")
     graph(
         data=data_mapped,
         network=network,
-        pathways=pathways,
         species_id=args_dict['species_id'],
-        output=args_dict['output'],
+        output_file=args_dict['output_file'],
         black_list=args_dict['blacklist'])
+
     for x in range(10):
         progress_feed(args_dict, "graph")

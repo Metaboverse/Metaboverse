@@ -150,7 +150,7 @@ def prep_metadata(
         data):
 
     if 'metadata' in args_dict \
-    and args_dict['rnaseq'] != None:
+    and args_dict['transcriptomics'] != None:
         data.add_metadata(args_dict['metadata'])
 
     else:
@@ -164,8 +164,8 @@ def prep_rnaseq(
         data):
 
     if 'rnaseq' in args_dict \
-    and args_dict['rnaseq'] != None:
-        data.add_transcriptome(args_dict['rnaseq'])
+    and args_dict['transcriptomics'] != None:
+        data.add_transcriptome(args_dict['transcriptomics'])
         data.format_transcriptome()
 
     return data
@@ -223,7 +223,8 @@ def __main__(
         metadata,
         transcriptomics,
         proteomics,
-        metabolomics):
+        metabolomics,
+        args_dict):
 
     # Init data container
     data = dataContainer()

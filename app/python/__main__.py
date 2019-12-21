@@ -47,19 +47,30 @@ def main(
     if args_dict['cmd'] == 'curate':
 
         print('Curating network model...')
-        curate(args_dict, args_dict['log_file'])
+        #curate(args_dict)
+        sys.stdout.flush()
+        sys.exit(1)
 
     # Run metaboverse-preprocess
     elif args_dict['cmd'] == 'preprocess':
 
         print('Preprocessing input data...')
         preprocess(args_dict)
+        sys.stdout.flush()
+        sys.exit(1)
 
     # Run metaboverse-analyze
     elif args_dict['cmd'] == 'analyze':
 
+        print('Curating network model...')
+        curate(args_dict)
+        sys.stdout.flush()
+
+
         print('Analyzing data in context of network model...')
         analyze(args_dict)
+        sys.stdout.flush()
+        sys.exit(1)
 
     # Print some error messaging
     else:
@@ -73,5 +84,5 @@ def main(
 """Run main
 """
 if __name__ == '__main__':
-    print("WHAT")
+
     sys.exit(main() or 0)
