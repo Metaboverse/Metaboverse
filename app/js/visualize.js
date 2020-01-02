@@ -111,37 +111,6 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
 };
 
-function initialize_links(links, nodex, node_dict) {
-
-  console.log(">>>>>>>>>")
-  console.log(links)
-  // Populate node object with relevant information and data
-  links.forEach(function(link) {
-
-    // Add pertinent node information
-    console.log(link)
-    console.log(nodex)
-    console.log("+++++")
-
-    //link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
-    //link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
-
-    link.source = nodex[link.source] || (nodex[link.source] = {name: link.source});
-    link.target = nodex[link.target] || (nodex[link.target] = {name: link.target});
-
-    console.log(link)
-    console.log(nodex)
-    console.log("=====")
-
-    nodex[link.source["name"]]["color"] = node_dict[link.source["name"]];
-    nodex[link.target["name"]]["color"] = node_dict[link.target["name"]];
-
-  });
-
-  return nodex;
-
-};
-
 function linkArc(d) {
 
   var dx = d.target.x - d.source.x;
@@ -159,6 +128,8 @@ function transform(d) {
 };
 
 function parse_pathway(data, reactions) {
+
+
 
   var master = data.master_reference;
   var reactions_dictionary = data.reactions_dictionary;
@@ -185,8 +156,8 @@ function parse_pathway(data, reactions) {
 
 function get_nodes_links(data, components) {
 
-  var nodes = data.nodes;
-  var links = data.links;
+  var nodes = data["nodes"];
+  var links = data["links"];
 
   // Parse the nodes of interest
   var new_nodes = [];
@@ -195,28 +166,29 @@ function get_nodes_links(data, components) {
 
     if (components.includes(node['entity_id']) || components.includes(node['name'])) {
 
-      new_nodes.push(node)
-      node_components.push(node["name"])
-      node_components.push(node["entity_id"])
+      var node_copy = $.extend(true,{},node)
+
+      node_copy["rgba"] = node_copy["rgba"][0]
+      node_copy["rgba_js"] = node_copy["rgba_js"][0]
+
+      new_nodes.push(node_copy)
+      node_components.push(node_copy["name"])
+      node_components.push(node_copy["entity_id"])
 
     };
 
   });
 
+  var new_links = []
   // Parse out links of interest
-  var new_links = [];
-  links.forEach(function(link) {
+  links.forEach( function (link) {
 
-    if ((node_components.includes(link.source) && node_components.includes(link.target)) ||
-        (node_components.includes(link.source["name"]) && node_components.includes(link.target["name"]))) {
-      console.log("relinking")
-      new_links.push(link);
-
+    if (node_components.includes(link.source) && node_components.includes(link.target)) {
+      var link_copy = $.extend(true,{},link)
+      new_links.push(link_copy)
     };
 
   });
-
-  console.log(new_links)
 
   return [new_nodes, new_links];
 
@@ -238,7 +210,6 @@ function nearest_neighbors(data, entity_id) {
 
   // Recurate the graph
   // Initialize variables
-  var nodex = {};
   var node_dict = {};
   var type_dict = {};
 
@@ -250,15 +221,9 @@ function nearest_neighbors(data, entity_id) {
   var display_reactions_dict = node_elements[4];
   var entity_id_dict = node_elements[5];
 
-  console.log("?????????????????????????????")
-  console.log(new_links)
-  console.log("?????????????????????????????")
-
-  var nodex = initialize_links(new_links, nodex, node_dict);
-
   make_graph(
       data,
-      nodex,
+      new_nodes,
       new_links,
       type_dict,
       node_dict,
@@ -296,10 +261,31 @@ function parse_kNN_pathway(data, entity_id, kNN) {
         nn_components.push(reactions_dictionary[reaction][entity]);
 
       };
-
     };
-
   };
+
+  if (kNN > 1) {
+
+    n = 1
+    while (n < kNN) {
+
+      for (element in nn_components) {
+
+        for (reaction in reactions_dictionary) {
+
+          if (reactions_dictionary[reaction].includes(nn_components[element])) {
+
+            for (el in reactions_dictionary[reaction]) {
+
+              nn_components.push(reactions_dictionary[reaction][el]);
+
+            };
+          };
+        };
+      }
+      n = n + 1
+    }
+  }
 
   var new_elements = get_nodes_links(data, nn_components);
 
@@ -310,16 +296,12 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 function kNN_input(d) {
 
   var knn_value = document.getElementById("kNN_button").value;
-  console.log(knn_value)
+  console.log("k-NN parameter now set to: " + knn_value)
 };
-
-
-
-
 
 function make_graph(
     data,
-    nodex,
+    new_nodes,
     new_links,
     type_dict,
     node_dict,
@@ -339,27 +321,26 @@ function make_graph(
 
   // Initialize force graph object
   var svg = d3
-    .select("body")
+    .select("#graph")
     .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-    .call(d3.behavior.zoom()
-    .on("zoom", activate_zoom));
+      .attr("width", width - 5)
+      .attr("height", height - 80)
+    .call(d3.zoom().on("zoom", function () {
+      svg.attr("transform", d3.event.transform)
+      }))
+    .append("g")
 
-  var force = d3.layout.force()
-    .gravity(0.1)
-    .linkDistance(60)
-    .charge(-500)
-    .on("tick", tick)
-    .size([width, height]);
+  const forceX = d3.forceX(width / 2).strength(0.015)
+  const forceY = d3.forceY(height / 2).strength(0.015)
 
-  var g_nodes = d3.values(nodex);
+  const simulation = d3.forceSimulation(new_nodes)
+      .force("link", d3.forceLink(new_links).id(d => d.name)
+        .distance(40)
+        .strength(1))
+      .force("charge", d3.forceManyBody().strength(-1000))
+      .force("center", d3.forceCenter(width / 2, height / 2))
 
-  // Build graph
-  force
-    .nodes(g_nodes)
-    .links(new_links)
-    .start();
+  simulation.alphaTarget(0.01).alphaMin(0.1).velocityDecay(0.70)
 
   // Generate edges with style attributes
   svg.append("defs").selectAll("marker")
@@ -382,24 +363,26 @@ function make_graph(
     .append("path")
       .attr("d", "M0, -5L10, 0L0, 5");
 
-  var path = svg.append("g").selectAll("path")
-    .data(force.links())
+  var link = svg.append("g").selectAll("path")
+    .data(new_links)
     .enter().append("path")
       .attr("class", function(d) { return "link " + d.type; })
       .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
   var node = svg.selectAll(".node")
-    .data(g_nodes)
+    .data(new_nodes)
     .enter().append("g")
       .attr("class", "node")
     .style("--node_color", function(d) {
-      try {
-        return "rgba(" + d.color[0].toString() + ")";
-      } catch (e) {
-        return "rgba(" + d.name.color[0].toString() + ")";
-      }})
+      return "rgba(" + d.rgba_js.toString() + ")";
+      }
+    )
     .style("--node_radius", function(d) { return 6; })
-    .call(force.drag);
+    .call(d3.drag()
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
 
   var circle = node
     .append("circle")
@@ -411,10 +394,9 @@ function make_graph(
         console.log("Selected a reaction, will not perform kNN graphing")
 
       } else {
-
-        console.log(entity_id_dict[d["name"]])
+        document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
+        document.getElementById("type_selection").innerHTML = d["name"];
         nearest_neighbors(data, entity_id_dict[d["name"]]);
-
 
       };
 
@@ -422,7 +404,7 @@ function make_graph(
 
   var text = node
     .append("text")
-      .attr("x", 16)
+      .attr("x", 14)
       .attr("y", ".31em")
     .text(function(d) {
 
@@ -438,6 +420,8 @@ function make_graph(
 
       }
     });
+
+  simulation.on("tick", tick);
 
   // Not working right now
   toggle_e = true;
@@ -504,7 +488,6 @@ function make_graph(
         determine_displays(toggle_a, toggle_r);
 
       }
-
     });
 
   function determine_displays(toggle_a, toggle_r) {
@@ -553,54 +536,53 @@ function make_graph(
     .append("path")
       .attr("class", "cell");
 
-  d3.select("body")
-    .on("keydown", function () {
-
-      toggle_zoom = d3.event.altKey;
-
-    });
-
-  d3.select("body")
-    .on("keyup", function () {
-
-      toggle_zoom = false;
-
-    });
-
   // Draw curved edges
   function tick() {
 
-    path.attr("d", linkArc);
+    link.attr("d", linkArc);
     circle.attr("transform", transform);
     text.attr("transform", transform);
 
   };
 
-  // Toggle zoom and pan by pressing the Alt key
-  // This section adapted from Pedro Tabacof, https://stackoverflow.com/a/34815469/9571488
-  var toggle_zoom = false;
-  function activate_zoom() {
+  function dragsubject() {
+    return simulation.find(d3.event.x, d3.event.y);
+  }
 
-      if (toggle_zoom === true) {
+  function dragstarted() {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d3.event.subject.fx = d3.event.subject.x;
+    d3.event.subject.fy = d3.event.subject.y;
+  }
 
-        svg.attr(
-          "transform",
-          "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
+  function dragged() {
+    d3.event.subject.fx = d3.event.x;
+    d3.event.subject.fy = d3.event.y;
+  }
 
-        );
-      }
-  };
+  function dragended() {
+    if (!d3.event.active) simulation.alphaTarget(0.05).alphaMin(0.06).velocityDecay(0.70);
+    d3.event.subject.fx = null;
+    d3.event.subject.fy = null;
+  }
+
+  function drawLink(d) {
+    context.moveTo(d.source.x, d.source.y);
+    context.lineTo(d.target.x, d.target.y);
+  }
+
+  function drawNode(d) {
+    context.moveTo(d.x + 3, d.y);
+    context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+  }
+
 };
 
 // MAIN
-
-
 database_url = get_session_info("database_url")
 console.log(database_url)
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
-
-console.log(data)
 
 var pathway_dict = make_pathway_dictionary(data);
 make_menu(pathway_dict);
@@ -610,6 +592,8 @@ d3.select("#pathwayMenu").on("change", change);
 function change() {
 
   var selection = document.getElementById("pathwayMenu").value;
+  document.getElementById("type_selection_type").innerHTML = "Pathway";
+  document.getElementById("type_selection").innerHTML = selection;
 
   var reactions = pathway_dict[selection]['reactions'];
   var elements = parse_pathway(data, reactions);
@@ -617,7 +601,6 @@ function change() {
   var new_links = elements[1];
 
   // Initialize variables
-  var nodex = {};
   var node_dict = {};
   var type_dict = {};
 
@@ -629,15 +612,9 @@ function change() {
   var display_reactions_dict = node_elements[4];
   var entity_id_dict = node_elements[5];
 
-  console.log("?????????????????????????????")
-  console.log(new_links)
-  console.log("?????????????????????????????")
-
-  var nodex = initialize_links(new_links, nodex, node_dict);
-
   make_graph(
       data,
-      nodex,
+      new_nodes,
       new_links,
       type_dict,
       node_dict,

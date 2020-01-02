@@ -65,8 +65,13 @@ const nodes = data.nodes;
 const forceX = d3.forceX(width / 2).strength(0.015)
 const forceY = d3.forceY(height / 2).strength(0.015)
 
+console.log(nodes)
+console.log(links)
+
 const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(40).strength(1))
+    .force("link", d3.forceLink(links).id(d => d.id)
+      .distance(40)
+      .strength(1))
     .force("charge", d3.forceManyBody().strength(-1000))
     .force("center", d3.forceCenter(width / 2, height / 2))
 
@@ -118,44 +123,19 @@ node.append("title")
 
 simulation.on("tick", tick);
 
-/*
-function dragstarted(d) {
-      if (!d3.event.active) simulation.alphaTarget(.03).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
+// Draw curved edges
+function tick() {
+  link.attr("d", linkArc);
+  node.attr("transform", transform);
+}
 
-    function dragged(d) {
-      d.fx = d3.event.x;
-      d.fy = d3.event.y;
-    }
+function linkArc(d) {
+  var dx = d.target.x - d.source.x,
+      dy = d.target.y - d.source.y,
+      dr = Math.sqrt(dx * dx + dy * dy);
+  return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+}
 
-    function dragended(d) {
-      if (!d3.event.active) simulation.alphaTarget(.03);
-      d.fx = null;
-      d.fy = null;
-    }
-
-    function types(d){
-      d.gdp = +d.gdp;
-      d.size = +d.gdp / sizeDivisor;
-      d.size < 3 ? d.radius = 3 : d.radius = d.size;
-      return d;
-    }
-*/
-    // Draw curved edges
-    function tick() {
-      link.attr("d", linkArc);
-      node.attr("transform", transform);
-    }
-
-    function linkArc(d) {
-      var dx = d.target.x - d.source.x,
-          dy = d.target.y - d.source.y,
-          dr = Math.sqrt(dx * dx + dy * dy);
-      return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-    }
-
-    function transform(d) {
+function transform(d) {
   return "translate(" + d.x + "," + d.y + ")";
 }

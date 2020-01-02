@@ -100,7 +100,7 @@ stroke: grey;
 }
 
 .node:hover circle {
-  r: 16;
+  r: 10;
 }
 
 .node:hover text {
@@ -130,7 +130,7 @@ display: inline-block;
 
 #pathwayMenu {
   font: 16px sans-serif;
-  margin-left: 260px;
+  margin-left: 200px;
   margin-top: 35px;
 }
 
@@ -139,24 +139,24 @@ display: inline-block;
 }
 
 .arrow {
-  width: 30px;
+  width: 18px;
 }
 
 .line {
   margin-top: 14px;
-  width: 15px;
+  width: 8px;
   background: var(--arrow_color);
-  height: 5px;
+  height: 3px;
   float: left;
 }
 
 .point {
-  margin-top: 7px;
+  margin-top: 10px;
   width: 0;
   height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 15px solid var(--arrow_color);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 10px solid var(--arrow_color);
   float: right;
 }
 
@@ -167,7 +167,7 @@ div
 
 .sidebar {
   height: 100%;
-  width: 225px;
+  width: 175px;
   position: fixed;
   top: 38px;
   left: 0;

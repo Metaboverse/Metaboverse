@@ -417,10 +417,15 @@ def map_graph_attributes(
         max_value = max(abs(data[0]))
     else:
         data = pd.DataFrame()
-        data['test'] = 0
+        data['0'] = 0
         max_value = 5
 
+    name_index = 0
+    names_dictionary = {}
+
     for col in data.columns.tolist():
+
+        names_dictionary[name_index] = col
 
         current_data = data[[col]]
 
@@ -475,7 +480,9 @@ def map_graph_attributes(
                 graph=graph,
                 edge_id=edge)
 
-    return graph
+        name_index += 1
+
+    return graph, names_dictionary
 
 """Extract expression value
 """
@@ -560,12 +567,14 @@ def output_graph(
         pathway_dictionary,
         reaction_dictionary,
         master_reference,
+        data_reference,
         output_name):
 
     data = json_graph.node_link_data(graph)
     data['pathway_dictionary'] = pathway_dictionary
     data['reactions_dictionary'] = reaction_dictionary
     data['master_reference'] = master_reference
+    data['data_reference'] = data_reference
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
@@ -705,7 +714,7 @@ def process_graph(
         all_reactions=process_all)
 
     # Add node and edge colors and size -> inside runs a function for node and for edge coloring
-    G = map_graph_attributes(
+    G, names_dictionary = map_graph_attributes(
         graph=G,
         data=data)
 
@@ -715,6 +724,7 @@ def process_graph(
         pathway_dictionary=pathway_dictionary,
         reaction_dictionary=reaction_dictionary,
         master_reference=master_reference,
+        data_reference=names_dictionary,
         output_name=graph_name)
 
     # Plot graph

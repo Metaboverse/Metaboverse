@@ -53,7 +53,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <a href="index.html">Metaboverse</a>
         </menuItem>
         <menuItem style="float:left">
-          <a href="index.html">Back</a>
+          <a href="variables.html">Back</a>
         </menuItem>
       </font>
     </menu>
@@ -63,111 +63,88 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <body>
 
     <div class="sidebar">
-      <font style="font-family: sans-serif">
+      <font style="font-family: sans-serif" size="2">
 
-        <!-- Pathway title -->
-        <p>
-          <b>
-            Legend:
-          </b>
-        </p>
-
-        <p>
-          <span class="dot" style="--dot_color: grey"></span>
+        <b><u>Legend:</u></b>
+        <br>
+        <br>
+        <span class="dot" style="--dot_color: grey"></span>
           Reaction
-        </p>
-        <p>
-          <span class="dot" style="--dot_color: white"></span>
+        <br>
+        <span class="dot" style="--dot_color: white"></span>
           No expression value
-        </p>
-        <p>
-          <span class="dot" style="--dot_color: #5757e7"></span>
+        <br>
+        <span class="dot" style="--dot_color: #5757e7"></span>
           Low expression
-        </p>
-        <p>
-          <span class="dot" style="--dot_color: #e75757"></span>
+        <br>
+        <span class="dot" style="--dot_color: #e75757"></span>
           High expression
-        </p>
+        <br>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: green"></div>
+          <div class="point" style="--arrow_color: green">Catalyst</div>
+        </div>
+        <br>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: red"></div>
+          <div class="point" style="--arrow_color: red">Inhibitor</div>
+        </div>
+        <br>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
+          <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">Gene</div>
+        </div>
+        <br>
+        <br>
+          - Click and drag to pan
+        <br>
+          - Use mouse wheel to zoom
+        <br>
+          - Hover to display name
+        <br>
+        <br>
+        <br>
+        <br>
+        <b><u>Options</u></b>
+        <br>
+        <br>
+        <button id="toggleAnalytes">Toggle Feature Labels</button>
+        <br>
+        <br>
+        <button id="toggleReactions">Toggle Reaction Labels</button>
+        <br>
+        <br>
+        <button id="toggleExpression">Toggle Expression</button>
+        <br>
+        <br>
+          # Nearest neighbors:
+        <input type="number" name="kNN_button" id="kNN_button" onchange="kNN_input()" min="1" max="2" value="1">
 
-        <p>
-          <div class="arrow">
-            <div class="line" style="--arrow_color: green"></div>
-            <div class="point" style="--arrow_color: green">Catalyst</div>
-          </div>
-        </p>
-        <p>
-          <div class="arrow">
-            <div class="line" style="--arrow_color: red"></div>
-            <div class="point" style="--arrow_color: red">Inhibitor</div>
-          </div>
-        </p>
-        <p>
-          <div class="arrow">
-            <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
-            <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">Gene Component</div>
-          </div>
-        </p>
-        </br>
-        <p></p>
-
-        <p>
-          <font size="2.5">- Press Alt to pan and zoom</font>
-        </p>
-        <p>
-          <font size="2.5">- Click and drag to pan</font>
-        </p>
-        <p>
-          <font size="2.5">- Use mouse wheel to zoom</font>
-        </p>
-        <p>
-          <font size="2.5">- Hover to display name</font>
-        </p>
-
-        <!--<p><font size="2.5"><button id="toggleTimecourse">Play</button></font></p>-->
-        <p>
-          <font size="2.5"><button id="toggleAnalytes">Toggle Feature Labels</button>
-          </font>
-        </p>
-        <p>
-          <font size="2.5"><button id="toggleReactions">Toggle Reaction Labels</button>
-          </font>
-        </p>
-        <p>
-          <font size="2.5">
-            <button id="toggleExpression">Toggle Expression</button>
-          </font>
-        </p>
-
-        <p>
-          <b>
-            <u>
-              Options
-            </u>
-          </b>
-        </p>
-        <p>
-          <font size="2.5">
-            # Nearest neighbors:
-            <input type="number" name="kNN_button" id="kNN_button" onchange="kNN_input()" min="1" max="3" value="1">
-          </font>
-        </p>
-
-        <p></p>
-        <p></p>
-
-        <p>
-          <font size="2">
-            &copy; 2019
-          </font>
-        </p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <b><u>Selection Type:</u></b>
+        <br>
+        <div id="type_selection_type"><br></div>
+        <br>
+        <br>
+        <br>
+        <b><u>Current Selection:</u></b>
+        <br>
+        <div id="type_selection"></div>
+        <br>
 
       </font>
-
     </div>
 
+    <br>
     <select id="pathwayMenu" onchange="selectPathway()"></select>
+    <br>
 
     <script src="../js/utils.js"></script>
+    <div id="graph" align="center"></div>
+
     <script src="../js/visualize.js"></script>
 
   </body>
