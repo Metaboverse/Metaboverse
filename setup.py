@@ -42,13 +42,13 @@ setup(
     url = 'https://github.com/j-berg/Metaboverse',
     packages = ['metaboverse'],
     exclude= ['tests','docs','recipes'],
-    package_dir = {'metaboverse': 'metaboverse'},
+    package_dir = {'metaboverse': 'app/python'},
     license = 'GPL-3.0',
     zip_safe = False,
     install_requires = __dependencies__,
     entry_points={
         "console_scripts": [
-            "metaboverse = metaboverse.__main__:main"
+            "metaboverse = app/python.__main__:main"
             ]
         },
     classifiers=[

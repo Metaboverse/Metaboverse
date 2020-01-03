@@ -1,0 +1,92 @@
+<!--
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8">
+
+<title>Metaboverse</title>
+
+<html>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/network.css">
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/build.js"></script>
+
+  <head>
+
+    <!-- menu -->
+    <menu>
+      <font size=3.25px>
+        <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues">Contact Us</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/">Documentation</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html">FAQs</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html">First Time?</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html">About</a></menuItem>
+        <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left"><a href="variables.html">Back</a></menuItem>
+      </font>
+    </menu>
+
+  </head>
+
+  <body onload="runBuild()">
+
+    <center>
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size="48" style="font-family: sans-serif">
+      <b>
+        Building Network...
+      </b>
+    </font>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    This may take several minutes...
+      <button class="info" title="Metaboverse is currently retrieving the source data from Reactome and other databases. Even if the progress bar is not moving, Metaboverse is still working. If the load bar does not move for more than 3 minutes, try refreshing or opening the console log to identify any problems."><i>i</i></button>
+    <br>
+    <br>
+    <br>
+    <div id="progressRange">
+      <div id="graph" align="center"></div>
+      <div id="progressBar">0%</div>
+    <script src="../js/network.js">
+    </script>
+    </div>
+    <br>
+    <br>
+
+    <br>
+    <div id="content"></div>
+    <script>
+      $('#content').append('')
+    </script>
+
+
+    </center>
+  </body>
+</html>
