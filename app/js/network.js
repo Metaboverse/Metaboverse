@@ -65,9 +65,6 @@ const nodes = data.nodes;
 const forceX = d3.forceX(width / 2).strength(0.015)
 const forceY = d3.forceY(height / 2).strength(0.015)
 
-console.log(nodes)
-console.log(links)
-
 const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id)
       .distance(40)

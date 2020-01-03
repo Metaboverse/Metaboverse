@@ -21,13 +21,14 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 const d3 = require('d3')
 
+const max_nodes = 1500;
+
 // Change user selection based on input
 var selection = null;
-console.log(selection)
 function selectPathway() {
 
   var selection = document.getElementById("pathwayMenu").value;
-  console.log(selection)
+  console.log("Pathway: " + selection)
   return selection;
 };
 
@@ -50,7 +51,6 @@ function make_pathway_dictionary(data) {
     } else {
       //var name = key; //eventually need to figure out mapping for remaining pathways that dont have a name, maybe they should be R-ALL
     };
-
   };
 
   return pathway_dict;
@@ -244,16 +244,18 @@ function nearest_neighbors(data, entity_id) {
 
 function parse_kNN_pathway(data, entity_id, kNN) {
 
+  // Reset warning messages
+  document.getElementById("warning_line_1").innerHTML = "<br>";
+  document.getElementById("warning_line_2").innerHTML = "<br><br>";
+
   var master = data.master_reference;
   var reactions_dictionary = data.reactions_dictionary;
 
   // Parse through each reaction where entity is a component
-  var components = [];
-
-  //Return all reactions that contain the entity
   nn_components = [entity_id];
   for (reaction in reactions_dictionary) {
 
+    //Return all reactions that contain the entity
     if (reactions_dictionary[reaction].includes(entity_id)) {
 
       for (entity in reactions_dictionary[reaction]) {
@@ -264,10 +266,26 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     };
   };
 
+  var escape = nn_components.length
+  console.log(escape)
+  // If too many nodes for first neighborhood, stop plotting
+  if (escape > max_nodes) {
+
+    document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot</i>";
+    document.getElementById("warning_line_2").innerHTML = "<i style=\"color: red;\">Will not plot<br></i>";
+    kNN = 0
+    nn_components = [];
+  }
+
   if (kNN > 1) {
+
+    document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Please wait<br><br></i>";
+    document.getElementById("warning_line_2").innerHTML = "";
 
     n = 1
     while (n < kNN) {
+
+      var components = [];
 
       for (element in nn_components) {
 
@@ -277,16 +295,31 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
             for (el in reactions_dictionary[reaction]) {
 
-              nn_components.push(reactions_dictionary[reaction][el]);
+              components.push(reactions_dictionary[reaction][el]);
 
             };
           };
         };
       }
       n = n + 1
+
+      // Only combine the lists if they pass the threshold
+      escape = escape + components.length
+      console.log(escape)
+      if (escape > max_nodes) {
+        n = kNN + 2
+        document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot. Will only plot first neighborhood</i>";
+        document.getElementById("warning_line_2").innerHTML = "";
+
+      } else {
+        nn_components = nn_components.concat(components)
+        document.getElementById("warning_line_1").innerHTML = "<br>";
+        document.getElementById("warning_line_2").innerHTML = "<br><br>";
+      }
+
     }
   }
-
+  console.log("++++++")
   var new_elements = get_nodes_links(data, nn_components);
 
   return new_elements;
@@ -580,7 +613,7 @@ function make_graph(
 
 // MAIN
 database_url = get_session_info("database_url")
-console.log(database_url)
+console.log("Database path: " + database_url)
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
 
@@ -594,6 +627,8 @@ function change() {
   var selection = document.getElementById("pathwayMenu").value;
   document.getElementById("type_selection_type").innerHTML = "Pathway";
   document.getElementById("type_selection").innerHTML = selection;
+  document.getElementById("warning_line_1").innerHTML = "<br>";
+  document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
   var reactions = pathway_dict[selection]['reactions'];
   var elements = parse_pathway(data, reactions);
