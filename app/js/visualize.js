@@ -20,7 +20,6 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 const d3 = require('d3')
-
 const max_nodes = 1500;
 
 // Change user selection based on input
@@ -266,9 +265,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     };
   };
 
-  var escape = nn_components.length
-  console.log(escape)
   // If too many nodes for first neighborhood, stop plotting
+  var escape = nn_components.length
   if (escape > max_nodes) {
 
     document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot</i>";
@@ -305,7 +303,6 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
       // Only combine the lists if they pass the threshold
       escape = escape + components.length
-      console.log(escape)
       if (escape > max_nodes) {
         n = kNN + 2
         document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot. Will only plot first neighborhood</i>";
@@ -319,7 +316,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
     }
   }
-  console.log("++++++")
+
   var new_elements = get_nodes_links(data, nn_components);
 
   return new_elements;

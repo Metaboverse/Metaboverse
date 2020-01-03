@@ -5,13 +5,13 @@
 
 # To Do
 0. Packaging
-- Make executable on workstation
+- <del>Make executable on workstation</del>
 - Make available on cloud (host via AWS)
 - Write to output citation info, user variables, etc
 - Clear tmp files
 
 1. Front-to-back-end communicaton
-	- <b><i>Variables python to html/js and vice versa</i></b>
+	- <del>Variables python to html/js and vice versa</del>
 		- <del>Store as JSON formatted variables dictionary?</del>
 	- How to store information when running online (no output doc, AWS bucket?)
 
@@ -19,18 +19,18 @@
 - General
 	- Get drop in bars to save and import data
 	- <del>Get pages to scale correctly</del>
-	- Get metadata to be saved page to page per session
+	- <del>Get metadata to be saved page to page per session</del>
 	- Output log of user actions
 	- <del><i><b>(i)</b></i> icons linking to docs</del>
 
 - Home page
 	- <del>If curation database given, skip curation page</del>
-	- Allow for input of just the network, or network with dataset already integrated
+	- <del>Allow for input of just the network, or network with dataset already integrated</del>
 
 - Curation page
 
 - Variables page
-	- Run curation with loading bar
+	- <del>Run curation with loading bar</del>
 	- Run motif search or exploration based on user input
 
 - Motif search page
@@ -62,7 +62,7 @@
 	- Drop down of all analytes available in dataset (that have values) and open a k-NN window
 
 - Pathway exploration
-	- Fix issue making it so you can't re-explore a network in same session  
+	- <del>Fix issue making it so you can't re-explore a network in same session</del>  
 
 - Reactome curation
 	- Fix incomplete pathways, missing names
@@ -107,10 +107,10 @@
 		- ???
 
 - k-NN
-	- Allow for recursive neighborhood searches
+	- <del>Allow for recursive neighborhood searches</del>
 	- Allow custom expansion
-	- Fix issue (in curation?) where network data variable is mutated  
-	- Fix hanging object node
+	- <del>Fix issue (in curation?) where network data variable is mutated</del>
+	- <del>Fix hanging object node</del>
 
 - Significance
 	- See jActiveModules methodology
