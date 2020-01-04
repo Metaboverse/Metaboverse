@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 const d3 = require('d3')
+var fs = require('fs')
 const max_nodes = 1500;
 
 // Change user selection based on input

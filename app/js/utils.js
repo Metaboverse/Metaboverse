@@ -21,7 +21,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var $ = require('jquery')
 var fs = require('fs')
-const session_file = "data/session_data.json"
+
+var app = require('electron').remote.app
+var userDataPath = app.getPath('userData');
+var session_file = userDataPath + "/session_data.json"
+
+console.log(session_file)
 
 function write_json(session_data) {
 

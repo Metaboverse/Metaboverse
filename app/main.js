@@ -22,10 +22,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
-const {ipcRenderer, remote} = require('electron')
+const {ipcRenderer} = require('electron')
 const path = require('path')
-const ipcMain = require('electron').ipcMain
 const fs = require('fs')
+const ipcMain = require('electron').ipcMain
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -51,7 +51,9 @@ function createWindow () {
   mainWindow.loadFile('html/index.html')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.closeDevTools()
+
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -80,16 +82,6 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-// Copy session info template each time the app is launched
-var session_file = 'data/session_data.json'
-fs.copyFile('data/session_data_template.json', session_file, (err) => {
-
-  if (err) throw err;
-  console.log('Session data file was copied for this session');
-});
-
-
 let pyProc = null
 let pyPort = null
 

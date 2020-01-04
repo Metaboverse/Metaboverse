@@ -81,8 +81,8 @@
 	- Data normalization and merging
 
 - Entity mapping
-	- Figure out how to allow for flexible name mapping to prep for Metaboverse
-	- Give user page of entities that we couldn't map, have them enter valid alternative ID
+	- <b>Figure out how to allow for flexible name mapping to prep for Metaboverse</b>
+	- <b>Give user page of entities that we couldn't map, have them enter valid alternative ID</b>
 
 - Time-course data
 	- Slider bar
@@ -93,7 +93,6 @@
 		- ???
 	- Ideas:
 		- https://bl.ocks.org/steveharoz/8c3e2524079a8c440df60c1ab72b5d03
-		- https://bl.ocks.org/pranitar/01305d9ad0eba73dbf80
 		- https://bl.ocks.org/jrladd/c76799aa63efd7176bd9006f403e854d
 		- https://bl.ocks.org/mbostock/6452972
 		- https://bl.ocks.org/officeofjane/47d2b0bfeecfcb41d2212d06d095c763
@@ -126,6 +125,10 @@
 - Implement pipeline, DESeq2 wrappers, etc.
 - Travis CI tests
 - Docs
+- Keep feature labels on if user specifies
+- Click on one node and show its neighbors
+- Info for what pathway a node belongs to
+
 
 5. Validation
 - MPC flux
