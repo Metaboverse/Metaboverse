@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {ipcRenderer, remote} = require('electron')
+const {ipcRenderer} = require('electron')
 var $ = require('jquery')
 
 // Drop pre-existing metabolic network database for further analysis
