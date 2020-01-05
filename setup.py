@@ -2,7 +2,7 @@
 Metaboverse
 A toolkit for navigating and analyzing gene expression datasets
 alias: metaboverse
-Copyright (C) 2019  Jordan A. Berg
+Copyright (C) 2019-2020  Jordan A. Berg
 jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
 This program is free software: you can redistribute it and/or modify it under
