@@ -42,9 +42,10 @@ function createWindow () {
       preload: path.join(__dirname, 'js/preload.js'),
       nodeIntegration: true
     },
-    "dependencies": {
+    dependencies: {
       "zerorpc": "fyears/zerorpc-node"
     },
+    icon: __dirname + "/data/icon/icon.icns"
   })
 
   // and load the index.html of the app.
