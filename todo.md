@@ -128,7 +128,7 @@
 - Keep feature labels on if user specifies
 - Click on one node and show its neighbors
 - Info for what pathway a node belongs to
-
+- kNN search by metabolite name
 
 5. Validation
 - MPC flux

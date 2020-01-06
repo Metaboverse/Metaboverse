@@ -7,6 +7,9 @@ To receive updates, join our mailing list by emailing `metaboverse@gmail.com`
 [![Build Status](https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.org/Metaboverse/Metaboverse)
 [![Documentation Status](https://readthedocs.org/projects/metaboverse/badge/?version=latest)](https://metaboverse.readthedocs.io/en/latest/?badge=latest)
 
+## Demo
+A demo version of Metaboverse can be found for MacOS [here](https://github.com/Metaboverse/Metaboverse/releases/download/metaboverse-v0.0.1b/Metaboverse-darwin-x64-demo.zip). Right-click on the Metaboverse icon within the `.zip` folder to launch Metaboverse. A mock human metabolic network is available as a `.json` file with this `.zip` folder. This can be dragged and dropped into the Metaboverse home page to explore the metabolic networks and get an idea for some of the functionality within Metaboverse. However, much more is planned.
+
 ## What does Metaboverse do?
 ### tl;dr
 - Curates metabolic model
