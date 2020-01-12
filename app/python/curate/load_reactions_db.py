@@ -158,11 +158,16 @@ def curate_reactions(
                         for child_3 in child_2:
 
                             reaction_name = species_tag + child_3.attrib['id'].split('_')[1]
+
+                            reaction_notes = child_3[0][0].text
+
                             reactions[reaction]['reactions'] = get_reaction_information(
                                 child=child_3,
                                 reaction_name=reaction_name,
                                 reaction_dict=reactions[reaction]['reactions'],
                                 species_tag=species_tag)
+
+                            reactions[reaction]['reactions'][reaction_name]['notes'] = reaction_notes
 
                             reactions[reaction]['reactions'][reaction_name]['reactants'] = {}
                             reactions[reaction]['reactions'][reaction_name]['products'] = {}
@@ -436,8 +441,9 @@ def __main__(
         output_dir,
         args_dict): # Location to output database file
 
-    #species_id='HSA'
-    #output_dir='/Users/jordan/Desktop/reactome_test'
+    species_id='HSA'
+    output_dir='/Users/jordan/Desktop/reactome_test'
+    args_dict=None
     # Get reaction files
     reactions_dir = unpack_reactions(
         output_dir=output_dir)
@@ -458,6 +464,11 @@ def __main__(
         reactions_list=reactions_list,
         species_id=species_id,
         args_dict=args_dict)
+
+    reactome_database['pathways']['R-HSA-2562578']['reactions'].keys()
+
+    reactome_database['pathways']['R-HSA-2562578']['reactions']['R-HSA-2562564']['name']
+    reactome_database['pathways']['R-HSA-2562578']['reactions']['R-HSA-2562564']['notes']
 
     # Add lists of available pathways and compartments found in the database
     reactome_database['pathway_types'] = add_pathways(
