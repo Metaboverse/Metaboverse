@@ -91,8 +91,15 @@ name_dict (listOfSpecies):
 |- nameB-1: id_2
 |- nameB-2: id_2
 |- ...
+Note that proteomics will work best if using UniProt ID
+Note that sequencing will work best if using Ensembl ID
+Note that metabolomics will work best if using CHEBI ID
 
 
+metabolite_mapping (from ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz)
+compound_id: synonym_name1,
+compound_id: synonym_name2,
+etc
 
 """
 
@@ -119,6 +126,7 @@ name_dict (listOfSpecies):
 - How to search motifs over time?
 
 - For gene expression, do something like DESeq2 timecourse analysis? Tractable to other omics?
+- Or not -- want a network-centric DE method
 """
 
 
@@ -132,4 +140,14 @@ name_dict (listOfSpecies):
 """ BRENDA
 How to know when its too much?
 How to show putative relationships?
+"""
+
+
+
+
+
+""" Other
+- Proteins are squares with rounded corners
+- RNA is diamond
+
 """

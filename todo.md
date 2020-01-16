@@ -129,6 +129,8 @@
 - Click on one node and show its neighbors
 - Info for what pathway a node belongs to
 - kNN search by metabolite name
+- Select parent pathway (i.e. metabolism) in order to let motif search run
+
 
 5. Validation
 - MPC flux
@@ -138,3 +140,11 @@
 
 6. Other  
 - Cartesian distortion?
+
+
+
+
+### Notes:
+- currently prioritizing based on number of pathways a reaction motif is found
+- write js function to extract metabolic sub network formatted in usual way
+- or
