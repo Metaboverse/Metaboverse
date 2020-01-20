@@ -22,6 +22,7 @@ from __future__ import print_function
 """
 import os
 import sys
+import re
 import shutil
 import time
 import hashlib
@@ -31,318 +32,21 @@ import xml.etree.ElementTree as et
 """
 from app.python.utils import progress_feed
 
-"""Set globals
+"""Global variables
 """
-analyte_prefix = 'R-ALL-'
+smbl_namespace = '{{http://www.sbml.org/sbml/level{0}/version{1}/core}}'
+rdf_namespace = '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}'
+bqbiol_namespace = '{http://biomodels.net/biology-qualifiers/}'
+smbl_level = '3'
+smbl_version = '1'
 
-"""Get list of reactions to parse
+"""Functions
 """
-def get_reactions(
-        species_id,
-        reaction_dir):
-
-    # Check provided path exists
-    if not os.path.isdir(reaction_dir):
-        raise Exception(reaction_dir, 'does not exist')
-
-    # Clean up path
-    dir = os.path.abspath(reaction_dir) + '/'
-
-    # Get list of files and their reaction name
-    file_list = os.listdir(dir)
-    reactions_list = [f for f in file_list if species_id in f]
-    reactions_list = [f.split('.')[:-1][0] for f in reactions_list]
-
-    return reactions_list
-
-"""Get pathway names
-"""
-def add_pathways(
-        database):
-
-    pathways = {}
-
-    # Cycle through processes
-    for key in database.keys():
-
-        if database[key]['pathway_name'] in pathways.keys():
-            pathways[database[key]['pathway_name']].append(database[key]['reactome_id'])
-
-        else:
-            pathways[database[key]['pathway_name']] = [database[key]['reactome_id']]
-
-    # Check for duplicate processes
-    for key, value in pathways.items():
-
-        if len(value) > 1:
-
-            reactions = []
-
-            for v in value:
-
-                reactions.append(list(database[v]['reactions'].keys()))
-
-            # Convert lists of reactions to hashes for comparison
-            hashes = []
-
-            for r in reactions:
-
-                text_hashed = hashlib.sha256(
-                    bytes(
-                        str(r),
-                        encoding='utf8')
-                        ).hexdigest()
-                hashes.append(text_hashed)
-
-            # If a list of lists contain identical reactions, keep the first reaction name
-            if len(set(hashes)) == 1:
-                pathways[key] = [value[0]]
-
-    return pathways
-
-"""Get compartments
-"""
-def add_compartments(
-        database):
-
-    compartments = []
-
-    # Cycle through processes
-    for key_x in database.keys():
-
-        # Cycle through reactions
-        for key_y in database[key_x]['reactions'].keys():
-
-            compartments.append(database[key_x]['reactions'][key_y]['compartment'])
-
-    return set(compartments)
-
-"""Curate database for all reactions and processes for an organism
-"""
-def curate_reactions(
-        reaction_dir,
-        reactions_list,
-        species_id,
-        species_key='species',
-        args_dict=None):
-
-    species_tag = 'R-' + species_id + '-'
-
-    reactions = {}
-
-    counter = 1
-    total = len(reactions_list)
-
-    for reaction in reactions_list:
-
-        database = get_database(
-            reaction_dir,
-            reaction)
-
-        reactions[reaction] = {}
-
-        for child in database:
-
-            if 'model' in child.tag:
-                reactions[reaction] = get_process_information(
-                    child=child,
-                    reactome_id=reaction,
-                    reaction_dict=reactions[reaction])
-
-                reactions[reaction]['reactions'] = {}
-
-                for child_2 in child:
-
-                    if 'listOfReactions' in child_2.tag:
-
-                        for child_3 in child_2:
-
-                            reaction_name = species_tag + child_3.attrib['id'].split('_')[1]
-
-                            reaction_notes = child_3[0][0].text
-
-                            reactions[reaction]['reactions'] = get_reaction_information(
-                                child=child_3,
-                                reaction_name=reaction_name,
-                                reaction_dict=reactions[reaction]['reactions'],
-                                species_tag=species_tag)
-
-                            reactions[reaction]['reactions'][reaction_name]['notes'] = reaction_notes
-
-                            reactions[reaction]['reactions'][reaction_name]['reactants'] = {}
-                            reactions[reaction]['reactions'][reaction_name]['products'] = {}
-                            reactions[reaction]['reactions'][reaction_name]['modifiers'] = {}
-
-                            for child_4 in child_3:
-
-
-                                if 'listOfReactants' in child_4.tag:
-
-                                    for child_5 in child_4:
-
-                                        reactant_name = analyte_prefix + child_5.attrib[species_key].split('_')[1]
-                                        reactions[reaction]['reactions'][reaction_name]['reactants'] = populate_reactants(
-                                            child=child_5,
-                                            species_name=reactant_name,
-                                            reactant_dict=reactions[reaction]['reactions'][reaction_name]['reactants'])
-
-                                elif 'listOfProducts' in child_4.tag:
-
-                                    for child_6 in child_4:
-
-                                        product_name = analyte_prefix + child_6.attrib[species_key].split('_')[1]
-                                        reactions[reaction]['reactions'][reaction_name]['products'] = populate_products(
-                                            child=child_6,
-                                            species_name=product_name,
-                                            products_dict=reactions[reaction]['reactions'][reaction_name]['products'])
-
-                                elif 'listOfModifiers' in child_4.tag:
-
-                                    for child_7 in child_4:
-
-                                        modifier_name = analyte_prefix + child_7.attrib[species_key].split('_')[1]
-                                        reactions[reaction]['reactions'][reaction_name]['modifiers'] = populate_modifiers(
-                                            child=child_7,
-                                            species_name=modifier_name,
-                                            modifiers_dict=reactions[reaction]['reactions'][reaction_name]['modifiers'])
-
-                                else:
-                                    pass
-
-        if int(counter % (total / 5)) == 0 and args_dict != None:
-            progress_feed(args_dict, "reactions")
-
-        counter += 1
-
-    return reactions
-
-"""Import sbml reaction data
-"""
-def get_database(
-        reaction_dir,
-        reaction_name):
-
-    if reaction_dir[-1] != '/':
-        reaction_dir = reaction_dir + '/'
-
-    reactome_file = reaction_dir + reaction_name + '.sbml'
-    reactome = et.parse(reactome_file)
-    root = reactome.getroot()
-
-    return root
-
-"""Add overall process information
-"""
-def get_process_information(
-        child,
-        reactome_id,
-        reaction_dict,
-        name_key='name'):
-
-    reaction_dict['reactome_id'] = reactome_id
-    reaction_dict['pathway_name'] = child.attrib[name_key]
-
-    return reaction_dict
-
-"""Add general information for reaction
-"""
-def get_reaction_information(
-        child,
-        reaction_dict,
-        reaction_name,
-        species_tag,
-        species_key='species',
-        species_splitter='_',
-        species_position=1,
-        id_key='id',
-        id_splitter='_',
-        id_position=1,
-        name_key='name',
-        reversible_key='reversible',
-        fast_key='fast',
-        compartment_key='compartment'):
-
-    reaction_dict[reaction_name] = {}
-    reaction_dict[reaction_name]['id'] = species_tag + child.attrib[id_key].split(id_splitter)[id_position]
-    reaction_dict[reaction_name]['name'] = child.attrib[name_key]
-    reaction_dict[reaction_name]['reversible'] = child.attrib[reversible_key]
-    reaction_dict[reaction_name]['fast'] = child.attrib[fast_key]
-    reaction_dict[reaction_name]['compartment'] = species_tag + child.attrib[compartment_key].split(species_splitter)[species_position]
-
-    return reaction_dict
-
-"""Add reactant information for reaction
-"""
-def populate_reactants(
-        child,
-        species_name,
-        reactant_dict,
-        species_key='species',
-        species_splitter='_',
-        species_position=1,
-        id_key='id',
-        id_splitter='_',
-        id_position=2,
-        constant_key='constant',
-        stoichiometry_key='stoichiometry'):
-
-    reactant_dict[species_name] = {}
-    reactant_dict[species_name]['species_id'] = analyte_prefix + child.attrib[species_key].split(species_splitter)[species_position]
-    reactant_dict[species_name]['type'] = child.attrib[id_key].split(id_splitter)[id_position]
-    reactant_dict[species_name]['constant'] = child.attrib[constant_key]
-    reactant_dict[species_name]['stoichiometry'] = child.attrib[stoichiometry_key]
-
-    return reactant_dict
-
-"""Add product information for reaction
-"""
-def populate_products(
-        child,
-        species_name,
-        products_dict,
-        species_key='species',
-        species_splitter='_',
-        species_position=1,
-        id_key='id',
-        id_splitter='_',
-        id_position=2,
-        constant_key='constant',
-        stoichiometry_key='stoichiometry'):
-
-    products_dict[species_name] = {}
-    products_dict[species_name]['species_id'] = analyte_prefix + child.attrib[species_key].split(species_splitter)[species_position]
-    products_dict[species_name]['type'] = child.attrib[id_key].split(id_splitter)[id_position]
-    products_dict[species_name]['constant'] = child.attrib[constant_key]
-    products_dict[species_name]['stoichiometry'] = child.attrib[stoichiometry_key]
-
-    return products_dict
-
-"""Add modifier information for reaction
-"""
-def populate_modifiers(
-        child,
-        species_name,
-        modifiers_dict,
-        species_key='species',
-        species_splitter='_',
-        species_position=1,
-        id_key='id',
-        id_splitter='_',
-        id_position=2):
-
-    modifiers_dict[species_name] = {}
-    modifiers_dict[species_name]['species_id'] = analyte_prefix + child.attrib[species_key].split(species_splitter)[species_position]
-    modifiers_dict[species_name]['type'] = child.attrib[id_key].split(id_splitter)[id_position]
-    modifiers_dict[species_name]['constant'] = None
-    modifiers_dict[species_name]['stoichiometry'] = None
-
-    return modifiers_dict
-
-"""Load tarballed sbml reactome reaction files from reactome site
-"""
-def unpack_reactions(
+def unpack_pathways(
         output_dir,
         url='https://reactome.org/download/current/all_species.3.1.sbml.tgz'):
+    """Load tarballed sbml reactome pathway files from reactome site
+    """
 
     if output_dir[-1] != '/':
         output_dir = output_dir + '/'
@@ -351,142 +55,382 @@ def unpack_reactions(
 
     os.system('curl -L ' + url + ' -o ' + file)
 
-    reactions_dir = file[:-4] + '/'
-    if os.path.exists(reactions_dir):
-        shutil.rmtree(reactions_dir)
-    os.makedirs(reactions_dir)
-    os.system('tar -zxvf ' + file + ' -C ' + reactions_dir)
+    pathways_dir = file[:-4] + '/'
+    if os.path.exists(pathways_dir):
+        shutil.rmtree(pathways_dir)
+    os.makedirs(pathways_dir)
+    os.system('tar -zxvf ' + file + ' -C ' + pathways_dir)
     try:
         os.remove(file)
     except:
         print('Could not find file: ' + file)
 
-    return reactions_dir
+    return pathways_dir
 
-"""Extract global reactions
-"""
-def add_global_reactions(
-        pathways):
+def get_pathways(
+        species_id,
+        pathways_dir):
+    """Get list of pathways to parse
+    """
 
-    global_reactions = {}
+    # Check provided path exists
+    if not os.path.isdir(pathways_dir):
+        raise Exception(pathways_dir, 'does not exist')
 
-    # Parse through each pathway to extract its reactions
-    for pathway in pathways.keys():
+    # Clean up path
+    dir = os.path.abspath(pathways_dir) + '/'
 
-        pathway_id = pathways[pathway]['reactome_id']
-        pathway_name = pathways[pathway]['pathway_name']
+    # Get list of files and their reaction name
+    file_list = os.listdir(dir)
+    pathways_list = [f for f in file_list if species_id in f]
+    pathways_list = [f.split('.')[:-1][0] for f in pathways_list]
 
-        # Parse out reactions to global reaction dictionary, keep same structure, but add pathway membership
-        for reaction in pathways[pathway]['reactions'].keys():
+    return pathways_list
 
-            global_reactions[reaction] = {}
-            global_reactions[reaction]['pathway_id'] = pathway_id
-            global_reactions[reaction]['pathway_name'] = pathway_name
-            global_reactions[reaction]['id'] = pathways[pathway]['reactions'][reaction]['id']
-            global_reactions[reaction]['name'] = pathways[pathway]['reactions'][reaction]['name']
-            global_reactions[reaction]['reversible'] = pathways[pathway]['reactions'][reaction]['reversible']
-            global_reactions[reaction]['fast'] = pathways[pathway]['reactions'][reaction]['fast']
-            global_reactions[reaction]['compartment'] = pathways[pathway]['reactions'][reaction]['compartment']
-            global_reactions[reaction]['reactants'] = pathways[pathway]['reactions'][reaction]['reactants']
-            global_reactions[reaction]['products'] = pathways[pathway]['reactions'][reaction]['products']
-            global_reactions[reaction]['modifiers'] = pathways[pathway]['reactions'][reaction]['modifiers']
+def get_database(
+        pathways_dir,
+        pathway_name):
+    """Import sbml reaction data
+    """
 
-    return global_reactions
+    if pathways_dir[-1] != '/':
+        pathways_dir = pathways_dir + '/'
 
-"""Generate pathway and reaction id dictionary for accessing from global network
-"""
-def add_pathway_dictionary(
-        pathways):
+    pathway_file = pathways_dir + pathway_name + '.sbml'
+    pathway_contents = et.parse(pathway_file)
+    contents = pathway_contents.getroot()
 
-    pathway_dictionary = {}
+    return contents
 
-    for x in pathways.keys():
+def get_metadata(
+        reaction,
+        smbl_level,
+        smbl_version,
+        smbl_namespace=smbl_namespace):
+    """Get basic metadata for a reaction
+    """
 
-        id = pathways[x]['reactome_id']
-        reactions = list(pathways[x]['reactions'].keys())
-        pathway_dictionary[id] = reactions
+    compartment = reaction.attrib['compartment']
+    id = reaction.attrib['id']
+    name = reaction.attrib['name']
 
-    return pathway_dictionary
+    reversible = reaction.attrib['reversible']
+    if reversible == 'false':
+        if '<' in name and '>' in name:
+            reversible = 'true'
 
-"""
-"""
-def add_reactions_dictionary(
-        pathways):
+    try:
+        notes = reaction.findall(
+            str(smbl_namespace + 'notes').format(
+                smbl_level,
+                smbl_version
+            )
+        )[0][0].text
+    except:
+        notes = ''
+        print('No notes available for', name)
 
-    reactions_dictionary = {}
-    for key in pathways.keys():
+    return compartment, id, name, reversible, notes
 
-        for reaction_id in pathways[key]['reactions'].keys():
+def add_reaction(
+        pathway_database,
+        reaction,
+        pathway,
+        bqbiol_namespace=bqbiol_namespace,
+        rdf_namespace=rdf_namespace):
+    """Add reactions to pathway
+    """
 
-            components = []
+    for rank in reaction.iter(str(bqbiol_namespace + 'is')):
+        for _rank in rank.iter(str(rdf_namespace + 'li')):
+            try:
+                item = _rank.attrib[str(rdf_namespace + 'resource')]
+                if 'reactome' in item:
+                    _id = item.split('/')[-1]
+                    pathway_database[pathway]['reactions'].add(_id)
+                else:
+                    pass
+            except:
+                pass
 
-            reactants = list(pathways[key]['reactions'][reaction_id]['reactants'].keys())
-            products = list(pathways[key]['reactions'][reaction_id]['products'].keys())
-            modifiers = list(pathways[key]['reactions'][reaction_id]['modifiers'].keys())
+    return pathway_database, _id
 
-            components.append(reaction_id)
-            for x in [reactants, products, modifiers]:
+def add_reaction_components(
+        type,
+        reaction,
+        smbl_namespace=smbl_namespace,
+        smbl_level=smbl_level,
+        smbl_version=smbl_version):
+    """Add reaction components to reactions database
+    For type, options are "listOfReactants", "listOfProducts", or
+    "listOfModifiers"
+    """
 
-                for y in x:
-                    components.append(y)
+    # Collect modifiers for a given reaction by species ID
+    component_list = reaction.findall(
+        str(smbl_namespace + type).format(
+            smbl_level,
+            smbl_version
+        )
+    )
 
-            reactions_dictionary[reaction_id] = components
+    if len(component_list) > 0:
+        component_list = component_list[0]
 
-    return reactions_dictionary
+    items = []
+    for child in component_list:
+        items.append(child.attrib['species'])
 
-"""Fetch all reactions for a given organism
-"""
+    return items
+
+def add_names(
+        name_database,
+        child,
+        search_string='is',
+        bqbiol_namespace=bqbiol_namespace,
+        rdf_namespace=rdf_namespace):
+    """Add names to dictionary to map species ID
+    """
+
+    for rank in child.iter(str(bqbiol_namespace + search_string)):
+        for _rank in rank.iter(str(rdf_namespace + 'li')):
+            try:
+                item = _rank.attrib[str(rdf_namespace + 'resource')]
+                _id = item.split('/')[-1]
+                if 'chebi' in item.lower():
+                    _id = check_chebi(item=_id)
+                name_database[_id] = specie
+
+                # If element has parentheses, remove what's in between as
+                # additional key
+                if '(' in _id and ')' in _id:
+                    name_database = add_alternative_names(
+                        name_database=name_database,
+                        item=_id,
+                        specie=specie)
+
+            except:
+                pass
+
+    return name_database
+
+def add_alternative_names(
+        name_database,
+        item,
+        specie):
+    """Add alternative names to name database for mapping
+    """
+
+    _remove = item[item.find('(') : item.find(')') + 1]
+    mod_item = item.replace(_remove, '')
+    name_database[mod_item] = specie
+
+    return name_database
+
+def check_chebi(
+        item):
+    """Some special formatting handling for CHEBI entries
+    """
+
+    item_parsed = item.lower().split('chebi:')[1]
+    item_returned = 'CHEBI:' + item_parsed
+
+    return item_returned
+
+def add_species(
+        species_database,
+        name_database,
+        pathway_record,
+        smbl_namespace=smbl_namespace,
+        smbl_level=smbl_level,
+        smbl_version=smbl_version,
+        bqbiol_namespace=bqbiol_namespace,
+        rdf_namespace=rdf_namespace):
+    """Add species records for pathway to database
+    """
+
+    species = pathway_record.findall(
+        str(smbl_namespace + 'listOfSpecies').format(
+            smbl_level,
+            smbl_version
+        )
+    )[0]
+
+    # Collect species information
+    for child in species:
+
+        # Initialize specie record and add common name
+        specie = child.attrib['id']
+        name = child.attrib['name']
+
+        if '[' in name:
+            name = name.split(' [')[0]
+
+        species_database[specie] = name
+
+        # Add names and ids to name dictionary
+        name_database[name] = specie
+
+        # Add source ID
+        name_database = add_names(
+            name_database=name_database,
+            child=child,
+            search_string='hasPart',
+            bqbiol_namespace=bqbiol_namespace,
+            rdf_namespace=rdf_namespace)
+
+        name_database = add_names(
+            name_database=name_database,
+            child=child,
+            search_string='is',
+            bqbiol_namespace=bqbiol_namespace,
+            rdf_namespace=rdf_namespace)
+
+    return species_database, name_database
+
+def process_components(
+        output_dir,
+        pathways_dir,
+        pathways_list,
+        species_id,
+        args_dict=None,
+        smbl_namespace=smbl_namespace,
+        bqbiol_namespace=bqbiol_namespace,
+        rdf_namespace=rdf_namespace):
+    """Process species-specific pathways
+    """
+
+    # Initialize databases
+    pathway_database = {}
+    reaction_database = {}
+    species_database = {}
+    name_database = {}
+
+    # Cycle through each pathway database and extract  contents
+    for pathway in pathways_list:
+
+        db =  get_database(
+            pathways_dir,
+            pathway)
+        smbl_level = db.attrib['level']
+        smbl_version = db.attrib['version']
+
+        pathway_record = db.findall(
+            str(smbl_namespace + 'model').format(
+                smbl_level,
+                smbl_version
+            )
+        )[0]
+
+        pathway_info = pathway_record.attrib
+        pathway_database[pathway] = {
+            'id': pathway_info['id'],
+            'name': pathway_info['name'],
+            'reactions': set()
+        }
+
+        # Parse out reaction IDs and add to pathway_database
+        reactions = pathway_record.findall(
+            str(smbl_namespace + 'listOfReactions').format(
+                smbl_level,
+                smbl_version
+            )
+        )[0]
+
+        # Extract reactions from pathway
+        for reaction in reactions:
+
+            # Get metadata
+            compartment, id, name, reversible, notes = get_metadata(
+                reaction=reaction,
+                smbl_level=smbl_level,
+                smbl_version=smbl_version,
+                smbl_namespace=smbl_namespace)
+
+            # Get pathway high-level information (reactions, name, compartment)
+            pathway_database, reaction_id = add_reaction(
+                pathway_database=pathway_database,
+                reaction=reaction,
+                pathway=pathway,
+                bqbiol_namespace=bqbiol_namespace,
+                rdf_namespace=rdf_namespace)
+
+            name_database[name] = reaction_id
+            reaction_database[reaction_id] = {
+                'compartment': compartment,
+                'id': id,
+                'name': name,
+                'reversible': reversible,
+                'notes': notes}
+
+            # Collect reactants for a given reaction by species ID
+            reaction_database[reaction_id]['reactants'] = add_reaction_components(
+                type='listOfReactants',
+                reaction=reaction,
+                smbl_namespace=smbl_namespace,
+                smbl_level=smbl_level,
+                smbl_version=smbl_version)
+
+            # Collect products for a given reaction by species ID
+            reaction_database[reaction_id]['products'] = add_reaction_components(
+                type='listOfProducts',
+                reaction=reaction,
+                smbl_namespace=smbl_namespace,
+                smbl_level=smbl_level,
+                smbl_version=smbl_version)
+
+            # Collect modifiers for a given reaction by species ID
+            reaction_database[reaction_id]['modifiers'] = add_reaction_components(
+                type='listOfReactants',
+                reaction=reaction,
+                smbl_namespace=smbl_namespace,
+                smbl_level=smbl_level,
+                smbl_version=smbl_version)
+
+        # Convert reaction set for pathway to list
+        pathway_database[pathway]['reactions'] = list(
+            pathway_database[pathway]['reactions'])
+
+        # Generate species dict
+        species_database, name_database = add_species(
+            species_database=species_database,
+            name_database=name_database,
+            pathway_record=pathway_record,
+            smbl_namespace=smbl_namespace,
+            smbl_level=smbl_level,
+            smbl_version=smbl_version,
+            bqbiol_namespace=bqbiol_namespace,
+            rdf_namespace=rdf_namespace)
+
+    return pathway_database, reaction_database, species_database, name_database
+
 def __main__(
         species_id,
         output_dir,
-        args_dict): # Location to output database file
+        args_dict):
+    """Fetch all reactions for a given organism
+    """
 
-    species_id='HSA'
-    output_dir='/Users/jordan/Desktop/reactome_test'
-    args_dict=None
-    # Get reaction files
-    reactions_dir = unpack_reactions(
+    # Get pathways files
+    pathways_dir = unpack_pathways(
         output_dir=output_dir)
     progress_feed(args_dict, "reactions")
 
-    #reactions_dir = '/Users/jordan/Desktop/reactome_test/all_species.3.1.sbml/'
-    reactome_database = {}
+    pathways_list = get_pathways(
+        species_id=species_id,
+        pathways_dir=pathways_dir)
 
     # Get list of reaction files to use for populating database
-    reactions_list = get_reactions(
-        species_id=species_id,
-        reaction_dir=reactions_dir)
-    progress_feed(args_dict, "reactions")
-
-    # Curate reactions database for organism of interest
-    reactome_database['pathways'] = curate_reactions(
-        reaction_dir=reactions_dir,
-        reactions_list=reactions_list,
+    pathway_database, reaction_database, species_database, name_database = process_components(
+        output_dir=output_dir,
+        pathways_dir=pathways_dir,
+        pathways_list=pathways_list,
         species_id=species_id,
         args_dict=args_dict)
 
-    reactome_database['pathways']['R-HSA-2562578']['reactions'].keys()
+    if 'sbml' in pathways_dir:
+        shutil.rmtree(pathways_dir)
+    else:
+        print('Could not find SMBL file directory, skipping removal of this directory...')
 
-    reactome_database['pathways']['R-HSA-2562578']['reactions']['R-HSA-2562564']['name']
-    reactome_database['pathways']['R-HSA-2562578']['reactions']['R-HSA-2562564']['notes']
-
-    # Add lists of available pathways and compartments found in the database
-    reactome_database['pathway_types'] = add_pathways(
-        reactome_database['pathways'])
-
-    reactome_database['compartment_types'] = add_compartments(
-        reactome_database['pathways'])
-
-    reactome_database['global_reactions'] = add_global_reactions(
-        pathways=reactome_database['pathways'])
-
-    reactome_database['pathway_dictionary'] = add_pathway_dictionary(
-        pathways=reactome_database['pathways'])
-
-    reactome_database['reactions_dictionary'] = add_reactions_dictionary(
-        pathways=reactome_database['pathways'])
-    progress_feed(args_dict, "reactions")
-
-    shutil.rmtree(reactions_dir)
-
-    return reactome_database
+    return pathway_database, reaction_database, species_database, name_database

@@ -54,20 +54,24 @@ import json
 
 """JS progress feed
 """
-def progress_feed(args_dict, process=None):
+def progress_feed(
+        args_dict=None,
+        process=None):
 
-    feed_file = args_dict['progress_log']
+    if args_dict != None:
+        if 'progress_log' in args_dict:
+            feed_file = args_dict['progress_log']
 
-    if os.path.exists(feed_file) and process != None:
+            if os.path.exists(feed_file) and process != None:
 
-        with open(feed_file) as json_file:
-            data = json.load(json_file)
+                with open(feed_file) as json_file:
+                    data = json.load(json_file)
 
-            if data[process] < 10:
-                data[process] += 1
+                    if data[process] < 10:
+                        data[process] += 1
 
-        with open(feed_file, 'w') as outfile:
-            json.dump(data, outfile)
+                with open(feed_file, 'w') as outfile:
+                    json.dump(data, outfile)
 
 """Print out progress bar for long steps
 """

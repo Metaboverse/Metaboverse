@@ -27,11 +27,6 @@ import pickle
 """Import internal dependencies
 """
 from app.python.curate.load_reactions_db import __main__ as load_reactions
-from app.python.curate.load_chebi_db import __main__ as load_chebi
-from app.python.curate.load_uniprot_db import __main__ as load_uniprot
-from app.python.curate.load_ensembl_db import __main__ as load_ensembl
-from app.python.curate.load_ncbi_db import __main__ as load_ncbi
-from app.python.curate.load_mirbase_db import __main__ as load_mirbase
 from app.python.curate.load_complexes_db import __main__ as load_complexes
 from app.python.utils import progress_feed
 
@@ -314,100 +309,37 @@ def write_database(
 def __main__(
         args_dict):
 
-    #args_dict = {
-    #    'output':'/Users/jordan/Desktop/',
-    #    ['transcriptomics']:'HSA'}
+    args_dict = {
+        'output':'/Users/jordan/Desktop/',
+        'species_id':'HSA'}
 
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
     progress_feed(args_dict, "reactions")
-    reactions_database = load_reactions(
+    pathway_database, reaction_database, species_database, name_database = load_reactions(
         species_id=args_dict['species_id'],
         output_dir=args_dict['output'],
         args_dict=args_dict)
     for x in range(10):
         progress_feed(args_dict, "reactions")
 
-    # Add interfacing information to reactions database
-    print('\nLoading ChEBI database...')
-    progress_feed(args_dict, "chebi")
-    chebi_reference = load_chebi(
-        output_dir=args_dict['output'])
-    progress_feed(args_dict, "chebi")
-    print('Parsing ChEBI database...')
-    reactions_database['chebi_reference'] = parse_table(
-        reference=chebi_reference,
-        key='chebi_pe_all_levels',
-        args_dict=args_dict)
-    for x in range(10):
-        progress_feed(args_dict, "chebi")
-
-    print('Loading UniProt database...')
-    progress_feed(args_dict, "uniprot")
-    uniprot_reference = load_uniprot(
-        output_dir=args_dict['output'])
-    progress_feed(args_dict, "uniprot")
-    print('Parsing UniProt database...')
-    reactions_database['uniprot_reference'] = parse_table(
-        reference=uniprot_reference,
-        key='uniprot_pe_all_levels',
-        args_dict=args_dict)
-    for x in range(10):
-        progress_feed(args_dict, "uniprot")
-
-    print('Loading Ensembl database...')
-    progress_feed(args_dict, "ensembl")
-    ensembl_reference = load_ensembl(
-        output_dir=args_dict['output'])
-    progress_feed(args_dict, "ensembl")
-    print('Parsing Ensembl database...')
-    reactions_database['ensembl_reference'] = parse_table(
-        reference=ensembl_reference,
-        key='ensembl_pe_all_levels',
-        args_dict=args_dict)
-    for x in range(10):
-        progress_feed(args_dict, "ensembl")
-
-    print('Loading NCBI database...')
-    progress_feed(args_dict, "ncbi")
-    ncbi_reference = load_ncbi(
-        output_dir=args_dict['output'])
-    progress_feed(args_dict, "ncbi")
-    print('Parsing NCBI database...')
-    reactions_database['ncbi_reference'] = parse_table(
-        reference=ncbi_reference,
-        key='ncbi_pe_all_levels',
-        args_dict=args_dict)
-    for x in range(10):
-        progress_feed(args_dict, "ncbi")
-
-    print('Loading miRBase database...')
-    progress_feed(args_dict, "mirbase")
-    mirbase_reference = load_mirbase(
-        output_dir=args_dict['output'])
-    progress_feed(args_dict, "mirbase")
-    print('Parsing miRBase database...')
-    reactions_database['mirbase_reference'] = parse_table(
-        reference=mirbase_reference,
-        key='mirbase_pe_all_levels',
-        args_dict=args_dict)
-    for x in range(10):
-        progress_feed(args_dict, "mirbase")
+    reaction_database
 
     print('Loading complex database...')
     progress_feed(args_dict, "complex")
-    reactions_database['complexes_reference'] = load_complexes(
+    complexes_reference = load_complexes(
         output_dir=args_dict['output'])
+
     progress_feed(args_dict, "complex")
     print('Parsing complex database...')
-    reactions_database['complexes_reference']['complex_dictionary'] = parse_complexes(
-        reactions_database['complexes_reference'])
+    complexes_reference['complex_dictionary'] = parse_complexes(
+        complexes_reference)
     for x in range(10):
         progress_feed(args_dict, "complex")
 
-    reactions_database['complexes_reference']['complex_mapper'] = map_complexes_genes(
-        complex_participants=reactions_database['complexes_reference']['complex_participants'],
+    complexes_reference['complex_mapper'] = map_complexes_genes(
+        complex_participants=complexes_reference['complex_participants'],
         databases=reactions_database)
 
     reactions_database['master_reference'] = make_master(
