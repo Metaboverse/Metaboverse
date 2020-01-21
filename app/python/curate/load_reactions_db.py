@@ -186,6 +186,7 @@ def add_reaction_components(
 def add_names(
         name_database,
         child,
+        specie,
         search_string='is',
         bqbiol_namespace=bqbiol_namespace,
         rdf_namespace=rdf_namespace):
@@ -194,23 +195,21 @@ def add_names(
 
     for rank in child.iter(str(bqbiol_namespace + search_string)):
         for _rank in rank.iter(str(rdf_namespace + 'li')):
-            try:
-                item = _rank.attrib[str(rdf_namespace + 'resource')]
-                _id = item.split('/')[-1]
-                if 'chebi' in item.lower():
-                    _id = check_chebi(item=_id)
-                name_database[_id] = specie
 
-                # If element has parentheses, remove what's in between as
-                # additional key
-                if '(' in _id and ')' in _id:
-                    name_database = add_alternative_names(
-                        name_database=name_database,
-                        item=_id,
-                        specie=specie)
+            item = _rank.attrib[str(rdf_namespace + 'resource')]
+            _id = item.split('/')[-1]
+            if 'chebi' in item.lower():
+                _id = check_chebi(item=_id)
+                _id = _id.split(' ')[0]
+            name_database[_id] = specie
 
-            except:
-                pass
+            # If element has parentheses, remove what's in between as
+            # additional key
+            if '(' in _id and ')' in _id:
+                name_database = add_alternative_names(
+                    name_database=name_database,
+                    item=_id,
+                    specie=specie)
 
     return name_database
 
@@ -275,6 +274,7 @@ def add_species(
         name_database = add_names(
             name_database=name_database,
             child=child,
+            specie=specie,
             search_string='hasPart',
             bqbiol_namespace=bqbiol_namespace,
             rdf_namespace=rdf_namespace)
@@ -282,6 +282,7 @@ def add_species(
         name_database = add_names(
             name_database=name_database,
             child=child,
+            specie=specie,
             search_string='is',
             bqbiol_namespace=bqbiol_namespace,
             rdf_namespace=rdf_namespace)
@@ -410,6 +411,10 @@ def __main__(
         args_dict):
     """Fetch all reactions for a given organism
     """
+
+    # output_dir = '/Users/jordan/Desktop/'
+    # species_id = 'HSA'
+    # args_dict = None
 
     # Get pathways files
     pathways_dir = unpack_pathways(

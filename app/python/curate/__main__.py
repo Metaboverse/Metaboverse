@@ -23,6 +23,7 @@ from __future__ import print_function
 import os
 import re
 import pickle
+import pandas as pd
 
 """Import internal dependencies
 """
@@ -70,9 +71,6 @@ def parse_table(
 
     counter = 0
     total = len(reference_parsed.index.tolist())
-    print("====")
-    print(total)
-    print("====")
 
     for index, row in reference_parsed.iterrows():
 
@@ -160,131 +158,46 @@ def parse_complexes(
 
     return complex_dictionary
 
-"""
-"""
-def make_master(
-        database):
+def parse_chebi_synonyms(
+        output_dir,
+        url='ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz',
+        file_name='names.tsv',
+        name_string='name',
+        id_string='compound_id'):
+    """Retrieve CHEBI chemical entity synonyms
+    """
 
-    master_reference = {}
+    os.system('curl -L ' + url + ' -o ' + output_dir + file_name + '.gz')
+    os.system('gzip -d ' + output_dir + file_name + '.gz')
 
-    reference_list = [
-        'chebi_reference',
-        'uniprot_reference',
-        'ensembl_reference',
-        'ncbi_reference',
-        'mirbase_reference']
+    chebi = pd.read_csv(
+        output_dir + file_name,
+        sep='\t')
+    os.remove(output_dir + file_name)
 
-    for x in reference_list:
+    name_index = None
+    id_index = None
 
-        for key in database[x].keys():
+    col_names = chebi.columns.tolist()
 
-            master_reference[database[x][key]['analyte_id']] = database[x][key]['analyte']
+    for x in range(len(col_names)):
+        if col_names[x].lower() == name_string:
+            name_index = x
 
-    for key in database['complexes_reference']['complex_dictionary'].keys():
+        if col_names[x].lower() == id_string:
+            id_index = x
 
-        master_reference[database['complexes_reference']['complex_dictionary'][key]['complex_id']] = database['complexes_reference']['complex_dictionary'][key]['complex_name']
+    chebi_name_dictionary = {}
+    if name_index != None and id_index != None:
 
-    # Add pathway id to name mapping
-    for key in database['global_reactions'].keys():
+        for index, row in chebi.iterrows():
+            chebi_name_dictionary[row[name_index]] = 'CHEBI:' + str(row[id_index])
 
-        master_reference[database['global_reactions'][key]['pathway_id']] = database['global_reactions'][key]['pathway_name']
+    else:
+        print('Unable to parse CHEBI file as expected...')
 
-    return master_reference
+    return chebi_name_dictionary
 
-"""
-"""
-def prepare_mappers(
-        databases):
-
-    mappers = {}
-
-    mappers['ensembl'] = {}
-    for key in databases['ensembl_reference'].keys():
-
-        mappers['ensembl'][databases['ensembl_reference'][key]['source_id']] = databases['ensembl_reference'][key]['analyte_id']
-
-    mappers['mirbase'] = {}
-    for key in databases['mirbase_reference'].keys():
-
-        mappers['mirbase'][databases['mirbase_reference'][key]['source_id']] = databases['mirbase_reference'][key]['analyte_id']
-
-    mappers['uniprot'] = {}
-    for key in databases['uniprot_reference'].keys():
-
-        mappers['uniprot'][databases['uniprot_reference'][key]['source_id']] = databases['uniprot_reference'][key]['analyte_id']
-
-    mappers['chebi'] = {}
-    for key in databases['chebi_reference'].keys():
-
-        mappers['chebi'][databases['chebi_reference'][key]['source_id']] = databases['chebi_reference'][key]['analyte_id']
-
-    return mappers
-
-"""Map complex names to lists of component genes
-"""
-def map_complexes_genes(
-        complex_participants,
-        databases):
-
-    complex_mapper = {}
-
-    mappers = prepare_mappers(
-        databases=databases)
-
-    for index, row in complex_participants.iterrows():
-
-        complex_id = row[0]
-        participants = row[2].split('|')
-        partner_complexes = row[3].split('|')
-
-        participants_ids = []
-
-        for x in participants:
-
-            if x.split(':')[0] == 'ensembl':
-                try:
-                    id = mappers['ensembl'][x.split(':')[1]]
-                    participants_ids.append(id)
-
-                except:
-                    print('Could not find', x)
-
-            elif x.split(':')[0] == 'mirbase':
-                try:
-                    id = mappers['mirbase'][x.split(':')[1]]
-                    participants_ids.append(id)
-
-                except:
-                    print('Could not find', x)
-
-            elif x.split(':')[0] == 'ncbi':
-                print('Skipping NCBI records...')
-
-            elif x.split(':')[0] == 'uniprot':
-                try:
-                    id = mappers['uniprot'][x.split(':')[1]]
-                    participants_ids.append(id)
-
-                except:
-                    print('Could not find', x)
-
-            elif x.split(':')[0] == 'chebi':
-                try:
-                    id = mappers['chebi'][x.split(':')[1]]
-                    participants_ids.append(id)
-
-                except:
-                    print('Could not find', x)
-
-            else:
-                print('Warning: Unable to find', x, 'in database')
-
-        complex_mapper[complex_id] = {
-            'id': complex_id,
-            'participants': participants_ids,
-            'partner_complexes': partner_complexes}
-
-    return complex_mapper
 
 """Write reactions database to pickle file
 """
@@ -309,9 +222,9 @@ def write_database(
 def __main__(
         args_dict):
 
-    args_dict = {
-        'output':'/Users/jordan/Desktop/',
-        'species_id':'HSA'}
+    #args_dict = {
+    #    'output':'/Users/jordan/Desktop/',
+    #    'species_id':'HSA'}
 
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
@@ -324,35 +237,31 @@ def __main__(
     for x in range(10):
         progress_feed(args_dict, "reactions")
 
-    reaction_database
-
     print('Loading complex database...')
-    progress_feed(args_dict, "complex")
     complexes_reference = load_complexes(
         output_dir=args_dict['output'])
 
-    progress_feed(args_dict, "complex")
     print('Parsing complex database...')
     complexes_reference['complex_dictionary'] = parse_complexes(
         complexes_reference)
-    for x in range(10):
-        progress_feed(args_dict, "complex")
 
-    complexes_reference['complex_mapper'] = map_complexes_genes(
-        complex_participants=complexes_reference['complex_participants'],
-        databases=reactions_database)
+    chebi_reference = parse_chebi_synonyms(
+        output_dir=args_dict['output'])
 
-    reactions_database['master_reference'] = make_master(
-        reactions_database)
-    for x in range(10):
-        progress_feed(args_dict, "master")
+    metaboverse_db = {
+        'pathway_database': pathway_database,
+        'reaction_database': reaction_database,
+        'species_database': species_database,
+        'name_database': name_database,
+        'chebi_synonyms': chebi_reference,
+        'complex_dictionary': complexes_reference['complex_dictionary']}
 
     # Write database to file
     print('Writing metaboverse database to file...')
     write_database(
         output=args_dict['output'],
         file=args_dict['species_id'] + '_metaboverse_db.pickle',
-        database=reactions_database)
+        database=metaboverse_db)
     for x in range(10):
         progress_feed(args_dict, "write")
     print('Metaboverse database curation complete.')
