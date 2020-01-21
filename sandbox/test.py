@@ -9,10 +9,6 @@ Include additional info:
 - Other pathway membership?
 """
 
-
-
-
-
 """ Name mapping
 - genes: default is ensembl gene ID
 - proteins: default is gene ID (backend all caps? But save original too for display)
@@ -86,21 +82,12 @@ id_dict (listOfSpecies):
 
 name_dict (listOfSpecies):
 |- nameA-1: id_1
-|- nameA-2: id_1
-|- nameA-3: id_1
-|- nameB-1: id_2
-|- nameB-2: id_2
-|- ...
 Note that proteomics will work best if using UniProt ID
 Note that sequencing will work best if using Ensembl ID
 Note that metabolomics will work best if using CHEBI ID
 
-
-metabolite_mapping (from ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz)
+metabolite_mapping:
 compound_id: synonym_name1,
-compound_id: synonym_name2,
-etc
-
 """
 
 
