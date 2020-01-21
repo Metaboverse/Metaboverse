@@ -88,13 +88,6 @@ Note that metabolomics will work best if using CHEBI ID
 
 metabolite_mapping:
 compound_id: synonym_name1,
-<<<<<<< HEAD
-=======
-compound_id: synonym_name2,
-etc
-
-
->>>>>>> 55b73048471f5cf56fca20b7e5e6d8faa0f243ed
 """
 
 
