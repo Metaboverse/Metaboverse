@@ -144,15 +144,20 @@ def parse_complexes(
 
         for x in participants:
             if 'chebi' in x:
-                complex_dictionary[row[0]]['participants']['chebi'].append(x.split(':')[1])
+                complex_dictionary[row[0]]['participants']['chebi'].append(
+                    x.split(':')[1])
             if 'uniprot' in x:
-                complex_dictionary[row[0]]['participants']['uniprot'].append(x.split(':')[1])
+                complex_dictionary[row[0]]['participants']['uniprot'].append(
+                    x.split(':')[1])
             if 'ensembl' in x:
-                complex_dictionary[row[0]]['participants']['ensembl'].append(x.split(':')[1])
+                complex_dictionary[row[0]]['participants']['ensembl'].append(
+                    x.split(':')[1])
             if 'mirbase' in x:
-                complex_dictionary[row[0]]['participants']['mirbase'].append(x.split(':')[1])
+                complex_dictionary[row[0]]['participants']['mirbase'].append(
+                    x.split(':')[1])
             if 'ncbi' in x:
-                complex_dictionary[row[0]]['participants']['ncbi'].append(x.split(':')[1])
+                complex_dictionary[row[0]]['participants']['ncbi'].append(
+                    x.split(':')[1])
             else:
                 pass
 
@@ -160,8 +165,10 @@ def parse_complexes(
 
 def parse_ensembl_synonyms(
         output_dir,
+        species_id,
         url='https://reactome.org/download/current/Ensembl2Reactome_PE_All_Levels.txt',
         file_name='Ensembl2Reactome_PE_All_Levels.txt',
+        reactome_location=3,
         name_location=2,
         id_location=0):
     """Retrieve Ensembl gene entity synonyms
@@ -178,6 +185,8 @@ def parse_ensembl_synonyms(
 
     ensembl[name_location] = ensembl[name_location].str.split(' \[').str[0].tolist()
 
+    ensembl = ensembl[ensembl[reactome_location].str.contains(species_id)]
+
     ensembl_name_dictionary = pd.Series(
         ensembl[id_location].values,
         index=ensembl[name_location]).to_dict()
@@ -186,8 +195,10 @@ def parse_ensembl_synonyms(
 
 def parse_uniprot_synonyms(
         output_dir,
+        species_id,
         url='https://reactome.org/download/current/UniProt2Reactome_PE_All_Levels.txt',
         file_name='UniProt2Reactome_PE_All_Levels.txt',
+        reactome_location=3,
         name_location=2,
         id_location=0):
     """Retrieve UniProt protein entity synonyms
@@ -202,6 +213,8 @@ def parse_uniprot_synonyms(
     os.remove(output_dir + file_name)
 
     uniprot[name_location] = uniprot[name_location].str.split(' \[').str[0].tolist()
+
+    uniprot = uniprot[uniprot[reactome_location].str.contains(species_id)]
 
     uniprot_name_dictionary = pd.Series(
         uniprot[id_location].values,
@@ -294,10 +307,12 @@ def __main__(
         complexes_reference)
 
     ensembl_reference = parse_ensembl_synonyms(
-            output_dir=args_dict['output'])
+            output_dir=args_dict['output'],
+            species_id=args_dict['species_id'])
 
     uniprot_reference = parse_uniprot_synonyms(
-            output_dir=args_dict['output'])
+            output_dir=args_dict['output'],
+            species_id=args_dict['species_id'])
 
     chebi_reference = parse_chebi_synonyms(
         output_dir=args_dict['output'])
