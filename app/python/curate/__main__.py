@@ -158,6 +158,57 @@ def parse_complexes(
 
     return complex_dictionary
 
+def parse_ensembl_synonyms(
+        output_dir,
+        url='https://reactome.org/download/current/Ensembl2Reactome_PE_All_Levels.txt',
+        file_name='Ensembl2Reactome_PE_All_Levels.txt',
+        name_location=2,
+        id_location=0):
+    """Retrieve Ensembl gene entity synonyms
+    """
+    # output_dir='/Users/jordan/Desktop/'
+
+    os.system('curl -L ' + url + ' -o ' + output_dir + file_name)
+
+    ensembl = pd.read_csv(
+        output_dir + file_name,
+        sep='\t',
+        header=None)
+    os.remove(output_dir + file_name)
+
+    ensembl[name_location] = ensembl[name_location].str.split(' \[').str[0].tolist()
+
+    ensembl_name_dictionary = pd.Series(
+        ensembl[id_location].values,
+        index=ensembl[name_location]).to_dict()
+
+    return ensembl_name_dictionary
+
+def parse_uniprot_synonyms(
+        output_dir,
+        url='https://reactome.org/download/current/UniProt2Reactome_PE_All_Levels.txt',
+        file_name='UniProt2Reactome_PE_All_Levels.txt',
+        name_location=2,
+        id_location=0):
+    """Retrieve UniProt protein entity synonyms
+    """
+
+    os.system('curl -L ' + url + ' -o ' + output_dir + file_name)
+
+    uniprot = pd.read_csv(
+        output_dir + file_name,
+        sep='\t',
+        header=None)
+    os.remove(output_dir + file_name)
+
+    uniprot[name_location] = uniprot[name_location].str.split(' \[').str[0].tolist()
+
+    uniprot_name_dictionary = pd.Series(
+        uniprot[id_location].values,
+        index=uniprot[name_location]).to_dict()
+
+    return uniprot_name_dictionary
+
 def parse_chebi_synonyms(
         output_dir,
         url='ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz',
@@ -229,13 +280,10 @@ def __main__(
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
-    progress_feed(args_dict, "reactions")
     pathway_database, reaction_database, species_database, name_database = load_reactions(
         species_id=args_dict['species_id'],
         output_dir=args_dict['output'],
         args_dict=args_dict)
-    for x in range(10):
-        progress_feed(args_dict, "reactions")
 
     print('Loading complex database...')
     complexes_reference = load_complexes(
@@ -245,6 +293,12 @@ def __main__(
     complexes_reference['complex_dictionary'] = parse_complexes(
         complexes_reference)
 
+    ensembl_reference = parse_ensembl_synonyms(
+            output_dir=args_dict['output'])
+
+    uniprot_reference = parse_uniprot_synonyms(
+            output_dir=args_dict['output'])
+
     chebi_reference = parse_chebi_synonyms(
         output_dir=args_dict['output'])
 
@@ -253,15 +307,19 @@ def __main__(
         'reaction_database': reaction_database,
         'species_database': species_database,
         'name_database': name_database,
+        'ensembl_synonyms': ensembl_reference,
+        'uniprot_synonyms': uniprot_reference,
         'chebi_synonyms': chebi_reference,
         'complex_dictionary': complexes_reference['complex_dictionary']}
 
     # Write database to file
     print('Writing metaboverse database to file...')
+    args_dict['network'] = args_dict['species_id'] + '_metaboverse_db.pickle'
     write_database(
         output=args_dict['output'],
-        file=args_dict['species_id'] + '_metaboverse_db.pickle',
+        file=args_dict['network'],
         database=metaboverse_db)
-    for x in range(10):
-        progress_feed(args_dict, "write")
+
     print('Metaboverse database curation complete.')
+
+    return args_dict
