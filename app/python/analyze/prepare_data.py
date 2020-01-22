@@ -64,10 +64,30 @@ def format_data(
     - Columns should be condition_fc, condition_p, etc.
     """
 
-    data_c = data.copy()
+    data_output = data.copy()
+    data_unmapped = data.copy()
 
+    reference_ids = list(reference.values())
 
-    return data_c, unmapped
+    data_output.index = data_output.index.to_series().map(reference)
+    data_output = data_output[data_output.index.isin(reference_ids)]
+
+    data_unmapped.index = data_unmapped.index.to_series().map(reference)
+    data_unmapped = data_unmapped[~data_unmapped.index.isin(reference_ids)]
+
+    return data_output, data_unmapped
+
+def output_unmapped(
+        data,
+        url,
+        delimiter='\t'):
+    """Output unmapped entities for user information
+    """
+
+    if len(data.index.tolist()):
+        data.to_csv(
+            url[:-4] + '_unmapped.txt',
+            sep=delimiter)
 
 def extract_data(
         data):
@@ -76,7 +96,7 @@ def extract_data(
     """
     data_c = data.copy()
 
-    _values = data_c.T[1::2].T
+    _values = data_c.T[::2].T
     _stats = data_c.T[1::2].T
 
     return _values, _stats
@@ -97,10 +117,18 @@ def broadcast_transcriptomics(
 def catenate_data(
         array):
     """Combine data
-    - remove duplicates
+    - average duplicates
     - remove NAs
     Return: combined dataframe where indices are species IDs
     """
+
+    combined = pd.concat(array)
+    combined = combined.dropna(axis=0)
+
+    combined = combined.sort_index()
+    combined = combined.groupby(combined.index).mean()
+
+    return combined
 
 def __main__(
         network,
@@ -143,10 +171,17 @@ def __main__(
         transcriptomics, transcriptomics_unmapped = format_data(
             data=transcriptomics,
             reference=network['ensembl_synonyms'])
+        output_unmapped(
+            data=transcriptomics_unmapped,
+            url=transcriptomics_url)
         transcriptomics, transcriptomics_stats = extract_data(
             data=transcriptomics)
         data_array.append(transcriptomics)
         stats_array.append(transcriptomics_stats)
+
+
+
+transcriptomics_unmapped
 
     # Process proteomics
     if proteomics_url.lower() != 'none':
@@ -156,6 +191,9 @@ def __main__(
         proteomics, proteomics_unmapped = format_proteomics(
             data=proteomics,
             reference=network['uniprot_synonyms'])
+        output_unmapped(
+            data=proteomics_unmapped,
+            url=proteomics_url)
         proteomics, proteomics_stats = extract_data(
             data=proteomics)
         data_array.append(proteomics)
@@ -169,18 +207,19 @@ def __main__(
         metabolomics, metabolomics_unmapped = format_metabolomics(
             data=metabolomics,
             reference=network['chebi_synonyms'])
+        output_unmapped(
+            data=metabolomics_unmapped,
+            url=metabolomics_url)
         metabolomics, metabolomics_stats = extract_data(
             data=metabolomics)
         data_array.append(metabolomics)
         stats_array.append(metabolomics_stats)
 
-    if len(metabolomics_unmapped.index.tolist()):
-
     # Check for broadcasting
     if proteomics_url.lower() == 'none' \
     and transcriptomics_url.lower() != 'none':
 
-        extract_data
+        #
 
 
     # Combine data
