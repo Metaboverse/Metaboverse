@@ -33,10 +33,8 @@ import pickle
 """
 def tests():
 
-    network = read_network('/Users/jordan/Desktop/reactome_test/HSA_metaboverse_db.pickle')
+    network = read_network('/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
     network.keys()
-
-    network['chebi_reference']['R-ALL-9014945']
 
 """Read in networkx-formatted pickle file from curation step
 """

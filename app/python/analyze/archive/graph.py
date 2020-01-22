@@ -748,17 +748,22 @@ def __main__(
         graph_name='name'):
 
     # Get output directory for graphs
-    #output='/Users/jordan/Desktop/'
+    ####
+    output='/Users/jordan/Desktop/'
+    output_file = output + 'HSA_global_network.json'
+    species_id = 'HSA'
+    with open(output + 'HSA_metaboverse_db.pickle', 'rb') as network_file:
+        network = pickle.load(network_file)
+    ####
 
     if output_file[-5:].lower() == '.json':
         graph_name = output_file
     else:
         graph_name = output_file + species_id + '_global_reactions.json'
 
-    # Make master reference
-    master_reference = network['master_reference']
-    complex_reference = network['complexes_reference']['complex_mapper']
-    species_accession = 'R-' + species_id + '-'
+    network.keys()
+
+
 
     # Generate graph
     # Input list of pathway names

@@ -24,6 +24,7 @@ Table of contents
    content/overview
    content/quickstart
    content/installation
+   content/data-formatting
    content/general-usage
    content/beginner
    content/faqs

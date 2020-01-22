@@ -20,37 +20,41 @@ from __future__ import print_function
 
 """Import dependencies
 """
+import os
+import sys
 
-"""Specify output sub-directory paths
+"""Import internal dependencies
 """
-def set_paths(
-        args_dict):
 
-    args_dict['measurements'] = args_dict['output'] + 'measurements/'
-
-    # Step 1
-
-    # Step 2
-
-    # Step 3
-
-    # ...
-
-    return args_dict
-
-"""Preprocess data
+"""Per a omics type, generate fold changes and p values based on input data
+and metadata
 """
+
+def get_type(
+        type):
+    """Extract omics type from user option
+    - Flexible selection based on first letter alone
+    """
+
+    if type[0].lower() == 't':
+        print('Provided transcriptomics data')
+        type = 'transcriptomics'
+    if type[0].lower() == 'p':
+        print('Provided proteomics data')
+        type = 'transcriptomics'
+    if type[0].lower() == 'm':
+        print('Provided metabolomics data')
+        type = 'transcriptomics'
+    else:
+        print('Invalid omics type provided. Exiting...')
+        sys.exit(1)
+
+    return type
+
 def __main__(
         args_dict):
+    """
+    """
 
-    args_dict = set_paths(args_dict)
-
-    # Set standards for each omic datatype for input
-    # - transcriptomics = counts
-    # - translatomics = counts formatted for easy TE calculation
-    # - proteomics = raw quant
-    # - metabolomics = raw quant
-
-    # Run basic quality control on data after normalized
-
-    return args_dict
+    type = get_type(
+        type=args_dict['type'])

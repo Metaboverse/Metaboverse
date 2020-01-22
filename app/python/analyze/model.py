@@ -16,3 +16,72 @@ Metaboverse:
     You should have received a copy of the GNU General Public License along with
     this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
+
+
+
+
+""" 2) return a table for values with missing ids
+
+nodes:
+    species_id: {
+        display_name: ___,
+        expression_value: [],
+        p_value: [],
+        rgba_value: [ [], ],
+        rjba_js: [ [], ],
+        type: ___,
+    }
+
+
+links:
+    {target: species_id,
+    source: species_id,
+    type: ___
+    }
+
+pathways:
+
+reactions:
+
+names:
+
+super_pathways:
+"""
+
+
+
+
+
+
+
+
+
+""" 3) generate graph
+"""
+
+
+
+
+
+
+
+
+""" 4) finalize formatting for viz
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+""" 5) export
+"""

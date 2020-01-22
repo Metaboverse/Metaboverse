@@ -63,13 +63,11 @@ description_table  =  """\
     Sub-module help can be displayed by executing:
     'metaboverse sub-module_name --help'
     Sub-module descriptions:
-        +-----------------------+--------------------------------------------------------------------------------------+
-        |    curate             |   Curate network model                                                               |
-        |-----------------------|--------------------------------------------------------------------------------------|
-        |    preprocess         |   Preprocess -omics data                                                             |
-        |-----------------------|--------------------------------------------------------------------------------------|
-        |    analyze            |   Analyze -omics data using network model                                            |
-        +-----------------------+--------------------------------------------------------------------------------------+
+        +-----------------------+-----------------------------+
+        |    preprocess         |   Preprocess a dataframe    |
+        +-----------------------+-----------------------------+
+        |    curate             |   Curate network            |
+        +-----------------------+-----------------------------+
 """
 
 """Check dependencies
@@ -172,6 +170,33 @@ def parse_arguments(
     # Add sub-parsers
     subparser = parser.add_subparsers(dest = 'cmd')
 
+    # Preprocess parser
+    preprocess_parser = subparser.add_parser(
+        'preprocess',
+        description = 'Preprocess a dataframe',
+        add_help = False)
+
+    # Curate required arguments
+    preprocess_reqs = preprocess_parser.add_argument_group('required arguments')
+    preprocess_reqs.add_argument(
+        '-d', '--data',
+        help = 'Path and filename of dataset -- refer to documentation for details on formatting',
+        metavar = '<path/filename>',
+        type = str,
+        required = True)
+    preprocess_reqs.add_argument(
+        '-m', '--metadata',
+        help = 'Path and filename of metadata -- refer to documentation for details on formatting',
+        metavar = '<path/filename>',
+        type = str,
+        required = True)
+    preprocess_reqs.add_argument(
+        '-t', '--type',
+        help = 'Omics type (options: transcriptomics, proteomics, metabolomics)',
+        metavar = '<transcriptomics/proteomics/metabolomics>',
+        type = str,
+        required = True)
+
     # Curate parser
     curate_parser = subparser.add_parser(
         'curate',
@@ -180,6 +205,19 @@ def parse_arguments(
 
     # Curate required arguments
     curate_reqs = curate_parser.add_argument_group('required arguments')
+    curate_reqs.add_argument(
+        '-o', '--output',
+        help = 'Path to output directory (default: current working directory)',
+        metavar = '<path>',
+        type = str,
+        required = True)
+    curate_reqs.add_argument(
+        '-s', '--species_id',
+        help = 'Reactome species ID',
+        metavar = '<species_id>',
+        type = str,
+        default = 'HSA',
+        required = True)
 
     # Curate optional arguments
     curate_opts = curate_parser.add_argument_group('optional arguments')
@@ -188,142 +226,68 @@ def parse_arguments(
         action = 'help',
         help = 'Show help message and exit')
     curate_opts.add_argument(
-        '-o', '--output',
-        help = 'Path to output directory (default: current working directory)',
-        metavar = '<path>',
+        '-f', '--output_file',
+        help = 'Path and name for output database file',
+        metavar = '<path/filename.json>',
         type = str,
         required = False)
     curate_opts.add_argument(
-        '-s', '--species_id',
-        help = 'Reactome species ID',
-        metavar = '<species_id>',
-        type = str,
-        default = 'HSA',
-        required = False)
-    curate_opts.add_argument(
-        '-p', '--progress_log',
-        help = 'Path to progress file',
-        metavar = '</path/to/file.json>',
-        type = str,
-        required = False)
-    curate_opts.add_argument(
-        '-m', '--max_processors',
-        help = 'Number of max processors to use for tasks (default: No limit)',
-        metavar = '<processors>',
-        type = int,
-        default = DEFAULT_MAX_PROCESSORS,
-        required = False)
-
-    # Preprocess parser
-    preprocess_parser = subparser.add_parser(
-        'preprocess',
-        description = 'Preprocess data for network analysis',
-        add_help = False)
-
-    # Preprocess required arguments
-    preprocess_reqs = preprocess_parser.add_argument_group('required arguments')
-
-    # Preprocess optional arguments
-    preprocess_opts = preprocess_parser.add_argument_group('optional arguments')
-    preprocess_opts.add_argument(
-        '-h', '--help',
-        action = 'help',
-        help = 'Show help message and exit')
-
-    # Analyze parser
-    analyze_parser = subparser.add_parser(
-        'analyze',
-        description = 'Analyze data on biological network',
-        add_help = False)
-
-    # Analyze required arguments
-    analyze_reqs = analyze_parser.add_argument_group('required arguments')
-    analyze_reqs.add_argument(
-        '-d', '--model',
-        help = 'Path to metaboverse network model for NetworkX (should be at output_dir/_network/network.pickle)',
-        metavar = '<path/filename>',
-        type = str,
-        required = True)
-    analyze_reqs.add_argument(
-        '-t', '--metadata',
-        help = 'Path and filename of metadata -- refer to documentation for details on formatting',
-        metavar = '<path/filename>',
-        type = str,
-        required = True)
-
-    # Analyze optional arguments
-    analyze_opts = analyze_parser.add_argument_group('optional arguments')
-    analyze_opts.add_argument(
-        '-h', '--help',
-        action = 'help',
-        help = 'Show help message and exit')
-    analyze_opts.add_argument(
-        '--output_file',
-        help = 'Path and filename to save curated model to. If not provided, will save as a generic file to directory where the model is found, followed by the species ID and _metaboverse_db.json',
-        metavar = '<path/filename>',
-        type = str,
-        required = False)
-    analyze_opts.add_argument(
-        '-s', '--species_id',
-        help = 'Provide Reactome species ID (default: HSA for human)',
-        metavar = '<species_id>',
-        type = str,
-        default = 'HSA',
-        required = False)
-    analyze_opts.add_argument(
         '-r', '--transcriptomics',
         help = 'Path and filename of RNA-Seq data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
+        default = 'None',
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '-p', '--proteomics',
         help = 'Path and filename of proteomics data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
+        default = 'None',
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '-b', '--metabolomics',
         help = 'Path and filename of metabolomics data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
+        default = 'None',
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '--experiment',
         help = 'Specify experiment type',
         metavar = '<default/timecourse/flux/multi-condition>',
         type = str,
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '--collapse_missing_reactions',
         help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
         action = 'store_true',
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '--split_duplicate_nodes',
         help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
         action = 'store_true',
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '--blacklist',
         help = 'Provide space-seperated list of analytes to blacklist',
         default = DEFAULT_BLACKLIST,
         type = str,
         nargs = '+',
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '--session_data',
         help = 'Path and filename to session data file',
         metavar = '<path/filename>',
         type = str,
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '--progress_log',
         help = 'Path and filename to progress log file',
         metavar = '<path/filename>',
         type = str,
         required = False)
-    analyze_opts.add_argument(
+    curate_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',

@@ -7,6 +7,46 @@ Include additional info:
 - Broad category (metabolism, cell signaling, etc)
 - p-value
 - Other pathway membership?
+
+Graph_database
+nodes:
+    species_id: {
+        display_name: ___,
+        expression_value: [],
+        p_value: [],
+        rgba_value: [ [], ],
+        rjba_js: [ [], ],
+        type: ___,
+    }
+
+
+links:
+    {target: species_id,
+    source: species_id,
+    type: ___
+    }
+
+pathways:
+
+reactions:
+
+names:
+
+super_pathways: --> do in interactive mode
+    - display all pathway for selection and in parentheses display number of nodes (sort in order of node #)
+    - user selects pathway and super pathway for downstream analysis is assembled
+
+
+
+1) convert user data ids to values where available
+    - convert gene expression data to ensembl ID
+    - convert protein expresison data to uniprot ID
+    - cross reference metabolite data to CHEBI dictionary
+2) return a table for values with missing ids
+3) generate graph
+4) finalize formatting for viz
+5) export
+
 """
 
 """ Name mapping
@@ -136,5 +176,6 @@ How to show putative relationships?
 """ Other
 - Proteins are squares with rounded corners
 - RNA is diamond
-
+- Display color bar in left side of page
+- node search
 """

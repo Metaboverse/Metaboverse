@@ -31,39 +31,30 @@ from app.python.arguments import parse_arguments
 from app.python.arguments import get_dependencies
 from app.python.preprocess.__main__ import __main__ as preprocess
 from app.python.curate.__main__ import __main__ as curate
-from app.python.analyze.__main__ import __main__ as analyze
 from app.python.utils import progress_feed
 
 """Run metaboverse
 """
 def main(
         args=None):
+
     # Read in arguments
     args, args_dict = parse_arguments(
         args,
         __version__)
 
-    # Run metaboverse-curate
-    if args_dict['cmd'] == 'curate':
+    if args_dict['cmd'] == 'preprocess':
 
-        print('Curating network model...')
-        #curate(args_dict)
-        sys.stdout.flush()
-        sys.exit(1)
-
-    # Run metaboverse-preprocess
-    elif args_dict['cmd'] == 'preprocess':
-
-        print('Preprocessing input data...')
+        print('Preprocessing ' + args_dict['type'] + ' dataset...')
         preprocess(args_dict)
         sys.stdout.flush()
         sys.exit(1)
 
-    # Run metaboverse-analyze
-    elif args_dict['cmd'] == 'analyze':
+    # Run metaboverse-curate
+    elif args_dict['cmd'] == 'curate':
 
         print('Curating network model...')
-        curate(args_dict)
+        args_dict = curate(args_dict)
         sys.stdout.flush()
 
 

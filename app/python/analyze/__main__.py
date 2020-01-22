@@ -20,58 +20,53 @@ from __future__ import print_function
 
 """Import dependencies
 """
+import pickle
 
 """Import internal dependencies
 """
-from app.python.analyze.curate_data import __main__ as curate_data
-from app.python.analyze.curate_network import __main__ as curate_network
-from app.python.analyze.graph import __main__ as graph
-from app.python.analyze.utils import map_ids
+from app.python.analyze.prepare_data import __main__ as prepare_data
+from app.python.analyze.model import __main__ as model
 from app.python.utils import progress_feed
 
-"""Analyze data on network model
-"""
+def read_network(
+        network_url):
+    """Read in network from previous curation module
+    - was provided as a URL to the file and saved to args_dict['network'] in
+    "curate" sub-module
+    """
+
+    with open(network_url, 'rb') as network_file:
+        network = pickle.load(network_file)
+
+    return network
+
 def __main__(
         args_dict):
+    """Analyze data on network model
+    """
 
-    # Read in network
-    progress_feed(args_dict, "graph")
-    network = curate_network(
-        model=args_dict['model'])
-    progress_feed(args_dict, "graph")
+    # Get network curation info
+    network = read_network(
+        network_url=args_dict['network'])
 
-    # Read in data
+    # Read in data (if any)
     if args_dict['transcriptomics'].lower() != 'none' \
     or args_dict['proteomics'].lower() != 'none' \
     or args_dict['metabolomics'].lower() != 'none':
 
-        data = curate_data(
-            metadata=args_dict['metadata'],
-            transcriptomics=args_dict['transcriptomics'],
-            proteomics=args_dict['proteomics'],
-            metabolomics=args_dict['metabolomics'],
-            args_dict=args_dict)
-        progress_feed(args_dict, "graph")
-
-        # Map names to work with what metaboverse expects
-        data_mapped = map_ids(
-            data=data,
-            network=network)
-        progress_feed(args_dict, "graph")
+        data = prepare_data(
+            network=network,
+            transcriptomics_url=args_dict['transcriptomics'],
+            proteomics_url=args_dict['proteomics'],
+            metabolomics_url=args_dict['metabolomics'])
 
     else:
-        data_mapped = None
-        progress_feed(args_dict, "graph")
-        progress_feed(args_dict, "graph")
+        data = None
 
-    # Generate graph(s)
-    progress_feed(args_dict, "graph")
-    graph(
-        data=data_mapped,
+    # Generate graph
+    model(
         network=network,
+        data=data,
         species_id=args_dict['species_id'],
         output_file=args_dict['output_file'],
         black_list=args_dict['blacklist'])
-
-    for x in range(10):
-        progress_feed(args_dict, "graph")

@@ -1,0 +1,93 @@
+	fc	p
+ D-glucose	5.136575608	0.83
+ Glucose 6-phosphate	1.90975637	0.32
+ Fructose-6-phosphate	2.378871509	0.23
+ DHAP	19.03468743	0.93
+ 3-Phosphoglyceric acid 	5.383704832	0.01
+ Phosphoenolpyruvate 	6.165951754	0.76
+ Pyruvate	2.355559226	0.4
+ L-Lactic acid 	4.315069692	0.96
+ Citric acid 	-1.168143947	0.62
+ cis-Aconitic acid	-1.857055272	0.22
+ Isocitric acid 	-3.224103988	0.33
+ 2-ketoglutarate 	4.630251751	0.7
+ Succinic acid 	4.309735316	0.3
+ Fumaric acid 	3.719425697	0.39
+ D-Malic acid 	5.812418004	0.32
+ Sedoheptulose 7-phosphate	7.202045162	0.84
+ Glycine 	5.024333964	0.02
+ L-Alanine	5.816416185	0.05
+ L-Valine	8.35710249	0.89
+ Leucine	6.870556449	0.13
+ L-Isoleucine	26.43534245	0.25
+ L-Proline	10.1582769	0.81
+ L-Phenylalanine	7.441222124	0.65
+ L-Tyrosine	2.405076303	0.37
+ L-Tryptophan	3.356053168	0.73
+ L-Serine	26.63113488	0.46
+ L-Threonine	6.594303139	0.81
+ L-Methionine	2.309430262	0.05
+ L-Asparagine	4.506943176	0.75
+ L-Aspartic acid	7.35847539	0.65
+ L-Glutamic acid	27.63225431	0.95
+ L-Lysine	3.700668609	0.69
+ Pyroglutamic acid 	6.957758235	0.72
+ Beta-Alanine	4.846629883	0.09
+ Pantothenic acid	1.922812636	0.66
+ 2-Aminoadipic acid	6.744820707	0.39
+ D-Fructose	2.259327501	0.07
+ D-Mannose	2.147389617	0.72
+ D-Galactose	2.295127263	0.32
+ sorbitol	2.489477271	0.51
+ Ribitol 	3.277603148	0.81
+ Myo-inositol 	2.590992401	0.29
+ Inositol phosphate	-2.543306051	0.09
+ galactosamine	5.139570385	0.42
+ Gluconic acid 	6.719860156	0.43
+ nonanoic acid 	-0.117236935	0.43
+ Capric acid 	0.39752712	0.49
+ Lauric acid 	0.638987283	0.78
+ Myristic acid 	0.273372202	0.54
+ Palmitoleic acid 	0.034619071	0.12
+ Palmitic acid 	0.408803249	0.7
+ Linoleic acid 	0.238061099	0.58
+ Oleic acid 	0.046016176	0.88
+ Elaidic acid 	0.626142677	0.4
+ Stearic acid 	0.358694693	0.98
+ Arachidonic acid 	0.915329558	0.87
+ Heptadecanoic acid 	0.281719978	0.25
+ 1-monomyristin	-0.475154519	0.26
+ 2-monopalmitoylglycerol	-0.782929708	0.16
+ 1-Palmitoylglycerol	-1.004893655	0.61
+ 2-Steroylglycerol	-0.822618817	0.06
+ 1-Steroylglycerol	-1.365289115	0.95
+ Cholesterol 	-0.217468757	0.9
+ Glycerol 	3.803887212	0.99
+ glycerol 3-phosphate 	5.642601854	0.82
+ Beta-Glycerophosphoric acid  	1.682322096	0.75
+ O-Phosphoethanolamine 	9.11893928	0.21
+ Phosphate	-0.240705231	0.56
+ Pyrophosphate 	-2.984580829	0.1
+ xanthine 	21.03012073	0.93
+ Hypoxanthine	24.25302045	0.17
+ Adenosine 	-0.386995797	0.1
+ Inosine 	2.830031931	0.36
+ Adenine 	5.786611073	0.62
+ Thymine 	3.120469705	0.88
+ Urea 	10.98254183	0.81
+ creatinine 	12.41639376	0.54
+ Dehydroascorbic acid	5.49305299	0.94
+ Allantoin	0	0.31
+ serotonin	16.26236677	0.85
+ 2-Hydroxyglutaric acid	3.913174152	0.17
+ 2-Hydroxybutyric acid 	5.4756597	1
+ 3-hydroxybutyric acid 	5.895349757	0.91
+ acetohydroxamic acid 	-6.445933399	0.56
+ adipic acid 	3.368251195	0.16
+ ethanolamine 	-0.902880905	0.51
+ glyoxylic acid 	-0.746569632	0.45
+ nicotinamide	8.364815576	0.34
+ oxalic acid 	0.912788803	0.51
+ putrescine	5.42455003	0.14
+ uracil 	22.70382	0.86
+ uridine 	18.57107308	1
