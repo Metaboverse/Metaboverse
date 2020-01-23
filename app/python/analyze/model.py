@@ -18,8 +18,9 @@ Metaboverse:
 """
 from __future__ import print_function
 
-
-
+"""Import dependencies
+"""
+import pandas as pd
 
 """ 2) return a table for values with missing ids
 
@@ -31,6 +32,7 @@ nodes:
         rgba_value: [ [], ],
         rjba_js: [ [], ],
         type: ___,
+        degree: __
     }
 
 
@@ -85,3 +87,45 @@ super_pathways:
 
 """ 5) export
 """
+
+
+
+
+
+def __main__(
+        network,
+        data,
+        species_id,
+        output_file,
+        black_list):
+    """Generate graph object for visualization
+    - Place black_list as key in graph object for later parsing
+        - Will allow for on-the-fly removal of nodes
+    """
+
+    #############################
+    def read_network(
+            network_url):
+        """Read in network from previous curation module
+        - was provided as a URL to the file and saved to args_dict['network']  in "curate" sub-module
+        """
+        import pickle
+        with open(network_url, 'rb') as network_file:
+            network = pickle.load(network_file)
+
+        return network
+
+    network = read_network(
+        network_url='/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
+
+    data = pd.read_csv(
+        '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_data.txt',
+        sep='\t')
+
+    stats = pd.read_csv(
+        '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_stats.txt',
+        sep='\t')
+
+    species_id = 'HSA'
+    output_file = 'HSA_global_reactions.json'
+    #############################

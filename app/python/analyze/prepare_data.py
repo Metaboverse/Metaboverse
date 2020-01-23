@@ -180,6 +180,9 @@ def format_metabolomics (
         labels='holder',
         axis=1)
 
+    del data_output.index.name
+    del data_unmapped.index.name
+
     return data_output, data_unmapped
 
 def output_unmapped(
@@ -267,25 +270,24 @@ def __main__(
     """Get user data and preprocess
     """
     #############################
-    def read_network(
-            network_url):
-        """Read in network from previous curation module
-        - was provided as a URL to the file and saved to args_dict['network'] in
-        "curate" sub-module
-        """
-        import pickle
-        with open(network_url, 'rb') as network_file:
-            network = pickle.load(network_file)
-
-        return network
-
-    network = read_network(
-        network_url='/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
-
-    transcriptomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/transcriptomics.txt'
-    proteomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/proteomics.txt'
-    metabolomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/metabolomics.txt'
-
+    #def read_network(
+    #        network_url):
+    #    """Read in network from previous curation module
+    #    - was provided as a URL to the file and saved to args_dict['network'] #    in "curate" sub-module
+    #    """
+    #    import pickle
+    #    with open(network_url, 'rb') as network_file:
+    #        network = pickle.load(network_file)
+    #
+    #    return network
+    #
+    #network = read_network(
+    #    network_url='/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
+    #
+    #transcriptomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/transcriptomics.txt'
+    #proteomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/proteomics.txt'
+    #metabolomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/metabolomics.txt'
+    #
     #############################
 
     # Initialize array of filled data
@@ -357,5 +359,15 @@ def __main__(
 
     stats = catenate_data(
         array=stats_array)
+
+    ####################################################
+    #data.to_csv(
+    #    '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_data.txt',
+    #    sep='\t')
+    #
+    #stats.to_csv(
+    #    '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_stats.txt',
+    #    sep='\t')
+    ####################################################
 
     return data, stats
