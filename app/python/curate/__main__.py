@@ -226,8 +226,9 @@ def parse_chebi_synonyms(
         output_dir,
         url='ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz',
         file_name='names.tsv',
-        name_string='name',
-        id_string='compound_id'):
+        name_string='NAME',
+        id_string='COMPOUND_ID',
+        source_string='SOURCE'):
     """Retrieve CHEBI chemical entity synonyms
     """
 
@@ -241,27 +242,45 @@ def parse_chebi_synonyms(
 
     name_index = None
     id_index = None
+    source_index = None
 
     col_names = chebi.columns.tolist()
 
     for x in range(len(col_names)):
-        if col_names[x].lower() == name_string:
+        if col_names[x].upper() == name_string:
             name_index = x
 
-        if col_names[x].lower() == id_string:
+        if col_names[x].upper() == id_string:
             id_index = x
 
-    chebi_name_dictionary = {}
+        if col_names[x].upper() == source_string:
+            source_index = x
+
+    chebi_dictionary = {}
+    uniprot_metabolites = {}
     if name_index != None and id_index != None:
 
         for index, row in chebi.iterrows():
-            chebi_name_dictionary[row[name_index]] = 'CHEBI:' + str(row[id_index])
+
+            if 'KEGG' in row[source_index].upper() \
+            or 'CHEM' in row[source_index].upper() \
+            or 'CHEBI' in row[source_index].upper() \
+            or 'HMDB' in row[source_index].upper() \
+            or 'DRUG' in row[source_index].upper() \
+            or 'IUPAC' in row[source_index].upper() \
+            or 'LIPID' in row[source_index].upper() \
+            or 'METACYC' in row[source_index].upper() \
+            or 'SUBMITTER' in row[source_index].upper():
+
+                chebi_dictionary[row[name_index]] = 'CHEBI:' + str(row[id_index])
+
+            else:
+                uniprot_metabolites[row[name_index]] = 'CHEBI:' + str(row[id_index])
 
     else:
         print('Unable to parse CHEBI file as expected...')
 
-    return chebi_name_dictionary
-
+    return chebi_dictionary, uniprot_metabolites
 
 """Write reactions database to pickle file
 """
@@ -314,7 +333,7 @@ def __main__(
             output_dir=args_dict['output'],
             species_id=args_dict['species_id'])
 
-    chebi_reference = parse_chebi_synonyms(
+    chebi_reference, uniprot_metabolites = parse_chebi_synonyms(
         output_dir=args_dict['output'])
 
     metaboverse_db = {
@@ -325,6 +344,7 @@ def __main__(
         'ensembl_synonyms': ensembl_reference,
         'uniprot_synonyms': uniprot_reference,
         'chebi_synonyms': chebi_reference,
+        'uniprot_metabolites': uniprot_metabolites,
         'complex_dictionary': complexes_reference['complex_dictionary']}
 
     # Write database to file
