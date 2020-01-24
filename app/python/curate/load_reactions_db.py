@@ -179,7 +179,25 @@ def add_reaction_components(
 
     items = []
     for child in component_list:
-        items.append(child.attrib['species'])
+
+        if 'modifier' in child.attrib['id']:
+
+            type = None
+            if 'catalyst' in child.attrib['id'] \
+            or 'positive' in child.attrib['id']:
+                type = 'catalyst'
+
+            elif 'inhibitor' in child.attrib['id'] \
+            or 'negative' in child.attrib['id']:
+                type = 'inhibitor'
+
+            else:
+                type = 'other'
+
+            items.append([child.attrib['species'], type])
+
+        else:
+            items.append(child.attrib['species'])
 
     return items
 
@@ -382,7 +400,7 @@ def process_components(
 
             # Collect modifiers for a given reaction by species ID
             reaction_database[reaction_id]['modifiers'] = add_reaction_components(
-                type='listOfReactants',
+                type='listOfModifiers',
                 reaction=reaction,
                 smbl_namespace=smbl_namespace,
                 smbl_level=smbl_level,

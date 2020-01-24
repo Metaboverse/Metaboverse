@@ -4,7 +4,6 @@
 
 """ Curation
 Include additional info:
-- Broad category (metabolism, cell signaling, etc)
 - p-value
 - Other pathway membership?
 
@@ -178,4 +177,5 @@ How to show putative relationships?
 - RNA is diamond
 - Display color bar in left side of page
 - node search
+- Ability to color nodes based on value or p-value
 """

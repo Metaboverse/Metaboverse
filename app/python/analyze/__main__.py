@@ -54,7 +54,7 @@ def __main__(
     or args_dict['proteomics'].lower() != 'none' \
     or args_dict['metabolomics'].lower() != 'none':
 
-        data = prepare_data(
+        data, stats = prepare_data(
             network=network,
             transcriptomics_url=args_dict['transcriptomics'],
             proteomics_url=args_dict['proteomics'],
@@ -62,11 +62,13 @@ def __main__(
 
     else:
         data = None
+        stats = None
 
     # Generate graph
     model(
         network=network,
         data=data,
+        stats=stats,
         species_id=args_dict['species_id'],
         output_file=args_dict['output_file'],
         black_list=args_dict['blacklist'])

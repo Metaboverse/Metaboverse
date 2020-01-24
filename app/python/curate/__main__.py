@@ -31,17 +31,11 @@ from app.python.curate.load_reactions_db import __main__ as load_reactions
 from app.python.curate.load_complexes_db import __main__ as load_complexes
 from app.python.utils import progress_feed
 
-"""Plan
-"""
-# This file will run loading of reactions database, chebi, ensemble, uniprot, complex, etc.
-# Will then create interface dictionary for metabolites, proteins, etc relation info, name to id, etc.
-# Output total network as pickle
-
 def test():
 
     __main__(
         {'output':'/Users/jordan/Desktop/',
-        'transcriptomics':'HSA'}
+        'species_id':'HSA'}
     )
 
 def parse_table(
