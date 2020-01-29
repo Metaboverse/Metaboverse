@@ -36,20 +36,13 @@ function selectPathway() {
 function make_pathway_dictionary(data) {
 
   // Get pathway name and ID
-  var master = data.master_reference;
   var pathways = data.pathway_dictionary;
   var pathway_dict = {}
   for (var key in pathways) {
 
-    if (key in master) {
-      var name = master[key];
-      pathway_dict[name] = {
-        'id': key,
-        'reactions': pathways[key]
-      };
-
-    } else {
-      //var name = key; //eventually need to figure out mapping for remaining pathways that dont have a name, maybe they should be R-ALL
+    pathway_dict[pathways[key]['name']] = {
+      'id': pathways[key]['name'],
+      'reactions': pathways[key]['reactions']
     };
   };
 
@@ -91,9 +84,9 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   // Make dictionary of node color values and types
   nodes.forEach(function(node) {
 
-    node_dict[node['name']] = node['rgba_js']
+    node_dict[node['name']] = node['js']
     type_dict[node['name']] = node['type']
-    expression_dict[node['name']] = node['expression'][0]
+    expression_dict[node['name']] = node['values'][0]
     entity_id_dict[node['name']] = node['entity_id']
     entity_id_dict[node['entity_id']] = node['name']
 
@@ -129,9 +122,6 @@ function transform(d) {
 
 function parse_pathway(data, reactions) {
 
-
-
-  var master = data.master_reference;
   var reactions_dictionary = data.reactions_dictionary;
 
   // Parse through each reaction listed and get the component parts
@@ -142,7 +132,6 @@ function parse_pathway(data, reactions) {
     for (x in target_rxns) {
 
       components.push(target_rxns[x]);
-      components.push(master[target_rxns[x]]);
 
     };
 

@@ -48,27 +48,13 @@ def name_graph(
 
     return graph_name
 
-def output_graph(
-        graph,
-        output_name,
-        pathway_dictionary,
-        black_list):
-    """Output graph and necessary metadata
-    """
-
-    data = json_graph.node_link_data(graph)
-    data['pathway_dictionary'] = pathway_dictionary
-    data['black_list'] = black_list
-
-    with open(output_name, 'w') as f:
-        json.dump(data, f, indent=4) # Parse out as array for javascript
-
 """Graph building
 """
 def build_graph(
         network,
         species_reference,
         name_reference,
+        protein_reference,
         complexes,
         species_id):
     """Build graph
@@ -88,11 +74,9 @@ def build_graph(
             network=network,
             species_reference=species_reference,
             name_reference=name_reference,
+            protein_reference=protein_reference,
             complex_reference=complexes,
             species_id=species_id)
-
-    # Layer graph metadata for each node
-
 
     return G
 
@@ -102,6 +86,7 @@ def process_reactions(
         network,
         species_reference,
         name_reference,
+        protein_reference,
         complex_reference,
         species_id):
     """
@@ -116,7 +101,6 @@ def process_reactions(
     reactants = network[reactome_id]['reactants']
     products = network[reactome_id]['products']
     modifiers = network[reactome_id]['modifiers'] # ordered list
-    modifier_types = network[reactome_id]['modifier_types'] # ordered list
 
     # Add reaction node
     graph.add_node(reaction_id)
@@ -125,6 +109,7 @@ def process_reactions(
     graph.nodes()[reaction_id]['reversible'] = reaction_rev
     graph.nodes()[reaction_id]['notes'] = reaction_notes
     graph.nodes()[reaction_id]['type'] = 'reaction'
+    graph.nodes()[reaction_id]['sub_type'] = 'reaction'
 
     # Add vanilla element nodes and their edges
     for reactant in reactants:
@@ -135,7 +120,20 @@ def process_reactions(
             name=species_reference[reactant],
             reaction_membership=reaction_id,
             type='reactant',
-            reversible=reaction_rev)
+            sub_type='reactant',
+            reversible=reaction_rev,
+            complex_reference=complex_reference,
+            species_reference=species_reference,
+            name_reference=name_reference,
+            protein_reference=protein_reference)
+
+        graph = check_complexes(
+                graph=graph,
+                id=reactant,
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference)
 
     for product in products:
 
@@ -145,7 +143,20 @@ def process_reactions(
             name=species_reference[product],
             reaction_membership=reaction_id,
             type='product',
-            reversible=reaction_rev)
+            sub_type='product',
+            reversible=reaction_rev,
+            complex_reference=complex_reference,
+            species_reference=species_reference,
+            name_reference=name_reference,
+            protein_reference=protein_reference)
+
+        graph = check_complexes(
+                graph=graph,
+                id=product,
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference)
 
     for modifier in modifiers:
 
@@ -164,12 +175,20 @@ def process_reactions(
             name=species_reference[id],
             reaction_membership=reaction_id,
             type=type,
-            reversible='false')
+            sub_type='modifier',
+            reversible='false',
+            complex_reference=complex_reference,
+            species_reference=species_reference,
+            name_reference=name_reference,
+            protein_reference=protein_reference)
 
-    # Expand complexes for components and gene parts
-    # Label as component to allow for optional plotting
-    # Specify subtypes -- protein_subunit, gene_component, etc.
-
+        graph = check_complexes(
+                graph=graph,
+                id=id,
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference)
 
     return graph
 
@@ -179,7 +198,12 @@ def add_node_edge(
         name, # display name
         reaction_membership,
         type,
-        reversible):
+        sub_type,
+        reversible,
+        complex_reference,
+        species_reference,
+        name_reference,
+        protein_reference):
     """Add node and edge information to graph
     """
 
@@ -187,6 +211,7 @@ def add_node_edge(
     graph.nodes()[id]['id'] = id
     graph.nodes()[id]['name'] = name
     graph.nodes()[id]['type'] = type
+    graph.nodes()[id]['sub_type'] = sub_type
     graph.add_edges_from([
         (id, reaction_membership)])
     graph.edges()[(id, reaction_membership)]['type'] = type
@@ -202,11 +227,10 @@ def add_node_edge(
 def check_complexes(
         graph,
         id,
-        complex_node,
         complex_reference,
-        name_reference,
         species_reference,
-        ensembl_reference):
+        name_reference,
+        protein_reference):
     """Check if species being added is in complex dictionary
     - If record exists, add nodes and edges for the new relationship.
     - If record contains a UniProt ID, cross reference with Ensembl database
@@ -223,68 +247,208 @@ def check_complexes(
 
                 if p.lower() == 'chebi':
                     name = 'CHEBI:' + x
+                    sub_type = 'metabolite_component'
                 else:
                     name = x
 
-                id = name_reference[name]
+                    if p.lower() == 'uniprot':
+                        sub_type = 'protein_component'
+                    elif p.lower() == 'mirna':
+                        sub_type = 'mirna_component'
+                    elif p.lower() == 'ensembl':
+                        sub_type = 'gene_component'
+                    else:
+                        sub_type = 'other'
 
-                graph = add_node_edge(
-                    graph=graph,
-                    id=id,
-                    name=species_reference[id],
-                    reaction_membership=complex_node,
-                    type='complex_component',
-                    reversible='false')
-
-                if p.lower() == 'uniprot':
+                try:
+                    component_id = name_reference[name]
 
                     graph = add_node_edge(
                         graph=graph,
-                        id=,
-                        name=species_reference[],
+                        id=component_id,
+                        name=species_reference[component_id],
                         reaction_membership=id,
-                        type='gene_component',
-                        reversible='false')
+                        type='complex_component',
+                        sub_type=sub_type,
+                        reversible='false',
+                        complex_reference=complex_reference,
+                        species_reference=species_reference,
+                        name_reference=name_reference,
+                        protein_reference=protein_reference)
 
-                        ### NEED TO GET NODE NAMES AND DISPLAY NAMES RIGHT FOR EACH
+                    if p.lower() == 'uniprot':
 
+                        # Get protein's corresponding gene ID
+                        gene = protein_reference[name]
+                        gene_id = name_reference[gene]
 
+                        graph = add_node_edge(
+                            graph=graph,
+                            id=gene_id,
+                            name=species_reference[gene_id],
+                            reaction_membership=component_id,
+                            type='gene_component',
+                            sub_type='gene',
+                            reversible='false',
+                            complex_reference=complex_reference,
+                            species_reference=species_reference,
+                            name_reference=name_reference,
+                            protein_reference=protein_reference)
 
-
-                if p.lower() == 'uniprot':
-                    name = x
-
-
-
-
-
+                except:
+                    pass
+                    #print('Could not retrieve components for', name)
 
     else:
         graph.nodes()[id]['complex'] = 'false'
 
     return graph
 
+def uniprot_ensembl_reference(
+        uniprot_reference,
+        ensembl_reference):
+    """Build cross-referencing dictionary to convert uniprot ID to
+    corresponding Ensembl ID
+    """
 
-network['complex_dictionary']['species_1006173']
+    new_dict = {}
 
+    for k, v in uniprot_reference.items():
+        try:
+            new_dict[v] = ensembl_reference[k]
+        except:
+            pass
 
+    for k, v in ensembl_reference.items():
+        try:
+            new_dict[uniprot_reference[k]] = v
+        except:
+            pass
 
+    return new_dict
 
+def map_attributes(
+        graph,
+        data,
+        stats,
+        name_reference):
+    """Data overlay
+    - Map repo id to species_id
+    - If a node is a complex, take average of neighbors that are not
+    To do:
+    - Currently, many metabolites that should map are not found in name
+    database
+    """
 
+    n = len(data.columns.tolist())
+    reaction_color = (0.75, 0.75, 0.75, 1)
+    missing_color = (1, 1, 1, 1)
 
+    # Re-index data and stats
+    data_renamed = data.copy()
+    data_renamed.index = data.index.map(network['name_database'])
+    data_renamed = data_renamed.loc[data_renamed.index.dropna()]
+    data_max = abs(data_renamed).max().max()
 
+    stats_renamed = stats.copy()
+    stats_renamed.index = stats.index.map(network['name_database'])
+    stats_renamed = stats_renamed.loc[stats_renamed.index.dropna()]
+    stats_max = abs(stats_renamed).max().max()
 
+    data_dict = {}
+    for index, row in data_renamed.iterrows():
+        data_dict[index] = list(row)
 
-"""Data overlay
-- Map repo id to species_id
-- If a node is a complex, take average of neighbors that are not
-"""
+    stats_dict = {}
+    for index, row in stats_renamed.iterrows():
+        stats_dict[index] = list(row)
 
+    for x in list(graph.nodes()):
 
+        current_id = graph.nodes()[x]['id']
+        if current_id in set(data_dict.keys()):
 
+            graph.nodes()[x]['values'] = data_dict[current_id]
+            graph.nodes()[x]['values_rgba'] = extract_value(
+                value_array=data_dict[current_id],
+                max_value=data_max)
+            graph.nodes()[x]['values_js'] = convert_rgba(
+                rgba_tuples=graph.nodes()[x]['values_rgba'])
 
+            graph.nodes()[x]['stats'] = stats_dict[current_id]
+            graph.nodes()[x]['stats_rgba'] = extract_value(
+                value_array=stats_dict[current_id],
+                max_value=stats_max)
+            graph.nodes()[x]['stats_js'] = convert_rgba(
+                rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
+        else:
+            if graph.nodes()[x]['type'] == 'reaction':
+                colors = [reaction_color for x in range(n)]
 
+            else:
+                colors = [missing_color for x in range(n)]
+
+            graph.nodes()[x]['values'] = [None for x in range(n)]
+            graph.nodes()[x]['values_rgba'] = colors
+            graph.nodes()[x]['values_js'] = convert_rgba(
+                rgba_tuples=colors)
+
+            graph.nodes()[x]['stats'] = [None for x in range(n)]
+            graph.nodes()[x]['stats_rgba'] = colors
+            graph.nodes()[x]['stats_js'] = convert_rgba(
+                rgba_tuples=colors)
+
+    return graph
+
+def extract_value(
+        value_array,
+        max_value):
+    """Extract expression value
+    """
+
+    rgba = []
+    for x in value_array:
+
+        position = (x + max_value) / (2 * max_value)
+        rgba_tuple = cmap(position)
+        rgba.append(rgba_tuple)
+
+    return rgba
+
+def convert_rgba(
+        rgba_tuples):
+    """Convert python RGBA tuple to web-friendly tuple for later viz
+    """
+
+    js = []
+    for x in rgba_tuples:
+
+        rgba_list = list(x)
+        rgba_new = []
+        for x in rgba_list[:3]:
+            rgba_new.append(int(x * 255))
+
+        rgba_new.append(rgba_list[3])
+
+        js.append(tuple(rgba_new))
+
+    return js
+
+def output_graph(
+        graph,
+        output_name,
+        pathway_dictionary,
+        black_list):
+    """Output graph and necessary metadata
+    """
+
+    data = json_graph.node_link_data(graph)
+    data['pathway_dictionary'] = pathway_dictionary
+    data['black_list'] = black_list
+
+    with open(output_name, 'w') as f:
+        json.dump(data, f, indent=4) # Parse out as array for javascript
 
 def __main__(
         network,
@@ -292,10 +456,13 @@ def __main__(
         stats,
         species_id,
         output_file,
-        black_list):
+        black_list=[]):
     """Generate graph object for visualization
     - Place black_list as key in graph object for later parsing
         - Will allow for on-the-fly removal of nodes
+    To do:
+    - Map average component expression to complex nodes
+    - Determine product reactant type -- metabolite, protein, etc
     """
 
     #############################
@@ -315,14 +482,16 @@ def __main__(
 
     data = pd.read_csv(
         '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_data.txt',
-        sep='\t')
+        sep='\t',
+        index_col=0)
 
     stats = pd.read_csv(
         '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_stats.txt',
-        sep='\t')
+        sep='\t',
+        index_col=0)
 
     species_id = 'HSA'
-    output_file = 'HSA_global_reactions.json'
+    output_file = '/Users/jordan/Desktop/HSA_global_reactions.json'
     #############################
 
     # Generate output file name
@@ -330,21 +499,28 @@ def __main__(
         output_file=output_file,
         species_id=species_id)
 
+    # Prepare uniprot to ensembl name mapper
+    protein_dictionary = uniprot_ensembl_reference(
+        uniprot_reference=network['uniprot_synonyms'],
+        ensembl_reference=network['ensembl_synonyms'])
+
     # Generate graph
     # Name mapping
     G = build_graph(
         network=network['reaction_database'],
         species_reference=network['species_database'],
         name_reference=network['name_database'],
+        protein_reference=protein_dictionary,
         complexes=network['complex_dictionary'],
         species_id=species_id)
 
     # Overlay data and stats, calculate heatmap values for p-value
     # and expression value
-    G, names_dictionary = map_attributes(
+    G = map_attributes(
         graph=G,
         data=data,
-        stats=stats)
+        stats=stats,
+        name_reference=network['name_database'])
 
     # Export graph, pathway membership, pathway degree, black_list, other refs
     output_graph(

@@ -1,0 +1,16 @@
+Instructions for building app for distribution:
+-----------------------------------------------
+1) Go to app directory 
+1.1) If modules not installed, run 'npm install electron --save-dev'
+2) Run 'electron-packager ./ Metaboverse --platform=darwin'
+
+If modules not installed: 
+-------------------------
+1) Run 'npm install electron --save-dev'
+2) Run 'npm install d3'
+3) Run 'npm install jquery'
+
+To run demo app:
+----------------
+1) Go to app directory 
+2) Run 'npm start'

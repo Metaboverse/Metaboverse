@@ -7,3 +7,4 @@ tests/analysis_tests/graphs
 tests/analysis_tests/*pickle
 app/node_modules
 app/data/session_data.json
+app/Metaboverse-*
