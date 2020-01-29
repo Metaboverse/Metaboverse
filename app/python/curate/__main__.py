@@ -276,12 +276,28 @@ def parse_chebi_synonyms(
 
     return chebi_dictionary, uniprot_metabolites
 
-"""Write reactions database to pickle file
-"""
+def reference_complex_species(
+        reference,
+        name_database):
+    """Correct complex dictionary keys to be searchable by species ID
+    """
+
+    new_dict = {}
+
+    for k, v in reference.items():
+
+        if reference[k]['complex_id'] in list(name_database.keys()):
+
+            new_dict[name_database[reference[k]['complex_id']]] = reference[k]
+
+    return new_dict
+
 def write_database(
         output,
         file,
         database):
+    """Write reactions database to pickle file
+    """
 
     # Check provided path exists
     if not os.path.isdir(output):
@@ -318,6 +334,10 @@ def __main__(
     print('Parsing complex database...')
     complexes_reference['complex_dictionary'] = parse_complexes(
         complexes_reference)
+
+    complexes_reference['complex_dictionary'] = reference_complex_species(
+        reference=complexes_reference['complex_dictionary'],
+        name_database=name_database)
 
     ensembl_reference = parse_ensembl_synonyms(
             output_dir=args_dict['output'],

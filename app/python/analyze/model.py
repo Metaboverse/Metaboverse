@@ -129,65 +129,155 @@ def process_reactions(
     # Add vanilla element nodes and their edges
     for reactant in reactants:
 
-        graph.add_node(reactant)
-        graph.nodes()[reactant]['id'] = reactant
-        graph.nodes()[reactant]['type'] = 'reactant'
-        graph.add_edges_from([
-            (reactant, reaction_id)])
-        graph.edges()[(reactant, reaction_id)]['type'] = 'reactant'
-
-        # Add edge direction if reversible
-        if reaction_rev == 'true':
-            graph.add_edges_from([
-                (reaction_id, reactant)])
-            graph.edges()[(reaction_id, reactant)]['type'] = 'reactant'
+        graph = add_node_edge(
+            graph=graph,
+            id=reactant,
+            name=species_reference[reactant],
+            reaction_membership=reaction_id,
+            type='reactant',
+            reversible=reaction_rev)
 
     for product in products:
 
-        graph.add_node(product)
-        graph.nodes()[product]['id'] = product
-        graph.nodes()[product]['type'] = 'product'
-        graph.add_edges_from([
-            (reaction_id, product)])
-        graph.edges()[(reaction_id, product)]['type'] = 'product'
-
-        # Add edge direction if reversible
-        if reaction_rev == 'true':
-            graph.add_edges_from([
-                (product, reaction_id)])
-            graph.edges()[(product, reaction_id)]['type'] = 'product'
+        graph = add_node_edge(
+            graph=graph,
+            id=product,
+            name=species_reference[product],
+            reaction_membership=reaction_id,
+            type='product',
+            reversible=reaction_rev)
 
     for modifier in modifiers:
 
-        graph.add_node(modifier)
-        graph.nodes()[modifier]['id'] = modifier
-        graph.nodes()[modifier]['type'] = 'modifier'
-
         # Extract modifier type
+        # Formatted as a list of lists with first index of each sub list being
+        # the species ID and the second index being the modifier type
+        # ex: [['species_0', 'inhibitor'], ['species_1', 'catalyst']]
         # Labeling the edge should allow for differentiation between the same
         # modifier node acting as a catalyst or inhibitor
-        graph.add_edges_from([
-            (modifier, reaction_id)])
-        graph.edges()[(modifier, reaction_id)]['type'] = 'modifier'
+        id = modifier[0]
+        type = modifier[1]
 
-
+        graph = add_node_edge(
+            graph=graph,
+            id=id,
+            name=species_reference[id],
+            reaction_membership=reaction_id,
+            type=type,
+            reversible='false')
 
     # Expand complexes for components and gene parts
+    # Label as component to allow for optional plotting
+    # Specify subtypes -- protein_subunit, gene_component, etc.
+
+
+    return graph
+
+def add_node_edge(
+        graph,
+        id, # node id
+        name, # display name
+        reaction_membership,
+        type,
+        reversible):
+    """Add node and edge information to graph
+    """
+
+    graph.add_node(id)
+    graph.nodes()[id]['id'] = id
+    graph.nodes()[id]['name'] = name
+    graph.nodes()[id]['type'] = type
+    graph.add_edges_from([
+        (id, reaction_membership)])
+    graph.edges()[(id, reaction_membership)]['type'] = type
+
+    # Add edge direction if reversible
+    if reversible == 'true':
+        graph.add_edges_from([
+            (reaction_membership, id)])
+        graph.edges()[(reaction_membership, id)]['type'] = type
+
+    return graph
+
+def check_complexes(
+        graph,
+        id,
+        complex_node,
+        complex_reference,
+        name_reference,
+        species_reference,
+        ensembl_reference):
+    """Check if species being added is in complex dictionary
+    - If record exists, add nodes and edges for the new relationship.
+    - If record contains a UniProt ID, cross reference with Ensembl database
+    - If complex, label true; else label as false
+    """
+
+    if id in complex_reference.keys():
+        graph.nodes()[id]['complex'] = 'true'
+
+        participants = complex_reference[id]['participants']
+        for p in participants.keys():
+
+            for x in participants[p]:
+
+                if p.lower() == 'chebi':
+                    name = 'CHEBI:' + x
+                else:
+                    name = x
+
+                id = name_reference[name]
+
+                graph = add_node_edge(
+                    graph=graph,
+                    id=id,
+                    name=species_reference[id],
+                    reaction_membership=complex_node,
+                    type='complex_component',
+                    reversible='false')
+
+                if p.lower() == 'uniprot':
+
+                    graph = add_node_edge(
+                        graph=graph,
+                        id=,
+                        name=species_reference[],
+                        reaction_membership=id,
+                        type='gene_component',
+                        reversible='false')
+
+                        ### NEED TO GET NODE NAMES AND DISPLAY NAMES RIGHT FOR EACH
+
+
+
+
+                if p.lower() == 'uniprot':
+                    name = x
 
 
 
 
 
 
-network['reaction_database'].keys()
+    else:
+        graph.nodes()[id]['complex'] = 'false'
+
+    return graph
 
 
-network['species_database']['species_54639']
+network['complex_dictionary']['species_1006173']
+
+
+
+
+
 
 
 
 
 """Data overlay
+- Map repo id to species_id
+- If a node is a complex, take average of neighbors that are not
 """
 
 
