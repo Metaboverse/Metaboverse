@@ -439,12 +439,14 @@ def output_graph(
         graph,
         output_name,
         pathway_dictionary,
+        reaction_dictionary,
         black_list):
     """Output graph and necessary metadata
     """
 
     data = json_graph.node_link_data(graph)
     data['pathway_dictionary'] = pathway_dictionary
+    data['reaction_dictionary'] = reaction_dictionary
     data['black_list'] = black_list
 
     with open(output_name, 'w') as f:
@@ -494,6 +496,7 @@ def __main__(
     output_file = '/Users/jordan/Desktop/HSA_global_reactions.json'
     #############################
 
+    print('Preparing metadata...')
     # Generate output file name
     graph_name = name_graph(
         output_file=output_file,
@@ -506,6 +509,7 @@ def __main__(
 
     # Generate graph
     # Name mapping
+    print('Building network...')
     G = build_graph(
         network=network['reaction_database'],
         species_reference=network['species_database'],
@@ -516,6 +520,7 @@ def __main__(
 
     # Overlay data and stats, calculate heatmap values for p-value
     # and expression value
+    print('Mapping user data...')
     G = map_attributes(
         graph=G,
         data=data,
@@ -523,8 +528,11 @@ def __main__(
         name_reference=network['name_database'])
 
     # Export graph, pathway membership, pathway degree, black_list, other refs
+    print('Exporting graph...')
     output_graph(
         graph=G,
         output_name=graph_name,
         pathway_dictionary=network['pathway_database'],
+        reaction_dictionary=network['reaction_database'],
         black_list=black_list)
+    print('Graphing complete.')

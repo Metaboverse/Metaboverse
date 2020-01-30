@@ -54,11 +54,19 @@ fill: red;
 stroke: red;
 }
 
-#complex_component {
+#gene_component {
 fill: rgba(165, 55, 253, 1);
 }
-.link.complex_component {
+.link.gene_component {
 stroke: rgba(165, 55, 253, 1);
+stroke-dasharray: 0,2 1;
+}
+
+#complex_component {
+fill: rgba(166,97,26, 1);
+}
+.link.complex_component {
+stroke: rgba(166,97,26, 1);
 stroke-dasharray: 0,2 1;
 }
 

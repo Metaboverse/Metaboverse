@@ -23,6 +23,9 @@ const d3 = require('d3')
 var fs = require('fs')
 const max_nodes = 1500;
 
+var entity = "values_js";
+var sample = 0;
+
 // Change user selection based on input
 var selection = null;
 function selectPathway() {
@@ -122,19 +125,23 @@ function transform(d) {
 
 function parse_pathway(data, reactions) {
 
-  var reactions_dictionary = data.reactions_dictionary;
+  var reaction_dictionary = data.reaction_dictionary;
 
   // Parse through each reaction listed and get the component parts
   var components = [];
   for (rxn in reactions) {
 
-    var target_rxns = reactions_dictionary[reactions[rxn]];
-    for (x in target_rxns) {
-
-      components.push(target_rxns[x]);
-
+    var target_rxns = reaction_dictionary[reactions[rxn]];
+    components.push(reactions[rxn]);
+    for (x in target_rxns['reactants']) {
+      components.push(target_rxns['reactants'][x]);
     };
-
+    for (x in target_rxns['products']) {
+      components.push(target_rxns['products'][x]);
+    };
+    for (x in target_rxns['modifiers']) {
+      components.push(target_rxns['modifiers'][x][0]);
+    };
   };
 
   var new_elements = get_nodes_links(data, components);
@@ -150,33 +157,24 @@ function get_nodes_links(data, components) {
 
   // Parse the nodes of interest
   var new_nodes = [];
-  var node_components = [];
   nodes.forEach(function(node) {
 
-    if (components.includes(node['entity_id']) || components.includes(node['name'])) {
+    if (components.includes(node['id'])) {
 
       var node_copy = $.extend(true,{},node)
-
-      node_copy["rgba"] = node_copy["rgba"][0]
-      node_copy["rgba_js"] = node_copy["rgba_js"][0]
-
+      node_copy[entity] = node_copy[entity][sample]
       new_nodes.push(node_copy)
-      node_components.push(node_copy["name"])
-      node_components.push(node_copy["entity_id"])
-
     };
-
   });
 
   var new_links = []
   // Parse out links of interest
   links.forEach( function (link) {
 
-    if (node_components.includes(link.source) && node_components.includes(link.target)) {
+    if (components.includes(link.source) && components.includes(link.target)) {
       var link_copy = $.extend(true,{},link)
       new_links.push(link_copy)
     };
-
   });
 
   return [new_nodes, new_links];
@@ -238,18 +236,18 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
   var master = data.master_reference;
-  var reactions_dictionary = data.reactions_dictionary;
+  var reaction_dictionary = data.reaction_dictionary;
 
   // Parse through each reaction where entity is a component
   nn_components = [entity_id];
-  for (reaction in reactions_dictionary) {
+  for (reaction in reaction_dictionary) {
 
     //Return all reactions that contain the entity
-    if (reactions_dictionary[reaction].includes(entity_id)) {
+    if (reaction_dictionary[reaction].includes(entity_id)) {
 
-      for (entity in reactions_dictionary[reaction]) {
+      for (entity in reaction_dictionary[reaction]) {
 
-        nn_components.push(reactions_dictionary[reaction][entity]);
+        nn_components.push(reaction_dictionary[reaction][entity]);
 
       };
     };
@@ -277,13 +275,13 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
       for (element in nn_components) {
 
-        for (reaction in reactions_dictionary) {
+        for (reaction in reaction_dictionary) {
 
-          if (reactions_dictionary[reaction].includes(nn_components[element])) {
+          if (reaction_dictionary[reaction].includes(nn_components[element])) {
 
-            for (el in reactions_dictionary[reaction]) {
+            for (el in reaction_dictionary[reaction]) {
 
-              components.push(reactions_dictionary[reaction][el]);
+              components.push(reaction_dictionary[reaction][el]);
 
             };
           };
@@ -353,8 +351,12 @@ function make_graph(
   const forceX = d3.forceX(width / 2).strength(0.015)
   const forceY = d3.forceY(height / 2).strength(0.015)
 
+  console.log(new_nodes)
+  console.log(new_links)
+
   const simulation = d3.forceSimulation(new_nodes)
-      .force("link", d3.forceLink(new_links).id(d => d.name)
+      .force("link", d3.forceLink(new_links)
+        .id(d => d.id)
         .distance(40)
         .strength(1))
       .force("charge", d3.forceManyBody().strength(-1000))
@@ -394,7 +396,7 @@ function make_graph(
     .enter().append("g")
       .attr("class", "node")
     .style("--node_color", function(d) {
-      return "rgba(" + d.rgba_js.toString() + ")";
+      return "rgba(" + d[entity].toString() + ")";
       }
     )
     .style("--node_radius", function(d) { return 6; })

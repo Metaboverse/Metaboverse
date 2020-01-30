@@ -141,17 +141,8 @@ def add_reaction(
     """Add reactions to pathway
     """
 
-    for rank in reaction.iter(str(bqbiol_namespace + 'is')):
-        for _rank in rank.iter(str(rdf_namespace + 'li')):
-            try:
-                item = _rank.attrib[str(rdf_namespace + 'resource')]
-                if 'reactome' in item:
-                    _id = item.split('/')[-1]
-                    pathway_database[pathway]['reactions'].add(_id)
-                else:
-                    pass
-            except:
-                pass
+    _id = reaction.attrib['id']
+    pathway_database[pathway]['reactions'].add(_id)
 
     return pathway_database, _id
 
@@ -342,8 +333,11 @@ def process_components(
         )[0]
 
         pathway_info = pathway_record.attrib
+
+        id = pathway_info['id']
         pathway_database[pathway] = {
-            'id': pathway_info['id'],
+            'id': id,
+            'reactome': pathway,
             'name': pathway_info['name'],
             'reactions': set()
         }
@@ -375,7 +369,7 @@ def process_components(
                 rdf_namespace=rdf_namespace)
 
             name_database[name] = reaction_id
-            reaction_database[reaction_id] = {
+            reaction_database[id] = {
                 'compartment': compartment,
                 'id': id,
                 'name': name,
@@ -433,6 +427,10 @@ def __main__(
     # output_dir = '/Users/jordan/Desktop/'
     # species_id = 'HSA'
     # args_dict = None
+
+    #############
+    # Make pathway id and reaction ids non R-HSA-etc
+    #############
 
     # Get pathways files
     pathways_dir = unpack_pathways(

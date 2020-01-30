@@ -335,18 +335,22 @@ def __main__(
     complexes_reference['complex_dictionary'] = parse_complexes(
         complexes_reference)
 
+    print('Finalizing complex database...')
     complexes_reference['complex_dictionary'] = reference_complex_species(
         reference=complexes_reference['complex_dictionary'],
         name_database=name_database)
 
+    print('Parsing Ensembl database...')
     ensembl_reference = parse_ensembl_synonyms(
             output_dir=args_dict['output'],
             species_id=args_dict['species_id'])
 
+    print('Parsing UniProt database...')
     uniprot_reference = parse_uniprot_synonyms(
             output_dir=args_dict['output'],
             species_id=args_dict['species_id'])
 
+    print('Parsing ChEBI database...')
     chebi_reference, uniprot_metabolites = parse_chebi_synonyms(
         output_dir=args_dict['output'])
 
