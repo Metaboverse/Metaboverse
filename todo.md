@@ -1,150 +1,99 @@
-# Instructions for to-do list
-- If in progress, bold the text using `<b>text</b>`
-- Once reviewed and merged, strikethrough using `<del>text</del>`
-- FORK THE REPO
-
 # To Do
 0. Packaging
-- <del>Make executable on workstation</del>
 - Make available on cloud (host via AWS)
 - Write to output citation info, user variables, etc
 - Clear tmp files
 
-1. Front-to-back-end communicaton
-	- <del>Variables python to html/js and vice versa</del>
-		- <del>Store as JSON formatted variables dictionary?</del>
-	- How to store information when running online (no output doc, AWS bucket?)
+1. UI
+- How to store information when running online (no output doc, AWS bucket?)
+- Get drop in bars to save and import data
+- Output log of user actions
+- Icons linking to docs
 
-2. Front-end
-- General
-	- Get drop in bars to save and import data
-	- <del>Get pages to scale correctly</del>
-	- <del>Get metadata to be saved page to page per session</del>
-	- Output log of user actions
-	- <del><i><b>(i)</b></i> icons linking to docs</del>
+2. Curation
+- Label genes, proteins, metabolites for selective sorting
+- Run motif search or exploration based on user input
+- Give user page of entities that we couldn't map, have them enter valid alternative ID
+- Update viz for new curation paradigm
+- Cast gene expression to proteins if no proteomics data 
 
-- Home page
-	- <del>If curation database given, skip curation page</del>
-	- <del>Allow for input of just the network, or network with dataset already integrated</del>
+3. Motif searching
+- Integrate Youjia's module; Figure out licensing
+- Allow integration of motif in-pathway panel for exploration module
 
-- Curation page
+4. Viz
+- Show Reactome pathway on hover; double-click opens new window for that page
+- Motif: Integrate motif window for real-time analysis
+- Allow collapse/hide of these side boxes
+- Option to hide genes, modifiers
+- Option to change shapes of different node types
+- Display color bar
+	- Need to output in graph info range, color scale, etc
+	- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
+	- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
+- Allow for node-based exploration (list of analytes)
+- Allow custom creation of black list (nodes not to display)
+- Option to split out highly connected entities (so in pathway view you see an individual node for each use)
 
-- Variables page
-	- <del>Run curation with loading bar</del>
-	- Run motif search or exploration based on user input
+5. Processing
+- Export -- give option to export visualizations, data tables, etc.
+- Data normalization and merging? Or restrict acceptable inputs
+- Speed up curation (archived versions)
+- Pre-processing pipelines
 
-- Motif search page
-	- Integrate Youjia's module
-	- Figure out licensing
-	- Allow integration of motif in-pathway panel for exploration module
+6. BRENDA curation
+- Extract
+- Figure out how to parse relevant information
+- Allow user to customize
+- Search reactions in other species for motifs
+	- Display if motif found in putative reaction  
 
-- Explore page
-	- Right side panel (3)
-		- more information: On hover, display node name and populate
-		- pathway: On side of page, show KEGG or Reactome pathway image, double-click opens new window for that page
-		- motif: Integrate motif window for real-time analysis
-		- Allow collapse/hide of these side boxes
+7. Time-course data
+- Slider bar
+- Integration into network curation
 
-	- Optional node display
-		- option to hide genes, modifiers
-		- option to change shapes of different node types
+- k-NN integration?
+- Ideas:
+	- https://bl.ocks.org/steveharoz/8c3e2524079a8c440df60c1ab72b5d03
+	- https://bl.ocks.org/jrladd/c76799aa63efd7176bd9006f403e854d
+	- https://bl.ocks.org/mbostock/6452972
+	- https://bl.ocks.org/officeofjane/47d2b0bfeecfcb41d2212d06d095c763
+- Motif search integration
+	- See below
+- Use an interactive dial to drag the motif you want (two next to each other)
+	- Allow to specify one is gene, one is metabolite, etc
+	- build that into the regular motif searcher too
+	- https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
+- For now, limit motif search to one node and its behavior
+	- Map them on the network
+	- Look at two adjacent motifs and one goes up. Gradually, one goes down gradually
 
-	- Display color bar
-		- Need to output in graph info range, color scale, etc
-		- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
-		- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
+8. Flux data
+- Slider bar
+- Integration into network curation
+- Motif search integration
+	- collapse to rate
+	- work in incorporation (max labeling)
+- k-NN integration?
 
-- Export
-	- Give option to export visualizations, data tables, etc.
-
-3. Back-end
-- Analyte exploration
-	- Drop down of all analytes available in dataset (that have values) and open a k-NN window
-
-- Pathway exploration
-	- <del>Fix issue making it so you can't re-explore a network in same session</del>  
-
-- Reactome curation
-	- Fix incomplete pathways, missing names
-	- Allow for compartment customization
-	- Allow custom creation of black list (nodes not to display)
-	- Option to split out highly connected entities (so in pathway view you see an individual node for each use)
-
-- BRENDA curation
-	- Extract
-	- Figure out how to parse relevant information
-	- Allow user to customize
-	- Search reactions in other species for motifs
-		- Display if motif found in putative reaction  
-
-- Data processing
-	- Data normalization and merging
-
-- Entity mapping
-	- <b>Figure out how to allow for flexible name mapping to prep for Metaboverse</b>
-	- <b>Give user page of entities that we couldn't map, have them enter valid alternative ID</b>
-
-- Time-course data
-	- Slider bar
-	- Integration into network curation
-	- Motif search integration
-		- ???
-	- k-NN integration
-		- ???
-	- Ideas:
-		- https://bl.ocks.org/steveharoz/8c3e2524079a8c440df60c1ab72b5d03
-		- https://bl.ocks.org/jrladd/c76799aa63efd7176bd9006f403e854d
-		- https://bl.ocks.org/mbostock/6452972
-		- https://bl.ocks.org/officeofjane/47d2b0bfeecfcb41d2212d06d095c763
-
-- Flux data
-	- Slider bar
-	- Integration into network curation
-	- Motif search integration
-		- ???
-	- k-NN integration
-		- ???
-
-- k-NN
-	- <del>Allow for recursive neighborhood searches</del>
-	- Allow custom expansion
-	- <del>Fix issue (in curation?) where network data variable is mutated</del>
-	- <del>Fix hanging object node</del>
-
+9. Statistics
 - Significance
 	- See jActiveModules methodology
 	- See M-K trend analysis
 
-- Reaction collapser
-	- For reactions with missing data, collapse into bridged reaction for all others
-		- During hover, in pop-out or sidebar, show missing reactions in full
-	- Remove nodes with missing data
+10. Node collapse
+- For reactions with missing data, collapse into bridged reaction for all others
+- During hover, in pop-out or sidebar, show missing reactions in full
+- Remove nodes with missing data
 
-4. Other
-- Enable parallel processing
-- Implement pipeline, DESeq2 wrappers, etc.
+11. Other
 - Travis CI tests
 - Docs
-- Keep feature labels on if user specifies
-- Click on one node and show its neighbors
 - Info for what pathway a node belongs to
-- kNN search by metabolite name
 - Select parent pathway (i.e. metabolism) in order to let motif search run
+- Cartesian distortion?
 
-
-5. Validation
+12. Validation
 - MPC flux
 - MetaboNet datasets
 - Time-course data
-
-
-6. Other  
-- Cartesian distortion?
-
-
-
-
-### Notes:
-- currently prioritizing based on number of pathways a reaction motif is found
-- write js function to extract metabolic sub network formatted in usual way
-- or
