@@ -212,15 +212,31 @@ def add_node_edge(
     graph.nodes()[id]['name'] = name
     graph.nodes()[id]['type'] = type
     graph.nodes()[id]['sub_type'] = sub_type
-    graph.add_edges_from([
-        (id, reaction_membership)])
-    graph.edges()[(id, reaction_membership)]['type'] = type
 
-    # Add edge direction if reversible
-    if reversible == 'true':
+    if type == 'reactant':
+        graph.add_edges_from([
+            (id, reaction_membership)])
+        graph.edges()[(id, reaction_membership)]['type'] = type
+
+        if reversible == 'true':
+            graph.add_edges_from([
+                (reaction_membership, id)])
+            graph.edges()[(reaction_membership, id)]['type'] = type
+
+    elif type == 'product':
         graph.add_edges_from([
             (reaction_membership, id)])
         graph.edges()[(reaction_membership, id)]['type'] = type
+
+        if reversible == 'true':
+            graph.add_edges_from([
+                (id, reaction_membership)])
+            graph.edges()[(id, reaction_membership)]['type'] = type
+
+    else:
+        graph.add_edges_from([
+            (id, reaction_membership)])
+        graph.edges()[(id, reaction_membership)]['type'] = type
 
     return graph
 

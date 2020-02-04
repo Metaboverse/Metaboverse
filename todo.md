@@ -1,4 +1,18 @@
 # To Do
+
+### Critical:
+- Some nodes currently showing up twice with recent curation changes
+- Can't do 2 kNNs
+- Random arrows with no arm for some links in some pathways
+- Some mismatched arrow and arm colors (because it has two roles?)
+- Remove pathways with just one reaction?
+- Consider super pathways to be those that have more than 200 rxns?
+	- Then gather all pathways that fall within those pathways
+	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
+- Wrap text for reactions, notes
+- It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
+- No gene components appear to be showing up
+
 0. Packaging
 - Make available on cloud (host via AWS)
 - Write to output citation info, user variables, etc
@@ -15,7 +29,7 @@
 - Run motif search or exploration based on user input
 - Give user page of entities that we couldn't map, have them enter valid alternative ID
 - Update viz for new curation paradigm
-- Cast gene expression to proteins if no proteomics data 
+- Cast gene expression to proteins if no proteomics data
 
 3. Motif searching
 - Integrate Youjia's module; Figure out licensing

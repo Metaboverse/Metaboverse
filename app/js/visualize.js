@@ -87,11 +87,11 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   // Make dictionary of node color values and types
   nodes.forEach(function(node) {
 
-    node_dict[node['name']] = node['js']
+    node_dict[node['name']] = node['values_js']
     type_dict[node['name']] = node['type']
     expression_dict[node['name']] = node['values'][0]
-    entity_id_dict[node['name']] = node['entity_id']
-    entity_id_dict[node['entity_id']] = node['name']
+    entity_id_dict[node['name']] = node['id']
+    entity_id_dict[node['id']] = node['name']
 
     if (node['type'] === 'reaction') {
       display_analytes_dict[node['name']] = 'none'
@@ -143,7 +143,6 @@ function parse_pathway(data, reactions) {
       components.push(target_rxns['modifiers'][x][0]);
     };
   };
-
   var new_elements = get_nodes_links(data, components);
 
   return new_elements;
@@ -182,8 +181,6 @@ function get_nodes_links(data, components) {
 };
 
 function nearest_neighbors(data, entity_id) {
-
-  var master = data.master_reference;
 
   // Get current nearest neighbors value
   var kNN = document.getElementById("kNN_button").value;
@@ -235,23 +232,34 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   document.getElementById("warning_line_1").innerHTML = "<br>";
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
-  var master = data.master_reference;
   var reaction_dictionary = data.reaction_dictionary;
+  console.log(entity_id)
 
   // Parse through each reaction where entity is a component
   nn_components = [entity_id];
   for (reaction in reaction_dictionary) {
 
     //Return all reactions that contain the entity
-    if (reaction_dictionary[reaction].includes(entity_id)) {
+    if ((reaction_dictionary[reaction]['reactants'].includes(entity_id)) ||
+        (reaction_dictionary[reaction]['products'].includes(entity_id)) ||
+        (reaction_dictionary[reaction]['modifiers'].includes(entity_id))) {
 
-      for (entity in reaction_dictionary[reaction]) {
+        nn_components.push(reaction_dictionary[reaction]['id']);
+        for (x in reaction_dictionary[reaction]['reactants']) {
+          nn_components.push(reaction_dictionary[reaction]['reactants'][x]);
+        };
+        for (x in reaction_dictionary[reaction]['products']) {
+          nn_components.push(reaction_dictionary[reaction]['products'][x]);
+        };
+        for (x in reaction_dictionary[reaction]['modifiers']) {
+          nn_components.push(reaction_dictionary[reaction]['modifiers'][x]);
+        };
 
-        nn_components.push(reaction_dictionary[reaction][entity]);
 
-      };
     };
   };
+
+  console.log(nn_components)
 
   // If too many nodes for first neighborhood, stop plotting
   var escape = nn_components.length
@@ -268,7 +276,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Please wait<br><br></i>";
     document.getElementById("warning_line_2").innerHTML = "";
 
-    n = 1
+    n = 0
     while (n < kNN) {
 
       var components = [];
@@ -277,13 +285,22 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
         for (reaction in reaction_dictionary) {
 
-          if (reaction_dictionary[reaction].includes(nn_components[element])) {
+          //Return all reactions that contain the entity
+          if ((reaction_dictionary[reaction]['reactants'].includes(element)) ||
+              (reaction_dictionary[reaction]['products'].includes(element)) ||
+              (reaction_dictionary[reaction]['modifiers'].includes(element))) {
 
-            for (el in reaction_dictionary[reaction]) {
+              components.push(reaction_dictionary[reaction]['id']);
+              for (x in reaction_dictionary[reaction]['reactants']) {
+                components.push(reaction_dictionary[reaction]['reactants'][x]);
+              };
+              for (x in reaction_dictionary[reaction]['products']) {
+                components.push(reaction_dictionary[reaction]['products'][x]);
+              };
+              for (x in reaction_dictionary[reaction]['modifiers']) {
+                components.push(reaction_dictionary[reaction]['modifiers'][x]);
+              };
 
-              components.push(reaction_dictionary[reaction][el]);
-
-            };
           };
         };
       }
@@ -377,8 +394,8 @@ function make_graph(
     .append("marker")
       .attr("id", function(d) { return d; })
       .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 15)
-      .attr("refY", -1.5)
+      .attr("refX", 15.7)
+      .attr("refY", -0.18)
       .attr("markerWidth", 6)
       .attr("markerHeight", 6)
       .attr("orient", "auto")
@@ -410,7 +427,7 @@ function make_graph(
     .append("circle")
       .attr("r", 6)
     .on("dblclick", function(d) {
-
+      console.log(d)
       if ((type_dict[entity_id_dict[d["name"]]] === "reaction") || (type_dict[d["name"]] === "reaction")) {
 
         console.log("Selected a reaction, will not perform kNN graphing")
@@ -418,6 +435,8 @@ function make_graph(
       } else {
         document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
         document.getElementById("type_selection").innerHTML = d["name"];
+
+
         nearest_neighbors(data, entity_id_dict[d["name"]]);
 
       };
@@ -433,7 +452,7 @@ function make_graph(
       if (type_dict[d.name] === "reaction") {
 
         // If reaction node, do not display expression value
-        return d.name;
+        return d.name + " \n \n " + d.notes;
 
       } else {
 
