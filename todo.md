@@ -1,17 +1,21 @@
 # To Do
 
+### Completed:
+- Wrap text for reactions, notes
+
 ### Critical:
 - Some nodes currently showing up twice with recent curation changes
 - Can't do 2 kNNs
+- Some kNNs will just show parent node
 - Random arrows with no arm for some links in some pathways
 - Some mismatched arrow and arm colors (because it has two roles?)
 - Remove pathways with just one reaction?
 - Consider super pathways to be those that have more than 200 rxns?
 	- Then gather all pathways that fall within those pathways
 	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
-- Wrap text for reactions, notes
 - It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 - No gene components appear to be showing up
+- Current selection wraps and pushes below
 
 0. Packaging
 - Make available on cloud (host via AWS)
@@ -42,6 +46,7 @@
 - Option to hide genes, modifiers
 - Option to change shapes of different node types
 - Display color bar
+	- When toggling values, label with colorbar
 	- Need to output in graph info range, color scale, etc
 	- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
 	- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d

@@ -64,13 +64,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <div class="sidebar">
       <font style="font-family: sans-serif" size="2">
-
-        <b><u>Legend:</u></b>
+        <b><u>Legend</u></b>
+        <button class="info" title="Click and drag the background to pan, or use the mouse wheel to zoom"><i>i</i></button>
         <br>
         <br>
-        <span class="dot" style="--dot_color: grey"></span>
+        <div title="Double-click to display reaction notes">
+          <span class="dot" style="--dot_color: grey"></span>
           Reaction
+        </div>
         <br>
+        <div title="Double-click to expand nearest neighbors">
         <span class="dot" style="--dot_color: white"></span>
           No expression value
         <br>
@@ -79,6 +82,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br>
         <span class="dot" style="--dot_color: #e75757"></span>
           High expression
+        </div>
         <br>
         <div class="arrow">
           <div class="line" style="--arrow_color: green"></div>
@@ -91,36 +95,61 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <br>
         <div class="arrow">
+          <div class="line" style="--arrow_color: orange"></div>
+          <div class="point" style="--arrow_color: orange">Protein</div>
+        </div>
+        <br>
+        <div class="arrow">
           <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
           <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">Gene</div>
         </div>
         <br>
         <br>
-          - Click and drag to pan
-        <br>
-          - Use mouse wheel to zoom
-        <br>
-          - Hover to display name
-        <br>
-        <br>
-        <br>
         <br>
         <b><u>Options</u></b>
+        <button class="info" title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details"><i>i</i></button>
         <br>
         <br>
-        <button id="toggleAnalytes">Toggle Feature Labels</button>
+        <div title="Click to turn feature labels on or off">
+          <button id="toggleAnalytes">Features</button>
+        </div>
+        <div title="Click to turn reaction labels on or off">
+          <button id="toggleReactions">Reactions</button>
+        </div>
+        <div title="Click to turn expression and statistical values on or off">
+          <button id="toggleExpression">Expression</button>
+        </div>
+        <br>
+        <div title="Click to toggle gene nodes (remove or display)">
+          <button id="toggleGenes">Genes</button>
+        </div>
+        <div title="Click to toggle protein nodes (remove or display)">
+          <button id="toggleProteins">Proteins</button>
+        </div>
+        <div title="Click to toggle metabolite nodes (remove or display)">
+          <button id="toggleMetabolites">Metabolites</button>
+        </div>
+        <br>
+        <div title="Click to toggle modifier nodes (remove or display)">
+          <button id="toggleModifiers">Modifiers</button>
+        </div>
+        <div title="Click to toggle between mapping expression or statistical color values">
+          <button id="toggleColors">Color Values/Stats</button>
+        </div>
         <br>
         <br>
-        <button id="toggleReactions">Toggle Reaction Labels</button>
-        <br>
-        <br>
-        <button id="toggleExpression">Toggle Expression</button>
+        <div title="Click to toggle collapse of nodes with no data overlaid">
+          <button id="collapseNodes">Collapse Empty Nodes</button>
+        </div>
+        <div title="Click to save the current graph view">
+          <button id="saveGraph">Save Graph</button>
+        </div>
         <br>
         <br>
           # Nearest neighbors:
         <input type="number" name="kNN_button" id="kNN_button" onchange="kNN_input()" min="1" max="2" value="1">
+        <button class="info" title="Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node."><i>i</i></button>
 
-        <br>
         <br>
         <br>
         <br>
@@ -138,7 +167,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br>
         <b><u>Current Selection:</u></b>
         <br>
-        <div id="type_selection"></div>
+        <div id="type_selection"><br><br></div>
+        <br>
+        <br>
+        <b><u>Notes:</u></b>
+        <button class="info" title="Display reaction details by double-clicking on a reaction node."><i>i</i></button>
+        <br>
+        <div id="reaction_notes"></div>
+        <br>
+        <br>
         <br>
 
       </font>

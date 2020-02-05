@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var $ = require('jquery')
 var fs = require('fs')
+var pixelWidth = require('string-pixel-width');
 
 var app = require('electron').remote.app
 var userDataPath = app.getPath('userData');
@@ -107,4 +108,15 @@ function getArgument(key) {
   }
 
   return value;
+}
+
+function determineWidth(input) {
+
+  if (pixelWidth(input) < 1662) {
+    var mod_selection = input + "<br><br>";
+  } else {
+    var mod_selection = input;
+  };
+
+  return mod_selection;
 }

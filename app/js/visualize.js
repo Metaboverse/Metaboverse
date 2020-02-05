@@ -21,8 +21,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 const d3 = require('d3')
 var fs = require('fs')
-const max_nodes = 1500;
 
+const max_nodes = 1500;
 var entity = "values_js";
 var sample = 0;
 
@@ -80,6 +80,7 @@ function make_menu(pathway_dict) {
 function initialize_nodes(nodes, node_dict, type_dict) {
 
   var expression_dict = {};
+  var stats_dict = {};
   var display_analytes_dict = {};
   var display_reactions_dict = {};
   var entity_id_dict = {};
@@ -90,6 +91,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
     node_dict[node['name']] = node['values_js']
     type_dict[node['name']] = node['type']
     expression_dict[node['name']] = node['values'][0]
+    stats_dict[node['name']] = node['stats'][0]
     entity_id_dict[node['name']] = node['id']
     entity_id_dict[node['id']] = node['name']
 
@@ -103,7 +105,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 
   });
 
-  return [node_dict, type_dict, expression_dict, display_analytes_dict, display_reactions_dict, entity_id_dict];
+  return [node_dict, type_dict, expression_dict, stats_dict, display_analytes_dict, display_reactions_dict, entity_id_dict];
 
 };
 
@@ -201,9 +203,10 @@ function nearest_neighbors(data, entity_id) {
   var node_dict = node_elements[0];
   var type_dict = node_elements[1];
   var expression_dict = node_elements[2];
-  var display_analytes_dict = node_elements[3];
-  var display_reactions_dict = node_elements[4];
-  var entity_id_dict = node_elements[5];
+  var stats_dict = node_elements[3];
+  var display_analytes_dict = node_elements[4];
+  var display_reactions_dict = node_elements[5];
+  var entity_id_dict = node_elements[6];
 
   make_graph(
       data,
@@ -213,6 +216,7 @@ function nearest_neighbors(data, entity_id) {
       node_dict,
       entity_id_dict,
       expression_dict,
+      stats_dict,
       display_analytes_dict,
       display_reactions_dict)
 
@@ -265,8 +269,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   var escape = nn_components.length
   if (escape > max_nodes) {
 
-    document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot</i>";
-    document.getElementById("warning_line_2").innerHTML = "<i style=\"color: red;\">Will not plot<br></i>";
+    document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot</i><br><i style=\"color: red;\">Will not plot</i>";
+    document.getElementById("warning_line_2").innerHTML = "<br>";
     kNN = 0
     nn_components = [];
   }
@@ -342,6 +346,7 @@ function make_graph(
     node_dict,
     entity_id_dict,
     expression_dict,
+    stats_dict,
     display_analytes_dict,
     display_reactions_dict) {
 
@@ -363,6 +368,7 @@ function make_graph(
     .call(d3.zoom().on("zoom", function () {
       svg.attr("transform", d3.event.transform)
       }))
+    .on("dblclick.zoom", null)
     .append("g")
 
   const forceX = d3.forceX(width / 2).strength(0.015)
@@ -428,43 +434,58 @@ function make_graph(
       .attr("r", 6)
     .on("dblclick", function(d) {
       console.log(d)
+
+      document.getElementById("reaction_notes").innerHTML = "";
+
       if ((type_dict[entity_id_dict[d["name"]]] === "reaction") || (type_dict[d["name"]] === "reaction")) {
 
         console.log("Selected a reaction, will not perform kNN graphing")
+        document.getElementById("reaction_notes").innerHTML =
+          "<b><i>"
+            + d.name
+          + "</i></b>: "
+          + d.notes;
 
       } else {
-        document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
-        document.getElementById("type_selection").innerHTML = d["name"];
 
+        document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
+
+        var mod_selection = determineWidth(d["name"]);
+        document.getElementById("type_selection").innerHTML = mod_selection;
 
         nearest_neighbors(data, entity_id_dict[d["name"]]);
 
       };
 
-    });
+    })
 
   var text = node
     .append("text")
-      .attr("x", 14)
-      .attr("y", ".31em")
-    .text(function(d) {
+      .html(function(d) {
 
-      if (type_dict[d.name] === "reaction") {
+        if (type_dict[d.name] === "reaction") {
 
-        // If reaction node, do not display expression value
-        return d.name + " \n \n " + d.notes;
+          // Label other nodes with expression value in parentheses
+          return "<tspan dx='16' y='.31em' style='font-weight: bold;'>" + d.name + "</tspan>";
+        } else {
 
-      } else {
+          return "<tspan dx='16' y='-.5em' style='font-weight: bold;'>" +       d.name + "</tspan>" +
+                  "<tspan x='16' y='.7em'>Value: " +
+                    parseFloat(expression_dict[d.name]).toFixed(2) +
+                    "</tspan>" +
+                  "<tspan x='16' y='1.7em'>Statistic: " +
+                    parseFloat(stats_dict[d.name]).toFixed(2) +
+                    "</tspan>";
+          }
+        });
 
-        // Label other nodes with expression value in parentheses
-        return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
 
-      }
-    });
 
   simulation.on("tick", tick);
 
   // Not working right now
+
+
   toggle_e = true;
   d3.select("#toggleExpression")
     .on("click", function() {
@@ -632,9 +653,13 @@ d3.select("#pathwayMenu").on("change", change);
 // Graphing
 function change() {
 
+  document.getElementById("reaction_notes").innerHTML = "";
+
   var selection = document.getElementById("pathwayMenu").value;
+
+  var mod_selection = determineWidth(selection);
   document.getElementById("type_selection_type").innerHTML = "Pathway";
-  document.getElementById("type_selection").innerHTML = selection;
+  document.getElementById("type_selection").innerHTML = mod_selection;
   document.getElementById("warning_line_1").innerHTML = "<br>";
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
@@ -651,9 +676,10 @@ function change() {
   var node_dict = node_elements[0];
   var type_dict = node_elements[1];
   var expression_dict = node_elements[2];
-  var display_analytes_dict = node_elements[3];
-  var display_reactions_dict = node_elements[4];
-  var entity_id_dict = node_elements[5];
+  var stats_dict = node_elements[3];
+  var display_analytes_dict = node_elements[4];
+  var display_reactions_dict = node_elements[5];
+  var entity_id_dict = node_elements[6];
 
   make_graph(
       data,
@@ -663,6 +689,7 @@ function change() {
       node_dict,
       entity_id_dict,
       expression_dict,
+      stats_dict,
       display_analytes_dict,
       display_reactions_dict)
 

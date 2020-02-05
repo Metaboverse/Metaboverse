@@ -111,6 +111,10 @@ stroke: grey;
   r: 10;
 }
 
+.node:target circle {
+  r: 20;
+}
+
 .node:hover text {
   display: inline;
   font: 12px sans-serif;
@@ -138,7 +142,7 @@ display: inline-block;
 
 #pathwayMenu {
   font: 16px sans-serif;
-  margin-left: 200px;
+  margin-left: 250px;
   margin-top: 35px;
 }
 
@@ -175,7 +179,7 @@ div
 
 .sidebar {
   height: 100%;
-  width: 175px;
+  width: 225px;
   position: fixed;
   top: 38px;
   left: 0;
@@ -183,4 +187,16 @@ div
   overflow-x: hidden;
   padding-top: 20px;
   padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+#reaction_notes {
+  overflow: auto;
+  max-height: 20vh;
+}
+
+#type_selection {
+  overflow: auto;
+  max-width: 215px;
 }

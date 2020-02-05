@@ -23,5 +23,8 @@
     "jquery": "^3.4.1",
     "wine": "^0.9.13",
     "zerorpc": "^0.9.8"
+  },
+  "dependencies": {
+    "string-pixel-width": "^1.10.0"
   }
 }

@@ -273,17 +273,6 @@ border: 2px solid #0E8886;
 background: #0F9A98;
 }
 
-#fileElem {
-display: none;
-}
-
-#dropdown2 {
-/*
-  float:right;
-  width:25%;
-*/
-}
-
 #pathway {
 float:left;
 width:33%;
