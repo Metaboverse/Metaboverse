@@ -2,6 +2,9 @@
 
 ### Completed:
 - Wrap text for reactions, notes
+- Current selection wraps and pushes below
+- Toggle values doesn't update correctly
+- Icons linking to docs
 
 ### Critical:
 - Some nodes currently showing up twice with recent curation changes
@@ -15,7 +18,7 @@
 	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
 - It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 - No gene components appear to be showing up
-- Current selection wraps and pushes below
+
 
 0. Packaging
 - Make available on cloud (host via AWS)
@@ -26,7 +29,6 @@
 - How to store information when running online (no output doc, AWS bucket?)
 - Get drop in bars to save and import data
 - Output log of user actions
-- Icons linking to docs
 
 2. Curation
 - Label genes, proteins, metabolites for selective sorting

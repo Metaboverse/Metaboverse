@@ -493,17 +493,23 @@ function make_graph(
       if (toggle_e === false) {
 
         toggle_e = true;
-        text.text(function(d) {
+        text.html(function(d) {
 
           if (type_dict[d.name] === "reaction") {
 
             // If reaction node, do not display expression value
-            return d.name;
+            return "<tspan dx='16' y='.31em' style='font-weight: bold;'>" + d.name + "</tspan>";
 
           } else {
 
             // Label other nodes with expression value in parentheses
-            return d.name + ' (' + parseFloat(expression_dict[d.name]).toFixed(2) + ')';
+            return "<tspan dx='16' y='-.5em' style='font-weight: bold;'>" +       d.name + "</tspan>" +
+                    "<tspan x='16' y='.7em'>Value: " +
+                      parseFloat(expression_dict[d.name]).toFixed(2) +
+                      "</tspan>" +
+                    "<tspan x='16' y='1.7em'>Statistic: " +
+                      parseFloat(stats_dict[d.name]).toFixed(2) +
+                      "</tspan>";
 
           }
 
@@ -511,7 +517,7 @@ function make_graph(
 
       } else {
         toggle_e = false;
-        text.text(function(d) { return d.name });
+        text.html(function(d) { return "<tspan dx='16' y='.31em' style='font-weight: bold;'>" + d.name + "</tspan>"; });
       }
 
    });
