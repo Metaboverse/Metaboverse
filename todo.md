@@ -5,10 +5,10 @@
 - Current selection wraps and pushes below
 - Toggle values doesn't update correctly
 - Icons linking to docs
+- Can't do 2 kNNs
 
 ### Critical:
 - Some nodes currently showing up twice with recent curation changes
-- Can't do 2 kNNs
 - Some kNNs will just show parent node
 - Random arrows with no arm for some links in some pathways
 - Some mismatched arrow and arm colors (because it has two roles?)
@@ -18,7 +18,7 @@
 	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
 - It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 - No gene components appear to be showing up
-
+- Validate viz for new curation paradigm
 
 0. Packaging
 - Make available on cloud (host via AWS)
@@ -34,7 +34,6 @@
 - Label genes, proteins, metabolites for selective sorting
 - Run motif search or exploration based on user input
 - Give user page of entities that we couldn't map, have them enter valid alternative ID
-- Update viz for new curation paradigm
 - Cast gene expression to proteins if no proteomics data
 
 3. Motif searching
@@ -118,3 +117,7 @@
 - MPC flux
 - MetaboNet datasets
 - Time-course data
+
+13. Try again?
+- Provide a go back button to get back to the graph they made previously
+- Make node of interest bigger than others (optional)

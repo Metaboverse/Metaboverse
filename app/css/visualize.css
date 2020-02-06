@@ -111,10 +111,6 @@ stroke: grey;
   r: 10;
 }
 
-.node:target circle {
-  r: 20;
-}
-
 .node:hover text {
   display: inline;
   font: 12px sans-serif;
@@ -142,7 +138,7 @@ display: inline-block;
 
 #pathwayMenu {
   font: 16px sans-serif;
-  margin-left: 250px;
+  margin-left: 260;
   margin-top: 35px;
 }
 

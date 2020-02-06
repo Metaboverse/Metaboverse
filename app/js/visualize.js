@@ -208,6 +208,7 @@ function nearest_neighbors(data, entity_id) {
   var display_reactions_dict = node_elements[5];
   var entity_id_dict = node_elements[6];
 
+  // Remove old plot and plot this one
   make_graph(
       data,
       new_nodes,
@@ -219,15 +220,6 @@ function nearest_neighbors(data, entity_id) {
       stats_dict,
       display_analytes_dict,
       display_reactions_dict)
-
-
-
-  // Remove old plot and plot this one
-
-  // Provide a go back button to get back to the graph they made previously
-  // Run by dblclick on node of interest
-  // Make node of interest bigger than others
-
 };
 
 function parse_kNN_pathway(data, entity_id, kNN) {
@@ -237,7 +229,6 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
   var reaction_dictionary = data.reaction_dictionary;
-  console.log(entity_id)
 
   // Parse through each reaction where entity is a component
   nn_components = [entity_id];
@@ -259,11 +250,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
           nn_components.push(reaction_dictionary[reaction]['modifiers'][x]);
         };
 
-
     };
   };
-
-  console.log(nn_components)
 
   // If too many nodes for first neighborhood, stop plotting
   var escape = nn_components.length
@@ -280,7 +268,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Please wait<br><br></i>";
     document.getElementById("warning_line_2").innerHTML = "";
 
-    n = 0
+    n = 1
     while (n < kNN) {
 
       var components = [];
@@ -290,11 +278,12 @@ function parse_kNN_pathway(data, entity_id, kNN) {
         for (reaction in reaction_dictionary) {
 
           //Return all reactions that contain the entity
-          if ((reaction_dictionary[reaction]['reactants'].includes(element)) ||
-              (reaction_dictionary[reaction]['products'].includes(element)) ||
-              (reaction_dictionary[reaction]['modifiers'].includes(element))) {
+          if ((reaction_dictionary[reaction]['reactants'].includes(nn_components[element])) ||
+              (reaction_dictionary[reaction]['products'].includes(nn_components[element])) ||
+              (reaction_dictionary[reaction]['modifiers'].includes(nn_components[element]))) {
 
               components.push(reaction_dictionary[reaction]['id']);
+
               for (x in reaction_dictionary[reaction]['reactants']) {
                 components.push(reaction_dictionary[reaction]['reactants'][x]);
               };
@@ -374,9 +363,6 @@ function make_graph(
   const forceX = d3.forceX(width / 2).strength(0.015)
   const forceY = d3.forceY(height / 2).strength(0.015)
 
-  console.log(new_nodes)
-  console.log(new_links)
-
   const simulation = d3.forceSimulation(new_nodes)
       .force("link", d3.forceLink(new_links)
         .id(d => d.id)
@@ -433,7 +419,6 @@ function make_graph(
     .append("circle")
       .attr("r", 6)
     .on("dblclick", function(d) {
-      console.log(d)
 
       document.getElementById("reaction_notes").innerHTML = "";
 
@@ -456,7 +441,6 @@ function make_graph(
         nearest_neighbors(data, entity_id_dict[d["name"]]);
 
       };
-
     })
 
   var text = node
@@ -479,12 +463,7 @@ function make_graph(
           }
         });
 
-
-
   simulation.on("tick", tick);
-
-  // Not working right now
-
 
   toggle_e = true;
   d3.select("#toggleExpression")
@@ -510,16 +489,13 @@ function make_graph(
                     "<tspan x='16' y='1.7em'>Statistic: " +
                       parseFloat(stats_dict[d.name]).toFixed(2) +
                       "</tspan>";
-
           }
-
         });
 
       } else {
         toggle_e = false;
         text.html(function(d) { return "<tspan dx='16' y='.31em' style='font-weight: bold;'>" + d.name + "</tspan>"; });
       }
-
    });
 
   toggle_a = false;
@@ -539,7 +515,6 @@ function make_graph(
         toggle_a = false;
         determine_displays(toggle_a, toggle_r);
       }
-
     });
 
   d3.select("#toggleReactions")
@@ -658,10 +633,9 @@ d3.select("#pathwayMenu").on("change", change);
 
 // Graphing
 function change() {
+  var selection = document.getElementById("pathwayMenu").value;
 
   document.getElementById("reaction_notes").innerHTML = "";
-
-  var selection = document.getElementById("pathwayMenu").value;
 
   var mod_selection = determineWidth(selection);
   document.getElementById("type_selection_type").innerHTML = "Pathway";
@@ -698,5 +672,4 @@ function change() {
       stats_dict,
       display_analytes_dict,
       display_reactions_dict)
-
-  };
+}
