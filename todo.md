@@ -1,21 +1,27 @@
 # To Do
 
-### Completed:
+### COMPLETED:
 - Wrap text for reactions, notes
 - Current selection wraps and pushes below
 - Toggle values doesn't update correctly
 - Icons linking to docs
 - Can't do 2 kNNs
-
-### Critical:
-- Some nodes currently showing up twice with recent curation changes
-- Some kNNs will just show parent node
+- Some kNNs will just show parent node (looks like it fixed itself with some previous edit)
 - Random arrows with no arm for some links in some pathways
-- Some mismatched arrow and arm colors (because it has two roles?)
+	- Always protein component
+	- Looks like some, but not all have expression layering
+	- Solution: arose from edges where source and target were identical
 - Remove pathways with just one reaction?
+	- Solution: no
 - Consider super pathways to be those that have more than 200 rxns?
 	- Then gather all pathways that fall within those pathways
 	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
+	- Solution: done
+
+### CRITICAL:
+- Some nodes currently showing up twice with recent curation changes
+	- See glycolysis/GCK1:GKRP complex
+- Some mismatched arrow and arm colors (because it has two roles?)
 - It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 - No gene components appear to be showing up
 - Validate viz for new curation paradigm
