@@ -35,6 +35,14 @@ function selectPathway() {
   return selection;
 };
 
+var superSelection = null;
+function selectSuperPathway(selector) {
+
+  var superSelection = document.getElementById("superPathwayMenu").value;
+  console.log("Super Pathway: " + superSelection)
+  return superSelection;
+};
+
 // Populate dictionary to access component reactions for each pathway
 function make_pathway_dictionary(data) {
 
@@ -52,20 +60,46 @@ function make_pathway_dictionary(data) {
   return pathway_dict;
 };
 
+// Populate dictionary to access component reactions for each super-pathway
+function make_superPathway_dictionary(data) {
+
+  // Get pathway name and ID
+  var superPathways = data.super_pathways;
+  var superPathwayDict = {}
+  for (var key in superPathways) {
+
+    superPathwayDict[superPathways[key]['name']] = {
+      'id': superPathways[key]['name'],
+      'reactions': superPathways[key]['reactions']
+    };
+  };
+
+  return superPathwayDict;
+};
+
 // Make Pathway menu for users to
-function make_menu(pathway_dict) {
+function make_menu(
+    pathway_dict,
+    selector,
+    opening_message,
+    provide_all=false) {
 
   // Get species names (keys) as list
+  pathways_list = [];
   pathways_list = Object.getOwnPropertyNames(
     pathway_dict
   ).map(function(k) {
     return k;
   });
   pathways_list.sort();
-  pathways_list.unshift("Select a pathway..."); // Add select prompt to menu bar
+  if (provide_all === true) {
+    pathways_list.unshift("All");
+  }
+  pathways_list.unshift(opening_message); // Add select prompt to menu bar
 
   // Generate drop-down menu for species select
-  var menu = document.getElementById("pathwayMenu");
+  menu = [];
+  menu = document.getElementById(selector);
   for (var i = 0; i < pathways_list.length; i++) {
 
     var option = document.createElement("option");
@@ -75,6 +109,35 @@ function make_menu(pathway_dict) {
 
   };
 
+};
+
+function emptyMenu(selectMenu) {
+
+    var i;
+
+    for(i = selectMenu.options.length - 1; i >= 0; i--) {
+      selectMenu.remove(i);
+    }
+};
+
+function parsePathways(pathway_dict, selectedReactions) {
+
+  var parsed_pathway_dict = {};
+  // from https://stackoverflow.com/a/53606357
+  let checker = (arr, target) => target.every(v => arr.includes(v));
+
+  for (pathway in pathway_dict) {
+
+    belongs = checker(selectedReactions, pathway_dict[pathway]['reactions'])
+
+    if (belongs === true) {
+
+      parsed_pathway_dict[pathway] = pathway_dict[pathway]
+
+    }
+  }
+
+  return parsed_pathway_dict
 };
 
 function initialize_nodes(nodes, node_dict, type_dict) {
@@ -625,14 +688,48 @@ function make_graph(
 };
 
 // MAIN
-database_url = get_session_info("database_url")
+database_url = get_session_info("database_url");
 console.log("Database path: " + database_url)
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
 
 var pathway_dict = make_pathway_dictionary(data);
-make_menu(pathway_dict);
+var superPathwayDict = make_superPathway_dictionary(data);
+console.log(pathway_dict)
+
+make_menu(
+  superPathwayDict,
+  "superPathwayMenu",
+  "Select a super pathway...",
+  provide_all=true);
+
+d3.select("#superPathwayMenu").on("change", changeSuper);
+
 d3.select("#pathwayMenu").on("change", change);
+
+function changeSuper() {
+
+  var superSelection = document.getElementById("superPathwayMenu").value;
+
+  emptyMenu(document.getElementById("pathwayMenu"));
+
+  // Limit pathways to super-pathway
+  if (superSelection !== "All") {
+
+    var selectedReactions = superPathwayDict[superSelection]["reactions"];
+
+    var parsed_pathway_dict = parsePathways(pathway_dict, selectedReactions);
+
+  } else {
+    var parsed_pathway_dict = pathway_dict;
+  }
+
+  make_menu(
+    parsed_pathway_dict,
+    "pathwayMenu",
+    "Select a pathway...");
+
+}
 
 // Graphing
 function change() {

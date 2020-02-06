@@ -136,10 +136,16 @@ border-radius: 50%;
 display: inline-block;
 }
 
-#pathwayMenu {
+#superPathwayMenu {
   font: 16px sans-serif;
   margin-left: 260;
   margin-top: 35px;
+}
+
+#pathwayMenu {
+  font: 16px sans-serif;
+  margin-left: 260;
+  margin-top: 0px;
 }
 
 #kNN_button {
