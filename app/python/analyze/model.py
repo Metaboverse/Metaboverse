@@ -455,6 +455,7 @@ def output_graph(
         graph,
         output_name,
         pathway_dictionary,
+        super_pathways,
         reaction_dictionary,
         black_list):
     """Output graph and necessary metadata
@@ -462,11 +463,26 @@ def output_graph(
 
     data = json_graph.node_link_data(graph)
     data['pathway_dictionary'] = pathway_dictionary
+    data['super_pathways'] = super_pathways
     data['reaction_dictionary'] = reaction_dictionary
     data['black_list'] = black_list
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
+
+def compile_pathway_degree(
+        pathways):
+    """Compile database of large pathways
+    """
+
+    super_pathways = {}
+
+    for key in list(pathways.keys()):
+
+        if len(pathways[key]["reactions"]) > 200:
+            super_pathways[key] = pathways[key]
+
+    return super_pathways
 
 def __main__(
         network,
@@ -510,6 +526,7 @@ def __main__(
 
     species_id = 'HSA'
     output_file = '/Users/jordan/Desktop/HSA_global_reactions.json'
+    black_list=[]
     #############################
 
     print('Preparing metadata...')
@@ -543,12 +560,17 @@ def __main__(
         stats=stats,
         name_reference=network['name_database'])
 
+    # Generate list of super pathways (those with more than 200 reactions)
+    super_pathways = compile_pathway_degree(
+        pathways=network['pathway_database'])
+
     # Export graph, pathway membership, pathway degree, black_list, other refs
     print('Exporting graph...')
     output_graph(
         graph=G,
         output_name=graph_name,
         pathway_dictionary=network['pathway_database'],
+        super_pathways=super_pathways,
         reaction_dictionary=network['reaction_database'],
         black_list=black_list)
     print('Graphing complete.')
