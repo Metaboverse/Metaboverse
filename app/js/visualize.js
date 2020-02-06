@@ -172,7 +172,9 @@ function get_nodes_links(data, components) {
   // Parse out links of interest
   links.forEach( function (link) {
 
-    if (components.includes(link.source) && components.includes(link.target)) {
+    if (components.includes(link.source)
+        && components.includes(link.target)
+        && link.source !== link.target) {
       var link_copy = $.extend(true,{},link)
       new_links.push(link_copy)
     };
@@ -381,6 +383,7 @@ function make_graph(
       "product",
       "inhibitor",
       "catalyst",
+      "gene_component",
       "complex_component"])
     .enter()
     .append("marker")
