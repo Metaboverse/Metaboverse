@@ -310,11 +310,21 @@ def write_database(
     with open(dir + file, 'wb') as file_product:
         pickle.dump(database, file_product)
 
-"""Curate reactome database
-"""
+def add_genes(
+        name_database,
+        ensembl_reference):
+    """Self map all ensembl gene ids for network creation and mapping
+    """
+
+    for k, v in ensembl_reference.items():
+        name_database[v] = v
+
+    return name_database
+
 def __main__(
         args_dict):
-
+    """Curate reactome database
+    """
     #args_dict = {
     #    'output':'/Users/jordan/Desktop/',
     #    'species_id':'HSA'}
@@ -342,8 +352,13 @@ def __main__(
 
     print('Parsing Ensembl database...')
     ensembl_reference = parse_ensembl_synonyms(
-            output_dir=args_dict['output'],
-            species_id=args_dict['species_id'])
+        output_dir=args_dict['output'],
+        species_id=args_dict['species_id'])
+
+    print('Adding gene IDs to name database...')
+    name_database = add_genes(
+        name_database=name_database,
+        ensembl_reference=ensembl_reference)
 
     print('Parsing UniProt database...')
     uniprot_reference = parse_uniprot_synonyms(

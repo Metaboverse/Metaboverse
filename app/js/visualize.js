@@ -182,6 +182,16 @@ function linkArc(d) {
 
 };
 
+function linkArc(d) {
+
+  var dx = d.target.x - d.source.x;
+  var dy = d.target.y - d.source.y;
+  var dr = Math.sqrt(dx * dx + dy * dy);
+
+  return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+
+};
+
 function transform(d) {
 
   return "translate(" + d.x + "," + d.y + ")";
@@ -206,6 +216,9 @@ function parse_pathway(data, reactions) {
     };
     for (x in target_rxns['modifiers']) {
       components.push(target_rxns['modifiers'][x][0]);
+    };
+    for (x in target_rxns['genes']) {
+      components.push(target_rxns['genes'][x]);
     };
   };
   var new_elements = get_nodes_links(data, components);
@@ -423,7 +436,7 @@ function make_graph(
       svg.attr("transform", d3.event.transform)
       }))
     .on("dblclick.zoom", null)
-    .append("g")
+    .append("g");
 
   const forceX = d3.forceX(width / 2).strength(0.015)
   const forceY = d3.forceY(height / 2).strength(0.015)
@@ -463,7 +476,8 @@ function make_graph(
   var link = svg.append("g").selectAll("path")
     .data(new_links)
     .enter().append("path")
-      .attr("class", function(d) { return "link " + d.type; })
+      .attr("class", function(d) {
+        return "link " + d.type; })
       .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
   var node = svg.selectAll(".node")
@@ -529,7 +543,8 @@ function make_graph(
           }
         });
 
-  simulation.on("tick", tick);
+  simulation
+    .on("tick", tick)
 
   toggle_e = true;
   d3.select("#toggleExpression")

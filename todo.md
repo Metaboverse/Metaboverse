@@ -21,9 +21,17 @@
 ### CRITICAL:
 - Some nodes currently showing up twice with recent curation changes
 	- See glycolysis/GCK1:GKRP complex
+		- two separate species IDs for complex component and reactant
+	- Also, this reaction in kNN seems to be missing modifier or input?
 - Some mismatched arrow and arm colors (because it has two roles?)
 - It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
+	- Only broadcast to protein nodes that don't ahve values, but if values, leave it. For broadcasted proteins, outline node as dotted border
 - No gene components appear to be showing up
+	- issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
+	- Genes not getting pulled for reactions -- need to add their ID to the reaction database
+	- Get metabolite components to show
+	- Test some components to make sure they are curating correctly
+	- Adding gene components makes the scramble and spacing of nodes worse
 - Validate viz for new curation paradigm
 
 0. Packaging
@@ -77,6 +85,7 @@
 7. Time-course data
 - Slider bar
 - Integration into network curation
+	- https://observablehq.com/@mbostock/the-wealth-health-of-nations
 
 - k-NN integration?
 - Ideas:
@@ -118,6 +127,7 @@
 - Info for what pathway a node belongs to
 - Select parent pathway (i.e. metabolism) in order to let motif search run
 - Cartesian distortion?
+	- Seems to only work as is with d3 <= v3
 
 12. Validation
 - MPC flux

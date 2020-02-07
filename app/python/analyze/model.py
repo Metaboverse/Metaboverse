@@ -56,7 +56,8 @@ def build_graph(
         name_reference,
         protein_reference,
         complexes,
-        species_id):
+        species_id,
+        reverse_genes):
     """Build graph
     - Add nodes and edges
     - Map names to objects in the graph for display
@@ -68,7 +69,7 @@ def build_graph(
 
     for reactome_id in network.keys():
 
-        G = process_reactions(
+        G, network = process_reactions(
             graph=G,
             reactome_id=reactome_id,
             network=network,
@@ -76,9 +77,10 @@ def build_graph(
             name_reference=name_reference,
             protein_reference=protein_reference,
             complex_reference=complexes,
-            species_id=species_id)
+            species_id=species_id,
+            reverse_genes=reverse_genes)
 
-    return G
+    return G, network
 
 def process_reactions(
         graph,
@@ -88,9 +90,11 @@ def process_reactions(
         name_reference,
         protein_reference,
         complex_reference,
-        species_id):
+        species_id,
+        reverse_genes):
     """
     """
+    new_genes = []
 
     # Get reaction name
     reaction_id = network[reactome_id]['id']
@@ -127,13 +131,16 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference)
 
-        graph = check_complexes(
-                graph=graph,
-                id=reactant,
-                complex_reference=complex_reference,
-                species_reference=species_reference,
-                name_reference=name_reference,
-                protein_reference=protein_reference)
+        graph, gene_components = check_complexes(
+            graph=graph,
+            id=reactant,
+            complex_reference=complex_reference,
+            species_reference=species_reference,
+            name_reference=name_reference,
+            protein_reference=protein_reference,
+            reverse_genes=reverse_genes)
+        for x in gene_components:
+            new_genes.append(x)
 
     for product in products:
 
@@ -150,13 +157,16 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference)
 
-        graph = check_complexes(
-                graph=graph,
-                id=product,
-                complex_reference=complex_reference,
-                species_reference=species_reference,
-                name_reference=name_reference,
-                protein_reference=protein_reference)
+        graph, gene_components = check_complexes(
+            graph=graph,
+            id=product,
+            complex_reference=complex_reference,
+            species_reference=species_reference,
+            name_reference=name_reference,
+            protein_reference=protein_reference,
+            reverse_genes=reverse_genes)
+        for x in gene_components:
+            new_genes.append(x)
 
     for modifier in modifiers:
 
@@ -182,15 +192,20 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference)
 
-        graph = check_complexes(
-                graph=graph,
-                id=id,
-                complex_reference=complex_reference,
-                species_reference=species_reference,
-                name_reference=name_reference,
-                protein_reference=protein_reference)
+        graph, gene_components = check_complexes(
+            graph=graph,
+            id=id,
+            complex_reference=complex_reference,
+            species_reference=species_reference,
+            name_reference=name_reference,
+            protein_reference=protein_reference,
+            reverse_genes=reverse_genes)
+        for x in gene_components:
+            new_genes.append(x)
 
-    return graph
+    network[reactome_id]['genes'] = new_genes
+
+    return graph, network
 
 def add_node_edge(
         graph,
@@ -217,26 +232,31 @@ def add_node_edge(
         graph.add_edges_from([
             (id, reaction_membership)])
         graph.edges()[(id, reaction_membership)]['type'] = type
+        graph.edges()[(id, reaction_membership)]['sub_type'] = sub_type
 
         if reversible == 'true':
             graph.add_edges_from([
                 (reaction_membership, id)])
             graph.edges()[(reaction_membership, id)]['type'] = type
+            graph.edges()[(reaction_membership, id)]['sub_type'] = sub_type
 
     elif type == 'product':
         graph.add_edges_from([
             (reaction_membership, id)])
         graph.edges()[(reaction_membership, id)]['type'] = type
+        graph.edges()[(reaction_membership, id)]['sub_type'] = sub_type
 
         if reversible == 'true':
             graph.add_edges_from([
                 (id, reaction_membership)])
             graph.edges()[(id, reaction_membership)]['type'] = type
+            graph.edges()[(id, reaction_membership)]['sub_type'] = sub_type
 
     else:
         graph.add_edges_from([
             (id, reaction_membership)])
         graph.edges()[(id, reaction_membership)]['type'] = type
+        graph.edges()[(id, reaction_membership)]['sub_type'] = sub_type
 
     return graph
 
@@ -246,12 +266,15 @@ def check_complexes(
         complex_reference,
         species_reference,
         name_reference,
-        protein_reference):
+        protein_reference,
+        reverse_genes):
     """Check if species being added is in complex dictionary
     - If record exists, add nodes and edges for the new relationship.
     - If record contains a UniProt ID, cross reference with Ensembl database
     - If complex, label true; else label as false
     """
+
+    add_components = []
 
     if id in complex_reference.keys():
         graph.nodes()[id]['complex'] = 'true'
@@ -268,6 +291,7 @@ def check_complexes(
                     name = x
 
                     if p.lower() == 'uniprot':
+
                         sub_type = 'protein_component'
                     elif p.lower() == 'mirna':
                         sub_type = 'mirna_component'
@@ -278,6 +302,7 @@ def check_complexes(
 
                 try:
                     component_id = name_reference[name]
+                    add_components.append(component_id)
 
                     graph = add_node_edge(
                         graph=graph,
@@ -296,12 +321,12 @@ def check_complexes(
 
                         # Get protein's corresponding gene ID
                         gene = protein_reference[name]
-                        gene_id = name_reference[gene]
+                        add_components.append(gene)
 
                         graph = add_node_edge(
                             graph=graph,
-                            id=gene_id,
-                            name=species_reference[gene_id],
+                            id=gene,
+                            name=reverse_genes[gene],
                             reaction_membership=component_id,
                             type='gene_component',
                             sub_type='gene',
@@ -318,7 +343,7 @@ def check_complexes(
     else:
         graph.nodes()[id]['complex'] = 'false'
 
-    return graph
+    return graph, add_components
 
 def uniprot_ensembl_reference(
         uniprot_reference,
@@ -539,17 +564,22 @@ def __main__(
     protein_dictionary = uniprot_ensembl_reference(
         uniprot_reference=network['uniprot_synonyms'],
         ensembl_reference=network['ensembl_synonyms'])
+    reverse_genes = {v:k for k,v in network['ensembl_synonyms'].items()}
 
     # Generate graph
     # Name mapping
     print('Building network...')
-    G = build_graph(
+    G, network['reaction_database'] = build_graph(
         network=network['reaction_database'],
         species_reference=network['species_database'],
         name_reference=network['name_database'],
         protein_reference=protein_dictionary,
         complexes=network['complex_dictionary'],
-        species_id=species_id)
+        species_id=species_id,
+        reverse_genes=reverse_genes)
+
+    # For gene components, add section to reaction database for gene_components and list
+    # Pull those in with everything else in JS
 
     # Overlay data and stats, calculate heatmap values for p-value
     # and expression value

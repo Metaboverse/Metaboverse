@@ -25,6 +25,7 @@
     "zerorpc": "^0.9.8"
   },
   "dependencies": {
+    "d3-fisheye": "^2.0.1",
     "string-pixel-width": "^1.10.0"
   }
 }
