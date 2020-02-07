@@ -70,6 +70,14 @@ stroke: rgba(166,97,26, 1);
 stroke-dasharray: 0,2 1;
 }
 
+#metabolite_component {
+fill: rgba(0, 55, 253, 1);
+}
+.link.metabolite_component {
+stroke: rgba(0, 55, 253, 1);
+stroke-dasharray: 0,2 1;
+}
+
 #reaction {
 fill: grey;
 }

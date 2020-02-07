@@ -405,6 +405,20 @@ function kNN_input(d) {
   console.log("k-NN parameter now set to: " + knn_value)
 };
 
+function get_link(d) {
+
+  if (d.type === "complex_component") {
+    if (d.sub_type === "metabolite_component") {
+      return d.sub_type;
+    } else {
+      return d.type;
+    }
+  } else {
+    return d.type;
+  }
+
+};
+
 function make_graph(
     data,
     new_nodes,
@@ -460,7 +474,8 @@ function make_graph(
       "inhibitor",
       "catalyst",
       "gene_component",
-      "complex_component"])
+      "complex_component",
+      "metabolite_component"])
     .enter()
     .append("marker")
       .attr("id", function(d) { return d; })
@@ -477,8 +492,9 @@ function make_graph(
     .data(new_links)
     .enter().append("path")
       .attr("class", function(d) {
-        return "link " + d.type; })
-      .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+        return "link " + get_link(d);
+      })
+      .attr("marker-end", function(d) { return "url(#" + get_link(d) + ")"; });
 
   var node = svg.selectAll(".node")
     .data(new_nodes)
