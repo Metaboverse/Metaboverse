@@ -17,6 +17,12 @@
 	- Then gather all pathways that fall within those pathways
 	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
 	- Solution: done
+- No gene components appear to be showing up
+- Get metabolite components to show
+- Genes not getting pulled for reactions -- need to add their ID to the reaction database
+- Label genes, proteins, metabolites for selective sorting
+
+
 
 ### CRITICAL:
 - Some nodes currently showing up twice with recent curation changes
@@ -26,13 +32,14 @@
 - Some mismatched arrow and arm colors (because it has two roles?)
 - It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 	- Only broadcast to protein nodes that don't ahve values, but if values, leave it. For broadcasted proteins, outline node as dotted border
-- No gene components appear to be showing up
-	- issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
-	- Genes not getting pulled for reactions -- need to add their ID to the reaction database
-	- Get metabolite components to show
-	- Test some components to make sure they are curating correctly
-	- Adding gene components makes the scramble and spacing of nodes worse
 - Validate viz for new curation paradigm
+	- Test some components to make sure they are curating correctly
+- Adding gene components makes the scramble and spacing of nodes worse
+- issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
+- Some kNN only bring up one node
+- Some genes are not finding their edges (see Attenuation)
+- Labeling "Active mTORC1 complex" as metabolite component
+
 
 0. Packaging
 - Make available on cloud (host via AWS)
@@ -45,7 +52,6 @@
 - Output log of user actions
 
 2. Curation
-- Label genes, proteins, metabolites for selective sorting
 - Run motif search or exploration based on user input
 - Give user page of entities that we couldn't map, have them enter valid alternative ID
 - Cast gene expression to proteins if no proteomics data

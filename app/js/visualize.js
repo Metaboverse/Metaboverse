@@ -25,6 +25,9 @@ var fs = require('fs')
 const max_nodes = 1500;
 var entity = "values_js";
 var sample = 0;
+var graph_genes = true;
+var saved_nodes = [];
+var saved_links = [];
 
 // Change user selection based on input
 var selection = null;
@@ -315,7 +318,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     //Return all reactions that contain the entity
     if ((reaction_dictionary[reaction]['reactants'].includes(entity_id)) ||
         (reaction_dictionary[reaction]['products'].includes(entity_id)) ||
-        (reaction_dictionary[reaction]['modifiers'].includes(entity_id))) {
+        (reaction_dictionary[reaction]['modifiers'].includes(entity_id)) ||
+        (reaction_dictionary[reaction]['genes'].includes(entity_id))) {
 
         nn_components.push(reaction_dictionary[reaction]['id']);
         for (x in reaction_dictionary[reaction]['reactants']) {
@@ -325,9 +329,11 @@ function parse_kNN_pathway(data, entity_id, kNN) {
           nn_components.push(reaction_dictionary[reaction]['products'][x]);
         };
         for (x in reaction_dictionary[reaction]['modifiers']) {
-          nn_components.push(reaction_dictionary[reaction]['modifiers'][x]);
+          nn_components.push(reaction_dictionary[reaction]['modifiers'][x][0]);
         };
-
+        for (x in reaction_dictionary[reaction]['genes']) {
+          nn_components.push(reaction_dictionary[reaction]['genes'][x]);
+        };
     };
   };
 
@@ -358,7 +364,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
           //Return all reactions that contain the entity
           if ((reaction_dictionary[reaction]['reactants'].includes(nn_components[element])) ||
               (reaction_dictionary[reaction]['products'].includes(nn_components[element])) ||
-              (reaction_dictionary[reaction]['modifiers'].includes(nn_components[element]))) {
+              (reaction_dictionary[reaction]['modifiers'].includes(nn_components[element])) ||
+              (reaction_dictionary[reaction]['genes'].includes(nn_components[element]))) {
 
               components.push(reaction_dictionary[reaction]['id']);
 
@@ -369,7 +376,10 @@ function parse_kNN_pathway(data, entity_id, kNN) {
                 components.push(reaction_dictionary[reaction]['products'][x]);
               };
               for (x in reaction_dictionary[reaction]['modifiers']) {
-                components.push(reaction_dictionary[reaction]['modifiers'][x]);
+                components.push(reaction_dictionary[reaction]['modifiers'][x][0]);
+              };
+              for (x in reaction_dictionary[reaction]['genes']) {
+                components.push(reaction_dictionary[reaction]['genes'][x]);
               };
 
           };
@@ -534,6 +544,7 @@ function make_graph(
         var mod_selection = determineWidth(d["name"]);
         document.getElementById("type_selection").innerHTML = mod_selection;
 
+        graph_genes = true;
         nearest_neighbors(data, entity_id_dict[d["name"]]);
 
       };
@@ -672,6 +683,72 @@ function make_graph(
 
   };
 
+  d3.select("#toggleGenes")
+    .on("click", function() {
+
+      if (graph_genes === false) {
+
+        graph_genes = true;
+        new_nodes = saved_nodes;
+        new_links = saved_links;
+
+        make_graph(
+            data,
+            new_nodes,
+            new_links,
+            type_dict,
+            node_dict,
+            entity_id_dict,
+            expression_dict,
+            stats_dict,
+            display_analytes_dict,
+            display_reactions_dict)
+
+      } else {
+
+        graph_genes = false;
+        saved_nodes = new_nodes;
+        saved_links = new_links;
+
+        var newer_components = [];
+        for (x in new_nodes) {
+          if (new_nodes[x]['type'] !== "gene_component") {
+
+            newer_components.push(new_nodes[x]['id'])
+          }
+        }
+
+        var newer_elements = get_nodes_links(data, newer_components);
+        var newer_nodes = newer_elements[0]
+        var newer_links = newer_elements[1]
+
+        // Initialize variables
+        var new_node_dict = {};
+        var new_type_dict = {};
+
+        var new_node_elements = initialize_nodes(newer_nodes, new_node_dict, new_type_dict);
+        var new_node_dict = new_node_elements[0];
+        var new_type_dict = new_node_elements[1];
+        var new_expression_dict = new_node_elements[2];
+        var new_stats_dict = new_node_elements[3];
+        var new_display_analytes_dict = new_node_elements[4];
+        var new_display_reactions_dict = new_node_elements[5];
+        var new_entity_id_dict = new_node_elements[6];
+
+        make_graph(
+            data,
+            newer_nodes,
+            newer_links,
+            new_type_dict,
+            new_node_dict,
+            new_entity_id_dict,
+            new_expression_dict,
+            new_stats_dict,
+            new_display_analytes_dict,
+            new_display_reactions_dict)
+      }
+    });
+
   var cell = node
     .append("path")
       .attr("class", "cell");
@@ -759,11 +836,11 @@ function changeSuper() {
     parsed_pathway_dict,
     "pathwayMenu",
     "Select a pathway...");
-
 }
 
 // Graphing
 function change() {
+  graph_genes = true;
   var selection = document.getElementById("pathwayMenu").value;
 
   document.getElementById("reaction_notes").innerHTML = "";
