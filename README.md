@@ -1,4 +1,5 @@
-# Metaboverse
+# ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/images/metaboverse_banner.png)
+
 Biological and Metabolic Networks Analyzer
 
 `WARNING: This repository is currently under development. When the software is complete and stable enough for beta testing, the alpha tag will be removed.`
