@@ -26,6 +26,7 @@ const {ipcRenderer} = require('electron')
 const path = require('path')
 const fs = require('fs')
 const ipcMain = require('electron').ipcMain
+const { dialog } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -59,6 +60,35 @@ function createWindow () {
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
 
+    var userDataPath = app.getPath('userData');
+    var session_file = userDataPath + "/session_data.json"
+    var session = JSON.parse(fs.readFileSync(session_file).toString());
+    var output = session["output"]
+
+    if (output !== null) {
+
+      fs.writeFile(output + "session_data.json", JSON.stringify(session), function(err) {
+
+        if (err) throw err;
+        console.log('Session data written to user output directory');
+        }
+      );
+
+    } else {
+      const options = {
+        buttons: ['Okay'],
+        title: 'Alert',
+        message: 'Valid output directory cannot be found.',
+        detail: 'Closing will lose all session data.\n\nCopy the following information to a .json file to save your session information:\n' + JSON.stringify(session),
+      };
+
+      dialog.showMessageBox(null, options, (response, checkboxChecked) => {
+        console.log(response);
+        console.log(checkboxChecked);
+      });
+    }
+
+    fs.unlinkSync(session_file)
     mainWindow = null
   })
 }
