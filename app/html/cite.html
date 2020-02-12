@@ -20,17 +20,14 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<meta charset="utf-8">
-
+<meta charset="UTF-8">
 <title>Metaboverse</title>
 
 <html>
 
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/network.css">
 
-  <script src="../js/utils.js"></script>
-  <script src="../js/build.js"></script>
+
 
   <head>
 
@@ -38,56 +35,71 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <menu>
       <font size=3.25px>
         <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
-        <menuItem style="float:right"><a href="cite.html">Cite</a></menuItem>
+        <menuItem style="float:right"><a href="cite.html"">Cite</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
-        <menuItem style="float:left"><a href="variables.html">Back</a></menuItem>
+        <menuItem style="float:left"><a href="index.html">Back</a></menuItem>
       </font>
     </menu>
 
   </head>
 
-  <body onload="runBuild()">
+<body>
 
-    <center>
+  <center>
     <br>
     <br>
     <br>
     <br>
-    <font size="48" style="font-family: sans-serif">
-      <b>
-        Building Network...
-      </b>
-    </font>
+    <br>
+    <h1>
+      Citing Metaboverse:
+    </h1>
+    <br>
+    <text style="font-size: 16px;">
+      Network regulatory analysis was performed using Metaboverse v
+    </text>
+    <text style="font-size: 16px;" id="getVersion"></text>.
+    <br>
+    <br>
+    <text style="font-size: 16px;">
+      Please cite as:
+      <br>
+      Berg, et. al. 2020. Metaboverse. <a href="https://github.com/Metaboverse" target="_blank">https://github.com/Metaboverse</a>
+    </text>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>
+      Citing Reactome:
+    </h1>
+    <br>
+    <text style="font-size: 16px;">
+      Network curation was generated using Reactome v
+    </text>
+    <text style="font-size: 16px;" id="getReactomeVersion"></text>.
+    <text style="font-size: 16px;">
+      <br>
+      <br>
+      Please include the following citations when referencing Reactome:
+      <br>
+      Bijay et al. 2020 <a href="https://www.ncbi.nlm.nih.gov/pubmed/31691815" target="_blank">PMID: 31691815</a>
+      <br>
+      Fabregat et al. 2018 <a href="https://www.ncbi.nlm.nih.gov/pubmed/29145629" target="_blank">PMID: 29145629</a>
+    </text>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <img src="../../docs/images/metaboverse_logo.png" style="all: initial; width: 250px; text-align:center;">
+  </center>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    This may take several minutes...
-      <button class="info" title="Metaboverse is currently retrieving the source data from Reactome and other databases. Even if the progress bar is not moving, Metaboverse is still working. If the load bar does not move for more than 3 minutes, try refreshing or opening the console log to identify any problems."><i>i</i></button>
-    <br>
-    <br>
-    <br>
-    <div id="progressRange">
-      <div id="graph" align="center"></div>
-      <div id="progressBar">0%</div>
-    <script src="../js/network.js">
-    </script>
-    </div>
-    <br>
-    <br>
+<script src="../js/cite.js"></script>
 
-    <br>
-    <div id="content"></div>
-    <script>
-      $('#content').append('')
-    </script>
-
-
-    </center>
-  </body>
+</body>
 </html>
