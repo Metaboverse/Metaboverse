@@ -418,7 +418,8 @@ function kNN_input(d) {
 function get_link(d) {
 
   if (d.type === "complex_component") {
-    if (d.sub_type === "metabolite_component") {
+    if (d.sub_type === "metabolite_component"
+        || d.sub_type === "protein_component") {
       return d.sub_type;
     } else {
       return d.type;
@@ -465,6 +466,9 @@ function make_graph(
   const forceX = d3.forceX(width / 2).strength(0.015)
   const forceY = d3.forceY(height / 2).strength(0.015)
 
+  console.log(new_nodes)
+  console.log(new_links)
+
   const simulation = d3.forceSimulation(new_nodes)
       .force("link", d3.forceLink(new_links)
         .id(d => d.id)
@@ -485,6 +489,7 @@ function make_graph(
       "catalyst",
       "gene_component",
       "complex_component",
+      "protein_component",
       "metabolite_component"])
     .enter()
     .append("marker")

@@ -62,6 +62,14 @@ stroke: rgba(165, 55, 253, 1);
 stroke-dasharray: 0,2 1;
 }
 
+#protein_component {
+fill: rgba(0, 0, 0, 1);
+}
+.link.protein_component {
+stroke: rgba(0, 0, 0, 1);
+stroke-dasharray: 0,2 1;
+}
+
 #complex_component {
 fill: rgba(166,97,26, 1);
 }
