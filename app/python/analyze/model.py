@@ -302,7 +302,7 @@ def check_complexes(
 
                 try:
                     component_id = name_reference[name]
-                    add_components.append(component_id)
+                    #add_components.append(component_id)
 
                     graph = add_node_edge(
                         graph=graph,
@@ -372,7 +372,8 @@ def map_attributes(
         graph,
         data,
         stats,
-        name_reference):
+        name_reference,
+        degree_dictionary):
     """Data overlay
     - Map repo id to species_id
     - If a node is a complex, take average of neighbors that are not
@@ -407,6 +408,10 @@ def map_attributes(
     for x in list(graph.nodes()):
 
         current_id = graph.nodes()[x]['id']
+
+        # Add degree
+        graph.nodes()[x]['degree'] = degree_dictionary[current_id]
+
         if current_id in set(data_dict.keys()):
 
             graph.nodes()[x]['values'] = data_dict[current_id]
@@ -509,6 +514,20 @@ def compile_pathway_degree(
 
     return super_pathways
 
+def compile_node_degrees(
+        graph):
+    """Retrieve degree metrics for each node
+    """
+
+    d = {}
+
+    deg_dict = G.degree
+    for k,v in deg_dict:
+
+        d[k] = v
+
+    return d
+
 def __main__(
         network,
         data,
@@ -549,9 +568,41 @@ def __main__(
         sep='\t',
         index_col=0)
 
-    species_id = 'HSA'
     output_file = '/Users/jordan/Desktop/HSA_global_reactions.json'
+
+    species_id = 'HSA'
     black_list=[]
+
+    """Start of pancancer-necessary code
+    To run, place all graph-making code within the for loop below
+    """
+    """
+    cancers = [
+    ['breast', 'brca'],
+    ['colon', 'coad'],
+    ['colon','read'],
+    ['bladder','blca'],
+    ['cervix','cesc'],
+    ['kidney','kirc'],
+    ['kidney','kirp'],
+    ['liver','lihc'],
+    ['lung','luad'],
+    ['lung','lusc'],
+    ['prostate','prad'],
+    ['stomach','stad'],
+    ['thyroid','thca'],
+    ['uterus','ucec']]
+
+    for x in [x[1] for x in cancers]:
+        output_file = '/Users/jordan/Desktop/HSA_global_reactions_' + x + '.json'
+        print(output_file)
+        data = stats = pd.read_csv(
+            '/Users/jordan/Desktop/cancer_network_topology/tables/' + x + '_z_table.txt',
+            sep='\t',
+            index_col=0)
+    """
+
+
     #############################
 
     print('Preparing metadata...')
@@ -584,15 +635,35 @@ def __main__(
     # Overlay data and stats, calculate heatmap values for p-value
     # and expression value
     print('Mapping user data...')
+    degree_dictionary = compile_node_degrees(
+        graph=G)
     G = map_attributes(
         graph=G,
         data=data,
         stats=stats,
-        name_reference=network['name_database'])
+        name_reference=network['name_database'],
+        degree_dictionary=degree_dictionary)
 
     # Generate list of super pathways (those with more than 200 reactions)
     super_pathways = compile_pathway_degree(
         pathways=network['pathway_database'])
+    ###
+    # For pancancer
+    """
+    metabolism = network['pathway_database']['R-HSA-1430728']
+    network['pathway_database'] = {}
+    network['pathway_database']['R-HSA-1430728'] = metabolism
+
+    with open('/Users/jordan/Desktop/cancer_network_topology/network/cancer_reactions.json') as f:
+        file = json.load(f)
+        for k,v in file.items():
+
+            network['pathway_database'][k] = {}
+            network['pathway_database'][k]['id'] = k
+            network['pathway_database'][k]['name'] = k
+            network['pathway_database'][k]['reactions'] = v
+    """
+    ###
 
     # Export graph, pathway membership, pathway degree, black_list, other refs
     print('Exporting graph...')

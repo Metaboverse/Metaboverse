@@ -43,7 +43,9 @@
 	- Not seeing this anymore, so listing as solved
 - Protein component edges now showing up
 	- Included sub-type in viz curation side
-
+- Issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
+		- This appears to be a non-issue in mapping as mapping to ID fine
+- Make kNN only focus on lower degree nodes. May allow for better expansion of NNs
 
 ### CRITICAL:
 1. Some nodes currently showing up twice with recent curation changes
@@ -55,20 +57,19 @@
 	- Will likely need to do so in python for colorbar
 	- Export colorbar info to JS
 	- Need to do stats coloring too
-3. issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
-	- This appears to be a non-issue in mapping as mapping to ID fine
-4. Some kNN only bring up one node
-5. Some genes are not finding their edges (see Attenuation)
+
+3. Some kNN only bring up one node
+4. Some genes are not finding their edges (see Attenuation)
 	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
 		- "ENSG00000230989"
 		- "ENSG00000106211" -> this should map to HSPB1
 	- HSPH1 does not have any links
-6. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
+5. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
 	- likely occuring because Active mTORC1 has a CHEBI ID
-7. Cast gene expression to proteins if no proteomics data
-8. Validate viz for new curation paradigm
+6. Cast gene expression to proteins if no proteomics data
+7. Validate viz for new curation paradigm
 	- Test some components to make sure they are curating correctly
-9. Entity search
+8. Entity search
 	- kNN
 	- Component pathways
 		- Drop down with each pathway and target larger node, or all pathways together

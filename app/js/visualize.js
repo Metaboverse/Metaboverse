@@ -185,16 +185,6 @@ function linkArc(d) {
 
 };
 
-function linkArc(d) {
-
-  var dx = d.target.x - d.source.x;
-  var dy = d.target.y - d.source.y;
-  var dr = Math.sqrt(dx * dx + dy * dy);
-
-  return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-
-};
-
 function transform(d) {
 
   return "translate(" + d.x + "," + d.y + ")";
@@ -240,7 +230,6 @@ function get_nodes_links(data, components) {
   nodes.forEach(function(node) {
 
     if (components.includes(node['id'])) {
-
       var node_copy = $.extend(true,{},node)
       node_copy[entity] = node_copy[entity][sample]
       new_nodes.push(node_copy)
@@ -337,6 +326,14 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     };
   };
 
+  var nodes = data["nodes"];
+  nodes.forEach(function(node) {
+    if (node.degree > 20) {
+      nn_components = nn_components.filter(x => x !== node.id)
+    };
+  });
+
+
   // If too many nodes for first neighborhood, stop plotting
   var escape = nn_components.length
   if (escape > max_nodes) {
@@ -352,6 +349,19 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Please wait<br><br></i>";
     document.getElementById("warning_line_2").innerHTML = "";
 
+    // Filter out any components that are above hub threshold for kNN
+    var hub_limit = document.getElementById("hub_button").value;
+    var hub_exclusion = new Set();
+    if (hub_limit > 0) {
+
+      nodes.forEach(function(node) {
+        if (node.degree > hub_limit) {
+          hub_exclusion.add(node.id);
+        };
+      });
+    };
+    console.log(hub_exclusion)
+
     n = 1
     while (n < kNN) {
 
@@ -362,61 +372,76 @@ function parse_kNN_pathway(data, entity_id, kNN) {
         for (reaction in reaction_dictionary) {
 
           //Return all reactions that contain the entity
-          if ((reaction_dictionary[reaction]['reactants'].includes(nn_components[element])) ||
-              (reaction_dictionary[reaction]['products'].includes(nn_components[element])) ||
-              (reaction_dictionary[reaction]['modifiers'].includes(nn_components[element])) ||
-              (reaction_dictionary[reaction]['genes'].includes(nn_components[element]))) {
+          if (((reaction_dictionary[reaction]['reactants'].includes(nn_components[element]))
+          || (reaction_dictionary[reaction]['products'].includes(nn_components[element]))
+          || (reaction_dictionary[reaction]['modifiers'].includes(nn_components[element]))
+          || (reaction_dictionary[reaction]['genes'].includes(nn_components[element])))
+          && (!hub_exclusion.has(reaction_dictionary[reaction]['id']))) {
 
               components.push(reaction_dictionary[reaction]['id']);
 
               for (x in reaction_dictionary[reaction]['reactants']) {
-                components.push(reaction_dictionary[reaction]['reactants'][x]);
+
+                if (!hub_exclusion.has(reaction_dictionary[reaction]['reactants'][x])) {
+                  components.push(reaction_dictionary[reaction]['reactants'][x]);
+                };
               };
               for (x in reaction_dictionary[reaction]['products']) {
-                components.push(reaction_dictionary[reaction]['products'][x]);
+                if (!hub_exclusion.has(reaction_dictionary[reaction]['products'][x])) {
+                  components.push(reaction_dictionary[reaction]['products'][x]);
+                };
               };
               for (x in reaction_dictionary[reaction]['modifiers']) {
-                components.push(reaction_dictionary[reaction]['modifiers'][x][0]);
+
+                if (!hub_exclusion.has(reaction_dictionary[reaction]['modifiers'][x][0])) {
+                  components.push(reaction_dictionary[reaction]['modifiers'][x][0]);
+                };
+
               };
               for (x in reaction_dictionary[reaction]['genes']) {
-                components.push(reaction_dictionary[reaction]['genes'][x]);
+                if (!hub_exclusion.has(reaction_dictionary[reaction]['genes'][x])) {
+                  components.push(reaction_dictionary[reaction]['genes'][x]);
+                };
               };
 
           };
         };
-      }
-      n = n + 1
+      };
 
       // Only combine the lists if they pass the threshold
-      escape = escape + components.length
+      escape = escape + components.length;
+
       if (escape > max_nodes) {
-        n = kNN + 2
-        document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot. Will only plot first neighborhood</i>";
+        console.log(escape)
+        document.getElementById("warning_line_1").innerHTML = "<i style=\"color: red;\">Too many entities to plot. Will only plot first " + n + " neighborhood(s)</i>";
         document.getElementById("warning_line_2").innerHTML = "";
+        n = kNN + 2;
 
       } else {
         nn_components = nn_components.concat(components)
         document.getElementById("warning_line_1").innerHTML = "<br>";
         document.getElementById("warning_line_2").innerHTML = "<br><br>";
-      }
-
-    }
-  }
+      };
+      n = n + 1;
+    };
+  };
 
   var new_elements = get_nodes_links(data, nn_components);
-
   return new_elements;
 
 };
 
 function kNN_input(d) {
-
   var knn_value = document.getElementById("kNN_button").value;
   console.log("k-NN parameter now set to: " + knn_value)
 };
 
-function get_link(d) {
+function hub_input(d) {
+  var hub_value = document.getElementById("hub_button").value;
+  console.log("Hub threshold now set to: " + hub_value)
+};
 
+function get_link(d) {
   if (d.type === "complex_component") {
     if (d.sub_type === "metabolite_component"
         || d.sub_type === "protein_component") {
@@ -427,7 +452,6 @@ function get_link(d) {
   } else {
     return d.type;
   }
-
 };
 
 function make_graph(
@@ -448,8 +472,6 @@ function make_graph(
 
   // Restart graph
   d3.select("svg").remove();
-  d3.select("force").remove();
-  d3.select("g_nodes").remove();
 
   // Initialize force graph object
   var svg = d3
@@ -465,9 +487,6 @@ function make_graph(
 
   const forceX = d3.forceX(width / 2).strength(0.015)
   const forceY = d3.forceY(height / 2).strength(0.015)
-
-  console.log(new_nodes)
-  console.log(new_links)
 
   const simulation = d3.forceSimulation(new_nodes)
       .force("link", d3.forceLink(new_links)
@@ -808,7 +827,6 @@ var data = JSON.parse(fs.readFileSync(database_url).toString());
 
 var pathway_dict = make_pathway_dictionary(data);
 var superPathwayDict = make_superPathway_dictionary(data);
-console.log(pathway_dict)
 
 make_menu(
   superPathwayDict,
@@ -860,6 +878,7 @@ function change() {
   var elements = parse_pathway(data, reactions);
   var new_nodes = elements[0];
   var new_links = elements[1];
+  console.log(new_links)
 
   // Initialize variables
   var node_dict = {};

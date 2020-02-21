@@ -168,6 +168,10 @@ display: inline-block;
   border-radius: 5px;
 }
 
+#hub_button {
+  border-radius: 5px;
+}
+
 .arrow {
   width: 18px;
 }
