@@ -46,6 +46,16 @@
 - Issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
 		- This appears to be a non-issue in mapping as mapping to ID fine
 - Make kNN only focus on lower degree nodes. May allow for better expansion of NNs
+- Display color bar
+	- When toggling values, label with colorbar
+	- Need to output in graph info range, color scale, etc
+	- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
+	- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
+	- Will likely need to do so in python for colorbar
+	- Export colorbar info to JS
+	- Need to do stats coloring too
+	- Solution: build matplotlib colorscale in JS and use that to build colorbar for reference.
+
 
 ### CRITICAL:
 1. Some nodes currently showing up twice with recent curation changes
@@ -54,9 +64,6 @@
 	- Also, this reaction in kNN seems to be missing modifier or input?
 2. It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 	- Only broadcast to protein nodes that don't have values, but if values, leave it. For broadcasted proteins, outline node as dotted border
-	- Will likely need to do so in python for colorbar
-	- Export colorbar info to JS
-	- Need to do stats coloring too
 3. Some kNN only bring up one node
 4. Some genes are not finding their edges (see "Attenuation")
 	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
@@ -96,11 +103,6 @@
 - Allow collapse/hide of these side boxes
 - Option to hide genes, modifiers
 - Option to change shapes of different node types
-- Display color bar
-	- When toggling values, label with colorbar
-	- Need to output in graph info range, color scale, etc
-	- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
-	- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
 - Allow for node-based exploration (list of analytes)
 - Allow custom creation of black list (nodes not to display)
 - Option to split out highly connected entities (so in pathway view you see an individual node for each use)
@@ -179,3 +181,5 @@
 - Packaging
 	- Make available on cloud (host via AWS)
 	- How to store information when running online (no output doc, AWS bucket?)
+- Colorbar
+	- Toggle between expression and significance
