@@ -212,7 +212,6 @@ div
   padding-right: 10px;
 }
 
-
 #reaction_notes {
   overflow: auto;
   max-height: 20vh;
@@ -221,4 +220,22 @@ div
 #type_selection {
   overflow: auto;
   max-width: 215px;
+}
+
+#seismic_canvas {
+  border-radius:10px;
+  margin-top:5px;
+}
+
+#displayValue {
+  height: 20px;
+  width: 24px;
+  border-style: solid;
+  border-width: thin;
+  background-color: white;
+  stroke: black;
+  border-radius: 50%;
+  text-align: center;
+  padding-top:6px;
+  padding-right:1px;
 }

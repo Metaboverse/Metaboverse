@@ -76,17 +76,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           Reaction
         </div>
         <br>
-        <div title="Double-click to expand nearest neighbors">
-        <span class="dot" style="--dot_color: white"></span>
-          No expression value
+        <canvas title="Double-click to expand nearest neighbors" id="seismic_node" class="dot" width="12" height="12" style="background-color:none"></canvas>
+          Entity expression
         <br>
-        <span class="dot" style="--dot_color: #5757e7"></span>
-          Low expression
+        <canvas id="seismic_canvas" class="tooltop" width="225" height="20"></canvas>
         <br>
-        <span class="dot" style="--dot_color: #e75757"></span>
-          High expression
-        </div>
         <br>
+
         <div class="arrow">
           <div class="line" style="--arrow_color: green"></div>
           <div class="point" style="--arrow_color: green">Catalyst</div>
@@ -95,6 +91,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div class="arrow">
           <div class="line" style="--arrow_color: red"></div>
           <div class="point" style="--arrow_color: red">Inhibitor</div>
+        </div>
+        <br>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: blue"></div>
+          <div class="point" style="--arrow_color: blue">Metabolite</div>
         </div>
         <br>
         <div class="arrow">
@@ -185,6 +186,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br>
         <br>
 
+
       </font>
     </div>
 
@@ -197,8 +199,39 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <script src="../js/utils.js"></script>
     <div id="graph" align="center"></div>
-
     <script src="../js/visualize.js"></script>
+    <script src="../js/js-colormaps.js"></script>
+    <script>
+      var max_value = data.max_value;
+      var ignore = drawColormap('seismic_node', 12, max_value);
+      var points = drawColormap('seismic_canvas', 225, max_value);
+
+      $("#seismic_canvas")
+        .mousemove(function(e) {
+          values = handleMouseMove(e, points);
+          var display_value = values[0];
+          var x = values[1];
+          var y = values[2];
+
+          var d = document.getElementById('displayValue');
+          d.style.position = "absolute";
+          d.style.left = String(x);
+          d.style.top = String(y);
+          d.innerHTML = display_value;
+          d.style.display = "inline-block";
+        })
+        .mouseout(function(e) {
+          var d = document.getElementById('displayValue');
+          d.innerHTML = "";
+          d.style.display = "none";
+        });
+
+    </script>
+
+    <!--Colorbar pointer label-->
+    <font style="font-family: sans-serif" size="2">
+      <div id="displayValue" class="displayValue"></div>
+    </font>
 
   </body>
 

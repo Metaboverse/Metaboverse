@@ -445,7 +445,7 @@ def map_attributes(
             graph.nodes()[x]['stats_js'] = convert_rgba(
                 rgba_tuples=colors)
 
-    return graph
+    return graph, data_max
 
 def extract_value(
         value_array,
@@ -487,7 +487,8 @@ def output_graph(
         pathway_dictionary,
         super_pathways,
         reaction_dictionary,
-        black_list):
+        black_list,
+        max_value):
     """Output graph and necessary metadata
     """
 
@@ -496,6 +497,7 @@ def output_graph(
     data['super_pathways'] = super_pathways
     data['reaction_dictionary'] = reaction_dictionary
     data['black_list'] = black_list
+    data['max_value'] = max_value
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
@@ -637,7 +639,7 @@ def __main__(
     print('Mapping user data...')
     degree_dictionary = compile_node_degrees(
         graph=G)
-    G = map_attributes(
+    G, max_value = map_attributes(
         graph=G,
         data=data,
         stats=stats,
@@ -673,5 +675,6 @@ def __main__(
         pathway_dictionary=network['pathway_database'],
         super_pathways=super_pathways,
         reaction_dictionary=network['reaction_database'],
-        black_list=black_list)
+        black_list=black_list,
+        max_value=max_value)
     print('Graphing complete.')

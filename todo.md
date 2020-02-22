@@ -57,9 +57,8 @@
 	- Will likely need to do so in python for colorbar
 	- Export colorbar info to JS
 	- Need to do stats coloring too
-
 3. Some kNN only bring up one node
-4. Some genes are not finding their edges (see Attenuation)
+4. Some genes are not finding their edges (see "Attenuation")
 	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
 		- "ENSG00000230989"
 		- "ENSG00000106211" -> this should map to HSPB1

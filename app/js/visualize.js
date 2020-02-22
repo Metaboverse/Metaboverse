@@ -824,7 +824,7 @@ database_url = get_session_info("database_url");
 console.log("Database path: " + database_url)
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
-
+console.log(data)
 var pathway_dict = make_pathway_dictionary(data);
 var superPathwayDict = make_superPathway_dictionary(data);
 
