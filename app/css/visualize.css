@@ -184,6 +184,17 @@ display: inline-block;
   float: left;
 }
 
+.line2 {
+  margin-top: 14px;
+  width: 16px;
+  border: 0 none;
+  border-bottom: 3px dashed black;
+  background: none;
+  height: 0px;
+  float: left;
+}
+
+
 .point {
   margin-top: 10px;
   width: 0;
