@@ -55,7 +55,10 @@
 	- Export colorbar info to JS
 	- Need to do stats coloring too
 	- Solution: build matplotlib colorscale in JS and use that to build colorbar for reference.
-
+- Entity search
+	- kNN
+	- Component pathways
+		- Drop down with each pathway and target larger node, or all pathways together
 
 ### CRITICAL:
 1. Some nodes currently showing up twice with recent curation changes
@@ -75,19 +78,24 @@
 6. Cast gene expression to proteins if no proteomics data
 7. Validate viz for new curation paradigm
 	- Test some components to make sure they are curating correctly
-8. Entity search
-	- kNN
-	- Component pathways
-		- Drop down with each pathway and target larger node, or all pathways together
 
 
+- Option to hide genes, modifiers
+- Option to change shapes of different node types
+- Allow for node-based exploration (list of analytes)
+- Wrap text for pop-out boxes
+	- change title to div display
+- Show Reactome pathway on hover; double-click opens new window for that page
+- Allow custom on-the-fly creation of black list (nodes not to display)
+	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
+
+- Custom drag and drops that load current session data
 
 
 ### To Do:
 1. UI
 - Get drop in bars to save and import data
 - Output log of user actions
-- Wrap text for pop-out boxes
 
 2. Curation
 - Run motif search or exploration based on user input
@@ -98,13 +106,7 @@
 - Allow integration of motif in-pathway panel for exploration module
 
 4. Viz
-- Show Reactome pathway on hover; double-click opens new window for that page
 - Motif: Integrate motif window for real-time analysis
-- Allow collapse/hide of these side boxes
-- Option to hide genes, modifiers
-- Option to change shapes of different node types
-- Allow for node-based exploration (list of analytes)
-- Allow custom creation of black list (nodes not to display)
 - Option to split out highly connected entities (so in pathway view you see an individual node for each use)
 
 5. Processing

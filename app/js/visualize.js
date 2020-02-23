@@ -34,7 +34,7 @@ var selection = null;
 function selectPathway() {
 
   var selection = document.getElementById("pathwayMenu").value;
-  console.log("Pathway: " + selection)
+  console.log("Selection: " + selection)
   return selection;
 };
 
@@ -96,8 +96,9 @@ function make_menu(
   });
   pathways_list.sort();
   if (provide_all === true) {
-    pathways_list.unshift("All");
-  }
+    pathways_list.unshift("All pathways");
+    pathways_list.unshift("All entities (may experience some lag)");
+  };
   pathways_list.unshift(opening_message); // Add select prompt to menu bar
 
   // Generate drop-down menu for species select
@@ -831,7 +832,7 @@ var superPathwayDict = make_superPathway_dictionary(data);
 make_menu(
   superPathwayDict,
   "superPathwayMenu",
-  "Select a super pathway...",
+  "Select a category...",
   provide_all=true);
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
@@ -841,30 +842,56 @@ d3.select("#pathwayMenu").on("change", change);
 function changeSuper() {
 
   var superSelection = document.getElementById("superPathwayMenu").value;
-
+  console.log(superSelection)
   emptyMenu(document.getElementById("pathwayMenu"));
 
   // Limit pathways to super-pathway
-  if (superSelection !== "All") {
+  if (superSelection === "All pathways") {
+    var parsed_pathway_dict = pathway_dict;
 
-    var selectedReactions = superPathwayDict[superSelection]["reactions"];
+  } else if (superSelection === "All entities") {
 
-    var parsed_pathway_dict = parsePathways(pathway_dict, selectedReactions);
+    var entity_dictionary = parseEntities(data.nodes)
 
   } else {
-    var parsed_pathway_dict = pathway_dict;
-  }
+    var selectedReactions = superPathwayDict[superSelection]["reactions"];
+    var parsed_pathway_dict = parsePathways(pathway_dict, selectedReactions);
+    console.log(parsed_pathway_dict)
+  };
 
-  make_menu(
-    parsed_pathway_dict,
-    "pathwayMenu",
-    "Select a pathway...");
-}
+  if (superSelection !== "All entities") {
+    make_menu(
+      parsed_pathway_dict,
+      "pathwayMenu",
+      "Select a pathway...");
+  } else {
+    make_menu(
+      entity_dictionary,
+      "pathwayMenu",
+      "Select an entity...");
+  };
+
+};
+
+// Create dictionary of all entity names and their corresponding entity IDs
+function parseEntities(nodes) {
+
+  entity_dictionary = {};
+  for (node in nodes) {
+
+    if (nodes[node].type !== 'reaction') {
+      entity_dictionary[nodes[node].name] = nodes[node].id;
+    };
+  };
+
+  return entity_dictionary;
+};
 
 // Graphing
 function change() {
   graph_genes = true;
   var selection = document.getElementById("pathwayMenu").value;
+  var superSelection = document.getElementById("superPathwayMenu").value;
 
   document.getElementById("reaction_notes").innerHTML = "";
 
@@ -874,34 +901,51 @@ function change() {
   document.getElementById("warning_line_1").innerHTML = "<br>";
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
-  var reactions = pathway_dict[selection]['reactions'];
-  var elements = parse_pathway(data, reactions);
-  var new_nodes = elements[0];
-  var new_links = elements[1];
-  console.log(new_links)
+  if (superSelection !== "All entities") {
 
-  // Initialize variables
-  var node_dict = {};
-  var type_dict = {};
+    // Run normal first plot
+    var reactions = pathway_dict[selection]['reactions'];
+    var elements = parse_pathway(data, reactions);
+    var new_nodes = elements[0];
+    var new_links = elements[1];
 
-  var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
-  var node_dict = node_elements[0];
-  var type_dict = node_elements[1];
-  var expression_dict = node_elements[2];
-  var stats_dict = node_elements[3];
-  var display_analytes_dict = node_elements[4];
-  var display_reactions_dict = node_elements[5];
-  var entity_id_dict = node_elements[6];
+    // Initialize variables
+    var node_dict = {};
+    var type_dict = {};
 
-  make_graph(
-      data,
-      new_nodes,
-      new_links,
-      type_dict,
-      node_dict,
-      entity_id_dict,
-      expression_dict,
-      stats_dict,
-      display_analytes_dict,
-      display_reactions_dict)
-}
+    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+    var node_dict = node_elements[0];
+    var type_dict = node_elements[1];
+    var expression_dict = node_elements[2];
+    var stats_dict = node_elements[3];
+    var display_analytes_dict = node_elements[4];
+    var display_reactions_dict = node_elements[5];
+    var entity_id_dict = node_elements[6];
+
+    make_graph(
+        data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        expression_dict,
+        stats_dict,
+        display_analytes_dict,
+        display_reactions_dict)
+
+  } else {
+
+    // Get kNN of entity selected
+    document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
+
+    var mod_selection = determineWidth(selection);
+    document.getElementById("type_selection").innerHTML = mod_selection;
+
+    graph_genes = true;
+    var entity_dictionary = parseEntities(data.nodes)
+    nearest_neighbors(data, entity_dictionary[selection]);
+
+  };
+
+};
