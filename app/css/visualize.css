@@ -225,6 +225,8 @@ div
 #seismic_canvas {
   border-radius:10px;
   margin-top:5px;
+  border-style: solid;
+  border-width: thin;
 }
 
 #displayValue {
