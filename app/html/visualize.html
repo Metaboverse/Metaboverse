@@ -28,6 +28,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/visualize.css">
+  <link rel="stylesheet" href="../css/timecourse.css">
 
   <head>
 
@@ -80,7 +81,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           Entity expression
         <br>
         <canvas id="seismic_canvas" class="tooltop" width="220" height="15"></canvas>
-      
+
         <br>
         <div class="arrow">
           <div class="line" style="--arrow_color: grey"></div>
@@ -206,9 +207,21 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <select id="pathwayMenu" onchange="selectPathway()"></select>
     <br>
 
-    <script src="../js/utils.js"></script>
+    <!--Colorbar pointer label-->
+    <font style="font-family: sans-serif" size="1">
+      <div id="displayValue" class="displayValue"></div>
+    </font>
+
+    <!--Put timecourse placeholder here-->
+    <div id="slider" align="center"></div>
+
+    <!--Graph space-->
     <div id="graph" align="center"></div>
+
+    <!--Scripts-->
+    <script src="../js/utils.js"></script>
     <script src="../js/visualize.js"></script>
+    <script src="../js/timecourse.js"></script>
     <script src="../js/js-colormaps.js"></script>
     <script>
       var max_value = data.max_value;
@@ -234,13 +247,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           d.innerHTML = "";
           d.style.display = "none";
         });
-
     </script>
 
-    <!--Colorbar pointer label-->
-    <font style="font-family: sans-serif" size="1">
-      <div id="displayValue" class="displayValue"></div>
-    </font>
+
+
+
 
   </body>
 

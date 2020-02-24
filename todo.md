@@ -59,6 +59,10 @@
 	- kNN
 	- Component pathways
 		- Drop down with each pathway and target larger node, or all pathways together
+	- Allow for node-based exploration (list of analytes)
+
+
+
 
 ### CRITICAL:
 1. Some nodes currently showing up twice with recent curation changes
@@ -82,14 +86,14 @@
 
 - Option to hide genes, modifiers
 - Option to change shapes of different node types
-- Allow for node-based exploration (list of analytes)
 - Wrap text for pop-out boxes
 	- change title to div display
 - Show Reactome pathway on hover; double-click opens new window for that page
 - Allow custom on-the-fly creation of black list (nodes not to display)
 	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
-
 - Custom drag and drops that load current session data
+
+
 
 
 ### To Do:

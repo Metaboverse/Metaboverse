@@ -97,7 +97,7 @@ function make_menu(
   pathways_list.sort();
   if (provide_all === true) {
     pathways_list.unshift("All pathways");
-    pathways_list.unshift("All entities (may experience some lag)");
+    pathways_list.unshift("All entities");
   };
   pathways_list.unshift(opening_message); // Add select prompt to menu bar
 
@@ -112,13 +112,11 @@ function make_menu(
     menu.appendChild(option);
 
   };
-
 };
 
 function emptyMenu(selectMenu) {
 
     var i;
-
     for(i = selectMenu.options.length - 1; i >= 0; i--) {
       selectMenu.remove(i);
     }
@@ -820,25 +818,6 @@ function make_graph(
 
 };
 
-// MAIN
-database_url = get_session_info("database_url");
-console.log("Database path: " + database_url)
-
-var data = JSON.parse(fs.readFileSync(database_url).toString());
-console.log(data)
-var pathway_dict = make_pathway_dictionary(data);
-var superPathwayDict = make_superPathway_dictionary(data);
-
-make_menu(
-  superPathwayDict,
-  "superPathwayMenu",
-  "Select a category...",
-  provide_all=true);
-
-d3.select("#superPathwayMenu").on("change", changeSuper);
-
-d3.select("#pathwayMenu").on("change", change);
-
 function changeSuper() {
 
   var superSelection = document.getElementById("superPathwayMenu").value;
@@ -937,10 +916,9 @@ function change() {
   } else {
 
     // Get kNN of entity selected
-    document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
-
     var mod_selection = determineWidth(selection);
     document.getElementById("type_selection").innerHTML = mod_selection;
+    document.getElementById("type_selection_type").innerHTML = "Nearest Neighbor";
 
     graph_genes = true;
     var entity_dictionary = parseEntities(data.nodes)
@@ -949,3 +927,43 @@ function change() {
   };
 
 };
+
+// Check number of categories
+function checkCategories(categories) {
+
+  //change to > 1 after testing
+  if (data.categories.length === 1) {
+    timecourse = true;
+    timecourse_fill = '<div id="play-button" align="center">Pause<div id="bar" align="center"></div></div>'
+    document.getElementById("slider").innerHTML = timecourse_fill;
+
+
+
+    //buildSlider();
+  } else {
+    timecourse = false;
+  };
+  return timecourse
+
+};
+
+// MAIN
+database_url = get_session_info("database_url");
+console.log("Database path: " + database_url)
+
+var data = JSON.parse(fs.readFileSync(database_url).toString());
+var pathway_dict = make_pathway_dictionary(data);
+var superPathwayDict = make_superPathway_dictionary(data);
+
+var timecourse = checkCategories(data.categories)
+
+
+
+make_menu(
+  superPathwayDict,
+  "superPathwayMenu",
+  "Select a category...",
+  provide_all=true);
+
+d3.select("#superPathwayMenu").on("change", changeSuper);
+d3.select("#pathwayMenu").on("change", change);

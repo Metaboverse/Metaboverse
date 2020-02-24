@@ -1,0 +1,97 @@
+/*
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+#slider,
+#bar {
+  margin-left:225px;
+}
+
+
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+.track-inset {
+  stroke: #ddd;
+  stroke-width: 8px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  stroke: transparent;
+  cursor: crosshair;
+}
+
+.handle {
+  fill: rgba(103, 128, 159, 1);
+  stroke: #000;
+  stroke-opacity: 1;
+  stroke-width: 1px;
+}
+
+.label {
+    font: 16px sans-serif;
+    pointer-events: none;
+    fill: white;
+}
+
+#play-button {
+  font: 16px sans-serif;
+  position: relative;
+  top: 45px;
+  left: 70px;
+  background: rgba(103, 128, 159, 1);
+  padding-right: 26px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  margin: 2;
+  padding: 12px 8px 0px 8px;
+  width: 60px;
+  cursor: pointer;
+  height: 30px;
+  float: left;
+}
+
+#play-button:hover {
+  background-color: #696969;
+}
+
+
+#bar {
+  float: center;
+}
+
+#_border {
+  outline: solid black;
+  outline-offset: 0px;
+  margin-left: 0px;
+  padding-right: -40px;
+}

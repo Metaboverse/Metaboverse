@@ -488,7 +488,8 @@ def output_graph(
         super_pathways,
         reaction_dictionary,
         black_list,
-        max_value):
+        max_value,
+        categories):
     """Output graph and necessary metadata
     """
 
@@ -498,6 +499,7 @@ def output_graph(
     data['reaction_dictionary'] = reaction_dictionary
     data['black_list'] = black_list
     data['max_value'] = max_value
+    data['categories'] = categories
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
@@ -646,6 +648,8 @@ def __main__(
         name_reference=network['name_database'],
         degree_dictionary=degree_dictionary)
 
+    categories = data.columns.tolist()
+
     # Generate list of super pathways (those with more than 200 reactions)
     super_pathways = compile_pathway_degree(
         pathways=network['pathway_database'])
@@ -676,5 +680,6 @@ def __main__(
         super_pathways=super_pathways,
         reaction_dictionary=network['reaction_database'],
         black_list=black_list,
-        max_value=max_value)
+        max_value=max_value,
+        categories=categories)
     print('Graphing complete.')
