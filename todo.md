@@ -60,7 +60,9 @@
 	- Component pathways
 		- Drop down with each pathway and target larger node, or all pathways together
 	- Allow for node-based exploration (list of analytes)
-
+- Extra nodes in pathways
+	- example for adaptive immune system -> activation of ras in b cells
+		- looks like a complex is having troubles matching up its component proteins? RASGRP3 and RASGRP1,3
 
 
 
@@ -77,6 +79,7 @@
 		- "ENSG00000230989"
 		- "ENSG00000106211" -> this should map to HSPB1
 	- HSPH1 does not have any links
+	- Post curation that collapses these instances? Or is it fine? As long as both instances have the data mapped, shouldn't really be in issue?
 5. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
 	- likely occuring because Active mTORC1 has a CHEBI ID
 6. Cast gene expression to proteins if no proteomics data
@@ -89,11 +92,12 @@
 - Wrap text for pop-out boxes
 	- change title to div display
 - Show Reactome pathway on hover; double-click opens new window for that page
+	- Just have button that hyperlinks and opens in new window
 - Allow custom on-the-fly creation of black list (nodes not to display)
 	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
 - Custom drag and drops that load current session data
-
-
+- Snapshot of svg object
+	- http://bl.ocks.org/Rokotyan/0556f8facbaf344507cdc45dc3622177
 
 
 ### To Do:

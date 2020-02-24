@@ -63,20 +63,20 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 }
 
 #play-button {
-  font: 16px sans-serif;
+  font: 12px sans-serif;
   position: relative;
-  top: 45px;
+  top: 25px;
   left: 70px;
   background: rgba(103, 128, 159, 1);
-  padding-right: 26px;
+  padding-right: 10px;
   border-radius: 3px;
   border: none;
   color: white;
   margin: 2;
-  padding: 12px 8px 0px 8px;
+  padding: 6px 4px 0px 4px;
   width: 60px;
   cursor: pointer;
-  height: 30px;
+  height: 22px;
   float: left;
 }
 

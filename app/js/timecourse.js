@@ -21,9 +21,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var width = window.innerWidth * 0.7;
 var height = window.innerHeight * 0.8;
-var start = 90;
-var end = 160;
 var timeTransition = 8000;
+var numberConditions = 5; // determine based on user data
+var start = 90; // data min
+var end = 160; // data max
 
 var x = d3.scaleLinear()
     .domain([start, end])
@@ -45,19 +46,23 @@ slider.append("line")
     .attr("class", "track")
     .attr("x1", x.range()[0])
     .attr("x2", x.range()[1])
-  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+  .select(function() {
+    return this.parentNode.appendChild(this.cloneNode(true));
+  })
     .attr("class", "track-inset")
-  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+  .select(function() {
+    return this.parentNode.appendChild(this.cloneNode(true));
+  })
     .attr("class", "track-overlay")
-    .call(d3.drag()
-        .on("start.interrupt", function() { slider.interrupt(); })
-        .on("start drag", function() { hue(x.invert(d3.event.x)); }));
+  .call(d3.drag()
+      .on("start.interrupt", function() { slider.interrupt(); })
+      .on("start drag", function() { hue(x.invert(d3.event.x)); }));
 
 slider.insert("g", ".track-overlay")
     .attr("class", "ticks")
     .attr("transform", "translate(0," + 18 + ")")
   .selectAll("text")
-  .data(x.ticks(10))
+  .data(x.ticks(numberConditions))
   .enter().append("text")
     .attr("x", x)
     .attr("text-anchor", "middle")
@@ -65,12 +70,7 @@ slider.insert("g", ".track-overlay")
 
 var handle = slider.insert("circle", ".track-overlay")
     .attr("class", "handle")
-    .attr("r", 17);
-
-var label = slider.append("text")
-  .attr("class", "label")
-  .text(start)
-  .attr("transform", "translate(" + start + ",7)")
+    .attr("r", 12);
 
 /*
 slider.transition() // Gratuitous intro!

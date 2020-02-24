@@ -209,8 +209,8 @@ function parse_pathway(data, reactions) {
     for (x in target_rxns['modifiers']) {
       components.push(target_rxns['modifiers'][x][0]);
     };
-    for (x in target_rxns['genes']) {
-      components.push(target_rxns['genes'][x]);
+    for (x in target_rxns['additional_components']) {
+      components.push(target_rxns['additional_components'][x]);
     };
   };
   var new_elements = get_nodes_links(data, components);
@@ -307,7 +307,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     if ((reaction_dictionary[reaction]['reactants'].includes(entity_id)) ||
         (reaction_dictionary[reaction]['products'].includes(entity_id)) ||
         (reaction_dictionary[reaction]['modifiers'].includes(entity_id)) ||
-        (reaction_dictionary[reaction]['genes'].includes(entity_id))) {
+        (reaction_dictionary[reaction]['additional_components'].includes(entity_id))) {
 
         nn_components.push(reaction_dictionary[reaction]['id']);
         for (x in reaction_dictionary[reaction]['reactants']) {
@@ -319,8 +319,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
         for (x in reaction_dictionary[reaction]['modifiers']) {
           nn_components.push(reaction_dictionary[reaction]['modifiers'][x][0]);
         };
-        for (x in reaction_dictionary[reaction]['genes']) {
-          nn_components.push(reaction_dictionary[reaction]['genes'][x]);
+        for (x in reaction_dictionary[reaction]['additional_components']) {
+          nn_components.push(reaction_dictionary[reaction]['additional_components'][x]);
         };
     };
   };
@@ -374,7 +374,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
           if (((reaction_dictionary[reaction]['reactants'].includes(nn_components[element]))
           || (reaction_dictionary[reaction]['products'].includes(nn_components[element]))
           || (reaction_dictionary[reaction]['modifiers'].includes(nn_components[element]))
-          || (reaction_dictionary[reaction]['genes'].includes(nn_components[element])))
+          || (reaction_dictionary[reaction]['additional_components'].includes(nn_components[element])))
           && (!hub_exclusion.has(reaction_dictionary[reaction]['id']))) {
 
               components.push(reaction_dictionary[reaction]['id']);
@@ -397,9 +397,9 @@ function parse_kNN_pathway(data, entity_id, kNN) {
                 };
 
               };
-              for (x in reaction_dictionary[reaction]['genes']) {
-                if (!hub_exclusion.has(reaction_dictionary[reaction]['genes'][x])) {
-                  components.push(reaction_dictionary[reaction]['genes'][x]);
+              for (x in reaction_dictionary[reaction]['additional_components']) {
+                if (!hub_exclusion.has(reaction_dictionary[reaction]['additional_components'][x])) {
+                  components.push(reaction_dictionary[reaction]['additional_components'][x]);
                 };
               };
 
@@ -464,6 +464,10 @@ function make_graph(
     stats_dict,
     display_analytes_dict,
     display_reactions_dict) {
+
+  console.log(new_nodes)
+  console.log(new_links)
+
 
   // Allow flexible window dimensions based on initial window size when opened
   var width = window.innerWidth;
@@ -932,7 +936,7 @@ function change() {
 function checkCategories(categories) {
 
   //change to > 1 after testing
-  if (data.categories.length === 1) {
+  if (data.categories.length > 1) {
     timecourse = true;
     timecourse_fill = '<div id="play-button" align="center">Pause<div id="bar" align="center"></div></div>'
     document.getElementById("slider").innerHTML = timecourse_fill;
@@ -956,8 +960,6 @@ var pathway_dict = make_pathway_dictionary(data);
 var superPathwayDict = make_superPathway_dictionary(data);
 
 var timecourse = checkCategories(data.categories)
-
-
 
 make_menu(
   superPathwayDict,

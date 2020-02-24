@@ -110,3 +110,27 @@ function handleMouseMove(e, points) {
   return [display_value, x, y];
 
 };
+
+var max_value = data.max_value;
+var ignore = drawColormap('seismic_node', 12, max_value);
+var points = drawColormap('seismic_canvas', 220, max_value);
+
+$("#seismic_canvas")
+  .mousemove(function(e) {
+    values = handleMouseMove(e, points);
+    var display_value = values[0];
+    var x = values[1];
+    var y = values[2];
+
+    var d = document.getElementById('displayValue');
+    d.style.position = "absolute";
+    d.style.left = String(x);
+    d.style.top = String(y);
+    d.innerHTML = display_value;
+    d.style.display = "inline-block";
+  })
+  .mouseout(function(e) {
+    var d = document.getElementById('displayValue');
+    d.innerHTML = "";
+    d.style.display = "none";
+  });

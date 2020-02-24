@@ -94,7 +94,7 @@ def process_reactions(
         reverse_genes):
     """
     """
-    new_genes = []
+    new_components = []
 
     # Get reaction name
     reaction_id = network[reactome_id]['id']
@@ -131,7 +131,7 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference)
 
-        graph, gene_components = check_complexes(
+        graph, additional_components = check_complexes(
             graph=graph,
             id=reactant,
             complex_reference=complex_reference,
@@ -139,8 +139,8 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference,
             reverse_genes=reverse_genes)
-        for x in gene_components:
-            new_genes.append(x)
+        for x in additional_components:
+            new_components.append(x)
 
     for product in products:
 
@@ -157,7 +157,7 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference)
 
-        graph, gene_components = check_complexes(
+        graph, additional_components = check_complexes(
             graph=graph,
             id=product,
             complex_reference=complex_reference,
@@ -165,8 +165,8 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference,
             reverse_genes=reverse_genes)
-        for x in gene_components:
-            new_genes.append(x)
+        for x in additional_components:
+            new_components.append(x)
 
     for modifier in modifiers:
 
@@ -192,7 +192,7 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference)
 
-        graph, gene_components = check_complexes(
+        graph, additional_components = check_complexes(
             graph=graph,
             id=id,
             complex_reference=complex_reference,
@@ -200,10 +200,10 @@ def process_reactions(
             name_reference=name_reference,
             protein_reference=protein_reference,
             reverse_genes=reverse_genes)
-        for x in gene_components:
-            new_genes.append(x)
+        for x in additional_components:
+            new_components.append(x)
 
-    network[reactome_id]['genes'] = new_genes
+    network[reactome_id]['additional_components'] = new_components
 
     return graph, network
 
@@ -291,7 +291,6 @@ def check_complexes(
                     name = x
 
                     if p.lower() == 'uniprot':
-
                         sub_type = 'protein_component'
                     elif p.lower() == 'mirna':
                         sub_type = 'mirna_component'
@@ -302,7 +301,7 @@ def check_complexes(
 
                 try:
                     component_id = name_reference[name]
-                    #add_components.append(component_id)
+                    add_components.append(component_id) # Add first componenet to reaction ids to graph during plotting
 
                     graph = add_node_edge(
                         graph=graph,
@@ -633,7 +632,8 @@ def __main__(
         species_id=species_id,
         reverse_genes=reverse_genes)
 
-    # For gene components, add section to reaction database for gene_components and list
+    # For gene and protein components, add section to reaction database
+    #for additional_components and list
     # Pull those in with everything else in JS
 
     # Overlay data and stats, calculate heatmap values for p-value

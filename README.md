@@ -1,6 +1,6 @@
 # ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/images/metaboverse_banner.png)
 
-A Biological and Metabolic Networks Analyzer
+A Biological and Metabolic Networks Analysis Platform
 
 `WARNING: This repository is currently under development. When the software is complete and stable enough for beta testing, the alpha tag will be removed.`   
 To receive updates, join our mailing list by emailing `metaboverse@gmail.com`
