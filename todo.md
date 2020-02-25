@@ -1,6 +1,7 @@
 # To Do
 
-## v1
+## Plan:
+### v1
 	- two condition
 	- basic paired time course
 	- explain considerations
@@ -9,64 +10,13 @@
 	- pathway motif (highest vs lowest or dead-end node comparisons)
 	- collapse time-course motif to assess trends with penalization for large spread
 	- co-IP shortest paths pseudo-network?
-## v2
+### v2
 	- flux
 	- advanced time course
 	- advanced stats
 
-### COMPLETED:
-- Wrap text for reactions, notes
-- Current selection wraps and pushes below
-- Toggle values doesn't update correctly
-- Icons linking to docs
-- Can't do 2 kNNs
-- Some kNNs will just show parent node (looks like it fixed itself with some previous edit)
-- Random arrows with no arm for some links in some pathways
-	- Always protein component
-	- Looks like some, but not all have expression layering
-	- Solution: arose from edges where source and target were identical
-- Remove pathways with just one reaction?
-	- Solution: no
-- Consider super pathways to be those that have more than 200 rxns?
-	- Then gather all pathways that fall within those pathways
-	- Check that all reactions of pathway must be reactions that are also in the metabolism pathway?
-	- Solution: done
-- No gene components appear to be showing up
-- Get metabolite components to show
-- Genes not getting pulled for reactions -- need to add their ID to the reaction database
-- Label genes, proteins, metabolites for selective sorting
-- Adding gene components makes the scramble and spacing of nodes worse
-	- Solution: Gave option to toggle genes from graph
-- Write to output citation info, user variables, etc
-- Clear tmp files
-- Some mismatched arrow and arm colors (because it has two roles?)
-	- Not seeing this anymore, so listing as solved
-- Protein component edges now showing up
-	- Included sub-type in viz curation side
-- Issue where some reaction nodes are called gene_name gene or gene_name(n-n+1)
-		- This appears to be a non-issue in mapping as mapping to ID fine
-- Make kNN only focus on lower degree nodes. May allow for better expansion of NNs
-- Display color bar
-	- When toggling values, label with colorbar
-	- Need to output in graph info range, color scale, etc
-	- https://bl.ocks.org/duspviz-mit/9b6dce37101c30ab80d0bf378fe5e583
-	- https://bl.ocks.org/starcalibre/6cccfa843ed254aa0a0d
-	- Will likely need to do so in python for colorbar
-	- Export colorbar info to JS
-	- Need to do stats coloring too
-	- Solution: build matplotlib colorscale in JS and use that to build colorbar for reference.
-- Entity search
-	- kNN
-	- Component pathways
-		- Drop down with each pathway and target larger node, or all pathways together
-	- Allow for node-based exploration (list of analytes)
-- Extra nodes in pathways
-	- example for adaptive immune system -> activation of ras in b cells
-		- looks like a complex is having troubles matching up its component proteins? RASGRP3 and RASGRP1,3
-- Snapshot of svg object
-	- http://bl.ocks.org/Rokotyan/0556f8facbaf344507cdc45dc3622177
-- Graph refresh button
 
+## To do:
 
 ### CRITICAL:
 1. Some nodes currently showing up twice with recent curation changes
@@ -94,6 +44,10 @@
 	- Test some components to make sure they are curating correctly
 
 
+
+### In progress:
+	- Add stats colors
+	- Add coloring toggle
 - Wrap text for pop-out boxes
 	- change title to div display
 - Show Reactome pathway on hover; double-click opens new window for that page
@@ -103,46 +57,30 @@
 - Custom drag and drops that load current session data
 - Timecourse
 - Node collapse
-- Re-integration curation
+- Re-integrate python calls for curation
 - Motif design
+- include python dependency installs in download
 
 
-### To Do:
-1. UI
-- Get drop in bars to save and import data
-- Output log of user actions
 
-2. Curation
+
+
+
+
+### In queue:
 - Run motif search or exploration based on user input
 - Give user page of entities that we couldn't map, have them enter valid alternative ID
-
-3. Motif searching
+	- already in table form, just need to show and give option to fill in and rerun?
 - Integrate Youjia's module; Figure out licensing
 - Allow integration of motif in-pathway panel for exploration module
-
-4. Viz
 - Motif: Integrate motif window for real-time analysis
 - Option to split out highly connected entities (so in pathway view you see an individual node for each use)
-
-5. Processing
 - Export -- give option to export visualizations, data tables, etc.
 - Data normalization and merging? Or restrict acceptable inputs
 - Speed up curation (archived versions)
 - Pre-processing pipelines
-
-6. Time-course data
-- Slider bar
-- Integration into network curation
-	- https://observablehq.com/@mbostock/the-wealth-health-of-nations
-- Ideas:
-	- https://bl.ocks.org/steveharoz/8c3e2524079a8c440df60c1ab72b5d03
-	- https://bl.ocks.org/jrladd/c76799aa63efd7176bd9006f403e854d
-	- https://bl.ocks.org/mbostock/6452972
-	- https://bl.ocks.org/officeofjane/47d2b0bfeecfcb41d2212d06d095c763
-- Motif search integration (simple)
+- Timecourse motif search integration (simple)
 	- See below
-
-7. Advanced
 - Use an interactive dial to drag the motif you want (two next to each other)
 	- Allow to specify one is gene, one is metabolite, etc
 	- build that into the regular motif searcher too
@@ -150,40 +88,38 @@
 - For now, limit motif search to one node and its behavior
 	- Map them on the network
 	- Look at two adjacent motifs and one goes up. Gradually, one goes down gradually
-
-8. Statistics
 - Significance
 	- See jActiveModules methodology
 	- See M-K trend analysis
-
-9. Node collapse
 - For reactions with missing data, collapse into bridged reaction for all others
 - During hover, in pop-out or sidebar, show missing reactions in full
 - Remove nodes with missing data
-
-10. Other
 - Travis CI tests
 - Docs
 - Info for what pathway a node belongs to
 - Select parent pathway (i.e. metabolism) in order to let motif search run
 - For MIDAS, co-IP, show paths to connect interactors, prioritize by path length
-
-11. Validation
 - MPC flux validation
 - MetaboNet datasets
 - Time-course data
 
-=================================================================
 
-12. Try again?
+
+
+
+
+
+
+
+
+## Future implementations (non-priority):
+- Try again?
 - Provide a go back button to get back to the graph they made previously
 - Make node of interest bigger than others (optional)
 - Cartesian distortion?
 	- Seems to only work as is with d3 <= v3
 - Option to hide proteins, other modifiers
 - Option to change shapes of different node types
-
-13. Future
 - Flux data
 	- Slider bar
 	- Integration into network curation
