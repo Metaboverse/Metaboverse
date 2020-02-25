@@ -83,17 +83,17 @@ svg.append("defs").selectAll("marker")
       "up",
       "down",
       "gene"])
-      .enter()
-  .append("marker")
-    .attr("id", function(d) { return d; })
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 15)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("path")
-    .attr("d", "M0,-5L10,0L0,5");
+    .enter()
+    .append("marker")
+      .attr("id", function(d) { return d; })
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 18.7)
+      .attr("refY", -2)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+    .append("path")
+      .attr("d", "M0, -5L10, 0L0, 5");
 
 var link = svg.append("g").selectAll("path")
     .data(links)
@@ -127,9 +127,10 @@ function tick() {
 }
 
 function linkArc(d) {
-  var dx = d.target.x - d.source.x,
-      dy = d.target.y - d.source.y,
-      dr = Math.sqrt(dx * dx + dy * dy);
+  var dx = d.target.x - d.source.x;
+  var dy = d.target.y - d.source.y;
+  var dr = Math.sqrt(dx * dx + dy * dy);
+
   return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
 }
 
