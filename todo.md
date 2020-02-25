@@ -74,13 +74,17 @@
 2. It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
 	- Only broadcast to protein nodes that don't have values, but if values, leave it. For broadcasted proteins, outline node as dotted border
 3. Some kNN only bring up one node
+	- seem to be a lot of modifiers, maybe genes that aren't directly linked to a reaction
 4. Some genes are not finding their edges (see "Attenuation")
 	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
 		- "ENSG00000230989" -> This is HSBP1, and is incorrectly matched?
 		- "ENSG00000106211" -> this should map to HSPB1. does not belong in pathway
 	- HSPH1 does not have any links, should not be a member of any complex in reactome
-	- Post curation that collapses these instances? Or is it fine? As long as both instances have the data mapped, shouldn't really be in issue?
 		- not fine -- the "HSBP1" connects to protein, but the "HSPB1 gene" carries the expression value
+	- Note: Most of the pathways work okay though where missing links aren't an issue. Actually, majority seem to be fine -- almost all of them are fine.
+		- Some are single reactions, but at least have some links
+	- Another case in "ACACB gene" from Regulation of cholesterol biosynthesis of SREBP (SREBF)
+		- Other than that, almost all metabolism pathways are fine
 5. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
 	- likely occuring because Active mTORC1 has a CHEBI ID
 6. Cast gene expression to proteins if no proteomics data

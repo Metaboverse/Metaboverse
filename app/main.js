@@ -26,7 +26,7 @@ const {ipcRenderer} = require('electron')
 const path = require('path')
 const fs = require('fs')
 const ipcMain = require('electron').ipcMain
-const { dialog } = require('electron')
+const {dialog} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
