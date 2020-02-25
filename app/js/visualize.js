@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 const d3 = require('d3')
 var fs = require('fs')
+var saveSVG = require('save-svg-as-png')
 
 const max_nodes = 1500;
 var entity = "values_js";
@@ -600,6 +601,30 @@ function make_graph(
   simulation
     .on("tick", tick)
 
+  // Refresh current graph
+  d3.select("#restartButton")
+    .on("click", function() {
+
+      simulation
+        .alphaTarget(0.01)
+        .alphaMin(0.1)
+        .velocityDecay(0.70)
+        .restart();
+
+    });
+
+  d3.select("#saveGraph")
+    .on("click", function() {
+
+      saveSVG.saveSvgAsPng(
+        document.getElementsByTagName("svg")[0],
+        "plot.png",
+        encoderOptions=1,
+        scale=5,
+        encoderType='image/png');
+
+    });
+
   toggle_e = true;
   d3.select("#toggleExpression")
     .on("click", function() {
@@ -825,7 +850,6 @@ function make_graph(
 function changeSuper() {
 
   var superSelection = document.getElementById("superPathwayMenu").value;
-  console.log(superSelection)
   emptyMenu(document.getElementById("pathwayMenu"));
 
   // Limit pathways to super-pathway

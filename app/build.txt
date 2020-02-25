@@ -11,6 +11,7 @@ If modules not installed:
 2) Run 'npm install d3'
 3) Run 'npm install jquery'
 4) Run 'npm install string-pixel-width'
+5) Run 'npm install d3-save-svg'
 
 To run demo app:
 ----------------

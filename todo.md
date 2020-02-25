@@ -63,7 +63,9 @@
 - Extra nodes in pathways
 	- example for adaptive immune system -> activation of ras in b cells
 		- looks like a complex is having troubles matching up its component proteins? RASGRP3 and RASGRP1,3
-
+- Snapshot of svg object
+	- http://bl.ocks.org/Rokotyan/0556f8facbaf344507cdc45dc3622177
+- Graph refresh button
 
 
 ### CRITICAL:
@@ -92,8 +94,6 @@
 	- Test some components to make sure they are curating correctly
 
 
-- Option to hide genes, modifiers
-- Option to change shapes of different node types
 - Wrap text for pop-out boxes
 	- change title to div display
 - Show Reactome pathway on hover; double-click opens new window for that page
@@ -101,10 +101,10 @@
 - Allow custom on-the-fly creation of black list (nodes not to display)
 	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
 - Custom drag and drops that load current session data
-- Snapshot of svg object
-	- http://bl.ocks.org/Rokotyan/0556f8facbaf344507cdc45dc3622177
-- Graph refresh button
-
+- Timecourse
+- Node collapse
+- Re-integration curation
+- Motif design
 
 
 ### To Do:
@@ -180,6 +180,8 @@
 - Make node of interest bigger than others (optional)
 - Cartesian distortion?
 	- Seems to only work as is with d3 <= v3
+- Option to hide proteins, other modifiers
+- Option to change shapes of different node types
 
 13. Future
 - Flux data
