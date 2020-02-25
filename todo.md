@@ -76,10 +76,11 @@
 3. Some kNN only bring up one node
 4. Some genes are not finding their edges (see "Attenuation")
 	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
-		- "ENSG00000230989"
-		- "ENSG00000106211" -> this should map to HSPB1
-	- HSPH1 does not have any links
+		- "ENSG00000230989" -> This is HSBP1, and is incorrectly matched?
+		- "ENSG00000106211" -> this should map to HSPB1. does not belong in pathway
+	- HSPH1 does not have any links, should not be a member of any complex in reactome
 	- Post curation that collapses these instances? Or is it fine? As long as both instances have the data mapped, shouldn't really be in issue?
+		- not fine -- the "HSBP1" connects to protein, but the "HSPB1 gene" carries the expression value
 5. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
 	- likely occuring because Active mTORC1 has a CHEBI ID
 6. Cast gene expression to proteins if no proteomics data
@@ -98,6 +99,8 @@
 - Custom drag and drops that load current session data
 - Snapshot of svg object
 	- http://bl.ocks.org/Rokotyan/0556f8facbaf344507cdc45dc3622177
+- Graph refresh button
+
 
 
 ### To Do:

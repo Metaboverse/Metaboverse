@@ -839,7 +839,7 @@ function changeSuper() {
   } else {
     var selectedReactions = superPathwayDict[superSelection]["reactions"];
     var parsed_pathway_dict = parsePathways(pathway_dict, selectedReactions);
-    console.log(parsed_pathway_dict)
+
   };
 
   if (superSelection !== "All entities") {
