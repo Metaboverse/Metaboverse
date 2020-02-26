@@ -24,8 +24,8 @@ var fs = require('fs')
 var saveSVG = require('save-svg-as-png')
 
 const max_nodes = 1500;
-var entity = "values_js";
 var sample = 0;
+var entity = "values_js";
 var graph_genes = true;
 var saved_nodes = [];
 var saved_links = [];
@@ -637,7 +637,7 @@ function make_graph(
         reactome_string = "https://reactome.org/PathwayBrowser/#/" + pathway_id;
         window.open(reactome_string, 'window name', 'window settings');
       };
-      
+
     });
 
   toggle_e = true;
@@ -707,6 +707,27 @@ function make_graph(
 
       }
     });
+
+    $("#toggleColors")
+      .click(function(e) {
+
+        if (toggle_c === false) {
+
+          entity = "stats_js";
+          node.style("--node_color", function(d) {
+              return "rgba(" + d[entity].toString() + ")";
+              }
+            );
+
+        } else {
+
+          entity = "values_js";
+          node.style("--node_color", function(d) {
+              return "rgba(" + d[entity].toString() + ")";
+              }
+            );
+        }
+      });
 
   function determine_displays(toggle_a, toggle_r) {
 

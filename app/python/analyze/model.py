@@ -32,6 +32,7 @@ from networkx.readwrite import json_graph
 import matplotlib
 import matplotlib.pyplot as plt
 cmap = matplotlib.cm.get_cmap('seismic')
+pmap = matplotlib.cm.get_cmap('Reds')
 
 """Graph utils
 """
@@ -394,7 +395,9 @@ def map_attributes(
     stats_renamed = stats.copy()
     stats_renamed.index = stats.index.map(network['name_database'])
     stats_renamed = stats_renamed.loc[stats_renamed.index.dropna()]
-    stats_max = abs(stats_renamed).max().max()
+    stats_logged = -1 * np.log10(stats_renamed + 1e-100)
+
+    stats_max = abs(stats_logged).max().max()
 
     data_dict = {}
     for index, row in data_renamed.iterrows():
@@ -423,7 +426,8 @@ def map_attributes(
             graph.nodes()[x]['stats'] = stats_dict[current_id]
             graph.nodes()[x]['stats_rgba'] = extract_value(
                 value_array=stats_dict[current_id],
-                max_value=stats_max)
+                max_value=stats_max,
+                type="stats")
             graph.nodes()[x]['stats_js'] = convert_rgba(
                 rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
@@ -444,20 +448,33 @@ def map_attributes(
             graph.nodes()[x]['stats_js'] = convert_rgba(
                 rgba_tuples=colors)
 
-    return graph, data_max
+    return graph, data_max, stats_max
 
 def extract_value(
         value_array,
-        max_value):
+        max_value,
+        type="value"):
     """Extract expression value
     """
 
     rgba = []
-    for x in value_array:
 
-        position = (x + max_value) / (2 * max_value)
-        rgba_tuple = cmap(position)
-        rgba.append(rgba_tuple)
+    if type == "value":
+
+        for x in value_array:
+
+            position = (x + max_value) / (2 * max_value)
+            rgba_tuple = cmap(position)
+            rgba.append(rgba_tuple)
+
+    else:
+
+        for x in value_array:
+
+            x = -1 * np.log10(x + 1e-100)
+            position = x / max_value
+            rgba_tuple = pmap(position)
+            rgba.append(rgba_tuple)
 
     return rgba
 
@@ -488,6 +505,7 @@ def output_graph(
         reaction_dictionary,
         black_list,
         max_value,
+        max_stat,
         categories):
     """Output graph and necessary metadata
     """
@@ -498,6 +516,7 @@ def output_graph(
     data['reaction_dictionary'] = reaction_dictionary
     data['black_list'] = black_list
     data['max_value'] = max_value
+    data['max_stat'] = max_stat
     data['categories'] = categories
 
     with open(output_name, 'w') as f:
@@ -641,7 +660,7 @@ def __main__(
     print('Mapping user data...')
     degree_dictionary = compile_node_degrees(
         graph=G)
-    G, max_value = map_attributes(
+    G, max_value, max_stat = map_attributes(
         graph=G,
         data=data,
         stats=stats,
@@ -681,5 +700,6 @@ def __main__(
         reaction_dictionary=network['reaction_database'],
         black_list=black_list,
         max_value=max_value,
+        max_stat=max_stat,
         categories=categories)
     print('Graphing complete.')

@@ -37,8 +37,9 @@
 		- Some are single reactions, but at least have some links
 	- Another case in "ACACB gene" from Regulation of cholesterol biosynthesis of SREBP (SREBF)
 		- Other than that, almost all metabolism pathways are fine
+	- A lot of missing edges in kNN
 5. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
-	- likely occuring because Active mTORC1 has a CHEBI ID
+	- likely occurring because Active mTORC1 has a CHEBI ID
 6. Cast gene expression to proteins if no proteomics data
 7. Validate viz for new curation paradigm
 	- Test some components to make sure they are curating correctly
@@ -46,10 +47,6 @@
 
 
 ### In progress:
-- Add stats colors
-- Add coloring toggle
-- Wrap text for pop-out boxes
-	- change title to div display
 - Allow custom on-the-fly creation of black list (nodes not to display)
 	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
 - Custom drag and drops that load current session data
@@ -59,7 +56,7 @@
 - Motif design
 - include python dependency installs in download
 
-
+speed up large networks? Or is it all in the force layout?
 
 
 
@@ -136,3 +133,5 @@
 	- How to store information when running online (no output doc, AWS bucket?)
 - Colorbar
 	- Toggle between expression and significance
+- Wrap text for pop-out boxes
+	- change title to div display
