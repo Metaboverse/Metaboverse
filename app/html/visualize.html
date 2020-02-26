@@ -69,21 +69,21 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <div class="sidebar">
       <font style="font-family: sans-serif" size="2">
         <b><u>Legend</u></b>
-        <button class="info" title="Click and drag the background to pan, or use the mouse wheel to zoom"><i>i</i></button>
+        <button class="info" title="Click and drag the background to pan, or use the mouse wheel to zoom."><i>i</i></button>
         <br>
         <br>
         <b>Entity Values</b>
         <br>
         <br>
-        <div title="Double-click to display reaction notes">
+        <div title="Double-click to display reaction notes.">
           <span class="dot" style="--dot_color: grey"></span>
           Reaction
         </div>
         <br>
-        <canvas title="Double-click to expand nearest neighbors" id="seismic_node" class="dot" width="12" height="12" style="background-color:none"></canvas>
+        <canvas title="Double-click to expand nearest neighbors." id="seismic_node" class="dot" width="12" height="12" style="background-color:none"></canvas>
           Entity expression
         <br>
-        <canvas id="seismic_canvas" class="tooltop" width="220" height="15"></canvas>
+        <canvas id="seismic_canvas" width="220" height="15"></canvas>
         <br>
         <br>
         <b>Relationship Types</b>
@@ -126,21 +126,21 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br>
         <br>
         <b><u>Options</u></b>
-        <button class="info" title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details"><i>i</i></button>
+        <button class="info" title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details."><i>i</i></button>
         <br>
         <br>
-        <div title="Click to turn feature labels on or off">
+        <div title="Click to turn feature labels on or off.">
           <button id="toggleAnalytes">Features</button>
         </div>
-        <div title="Click to turn reaction labels on or off">
+        <div title="Click to turn reaction labels on or off.">
           <button id="toggleReactions">Reactions</button>
         </div>
-        <div title="Click to turn expression and statistical values on or off">
+        <div title="Click to turn expression and statistical values on or off.">
           <button id="toggleExpression">Expression</button>
         </div>
         <br>
-        <div title="Click to toggle gene nodes (remove or display)">
-          <button id="toggleGenes">Genes</button>
+        <div title="Click to toggle gene nodes (remove or display).">
+          <button id="toggleGenes">Toggle Genes</button>
         </div>
         <!--
         <div title="Click to toggle protein nodes (remove or display)">
@@ -154,7 +154,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button id="toggleModifiers">Modifiers</button>
         </div>
         -->
-        <div title="Click to toggle between mapping expression or statistical color values">
+        <div title="Click to toggle between mapping expression or statistical color values.">
           <button id="toggleColors">Highlight Values/Stats</button>
         </div>
         <br>
@@ -166,8 +166,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <br>
         <br>
-        <div title="Click to toggle collapse of nodes with no data overlaid">
+        <div title="Click to toggle collapse of nodes with no data overlaid.">
           <button id="collapseNodes">Collapse Empty Nodes</button>
+        </div>
+        <div title="Click to open the Reactome representation of the current pathway.">
+          <button id="openPathway">View Curated Pathway Image</button>
         </div>
         <br>
         <br>
@@ -231,7 +234,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <script src="../js/visualize.js"></script>
     <script src="../js/timecourse.js"></script>
     <script src="../js/js-colormaps.js"></script>
-
   </body>
 
 </html>

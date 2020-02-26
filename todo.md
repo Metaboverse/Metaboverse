@@ -46,16 +46,14 @@
 
 
 ### In progress:
-	- Add stats colors
-	- Add coloring toggle
+- Add stats colors
+- Add coloring toggle
 - Wrap text for pop-out boxes
 	- change title to div display
-- Show Reactome pathway on hover; double-click opens new window for that page
-	- Just have button that hyperlinks and opens in new window
 - Allow custom on-the-fly creation of black list (nodes not to display)
 	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
 - Custom drag and drops that load current session data
-- Timecourse
+- Time-course
 - Node collapse
 - Re-integrate python calls for curation
 - Motif design

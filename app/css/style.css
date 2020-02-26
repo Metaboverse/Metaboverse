@@ -153,12 +153,6 @@ text {
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.59);
 }
 
-.info {
-  border-radius:28px;
-  border: 1px solid grey;
-}
-
-
 .tooltip {
   border-radius:5px;
   border: 1px solid grey;
@@ -335,4 +329,8 @@ font-family: sans-serif;
   width: 50%;
   background-color: white;
   border-radius: 10px;
+}
+
+.info {
+  border-radius: 50%;
 }

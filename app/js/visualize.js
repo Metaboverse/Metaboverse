@@ -57,6 +57,7 @@ function make_pathway_dictionary(data) {
 
     pathway_dict[pathways[key]['name']] = {
       'id': pathways[key]['name'],
+      'reactome': pathways[key]['reactome'],
       'reactions': pathways[key]['reactions']
     };
   };
@@ -256,6 +257,7 @@ function nearest_neighbors(data, entity_id) {
 
   // Get current nearest neighbors value
   var kNN = document.getElementById("kNN_button").value;
+  document.getElementById("pathwayMenu").value = "";
 
   // Curate kNN to node of interest
   var nn_elements = parse_kNN_pathway(data, entity_id, kNN);
@@ -622,6 +624,17 @@ function make_graph(
         encoderOptions=1,
         scale=5,
         encoderType='image/png');
+
+    });
+
+  d3.select("#openPathway")
+    .on("click", function() {
+
+      pathway = selectPathway();
+      pathway_id = pathway_dict[pathway].reactome;
+
+      reactome_string = "https://reactome.org/PathwayBrowser/#/" + pathway_id;
+      window.open(reactome_string, 'window name', 'window settings');
 
     });
 
