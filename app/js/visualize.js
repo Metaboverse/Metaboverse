@@ -631,11 +631,13 @@ function make_graph(
     .on("click", function() {
 
       pathway = selectPathway();
-      pathway_id = pathway_dict[pathway].reactome;
 
-      reactome_string = "https://reactome.org/PathwayBrowser/#/" + pathway_id;
-      window.open(reactome_string, 'window name', 'window settings');
-
+      if (pathway !== "") {
+        pathway_id = pathway_dict[pathway].reactome;
+        reactome_string = "https://reactome.org/PathwayBrowser/#/" + pathway_id;
+        window.open(reactome_string, 'window name', 'window settings');
+      };
+      
     });
 
   toggle_e = true;
