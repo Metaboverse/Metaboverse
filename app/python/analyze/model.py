@@ -228,6 +228,7 @@ def add_node_edge(
     graph.nodes()[id]['name'] = name
     graph.nodes()[id]['type'] = type
     graph.nodes()[id]['sub_type'] = sub_type
+    graph.nodes()[id]['inferred'] = 'false'
 
     if type == 'reactant':
         graph.add_edges_from([
@@ -432,6 +433,7 @@ def map_attributes(
                 rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
         else:
+
             if graph.nodes()[x]['type'] == 'reaction':
                 colors = [reaction_color for x in range(n)]
 
@@ -550,6 +552,113 @@ def compile_node_degrees(
 
     return d
 
+def remove_nulls(values):
+
+    if all(None in v for v in values) == True:
+        return []
+
+    else:
+        for v in values:
+            if None in v:
+                values.remove(v)
+
+        return values
+
+def infer_protein_values(values, length):
+
+    protein_vals = []
+    for i in range(length):
+
+        pos = []
+
+        for j in range(len(values)):
+
+            if values[j][i] != None:
+                pos.append(values[j][i])
+
+        protein_vals.append(sum(pos) / len(pos))
+
+    return protein_vals
+
+def broadcast_values(
+        graph,
+        categories,
+        max_value,
+        max_stat):
+    """
+    """
+
+    u = graph.to_undirected()
+    length = len(categories)
+
+    for x in graph.nodes():
+
+        if None not in graph.nodes()[x]['values'] \
+        and None not in graph.nodes()[x]['stats']:
+            pass
+
+        else:
+
+            # 1. sub_type == 'protein_component' && type == 'complex_component'
+            #       find edges
+            #       find nodes type == 'gene_component'
+            #       for x in values:
+            #           take min, max, avg of genes to broadcast
+            #           mark as inferred
+
+            if graph.nodes()[x]['sub_type'] == 'protein_component' \
+            and graph.nodes()[x]['type'] == 'complex_component':
+
+                gene_values = []
+                gene_stats = []
+                for neighbor in u[x]:
+
+                    if graph.nodes()[neighbor]['sub_type'] == 'gene':
+                        gene_values.append(graph.nodes()[neighbor]['values'])
+                        gene_stats.append(graph.nodes()[neighbor]['stats'])
+
+                # Remove None and avg
+                gene_values = remove_nulls(gene_values)
+                gene_stats = remove_nulls(gene_stats)
+
+                # Mark as inferred if this is possible
+                if gene_values != []:
+                    inferred_values = infer_protein_values(gene_values, length)
+
+                    graph.nodes()[x]['inferred'] = 'true'
+                    graph.nodes()[x]['values'] = inferred_values
+                    graph.nodes()[x]['values_rgba'] = extract_value(
+                        value_array=inferred_values,
+                        max_value=max_value)
+                    graph.nodes()[x]['values_js'] = convert_rgba(
+                        rgba_tuples=graph.nodes()[x]['values_rgba'])
+
+                if gene_stats != []:
+                    inferred_stats = infer_protein_values(gene_stats, length)
+
+                    graph.nodes()[x]['inferred'] = 'true'
+                    graph.nodes()[x]['stats'] = inferred_stats
+                    graph.nodes()[x]['stats_rgba'] = extract_value(
+                        value_array=inferred_stats,
+                        max_value=max_stat,
+                        type="stats")
+                    graph.nodes()[x]['stats_js'] = convert_rgba(
+                        rgba_tuples=graph.nodes()[x]['stats_rgba'])
+
+
+            # 2. graph.nodes()[id]['complex'] == 'true'
+            #       find edges
+            #       find nodes type == 'complex_component'
+            #       for x in values:
+            #           take min, max, avg of genes to broadcast
+            #           mark as inferred
+            # 3. Any remaining nodes with no "inferred" category are marked as:
+            #       inferred == 'false'
+
+
+    return graph
+
+G.nodes()["species_109796"]
 def __main__(
         network,
         data,
@@ -668,6 +777,11 @@ def __main__(
         degree_dictionary=degree_dictionary)
 
     categories = data.columns.tolist()
+    G = broadcast_values(
+            graph=G,
+            categories=categories,
+            max_value=max_value,
+            max_stat=max_stat)
 
     # Generate list of super pathways (those with more than 200 reactions)
     super_pathways = compile_pathway_degree(

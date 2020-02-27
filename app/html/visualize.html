@@ -80,7 +80,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           Reaction
         </div>
         <br>
-        <canvas title="Double-click to expand nearest neighbors." id="seismic_node" class="dot" width="12" height="12" style="background-color:none"></canvas>
+        <div title="Value was found in user data.">
+          <span class="dot" style="--dot_color: white"></span>
+          Measured
+        </div>
+        <div title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values.">
+          <span class="dot" style="--dot_color: white;border-style: dashed;margin-left:10px;"></span>
+          Inferred
+        </div>
+        <br>
+        <canvas title="Colormap value for entity measurement." id="seismic_node" class="dot" width="12" height="12" style="background-color:none"></canvas>
         <div id="entity_type"></div>
         <br>
         <canvas id="seismic_canvas" width="220" height="15"></canvas>

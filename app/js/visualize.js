@@ -330,7 +330,8 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
   var nodes = data["nodes"];
   nodes.forEach(function(node) {
-    if (node.degree > 20) {
+    if (node.degree > 500) {
+      console.log("filtering " + node.name + " (" + node.degree + ") -- may cause edge loss")
       nn_components = nn_components.filter(x => x !== node.id)
     };
   });
@@ -474,7 +475,7 @@ function make_graph(
 
   // Allow flexible window dimensions based on initial window size when opened
   var width = window.innerWidth;
-  var height = window.innerHeight;
+  var height = window.innerHeight - 75;
 
   // Restart graph
   d3.select("svg").remove();
@@ -514,6 +515,8 @@ function make_graph(
       "catalyst",
       "gene_component",
       "complex_component",
+      "mirna_component",
+      "other",
       "protein_component",
       "metabolite_component"])
     .enter()
@@ -545,6 +548,13 @@ function make_graph(
       }
     )
     .style("--node_radius", function(d) { return 6; })
+    .style("stroke-dasharray", function(d) {
+      if (d.inferred === "true") {
+        return "2,2";
+      } else {
+        return "none";
+      }
+    })
     .call(d3.drag()
           .subject(dragsubject)
           .on("start", dragstarted)
