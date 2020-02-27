@@ -23,11 +23,9 @@
 	- See glycolysis/GCK1:GKRP complex
 		- two separate species IDs for complex component and reactant
 	- Also, this reaction in kNN seems to be missing modifier or input?
-2. It looks like genes may be broadcasting expression to proteins, but I think I gave it protein
-	- Only broadcast to protein nodes that don't have values, but if values, leave it. For broadcasted proteins, outline node as dotted border
-3. Some kNN only bring up one node
+2. Some kNN only bring up one node
 	- seem to be a lot of modifiers, maybe genes that aren't directly linked to a reaction
-4. Some genes are not finding their edges (see "Attenuation")
+3. Some genes are not finding their edges (see "Attenuation")
 	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
 		- "ENSG00000230989" -> This is HSBP1, and is incorrectly matched?
 		- "ENSG00000106211" -> this should map to HSPB1. does not belong in pathway
@@ -38,10 +36,9 @@
 	- Another case in "ACACB gene" from Regulation of cholesterol biosynthesis of SREBP (SREBF)
 		- Other than that, almost all metabolism pathways are fine
 	- A lot of missing edges in kNN
-5. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
+4. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
 	- likely occurring because Active mTORC1 has a CHEBI ID
-6. Cast gene expression to proteins if no proteomics data
-7. Validate viz for new curation paradigm
+5. Validate viz for new curation paradigm
 	- Test some components to make sure they are curating correctly
 
 

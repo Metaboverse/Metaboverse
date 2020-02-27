@@ -674,6 +674,13 @@ def broadcast_values(
                     graph.nodes()[x]['stats_js'] = convert_rgba(
                         rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
+    for x in graph.nodes():
+
+        if None not in graph.nodes()[x]['values'] \
+        and None not in graph.nodes()[x]['stats']:
+            pass
+
+        else:
 
             # 2. graph.nodes()[id]['complex'] == 'true'
             #       find edges
@@ -681,8 +688,45 @@ def broadcast_values(
             #       for x in values:
             #           take min, max, avg of genes to broadcast
             #           mark as inferred
-            # 3. Any remaining nodes with no "inferred" category are marked as:
-            #       inferred == 'false'
+
+            if 'complex' in graph.nodes()[x] \
+            and graph.nodes()[x]['complex'] == 'true':
+
+                gene_values = []
+                gene_stats = []
+                for neighbor in u[x]:
+
+                    if graph.nodes()[neighbor]['type'] == 'complex_component':
+                        gene_values.append(graph.nodes()[neighbor]['values'])
+                        gene_stats.append(graph.nodes()[neighbor]['stats'])
+
+                # Remove None and avg
+                gene_values = remove_nulls(gene_values)
+                gene_stats = remove_nulls(gene_stats)
+
+                # Mark as inferred if this is possible
+                if gene_values != []:
+                    inferred_values = infer_protein_values(gene_values, length)
+
+                    graph.nodes()[x]['inferred'] = 'true'
+                    graph.nodes()[x]['values'] = inferred_values
+                    graph.nodes()[x]['values_rgba'] = extract_value(
+                        value_array=inferred_values,
+                        max_value=max_value)
+                    graph.nodes()[x]['values_js'] = convert_rgba(
+                        rgba_tuples=graph.nodes()[x]['values_rgba'])
+
+                if gene_stats != []:
+                    inferred_stats = infer_protein_values(gene_stats, length)
+
+                    graph.nodes()[x]['inferred'] = 'true'
+                    graph.nodes()[x]['stats'] = inferred_stats
+                    graph.nodes()[x]['stats_rgba'] = extract_value(
+                        value_array=inferred_stats,
+                        max_value=max_stat,
+                        type="stats")
+                    graph.nodes()[x]['stats_js'] = convert_rgba(
+                        rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
 
     return graph
