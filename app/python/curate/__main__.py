@@ -182,8 +182,8 @@ def parse_ensembl_synonyms(
     ensembl = ensembl[ensembl[reactome_location].str.contains(species_id)]
 
     ensembl_name_dictionary = pd.Series(
-        ensembl[id_location].values,
-        index=ensembl[name_location]).to_dict()
+        ensembl[name_location].values,
+        index=ensembl[id_location]).to_dict()
 
     return ensembl_name_dictionary
 
@@ -211,8 +211,8 @@ def parse_uniprot_synonyms(
     uniprot = uniprot[uniprot[reactome_location].str.contains(species_id)]
 
     uniprot_name_dictionary = pd.Series(
-        uniprot[id_location].values,
-        index=uniprot[name_location]).to_dict()
+        uniprot[name_location].values,
+        index=uniprot[id_location]).to_dict()
 
     return uniprot_name_dictionary
 

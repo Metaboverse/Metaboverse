@@ -47,13 +47,6 @@
 
 
 ### In progress:
-Mapping:
-- Some protein complexes are not finding their id in the uniprot dictionary but works if you flip the dictionary keys and values
-- Reaction components with protein get a general term from species ref and not the actual protein that it should belong to
-	- Try different display name from uniprot dictionary?
-
-
-
 - Allow custom on-the-fly creation of black list (nodes not to display)
 	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
 - Custom drag and drops that load current session data

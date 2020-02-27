@@ -56,9 +56,10 @@ def build_graph(
         species_reference,
         name_reference,
         protein_reference,
+        uniprot_reference,
         complexes,
         species_id,
-        reverse_genes):
+        gene_reference):
     """Build graph
     - Add nodes and edges
     - Map names to objects in the graph for display
@@ -77,9 +78,10 @@ def build_graph(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
+            uniprot_reference=uniprot_reference,
             complex_reference=complexes,
             species_id=species_id,
-            reverse_genes=reverse_genes)
+            gene_reference=gene_reference)
 
     return G, network
 
@@ -90,9 +92,10 @@ def process_reactions(
         species_reference,
         name_reference,
         protein_reference,
+        uniprot_reference,
         complex_reference,
         species_id,
-        reverse_genes):
+        gene_reference):
     """
     """
     new_components = []
@@ -139,7 +142,8 @@ def process_reactions(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
-            reverse_genes=reverse_genes)
+            uniprot_reference=uniprot_reference,
+            gene_reference=gene_reference)
         for x in additional_components:
             new_components.append(x)
 
@@ -165,7 +169,8 @@ def process_reactions(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
-            reverse_genes=reverse_genes)
+            uniprot_reference=uniprot_reference,
+            gene_reference=gene_reference)
         for x in additional_components:
             new_components.append(x)
 
@@ -200,7 +205,8 @@ def process_reactions(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
-            reverse_genes=reverse_genes)
+            uniprot_reference=uniprot_reference,
+            gene_reference=gene_reference)
         for x in additional_components:
             new_components.append(x)
 
@@ -269,12 +275,19 @@ def check_complexes(
         species_reference,
         name_reference,
         protein_reference,
-        reverse_genes):
+        uniprot_reference,
+        gene_reference):
     """Check if species being added is in complex dictionary
     - If record exists, add nodes and edges for the new relationship.
     - If record contains a UniProt ID, cross reference with Ensembl database
     - If complex, label true; else label as false
     """
+
+    prot_ref = {}
+    for k, v in uniprot_reference.items():
+        prot_ref[k] = v
+        prot_ref[v] = k
+    uniprot_reference = prot_ref
 
     add_components = []
 
@@ -289,26 +302,46 @@ def check_complexes(
                 if p.lower() == 'chebi':
                     name = 'CHEBI:' + x
                     sub_type = 'metabolite_component'
+                    component_id = name_reference[name]
+                    add_components.append(component_id)
+                    display_name = species_reference[component_id]
+
                 else:
-                    name = x
 
                     if p.lower() == 'uniprot':
+                        name = uniprot_reference[x]
                         sub_type = 'protein_component'
+                        component_id = x
+                        add_components.append(x)
+                        display_name = name
                     elif p.lower() == 'mirna':
+                        name = x
                         sub_type = 'mirna_component'
+                        component_id = name_reference[name]
+                        add_components.append(component_id)
+                        display_name = species_reference[component_id]
                     elif p.lower() == 'ensembl':
+                        name = x
                         sub_type = 'gene_component'
+                        component_id = x
+                        add_components.append(component_id)
+                        display_name = gene_reference[name]
                     else:
+                        name = x
                         sub_type = 'other'
+                        try:
+                            component_id = name_reference[name]
+                            display_name = species_reference[component_id]
+                        except:
+                            display_name = component_id = x
+                        add_components.append(component_id)
 
                 try:
-                    component_id = name_reference[name]
-                    add_components.append(component_id) # Add first componenet to reaction ids to graph during plotting
 
                     graph = add_node_edge(
                         graph=graph,
                         id=component_id,
-                        name=species_reference[component_id],
+                        name=display_name,
                         reaction_membership=id,
                         type='complex_component',
                         sub_type=sub_type,
@@ -321,13 +354,13 @@ def check_complexes(
                     if p.lower() == 'uniprot':
 
                         # Get protein's corresponding gene ID
-                        gene = protein_reference[name]
+                        gene = protein_reference[component_id]
                         add_components.append(gene)
 
                         graph = add_node_edge(
                             graph=graph,
                             id=gene,
-                            name=reverse_genes[gene],
+                            name=gene_reference[gene],
                             reaction_membership=component_id,
                             type='gene_component',
                             sub_type='gene',
@@ -356,14 +389,10 @@ def uniprot_ensembl_reference(
     new_dict = {}
 
     for k, v in uniprot_reference.items():
-        try:
-            new_dict[v] = ensembl_reference[k]
-        except:
-            pass
 
-    for k, v in ensembl_reference.items():
         try:
-            new_dict[uniprot_reference[k]] = v
+            new_dict[k] = ensembl_reference[v]
+
         except:
             pass
 
@@ -389,12 +418,12 @@ def map_attributes(
 
     # Re-index data and stats
     data_renamed = data.copy()
-    data_renamed.index = data.index.map(network['name_database'])
+    data_renamed = data.rename(index=network['name_database'])
     data_renamed = data_renamed.loc[data_renamed.index.dropna()]
     data_max = abs(data_renamed).max().max()
 
     stats_renamed = stats.copy()
-    stats_renamed.index = stats.index.map(network['name_database'])
+    stats_renamed = stats.rename(index=network['name_database'])
     stats_renamed = stats_renamed.loc[stats_renamed.index.dropna()]
     stats_logged = -1 * np.log10(stats_renamed + 1e-100)
 
@@ -658,7 +687,6 @@ def broadcast_values(
 
     return graph
 
-G.nodes()["species_109796"]
 def __main__(
         network,
         data,
@@ -743,10 +771,10 @@ def __main__(
         species_id=species_id)
 
     # Prepare uniprot to ensembl name mapper
+    reverse_genes = {v:k for k,v in network['ensembl_synonyms'].items()}
     protein_dictionary = uniprot_ensembl_reference(
         uniprot_reference=network['uniprot_synonyms'],
-        ensembl_reference=network['ensembl_synonyms'])
-    reverse_genes = {v:k for k,v in network['ensembl_synonyms'].items()}
+        ensembl_reference=reverse_genes)
 
     # Generate graph
     # Name mapping
@@ -756,9 +784,10 @@ def __main__(
         species_reference=network['species_database'],
         name_reference=network['name_database'],
         protein_reference=protein_dictionary,
+        uniprot_reference=network['uniprot_synonyms'],
         complexes=network['complex_dictionary'],
         species_id=species_id,
-        reverse_genes=reverse_genes)
+        gene_reference=network['ensembl_synonyms'])
 
     # For gene and protein components, add section to reaction database
     #for additional_components and list
