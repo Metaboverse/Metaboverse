@@ -25,22 +25,10 @@
 	- Also, this reaction in kNN seems to be missing modifier or input?
 2. Some kNN only bring up one node
 	- seem to be a lot of modifiers, maybe genes that aren't directly linked to a reaction
-3. Some genes are not finding their edges (see "Attenuation")
-	- In case of HSBP1, two HSBP1 nodes for gene components with two ensembl IDs
-		- "ENSG00000230989" -> This is HSBP1, and is incorrectly matched?
-		- "ENSG00000106211" -> this should map to HSPB1. does not belong in pathway
-	- HSPH1 does not have any links, should not be a member of any complex in reactome
-		- not fine -- the "HSBP1" connects to protein, but the "HSPB1 gene" carries the expression value
-	- Note: Most of the pathways work okay though where missing links aren't an issue. Actually, majority seem to be fine -- almost all of them are fine.
-		- Some are single reactions, but at least have some links
-	- Another case in "ACACB gene" from Regulation of cholesterol biosynthesis of SREBP (SREBF)
-		- Other than that, almost all metabolism pathways are fine
 	- A lot of missing edges in kNN
-4. Labeling "Active mTORC1 complex" as metabolite component in Acetylcholine regulates insulin secretion
-	- likely occurring because Active mTORC1 has a CHEBI ID
 5. Validate viz for new curation paradigm
 	- Test some components to make sure they are curating correctly
-
+	- Are the mappings of data that matter happening? 
 
 
 ### In progress:

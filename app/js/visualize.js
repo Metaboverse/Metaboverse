@@ -447,7 +447,8 @@ function hub_input(d) {
 function get_link(d) {
   if (d.type === "complex_component") {
     if (d.sub_type === "metabolite_component"
-        || d.sub_type === "protein_component") {
+        || d.sub_type === "protein_component"
+      || d.sub_type === "gene_component") {
       return d.sub_type;
     } else {
       return d.type;
@@ -810,7 +811,8 @@ function make_graph(
 
         var newer_components = [];
         for (x in new_nodes) {
-          if (new_nodes[x]['type'] !== "gene_component") {
+          if (new_nodes[x]['type'] !== "gene_component"
+            && (new_nodes[x]['sub_type'] !== "gene_component")) {
 
             newer_components.push(new_nodes[x]['id'])
           }
