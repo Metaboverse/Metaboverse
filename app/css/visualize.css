@@ -35,76 +35,76 @@ https://bl.ocks.org/mbostock/1212215
 */
 
 .link {
-fill: none;
-stroke: #666;
-stroke-width: 1.5px;
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
 }
 
 #catalyst {
-fill: green;
+  fill: green;
 }
 .link.catalyst {
-stroke: green;
+  stroke: green;
 }
 
 #inhibitor {
-fill: red;
+  fill: red;
 }
 .link.inhibitor {
-stroke: red;
+  stroke: red;
 }
 
 #gene_component {
-fill: rgba(165, 55, 253, 1);
+  fill: rgba(165, 55, 253, 1);
 }
 .link.gene_component {
-stroke: rgba(165, 55, 253, 1);
-stroke-dasharray: 0,2 1;
+  stroke: rgba(165, 55, 253, 1);
+  stroke-dasharray: 0, 2 1;
 }
 
 #protein_component {
-fill: orange;
+  fill: orange;
 }
 .link.protein_component {
-stroke: orange;
-stroke-dasharray: 0,2 1;
+  stroke: orange;
+  stroke-dasharray: 0, 2 1;
 }
 
 #complex_component {
-fill: rgba(166,97,26, 1);
+  fill: rgba(166, 97, 26, 1);
 }
 .link.complex_component {
-stroke: rgba(166,97,26, 1);
-stroke-dasharray: 0,2 1;
+  stroke: rgba(166, 97, 26, 1);
+  stroke-dasharray: 0, 2 1;
 }
 
 #metabolite_component {
-fill: rgba(0, 55, 253, 1);
+  fill: rgba(0, 55, 253, 1);
 }
 .link.metabolite_component {
-stroke: rgba(0, 55, 253, 1);
-stroke-dasharray: 0,2 1;
+  stroke: rgba(0, 55, 253, 1);
+  stroke-dasharray: 0, 2 1;
 }
 
 #reaction {
-fill: grey;
+  fill: grey;
 }
 .link.reaction {
-stroke: grey;
+  stroke: grey;
 }
 
 #reactant {
-fill: grey;
+  fill: grey;
 }
 .link.reactant {
-stroke: grey;
+  stroke: grey;
 }
 
 #product {
-fill: grey;
+  fill: grey;
 }
 .link.product {
-stroke: grey;
+  stroke: grey;
 }
 
 .node circle {
@@ -133,12 +133,9 @@ stroke: grey;
 }
 
 .node text {
-  display: var(--node_display);;
+  display: var(--node_display);
   font: 12px sans-serif;
-  text-shadow: 0 1px 0 white,
-               1px 0 0 white,
-               0 -1px 0 white,
-               -1px 0 0 white;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
 }
 
 .node:hover circle {
@@ -153,17 +150,14 @@ stroke: grey;
 }
 
 .node:hover ellipse {
-   rx: 16;
-   ry: 8;
+  rx: 16;
+  ry: 8;
 }
 
 .node:hover text {
   display: inline;
   font: 12px sans-serif;
-  text-shadow: 0 1px 0 white,
-               1px 0 0 white,
-               0 -1px 0 white,
-               -1px 0 0 white;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
 }
 
 .cell {
@@ -172,35 +166,35 @@ stroke: grey;
 }
 
 .dot {
-height: 12px;
-width: 12px;
-border-style: solid;
-border-width: thin;
-background-color: var(--dot_color);
-stroke: black;
-border-radius: 50%;
-display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-style: solid;
+  border-width: thin;
+  background-color: var(--dot_color);
+  stroke: black;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .square {
-height: 12px;
-width: 12px;
-border-style: solid;
-border-width: thin;
-background-color: var(--dot_color);
-stroke: black;
-display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-style: solid;
+  border-width: thin;
+  background-color: var(--dot_color);
+  stroke: black;
+  display: inline-block;
 }
 
 .ellip {
-height: 8px;
-width: 20px;
-border-style: solid;
-border-width: thin;
-background-color: var(--dot_color);
-stroke: black;
-border-radius: 50%;
-display: inline-block;
+  height: 8px;
+  width: 20px;
+  border-style: solid;
+  border-width: thin;
+  background-color: var(--dot_color);
+  stroke: black;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 #superPathwayMenu {
@@ -245,7 +239,6 @@ display: inline-block;
   float: left;
 }
 
-
 .point {
   margin-top: 10px;
   width: 0;
@@ -256,10 +249,9 @@ display: inline-block;
   float: right;
 }
 
-div
-   {
-     display: inline-block;
-   }
+div {
+  display: inline-block;
+}
 
 .sidebar {
   height: 100%;
@@ -285,9 +277,9 @@ div
 }
 
 #seismic_canvas {
-  border-radius:10px;
-  margin-top:5px;
-  margin-bottom:8px;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 8px;
   border-style: solid;
   border-width: thin;
 }
@@ -301,6 +293,6 @@ div
   stroke: black;
   border-radius: 50%;
   text-align: center;
-  padding-top:6px;
-  padding-right:1px;
+  padding-top: 6px;
+  padding-right: 1px;
 }

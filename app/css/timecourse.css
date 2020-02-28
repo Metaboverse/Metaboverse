@@ -21,9 +21,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #slider,
 #bar {
-  margin-left:225px;
+  margin-left: 225px;
 }
-
 
 .track,
 .track-inset,
@@ -57,9 +56,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 }
 
 .label {
-    font: 16px sans-serif;
-    pointer-events: none;
-    fill: white;
+  font: 16px sans-serif;
+  pointer-events: none;
+  fill: white;
 }
 
 #play-button {
@@ -83,7 +82,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 #play-button:hover {
   background-color: #696969;
 }
-
 
 #bar {
   float: center;

@@ -21,9 +21,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 .link {
-fill: none;
-stroke: #666;
-stroke-width: 1.5px;
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
 }
 
 #up {
@@ -45,7 +45,7 @@ stroke-width: 1.5px;
 }
 .link.gene {
   stroke: rgba(165, 55, 253, 1);
-  stroke-dasharray: 0,2 1;
+  stroke-dasharray: 0, 2 1;
 }
 
 #reaction {

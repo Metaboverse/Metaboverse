@@ -20,7 +20,8 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
@@ -39,11 +40,11 @@ menu {
   width: 100%;
 }
 
-menuItem {
+menuitem {
   float: left;
 }
 
-menuItem a {
+menuitem a {
   display: block;
   color: white;
   text-align: center;
@@ -51,29 +52,23 @@ menuItem a {
   text-decoration: none;
 }
 
-menuItem a:hover {
+menuitem a:hover {
   background-color: #111;
 }
 
 text {
   font: 12px sans-serif;
-  text-shadow: 0 1px 0 white,
-               1px 0 0 white,
-               0 -1px 0 white,
-               -1px 0 0 white;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
 }
 
 .title {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    -moz-transform: translateX(-50%) translateY(-60%);
-    -webkit-transform: translateX(-50%) translateY(-60%);
-    transform: translateX(-50%) translateY(-60%);
-    text-shadow: 0 2px 0 white,
-                 2px 0 0 white,
-                 0 -2px 0 white,
-                 -2px 0 0 white;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-60%);
+  -webkit-transform: translateX(-50%) translateY(-60%);
+  transform: translateX(-50%) translateY(-60%);
+  text-shadow: 0 2px 0 white, 2px 0 0 white, 0 -2px 0 white, -2px 0 0 white;
 }
 
 #output {
@@ -88,8 +83,8 @@ text {
 }
 
 #output:hover {
-    background: #d3d3d3;
-    text-shadow: none;
+  background: #d3d3d3;
+  text-shadow: none;
 }
 
 #database {
@@ -104,8 +99,8 @@ text {
 }
 
 #database:hover {
-    background: #d3d3d3;
-    text-shadow: none;
+  background: #d3d3d3;
+  text-shadow: none;
 }
 
 #continue {
@@ -121,51 +116,51 @@ text {
 }
 
 #continue:hover {
-    background: #7CC08E;
-    text-shadow: none;
+  background: #7cc08e;
+  text-shadow: none;
 }
 
 #getOutput {
-    width: 100px;
-    height: 80px;
-    margin: 0 auto;
-    margin-top: 50px;
-    position: relative;
-    background-color: #0F9FCD;
-    border-radius: 6px 6px 6px 6px;
-    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.59);
+  width: 100px;
+  height: 80px;
+  margin: 0 auto;
+  margin-top: 50px;
+  position: relative;
+  background-color: #0f9fcd;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.59);
 }
 
 #getOutput:before {
-    content: '';
-    width: 40%;
-    height: 50px;
-    border-radius: 12px 12px 0 0;
-    background-color: #0D83A9;
-    position: absolute;
-    top: -12px;
-    left: 0px;
-    z-index: -5;
+  content: "";
+  width: 40%;
+  height: 50px;
+  border-radius: 12px 12px 0 0;
+  background-color: #0d83a9;
+  position: absolute;
+  top: -12px;
+  left: 0px;
+  z-index: -5;
 }
 
 #getOutput:hover {
-    background-color: 10AEE1;
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.59);
+  background-color: 10aee1;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.59);
 }
 
 .tooltip {
-  border-radius:5px;
+  border-radius: 5px;
   border: 1px solid grey;
   position: absolute;
   padding: 5px;
-  font-size:12px;
+  font-size: 12px;
   background-color: white;
 }
 
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 120px;
-  background-color: #3DA3EA;
+  background-color: #3da3ea;
   color: #fff;
   text-align: center;
   padding: 5px 0;
@@ -191,7 +186,7 @@ text {
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent #3DA3EA transparent transparent;
+  border-color: transparent #3da3ea transparent transparent;
 }
 
 #back {
@@ -206,92 +201,89 @@ text {
 }
 
 #back:hover {
-    background: #cc0000;
-    text-shadow: none;
+  background: #cc0000;
+  text-shadow: none;
 }
 
 a {
-   text-decoration: none;
-   color: black;
+  text-decoration: none;
+  color: black;
 }
 
-
 img {
-    max-width: 100%;
-    max-height: 90vh;
-    margin: auto;
-    display: block;
-    position: fixed;
-    top: 50px;
-    left: 40px;
-    overflow-x: hidden;
-
+  max-width: 100%;
+  max-height: 90vh;
+  margin: auto;
+  display: block;
+  position: fixed;
+  top: 50px;
+  left: 40px;
+  overflow-x: hidden;
 }
 
 .note {
-width: 500px;
-margin: 50px auto;
-font-size: 2.0em;
-color: #CD5C5C;
-text-align: justify;
+  width: 500px;
+  margin: 50px auto;
+  font-size: 2em;
+  color: #cd5c5c;
+  text-align: justify;
 }
 
 #drop-area {
-border: 2px dashed black;
-border-radius: 20px;
-width: 200px;
-margin: 30px auto;
-padding: 10px;
-align-content: justify;
-
+  border: 2px dashed black;
+  border-radius: 20px;
+  width: 200px;
+  margin: 30px auto;
+  padding: 10px;
+  align-content: justify;
 }
 
 #drop-area.highlight {
-border-color: purple;
+  border-color: purple;
 }
 
 .my-form {
-margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .button {
-display: inline-block;
-padding: 10px;
-background: #16CDCA;
-cursor: pointer;
-border-radius: 4px;
-border: 2px solid #0E8886;
+  display: inline-block;
+  padding: 10px;
+  background: #16cdca;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 2px solid #0e8886;
 }
 
 .button:hover {
-background: #0F9A98;
+  background: #0f9a98;
 }
 
 #pathway {
-float:left;
-width:33%;
-height:80px;
-margin:0 0 0 100px;
-font-size:20;
-font-family: sans-serif;
+  float: left;
+  width: 33%;
+  height: 80px;
+  margin: 0 0 0 100px;
+  font-size: 20;
+  font-family: sans-serif;
 }
 
-#motifs{
-float:left;
-width:33%;
-height:80px;
-margin:0 0 0 -50px;
-font-size:20;
-font-family: sans-serif;
+#motifs {
+  float: left;
+  width: 33%;
+  height: 80px;
+  margin: 0 0 0 -50px;
+  font-size: 20;
+  font-family: sans-serif;
 }
 
-#score{
-float:right;
-width:33%;
-height:80px;
-margin:0 0 0 -50px;
-font-size:20;
-font-family: sans-serif;
+#score {
+  float: right;
+  width: 33%;
+  height: 80px;
+  margin: 0 0 0 -50px;
+  font-size: 20;
+  font-family: sans-serif;
 }
 
 #backButton {
@@ -304,14 +296,14 @@ font-family: sans-serif;
   line-height: 25px;
   text-shadow: none;
   position: absolute;
-  right:0;
-  bottom:0;
-  margin:0 50 50 0px;
+  right: 0;
+  bottom: 0;
+  margin: 0 50 50 0px;
 }
 
 #backButton:hover {
-    background: #cc0000;
-    text-shadow: none;
+  background: #cc0000;
+  text-shadow: none;
 }
 
 /* Load bar */
@@ -319,7 +311,7 @@ font-family: sans-serif;
   width: 0%;
   height: 30px;
   border-radius: 10px;
-  background-color: #0F81A5;
+  background-color: #0f81a5;
   text-align: center;
   line-height: 30px;
   color: white;
