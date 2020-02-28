@@ -111,7 +111,12 @@ stroke: grey;
   fill: var(--node_color);
   stroke: black;
   stroke-width: 1px;
-  r: var(--node_radius);
+}
+
+.node rect {
+  fill: var(--node_color);
+  stroke: black;
+  stroke-width: 1px;
 }
 
 .node text {
@@ -124,7 +129,12 @@ stroke: grey;
 }
 
 .node:hover circle {
-  r: 10;
+  r: 10px;
+}
+
+.node:hover rect {
+  width: 20px;
+  height: 20px;
 }
 
 .node:hover text {

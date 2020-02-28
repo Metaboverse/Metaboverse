@@ -26,9 +26,10 @@
 2. Some kNN only bring up one node
 	- seem to be a lot of modifiers, maybe genes that aren't directly linked to a reaction
 	- A lot of missing edges in kNN
+		- Maybe an issue with complex components and they need another level of search to find their reactions since they don't directly link to a reaction as needed for the search
 5. Validate viz for new curation paradigm
 	- Test some components to make sure they are curating correctly
-	- Are the mappings of data that matter happening? 
+	- Are the mappings of data that matter happening?
 
 
 ### In progress:
@@ -43,7 +44,8 @@
 
 speed up large networks? Or is it all in the force layout?
 
-
+- Different shapes for different component types
+	- modify border radius 
 
 
 

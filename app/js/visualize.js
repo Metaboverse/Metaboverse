@@ -548,7 +548,7 @@ function make_graph(
       return "rgba(" + d[entity].toString() + ")";
       }
     )
-    .style("--node_radius", function(d) { return 6; })
+    .style("r", function(d) { return 6; })
     .style("stroke-dasharray", function(d) {
       if (d.inferred === "true") {
         return "2,2";
@@ -562,10 +562,31 @@ function make_graph(
           .on("drag", dragged)
           .on("end", dragended));
 
-  var circle = node
+  var rectangles = node
+    .append("rect")
+    .filter(function(d) {
+      if (d.complex === "true" || d.sub_type === "protein_component") {
+        console.log('hello')
+        return d;
+      }})
+      .attr("width", 12)
+      .attr("height", 12)
+      .attr("border-radius", 3)
+
+  var circles = node
     .append("circle")
+    .filter(function(d) {
+      if (d.complex !== "true" && d.sub_type !== "protein_component") {
+        console.log('goodbye')
+        return d;
+      }})
       .attr("r", 6)
-    .on("dblclick", function(d) {
+
+  var circle = rectangles.merge(circles)
+
+  console.log(circle)
+
+  circle.on("dblclick", function(d) {
 
       document.getElementById("reaction_notes").innerHTML = "";
 
