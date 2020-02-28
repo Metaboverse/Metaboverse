@@ -19,32 +19,29 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var $ = require('jquery')
+var $ = require("jquery");
 
 // Get Metaboverse version
-$.ajax( {
+$.ajax({
   url: "../../__version__.txt",
   success: function(version) {
-
-    document.getElementById('getVersion').innerHTML = version;
-
+    document.getElementById("getVersion").innerHTML = version;
   }
-} );
+});
 
 // Get current Reactome version
-$.ajax( {
+$.ajax({
   url: "https://reactome.org/tag/release",
   success: function(result) {
-
     var versions = [];
     let array = [...result.matchAll("Version (.*) Released")];
 
     for (a in array) {
-      versions.push(array[a][1])
+      versions.push(array[a][1]);
     }
 
-    document.getElementById('getReactomeVersion').innerHTML =
-      Math.max(...versions);
-
+    document.getElementById("getReactomeVersion").innerHTML = Math.max(
+      ...versions
+    );
   }
-} );
+});

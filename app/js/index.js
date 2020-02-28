@@ -20,40 +20,43 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {ipcRenderer} = require('electron')
-var $ = require('jquery')
+const { ipcRenderer } = require("electron");
+var $ = require("jquery");
 
 // Drop pre-existing metabolic network database for further analysis
-window.addEventListener('load', function(event) {
+window.addEventListener("load", function(event) {
+  document.getElementById("dropDatabase").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-  document.getElementById("dropDatabase").onchange = function (event) {
+    var inputVal = document.getElementById("dropDatabase").value.split(".");
 
-  event.preventDefault()
-  event.stopPropagation()
+    if (inputVal[inputVal.length - 1] !== "json") {
+      alert(
+        "Input is not a .json file. You must upload the correct file type for the analyses to work. Restarting page..."
+      );
+      window.location.reload(false);
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f);
+        path = f.path;
 
-  var inputVal = document.getElementById("dropDatabase").value.split(".")
+        update_session_info("database_url", path);
 
-  if (inputVal[inputVal.length-1] !== "json") {
-    alert('Input is not a .json file. You must upload the correct file type for the analyses to work. Restarting page...')
-    window.location.reload(false);
-  } else {
-
-    try {
-      f = event.srcElement.files[0]
-      console.log('The file you dragged: ', f)
-      path = f.path;
-
-      update_session_info("database_url", path)
-
-      $('#content').replaceWith('<a href="../html/motif.html"><div id="continue"><font size="3">Run Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>')
-
-    } catch (error) {
-      console.log(error)
-      alert('Input is not a .json file. You must upload the correct file type for the analyses to work.')
+        $("#content").replaceWith(
+          '<a href="../html/motif.html"><div id="continue"><font size="3">Run Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+        );
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Input is not a .json file. You must upload the correct file type for the analyses to work."
+        );
+      }
     }
-  }
-}})
+  };
+});
 
-ipcRenderer.on('dropDatabase', (event, data) => {
-  $("#dropDatabase").text(data)
-})
+ipcRenderer.on("dropDatabase", (event, data) => {
+  $("#dropDatabase").text(data);
+});

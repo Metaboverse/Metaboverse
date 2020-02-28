@@ -26,51 +26,66 @@ var numberConditions = 5; // determine based on user data
 var start = 90; // data min
 var end = 160; // data max
 
-var x = d3.scaleLinear()
-    .domain([start, end])
-    .range([90, width-200])
-    .clamp(true);
+var x = d3
+  .scaleLinear()
+  .domain([start, end])
+  .range([90, width - 200])
+  .clamp(true);
 
 var slider = d3
   .select("#bar")
   .append("svg")
-    .attr("width", width - 250)
-    .attr("height", 50)
-    .attr("overflow", "visible");
+  .attr("width", width - 250)
+  .attr("height", 50)
+  .attr("overflow", "visible");
 
-slider.append("g")
+slider
+  .append("g")
   .attr("class", "slider")
-  .attr("transform", "translate(" + 50 + "," + height / 2 + ")")
+  .attr("transform", "translate(" + 50 + "," + height / 2 + ")");
 
-slider.append("line")
-    .attr("class", "track")
-    .attr("x1", x.range()[0])
-    .attr("x2", x.range()[1])
+slider
+  .append("line")
+  .attr("class", "track")
+  .attr("x1", x.range()[0])
+  .attr("x2", x.range()[1])
   .select(function() {
     return this.parentNode.appendChild(this.cloneNode(true));
   })
-    .attr("class", "track-inset")
+  .attr("class", "track-inset")
   .select(function() {
     return this.parentNode.appendChild(this.cloneNode(true));
   })
-    .attr("class", "track-overlay")
-  .call(d3.drag()
-      .on("start.interrupt", function() { slider.interrupt(); })
-      .on("start drag", function() { hue(x.invert(d3.event.x)); }));
+  .attr("class", "track-overlay")
+  .call(
+    d3
+      .drag()
+      .on("start.interrupt", function() {
+        slider.interrupt();
+      })
+      .on("start drag", function() {
+        hue(x.invert(d3.event.x));
+      })
+  );
 
-slider.insert("g", ".track-overlay")
-    .attr("class", "ticks")
-    .attr("transform", "translate(0," + 18 + ")")
+slider
+  .insert("g", ".track-overlay")
+  .attr("class", "ticks")
+  .attr("transform", "translate(0," + 18 + ")")
   .selectAll("text")
   .data(x.ticks(numberConditions))
-  .enter().append("text")
-    .attr("x", x)
-    .attr("text-anchor", "middle")
-    .text(function(d) { return d; });
+  .enter()
+  .append("text")
+  .attr("x", x)
+  .attr("text-anchor", "middle")
+  .text(function(d) {
+    return d;
+  });
 
-var handle = slider.insert("circle", ".track-overlay")
-    .attr("class", "handle")
-    .attr("r", 12);
+var handle = slider
+  .insert("circle", ".track-overlay")
+  .attr("class", "handle")
+  .attr("r", 12);
 
 /*
 slider.transition() // Gratuitous intro!

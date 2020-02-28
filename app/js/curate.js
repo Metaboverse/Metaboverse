@@ -20,28 +20,22 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {ipcRenderer, ipcMain, remote} = require('electron')
-const { dialog } = require('electron').remote
+const { ipcRenderer, ipcMain, remote } = require("electron");
+const { dialog } = require("electron").remote;
 
-var $ = require('jquery')
+var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
-
-var abbreviation_dict = {}
+var abbreviation_dict = {};
 $.getJSON(reactome_api, function(data) {
-
   // Get species name and ID from Reactome API
 
   data.forEach(function(datum) {
-
-    abbreviation_dict[datum["displayName"]] = datum["abbreviation"]
-
+    abbreviation_dict[datum["displayName"]] = datum["abbreviation"];
   });
 
   // Get species names (keys) as list
-  speciesList = Object.getOwnPropertyNames(
-    abbreviation_dict
-  ).map(function(k) {
+  speciesList = Object.getOwnPropertyNames(abbreviation_dict).map(function(k) {
     return k;
   });
   speciesList.unshift("Select an organism..."); // Add select prompt to menu bar
@@ -53,66 +47,58 @@ $.getJSON(reactome_api, function(data) {
     option.innerHTML = speciesList[i];
     option.value = speciesList[i];
     menu.appendChild(option);
-  };
-
+  }
 });
 
 // Change user selection based on input
 function selectOrganism() {
-
   var selection = document.getElementById("speciesMenu").value;
-  console.log("User selected:", abbreviation_dict[selection])
-  update_session_info("organism", selection, abbrev_dict=abbreviation_dict)
+  console.log("User selected:", abbreviation_dict[selection]);
+  update_session_info("organism", selection, (abbrev_dict = abbreviation_dict));
   species_change = true;
   check_changes();
-
-};
+}
 
 // Select output directory from pop-out menu
-window.addEventListener('load', function(event) {
-
-  document.getElementById("selectOutput").onclick = function (event) {
-
-    filename = dialog.showSaveDialog(
-      {
-        "defaultPath": "../../",
-        "properties": ["createDirectory"],
-        "filters": [
+window.addEventListener("load", function(event) {
+  document.getElementById("selectOutput").onclick = function(event) {
+    filename = dialog
+      .showSaveDialog({
+        defaultPath: "../../",
+        properties: ["createDirectory"],
+        filters: [
           {
-            "name": "JSON",
-            "extensions": ["json", "JSON"]
-          }]
-      }
-    ).then(result => {
+            name: "JSON",
+            extensions: ["json", "JSON"]
+          }
+        ]
+      })
+      .then(result => {
+        filename = result.filePath;
+        if (filename === undefined) {
+          alert("File selection unsuccessful");
+          return;
+        }
 
-      filename = result.filePath;
-      if (filename === undefined) {
-        alert('File selection unsuccessful');
-        return;
-      }
-
-      console.log(filename)
-      update_session_info("database_url", filename)
-
-    }).catch(err => {
-      console.log(err)
-    })
+        console.log(filename);
+        update_session_info("database_url", filename);
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     output_change = true;
     check_changes();
-
-  }
-})
+  };
+});
 
 var output_change = false;
 var species_change = false;
 
 function check_changes() {
-
-  if (output_change === true & species_change === true) {
-
-    $('#content').replaceWith('<a href="../html/variables.html"><div id="continue"><font size="3">Continue</font></div></a>')
-
+  if ((output_change === true) & (species_change === true)) {
+    $("#content").replaceWith(
+      '<a href="../html/variables.html"><div id="continue"><font size="3">Continue</font></div></a>'
+    );
   }
-
 }
