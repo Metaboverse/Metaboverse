@@ -562,29 +562,22 @@ function make_graph(
           .on("drag", dragged)
           .on("end", dragended));
 
-  var rectangles = node
-    .append("rect")
-    .filter(function(d) {
-      if (d.complex === "true" || d.sub_type === "protein_component") {
-        console.log('hello')
-        return d;
-      }})
-      .attr("width", 12)
-      .attr("height", 12)
-      .attr("border-radius", 3)
-
-  var circles = node
-    .append("circle")
-    .filter(function(d) {
-      if (d.complex !== "true" && d.sub_type !== "protein_component") {
-        console.log('goodbye')
-        return d;
-      }})
-      .attr("r", 6)
-
-  var circle = rectangles.merge(circles)
-
-  console.log(circle)
+  var circle = node
+    .append(function(d) {
+      if (d.type === "gene_component" || d.sub_type === "gene") {
+          return document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "ellipse");
+      } else if (d.complex === "true" || d.sub_type === "protein_component") {
+          return document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "rect");
+      } else {
+          return document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "circle");
+      }
+    });
 
   circle.on("dblclick", function(d) {
 
