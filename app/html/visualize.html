@@ -20,134 +20,183 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 
 <title>Metaboverse</title>
 
 <html>
-
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/visualize.css">
-  <link rel="stylesheet" href="../css/timecourse.css">
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/visualize.css" />
+  <link rel="stylesheet" href="../css/timecourse.css" />
 
   <head>
-
     <!-- menu -->
     <menu>
-      <font size=3.25px>
-        <menuItem style="float:right">
-          <a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a>
-        </menuItem>
-        <menuItem style="float:right">
+      <font size="3.25px">
+        <menuitem style="float:right">
+          <a
+            href="https://github.com/Metaboverse/Metaboverse/issues"
+            target="_blank"
+            >Contact Us</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
           <a href="cite.html">Cite</a>
-        </menuItem>
-        <menuItem style="float:right">
-          <a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a>
-        </menuItem>
-        <menuItem style="float:right">
-          <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a>
-        </menuItem>
-        <menuItem style="float:right">
-          <a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a>
-        </menuItem>
-        <menuItem style="float:right">
-          <a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a>
-        </menuItem>
-        <menuItem style="float:left">
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/"
+            target="_blank"
+            >Documentation</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html"
+            target="_blank"
+            >FAQs</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html"
+            target="_blank"
+            >First Time?</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/content/overview.html"
+            target="_blank"
+            >About</a
+          >
+        </menuitem>
+        <menuitem style="float:left">
           <a href="index.html">Metaboverse</a>
-        </menuItem>
-        <menuItem style="float:left">
+        </menuitem>
+        <menuitem style="float:left">
           <a href="variables.html">Back</a>
-        </menuItem>
+        </menuitem>
       </font>
     </menu>
-
   </head>
 
   <body>
-
     <div class="sidebar">
       <font style="font-family: sans-serif" size="2">
         <b><u>Legend</u></b>
-        <button class="info" title="Click and drag the background to pan, or use the mouse wheel to zoom."><i>i</i></button>
-        <br>
-        <br>
+        <button
+          class="info"
+          title="Click and drag the background to pan, or use the mouse wheel to zoom."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <br />
         <b>Entity Values</b>
-        <br>
-        <br>
+        <br />
+        <br />
         <div title="Double-click to display reaction notes.">
           <span class="dot" style="--dot_color: grey"></span>
           Reaction
         </div>
-        <br>
+        <br />
         <div title="Value was found in user data.">
           <span class="dot" style="--dot_color: white"></span>
           Measured
         </div>
-        <div title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values.">
-          <span class="dot" style="--dot_color: white;border-style: dashed;margin-left:10px;"></span>
+        <div
+          title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values."
+        >
+          <span
+            class="dot"
+            style="--dot_color: white;border-style: dashed;margin-left:10px;"
+          ></span>
           Inferred
         </div>
-        <br>
-        <canvas title="Colormap value for entity measurement." id="seismic_node" class="dot" width="12" height="12" style="background-color:none"></canvas>
+        <br />
+        <canvas
+          title="Colormap value for entity measurement."
+          id="seismic_node"
+          class="dot"
+          width="12"
+          height="12"
+          style="background-color:none"
+        ></canvas>
         <div id="entity_type"></div>
-        <br>
+        <br />
         <canvas id="seismic_canvas" width="220" height="15"></canvas>
-        <br>
-        <br>
+        <br />
+        <br />
         <b>Relationship Types</b>
-        <br>
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
           <div class="line" style="--arrow_color: grey"></div>
-          <div class="point" style="--arrow_color: grey">&nbsp;&nbsp;&nbsp;Core</div>
+          <div class="point" style="--arrow_color: grey">
+            &nbsp;&nbsp;&nbsp;Core
+          </div>
         </div>
-        <br>
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
           <div class="line" style="--arrow_color: green"></div>
-          <div class="point" style="--arrow_color: green">&nbsp;&nbsp;&nbsp;Catalyst</div>
+          <div class="point" style="--arrow_color: green">
+            &nbsp;&nbsp;&nbsp;Catalyst
+          </div>
         </div>
-        <br>
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
           <div class="line" style="--arrow_color: red"></div>
-          <div class="point" style="--arrow_color: red">&nbsp;&nbsp;&nbsp;Inhibitor</div>
+          <div class="point" style="--arrow_color: red">
+            &nbsp;&nbsp;&nbsp;Inhibitor
+          </div>
         </div>
-        <br>
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
           <div class="line2"></div>
           <div style="margin-left: 17px;">&nbsp;&nbsp;&nbsp;Components</div>
         </div>
-        <br>
-    
-        <span class="dot" style="--dot_color: white"></span>
+        <br />
         &nbsp;
+        <span class="dot" style="--dot_color: white"></span>
         <div class="arrow">
           <div class="line" style="--arrow_color: blue;margin-top: 4px;"></div>
-          <div class="point" style="--arrow_color: blue;margin-top: 0px;">&nbsp;&nbsp;&nbsp;Metabolite</div>
+          <div class="point" style="--arrow_color: blue;margin-top: 0px;">
+            &nbsp;&nbsp;&nbsp;Metabolite
+          </div>
         </div>
-        <br>
-        <span class="square" style="--dot_color: white"></span>
+        <br />
         &nbsp;
+        <span class="square" style="--dot_color: white"></span>
         <div class="arrow">
           <div class="line" style="--arrow_color: orange"></div>
-          <div class="point" style="--arrow_color: orange">&nbsp;&nbsp;&nbsp;Protein</div>
+          <div class="point" style="--arrow_color: orange">
+            &nbsp;&nbsp;&nbsp;Protein
+          </div>
         </div>
-        <br>
+        <br />
         <span class="ellip" style="--dot_color: white"></span>
         <div class="arrow">
           <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
-          <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">&nbsp;&nbsp;&nbsp;Gene</div>
+          <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">
+            &nbsp;&nbsp;&nbsp;Gene
+          </div>
         </div>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        <br />
         <b><u>Options</u></b>
-        <button class="info" title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details."><i>i</i></button>
-        <br>
-        <br>
+        <button
+          class="info"
+          title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <br />
         <div title="Click to turn feature labels on or off.">
           <button id="toggleAnalytes">Features</button>
         </div>
@@ -157,7 +206,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div title="Click to turn expression and statistical values on or off.">
           <button id="toggleExpression">Expression</button>
         </div>
-        <br>
+        <br />
         <div title="Click to toggle gene nodes (remove or display).">
           <button id="toggleGenes">Toggle Genes</button>
         </div>
@@ -173,68 +222,102 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button id="toggleModifiers">Modifiers</button>
         </div>
         -->
-        <div title="Click to toggle between mapping expression or statistical color values.">
+        <div
+          title="Click to toggle between mapping expression or statistical color values."
+        >
           <button id="toggleColors">Highlight Values/Stats</button>
         </div>
-        <br>
+        <br />
         <div title="Click to refresh current graph">
           <button id="restartButton">Refresh Graph</button>
         </div>
         <div title="Click to save the current graph view">
           <button id="saveGraph">Save Graph</button>
         </div>
-        <br>
-        <br>
+        <br />
+        <br />
         <div title="Click to toggle collapse of nodes with no data overlaid.">
           <button id="collapseNodes">Collapse Empty Nodes</button>
         </div>
-        <div title="Click to open the Reactome representation of the current pathway.">
+        <div
+          title="Click to open the Reactome representation of the current pathway."
+        >
           <button id="openPathway">View Curated Pathway Image</button>
         </div>
-        <br>
-        <br>
-          # Nearest neighbors:
-        <input type="number" name="kNN_button" id="kNN_button" onchange="kNN_input()" min="1" max="9" value="1">
-        <button class="info" title="Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion)"><i>i</i></button>
-        <br>
-          Hub threshold:
-        <input type="number" name="hub_button" id="hub_button" onchange="hub_input()" min="1" max="9999999">
-        <button class="info" title="Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections."><i>i</i></button>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        # Nearest neighbors:
+        <input
+          type="number"
+          name="kNN_button"
+          id="kNN_button"
+          onchange="kNN_input()"
+          min="1"
+          max="9"
+          value="1"
+        />
+        <button
+          class="info"
+          title="Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion)"
+        >
+          <i>i</i>
+        </button>
+        <br />
+        Hub threshold:
+        <input
+          type="number"
+          name="hub_button"
+          id="hub_button"
+          onchange="hub_input()"
+          min="1"
+          max="9999999"
+        />
+        <button
+          class="info"
+          title="Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <br />
+        <br />
         <b><u>Warnings:</u></b>
-        <br>
-        <div id="warning_line_1"><br></div>
-        <div id="warning_line_2"><br><br></div>
-        <br>
-        <br>
+        <br />
+        <div id="warning_line_1"><br /></div>
+        <div id="warning_line_2"><br /><br /></div>
+        <br />
+        <br />
         <b><u>Selection Type:</u></b>
-        <br>
-        <div id="type_selection_type"><br></div>
-        <br>
-        <br>
-        <br>
+        <br />
+        <div id="type_selection_type"><br /></div>
+        <br />
+        <br />
+        <br />
         <b><u>Current Selection:</u></b>
-        <br>
-        <div id="type_selection"><br></div>
-        <br>
-        <br>
+        <br />
+        <div id="type_selection"><br /></div>
+        <br />
+        <br />
         <b><u>Notes:</u></b>
-        <button class="info" title="Display reaction details by double-clicking on a reaction node."><i>i</i></button>
-        <br>
+        <button
+          class="info"
+          title="Display reaction details by double-clicking on a reaction node."
+        >
+          <i>i</i>
+        </button>
+        <br />
         <div id="reaction_notes"></div>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        <br />
       </font>
     </div>
-    <br>
+    <br />
     <select id="superPathwayMenu" onchange="selectSuperPathway()"></select>
-    <br>
-    <br>
+    <br />
+    <br />
     <select id="pathwayMenu" onchange="selectPathway()"></select>
-    <br>
+    <br />
 
     <!--Colorbar pointer label-->
     <font style="font-family: sans-serif" size="1">
@@ -243,7 +326,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--Put timecourse placeholder here-->
     <div id="slider" align="center"></div>
-    <br>
+    <br />
 
     <!--Graph space-->
     <div id="graph" align="center"></div>
@@ -254,5 +337,4 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <script src="../js/timecourse.js"></script>
     <script src="../js/js-colormaps.js"></script>
   </body>
-
 </html>
