@@ -5,14 +5,15 @@ Metaboverse:
     Copyright (C) 2019  Jordan A. Berg
     jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
-    This program is free software: you can redistribute it and/or modify it under
-    the terms of the GNU General Public License as published by the Free Software
-    Foundation, either version 3 of the License, or (at your option) any later
-    version.
+    This program is free software: you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by the Free
+    Software Foundation, either version 3 of the License, or (at your option)
+    any later version.
 
-    This program is distributed in the hope that it will be useful, but WITHOUT ANY
-    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE. See the GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+    more details.
     You should have received a copy of the GNU General Public License along with
     this program.  If not, see <https://www.gnu.org/licenses/>.
 """
@@ -907,7 +908,8 @@ for x in G.nodes():
 # Calculate degrees
 
 
-# Generage edge dict for collapsed nodes (this way able to select from two versions)
+# Generage edge dict for collapsed nodes (this way able to select from two
+# versions)
 
 
 G.nodes()['species_54639']
@@ -927,11 +929,14 @@ def find_values(
 
     inputs = []
     outputs = []
-    for ii in reaction_dict[neighbor]['reactants']:
+    for ii in (reaction_dict[neighbor]['reactants'] \
+        + [x[0] for x in reaction_dict[neighbor]['modifiers'] if x[1] == 'inhibitor']
+):
         for y in graph.nodes()[ii]['values']:
             inputs.append(y)
 
-    for jj in reaction_dict[neighbor]['products']:
+    for jj in (reaction_dict[neighbor]['products'] \
+        + [x[0] for x in reaction_dict[neighbor]['modifiers'] if x[1] == 'catalyst']):
         for z in graph.nodes()[jj]['values']:
             outputs.append(z)
 
@@ -960,7 +965,12 @@ graph = G
 react_dict = {}
 reaction_dict = network['reaction_database']
 
-for rxn in list(reaction_dict.keys())[0:100]:
+
+
+len(list(reaction_dict.keys()))
+
+
+for rxn in list(reaction_dict.keys()):
 
     key = rxn
     compartment = reaction_dict[rxn]['compartment']
@@ -972,14 +982,22 @@ for rxn in list(reaction_dict.keys())[0:100]:
     products = reaction_dict[rxn]['products']
     modifiers = reaction_dict[rxn]['modifiers']
     additional_components = reaction_dict[rxn]['additional_components']
+    effective_reactants = (
+        reaction_dict[rxn]['reactants'] \
+        + [x[0] for x in reaction_dict[rxn]['modifiers'] if x[1] == 'inhibitor']
+    )
+    effective_products = (
+        reaction_dict[rxn]['products'] \
+        + [x[0] for x in reaction_dict[rxn]['modifiers'] if x[1] == 'catalyst']
+    )
 
     inputs = []
-    for r in reactants:
+    for r in effective_reactants:
         for x in G.nodes()[r]['values']:
             inputs.append(x)
 
     outputs = []
-    for p in products:
+    for p in effective_products:
         for y in G.nodes()[p]['values']:
             outputs.append(y)
 
@@ -1012,14 +1030,22 @@ for rxn in list(reaction_dict.keys())[0:100]:
         for rx in reaction_dict.keys():
 
             rx_key = rx
-            rx_reactants = reaction_dict[rx]['reactants']
-            rx_products = reaction_dict[rx]['products']
+            rx_reactants = (
+                reaction_dict[rx]['reactants'] \
+                + [x[0] for x in reaction_dict[rx]['modifiers'] if x[1] == 'inhibitor']
+            )
+            rx_products = (
+                reaction_dict[rx]['products'] \
+                + [x[0] for x in reaction_dict[rx]['modifiers'] if x[1] == 'catalyst']
+            )
 
-            if (reactants == rx_reactants or reactants == rx_products) \
+            if (effective_reactants == rx_reactants \
+            or effective_reactants == rx_products) \
             and rx_key != key:
                 input_neighbors.append(rx_key)
 
-            if (products == rx_reactants or products == rx_products) \
+            if (effective_products == rx_reactants \
+            or effective_products == rx_products) \
             and rx_key != key:
                 output_neighbors.append(rx_key)
 
@@ -1030,7 +1056,8 @@ for rxn in list(reaction_dict.keys())[0:100]:
             for o in output_neighbors:
 
                 outputs = []
-                for oo in reaction_dict[o]['products']:
+                for oo in (reaction_dict[o]['products'] \
+                    + [x[0] for x in reaction_dict[o]['modifiers'] if x[1] == 'catalyst']):
                     for y in G.nodes()[oo]['values']:
                         outputs.append(y)
 
@@ -1043,7 +1070,7 @@ for rxn in list(reaction_dict.keys())[0:100]:
                         'collapsed_reactions': [rxn, o],
                         'compartment': compartment,
                         'id': id + '_' + reaction_dict[o]['id'],
-                        'name': name + '_' + reaction_dict[o]['name'],
+                        'name': name + '/' + reaction_dict[o]['name'],
                         'reversible': 'false',
                         'notes': 'Compressed reaction between ' \
                             + name \
@@ -1079,7 +1106,8 @@ for rxn in list(reaction_dict.keys())[0:100]:
             for i in input_neighbors:
 
                 inputs = []
-                for ii in reaction_dict[i]['reactants']:
+                for ii in (reaction_dict[i]['reactants'] \
+                    + [x[0] for x in reaction_dict[i]['modifiers'] if x[1] == 'inhibitor']):
                     for z in G.nodes()[ii]['values']:
                         inputs.append(z)
 
@@ -1094,7 +1122,7 @@ for rxn in list(reaction_dict.keys())[0:100]:
                         'id': id + '_' \
                             + reaction_dict[i]['id'],
                         'name': name \
-                            + '_' + reaction_dict[i]['name'],
+                            + '/' + reaction_dict[i]['name'],
                         'reversible': 'false',
                         'notes': 'Compressed reaction between ' \
                             + name \
@@ -1131,7 +1159,6 @@ for rxn in list(reaction_dict.keys())[0:100]:
                 for i in input_neighbors:
                     for j in output_neighbors:
 
-
                         eval_i = find_values(
                             graph=G,
                             reaction_dict=reaction_dict,
@@ -1151,8 +1178,8 @@ for rxn in list(reaction_dict.keys())[0:100]:
                                 'compartment': compartment,
                                 'id': rxn + '_' + i + '_' + j,
                                 'name': reaction_dict[i]['name'] \
-                                    + '_' + name \
-                                    + '_' + reaction_dict[j]['name'],
+                                    + '/' + name \
+                                    + '/' + reaction_dict[j]['name'],
                                 'reversible': 'false',
                                 'notes': 'Compressed reaction between ' \
                                     + reaction_dict[i]['name'] \
@@ -1200,14 +1227,18 @@ for rxn in list(reaction_dict.keys())[0:100]:
 
 
 
+"""
+Add to network
+- effective_reactants: [] <== inhibitors
+- effective_products: [] <== catalysts
+
+"""
+
+
+
+
+l = []
 for k, v in react_dict.items():
 
     if v['collapsed'] == 'true':
         print(v)
-
-
-reaction_dict['reaction_2562541']
-
-G.nodes()['reaction_2562541']
-
-G.nodes()['species_54639']
