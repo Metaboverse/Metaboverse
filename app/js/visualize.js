@@ -231,15 +231,15 @@ function get_nodes_links(data, components) {
   var links = data["links"];
 
   // Parse the nodes of interest
-  var new_nodes = [];
+  var add_nodes = [];
   nodes.forEach(function(node) {
     if (components.includes(node["id"])) {
       var node_copy = $.extend(true, {}, node);
-      new_nodes.push(node_copy);
+      add_nodes.push(node_copy);
     }
   });
 
-  var new_links = [];
+  var add_links = [];
   // Parse out links of interest
   links.forEach(function(link) {
     if (
@@ -247,13 +247,12 @@ function get_nodes_links(data, components) {
       components.includes(link.target) &&
       link.source !== link.target
     ) {
-      console.log(link)
       var link_copy = $.extend(true, {}, link);
-      new_links.push(link_copy);
+      add_links.push(link_copy);
     }
   });
 
-  return [new_nodes, new_links];
+  return [add_nodes, add_links];
 }
 
 function nearest_neighbors(data, entity_id) {
@@ -604,7 +603,7 @@ function make_graph(
       return 6;
     })
     .style("stroke-dasharray", function(d) {
-      if (d.inferred === "true") {
+      if (d.inferred === "true" || d.type === "collapsed") {
         return "2,2";
       } else {
         return "none";
@@ -945,7 +944,7 @@ function make_graph(
           components.push(target_rxns["additional_components"][x]);
         }
       }
-      var new_elements = get_nodes_links(data, components);
+      var newer_elements = get_nodes_links(data, components);
       var newer_nodes = newer_elements[0];
       var newer_links = newer_elements[1];
 
