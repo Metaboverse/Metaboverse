@@ -116,6 +116,7 @@ def process_reactions(
     reactants = network[reactome_id]['reactants']
     products = network[reactome_id]['products']
     modifiers = network[reactome_id]['modifiers'] # ordered list
+    compartment = network[reactome_id]['compartment']
 
     # Add reaction node
     graph.add_node(reaction_id)
@@ -125,6 +126,7 @@ def process_reactions(
     graph.nodes()[reaction_id]['notes'] = reaction_notes
     graph.nodes()[reaction_id]['type'] = 'reaction'
     graph.nodes()[reaction_id]['sub_type'] = 'reaction'
+    graph.nodes()[reaction_id]['compartment'] = compartment
 
     # Add vanilla element nodes and their edges
     for reactant in reactants:
@@ -242,6 +244,7 @@ def add_node_edge(
     graph.nodes()[id]['type'] = type
     graph.nodes()[id]['sub_type'] = sub_type
     graph.nodes()[id]['inferred'] = 'false'
+    graph.nodes()[id]['compartment'] = 'none'
 
     if type == 'reactant':
         graph.add_edges_from([

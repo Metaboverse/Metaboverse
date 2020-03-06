@@ -12,6 +12,7 @@
 - Compartments
 	- http://bl.ocks.org/GerHobbelt/3071239
 	- Will have to go back and add compartment info
+	- On hover, display compartment name
 	
 - Z-score and FC for motif search
 
