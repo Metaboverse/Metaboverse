@@ -23,6 +23,7 @@ const d3 = require("d3");
 var fs = require("fs");
 var saveSVG = require("save-svg-as-png");
 
+var hullPadding = 60;
 const max_nodes = 1500;
 var sample = 0;
 var entity = "values_js";
@@ -628,6 +629,9 @@ function make_graph(
     }
   });
 
+  var convexHull = svg.append("path")
+    .attr("class",'hull');
+
   circle.on("dblclick", function(d) {
     document.getElementById("reaction_notes").innerHTML = "";
 
@@ -988,6 +992,19 @@ function make_graph(
     link.attr("d", linkArc);
     circle.attr("transform", transform);
     text.attr("transform", transform);
+
+    var hull = d3.polygonHull(
+
+
+      node.data().map(function(d) {
+        return [d.x,d.y];
+      })
+    );
+
+    convexHull.datum(hull).attr("d", function(d) {
+
+      return "M" + d.join("L") + "Z"; });
+
   }
 
   function dragsubject() {
