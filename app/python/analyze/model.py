@@ -35,6 +35,12 @@ import matplotlib.pyplot as plt
 cmap = matplotlib.cm.get_cmap('seismic')
 pmap = matplotlib.cm.get_cmap('Reds')
 
+"""Import internal dependencies
+"""
+from app.python.analyze.collapse import collapse_nodes
+from app.python.analyze.collapse import generate_updated_dictionary
+from app.python.analyze.utils import convert_rgba
+
 """Graph utils
 """
 def name_graph(
@@ -510,31 +516,14 @@ def extract_value(
 
     return rgba
 
-def convert_rgba(
-        rgba_tuples):
-    """Convert python RGBA tuple to web-friendly tuple for later viz
-    """
-
-    js = []
-    for x in rgba_tuples:
-
-        rgba_list = list(x)
-        rgba_new = []
-        for x in rgba_list[:3]:
-            rgba_new.append(int(x * 255))
-
-        rgba_new.append(rgba_list[3])
-
-        js.append(tuple(rgba_new))
-
-    return js
-
 def output_graph(
         graph,
         output_name,
         pathway_dictionary,
+        collapsed_pathway_dictionary,
         super_pathways,
         reaction_dictionary,
+        collapsed_reaction_dictionary,
         black_list,
         max_value,
         max_stat,
@@ -544,8 +533,10 @@ def output_graph(
 
     data = json_graph.node_link_data(graph)
     data['pathway_dictionary'] = pathway_dictionary
+    data['collapsed_pathway_dictionary'] = collapsed_pathway_dictionary
     data['super_pathways'] = super_pathways
     data['reaction_dictionary'] = reaction_dictionary
+    data['collapsed_reaction_dictionary'] = collapsed_reaction_dictionary
     data['black_list'] = black_list
     data['max_value'] = max_value
     data['max_stat'] = max_stat
@@ -850,6 +841,7 @@ def __main__(
         name_reference=network['name_database'],
         degree_dictionary=degree_dictionary)
 
+    print('Broadcasting values where available...')
     categories = data.columns.tolist()
     G = broadcast_values(
             graph=G,
@@ -858,8 +850,21 @@ def __main__(
             max_stat=max_stat)
 
     # Generate list of super pathways (those with more than 200 reactions)
+    print('Compiling super pathways...')
     super_pathways = compile_pathway_degree(
         pathways=network['pathway_database'])
+
+
+    print('Compiling collapsed reaction reference...')
+    # Collapse reactions
+    G, updated_reactions, changed_reactions = collapse_nodes(
+            graph=G,
+            reaction_dictionary=network['reaction_database'],
+            samples=len(categories))
+    updated_pathway_dictionary = generate_updated_dictionary(
+            original_database=network['pathway_database'],
+            update_dictionary=changed_reactions)
+
     ###
     # For pancancer
     """
@@ -884,361 +889,12 @@ def __main__(
         graph=G,
         output_name=graph_name,
         pathway_dictionary=network['pathway_database'],
+        collapsed_pathway_dictionary=updated_pathway_dictionary,
         super_pathways=super_pathways,
         reaction_dictionary=network['reaction_database'],
+        collapsed_reaction_dictionary=updated_reactions,
         black_list=black_list,
         max_value=max_value,
         max_stat=max_stat,
         categories=categories)
     print('Graphing complete.')
-
-
-
-
-
-# Merge same nodes
-# Probably keep these separate to allow for compartmentalization viz
-# Just make sure that values are able to map to all synonyms
-for x in G.nodes():
-    if G.nodes()[x]['name'] == 'FADD':
-        print(G.nodes()[x])
-        print('====')
-
-
-# Calculate degrees
-
-
-# Generage edge dict for collapsed nodes (this way able to select from two
-# versions)
-
-
-G.nodes()['species_54639']
-
-
-
-def find_values(
-        graph,
-        reaction_dict,
-        neighbor):
-    """Are there any values for either side of the reaction?
-    - There can only be one side with values for this situation to be valid in
-    this context
-    """
-
-    eval_items = []
-
-    inputs = []
-    outputs = []
-    for ii in (reaction_dict[neighbor]['reactants'] \
-        + [x[0] for x in reaction_dict[neighbor]['modifiers'] if x[1] == 'inhibitor']
-):
-        for y in graph.nodes()[ii]['values']:
-            inputs.append(y)
-
-    for jj in (reaction_dict[neighbor]['products'] \
-        + [x[0] for x in reaction_dict[neighbor]['modifiers'] if x[1] == 'catalyst']):
-        for z in graph.nodes()[jj]['values']:
-            outputs.append(z)
-
-    if len(inputs) == 0 and len(outputs) == 0:
-        # Nothing to see here
-        eval_items = []
-
-    elif len(inputs) > 1 and len(outputs) > 1:
-        eval_items = []
-
-    elif len(inputs) > 1 and \
-    any([False if z is None else True for z in inputs]):
-        eval_items = reaction_dict[neighbor]['reactants']
-
-    elif len(outputs) > 1 and \
-    any([False if z is None else True for z in outputs]):
-         eval_items = reaction_dict[neighbor]['products']
-    else:
-        eval_items = []
-
-    # Need to return the names of the successful values
-    return eval_items
-
-# After values are broadcast, collapse network by creating new reaction dict
-graph = G
-react_dict = {}
-reaction_dict = network['reaction_database']
-
-
-
-len(list(reaction_dict.keys()))
-
-
-for rxn in list(reaction_dict.keys()):
-
-    key = rxn
-    compartment = reaction_dict[rxn]['compartment']
-    id = reaction_dict[rxn]['id']
-    name = reaction_dict[rxn]['name']
-    reversible = reaction_dict[rxn]['reversible']
-    notes = reaction_dict[rxn]['notes']
-    reactants = reaction_dict[rxn]['reactants']
-    products = reaction_dict[rxn]['products']
-    modifiers = reaction_dict[rxn]['modifiers']
-    additional_components = reaction_dict[rxn]['additional_components']
-    effective_reactants = (
-        reaction_dict[rxn]['reactants'] \
-        + [x[0] for x in reaction_dict[rxn]['modifiers'] if x[1] == 'inhibitor']
-    )
-    effective_products = (
-        reaction_dict[rxn]['products'] \
-        + [x[0] for x in reaction_dict[rxn]['modifiers'] if x[1] == 'catalyst']
-    )
-
-    inputs = []
-    for r in effective_reactants:
-        for x in G.nodes()[r]['values']:
-            inputs.append(x)
-
-    outputs = []
-    for p in effective_products:
-        for y in G.nodes()[p]['values']:
-            outputs.append(y)
-
-    inputs_true = any([False if x is None else True for x in inputs])
-    outputs_true = any([False if y is None else True for y in outputs])
-
-    if inputs_true and outputs_true:
-        # If inputs and outputs both have at least one value, push to new dict
-        # as is
-        react_dict[key] = {
-            'collapsed': 'false',
-            'collapsed_reactions': [],
-            'compartment': compartment,
-            'id': id,
-            'name': name,
-            'reversible': reversible,
-            'notes': notes,
-            'reactants': reactants,
-            'products': products,
-            'modifiers': modifiers,
-            'additional_components': additional_components
-        }
-
-    else:
-
-        # Get the matching neighbors of this reaction for next decision tree
-        input_neighbors = []
-        output_neighbors = []
-
-        for rx in reaction_dict.keys():
-
-            rx_key = rx
-            rx_reactants = (
-                reaction_dict[rx]['reactants'] \
-                + [x[0] for x in reaction_dict[rx]['modifiers'] if x[1] == 'inhibitor']
-            )
-            rx_products = (
-                reaction_dict[rx]['products'] \
-                + [x[0] for x in reaction_dict[rx]['modifiers'] if x[1] == 'catalyst']
-            )
-
-            if (effective_reactants == rx_reactants \
-            or effective_reactants == rx_products) \
-            and rx_key != key:
-                input_neighbors.append(rx_key)
-
-            if (effective_products == rx_reactants \
-            or effective_products == rx_products) \
-            and rx_key != key:
-                output_neighbors.append(rx_key)
-
-        # Run one-sided bridging
-        if inputs_true and len(output_neighbors) != 0:
-
-            found = False
-            for o in output_neighbors:
-
-                outputs = []
-                for oo in (reaction_dict[o]['products'] \
-                    + [x[0] for x in reaction_dict[o]['modifiers'] if x[1] == 'catalyst']):
-                    for y in G.nodes()[oo]['values']:
-                        outputs.append(y)
-
-                # If a neighbor has output values, create compressed
-                if any([False if y is None else True for y in outputs]):
-                    found = True
-                    add = id + '_' + reaction_dict[o]['id']
-                    react_dict[add] = {
-                        'collapsed': 'true',
-                        'collapsed_reactions': [rxn, o],
-                        'compartment': compartment,
-                        'id': id + '_' + reaction_dict[o]['id'],
-                        'name': name + '/' + reaction_dict[o]['name'],
-                        'reversible': 'false',
-                        'notes': 'Compressed reaction between ' \
-                            + name \
-                            + ' and ' + reaction_dict[o]['name'],
-                        'reactants': reactants,
-                        'products': reaction_dict[o]['products'],
-                        'modifiers': modifiers \
-                            + reaction_dict[o]['modifiers'],
-                        'additional_components': additional_components \
-                            + reaction_dict[o]['additional_components']
-                    }
-
-            if found == False:
-                react_dict[key] = {
-                    'collapsed': 'false',
-                    'collapsed_reactions': [],
-                    'compartment': compartment,
-                    'id': id,
-                    'name': name,
-                    'reversible': reversible,
-                    'notes': notes,
-                    'reactants': reactants,
-                    'products': products,
-                    'modifiers': modifiers,
-                    'additional_components': additional_components
-                }
-
-
-
-        elif outputs_true and len(input_neighbors) != 0:
-
-            found = False
-            for i in input_neighbors:
-
-                inputs = []
-                for ii in (reaction_dict[i]['reactants'] \
-                    + [x[0] for x in reaction_dict[i]['modifiers'] if x[1] == 'inhibitor']):
-                    for z in G.nodes()[ii]['values']:
-                        inputs.append(z)
-
-                # If a neighbor has output values, create compressed
-                if any([False if z is None else True for z in inputs]):
-                    found = True
-                    add = id + '_' + reaction_dict[i]['id']
-                    react_dict[add] = {
-                        'collapsed': 'true',
-                        'collapsed_reactions': [rxn, i],
-                        'compartment': compartment,
-                        'id': id + '_' \
-                            + reaction_dict[i]['id'],
-                        'name': name \
-                            + '/' + reaction_dict[i]['name'],
-                        'reversible': 'false',
-                        'notes': 'Compressed reaction between ' \
-                            + name \
-                            + ' and ' + reaction_dict[i]['name'],
-                        'reactants': reaction_dict[i]['reactants'],
-                        'products': products,
-                        'modifiers': modifiers \
-                            + reaction_dict[i]['modifiers'],
-                        'additional_components': additional_components \
-                            + reaction_dict[i]['additional_components']
-                    }
-
-            if found == False:
-                react_dict[key] = {
-                    'collapsed': 'false',
-                    'collapsed_reactions': [],
-                    'compartment': compartment,
-                    'id': id,
-                    'name': name,
-                    'reversible': reversible,
-                    'notes': notes,
-                    'reactants': reactants,
-                    'products': products,
-                    'modifiers': modifiers,
-                    'additional_components': additional_components
-                }
-
-        else:
-
-            # If both neighbors can connect, do so
-            if len(input_neighbors) != 0 and len(output_neighbors) != 0:
-
-                found = False
-                for i in input_neighbors:
-                    for j in output_neighbors:
-
-                        eval_i = find_values(
-                            graph=G,
-                            reaction_dict=reaction_dict,
-                            neighbor=i)
-
-                        eval_j = find_values(
-                            graph=G,
-                            reaction_dict=reaction_dict,
-                            neighbor=j)
-
-                        if len(eval_i) > 0 and len(eval_j) > 0:
-
-                            add = rxn + '_' + i + '_' + j
-                            react_dict[add] = {
-                                'collapsed': 'true',
-                                'collapsed_reactions': [rxn, i, j],
-                                'compartment': compartment,
-                                'id': rxn + '_' + i + '_' + j,
-                                'name': reaction_dict[i]['name'] \
-                                    + '/' + name \
-                                    + '/' + reaction_dict[j]['name'],
-                                'reversible': 'false',
-                                'notes': 'Compressed reaction between ' \
-                                    + reaction_dict[i]['name'] \
-                                    + ' and ' + name \
-                                    +' and ' + reaction_dict[j]['name'],
-                                'reactants': eval_i,
-                                'products': eval_j,
-                                'modifiers': modifiers \
-                                    + reaction_dict[i]['modifiers'] \
-                                    + reaction_dict[j]['modifiers'],
-                                'additional_components': additional_components \
-                                    + reaction_dict[i]['additional_components']\
-                                    + reaction_dict[j]['additional_components']
-                            }
-                        else:
-                            react_dict[key] = {
-                                'collapsed': 'false',
-                                'collapsed_reactions': [],
-                                'compartment': compartment,
-                                'id': id,
-                                'name': name,
-                                'reversible': reversible,
-                                'notes': notes,
-                                'reactants': reactants,
-                                'products': products,
-                                'modifiers': modifiers,
-                                'additional_components': additional_components
-                            }
-
-            # Or else just add back as is
-            else:
-                react_dict[key] = {
-                    'collapsed': 'false',
-                    'collapsed_reactions': [],
-                    'compartment': compartment,
-                    'id': id,
-                    'name': name,
-                    'reversible': reversible,
-                    'notes': notes,
-                    'reactants': reactants,
-                    'products': products,
-                    'modifiers': modifiers,
-                    'additional_components': additional_components
-                }
-
-
-
-"""
-Add to network
-- effective_reactants: [] <== inhibitors
-- effective_products: [] <== catalysts
-
-"""
-
-
-
-
-l = []
-for k, v in react_dict.items():
-
-    if v['collapsed'] == 'true':
-        print(v)

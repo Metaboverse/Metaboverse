@@ -229,3 +229,22 @@ def map_ids(
     data_mapped.index = data_names
 
     return data_mapped
+
+def convert_rgba(
+        rgba_tuples):
+    """Convert python RGBA tuple to web-friendly tuple for later viz
+    """
+
+    js = []
+    for x in rgba_tuples:
+
+        rgba_list = list(x)
+        rgba_new = []
+        for x in rgba_list[:3]:
+            rgba_new.append(int(x * 255))
+
+        rgba_new.append(rgba_list[3])
+
+        js.append(tuple(rgba_new))
+
+    return js

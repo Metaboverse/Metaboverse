@@ -27,8 +27,11 @@ const max_nodes = 1500;
 var sample = 0;
 var entity = "values_js";
 var graph_genes = true;
+var collapse_reactions = true;
 var saved_nodes = [];
 var saved_links = [];
+var collapsed_nodes = [];
+var collapsed_links = [];
 
 // Change user selection based on input
 var selection = null;
@@ -46,9 +49,9 @@ function selectSuperPathway(selector) {
 }
 
 // Populate dictionary to access component reactions for each pathway
-function make_pathway_dictionary(data) {
+function make_pathway_dictionary(data, database_key) {
   // Get pathway name and ID
-  var pathways = data.pathway_dictionary;
+  var pathways = data[database_key];
   var pathway_dict = {};
   for (var key in pathways) {
     pathway_dict[pathways[key]["name"]] = {
@@ -140,8 +143,15 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   nodes.forEach(function(node) {
     node_dict[node["name"]] = node["values_js"];
     type_dict[node["name"]] = node["type"];
-    expression_dict[node["name"]] = node["values"][0];
-    stats_dict[node["name"]] = node["stats"][0];
+
+    try {
+      expression_dict[node["name"]] = node["values"][0];
+      stats_dict[node["name"]] = node["stats"][0];
+    }
+    catch (err) {
+      console.log(node);
+    }
+
     entity_id_dict[node["name"]] = node["id"];
     entity_id_dict[node["id"]] = node["name"];
 
@@ -225,7 +235,6 @@ function get_nodes_links(data, components) {
   nodes.forEach(function(node) {
     if (components.includes(node["id"])) {
       var node_copy = $.extend(true, {}, node);
-      node_copy[entity] = node_copy[entity][sample];
       new_nodes.push(node_copy);
     }
   });
@@ -238,6 +247,7 @@ function get_nodes_links(data, components) {
       components.includes(link.target) &&
       link.source !== link.target
     ) {
+      console.log(link)
       var link_copy = $.extend(true, {}, link);
       new_links.push(link_copy);
     }
@@ -541,6 +551,7 @@ function make_graph(
     .append("defs")
     .selectAll("marker")
     .data([
+      "collapsed",
       "reaction",
       "reactant",
       "product",
@@ -622,8 +633,8 @@ function make_graph(
     document.getElementById("reaction_notes").innerHTML = "";
 
     if (
-      type_dict[entity_id_dict[d["name"]]] === "reaction" ||
-      type_dict[d["name"]] === "reaction"
+      type_dict[d["name"]] === "reaction" ||
+      type_dict[d["name"]] === "collapsed"
     ) {
       console.log("Selected a reaction, will not perform kNN graphing");
       document.getElementById("reaction_notes").innerHTML =
@@ -641,7 +652,9 @@ function make_graph(
   });
 
   var text = node.append("text").html(function(d) {
-    if (type_dict[d.name] === "reaction") {
+    if (type_dict[d.name] === "reaction" ||
+      type_dict[d.name] === "collapsed"
+    ) {
       // Label other nodes with expression value in parentheses
       return (
         "<tspan dx='16' y='.31em' style='font-weight: bold;'>" +
@@ -887,6 +900,88 @@ function make_graph(
     }
   });
 
+  d3.select("#collapseNodes").on("click", function() {
+    if (collapse_reactions === false) {
+      collapse_reactions = true;
+      new_nodes = collapsed_nodes;
+      new_links = collapsed_links;
+
+      make_graph(
+        data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        expression_dict,
+        stats_dict,
+        display_analytes_dict,
+        display_reactions_dict
+      );
+    } else {
+      collapse_reactions = false;
+      collapsed_nodes = new_nodes;
+      collapsed_links = new_links;
+
+      var selection = document.getElementById("pathwayMenu").value;
+      var reactions = collapsed_pathway_dict[selection]["reactions"];
+      var collapsed_reaction_dictionary = data.collapsed_reaction_dictionary;
+
+      // Parse through each reaction listed and get the component parts
+      var components = [];
+      for (rxn in reactions) {
+        var target_rxns = collapsed_reaction_dictionary[reactions[rxn]];
+        components.push(reactions[rxn]);
+        for (x in target_rxns["reactants"]) {
+          components.push(target_rxns["reactants"][x]);
+        }
+        for (x in target_rxns["products"]) {
+          components.push(target_rxns["products"][x]);
+        }
+        for (x in target_rxns["modifiers"]) {
+          components.push(target_rxns["modifiers"][x][0]);
+        }
+        for (x in target_rxns["additional_components"]) {
+          components.push(target_rxns["additional_components"][x]);
+        }
+      }
+      var new_elements = get_nodes_links(data, components);
+      var newer_nodes = newer_elements[0];
+      var newer_links = newer_elements[1];
+
+      // Initialize variables
+      var new_node_dict = {};
+      var new_type_dict = {};
+
+      var new_node_elements = initialize_nodes(
+        newer_nodes,
+        new_node_dict,
+        new_type_dict
+      );
+      var new_node_dict = new_node_elements[0];
+      var new_type_dict = new_node_elements[1];
+      var new_expression_dict = new_node_elements[2];
+      var new_stats_dict = new_node_elements[3];
+      var new_display_analytes_dict = new_node_elements[4];
+      var new_display_reactions_dict = new_node_elements[5];
+      var new_entity_id_dict = new_node_elements[6];
+
+      make_graph(
+        data,
+        newer_nodes,
+        newer_links,
+        new_type_dict,
+        new_node_dict,
+        new_entity_id_dict,
+        new_expression_dict,
+        new_stats_dict,
+        new_display_analytes_dict,
+        new_display_reactions_dict
+      );
+    }
+  });
+
+
   var cell = node.append("path").attr("class", "cell");
 
   // Draw curved edges
@@ -968,6 +1063,7 @@ function parseEntities(nodes) {
 // Graphing
 function change() {
   graph_genes = true;
+  collapse_reactions = true;
   var selection = document.getElementById("pathwayMenu").value;
   var superSelection = document.getElementById("superPathwayMenu").value;
 
@@ -1045,7 +1141,12 @@ database_url = get_session_info("database_url");
 console.log("Database path: " + database_url);
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
-var pathway_dict = make_pathway_dictionary(data);
+var pathway_dict = make_pathway_dictionary(
+  data,
+  'pathway_dictionary');
+var collapsed_pathway_dict = make_pathway_dictionary(
+  data,
+  'collapsed_pathway_dictionary');
 var superPathwayDict = make_superPathway_dictionary(data);
 
 var timecourse = checkCategories(data.categories);
