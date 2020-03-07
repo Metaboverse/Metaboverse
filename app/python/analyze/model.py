@@ -527,7 +527,6 @@ def output_graph(
         super_pathways,
         reaction_dictionary,
         collapsed_reaction_dictionary,
-        black_list,
         max_value,
         max_stat,
         categories):
@@ -540,7 +539,6 @@ def output_graph(
     data['super_pathways'] = super_pathways
     data['reaction_dictionary'] = reaction_dictionary
     data['collapsed_reaction_dictionary'] = collapsed_reaction_dictionary
-    data['black_list'] = black_list
     data['max_value'] = max_value
     data['max_stat'] = max_stat
     data['categories'] = categories
@@ -731,14 +729,8 @@ def __main__(
         data,
         stats,
         species_id,
-        output_file,
-        black_list=[]):
+        output_file):
     """Generate graph object for visualization
-    - Place black_list as key in graph object for later parsing
-        - Will allow for on-the-fly removal of nodes
-    To do:
-    - Map average component expression to complex nodes
-    - Determine product reactant type -- metabolite, protein, etc
     """
 
     #############################
@@ -769,7 +761,6 @@ def __main__(
     output_file = '/Users/jordan/Desktop/HSA_global_reactions.json'
 
     species_id = 'HSA'
-    black_list=[]
 
     """Start of pancancer-necessary code
     To run, place all graph-making code within the for loop below
@@ -886,7 +877,7 @@ def __main__(
     """
     ###
 
-    # Export graph, pathway membership, pathway degree, black_list, other refs
+    # Export graph, pathway membership, pathway degree, other refs
     print('Exporting graph...')
     output_graph(
         graph=G,
@@ -896,7 +887,6 @@ def __main__(
         super_pathways=super_pathways,
         reaction_dictionary=network['reaction_database'],
         collapsed_reaction_dictionary=updated_reactions,
-        black_list=black_list,
         max_value=max_value,
         max_stat=max_stat,
         categories=categories)

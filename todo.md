@@ -13,13 +13,10 @@
 	- http://bl.ocks.org/GerHobbelt/3071239
 	- Will have to go back and add compartment info
 	- On hover, display compartment name
-	
+
 - Z-score and FC for motif search
 
 - Some modifiers seem to be missing their links and when kNN-click only bring up themselves - These cases seem to be consistent and the only time this happens with the kNN function
-
-- Allow custom on-the-fly creation of black list (nodes not to display)
-	- display all nodes in order of degree and have a check box -- remove to change, save all as true or false in table for grabbing
 
 - Custom drag and drops that load current session data
 
@@ -39,6 +36,8 @@
 	- likely because they also have a CHEBI ID
 	- This is probably fine, just include a disclaimer
 
+- Broadcasting
+	- take absolute minimum? Max? Avg? Let user decide?
 
 ### In queue:
 - Give user page of entities that we couldn't map, have them enter valid alternative ID - already in table form, just need to show and give option to fill in and rerun?
