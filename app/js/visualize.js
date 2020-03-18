@@ -578,6 +578,41 @@ function make_graph(
     .append("path")
     .attr("d", "M0, -5L10, 0L0, 5");
 
+  var offset = 30;
+  function getGroup(d, links) {
+
+    if (d.compartment === "none") {
+
+      for (l in links) {
+
+
+        if (d.id === links[l].source.id && links[l].target.compartment !== "none") {
+
+          return links[l].target.compartment;
+
+        } else if (d.id === links[l].target.id && links[l].source.compartment !== "none") {
+
+          return links[l].source.compartment;
+
+        } else {}
+      }
+
+      return "none";
+
+    } else {
+      return d.compartment;
+    }
+  }
+
+  var curve = d3.line()
+    .curve(d3.curveBasis);
+
+  function drawCluster(d) {
+    return curve(d.path); // 0.8
+  }
+
+  var hullg = svg.append("g")
+
   var link = svg
     .append("g")
     .selectAll("path")
@@ -600,7 +635,7 @@ function make_graph(
     .style("--node_color", function(d) {
       return "rgba(" + d[entity].toString() + ")";
     })
-    .style("r", function(d) {
+    .style("r", function() {
       return 6;
     })
     .style("stroke-dasharray", function(d) {
@@ -629,55 +664,92 @@ function make_graph(
     }
   });
 
-  var convexHull = svg.append("path")
-    .attr("class",'hull');
+  function getCategories(nodes) {
 
-  circle.on("dblclick", function(d) {
-    document.getElementById("reaction_notes").innerHTML = "";
-
-    if (
-      type_dict[d["name"]] === "reaction" ||
-      type_dict[d["name"]] === "collapsed"
-    ) {
-      console.log("Selected a reaction, will not perform kNN graphing");
-      document.getElementById("reaction_notes").innerHTML =
-        "<b><i>" + d.name + "</i></b>: " + d.notes;
-    } else {
-      document.getElementById("type_selection_type").innerHTML =
-        "Nearest Neighbor";
-
-      var mod_selection = determineWidth(d["name"]);
-      document.getElementById("type_selection").innerHTML = mod_selection;
-
-      graph_genes = true;
-      nearest_neighbors(data, entity_id_dict[d["name"]]);
+    var categories = new Set();
+    for (n in nodes) {
+      if (nodes[n].compartment == "none") {
+        categories.add("none");
+      } else {
+        categories.add(nodes[n].compartment);
+      }
     }
-  });
 
-  var text = node.append("text").html(function(d) {
-    if (type_dict[d.name] === "reaction" ||
-      type_dict[d.name] === "collapsed"
-    ) {
-      // Label other nodes with expression value in parentheses
-      return (
-        "<tspan dx='16' y='.31em' style='font-weight: bold;'>" +
-        d.name +
-        "</tspan>"
-      );
-    } else {
-      return (
-        "<tspan dx='16' y='-.5em' style='font-weight: bold;'>" +
-        d.name +
-        "</tspan>" +
-        "<tspan x='16' y='.7em'>Value: " +
-        parseFloat(expression_dict[d.name]).toFixed(2) +
-        "</tspan>" +
-        "<tspan x='16' y='1.7em'>Statistic: " +
-        parseFloat(stats_dict[d.name]).toFixed(2) +
-        "</tspan>"
-      );
-    }
-  });
+    var category_key = new Object();
+    var counter = 0;
+    categories.forEach( s => {
+      category_key[s] = counter;
+      counter = counter + 1;
+    })
+
+    return category_key
+  }
+
+  var categories = getCategories(new_nodes);
+  var fill = d3.schemeCategory10;
+
+  hullg.selectAll("path.hull").remove();
+  hull = hullg
+    .selectAll("path.hull")
+      .data(convexHulls(new_nodes, new_links, getGroup, offset))
+    .enter().append("path")
+      .attr("class", "hull")
+      .attr("d", drawCluster)
+      .style("fill", function(d) {
+        if (d.group !== "none") {
+          return fill[categories[d.group]];
+        }
+      })
+
+  circle
+    .on("dblclick", function(d) {
+      document.getElementById("reaction_notes").innerHTML = "";
+
+      if (
+        type_dict[d["name"]] === "reaction" ||
+        type_dict[d["name"]] === "collapsed"
+      ) {
+        console.log("Selected a reaction, will not perform kNN graphing");
+        document.getElementById("reaction_notes").innerHTML =
+          "<b><i>" + d.name + "</i></b>: " + d.notes;
+      } else {
+        document.getElementById("type_selection_type").innerHTML =
+          "Nearest Neighbor";
+
+        var mod_selection = determineWidth(d["name"]);
+        document.getElementById("type_selection").innerHTML = mod_selection;
+
+        graph_genes = true;
+        nearest_neighbors(data, entity_id_dict[d["name"]]);
+      }
+    });
+
+  var text = node
+    .append("text")
+    .html(function(d) {
+      if (type_dict[d.name] === "reaction" ||
+        type_dict[d.name] === "collapsed"
+      ) {
+        // Label other nodes with expression value in parentheses
+        return (
+          "<tspan dx='16' y='.31em' style='font-weight: bold;'>" +
+          d.name +
+          "</tspan>"
+        );
+      } else {
+        return (
+          "<tspan dx='16' y='-.5em' style='font-weight: bold;'>" +
+          d.name +
+          "</tspan>" +
+          "<tspan x='16' y='.7em'>Value: " +
+          parseFloat(expression_dict[d.name]).toFixed(2) +
+          "</tspan>" +
+          "<tspan x='16' y='1.7em'>Statistic: " +
+          parseFloat(stats_dict[d.name]).toFixed(2) +
+          "</tspan>"
+        );
+      }
+    });
 
   simulation.on("tick", tick);
 
@@ -984,27 +1056,66 @@ function make_graph(
     }
   });
 
-
   var cell = node.append("path").attr("class", "cell");
+
+  function convexHulls(nodes, links, index, offset) {
+    // Function adapted from: http://bl.ocks.org/GerHobbelt/3071239
+
+    var hulls = {};
+
+    // create point sets
+    for (var k = 0; k < nodes.length; ++k) {
+      var n = nodes[k];
+      if (n.size) continue;
+      var i = index(n, links),
+          l = hulls[i] || (hulls[i] = []);
+      l.push([n.x-offset, n.y-offset]);
+      l.push([n.x-offset, n.y+offset]);
+      l.push([n.x+offset, n.y-offset]);
+      l.push([n.x+offset, n.y+offset]);
+    }
+
+    // create convex hulls
+    var hullset = [];
+    for (i in hulls) {
+
+      var hull_space = d3.polygonHull(hulls[i]);
+      hullset.push({
+        group: i,
+        path: hull_space,
+        centroid: d3.polygonCentroid(hull_space)
+      });
+    }
+
+    return hullset;
+  }
+
+  var hull_text = hullg
+    .append("text");
 
   // Draw curved edges
   function tick() {
-    link.attr("d", linkArc);
-    circle.attr("transform", transform);
-    text.attr("transform", transform);
+    link
+      .attr("d", linkArc);
+    circle
+      .attr("transform", transform);
+    text
+      .attr("transform", transform);
+    hull
+      .data(convexHulls(new_nodes, new_links, getGroup, offset))
+      .attr("d", drawCluster);
 
-    var hull = d3.polygonHull(
-
-
-      node.data().map(function(d) {
-        return [d.x,d.y];
+    hull_text
+      .data(convexHulls(new_nodes, new_links, getGroup, offset))
+      .attr("transform", function(d) {
+        return "translate(" + d.centroid + ")";
       })
-    );
-
-    convexHull.datum(hull).attr("d", function(d) {
-
-      return "M" + d.join("L") + "Z"; });
-
+      .attr("content", function(d) {
+        console.log(d)
+        if (d.group !== "none") {
+          return d.group;
+        }
+      });
   }
 
   function dragsubject() {

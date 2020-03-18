@@ -34,11 +34,9 @@ http://bl.ocks.org/mbostock/1153292
 https://bl.ocks.org/mbostock/1212215
 */
 
-.hull {
-  fill-opacity: 0.2;
-  stroke: #888;
-  fill: #aca;
-  stroke-width: 2px;
+path.hull {
+  fill: none;
+  fill-opacity: 0.3;
 }
 
 .link {

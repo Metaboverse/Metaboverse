@@ -64,6 +64,8 @@
 - MPC flux validation
 - MetaboNet datasets
 - Time-course data
+- Make sure python back-end is Windows compatible 
+
 
 ## Future implementations (non-priority):
 - Provide a go back button to get back to the graph they made previously
