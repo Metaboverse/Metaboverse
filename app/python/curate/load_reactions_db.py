@@ -315,6 +315,7 @@ def process_components(
     reaction_database = {}
     species_database = {}
     name_database = {}
+    compartment_dictionary = {}
 
     # Cycle through each pathway database and extract  contents
     for pathway in pathways_list:
@@ -342,13 +343,25 @@ def process_components(
             'reactions': set()
         }
 
-        # Parse out reaction IDs and add to pathway_database
+        # Parse out reactions
         reactions = pathway_record.findall(
             str(smbl_namespace + 'listOfReactions').format(
                 smbl_level,
                 smbl_version
             )
         )[0]
+
+        # Parse out compartment IDs and names
+        compartments = pathway_record.findall(
+            str(smbl_namespace + 'listOfCompartments').format(
+                smbl_level,
+                smbl_version
+            )
+        )[0]
+        for c in range(len(compartments)):
+            id = compartments[c].attrib['id']
+            name = compartments[c].attrib['name']
+            compartment_dictionary[id] = name
 
         # Extract reactions from pathway
         for reaction in reactions:
@@ -415,7 +428,8 @@ def process_components(
             bqbiol_namespace=bqbiol_namespace,
             rdf_namespace=rdf_namespace)
 
-    return pathway_database, reaction_database, species_database, name_database
+    return pathway_database, reaction_database, species_database, \
+        name_database, compartment_dictionary
 
 def __main__(
         species_id,
@@ -442,7 +456,8 @@ def __main__(
         pathways_dir=pathways_dir)
 
     # Get list of reaction files to use for populating database
-    pathway_database, reaction_database, species_database, name_database = process_components(
+    pathway_database, reaction_database, species_database, \
+    name_database, compartment_dictionary = process_components(
         output_dir=output_dir,
         pathways_dir=pathways_dir,
         pathways_list=pathways_list,
@@ -454,4 +469,5 @@ def __main__(
     else:
         print('Could not find SMBL file directory, skipping removal of this directory...')
 
-    return pathway_database, reaction_database, species_database, name_database
+    return pathway_database, reaction_database, species_database, \
+        name_database, compartment_dictionary

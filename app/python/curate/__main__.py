@@ -332,7 +332,8 @@ def __main__(
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
-    pathway_database, reaction_database, species_database, name_database = load_reactions(
+    pathway_database, reaction_database, species_database, \
+        name_database, compartment_dictionary = load_reactions(
         species_id=args_dict['species_id'],
         output_dir=args_dict['output'],
         args_dict=args_dict)
@@ -378,7 +379,8 @@ def __main__(
         'uniprot_synonyms': uniprot_reference,
         'chebi_synonyms': chebi_reference,
         'uniprot_metabolites': uniprot_metabolites,
-        'complex_dictionary': complexes_reference['complex_dictionary']}
+        'complex_dictionary': complexes_reference['complex_dictionary'],
+        'compartment_dictionary': compartment_dictionary}
 
     # Write database to file
     print('Writing metaboverse database to file...')

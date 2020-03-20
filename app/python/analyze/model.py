@@ -66,7 +66,8 @@ def build_graph(
         uniprot_reference,
         complexes,
         species_id,
-        gene_reference):
+        gene_reference,
+        compartment_reference):
     """Build graph
     - Add nodes and edges
     - Map names to objects in the graph for display
@@ -88,7 +89,8 @@ def build_graph(
             uniprot_reference=uniprot_reference,
             complex_reference=complexes,
             species_id=species_id,
-            gene_reference=gene_reference)
+            gene_reference=gene_reference,
+            compartment_reference=compartment_reference)
 
     return G, network
 
@@ -102,7 +104,8 @@ def process_reactions(
         uniprot_reference,
         complex_reference,
         species_id,
-        gene_reference):
+        gene_reference,
+        compartment_reference):
     """
     """
     new_components = []
@@ -116,7 +119,8 @@ def process_reactions(
     reactants = network[reactome_id]['reactants']
     products = network[reactome_id]['products']
     modifiers = network[reactome_id]['modifiers'] # ordered list
-    compartment = network[reactome_id]['compartment']
+    compartment_id = network[reactome_id]['compartment']
+    compartment_name = compartment_reference[compartment_id]
 
     # Add reaction node
     graph.add_node(reaction_id)
@@ -126,7 +130,8 @@ def process_reactions(
     graph.nodes()[reaction_id]['notes'] = reaction_notes
     graph.nodes()[reaction_id]['type'] = 'reaction'
     graph.nodes()[reaction_id]['sub_type'] = 'reaction'
-    graph.nodes()[reaction_id]['compartment'] = compartment
+    graph.nodes()[reaction_id]['compartment'] = compartment_id
+    graph.nodes()[reaction_id]['compartment_display'] = compartment_name
 
     # Add vanilla element nodes and their edges
     for reactant in reactants:
@@ -817,7 +822,8 @@ def __main__(
         uniprot_reference=network['uniprot_synonyms'],
         complexes=network['complex_dictionary'],
         species_id=species_id,
-        gene_reference=network['ensembl_synonyms'])
+        gene_reference=network['ensembl_synonyms'],
+        compartment_reference=network['compartment_dictionary'])
 
     # For gene and protein components, add section to reaction database
     #for additional_components and list

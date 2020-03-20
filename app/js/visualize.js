@@ -732,24 +732,29 @@ function make_graph(
       ) {
         // Label other nodes with expression value in parentheses
         return (
-          "<tspan dx='16' y='.31em' style='font-weight: bold;'>" +
-          d.name +
-          "</tspan>"
+          "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
+          + d.name
+          + "</tspan>"
+          + "<tspan x='16' y='1.7em'>Compartment: "
+          + d.compartment_display
+          + "</tspan>"
         );
       } else {
         return (
-          "<tspan dx='16' y='-.5em' style='font-weight: bold;'>" +
-          d.name +
-          "</tspan>" +
-          "<tspan x='16' y='.7em'>Value: " +
-          parseFloat(expression_dict[d.name]).toFixed(2) +
-          "</tspan>" +
-          "<tspan x='16' y='1.7em'>Statistic: " +
-          parseFloat(stats_dict[d.name]).toFixed(2) +
-          "</tspan>"
+          "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+          + d.name
+          + "</tspan>"
+          + "<tspan x='16' y='.7em'>Value: "
+          + parseFloat(expression_dict[d.name]).toFixed(2)
+          + "</tspan>"
+          + "<tspan x='16' y='1.7em'>Statistic: "
+          + parseFloat(stats_dict[d.name]).toFixed(2)
+          + "</tspan>"
         );
       }
     });
+
+    console.log(text)
 
   simulation.on("tick", tick);
 
@@ -1090,8 +1095,21 @@ function make_graph(
     return hullset;
   }
 
-  var hull_text = hullg
-    .append("text");
+  /*Revisit labeling hull later
+  var hull_text = hull
+    .append("g")
+    .append("text")
+    .style("display", "inline")
+    .html(function(d) {
+      if (d.group !== "none") {
+        return "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
+        + d.group
+        + "</tspan>";
+      }
+    });
+
+  console.log(hull_text)
+  */
 
   // Draw curved edges
   function tick() {
@@ -1105,17 +1123,13 @@ function make_graph(
       .data(convexHulls(new_nodes, new_links, getGroup, offset))
       .attr("d", drawCluster);
 
+    /*Revisit labeling hull later
     hull_text
-      .data(convexHulls(new_nodes, new_links, getGroup, offset))
       .attr("transform", function(d) {
         return "translate(" + d.centroid + ")";
-      })
-      .attr("content", function(d) {
-        console.log(d)
-        if (d.group !== "none") {
-          return d.group;
-        }
       });
+    */
+
   }
 
   function dragsubject() {
