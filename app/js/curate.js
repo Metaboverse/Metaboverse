@@ -102,3 +102,41 @@ function check_changes() {
     );
   }
 }
+
+// Drop pre-existing metabolic network curation for further analysis
+window.addEventListener("load", function(event) {
+  document.getElementById("dropCuration").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var inputVal = document.getElementById("dropCuration").value.split(".");
+
+    if (inputVal[inputVal.length - 1] !== "pickle") {
+      alert(
+        "Input is not a .pickle file. You must upload the correct file type for the analyses to work. Restarting page..."
+      );
+      window.location.reload(false);
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f);
+        path = f.path;
+
+        update_session_info("curation_url", path);
+
+        $("#content").replaceWith(
+          '<a href="../html/variables.html"><div id="continue"><font size="3">Continue</font></div></a>'
+        );
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Input is not a .pickle file. You must upload the correct file type for the analyses to work."
+        );
+      }
+    }
+  };
+});
+
+ipcRenderer.on("dropCuration", (event, data) => {
+  $("#dropCuration").text(data);
+});

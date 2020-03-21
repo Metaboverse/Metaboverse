@@ -90,7 +90,6 @@ function parseCommand(args_dict) {
       commandString = commandString + " --" + key + " " + args_dict[key];
     }
   }
-
   return commandString;
 }
 
@@ -105,58 +104,48 @@ function execute(command, callback) {
   });
 }
 
-runCurate = function(_callback) {
-  var curateDictionary = {
-    output: getArgument("output"),
-    species_id: getArgument("organism_id"),
-    progress_log: path.resolve("data/progress_log.json")
-  };
+runBuild = function(_callback) {
 
-  var cmd = parseCommand(curateDictionary);
+  curated = getArgument("curation_url")
+
+  if (curated !== "None") {
+    graphDictionary = {
+      output: getArgument("output"),
+      output_file: "find",
+      species_id: "find",
+      organism_curation: curated,
+      metadata: getArgument("metadata"),
+      transcriptomics: getArgument("transcriptomics"),
+      proteomics: getArgument("proteomics"),
+      metabolomics: getArgument("metabolomics"),
+      experiment: getArgument("experiment"),
+      progress_log: path.resolve("data/progress_log.json")
+    }
+  } else {
+    graphDictionary = {
+      output: getArgument("output"),
+      output_file: getArgument("database_url"),
+      species_id: getArgument("organism_id"),
+      model_file:
+        getArgument("output") +
+        getArgument("organism_id") +
+        "_metaboverse_db.pickle",
+      metadata: getArgument("metadata"),
+      transcriptomics: getArgument("transcriptomics"),
+      proteomics: getArgument("proteomics"),
+      metabolomics: getArgument("metabolomics"),
+      experiment: getArgument("experiment"),
+      progress_log: path.resolve("data/progress_log.json")
+    }
+  }
+
+  var cmd = parseCommand(graphDictionary);
   console.log(cmd);
   execute("python " + scriptFilename + " curate " + cmd, output => {
     console.log(output);
   });
-  console.log("Hello");
   return _callback;
 };
-
-runAnalysis = function() {
-  graphDictionary = {
-    output: getArgument("output"),
-    output_file: getArgument("database_url"),
-    model:
-      getArgument("output") +
-      getArgument("organism_id") +
-      "_metaboverse_db.pickle",
-    metadata: getArgument("metadata"),
-    transcriptomics: getArgument("transcriptomics"),
-    proteomics: getArgument("proteomics"),
-    metabolomics: getArgument("metabolomics"),
-    species_id: getArgument("organism_id"),
-    blacklist: getArgument("blacklist"),
-    experiment: getArgument("experiment"),
-    collapse_missing_reactions: getArgument("collapse_missing_reactions"),
-    split_duplicate_nodes: getArgument("split_duplicate_nodes"),
-    progress_log: path.resolve("data/progress_log.json")
-  };
-  var cmd = parseCommand(graphDictionary);
-  console.log(cmd);
-  execute("python " + scriptFilename + " analyze " + cmd, output => {
-    console.log(output);
-  });
-};
-
-function runBuild() {
-  // call the functions
-  if (getArgument("normalize") === true) {
-    execute("python " + scriptFilename + " preprocess -h", output => {
-      console.log(output);
-    });
-  }
-
-  runAnalysis();
-}
 
 function displayOptions() {
   if (

@@ -25,8 +25,8 @@ import os
 
 """Import internal dependencies
 """
-from metaboverse.__init__ import __version__
-from metaboverse.__init__ import __dependencies__
+from app.python.__init__ import __version__
+from app.python.__init__ import __dependencies__
 
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
@@ -48,7 +48,7 @@ setup(
     install_requires = __dependencies__,
     entry_points={
         "console_scripts": [
-            "metaboverse = app/python.__main__:main"
+            "metaboverse = app.python.__main__:main"
             ]
         },
     classifiers=[

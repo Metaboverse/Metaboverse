@@ -3,15 +3,13 @@ Instructions for building app for distribution:
 1) Go to app directory
 1.1) If modules not installed, run 'npm install electron --save-dev'
 1.2) Update version at `package.json` and `__version__.txt`
-2) Run 'electron-packager ./ Metaboverse --platform=darwin'
+2) Package python code as executable
+3) Run 'electron-packager ./ Metaboverse --platform=darwin'
 
 If modules not installed:
 -------------------------
 1) Run 'npm install electron --save-dev'
-2) Run 'npm install d3'
-3) Run 'npm install jquery'
-4) Run 'npm install string-pixel-width'
-5) Run 'npm install d3-save-svg'
+2) Run 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle'
 
 To run demo app:
 ----------------

@@ -27,32 +27,13 @@ from textwrap import dedent
 
 """Import internal dependencies
 """
-from app.python.__init__ import __version__
-from app.python.__init__ import __dependencies__
-from app.python.utils import check_directories
-from app.python.utils import check_curate
-from app.python.utils import check_analyze
-from app.python.utils import generate_log
-from app.python.utils import argument_checks
-
-"""Set global variables
-"""
-DEFAULT_MAX_PROCESSORS = None
-DEFAULT_BLACKLIST = [
-    'H+', # proton
-    'H2O', # water
-    'O2', # dioxygen
-    # phosphate
-    # diphosphate
-    'CO2', # carbon dioxide
-    # sulfate
-    # hydrogen peroxide
-    # ammonium
-    # sulfite
-    # sodium
-    # hydrogen carbonate
-    # hydroxide
-    ]
+from python.__init__ import __version__
+from python.__init__ import __dependencies__
+from python.utils import check_directories
+from python.utils import check_curate
+from python.utils import check_analyze
+from python.utils import generate_log
+from python.utils import argument_checks
 
 __path__  =  os.path.dirname(os.path.realpath(__file__))
 url = 'https://raw.githubusercontent.com/j-berg/Metaboverse/master/metaboverse/__init__.py'
@@ -63,11 +44,11 @@ description_table  =  """\
     Sub-module help can be displayed by executing:
     'metaboverse sub-module_name --help'
     Sub-module descriptions:
-        +-----------------------+-----------------------------+
-        |    preprocess         |   Preprocess a dataframe    |
-        +-----------------------+-----------------------------+
-        |    curate             |   Curate network            |
-        +-----------------------+-----------------------------+
+        +-----------------------+--------------------------------------------+
+        |    preprocess         |   Preprocess a dataframe                   |
+        +-----------------------+--------------------------------------------+
+        |    curate             |   Curate network with optional user data   |
+        +-----------------------+--------------------------------------------+
 """
 
 """Check dependencies
@@ -156,7 +137,7 @@ def parse_arguments(
 
     # Initialize main parser
     parser = argparse.ArgumentParser(
-        prog = 'metabalyze',
+        prog = 'metaboverse',
         description = dedent(description_table),
         formatter_class = argparse.RawTextHelpFormatter)
 
@@ -226,6 +207,18 @@ def parse_arguments(
         action = 'help',
         help = 'Show help message and exit')
     curate_opts.add_argument(
+        '-c', '--organism_curation',
+        help = 'Path and name for organism curation file',
+        metavar = '<path/filename.pickle>',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
+        '-i', '--model_file',
+        help = 'Path and name for organism curation file output. If --organism_curation is used, this argument will be ignored.',
+        metavar = '<path/filename.pickle>',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
         '-f', '--output_file',
         help = 'Path and name for output database file',
         metavar = '<path/filename.json>',
@@ -246,53 +239,36 @@ def parse_arguments(
         default = 'None',
         required = False)
     curate_opts.add_argument(
-        '-b', '--metabolomics',
+        '-m', '--metabolomics',
         help = 'Path and filename of metabolomics data -- refer to documentation for details on formatting and normalization',
         metavar = '<path/filename>',
         type = str,
         default = 'None',
         required = False)
     curate_opts.add_argument(
-        '--experiment',
+        '-d', '--metadata',
+        help = 'Path and filename of metadata table -- refer to documentation for details on formatting and normalization',
+        metavar = '<path/filename>',
+        type = str,
+        default = 'None',
+        required = False)
+    curate_opts.add_argument(
+        '-e', '--experiment',
         help = 'Specify experiment type',
         metavar = '<default/timecourse/flux/multi-condition>',
         type = str,
         required = False)
     curate_opts.add_argument(
-        '--collapse_missing_reactions',
-        help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
-        action = 'store_true',
-        required = False)
-    curate_opts.add_argument(
-        '--split_duplicate_nodes',
-        help = 'Normalize expression values on standard scale (z-score), otherwise will display log$_2$(Fold change) values on plotting',
-        action = 'store_true',
-        required = False)
-    curate_opts.add_argument(
-        '--blacklist',
-        help = 'Provide space-seperated list of analytes to blacklist',
-        default = DEFAULT_BLACKLIST,
-        type = str,
-        nargs = '+',
-        required = False)
-    curate_opts.add_argument(
-        '--session_data',
+        '-n', '--session_data',
         help = 'Path and filename to session data file',
         metavar = '<path/filename>',
         type = str,
         required = False)
     curate_opts.add_argument(
-        '--progress_log',
+        '-l', '--progress_log',
         help = 'Path and filename to progress log file',
         metavar = '<path/filename>',
         type = str,
-        required = False)
-    curate_opts.add_argument(
-        '-m', '--max_processors',
-        help = 'Number of max processors to use for tasks (default: No limit)',
-        metavar = '<processors>',
-        type = int,
-        default = DEFAULT_MAX_PROCESSORS,
         required = False)
 
     # Get arguments are print help if no arguments provided

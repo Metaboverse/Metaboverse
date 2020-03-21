@@ -30,7 +30,7 @@ import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from app.python.utils import progress_feed
+from python.utils import progress_feed
 
 """Global variables
 """
@@ -449,11 +449,12 @@ def __main__(
     # Get pathways files
     pathways_dir = unpack_pathways(
         output_dir=output_dir)
-    progress_feed(args_dict, "reactions")
+    progress_feed(args_dict, "curate", 10)
 
     pathways_list = get_pathways(
         species_id=species_id,
         pathways_dir=pathways_dir)
+    progress_feed(args_dict, "curate", 7)
 
     # Get list of reaction files to use for populating database
     pathway_database, reaction_database, species_database, \
@@ -463,6 +464,7 @@ def __main__(
         pathways_list=pathways_list,
         species_id=species_id,
         args_dict=args_dict)
+    progress_feed(args_dict, "curate", 5)
 
     if 'sbml' in pathways_dir:
         shutil.rmtree(pathways_dir)

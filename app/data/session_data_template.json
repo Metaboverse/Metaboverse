@@ -1,5 +1,6 @@
 {
   "database_url": null,
+  "curation_url": null,
   "output": null,
   "organism": null,
   "organism_id": null,
@@ -7,12 +8,5 @@
 	"proteomics": null,
 	"metabolomics": null,
 	"metadata": null,
-	"experiment": null,
-	"normalization": null,
-	"blacklist": null,
-	"collapse_missing_reactions": false,
-	"split_duplicate_nodes": false,
-	"data_min": -5,
-	"data_max": 5,
-  "colorbar": null
+	"experiment": null
 }

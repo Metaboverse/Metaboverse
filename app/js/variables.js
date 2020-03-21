@@ -192,46 +192,6 @@ window.addEventListener("load", function(event) {
   };
 });
 
-var collapse = false;
-window.addEventListener("load", function(event) {
-  document.getElementById("updateCollapse").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (collapse === true) {
-      collapse = false;
-    } else {
-      collapse = true;
-    }
-
-    try {
-      update_session_info("collapse_missing_reactions", collapse);
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
-  };
-});
-
-var split = false;
-window.addEventListener("load", function(event) {
-  document.getElementById("updateSplit").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (split === true) {
-      split = false;
-    } else {
-      split = true;
-    }
-
-    try {
-      update_session_info("split_duplicate_nodes", split);
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
-  };
-});
-
 window.addEventListener("load", function(event) {
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
@@ -247,8 +207,7 @@ window.addEventListener("load", function(event) {
       experiment_type = "flux_balance";
     } else if (inputVal === "expType4") {
       experiment_type = "multiple_conditions";
-    } else {
-    }
+    } else {}
 
     try {
       update_session_info("experiment", experiment_type);
@@ -260,27 +219,21 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("updateNormalization").onchange = function(event) {
+  document.getElementById("updateExperimentName").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("updateNormalization").value;
-
-    if (inputVal === "normType1") {
-      normalization_type = null;
-    } else if (inputVal === "normType2") {
-      normalization_type = "log";
-    } else if (inputVal === "normType3") {
-      normalization_type = "z-score";
-    } else if (inputVal === "normType4") {
-    } else {
-    }
+    var inputVal = document.getElementById("updateExperimentName").value.split(".");
 
     try {
-      update_session_info("normalization", normalization_type);
+      console.log("Your provided experiment name: ", inputVal);
+
+      update_session_info("experiment", inputVal);
     } catch (error) {
       console.log(error);
-      alert(error);
+      alert(
+        "Experiment name is not valid."
+      );
     }
-  };
+  }
 });

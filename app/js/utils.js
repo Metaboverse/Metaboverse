@@ -38,18 +38,23 @@ function write_json(session_data) {
 
 function update_session_info(key_update, value_update, abbrev_dict = null) {
   var session = JSON.parse(fs.readFileSync(session_file).toString());
+  console.log(session)
+  console.log(key_update)
+  console.log(value_update)
   session[key_update] = value_update;
 
   // Where database output location is, make this the output location
   if (key_update === "database_url") {
     path = value_update.substring(0, value_update.lastIndexOf("/"));
     session["output"] = path + "/";
-  }
+  } else if (key_update === "curation_url") {
+    path = value_update.substring(0, value_update.lastIndexOf("/"));
+    session["output"] = path + "/";
+  } else {}
 
   if ((abbrev_dict !== null) & (key_update === "organism")) {
     session["organism_id"] = abbrev_dict[value_update];
   }
-
   write_json(session);
 }
 

@@ -121,8 +121,26 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <font size="3">
         <form>
+          Experiment Name:
+            <button
+              class="info"
+              title="Enter a name for your experiment (no spaces preferred)">
+              <i>i</i>
+            </button>
+            <br>
+            <br>
+            <input type="text" class="experimentName" id="updateExperimentName">
+            </input>
+        </form>
+        <br>
+        <br>
+        <form>
           Experiment Type:
-            <button class="info" title="Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter."><i>i</i></button>
+            <button
+              class="info"
+              title="Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter.">
+              <i>i</i>
+            </button>
             <br>
             <br>
             <select name="dropdown" id="updateExperiment">
@@ -132,29 +150,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
               <option value="expType4">Multiple Conditions (coming soon)</option>
             </select>
         </form>
-        <br>
-        <form>
-          Normalization:
-          <button class="info" title="Select the normalization type you would like to perform. Please see the documentation for more information on selecting this parameter."><i>i</i></button>
-          <br>
-          <br>
-          <select name="dropdown" id="updateNormalization">
-            <option value="normType1" selected>No Normalization</option>
-            <option value="normType2">Log Scale (coming soon)</option>
-            <option value="normType3">Z-Score (coming soon)</option>
-          </select>
-        </form>
-        <br>
-
-        <input type="checkbox" id="updateCollapse">Collapse entities with missing data
-        <button class="info" title="Check this box to collapse entities for which there is no expression/abundance data."><i>i</i></button>
-        <br>
-
-        <br>
-        <input type="checkbox" id="updateSplit">Split duplicate entities
-        <button class="info" title="Check this box to split duplicate entities within a pathway view into seperate entities. See the documentation for more information."><i>i</i></button>
-        <br>
-
         <br>
         <br>
         Drag and drop blacklist list:

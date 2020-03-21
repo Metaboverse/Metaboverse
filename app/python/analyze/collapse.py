@@ -21,7 +21,7 @@ from __future__ import print_function
 
 """Import dependencies
 """
-from app.python.analyze.utils import convert_rgba
+from python.analyze.utils import convert_rgba
 
 def find_values(
         graph,

@@ -76,7 +76,21 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <center>
       <font size="3">
-        <p>What organism you would like to analyze?</p>
+        Drag and drop a pre-existing <b>organism</b> database (ends in .pickle)
+        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.pickle'"><i>i</i></button>
+        <br>
+        <br>
+        <input id="dropCuration" type="file" accept="*.pickle">
+        <br />
+        <br />
+        <br />
+        <br />
+        <b><i>OR</i></b>
+        <br />
+        <br />
+        <br>
+        <br>
+        <p>Select the organism you would like to analyze:</p>
         <select id="speciesMenu" onchange="selectOrganism()"></select>
         <br>
         <br>
@@ -86,6 +100,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </p>
 
         <button id="selectOutput">Select Output File Name</button>
+        <br>
+        <br>
 
       </font>
       <br>

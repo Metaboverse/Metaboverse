@@ -24,9 +24,9 @@ import pickle
 
 """Import internal dependencies
 """
-from app.python.analyze.prepare_data import __main__ as prepare_data
-from app.python.analyze.model import __main__ as model
-from app.python.utils import progress_feed
+from python.analyze.prepare_data import __main__ as prepare_data
+from python.analyze.model import __main__ as model
+from python.utils import progress_feed
 
 def read_network(
         network_url):
@@ -48,6 +48,10 @@ def __main__(
     # Get network curation info
     network = read_network(
         network_url=args_dict['network'])
+    progress_feed(args_dict, "model", 5)
+
+    if args_dict['organism_curation'] != 'None':
+        args_dict['species_id'] = network['species_id']
 
     # Read in data (if any)
     if args_dict['transcriptomics'].lower() != 'none' \
@@ -59,16 +63,18 @@ def __main__(
             transcriptomics_url=args_dict['transcriptomics'],
             proteomics_url=args_dict['proteomics'],
             metabolomics_url=args_dict['metabolomics'])
+        progress_feed(args_dict, "model", 5)
 
     else:
         data = None
         stats = None
+        progress_feed(args_dict, "model", 5)
 
     # Generate graph
     model(
+        args_dict=args_dict,
         network=network,
         data=data,
         stats=stats,
         species_id=args_dict['species_id'],
-        output_file=args_dict['output_file'],
-        black_list=args_dict['blacklist'])
+        output_file=args_dict['output_file'])

@@ -36,3 +36,4 @@ https://github.com/Metaboverse/Metaboverse/releases/download/metaboverse-v0.0.1b
 
 ### Other information
 - If a page seems to be malfunctioning during the alpha release stage, please press `Ctrl + r` to refresh the page, then try the operation again
+- Need to install metaboverse CLI with python

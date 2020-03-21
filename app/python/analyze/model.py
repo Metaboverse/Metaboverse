@@ -37,9 +37,10 @@ pmap = matplotlib.cm.get_cmap('Reds')
 
 """Import internal dependencies
 """
-from app.python.analyze.collapse import collapse_nodes
-from app.python.analyze.collapse import generate_updated_dictionary
-from app.python.analyze.utils import convert_rgba
+from python.analyze.collapse import collapse_nodes
+from python.analyze.collapse import generate_updated_dictionary
+from python.analyze.utils import convert_rgba
+from python.utils import progress_feed
 
 """Graph utils
 """
@@ -730,6 +731,7 @@ def broadcast_values(
     return graph
 
 def __main__(
+        args_dict,
         network,
         data,
         stats,
@@ -810,6 +812,7 @@ def __main__(
     protein_dictionary = uniprot_ensembl_reference(
         uniprot_reference=network['uniprot_synonyms'],
         ensembl_reference=reverse_genes)
+    progress_feed(args_dict, "model", 5)
 
     # Generate graph
     # Name mapping
@@ -824,6 +827,7 @@ def __main__(
         species_id=species_id,
         gene_reference=network['ensembl_synonyms'],
         compartment_reference=network['compartment_dictionary'])
+    progress_feed(args_dict, "model", 10)
 
     # For gene and protein components, add section to reaction database
     #for additional_components and list
@@ -840,14 +844,16 @@ def __main__(
         stats=stats,
         name_reference=network['name_database'],
         degree_dictionary=degree_dictionary)
+    progress_feed(args_dict, "graph", 5)
 
     print('Broadcasting values where available...')
     categories = data.columns.tolist()
     G = broadcast_values(
-            graph=G,
-            categories=categories,
-            max_value=max_value,
-            max_stat=max_stat)
+        graph=G,
+        categories=categories,
+        max_value=max_value,
+        max_stat=max_stat)
+    progress_feed(args_dict, "graph", 10)
 
     # Generate list of super pathways (those with more than 200 reactions)
     print('Compiling super pathways...')
@@ -858,12 +864,13 @@ def __main__(
     print('Compiling collapsed reaction reference...')
     # Collapse reactions
     G, updated_reactions, changed_reactions = collapse_nodes(
-            graph=G,
-            reaction_dictionary=network['reaction_database'],
-            samples=len(categories))
+        graph=G,
+        reaction_dictionary=network['reaction_database'],
+        samples=len(categories))
     updated_pathway_dictionary = generate_updated_dictionary(
-            original_database=network['pathway_database'],
-            update_dictionary=changed_reactions)
+        original_database=network['pathway_database'],
+        update_dictionary=changed_reactions)
+    progress_feed(args_dict, "graph", 8)
 
     ###
     # For pancancer
@@ -897,3 +904,4 @@ def __main__(
         max_stat=max_stat,
         categories=categories)
     print('Graphing complete.')
+    progress_feed(args_dict, "graph", 2)

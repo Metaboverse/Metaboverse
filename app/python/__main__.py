@@ -22,16 +22,18 @@ from __future__ import print_function
 """
 import os
 import sys
+import pickle
 
 """Import internal dependencies
 """
-from app.python.__init__ import __version__
-from app.python.__init__ import __dependencies__
-from app.python.arguments import parse_arguments
-from app.python.arguments import get_dependencies
-from app.python.preprocess.__main__ import __main__ as preprocess
-from app.python.curate.__main__ import __main__ as curate
-from app.python.utils import progress_feed
+from python.__init__ import __version__
+from python.__init__ import __dependencies__
+from python.arguments import parse_arguments
+from python.arguments import get_dependencies
+from python.preprocess.__main__ import __main__ as preprocess
+from python.curate.__main__ import __main__ as curate
+from python.analyze.__main__ import __main__ as analyze
+from python.utils import progress_feed
 
 """Run metaboverse
 """
@@ -53,12 +55,31 @@ def main(
     # Run metaboverse-curate
     elif args_dict['cmd'] == 'curate':
 
-        print('Curating network model...')
-        args_dict = curate(args_dict)
-        sys.stdout.flush()
+        print(args_dict)
+        if str(args_dict['organism_curation']) != 'None':
+            progress_feed(
+                args_dict=args_dict,
+                process="curate",
+                amount=50)
+            # Update args_dict with path for network model
+            with open(args_dict['organism_curation'], 'rb') as network_file:
+                network = pickle.load(network_file)
+                args_dict['species_id'] = network['species_id']
+                args_dict['output_file'] = args_dict['output'] \
+                    + args_dict['species_id'] \
+                    + '_global_reactions.json'
+                args_dict['network'] = args_dict['organism_curation']
 
+            print('Skipping organism network modeling as one was provided by' \
+            + ' the user...')
+            sys.stdout.flush()
+        else:
+            print('Curating network model...')
+            args_dict['network'] = args_dict['model_file']
+            args_dict = curate(args_dict)
+            sys.stdout.flush()
 
-        print('Analyzing data in context of network model...')
+        print('Curating data onto the network model...')
         analyze(args_dict)
         sys.stdout.flush()
         sys.exit(1)
