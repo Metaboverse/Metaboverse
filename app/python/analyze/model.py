@@ -434,12 +434,12 @@ def map_attributes(
 
     # Re-index data and stats
     data_renamed = data.copy()
-    data_renamed = data.rename(index=network['name_database'])
+    data_renamed = data.rename(index=name_reference)
     data_renamed = data_renamed.loc[data_renamed.index.dropna()]
     data_max = abs(data_renamed).max().max()
 
     stats_renamed = stats.copy()
-    stats_renamed = stats.rename(index=network['name_database'])
+    stats_renamed = stats.rename(index=name_reference)
     stats_renamed = stats_renamed.loc[stats_renamed.index.dropna()]
     stats_logged = -1 * np.log10(stats_renamed + 1e-100)
 
@@ -573,7 +573,7 @@ def compile_node_degrees(
 
     d = {}
 
-    deg_dict = G.degree
+    deg_dict = graph.degree
     for k,v in deg_dict:
 
         d[k] = v
