@@ -33,7 +33,7 @@ from python.arguments import get_dependencies
 from python.preprocess.__main__ import __main__ as preprocess
 from python.curate.__main__ import __main__ as curate
 from python.analyze.__main__ import __main__ as analyze
-from python.utils import progress_feed
+from python.utils import progress_feed, update_session
 
 """Run metaboverse
 """
@@ -69,6 +69,22 @@ def main(
                     + args_dict['species_id'] \
                     + '_global_reactions.json'
                 args_dict['network'] = args_dict['organism_curation']
+
+                # add variables back to session data json file
+                session_file = args_dict['session_data']
+                update_session(
+                    session_file=session_file,
+                    key='species_id',
+                    value=args_dict['species_id'])
+                update_session(
+                    session_file=session_file,
+                    key='output_file',
+                    value=args_dict['output_file'])
+                update_session(
+                    session_file=session_file,
+                    key='database_url',
+                    value=args_dict['output_file'])
+
 
             print('Skipping organism network modeling as one was provided by' \
             + ' the user...')

@@ -8,5 +8,7 @@
 	"proteomics": null,
 	"metabolomics": null,
 	"metadata": null,
-	"experiment": null
+	"experiment": null,
+  "min_value": -5,
+  "max_value": 5
 }

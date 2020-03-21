@@ -25,6 +25,16 @@ var path = require("path");
 var fs = require("fs");
 var $ = require("jquery");
 
+var userDataPath = app.getPath("userData");
+var session_file = userDataPath + "/session_data.json";
+var session_format = session_file.split(" ")[0]
+  + String.fromCharCode(92)
+  + " "
+  + session_file.split(" ")[1]
+
+console.log(session_file)
+
+
 var progressFile = "data/progress_log.json";
 var scriptFilename = path.join(__dirname, "../python", "__main__.py");
 
@@ -119,7 +129,8 @@ runBuild = function(_callback) {
       proteomics: getArgument("proteomics"),
       metabolomics: getArgument("metabolomics"),
       experiment: getArgument("experiment"),
-      progress_log: path.resolve("data/progress_log.json")
+      progress_log: path.resolve("data/progress_log.json"),
+      session_data: session_format
     }
   } else {
     graphDictionary = {
@@ -135,12 +146,13 @@ runBuild = function(_callback) {
       proteomics: getArgument("proteomics"),
       metabolomics: getArgument("metabolomics"),
       experiment: getArgument("experiment"),
-      progress_log: path.resolve("data/progress_log.json")
+      progress_log: path.resolve("data/progress_log.json"),
+      session_data: session_format
     }
   }
 
   var cmd = parseCommand(graphDictionary);
-  console.log(cmd);
+  console.log("Running: python " + scriptFilename + " curate " + cmd);
   execute("python " + scriptFilename + " curate " + cmd, output => {
     console.log(output);
   });
