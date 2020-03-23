@@ -27,6 +27,12 @@ var $ = require("jquery");
 
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
+
+//if (" " in session_file) {
+//  for
+//}
+
+
 var session_format = session_file.split(" ")[0]
   + String.fromCharCode(92)
   + " "
@@ -51,11 +57,12 @@ fs.watch(progressFile, function(event, filename) {
   var elem = document.getElementById("progressBar");
   var sum_values = 0;
 
-  var session = JSON.parse(fs.readFileSync(progressFile).toString());
 
+  var session = JSON.parse(fs.readFileSync(progressFile).toString());
+  console.log(progressFile)
+  console.log(session)
   for (j in session) {
     //loop through the array
-
     sum_values += session[j]; //Do the math!
   }
   elem.style.width = sum_values + "%";

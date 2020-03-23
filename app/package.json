@@ -32,6 +32,7 @@
   "dependencies": {
     "d3-fisheye": "^2.0.1",
     "d3-save-svg": "0.0.2",
+    "electron-packager": "^14.2.1",
     "filereader": "^0.10.3",
     "fs": "0.0.1-security",
     "jpickle": "^0.4.1",

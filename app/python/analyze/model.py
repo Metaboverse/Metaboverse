@@ -736,39 +736,12 @@ def __main__(
         data,
         stats,
         species_id,
-        output_file):
+        output_file,
+        flag_data=False):
     """Generate graph object for visualization
     """
 
     #############################
-    def read_network(
-            network_url):
-        """Read in network from previous curation module
-        - was provided as a URL to the file and saved to args_dict['network']  in "curate" sub-module
-        """
-        import pickle
-        with open(network_url, 'rb') as network_file:
-            network = pickle.load(network_file)
-
-        return network
-
-    network = read_network(
-        network_url='/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
-
-    data = pd.read_csv(
-        '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_data.txt',
-        sep='\t',
-        index_col=0)
-
-    stats = pd.read_csv(
-        '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_stats.txt',
-        sep='\t',
-        index_col=0)
-
-    output_file = '/Users/jordan/Desktop/HSA_global_reactions.json'
-
-    species_id = 'HSA'
-
     """Start of pancancer-necessary code
     To run, place all graph-making code within the for loop below
     """
@@ -797,8 +770,6 @@ def __main__(
             sep='\t',
             index_col=0)
     """
-
-
     #############################
 
     print('Preparing metadata...')
@@ -812,7 +783,7 @@ def __main__(
     protein_dictionary = uniprot_ensembl_reference(
         uniprot_reference=network['uniprot_synonyms'],
         ensembl_reference=reverse_genes)
-    progress_feed(args_dict, "model", 5)
+    progress_feed(args_dict, "model", 1)
 
     # Generate graph
     # Name mapping
@@ -827,7 +798,7 @@ def __main__(
         species_id=species_id,
         gene_reference=network['ensembl_synonyms'],
         compartment_reference=network['compartment_dictionary'])
-    progress_feed(args_dict, "model", 10)
+    progress_feed(args_dict, "model", 9)
 
     # For gene and protein components, add section to reaction database
     #for additional_components and list
@@ -838,6 +809,7 @@ def __main__(
     print('Mapping user data...')
     degree_dictionary = compile_node_degrees(
         graph=G)
+
     G, max_value, max_stat = map_attributes(
         graph=G,
         data=data,
@@ -845,6 +817,10 @@ def __main__(
         name_reference=network['name_database'],
         degree_dictionary=degree_dictionary)
     progress_feed(args_dict, "graph", 5)
+
+    if flag_data == True:
+        max_value = 5
+        max_stat = 1
 
     print('Broadcasting values where available...')
     categories = data.columns.tolist()
@@ -854,12 +830,6 @@ def __main__(
         max_value=max_value,
         max_stat=max_stat)
     progress_feed(args_dict, "graph", 10)
-
-    # Generate list of super pathways (those with more than 200 reactions)
-    print('Compiling super pathways...')
-    super_pathways = compile_pathway_degree(
-        pathways=network['pathway_database'])
-
 
     print('Compiling collapsed reaction reference...')
     # Collapse reactions
@@ -872,7 +842,12 @@ def __main__(
         update_dictionary=changed_reactions)
     progress_feed(args_dict, "graph", 8)
 
-    ###
+    # Generate list of super pathways (those with more than 200 reactions)
+    print('Compiling super pathways...')
+    super_pathways = compile_pathway_degree(
+        pathways=network['pathway_database'])
+
+    #############################
     # For pancancer
     """
     metabolism = network['pathway_database']['R-HSA-1430728']
@@ -888,7 +863,7 @@ def __main__(
             network['pathway_database'][k]['name'] = k
             network['pathway_database'][k]['reactions'] = v
     """
-    ###
+    #############################
 
     # Export graph, pathway membership, pathway degree, other refs
     print('Exporting graph...')
@@ -905,3 +880,5 @@ def __main__(
         categories=categories)
     print('Graphing complete.')
     progress_feed(args_dict, "graph", 2)
+
+    return graph_name

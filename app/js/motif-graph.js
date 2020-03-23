@@ -20,7 +20,7 @@ class MetaGraph{
             .attr("id", "stamp-circle-group");
         this.stamp_svg_selection_group = this.stamp_svg.append("g")
             .attr("id", "stamp-selection-group");
-        
+
         console.log(this.stamp_svg_width,this.stamp_svg_height)
 
         this.mp_svg = d3.select("#motif-pathway-svg");
@@ -35,7 +35,7 @@ class MetaGraph{
             .attr("id","mp-pathway-group");
         this.mp_selection_group = this.mp_svg.append("g")
             .attr("id","mp-selection-group");
-        
+
         this.pathway_svg = d3.select("#pathway-view-svg");
         this.pathway_link_svg = this.pathway_svg.append("g")
             .attr("id", "pathway-link-group");
@@ -73,9 +73,9 @@ class MetaGraph{
             .attr("orient", "auto")
           .append("svg:path")
             .attr("d", "M0,-5L10,0L0,5");
-        
+
         this.motifSearch();
-        
+
     }
 
     motifSearch(){
@@ -254,7 +254,7 @@ class MetaGraph{
         cg.exit().remove();
         cg = cg.enter().append("g").merge(cg)
             .attr("id",(d,i)=>"stamp-circle-"+i);
-        
+
         let lg = this.stamp_svg_link_group.selectAll("g")
             .data(motif_list);
         lg.exit().remove();
@@ -480,7 +480,7 @@ class MetaGraph{
             .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
             .text(d=>d)
             .style("font-size",9)
-            
+
     }
 
     drawPathwayView(p){
@@ -489,7 +489,7 @@ class MetaGraph{
         let pnodes = [];
         let plinks = [];
         let pnodes_id = [];
-        
+
         react_list.forEach(rid=>{
             let react = this.react_nodes[rid];
             if(react){
@@ -509,7 +509,7 @@ class MetaGraph{
                     plinks.push(l);
                 })
             }
-            
+
         })
         console.log(pnodes, plinks)
 
@@ -568,8 +568,8 @@ class MetaGraph{
         //         d3.select("#circle_"+this.createId(d.id)).attr("r",10)
         //         d3.select("#circle_frame_"+this.createId(d.id)).attr("r",10)
         //     });
-        
-            
+
+
         let labels = this.pathway_circle_svg.selectAll("text").data(pnodes);
         labels.exit().remove();
         let newLabels = labels.enter().append("text");
@@ -582,7 +582,7 @@ class MetaGraph{
             .style("font-size",10)
             .style("font-weight","bold")
             .style("visibility","hidden")
-        
+
         simulation
             .nodes(pnodes)
                 .on("tick", ticked);
@@ -597,7 +597,7 @@ class MetaGraph{
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-    
+
             let radius = 8;
             nodes
                 .attr("cx", function(d) {
@@ -667,7 +667,7 @@ class MetaGraph{
         return arr_avg;
     }
 
-   
+
 
     computeMax(node_array){
         let node_max;
@@ -705,10 +705,6 @@ class MetaGraph{
             return;
         }
     }
-
-    
-
-    
 
     createId(id){
         return id.replace(/[^a-zA-Z0-9]/g, "")

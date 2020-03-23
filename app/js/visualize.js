@@ -1,7 +1,7 @@
 /*
 Metaboverse
 Metaboverse is designed for analysis of metabolic networks
-https://github.com/j-berg/Metaboverse/
+https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
 Copyright (C) 2019 Jordan A. Berg
@@ -1264,6 +1264,7 @@ function change() {
 // Check number of categories
 function checkCategories(categories) {
   //change to > 1 after testing
+  console.log(data)
   if (data.categories.length > 1) {
     timecourse = true;
     timecourse_fill =
@@ -1290,7 +1291,7 @@ var collapsed_pathway_dict = make_pathway_dictionary(
   'collapsed_pathway_dictionary');
 var superPathwayDict = make_superPathway_dictionary(data);
 
-var timecourse = checkCategories(data.categories);
+//var timecourse = checkCategories(data.categories);
 
 make_menu(
   superPathwayDict,
