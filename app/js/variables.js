@@ -161,38 +161,6 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropBlacklist").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var inputVal = document.getElementById("dropBlacklist").value.split(".");
-
-    if (
-      (inputVal[inputVal.length - 1] !== "tsv") &
-      (inputVal[inputVal.length - 1] !== "txt")
-    ) {
-      alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
-      );
-      window.location.reload(false);
-    } else {
-      try {
-        f = event.srcElement.files[0];
-        console.log("The file you dragged: ", f);
-        path = f.path;
-
-        update_session_info("blacklist", path);
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
-        );
-      }
-    }
-  };
-});
-
-window.addEventListener("load", function(event) {
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();

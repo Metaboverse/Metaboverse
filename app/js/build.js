@@ -27,11 +27,11 @@ var $ = require("jquery");
 
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
-
+console.log(session_file)
+// do something in case there are multiple spaces in the session data path
 //if (" " in session_file) {
 //  for
 //}
-
 
 var session_format = session_file.split(" ")[0]
   + String.fromCharCode(92)
@@ -39,7 +39,6 @@ var session_format = session_file.split(" ")[0]
   + session_file.split(" ")[1]
 
 console.log(session_file)
-
 
 var progressFile = "data/progress_log.json";
 var scriptFilename = path.join(__dirname, "../python", "__main__.py");
@@ -56,7 +55,6 @@ fs.copyFile(
 fs.watch(progressFile, function(event, filename) {
   var elem = document.getElementById("progressBar");
   var sum_values = 0;
-
 
   var session = JSON.parse(fs.readFileSync(progressFile).toString());
   console.log(progressFile)
@@ -123,47 +121,57 @@ function execute(command, callback) {
 
 runBuild = function(_callback) {
 
-  curated = getArgument("curation_url")
-
-  if (curated !== "None") {
-    graphDictionary = {
-      output: getArgument("output"),
-      output_file: "find",
-      species_id: "find",
-      organism_curation: curated,
-      metadata: getArgument("metadata"),
-      transcriptomics: getArgument("transcriptomics"),
-      proteomics: getArgument("proteomics"),
-      metabolomics: getArgument("metabolomics"),
-      experiment: getArgument("experiment"),
-      progress_log: path.resolve("data/progress_log.json"),
-      session_data: session_format
-    }
+  if (get_session_info("processed") === true) {
+    var elem = document.getElementById("progressBar");
+    elem.style.width = "100%";
+    elem.innerHTML = "100%";
+    $("#content").replaceWith(
+      '<a href="motif.html"><div id="continue"><font size="3">Run Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+    );
   } else {
-    graphDictionary = {
-      output: getArgument("output"),
-      output_file: getArgument("database_url"),
-      species_id: getArgument("organism_id"),
-      model_file:
-        getArgument("output") +
-        getArgument("organism_id") +
-        "_metaboverse_db.pickle",
-      metadata: getArgument("metadata"),
-      transcriptomics: getArgument("transcriptomics"),
-      proteomics: getArgument("proteomics"),
-      metabolomics: getArgument("metabolomics"),
-      experiment: getArgument("experiment"),
-      progress_log: path.resolve("data/progress_log.json"),
-      session_data: session_format
-    }
-  }
+    curated = getArgument("curation_url")
 
-  var cmd = parseCommand(graphDictionary);
-  console.log("Running: python " + scriptFilename + " curate " + cmd);
-  execute("python " + scriptFilename + " curate " + cmd, output => {
-    console.log(output);
-  });
-  return _callback;
+    if (curated !== "None") {
+      graphDictionary = {
+        output: getArgument("output"),
+        output_file: "find",
+        species_id: "find",
+        organism_curation: curated,
+        metadata: getArgument("metadata"),
+        transcriptomics: getArgument("transcriptomics"),
+        proteomics: getArgument("proteomics"),
+        metabolomics: getArgument("metabolomics"),
+        experiment: getArgument("experiment"),
+        progress_log: path.resolve("data/progress_log.json"),
+        session_data: session_format
+      }
+    } else {
+      graphDictionary = {
+        output: getArgument("output"),
+        output_file: getArgument("database_url"),
+        species_id: getArgument("organism_id"),
+        model_file:
+          getArgument("output") +
+          getArgument("organism_id") +
+          "_metaboverse_db.pickle",
+        metadata: getArgument("metadata"),
+        transcriptomics: getArgument("transcriptomics"),
+        proteomics: getArgument("proteomics"),
+        metabolomics: getArgument("metabolomics"),
+        experiment: getArgument("experiment"),
+        progress_log: path.resolve("data/progress_log.json"),
+        session_data: session_format
+      }
+    }
+
+    var cmd = parseCommand(graphDictionary);
+    console.log("Running: python " + scriptFilename + " curate " + cmd);
+    execute("python " + scriptFilename + " curate " + cmd, output => {
+      console.log(output);
+      update_session_info("processed", true);
+    });
+    return _callback;
+  }
 };
 
 function displayOptions() {

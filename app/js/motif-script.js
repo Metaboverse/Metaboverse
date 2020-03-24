@@ -20,29 +20,24 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var fs = require('fs')
-var app = require('electron').remote.app
+var fs = require('fs');
+var app = require('electron').remote.app;
 const exec = require('child_process').exec;
 
 var userDataPath = app.getPath('userData');
-var session_file = userDataPath + "/session_data.json"
+var session_file = userDataPath + "/session_data.json";
 let database_url = JSON.parse(
-  fs.readFileSync(session_file).toString())["database_url"]
+  fs.readFileSync(session_file).toString())["database_url"];
 
-console.log("Database path: " + database_url)
+console.log("Database path: " + database_url);
 
-function execute(database_url, callback) {};
+showMotifs = function(_callback) {
 
-execute(database_url, (output) => {
-    console.log(output);
-    //react_nodes
-    //other_nodes
-    //pathways
-    d3.json(database_url).then(data=>{
-      console.log(data)
-      let metaGraph = new MetaGraph(data);
-    })
-});
+  d3.json(database_url).then(data=>{
+    let metaGraph = new MetaGraph(data);
+  });
+  return _callback;
+}
 
 function clean_svg(){
     $('#networkSVG').remove();

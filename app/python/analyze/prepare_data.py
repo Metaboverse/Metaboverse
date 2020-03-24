@@ -180,8 +180,8 @@ def format_metabolomics (
         labels='holder',
         axis=1)
 
-    del data_output.index.name
-    del data_unmapped.index.name
+    data_output.index.name = None
+    data_unmapped.index.name = None
 
     return data_output, data_unmapped
 
