@@ -27,7 +27,7 @@ var $ = require("jquery");
 
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
-console.log(session_file)
+
 // do something in case there are multiple spaces in the session data path
 //if (" " in session_file) {
 //  for
@@ -37,8 +37,6 @@ var session_format = session_file.split(" ")[0]
   + String.fromCharCode(92)
   + " "
   + session_file.split(" ")[1]
-
-console.log(session_file)
 
 var progressFile = "data/progress_log.json";
 var scriptFilename = path.join(__dirname, "../python", "__main__.py");
@@ -55,10 +53,7 @@ fs.copyFile(
 fs.watch(progressFile, function(event, filename) {
   var elem = document.getElementById("progressBar");
   var sum_values = 0;
-
   var session = JSON.parse(fs.readFileSync(progressFile).toString());
-  console.log(progressFile)
-  console.log(session)
   for (j in session) {
     //loop through the array
     sum_values += session[j]; //Do the math!

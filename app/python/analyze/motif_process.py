@@ -39,9 +39,8 @@ def process_data(
 
     nodes = network_data['nodes']
     links = network_data['links']
-    pathway_dict = network_data['pathway_dictionary']
-    super_pathways = network_data['super_pathways']
-    reactions_dict = network_data['reaction_dictionary']
+    pathway_dict = network_data['collapsed_pathway_dictionary']
+    reactions_dict = network_data['collapsed_reaction_dictionary']
 
     reaction_nodes = []
     nodes_dict = {}

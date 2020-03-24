@@ -41,7 +41,6 @@ class MetaGraph{
 
     // Generate pathway viewer
     // Just get pathway ID and let the viz script do the rest
-
     this.pathway_svg = d3.select("#pathway-view-svg");
     this.pathway_link_svg = this.pathway_svg.append("g")
       .attr("id", "pathway-link-group");

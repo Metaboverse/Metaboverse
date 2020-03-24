@@ -14,13 +14,13 @@ div.scrollable {
   /* stroke: #999; */
   stroke-opacity: 0.6;
   }
-  
+
 .nodes circle {
   stroke: #fff;
   stroke-width: 1.5px;
   /* fill: rgba(190,23,59,1) */
   }
-  
+
 .labels {
   font-family: sans-serif;
   font-size: 10px;
@@ -149,10 +149,9 @@ circle.product {
 
 circle.reaction {
   /* fill:YellowGreen  ; */
-  fill: rgb(97, 198, 95);
+  fill: lightgrey;
 }
 
 circle.other {
-  fill: lightgray;
+  fill: white;
 }
-
