@@ -30,6 +30,21 @@ from python.analyze.model import __main__ as model
 from python.analyze.motif_process import __main__ as motif_search
 from python.utils import progress_feed
 
+def test():
+
+    args_dict = {
+        'network': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle',
+        'metabolomics': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt',
+        'transcriptomics': 'None',
+        'proteomics': 'None',
+        'organism_curation': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle',
+        'species_id': 'SCE',
+        'output_file': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_global_reactions.json',
+    }
+
+    __main__(
+        args_dict=args_dict)
+
 def read_network(
         network_url):
     """Read in network from previous curation module

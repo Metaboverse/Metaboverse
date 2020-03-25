@@ -48,5 +48,7 @@ make_menu(
   (provide_all = true)
 );
 
+console.log(data)
+
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);

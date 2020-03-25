@@ -256,8 +256,21 @@ def catenate_data(
 
     combined = pd.concat(array)
     combined = combined.dropna(axis=0)
-
     combined = combined.sort_index()
+
+    removers = [] # Remove non-numbers
+    for idx, row in combined.iterrows():
+        for x in row:
+            try:
+                float(x)
+            except:
+                removers.append(idx)
+
+    combined = combined[~combined.index.isin(removers)]
+
+    for col in combined.columns.tolist():
+        combined[col] = combined[col].astype(float)
+
     combined = combined.groupby(combined.index).mean()
 
     return combined
@@ -280,13 +293,13 @@ def __main__(
     #        network = pickle.load(network_file)
     #
     #    return network
-    #
+
     #network = read_network(
-    #    network_url='/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
-    #
+    #    network_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle')
+
     #transcriptomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/transcriptomics.txt'
     #proteomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/proteomics.txt'
-    #metabolomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/metabolomics.txt'
+    #metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt'
     #
     #############################
 
@@ -342,6 +355,9 @@ def __main__(
             data=metabolomics)
         data_array.append(metabolomics)
         stats_array.append(metabolomics_stats)
+
+
+
 
     # Check for broadcasting
     if proteomics_url.lower() == 'none' \

@@ -513,6 +513,3 @@ def generate_updated_dictionary(
         }
 
     return updated_pathway_dictionary
-
-def hello():
-    print('hello')

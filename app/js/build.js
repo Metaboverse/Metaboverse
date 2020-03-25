@@ -125,7 +125,7 @@ runBuild = function(_callback) {
     );
   } else {
     curated = getArgument("curation_url")
-
+    console.log(curated)
     if (curated !== "None") {
       graphDictionary = {
         output: getArgument("output"),

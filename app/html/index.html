@@ -51,7 +51,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
 
-        <menuItem style="float:left"><a href="build.html">Build</a></menuItem>
       </font>
     </menu>
 
@@ -107,7 +106,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.json'"><i>i</i></button>
           <br>
           <br>
-          <input id="dropDatabase" type="file" accept="*.json">
+          <input id="dropDatabase" ondrop="update_processed()" type="file" accept="*.json">
           <br>
           <br>
           <br>
@@ -121,7 +120,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <div id="content"></div>
           <script>
             $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>')
-            update_session_info("processed", true);
+
+            function update_processed() {
+              update_session_info("processed", true);
+            }
           </script>
         </center>
       </p>
