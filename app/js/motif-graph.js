@@ -1,11 +1,43 @@
+/*
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/Metaboverse/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019  Youjia Zhou, Jordan A. Berg
+  zhou325 <at> sci <dot> utah <dot> edu
+  jordan <dot> berg <at> biochem <dot> utah <dot> edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+var selector = "#pathway-view-svg";
+
 class MetaGraph{
   constructor(graphdata){
 
     // Get the data
-    console.log(graphdata)
+    this.data = graphdata;
     this.react_nodes = graphdata.react_nodes;
     this.other_nodes = graphdata.other_nodes;
+    this.pathway_dict = graphdata.pathways_motif;
     this.pathways = graphdata.pathways_motif;
+    this.reaction_dict = graphdata.reaction_dictionary;
+    this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
+    this.collapsed_pathway_dict = make_pathway_dictionary(
+      graphdata,
+      "collapsed_pathway_dictionary"
+    )
 
     // Generate stamp view output
     this.stamp_svg = d3.select("#stamp-view-svg");
@@ -42,6 +74,7 @@ class MetaGraph{
     // Generate pathway viewer
     // Just get pathway ID and let the viz script do the rest
     this.pathway_svg = d3.select("#pathway-view-svg");
+    console.log(this.pathway_svg)
     this.pathway_link_svg = this.pathway_svg.append("g")
       .attr("id", "pathway-link-group");
     this.pathway_circle_svg = this.pathway_svg.append("g")
@@ -93,18 +126,24 @@ class MetaGraph{
 
       d3.select("#motif2")
         .on("click", ()=>{
-          d3.select("#motif-pathway-svg").style("visibility","hidden");
-          d3.select("#pathway-view-svg").style("visibility","hidden");
-          d3.select(".network-panel").style("visibility","hidden");
+          d3.select("#motif-pathway-svg")
+            .style("visibility","hidden");
+          d3.select("#pathway-view-svg")
+            .style("visibility","hidden");
+          d3.select(".network-panel")
+            .style("visibility","hidden");
           this.motifSearch_MaxMax();
           this.drawMotifSearchResult(this.motif);
         })
 
       d3.select("#motif3")
         .on("click", ()=>{
-          d3.select("#motif-pathway-svg").style("visibility","hidden");
-          d3.select("#pathway-view-svg").style("visibility","hidden");
-          d3.select(".network-panel").style("visibility","hidden");
+          d3.select("#motif-pathway-svg")
+            .style("visibility","hidden");
+          d3.select("#pathway-view-svg")
+            .style("visibility","hidden");
+          d3.select(".network-panel")
+            .style("visibility","hidden");
           this.motifSearch_MaxMin();
           this.drawMotifSearchResult(this.motif);
         }
@@ -346,7 +385,7 @@ class MetaGraph{
           tg = tg.enter().append("text").merge(tg)
             .attr("x",start_x + 10)
             .attr("y",start_y + 45)
-            .text(d=>"#P: "+d.pathways.length)
+            .text(d=>d.pathways.length + " pathways")
             .style("font-size","11px")
       }
     }
@@ -430,7 +469,7 @@ class MetaGraph{
       tg = tg.enter().append("text").merge(tg)
         .attr("x",this.mp_svg_width/4)
         .attr("y",(motif_height-5))
-        .text(d=>"Motif Id: "+d.id)
+        .text(d=>"Reaction: " + this.reaction_dict[d.id].name.substring(0, 15) + "...")
         .style("font-size","11px")
         .style("font-weight","bold")
 
@@ -441,7 +480,7 @@ class MetaGraph{
     this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
     this.mp_svg.attr("height",this.mp_svg_height);
 
-    let pathway_width = this.mp_svg_width/3-margin.horizontal;
+    let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
 
     let sg = this.mp_selection_group.selectAll("rect")
       .data(pathway_list);
@@ -461,10 +500,10 @@ class MetaGraph{
         d3.select(".network-panel").style("visibility","visible");
       })
       .on("mouseover",(d)=>{
-        d3.select("#mp-cover-"+d).style("opacity",0.4);
+        d3.select("#mp-cover-" + d).style("opacity",0.4);
       })
       .on("mouseout",(d)=>{
-        d3.select("#mp-cover-"+d).style("opacity",0);
+        d3.select("#mp-cover-" + d).style("opacity",0);
       })
 
       let fg = this.mp_pathway_group.selectAll("rect")
@@ -484,12 +523,83 @@ class MetaGraph{
       ptg = ptg.enter().append("text").merge(ptg)
         .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+15)
         .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
-        .text(d=>d)
+        .text(d=>this.pathways[d].name.substring(0,13) + "...")
         .style("font-size",9)
 
     }
 
+
+    drawPathwayView(p) {
+
+      graph_genes = true;
+      collapse_reactions = true;
+      var selection = this.pathways[p].name;
+
+      // Run normal first plot
+      var motif_reactions = this.collapsed_pathway_dict[selection]["reactions"];
+
+      // Parse through each reaction listed and get the component parts
+      var components = [];
+      var rxn = 0;
+      for (rxn in motif_reactions) {
+        var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
+        components.push(motif_reactions[rxn]);
+        for (x in target_rxns["reactants"]) {
+          components.push(target_rxns["reactants"][x]);
+        }
+        for (x in target_rxns["products"]) {
+          components.push(target_rxns["products"][x]);
+        }
+        for (x in target_rxns["modifiers"]) {
+          components.push(target_rxns["modifiers"][x][0]);
+        }
+        for (x in target_rxns["additional_components"]) {
+          components.push(target_rxns["additional_components"][x]);
+        }
+      }
+      var elements = get_nodes_links(this.data, components);
+      var new_nodes = elements[0];
+      var new_links = elements[1];
+
+      // Initialize variables
+      var node_dict = {};
+      var type_dict = {};
+
+      var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+      var node_dict = node_elements[0];
+      var type_dict = node_elements[1];
+      var expression_dict = node_elements[2];
+      var stats_dict = node_elements[3];
+      var display_analytes_dict = node_elements[4];
+      var display_reactions_dict = node_elements[5];
+      var entity_id_dict = node_elements[6];
+
+
+      var _width = 0.45 * (window.innerWidth);
+      var _height = 0.75 * (window.innerHeight);
+
+      make_graph(
+        this.data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        expression_dict,
+        stats_dict,
+        display_analytes_dict,
+        display_reactions_dict,
+        selector,
+        _width,
+        _height
+      );
+    }
+
+
+    /*
     drawPathwayView(p){
+      console.log(this.pathways[p].name)
+      console.log(p)
       // recover pathway
       let react_list = this.pathways[p].reactions;
       let pnodes = [];
@@ -517,7 +627,6 @@ class MetaGraph{
         }
 
       })
-      console.log(pnodes, plinks)
 
       let simulation = d3.forceSimulation(pnodes)
         .force("link", d3.forceLink(plinks).id(function(d) { return d.id; }))
@@ -560,20 +669,7 @@ class MetaGraph{
             .style("visibility","hidden");
         })
         .attr("id",(d)=>"pathway-circle-"+d.id);
-      //     .on("mouseover",(d)=>{
-      //         if(d.type === "reaction"){
-      //             d3.select("#label_"+this.createId(d.id)).text(d=>d.id)
-      //         }
-      //         d3.select("#circle_"+this.createId(d.id)).attr("r",15)
-      //         d3.select("#circle_frame_"+this.createId(d.id)).attr("r",15)
-      //     })
-      //     .on("mouseout",(d)=>{
-      //         if(d.type === "reaction"){
-      //             d3.select("#label_"+this.createId(d.id)).text("")
-      //         }
-      //         d3.select("#circle_"+this.createId(d.id)).attr("r",10)
-      //         d3.select("#circle_frame_"+this.createId(d.id)).attr("r",10)
-      //     });
+
 
 
       let labels = this.pathway_circle_svg.selectAll("text").data(pnodes);
@@ -635,9 +731,46 @@ class MetaGraph{
         d.fy = null;
       }
     }
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     findAllMotif(pathway, motif_list){
       d3.select(".network-panel").style("visibility","visible");
+      document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.pathways[pathway].name + "</b></h6>";
       console.log(pathway, motif_list)
       let motif_id = [];
       motif_list.forEach(m=>{
@@ -651,15 +784,18 @@ class MetaGraph{
         }
       })
       current_motif.forEach(react_id=>{
-        d3.select("#pathway-circle-"+react_id)
+        d3.select("#pathway-circle-" + react_id)
           .attr("stroke-width", 5)
           .attr("stroke", "gold")
       })
 
-      let tg = d3.select("#all-motif-list").select("ul").selectAll("li").data(current_motif);
+      let tg = d3.select("#all-motif-list")
+        .select("ul")
+        .selectAll("li")
+        .data(current_motif);
       tg.exit().remove();
       tg = tg.enter().append("li").merge(tg)
-        .html(d=>"Motif Id: "+d)
+        .html(d => "- " + this.reaction_dict[d].name)
 
     }
 

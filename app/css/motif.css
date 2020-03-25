@@ -1,5 +1,5 @@
 * {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: sans-serif, Verdana, Geneva, Tahoma;
 }
 
 div.scrollable {
@@ -154,4 +154,11 @@ circle.reaction {
 
 circle.other {
   fill: white;
+}
+
+
+#pathway_name {
+  margin-left: 15px;
+  margin-bottom: 5px;
+  margin-top: 10px;
 }

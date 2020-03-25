@@ -45,7 +45,7 @@ window.addEventListener("load", function(event) {
         update_session_info("database_url", path);
 
         $("#content").replaceWith(
-          '<a href="../html/motif.html"><div id="continue"><font size="3">Run Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+          '<a href="../html/motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
         );
       } catch (error) {
         console.log(error);

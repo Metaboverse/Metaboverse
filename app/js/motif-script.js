@@ -38,8 +38,3 @@ showMotifs = function(_callback) {
   });
   return _callback;
 }
-
-function clean_svg(){
-    $('#networkSVG').remove();
-    $('#container').append('<svg id="networkSVG" width="800" height="800"></svg>');
-}

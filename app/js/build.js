@@ -121,7 +121,7 @@ runBuild = function(_callback) {
     elem.style.width = "100%";
     elem.innerHTML = "100%";
     $("#content").replaceWith(
-      '<a href="motif.html"><div id="continue"><font size="3">Run Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+      '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
     );
   } else {
     curated = getArgument("curation_url")
@@ -176,7 +176,7 @@ function displayOptions() {
     (metabolomics === true)
   ) {
     $("#content").replaceWith(
-      '<a href="motif.html"><div id="continue"><font size="3">Run Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+      '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
     );
   } else {
     $("#content").replaceWith(
