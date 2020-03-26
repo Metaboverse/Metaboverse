@@ -33,10 +33,10 @@ var session_file = userDataPath + "/session_data.json";
 //  for
 //}
 
-var session_format = session_file.split(" ")[0]
+var session_format = session_file.replace(" ",
   + String.fromCharCode(92)
   + " "
-  + session_file.split(" ")[1]
+  + session_file.split(" ")[1])
 
 var progressFile = "data/progress_log.json";
 var scriptFilename = path.join(__dirname, "../python", "__main__.py");

@@ -1,4 +1,4 @@
-/*
+update_session_info/*
 Metaboverse
 Metaboverse is designed for analysis of metabolic networks
 https://github.com/j-berg/Metaboverse/
@@ -30,14 +30,15 @@ var session_file = userDataPath + "/session_data.json";
 console.log(session_file);
 
 function write_json(session_data) {
-  fs.writeFile(session_file, JSON.stringify(session_data), function(err) {
+  fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {
     if (err) throw err;
     console.log("Session data updated");
   });
 }
 
 function update_session_info(key_update, value_update, abbrev_dict = null) {
-  var session = JSON.parse(fs.readFileSync(session_file).toString());
+
+  var session = JSON.parse(fs.readFileSync(session_file).toString(), "utf8");
   console.log(session)
   console.log(key_update)
   console.log(value_update)

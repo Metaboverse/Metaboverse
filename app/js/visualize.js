@@ -28,6 +28,7 @@ var _height = window.innerHeight - 75;
 
 // MAIN
 database_url = get_session_info("database_url");
+
 console.log("Database path: " + database_url);
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());

@@ -30,29 +30,30 @@ window.addEventListener("load", function(event) {
     event.stopPropagation();
 
     var inputVal = document.getElementById("dropDatabase").value.split(".");
-
+    console.log(inputVal[inputVal.length - 1])
     if (inputVal[inputVal.length - 1] !== "json") {
       alert(
         "Input is not a .json file. You must upload the correct file type for the analyses to work. Restarting page..."
       );
       window.location.reload(false);
-    } else {
-      try {
-        f = event.srcElement.files[0];
-        console.log("The file you dragged: ", f);
-        path = f.path;
+    }
 
-        update_session_info("database_url", path);
+    try {
+      f = event.srcElement.files[0];
+      console.log("The file you dragged: ", f.path);
+      path = f.path;
 
-        $("#content").replaceWith(
-          '<a href="../html/motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
-        );
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Input is not a .json file. You must upload the correct file type for the analyses to work."
-        );
-      }
+      update_session_info("database_url", path);
+
+      $("#content").replaceWith(
+        '<a href="../html/motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+      );
+    } catch (error) {
+      console.log(error);
+      alert(
+        "Unable to load provided file into session info."
+      );
+      window.location.reload(false);
     }
   };
 });
