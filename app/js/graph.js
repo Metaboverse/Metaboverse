@@ -516,7 +516,7 @@ function make_graph(
 
   // Restart graph
   d3.select("svg").remove();
-  
+
   // Initialize force graph object
   var svg = d3
     .select(selector)
@@ -764,14 +764,29 @@ function make_graph(
 
   simulation.on("tick", tick);
 
-  // Refresh current graph
-  d3.select("#restartButton").on("click", function() {
-    simulation
-      .alphaTarget(0.01)
-      .alphaMin(0.1)
-      .velocityDecay(0.7)
-      .restart();
-  });
+  // Toggle compartment view
+  toggle_comp = true;
+  d3.select("#toggleCompartments").on("click", function() {
+    if (toggle_comp === false) {
+      toggle_comp = true;
+      hull = hullg
+        .selectAll("path.hull")
+          .data(convexHulls(new_nodes, new_links, getGroup, offset))
+        .enter().append("path")
+          .attr("class", "hull")
+          .attr("d", drawCluster)
+          .style("fill", function(d) {
+            if (d.group !== "none") {
+              return fill[categories[d.group]];
+            }
+          })
+
+    } else {
+      toggle_comp = false;
+      hullg.selectAll("path.hull").remove();
+
+  }
+});
 
   d3.select("#saveGraph").on("click", function() {
     saveSVG.saveSvgAsPng(

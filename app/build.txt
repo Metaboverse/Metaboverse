@@ -15,3 +15,6 @@ To run demo app:
 ----------------
 1) Go to app directory
 2) Run 'npm start'
+
+
+Getting python dependencies installed: https://medium.com/@abulka/electron-python-4e8c807bfa5e

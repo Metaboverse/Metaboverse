@@ -32,11 +32,8 @@ var session_file = userDataPath + "/session_data.json";
 //if (" " in session_file) {
 //  for
 //}
-
-var session_format = session_file.replace(" ",
-  + String.fromCharCode(92)
-  + " "
-  + session_file.split(" ")[1])
+var replacer = String(String.fromCharCode(92) + " ");
+var session_format = session_file.replace(" ", replacer)
 
 var progressFile = "data/progress_log.json";
 var scriptFilename = path.join(__dirname, "../python", "__main__.py");
@@ -126,7 +123,7 @@ runBuild = function(_callback) {
   } else {
     curated = getArgument("curation_url")
     console.log(curated)
-    if (curated !== "None") {
+    if (String(curated) !== "None") {
       graphDictionary = {
         output: getArgument("output"),
         output_file: "find",
