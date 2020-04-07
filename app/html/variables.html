@@ -80,7 +80,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to gene identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropTranscriptomics" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('transcriptomics-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedTranscriptomics" class="selectedData">
+        </div>
+        <input id="transcriptomics-input" type="file" name="name" style="display: none;" />
+
 
         <br>
         <br>
@@ -89,7 +98,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to protein identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropProteomics" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('proteomics-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedProteomics" class="selectedData">
+        </div>
+        <input id="proteomics-input" type="file" name="name" style="display: none;" />
 
         <br>
         <br>
@@ -98,7 +115,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to metabolite identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropMetabolomics" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('metabolomics-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedMetabolomics" class="selectedData">
+        </div>
+        <input id="metabolomics-input" type="file" name="name" style="display: none;" />
 
         <br>
         <br>
@@ -107,7 +132,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button class="info" title="This datatype will accept any tab-delimited metadata table. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropMetadata" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('metadata-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedMetadata" class="selectedData">
+        </div>
+        <input id="metadata-input" type="file" name="name" style="display: none;" />
       </font>
 
       <br>
@@ -154,10 +187,48 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br>
       </font>
       <br>
-      <a href="../html/build.html"><div id="continue"><font size="3">Curate</font></div></a>
+      <a href="build.html"><div id="continue"><font size="3">Curate</font></div></a>
       <br>
       <br>
       <br>
       </center>
+
+      <script>
+        // If user goes back to this page, force re-curation
+        update_session_info("processed", false);
+
+        // Transcriptomics
+        var transcriptomicsURL = get_session_info("transcriptomics");
+        var defaultTranscriptomics = "No file selected";
+        if (transcriptomicsURL !== null) {
+          defaultTranscriptomics = transcriptomicsURL;
+        }
+        $('#selectedTranscriptomics').append('<font size="2">' + defaultTranscriptomics + '</font>');
+
+        // Proteomics
+        var proteomicsURL = get_session_info("proteomics");
+        var defaultProteomics = "No file selected";
+        if (proteomicsURL !== null) {
+          defaultProteomics = proteomicsURL;
+        }
+        $('#selectedProteomics').append('<font size="2">' + defaultProteomics + '</font>');
+
+        // Metabolomics
+        var metabolomicsURL = get_session_info("metabolomics");
+        var defaultMetabolomics = "No file selected";
+        if (metabolomicsURL !== null) {
+          defaultMetabolomics = metabolomicsURL;
+        }
+        $('#selectedMetabolomics').append('<font size="2">' + defaultMetabolomics + '</font>');
+
+        // Metadata
+        var metadataURL = get_session_info("metadata");
+        var defaultMetadata = "No file selected";
+        if (metadataURL !== null) {
+          defaultMetadata = metadataURL;
+        }
+        $('#selectedMetadata').append('<font size="2">' + defaultMetadata + '</font>');
+      </script>
+
   </body>
 </html>

@@ -25,39 +25,40 @@ var $ = require("jquery");
 
 // Drop pre-existing metabolic network database for further analysis
 window.addEventListener("load", function(event) {
-  document.getElementById("dropDatabase").onchange = function(event) {
+  document.getElementById("database-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropDatabase").value.split(".");
+    var inputVal = document.getElementById("database-input").value.split(".");
     console.log(inputVal[inputVal.length - 1])
     if (inputVal[inputVal.length - 1] !== "json") {
       alert(
-        "Input is not a .json file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .json file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
+
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f.path);
+        update_session_info("database_url", f.path);
+        $('#selectedFile').replaceWith('<font size="2">' + f.path + '</font>');
+
+        $("#content").replaceWith(
+          '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+        );
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Unable to load provided file into session info."
+        );
+        window.location.reload(false);
+      }
     }
 
-    try {
-      f = event.srcElement.files[0];
-      console.log("The file you dragged: ", f.path);
-      path = f.path;
 
-      update_session_info("database_url", path);
-
-      $("#content").replaceWith(
-        '<a href="../html/motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../html/visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="../html/curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
-      );
-    } catch (error) {
-      console.log(error);
-      alert(
-        "Unable to load provided file into session info."
-      );
-      window.location.reload(false);
-    }
   };
 });
 
-ipcRenderer.on("dropDatabase", (event, data) => {
-  $("#dropDatabase").text(data);
+ipcRenderer.on("file-input", (event, data) => {
+  $("#file-input").text(data);
 });

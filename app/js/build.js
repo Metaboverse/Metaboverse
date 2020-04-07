@@ -117,9 +117,7 @@ runBuild = function(_callback) {
     var elem = document.getElementById("progressBar");
     elem.style.width = "100%";
     elem.innerHTML = "100%";
-    $("#content").replaceWith(
-      '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
-    );
+    displayOptions();
   } else {
     curated = getArgument("curation_url")
     console.log(curated)

@@ -97,36 +97,30 @@ var species_change = false;
 
 function check_changes() {
   if ((output_change === true) & (species_change === true)) {
-    $("#content").replaceWith(
-      '<a href="../html/variables.html"><div id="continue"><font size="3">Continue</font></div></a>'
-    );
+    $('#content').replaceWith('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
   }
 }
 
 // Drop pre-existing metabolic network curation for further analysis
 window.addEventListener("load", function(event) {
-  document.getElementById("dropCuration").onchange = function(event) {
+  document.getElementById("curation-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropCuration").value.split(".");
+    var inputVal = document.getElementById("curation-input").value.split(".");
 
     if (inputVal[inputVal.length - 1] !== "pickle") {
       alert(
-        "Input is not a .pickle file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .pickle file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
+        update_session_info("curation_url", f.path);
+        $('#selectedFile').replaceWith('<font size="2">' + f.path + '</font>');
 
-        update_session_info("curation_url", path);
-
-        $("#content").replaceWith(
-          '<a href="../html/variables.html"><div id="continue"><font size="3">Continue</font></div></a>'
-        );
+        $('#content').replaceWith('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
       } catch (error) {
         console.log(error);
         alert(
@@ -137,6 +131,6 @@ window.addEventListener("load", function(event) {
   };
 });
 
-ipcRenderer.on("dropCuration", (event, data) => {
-  $("#dropCuration").text(data);
+ipcRenderer.on("curation-input", (event, data) => {
+  $("#curation-input").text(data);
 });

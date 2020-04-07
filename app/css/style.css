@@ -203,19 +203,19 @@ menuitem a {
 
 menuitem a:hover {
   background-color: #111;
+  color: white;
 }
 
 a {
-  color:black;
-  text-decoration:none;
-  background-color:#343d46;
-  -webkit-text-decoration-skip:objects;
+  color: black;
+  text-decoration: none;
+  -webkit-text-decoration-skip: objects;
   margin: 0;
   padding: 0;
 }
 
 a:hover {
-  color:white;
+  color:black;
   text-decoration:none;
 }
 
@@ -340,4 +340,42 @@ img {
 .experimentName {
   border: 1px solid black;
   border-radius: 3px;
+}
+
+
+#dropDatabase {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 1px solid grey;
+  width: 75px;
+  height: 15px;
+  text-align: center;
+  display: inline-block;
+  line-height: 15px;
+  text-shadow: none;
+  user-select: none;
+}
+#dropDatabase:active {
+  background: #0080ff;
+  text-shadow: none;
+}
+
+#selectedFile {
+  width: 90px;
+  height: 15px;
+  text-align: left;
+  display: inline-block;
+  line-height: 15px;
+  text-shadow: none;
+  user-select: none;
+}
+
+.selectedData {
+  width: 90px;
+  height: 15px;
+  text-align: left;
+  display: inline-block;
+  line-height: 15px;
+  text-shadow: none;
+  user-select: none;
 }

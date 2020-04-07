@@ -25,12 +25,12 @@ var fs = require("fs");
 var $ = require("jquery");
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropTranscriptomics").onchange = function(event) {
+  document.getElementById("transcriptomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
     var inputVal = document
-      .getElementById("dropTranscriptomics")
+      .getElementById("transcriptomics-input")
       .value.split(".");
 
     if (
@@ -38,9 +38,8 @@ window.addEventListener("load", function(event) {
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
@@ -61,20 +60,19 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropProteomics").onchange = function(event) {
+  document.getElementById("proteomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropProteomics").value.split(".");
+    var inputVal = document.getElementById("proteomics-input").value.split(".");
 
     if (
       (inputVal[inputVal.length - 1] !== "tsv") &
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
@@ -95,20 +93,19 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropMetabolomics").onchange = function(event) {
+  document.getElementById("metabolomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropMetabolomics").value.split(".");
+    var inputVal = document.getElementById("metabolomics-input").value.split(".");
 
     if (
       (inputVal[inputVal.length - 1] !== "tsv") &
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
@@ -129,20 +126,19 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropMetadata").onchange = function(event) {
+  document.getElementById("metadata-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropMetadata").value.split(".");
+    var inputVal = document.getElementById("metadata-input").value.split(".");
 
     if (
       (inputVal[inputVal.length - 1] !== "tsv") &
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];

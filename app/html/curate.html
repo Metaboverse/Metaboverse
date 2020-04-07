@@ -80,7 +80,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.pickle'"><i>i</i></button>
         <br>
         <br>
-        <input id="dropCuration" type="file" accept="*.pickle">
+        <div id="dropDatabase" onclick="document.getElementById('curation-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedFile">
+        </div>
+        <input id="curation-input" type="file" name="name" style="display: none;" />
         <br />
         <br />
         <br />
@@ -88,30 +96,45 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <b><i>OR</i></b>
         <br />
         <br />
-        <br>
-        <br>
+        <br />
+        <br />
         <p>Select the organism you would like to analyze:</p>
         <select id="speciesMenu" onchange="selectOrganism()"></select>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        <br />
         <p>Click on the folder to select output location:
           <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
         </p>
 
         <button id="selectOutput">Select Output File Name</button>
-        <br>
-        <br>
+        <br />
+        <br />
 
       </font>
-      <br>
-      <br>
-      <div id="content"></div>
-      <script>
-        $('#content').append('')
-      </script>
+      <br />
     </center>
 
-  </body>
+    <p>
+      <center>
+        <div id="content"></div>
 
+        <script>
+          $('#content').append('<a href=""></a>')
+
+          var curURL = get_session_info("curation_url");
+          var defaultValue = "No file selected";
+          if (curURL !== null) {
+            defaultValue = curURL;
+            $("#content").replaceWith(
+              '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+          }
+
+          $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+
+        </script>
+      </center>
+    </p>
+
+  </body>
 </html>
