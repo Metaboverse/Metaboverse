@@ -28,13 +28,14 @@ var basePath = app.getAppPath();
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
 
-// Copy session info template each time the app is launched
-
-fs.copyFile(
-  basePath + "/data/session_data_template.json",
-  session_file,
-  err => {
-    if (err) throw err;
-    console.log("Session data file was copied for this session");
-  }
-);
+function refresh_session() {
+  fs.copyFile(
+    basePath + "/data/session_data_template.json",
+    session_file,
+    err => {
+      if (err) throw err;
+      console.log("Session data file was copied for this session");
+    }
+  );
+  window.location.reload(false);
+}

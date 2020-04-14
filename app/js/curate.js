@@ -61,7 +61,7 @@ function selectOrganism() {
 
 // Select output directory from pop-out menu
 window.addEventListener("load", function(event) {
-  document.getElementById("selectOutput").onclick = function(event) {
+  document.getElementById("output-input").onclick = function(event) {
     filename = dialog
       .showSaveDialog({
         defaultPath: "../../",
@@ -82,6 +82,7 @@ window.addEventListener("load", function(event) {
 
         console.log(filename);
         update_session_info("database_url", filename);
+        $('#selectedOutput').replaceWith('<font size="2">' + filename + '</font>');
       })
       .catch(err => {
         console.log(err);

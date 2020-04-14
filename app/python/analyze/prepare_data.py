@@ -24,6 +24,26 @@ import os
 import sys
 import pandas as pd
 
+def test():
+
+    def read_network(
+            network_url):
+        """Read in network from previous curation module
+        - was provided as a URL to the file and saved to args_dict['network'] in "curate" sub-module
+        """
+        import pickle
+        with open(network_url, 'rb') as network_file:
+            network = pickle.load(network_file)
+
+        return network
+
+    network = read_network(
+        network_url='/Users/jordan/Desktop/SCE_metaboverse_db.pickle')
+
+    transcriptomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/transcriptomics_mct1_12hr.txt'
+    proteomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/proteomics_mct1_12hr.txt'
+    metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt'
+
 def read_data(
         url,
         delimiter='\t'):
@@ -207,6 +227,9 @@ def extract_data(
     _values = data_c.T[::2].T
     _stats = data_c.T[1::2].T
 
+    _values.columns = [x for x in range(len(_values.columns))]
+    _stats.columns = [x for x in range(len(_stats.columns))]
+
     return _values, _stats
 
 def broadcast_transcriptomics(
@@ -282,26 +305,6 @@ def __main__(
         metabolomics_url):
     """Get user data and preprocess
     """
-    #############################
-    #def read_network(
-    #        network_url):
-    #    """Read in network from previous curation module
-    #    - was provided as a URL to the file and saved to args_dict['network'] #    in "curate" sub-module
-    #    """
-    #    import pickle
-    #    with open(network_url, 'rb') as network_file:
-    #        network = pickle.load(network_file)
-    #
-    #    return network
-
-    #network = read_network(
-    #    network_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle')
-
-    #transcriptomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/transcriptomics.txt'
-    #proteomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/proteomics.txt'
-    #metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt'
-    #
-    #############################
 
     # Initialize array of filled data
     data_array = []
@@ -356,9 +359,6 @@ def __main__(
         data_array.append(metabolomics)
         stats_array.append(metabolomics_stats)
 
-
-
-
     # Check for broadcasting
     if proteomics_url.lower() == 'none' \
     and transcriptomics_url.lower() != 'none':
@@ -375,15 +375,5 @@ def __main__(
 
     stats = catenate_data(
         array=stats_array)
-
-    ####################################################
-    #data.to_csv(
-    #    '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_data.txt',
-    #    sep='\t')
-    #
-    #stats.to_csv(
-    #    '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_stats.txt',
-    #    sep='\t')
-    ####################################################
 
     return data, stats

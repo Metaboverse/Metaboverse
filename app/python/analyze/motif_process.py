@@ -46,8 +46,6 @@ def process_data(
     nodes_dict = {}
 
     for node in nodes:
-        if 'notes' in node.keys():
-            del node['notes']
         nodes_dict[node['id']] = node
         if node['type'] == 'reaction':
             reaction_nodes.append(node)

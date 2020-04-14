@@ -44,9 +44,8 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
-
-        update_session_info("transcriptomics", path);
+        $('#selectedTranscriptomics').replaceWith('<font size="2">' + f.path + '</font>');
+        update_session_info("transcriptomics", f.path);
 
         transcriptomics = true;
       } catch (error) {
@@ -77,9 +76,8 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
-
-        update_session_info("proteomics", path);
+        $('#selectedProteomics').replaceWith('<font size="2">' + f.path + '</font>');
+        update_session_info("proteomics", f.path);
 
         proteomics = true;
       } catch (error) {
@@ -110,9 +108,9 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
+        $('#selectedMetabolomics').replaceWith('<font size="2">' + f.path + '</font>');
 
-        update_session_info("metabolomics", path);
+        update_session_info("metabolomics", f.path);
 
         metabolomics = true;
       } catch (error) {
@@ -143,9 +141,9 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
+        $('#selectedMetadata').replaceWith('<font size="2">' + f.path + '</font>');
 
-        update_session_info("metadata", path);
+        update_session_info("metadata", f.path);
       } catch (error) {
         console.log(error);
         alert(

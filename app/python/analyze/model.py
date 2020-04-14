@@ -460,7 +460,8 @@ def map_attributes(
         # Add degree
         graph.nodes()[x]['degree'] = degree_dictionary[current_id]
 
-        if current_id in set(data_dict.keys()):
+        if current_id in set(data_dict.keys()) \
+        and current_id in set(stats_dict.keys()):
 
             graph.nodes()[x]['values'] = data_dict[current_id]
             graph.nodes()[x]['values_rgba'] = extract_value(
@@ -553,7 +554,8 @@ def output_graph(
         json.dump(data, f, indent=4) # Parse out as array for javascript
 
 def compile_pathway_degree(
-        pathways):
+        pathways,
+        scale_factor=200):
     """Compile database of large pathways
     """
 
@@ -561,7 +563,7 @@ def compile_pathway_degree(
 
     for key in list(pathways.keys()):
 
-        if len(pathways[key]["reactions"]) > 200:
+        if len(pathways[key]["reactions"]) > scale_factor:
             super_pathways[key] = pathways[key]
 
     return super_pathways
@@ -741,37 +743,6 @@ def __main__(
     """Generate graph object for visualization
     """
 
-    #############################
-    """Start of pancancer-necessary code
-    To run, place all graph-making code within the for loop below
-    """
-    """
-    cancers = [
-    ['breast', 'brca'],
-    ['colon', 'coad'],
-    ['colon','read'],
-    ['bladder','blca'],
-    ['cervix','cesc'],
-    ['kidney','kirc'],
-    ['kidney','kirp'],
-    ['liver','lihc'],
-    ['lung','luad'],
-    ['lung','lusc'],
-    ['prostate','prad'],
-    ['stomach','stad'],
-    ['thyroid','thca'],
-    ['uterus','ucec']]
-
-    for x in [x[1] for x in cancers]:
-        output_file = '/Users/jordan/Desktop/HSA_global_reactions_' + x + '.json'
-        print(output_file)
-        data = stats = pd.read_csv(
-            '/Users/jordan/Desktop/cancer_network_topology/tables/' + x + '_z_table.txt',
-            sep='\t',
-            index_col=0)
-    """
-    #############################
-
     print('Preparing metadata...')
     # Generate output file name
     graph_name = name_graph(
@@ -844,26 +815,11 @@ def __main__(
 
     # Generate list of super pathways (those with more than 200 reactions)
     print('Compiling super pathways...')
+
+    scale_factor = int(len(network['reaction_database'].keys()) * 0.0157)
     super_pathways = compile_pathway_degree(
-        pathways=network['pathway_database'])
-
-    #############################
-    # For pancancer
-    """
-    metabolism = network['pathway_database']['R-HSA-1430728']
-    network['pathway_database'] = {}
-    network['pathway_database']['R-HSA-1430728'] = metabolism
-
-    with open('/Users/jordan/Desktop/cancer_network_topology/network/cancer_reactions.json') as f:
-        file = json.load(f)
-        for k,v in file.items():
-
-            network['pathway_database'][k] = {}
-            network['pathway_database'][k]['id'] = k
-            network['pathway_database'][k]['name'] = k
-            network['pathway_database'][k]['reactions'] = v
-    """
-    #############################
+        pathways=network['pathway_database'],
+        scale_factor=scale_factor)
 
     # Export graph, pathway membership, pathway degree, other refs
     print('Exporting graph...')

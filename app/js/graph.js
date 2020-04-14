@@ -715,7 +715,6 @@ function make_graph(
         type_dict[d["name"]] === "reaction" ||
         type_dict[d["name"]] === "collapsed"
       ) {
-        console.log("Selected a reaction, will not perform kNN graphing");
         document.getElementById("reaction_notes").innerHTML =
           "<b><i>" + d.name + "</i></b>: " + d.notes;
       } else {

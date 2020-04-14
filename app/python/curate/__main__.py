@@ -393,10 +393,10 @@ def __main__(
 
     # Write database to file
     print('Writing metaboverse database to file...')
-    args_dict['network'] = args_dict['species_id'] + '_metaboverse_db.pickle'
+    args_dict['curation'] = args_dict['species_id'] + '_metaboverse_db.pickle'
     write_database(
         output=args_dict['output'],
-        file=args_dict['network'],
+        file=args_dict['curation'],
         database=metaboverse_db)
     progress_feed(args_dict, "curate", 5)
 
