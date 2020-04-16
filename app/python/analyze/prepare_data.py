@@ -40,6 +40,8 @@ def test():
     network = read_network(
         network_url='/Users/jordan/Desktop/SCE_metaboverse_db.pickle')
 
+    #network['uniprot_synonyms']
+
     transcriptomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/transcriptomics_mct1_12hr.txt'
     proteomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/proteomics_mct1_12hr.txt'
     metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt'

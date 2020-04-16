@@ -325,16 +325,14 @@ def __main__(
         args_dict):
     """Curate reactome database
     """
-    #args_dict = {
-    #    'output':'/Users/jordan/Desktop/',
-    #    'species_id':'HSA'}
 
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
     progress_feed(args_dict, "curate", 3)
     pathway_database, reaction_database, species_database, \
-        name_database, compartment_dictionary = load_reactions(
+    name_database, compartment_dictionary, \
+    components_database = load_reactions(
         species_id=args_dict['species_id'],
         output_dir=args_dict['output'],
         args_dict=args_dict)
@@ -389,7 +387,8 @@ def __main__(
         'chebi_synonyms': chebi_reference,
         'uniprot_metabolites': uniprot_metabolites,
         'complex_dictionary': complexes_reference['complex_dictionary'],
-        'compartment_dictionary': compartment_dictionary}
+        'compartment_dictionary': compartment_dictionary,
+        'components_database': components_database}
 
     # Write database to file
     print('Writing metaboverse database to file...')

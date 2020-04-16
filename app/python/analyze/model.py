@@ -42,6 +42,14 @@ from python.analyze.collapse import generate_updated_dictionary
 from python.analyze.utils import convert_rgba
 from python.utils import progress_feed
 
+def test():
+
+    output_file = "/Users/jordan/Desktop/test.json"
+    species_id = "SCE"
+    network_url = "/Users/jordan/Desktop/SCE_metaboverse_db.pickle"
+    with open(network_url, 'rb') as network_file:
+        network = pickle.load(network_file)
+
 """Graph utils
 """
 def name_graph(
@@ -68,7 +76,8 @@ def build_graph(
         complexes,
         species_id,
         gene_reference,
-        compartment_reference):
+        compartment_reference,
+        component_database):
     """Build graph
     - Add nodes and edges
     - Map names to objects in the graph for display
@@ -91,7 +100,8 @@ def build_graph(
             complex_reference=complexes,
             species_id=species_id,
             gene_reference=gene_reference,
-            compartment_reference=compartment_reference)
+            compartment_reference=compartment_reference,
+            component_database=component_database)
 
     return G, network
 
@@ -106,7 +116,8 @@ def process_reactions(
         complex_reference,
         species_id,
         gene_reference,
-        compartment_reference):
+        compartment_reference,
+        component_database):
     """
     """
     new_components = []
@@ -122,6 +133,12 @@ def process_reactions(
     modifiers = network[reactome_id]['modifiers'] # ordered list
     compartment_id = network[reactome_id]['compartment']
     compartment_name = compartment_reference[compartment_id]
+
+    prot_ref = {}
+    for k, v in uniprot_reference.items():
+        prot_ref[k] = v
+        prot_ref[v] = k
+    uniprot_reference = prot_ref
 
     # Add reaction node
     graph.add_node(reaction_id)
@@ -140,54 +157,118 @@ def process_reactions(
         graph = add_node_edge(
             graph=graph,
             id=reactant,
-            name=species_reference[reactant],
+            name=component_database[reactant]['name'],
+            compartment=component_database[reactant]['compartment'],
             reaction_membership=reaction_id,
             type='reactant',
-            sub_type='reactant',
+            sub_type=component_database[reactant]['type'],
             reversible=reaction_rev,
             complex_reference=complex_reference,
             species_reference=species_reference,
             name_reference=name_reference,
-            protein_reference=protein_reference)
-
-        graph, additional_components = check_complexes(
-            graph=graph,
-            id=reactant,
-            complex_reference=complex_reference,
-            species_reference=species_reference,
-            name_reference=name_reference,
             protein_reference=protein_reference,
-            uniprot_reference=uniprot_reference,
-            gene_reference=gene_reference)
-        for x in additional_components:
-            new_components.append(x)
+            compartment_reference=compartment_reference)
+
+        if len(component_database[reactant]['hasPart']) > 0:
+            graph.nodes()[reactant]['complex'] = 'true'
+            graph, additional_components = check_complexes(
+                species_id=species_id,
+                graph=graph,
+                id=reactant,
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference,
+                uniprot_reference=uniprot_reference,
+                gene_reference=gene_reference,
+                component_database=component_database,
+                compartment_reference=compartment_reference)
+            for x in additional_components:
+                new_components.append(x)
+        else:
+            graph.nodes()[reactant]['complex'] = 'false'
+
+            if component_database[reactant]['type'] == 'protein_component':
+                try:
+                    gene = protein_reference[reactant]
+                    add_components.append(gene)
+
+                    graph = add_node_edge(
+                        graph=graph,
+                        id=gene,
+                        name=gene_reference[gene],
+                        compartment='none',
+                        reaction_membership=reactant,
+                        type='gene_component',
+                        sub_type='gene',
+                        reversible='false',
+                        complex_reference=complex_reference,
+                        species_reference=species_reference,
+                        name_reference=name_reference,
+                        protein_reference=protein_reference,
+                        compartment_reference=compartment_reference)
+
+                except:
+                    pass
 
     for product in products:
 
         graph = add_node_edge(
             graph=graph,
             id=product,
-            name=species_reference[product],
+            name=component_database[product]['name'],
+            compartment=component_database[product]['compartment'],
             reaction_membership=reaction_id,
             type='product',
-            sub_type='product',
+            sub_type=component_database[product]['type'],
             reversible=reaction_rev,
             complex_reference=complex_reference,
             species_reference=species_reference,
             name_reference=name_reference,
-            protein_reference=protein_reference)
-
-        graph, additional_components = check_complexes(
-            graph=graph,
-            id=product,
-            complex_reference=complex_reference,
-            species_reference=species_reference,
-            name_reference=name_reference,
             protein_reference=protein_reference,
-            uniprot_reference=uniprot_reference,
-            gene_reference=gene_reference)
-        for x in additional_components:
-            new_components.append(x)
+            compartment_reference=compartment_reference)
+
+        if len(component_database[product]['hasPart']) > 0:
+            graph.nodes()[product]['complex'] = 'true'
+            graph, additional_components = check_complexes(
+                species_id=species_id,
+                graph=graph,
+                id=product,
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference,
+                uniprot_reference=uniprot_reference,
+                gene_reference=gene_reference,
+                component_database=component_database,
+                compartment_reference=compartment_reference)
+            for x in additional_components:
+                new_components.append(x)
+        else:
+            graph.nodes()[product]['complex'] = 'false'
+
+            if component_database[product]['type'] == 'protein_component':
+                try:
+                    gene = protein_reference[product]
+                    add_components.append(gene)
+
+                    graph = add_node_edge(
+                        graph=graph,
+                        id=gene,
+                        name=gene_reference[gene],
+                        compartment='none',
+                        reaction_membership=product,
+                        type='gene_component',
+                        sub_type='gene',
+                        reversible='false',
+                        complex_reference=complex_reference,
+                        species_reference=species_reference,
+                        name_reference=name_reference,
+                        protein_reference=protein_reference,
+                        compartment_reference=compartment_reference)
+
+                except:
+                    pass
 
     for modifier in modifiers:
 
@@ -203,27 +284,58 @@ def process_reactions(
         graph = add_node_edge(
             graph=graph,
             id=id,
-            name=species_reference[id],
+            name=component_database[id]['name'],
             reaction_membership=reaction_id,
+            compartment=component_database[id]['compartment'],
             type=type,
-            sub_type='modifier',
+            sub_type=component_database[id]['type'],
             reversible='false',
             complex_reference=complex_reference,
             species_reference=species_reference,
             name_reference=name_reference,
-            protein_reference=protein_reference)
-
-        graph, additional_components = check_complexes(
-            graph=graph,
-            id=id,
-            complex_reference=complex_reference,
-            species_reference=species_reference,
-            name_reference=name_reference,
             protein_reference=protein_reference,
-            uniprot_reference=uniprot_reference,
-            gene_reference=gene_reference)
-        for x in additional_components:
-            new_components.append(x)
+            compartment_reference=compartment_reference)
+
+        if len(component_database[id]['hasPart']) > 0:
+            graph.nodes()[id]['complex'] = 'true'
+            graph, additional_components = check_complexes(
+                species_id=species_id,
+                graph=graph,
+                id=id,
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference,
+                uniprot_reference=uniprot_reference,
+                gene_reference=gene_reference,
+                component_database=component_database,
+                compartment_reference=compartment_reference)
+            for x in additional_components:
+                new_components.append(x)
+        else:
+            graph.nodes()[id]['complex'] = 'false'
+
+            if component_database[id]['type'] == 'protein_component':
+                try:
+                    gene = protein_reference[id]
+                    add_components.append(gene)
+
+                    graph = add_node_edge(
+                        graph=graph,
+                        id=gene,
+                        name=gene_reference[gene],
+                        compartment='none',
+                        reaction_membership=id,
+                        type='gene_component',
+                        sub_type='gene',
+                        reversible='false',
+                        complex_reference=complex_reference,
+                        species_reference=species_reference,
+                        name_reference=name_reference,
+                        protein_reference=protein_reference,
+                        compartment_reference=compartment_reference)
+                except:
+                    pass
 
     network[reactome_id]['additional_components'] = new_components
 
@@ -232,7 +344,8 @@ def process_reactions(
 def add_node_edge(
         graph,
         id, # node id
-        name, # display name
+        name,
+        compartment,
         reaction_membership,
         type,
         sub_type,
@@ -240,7 +353,8 @@ def add_node_edge(
         complex_reference,
         species_reference,
         name_reference,
-        protein_reference):
+        protein_reference,
+        compartment_reference):
     """Add node and edge information to graph
     """
 
@@ -250,7 +364,12 @@ def add_node_edge(
     graph.nodes()[id]['type'] = type
     graph.nodes()[id]['sub_type'] = sub_type
     graph.nodes()[id]['inferred'] = 'false'
-    graph.nodes()[id]['compartment'] = 'none'
+    try:
+        graph.nodes()[id]['compartment'] = compartment
+        graph.nodes()[id]['compartment_name'] = compartment_reference[compartment]
+    except:
+        graph.nodes()[id]['compartment'] = 'none'
+        graph.nodes()[id]['compartment_name'] = 'none'
 
     if type == 'reactant':
         graph.add_edges_from([
@@ -285,6 +404,7 @@ def add_node_edge(
     return graph
 
 def check_complexes(
+        species_id,
         graph,
         id,
         complex_reference,
@@ -292,106 +412,98 @@ def check_complexes(
         name_reference,
         protein_reference,
         uniprot_reference,
-        gene_reference):
+        gene_reference,
+        component_database,
+        compartment_reference):
     """Check if species being added is in complex dictionary
     - If record exists, add nodes and edges for the new relationship.
     - If record contains a UniProt ID, cross reference with Ensembl database
     - If complex, label true; else label as false
     """
 
-    prot_ref = {}
-    for k, v in uniprot_reference.items():
-        prot_ref[k] = v
-        prot_ref[v] = k
-    uniprot_reference = prot_ref
-
     add_components = []
 
-    if id in complex_reference.keys():
-        graph.nodes()[id]['complex'] = 'true'
+    for x in component_database[id]['hasPart']:
 
-        participants = complex_reference[id]['participants']
-        for p in participants.keys():
+        if x in uniprot_reference:
+            name = uniprot_reference[x]
+            type = 'complex_component'
+            sub_type = 'protein_component'
+            component_id = x
+            add_components.append(x)
+            display_name = uniprot_reference[x]
 
-            for x in participants[p]:
+            graph = add_node_edge(
+                graph=graph,
+                id=component_id,
+                name=display_name,
+                compartment='none',
+                reaction_membership=id,
+                type='complex_component',
+                sub_type=sub_type,
+                reversible='false',
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference,
+                compartment_reference=compartment_reference)
 
-                if p.lower() == 'chebi':
-                    name = 'CHEBI:' + x
-                    sub_type = 'metabolite_component'
-                    component_id = name_reference[name]
-                    add_components.append(component_id)
-                    display_name = species_reference[component_id]
+            try:
+                gene = protein_reference[component_id]
+                add_components.append(gene)
 
-                else:
+                graph = add_node_edge(
+                    graph=graph,
+                    id=gene,
+                    name=gene_reference[gene],
+                    compartment='none',
+                    reaction_membership=component_id,
+                    type='gene_component',
+                    sub_type='gene',
+                    reversible='false',
+                    complex_reference=complex_reference,
+                    species_reference=species_reference,
+                    name_reference=name_reference,
+                    protein_reference=protein_reference,
+                    compartment_reference=compartment_reference)
+            except:
+                pass
 
-                    if p.lower() == 'uniprot':
-                        name = uniprot_reference[x]
-                        sub_type = 'protein_component'
-                        component_id = x
-                        add_components.append(x)
-                        display_name = name
-                    elif p.lower() == 'mirna':
-                        name = x
-                        sub_type = 'mirna_component'
-                        component_id = name_reference[name]
-                        add_components.append(component_id)
-                        display_name = species_reference[component_id]
-                    elif p.lower() == 'ensembl':
-                        name = x
-                        sub_type = 'gene_component'
-                        component_id = x
-                        add_components.append(component_id)
-                        display_name = gene_reference[name]
-                    else:
-                        name = x
-                        sub_type = 'other'
-                        try:
-                            component_id = name_reference[name]
-                            display_name = species_reference[component_id]
-                        except:
-                            display_name = component_id = x
-                        add_components.append(component_id)
+        else:
+            if 'chebi' in x.lower():
+                name = x
+                sub_type = 'metabolite_component'
 
-                try:
+            elif 'mi' in x.lower():
+                name = x
+                sub_type = 'mirna_component'
 
-                    graph = add_node_edge(
-                        graph=graph,
-                        id=component_id,
-                        name=display_name,
-                        reaction_membership=id,
-                        type='complex_component',
-                        sub_type=sub_type,
-                        reversible='false',
-                        complex_reference=complex_reference,
-                        species_reference=species_reference,
-                        name_reference=name_reference,
-                        protein_reference=protein_reference)
+            else:
+                name = x
+                sub_type = 'other'
 
-                    if p.lower() == 'uniprot':
+            try:
+                component_id = name_reference[name]
+                display_name = species_reference[component_id]
+            except:
+                display_name = component_id = x
 
-                        # Get protein's corresponding gene ID
-                        gene = protein_reference[component_id]
-                        add_components.append(gene)
+            add_components.append(component_id)
 
-                        graph = add_node_edge(
-                            graph=graph,
-                            id=gene,
-                            name=gene_reference[gene],
-                            reaction_membership=component_id,
-                            type='gene_component',
-                            sub_type='gene',
-                            reversible='false',
-                            complex_reference=complex_reference,
-                            species_reference=species_reference,
-                            name_reference=name_reference,
-                            protein_reference=protein_reference)
-
-                except:
-                    pass
-                    #print('Could not retrieve components for', name)
-
-    else:
-        graph.nodes()[id]['complex'] = 'false'
+            graph = add_node_edge(
+                graph=graph,
+                id=component_id,
+                name=display_name,
+                compartment='none',
+                reaction_membership=id,
+                type='complex_component',
+                sub_type=sub_type,
+                reversible='false',
+                complex_reference=complex_reference,
+                species_reference=species_reference,
+                name_reference=name_reference,
+                protein_reference=protein_reference,
+                compartment_reference=compartment_reference)
 
     return graph, add_components
 
@@ -453,48 +565,52 @@ def map_attributes(
     for index, row in stats_renamed.iterrows():
         stats_dict[index] = list(row)
 
-    for x in list(graph.nodes()):
+    for current_id in list(graph.nodes()):
 
-        current_id = graph.nodes()[x]['id']
+        #current_id = graph.nodes()[x]['id']
+        x = current_id
 
         # Add degree
-        graph.nodes()[x]['degree'] = degree_dictionary[current_id]
+        try:
+            graph.nodes()[x]['degree'] = degree_dictionary[current_id]
 
-        if current_id in set(data_dict.keys()) \
-        and current_id in set(stats_dict.keys()):
+            if current_id in set(data_dict.keys()) \
+            and current_id in set(stats_dict.keys()):
 
-            graph.nodes()[x]['values'] = data_dict[current_id]
-            graph.nodes()[x]['values_rgba'] = extract_value(
-                value_array=data_dict[current_id],
-                max_value=data_max)
-            graph.nodes()[x]['values_js'] = convert_rgba(
-                rgba_tuples=graph.nodes()[x]['values_rgba'])
+                graph.nodes()[x]['values'] = data_dict[current_id]
+                graph.nodes()[x]['values_rgba'] = extract_value(
+                    value_array=data_dict[current_id],
+                    max_value=data_max)
+                graph.nodes()[x]['values_js'] = convert_rgba(
+                    rgba_tuples=graph.nodes()[x]['values_rgba'])
 
-            graph.nodes()[x]['stats'] = stats_dict[current_id]
-            graph.nodes()[x]['stats_rgba'] = extract_value(
-                value_array=stats_dict[current_id],
-                max_value=stats_max,
-                type="stats")
-            graph.nodes()[x]['stats_js'] = convert_rgba(
-                rgba_tuples=graph.nodes()[x]['stats_rgba'])
-
-        else:
-
-            if graph.nodes()[x]['type'] == 'reaction':
-                colors = [reaction_color for x in range(n)]
+                graph.nodes()[x]['stats'] = stats_dict[current_id]
+                graph.nodes()[x]['stats_rgba'] = extract_value(
+                    value_array=stats_dict[current_id],
+                    max_value=stats_max,
+                    type="stats")
+                graph.nodes()[x]['stats_js'] = convert_rgba(
+                    rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
             else:
-                colors = [missing_color for x in range(n)]
 
-            graph.nodes()[x]['values'] = [None for x in range(n)]
-            graph.nodes()[x]['values_rgba'] = colors
-            graph.nodes()[x]['values_js'] = convert_rgba(
-                rgba_tuples=colors)
+                if graph.nodes()[x]['type'] == 'reaction':
+                    colors = [reaction_color for x in range(n)]
 
-            graph.nodes()[x]['stats'] = [None for x in range(n)]
-            graph.nodes()[x]['stats_rgba'] = colors
-            graph.nodes()[x]['stats_js'] = convert_rgba(
-                rgba_tuples=colors)
+                else:
+                    colors = [missing_color for x in range(n)]
+
+                graph.nodes()[x]['values'] = [None for x in range(n)]
+                graph.nodes()[x]['values_rgba'] = colors
+                graph.nodes()[x]['values_js'] = convert_rgba(
+                    rgba_tuples=colors)
+
+                graph.nodes()[x]['stats'] = [None for x in range(n)]
+                graph.nodes()[x]['stats_rgba'] = colors
+                graph.nodes()[x]['stats_js'] = convert_rgba(
+                    rgba_tuples=colors)
+        except:
+            graph.remove_node(x)
 
     return graph, data_max, stats_max
 
@@ -729,7 +845,6 @@ def broadcast_values(
                     graph.nodes()[x]['stats_js'] = convert_rgba(
                         rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
-
     return graph
 
 def __main__(
@@ -768,7 +883,8 @@ def __main__(
         complexes=network['complex_dictionary'],
         species_id=species_id,
         gene_reference=network['ensembl_synonyms'],
-        compartment_reference=network['compartment_dictionary'])
+        compartment_reference=network['compartment_dictionary'],
+        component_database=network['components_database'])
     progress_feed(args_dict, "model", 9)
 
     # For gene and protein components, add section to reaction database
