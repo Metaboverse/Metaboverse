@@ -33,7 +33,7 @@ def get_table(
         organism='Homo sapiens',
         organism_key='organism'):
 
-    # chebi_reactom_reactions
+    # chebi_reactome_reactions
     file = unpack_table(
             url=url,
             output_dir=output_dir)

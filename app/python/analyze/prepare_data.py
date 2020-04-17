@@ -317,9 +317,13 @@ def __main__(
 
         transcriptomics = read_data(
             url=transcriptomics_url)
+        e_sym = {}
+        for k, v in network['ensembl_synonyms'].items():
+            e_sym[v] = k
+            e_sym[k] = k
         transcriptomics, transcriptomics_unmapped = format_data(
             data=transcriptomics,
-            reference=network['ensembl_synonyms'])
+            reference=e_sym)
         output_unmapped(
             data=transcriptomics_unmapped,
             url=transcriptomics_url)
@@ -333,9 +337,13 @@ def __main__(
 
         proteomics = read_data(
             url=proteomics_url)
+        u_sym = {}
+        for k, v in network['uniprot_synonyms'].items():
+            u_sym[v] = k
+            u_sym[k] = k
         proteomics, proteomics_unmapped = format_data(
             data=proteomics,
-            reference=network['uniprot_synonyms'])
+            reference=u_sym)
         output_unmapped(
             data=proteomics_unmapped,
             url=proteomics_url)
@@ -349,9 +357,13 @@ def __main__(
 
         metabolomics = read_data(
             url=metabolomics_url)
+        c_sym = {}
+        for k, v in network['chebi_synonyms'].items():
+            c_sym[k] = v
+            c_sym[v] = v
         metabolomics, metabolomics_unmapped = format_metabolomics(
             data=metabolomics,
-            chebi_reference=network['chebi_synonyms'],
+            chebi_reference=c_sym,
             other_reference=network['uniprot_metabolites'])
         output_unmapped(
             data=metabolomics_unmapped,

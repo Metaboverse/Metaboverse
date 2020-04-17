@@ -133,8 +133,6 @@ function parsePathways(pathway_dict, selectedReactions) {
 }
 
 function initialize_nodes(nodes, node_dict, type_dict) {
-  var expression_dict = {};
-  var stats_dict = {};
   var display_analytes_dict = {};
   var display_reactions_dict = {};
   var entity_id_dict = {};
@@ -143,14 +141,6 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   nodes.forEach(function(node) {
     node_dict[node["name"]] = node["values_js"];
     type_dict[node["name"]] = node["type"];
-
-    try {
-      expression_dict[node["name"]] = node["values"][0];
-      stats_dict[node["name"]] = node["stats"][0];
-    }
-    catch (err) {
-      console.log(node);
-    }
 
     entity_id_dict[node["name"]] = node["id"];
     entity_id_dict[node["id"]] = node["name"];
@@ -167,8 +157,6 @@ function initialize_nodes(nodes, node_dict, type_dict) {
   return [
     node_dict,
     type_dict,
-    expression_dict,
-    stats_dict,
     display_analytes_dict,
     display_reactions_dict,
     entity_id_dict
@@ -278,11 +266,9 @@ function nearest_neighbors(data, entity_id) {
   var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
   var node_dict = node_elements[0];
   var type_dict = node_elements[1];
-  var expression_dict = node_elements[2];
-  var stats_dict = node_elements[3];
-  var display_analytes_dict = node_elements[4];
-  var display_reactions_dict = node_elements[5];
-  var entity_id_dict = node_elements[6];
+  var display_analytes_dict = node_elements[2];
+  var display_reactions_dict = node_elements[3];
+  var entity_id_dict = node_elements[4];
 
   // Remove old plot and plot this one
   make_graph(
@@ -292,8 +278,6 @@ function nearest_neighbors(data, entity_id) {
     type_dict,
     node_dict,
     entity_id_dict,
-    expression_dict,
-    stats_dict,
     display_analytes_dict,
     display_reactions_dict,
     selector,
@@ -501,8 +485,6 @@ function make_graph(
     type_dict,
     node_dict,
     entity_id_dict,
-    expression_dict,
-    stats_dict,
     display_analytes_dict,
     display_reactions_dict,
     selector,
@@ -750,10 +732,10 @@ function make_graph(
           + d.name
           + "</tspan>"
           + "<tspan x='16' y='.7em'>Value: "
-          + parseFloat(expression_dict[d.name]).toFixed(2)
+          + parseFloat(d.values[sample]).toFixed(2)
           + "</tspan>"
           + "<tspan x='16' y='1.7em'>Statistic: "
-          + parseFloat(stats_dict[d.name]).toFixed(2)
+          + parseFloat(d.stats[sample]).toFixed(2)
           + "</tspan>"
         );
       }
@@ -826,10 +808,10 @@ function make_graph(
             d.name +
             "</tspan>" +
             "<tspan x='16' y='.7em'>Value: " +
-            parseFloat(expression_dict[d.name]).toFixed(2) +
+            parseFloat(d.values[sample]).toFixed(2) +
             "</tspan>" +
             "<tspan x='16' y='1.7em'>Statistic: " +
-            parseFloat(stats_dict[d.name]).toFixed(2) +
+            parseFloat(d.stats[sample]).toFixed(2) +
             "</tspan>"
           );
         }
@@ -944,8 +926,6 @@ function make_graph(
         type_dict,
         node_dict,
         entity_id_dict,
-        expression_dict,
-        stats_dict,
         display_analytes_dict,
         display_reactions_dict,
         selector,
@@ -982,11 +962,9 @@ function make_graph(
       );
       var new_node_dict = new_node_elements[0];
       var new_type_dict = new_node_elements[1];
-      var new_expression_dict = new_node_elements[2];
-      var new_stats_dict = new_node_elements[3];
-      var new_display_analytes_dict = new_node_elements[4];
-      var new_display_reactions_dict = new_node_elements[5];
-      var new_entity_id_dict = new_node_elements[6];
+      var new_display_analytes_dict = new_node_elements[2];
+      var new_display_reactions_dict = new_node_elements[3];
+      var new_entity_id_dict = new_node_elements[4];
 
       make_graph(
         data,
@@ -995,8 +973,6 @@ function make_graph(
         new_type_dict,
         new_node_dict,
         new_entity_id_dict,
-        new_expression_dict,
-        new_stats_dict,
         new_display_analytes_dict,
         new_display_reactions_dict,
         selector,
@@ -1019,8 +995,6 @@ function make_graph(
         type_dict,
         node_dict,
         entity_id_dict,
-        expression_dict,
-        stats_dict,
         display_analytes_dict,
         display_reactions_dict,
         selector,
@@ -1069,11 +1043,9 @@ function make_graph(
       );
       var new_node_dict = new_node_elements[0];
       var new_type_dict = new_node_elements[1];
-      var new_expression_dict = new_node_elements[2];
-      var new_stats_dict = new_node_elements[3];
-      var new_display_analytes_dict = new_node_elements[4];
-      var new_display_reactions_dict = new_node_elements[5];
-      var new_entity_id_dict = new_node_elements[6];
+      var new_display_analytes_dict = new_node_elements[2];
+      var new_display_reactions_dict = new_node_elements[3];
+      var new_entity_id_dict = new_node_elements[4];
 
       make_graph(
         data,
@@ -1082,8 +1054,6 @@ function make_graph(
         new_type_dict,
         new_node_dict,
         new_entity_id_dict,
-        new_expression_dict,
-        new_stats_dict,
         new_display_analytes_dict,
         new_display_reactions_dict,
         selector,
@@ -1262,11 +1232,9 @@ function change() {
     var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
     var node_dict = node_elements[0];
     var type_dict = node_elements[1];
-    var expression_dict = node_elements[2];
-    var stats_dict = node_elements[3];
-    var display_analytes_dict = node_elements[4];
-    var display_reactions_dict = node_elements[5];
-    var entity_id_dict = node_elements[6];
+    var display_analytes_dict = node_elements[2];
+    var display_reactions_dict = node_elements[3];
+    var entity_id_dict = node_elements[4];
 
     make_graph(
       data,
@@ -1275,8 +1243,6 @@ function change() {
       type_dict,
       node_dict,
       entity_id_dict,
-      expression_dict,
-      stats_dict,
       display_analytes_dict,
       display_reactions_dict,
       selector,

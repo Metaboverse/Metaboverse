@@ -27,17 +27,35 @@ class MetaGraph{
   constructor(graphdata){
 
     // Get the data
+    console.log(graphdata)
     this.data = graphdata;
-    this.react_nodes = graphdata.react_nodes;
-    this.other_nodes = graphdata.other_nodes;
-    this.pathway_dict = graphdata.pathways_motif;
-    this.pathways = graphdata.pathways_motif;
-    this.reaction_dict = graphdata.reaction_dictionary;
+    this.nodes = graphdata.nodes;
     this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
+    this.mod_collapsed_pathways = graphdata.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
       graphdata,
       "collapsed_pathway_dictionary"
     )
+    this.path_mapper = graphdata.motif_reaction_dictionary
+
+    this.node_dict = {};
+    for (let node in this.nodes) {
+      this.node_dict[this.nodes[node]['id']] = this.nodes[node];
+    }
+
+    // Generate expression and stats dictionaries
+    let expression_dict = {};
+    let stats_dict = {};
+    for (x in this.nodes) {
+      let id = this.nodes[x]['id'];
+      let expression = this.nodes[x]['values'];
+      let stats = this.nodes[x]['stats'];
+
+      expression_dict[id] = expression;
+      stats_dict[id] = stats;
+    }
+    this.expression_dict = expression_dict;
+    this.stats_dict = stats_dict;
 
     // Generate stamp view output
     this.stamp_svg = d3.select("#stamp-view-svg");
@@ -106,9 +124,7 @@ class MetaGraph{
         .attr("orient", "auto")
       .append("svg:path")
         .attr("d", "M0,-5L10,0L0,5");
-
     this.motifSearch();
-
     }
 
     motifSearch(){
@@ -154,31 +170,47 @@ class MetaGraph{
       console.log("motif search 1")
       this.motif = [];
       let threshold = d3.select("#avg_num").node().value;
-      for(let node_id in this.react_nodes){
-        let react = this.react_nodes[node_id];
-        let source_links = react.links.reactant;
-        let target_links = react.links.product;
+      console.log("Avg threshold set at: ", threshold)
+
+      for(let rxn in this.collapsed_reaction_dict){
+        let reaction = this.collapsed_reaction_dict[rxn];
+        let reactants = reaction.reactants;
+        let products = reaction.products;
         let source_expression = [];
         let target_expression = [];
-        source_links.forEach(l=>{
-          let source_node = this.other_nodes[l.source];
-          if(source_node.expression != "None"){
-            source_expression.push(parseFloat(source_node.expression));
+
+        reactants.forEach(l=>{
+          let reactant_expr = this.expression_dict[l];
+          if(reactant_expr !== null){
+            source_expression.push(parseFloat(reactant_expr));
           }
         })
-        target_links.forEach(l=>{
-          let target_node = this.other_nodes[l.target];
-          if(target_node.expression != "None"){
-            target_expression.push(parseFloat(target_node.expression));
+
+        products.forEach(l=>{
+          let product_expr = this.expression_dict[l];
+          if(product_expr !== null){
+            target_expression.push(parseFloat(product_expr));
           }
         })
-        if(source_expression.length>0 && target_expression.length>0){
-          let source_avg = this.computeAvg(source_expression);
-          let target_avg = this.computeAvg(target_expression);
+
+        let updated_source = source_expression.filter(function (value) {
+            return !Number.isNaN(value);
+        });
+        let updated_target = target_expression.filter(function (value) {
+            return !Number.isNaN(value);
+        });
+
+        if(updated_source.length>0 && updated_target.length>0){
+          let source_avg = this.computeAvg(updated_source);
+          let target_avg = this.computeAvg(updated_target);
+
           if(Math.abs(source_avg - target_avg)>=threshold){
-            this.motif.push(react);
+            this.motif.push(reaction);
           }
         }
+      }
+      for (let m in this.motif) {
+        this.motif[m]['pathways'] = this.path_mapper[this.motif[m]['id']]
       }
       console.log(this.motif);
     }
@@ -187,70 +219,99 @@ class MetaGraph{
       console.log("motif search 2")
       this.motif = [];
       let threshold = d3.select("#maxmax_num").node().value;
-      for(let node_id in this.react_nodes){
-        let react = this.react_nodes[node_id];
-        let source_links = react.links.reactant;
-        let target_links = react.links.product;
+      for(let rxn in this.collapsed_reaction_dict){
+        let reaction = this.collapsed_reaction_dict[rxn];
+        let reactants = reaction.reactants;
+        let products = reaction.products;
         let source_expression = [];
         let target_expression = [];
-        source_links.forEach(l=>{
-          let source_node = this.other_nodes[l.source];
-          if(source_node.expression != "None"){
-            source_expression.push(parseFloat(source_node.expression));
+
+        reactants.forEach(l=>{
+          let reactant_expr = this.expression_dict[l];
+          if(reactant_expr !== null){
+            source_expression.push(parseFloat(reactant_expr));
           }
         })
-        target_links.forEach(l=>{
-          let target_node = this.other_nodes[l.target];
-          if(target_node.expression != "None"){
-            target_expression.push(parseFloat(target_node.expression));
+
+        products.forEach(l=>{
+          let product_expr = this.expression_dict[l];
+          if(product_expr !== null){
+            target_expression.push(parseFloat(product_expr));
           }
         })
-        if(source_expression.length>0 && target_expression.length>0){
-          let source_max = Math.max(...source_expression);
-          let target_max = Math.max(...target_expression);
+
+        let updated_source = source_expression.filter(function (value) {
+            return !Number.isNaN(value);
+        });
+        let updated_target = target_expression.filter(function (value) {
+            return !Number.isNaN(value);
+        });
+
+        if(updated_source.length>0 && updated_target.length>0){
+          let source_max = Math.max(...updated_source);
+          let target_max = Math.max(...updated_target);
           if(Math.abs(source_max - target_max)>=threshold){
-            this.motif.push(react);
+            this.motif.push(reaction);
           }
         }
       }
+      for (let m in this.motif) {
+        this.motif[m]['pathways'] = this.path_mapper[this.motif[m]['id']]
+      }
+      console.log(this.motif);
     }
 
     motifSearch_MaxMin(){ //MaxMin
       console.log("motif search 3")
       this.motif = [];
       let threshold = d3.select("#maxmin_num").node().value;
-      for(let node_id in this.react_nodes){
-        let react = this.react_nodes[node_id];
-        let source_links = react.links.reactant;
-        let target_links = react.links.product;
+      for(let rxn in this.collapsed_reaction_dict){
+        let reaction = this.collapsed_reaction_dict[rxn];
+        let reactants = reaction.reactants;
+        let products = reaction.products;
         let source_expression = [];
         let target_expression = [];
-        source_links.forEach(l=>{
-          let source_node = this.other_nodes[l.source];
-          if(source_node.expression != "None"){
-            source_expression.push(parseFloat(source_node.expression));
+
+        reactants.forEach(l=>{
+          let reactant_expr = this.expression_dict[l];
+          if(reactant_expr !== null){
+            source_expression.push(parseFloat(reactant_expr));
           }
         })
-        target_links.forEach(l=>{
-          let target_node = this.other_nodes[l.target];
-          if(target_node.expression != "None"){
-            target_expression.push(parseFloat(target_node.expression));
+
+        products.forEach(l=>{
+          let product_expr = this.expression_dict[l];
+          if(product_expr !== null){
+            target_expression.push(parseFloat(product_expr));
           }
         })
-        if(source_expression.length>0 && target_expression.length>0){
-          let source_max = Math.max(...source_expression);
-          let target_min = Math.min(...target_expression);
+
+        let updated_source = source_expression.filter(function (value) {
+            return !Number.isNaN(value);
+        });
+        let updated_target = target_expression.filter(function (value) {
+            return !Number.isNaN(value);
+        });
+        if(updated_source.length>0 && updated_target.length>0){
+          let source_max = Math.max(...updated_source);
+          let target_min = Math.min(...updated_target);
           if(Math.abs(source_max - target_min)>=threshold){
-            this.motif.push(react);
+            this.motif.push(reaction);
           }
         }
       }
+      for (let m in this.motif) {
+        this.motif[m]['pathways'] = this.path_mapper[this.motif[m]['id']]
+      }
+      console.log(this.motif);
     }
 
     drawMotifSearchResult(motif_list){
-      motif_list.sort(function(a,b){
-        return d3.descending(a.pathways.length, b.pathways.length)
-      })
+      //Change this to sort by p-values
+      //motif_list.sort(function(a,b){
+      //  console.log(a.pathways)
+      //  return d3.descending(a.pathways.length, b.pathways.length)
+      //})
       let stamp_height = 50;
       this.stamp_svg_height = Math.ceil(
         motif_list.length / 3)
@@ -309,29 +370,34 @@ class MetaGraph{
 
         for(let i=0; i<motif_list.length; i++){
           let mnodes = [];
-          let mlinks = [];
           let mnodes_id = [];
-          mnodes.push(motif_list[i]);
+          let mlinks = [];
           let r_idx = 0;
           let p_idx = 0;
-          motif_list[i].current_type = "reaction";
-          motif_list[i].links.reactant.forEach(l=>{
-            if(mnodes_id.indexOf(l.source)===-1){
-              this.other_nodes[l.source].current_type = "reactant";
-              this.other_nodes[l.source].r_idx = r_idx;
-              mnodes.push(this.other_nodes[l.source]);
-              mnodes_id.push(l.source);
-              mlinks.push(l);
+          // Add reaction node
+          this.node_dict[motif_list[i].id].current_type = "reaction";
+          mnodes.push(this.node_dict[motif_list[i].id]);
+
+          // Add reactant nodes
+          motif_list[i].reactants.forEach(l=>{
+            if(mnodes_id.indexOf(l)===-1){
+              this.node_dict[l].current_type = "reactant";
+              this.node_dict[l].r_idx = r_idx;
+              mnodes.push(this.node_dict[l]);
+              mnodes_id.push(l);
+              mlinks.push({'source': l, 'target': motif_list[i].id});
               r_idx += 1;
             }
           })
-          motif_list[i].links.product.forEach(l=>{
-            if(mnodes_id.indexOf(l.target)===-1){
-              this.other_nodes[l.target].current_type = "product";
-              this.other_nodes[l.target].p_idx = p_idx;
-              mnodes.push(this.other_nodes[l.target]);
-              mnodes_id.push(l.target);
-              mlinks.push(l);
+
+          // Add product nodes
+          motif_list[i].products.forEach(l=>{
+            if(mnodes_id.indexOf(l)===-1){
+              this.node_dict[l].current_type = "product";
+              this.node_dict[l].p_idx = p_idx;
+              mnodes.push(this.node_dict[l]);
+              mnodes_id.push(l);
+              mlinks.push({'source': motif_list[i].id, 'target': l});
               p_idx += 1;
             }
           })
@@ -397,24 +463,25 @@ class MetaGraph{
       let mnodes_id = [];
       let r_idx = 0;
       let p_idx = 0;
+      console.log(motif)
       motif.current_type = "reaction";
-      motif.links.reactant.forEach(l=>{
-        if(mnodes_id.indexOf(l.source)===-1){
-          this.other_nodes[l.source].current_type = "reactant";
-          this.other_nodes[l.source].r_idx = r_idx;
-          mnodes.push(this.other_nodes[l.source]);
-          mnodes_id.push(l.source);
-          mlinks.push(l);
+      motif.reactants.forEach(l=>{
+        if(mnodes_id.indexOf(l)===-1){
+          this.node_dict[l].current_type = "reactant";
+          this.node_dict[l].r_idx = r_idx;
+          mnodes.push(this.node_dict[l]);
+          mnodes_id.push(l);
+          mlinks.push({'source': l, 'target': motif.id});
           r_idx += 1;
         }
       })
-      motif.links.product.forEach(l=>{
-        if(mnodes_id.indexOf(l.target)===-1){
-          this.other_nodes[l.target].current_type = "product";
-          this.other_nodes[l.target].p_idx = p_idx;
-          mnodes.push(this.other_nodes[l.target]);
-          mnodes_id.push(l.target);
-          mlinks.push(l);
+      motif.products.forEach(l=>{
+        if(mnodes_id.indexOf(l)===-1){
+          this.node_dict[l].current_type = "product";
+          this.node_dict[l].p_idx = p_idx;
+          mnodes.push(this.node_dict[l]);
+          mnodes_id.push(l);
+          mlinks.push({'source': motif.id, 'target': l});
           p_idx += 1;
         }
       })
@@ -452,6 +519,7 @@ class MetaGraph{
         .attr("stroke","gray")
         .attr("id",d=>"mp-circle-"+d.id);
 
+      console.log(mlinks)
       let lg = this.mp_motif_link_group.selectAll("line")
         .data(mlinks);
       lg.exit().remove();
@@ -469,7 +537,7 @@ class MetaGraph{
       tg = tg.enter().append("text").merge(tg)
         .attr("x",this.mp_svg_width/4)
         .attr("y",(motif_height-5))
-        .text(d=>"Reaction: " + this.reaction_dict[d.id].name.substring(0, 15) + "...")
+        .text(d=>"Reaction: " + this.collapsed_reaction_dict[d.id].name.substring(0, 15) + "...")
         .style("font-size","11px")
         .style("font-weight","bold")
 
@@ -517,13 +585,15 @@ class MetaGraph{
         .attr("fill","lightblue")
         .style("opacity",0.5)
 
+      // get pathway names
+      console.log(this.mod_collapsed_pathways)
       let ptg = this.mp_pathway_group.selectAll("text")
         .data(pathway_list);
       ptg.exit().remove();
       ptg = ptg.enter().append("text").merge(ptg)
         .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+15)
         .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
-        .text(d=>this.pathways[d].name.substring(0,13) + "...")
+        .text(d=>this.mod_collapsed_pathways[d].name.substring(0,13) + "...")
         .style("font-size",9)
 
     }
@@ -533,13 +603,13 @@ class MetaGraph{
 
       graph_genes = true;
       collapse_reactions = true;
-      var selection = this.pathways[p].name;
+      var selection = this.mod_collapsed_pathways[p].name;
 
       // Run normal first plot
-      var motif_reactions = this.collapsed_pathway_dict[selection]["reactions"];
+      var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
 
       // Parse through each reaction listed and get the component parts
-      var components = [];
+      let components = [];
       var rxn = 0;
       for (rxn in motif_reactions) {
         var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
@@ -568,12 +638,9 @@ class MetaGraph{
       var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
       var node_dict = node_elements[0];
       var type_dict = node_elements[1];
-      var expression_dict = node_elements[2];
-      var stats_dict = node_elements[3];
-      var display_analytes_dict = node_elements[4];
-      var display_reactions_dict = node_elements[5];
-      var entity_id_dict = node_elements[6];
-
+      var display_analytes_dict = node_elements[2];
+      var display_reactions_dict = node_elements[3];
+      var entity_id_dict = node_elements[4];
 
       var _width = 0.45 * (window.innerWidth);
       var _height = 0.75 * (window.innerHeight);
@@ -585,8 +652,6 @@ class MetaGraph{
         type_dict,
         node_dict,
         entity_id_dict,
-        expression_dict,
-        stats_dict,
         display_analytes_dict,
         display_reactions_dict,
         selector,
@@ -595,188 +660,15 @@ class MetaGraph{
       );
     }
 
-
-    /*
-    drawPathwayView(p){
-      console.log(this.pathways[p].name)
-      console.log(p)
-      // recover pathway
-      let react_list = this.pathways[p].reactions;
-      let pnodes = [];
-      let plinks = [];
-      let pnodes_id = [];
-
-      react_list.forEach(rid=>{
-        let react = this.react_nodes[rid];
-        if(react){
-          pnodes.push(react);
-          react.links.reactant.forEach(l=>{
-            if(pnodes_id.indexOf(l.source)===-1){
-              pnodes.push(this.other_nodes[l.source]);
-              pnodes_id.push(l.source);
-            }
-            plinks.push(l);
-          })
-          react.links.product.forEach(l=>{
-            if(pnodes_id.indexOf(l.target)===-1){
-              pnodes.push(this.other_nodes[l.target]);
-              pnodes_id.push(l.target);
-            }
-            plinks.push(l);
-          })
-        }
-
-      })
-
-      let simulation = d3.forceSimulation(pnodes)
-        .force("link", d3.forceLink(plinks).id(function(d) { return d.id; }))
-        .force("charge", d3.forceManyBody().strength(-1))
-        .force("center", d3.forceCenter(this.pathway_svg_width / 2, this.pathway_svg_height / 2));
-
-      let links = this.pathway_link_svg.selectAll("line").data(plinks);
-      links.exit().remove();
-      links = links.enter().append("line").merge(links);
-      links
-        .attr("stroke", (d)=>d.color)
-        .attr("stroke-width",1)
-        .attr("marker-end", "url(#end)");
-
-      let nodes = this.pathway_circle_svg.selectAll("circle").data(pnodes);
-      nodes.exit().remove();
-      nodes = nodes.enter().append("circle").merge(nodes);
-      nodes
-        .attr("r",8)
-        .attr("id",d=>"circle_"+this.createId(d.id))
-        .attr("class",(d)=>{
-          if(['reactant','product','reaction'].indexOf(d.type)!=-1){
-            return d.type
-          } else {
-            return "other";
-          }
-        })
-        .attr("stroke","gray")
-        .attr("stroke-width",1)
-        .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended))
-        .on("mouseover",(d)=>{
-          d3.select("#pathway-label-"+d.id)
-            .style("visibility","visible");
-        })
-        .on("mouseout",(d)=>{
-          d3.select("#pathway-label-"+d.id)
-            .style("visibility","hidden");
-        })
-        .attr("id",(d)=>"pathway-circle-"+d.id);
-
-
-
-      let labels = this.pathway_circle_svg.selectAll("text").data(pnodes);
-      labels.exit().remove();
-      let newLabels = labels.enter().append("text");
-      labels = newLabels.merge(labels);
-      labels
-        .text(d=> {
-          return d.id;
-        })
-        .attr("id",d=>"pathway-label-"+d.id)
-        .style("font-size",10)
-        .style("font-weight","bold")
-        .style("visibility","hidden")
-
-      simulation
-        .nodes(pnodes)
-          .on("tick", ticked);
-
-      simulation.force("link")
-        .links(plinks);
-
-      let that = this;
-      function ticked() {
-        links
-          .attr("x1", d => d.source.x)
-          .attr("y1", d => d.source.y)
-          .attr("x2", d => d.target.x)
-          .attr("y2", d => d.target.y);
-
-        let radius = 8;
-        nodes
-          .attr("cx", function(d) {
-            return (d.x = Math.max(radius, Math.min(that.pathway_svg_width - radius, d.x)));
-          })
-          .attr("cy", function(d) {
-            return (d.y = Math.max(radius, Math.min(that.pathway_svg_height/8*7 - radius, d.y)));
-          })
-
-        labels
-          .attr("x",d=>d.x+5)
-          .attr("y",d=>d.y-10);
-      }
-
-      function dragstarted(d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
-
-      function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-      }
-
-      function dragended(d) {
-        if (!d3.event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      }
-    }
-    */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     findAllMotif(pathway, motif_list){
       d3.select(".network-panel").style("visibility","visible");
-      document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.pathways[pathway].name + "</b></h6>";
+      document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.mod_collapsed_pathways[pathway].name + "</b></h6>";
       console.log(pathway, motif_list)
       let motif_id = [];
       motif_list.forEach(m=>{
         motif_id.push(m.id);
       })
-      let pathway_list = this.pathways[pathway].reactions;
+      let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
       let current_motif = [];
       pathway_list.forEach(react_id=>{
         if(motif_id.indexOf(react_id)!=-1){
@@ -795,21 +687,18 @@ class MetaGraph{
         .data(current_motif);
       tg.exit().remove();
       tg = tg.enter().append("li").merge(tg)
-        .html(d => "- " + this.reaction_dict[d].name)
+        .html(d => "- " + this.collapsed_reaction_dict[d].name)
 
     }
-
 
     computeAvg(arr){
       let arr_sum = arr[0];
       for(let i=1; i<arr.length; i++){
         arr_sum += arr[i];
       }
-      let arr_avg = Math.round(arr_sum/arr.length*1000)/1000;
+      let arr_avg = arr_sum / arr.length;
       return arr_avg;
     }
-
-
 
     computeMax(node_array){
       let node_max;
