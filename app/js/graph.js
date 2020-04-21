@@ -35,103 +35,6 @@ var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
 
-// Change user selection based on input
-function selectPathway() {
-  var selection = document.getElementById("pathwayMenu").value;
-  console.log("Selection: " + selection);
-  return selection;
-}
-
-function selectSuperPathway(selector) {
-  var superSelection = document.getElementById("superPathwayMenu").value;
-  console.log("Super Pathway: " + superSelection);
-  return superSelection;
-}
-
-// Populate dictionary to access component reactions for each pathway
-function make_pathway_dictionary(data, database_key) {
-  // Get pathway name and ID
-  var pathways = data[database_key];
-  var pathway_dict = {};
-  for (var key in pathways) {
-    pathway_dict[pathways[key]["name"]] = {
-      id: pathways[key]["name"],
-      reactome: pathways[key]["reactome"],
-      reactions: pathways[key]["reactions"]
-    };
-  }
-
-  return pathway_dict;
-}
-
-// Populate dictionary to access component reactions for each super-pathway
-function make_superPathway_dictionary(data) {
-  // Get pathway name and ID
-  var superPathways = data.super_pathways;
-  var superPathwayDict = {};
-  for (var key in superPathways) {
-    superPathwayDict[superPathways[key]["name"]] = {
-      id: superPathways[key]["name"],
-      reactions: superPathways[key]["reactions"]
-    };
-  }
-
-  return superPathwayDict;
-}
-
-// Make Pathway menu for users to
-function make_menu(
-  pathway_dict,
-  selector,
-  opening_message,
-  provide_all = false
-) {
-  // Get species names (keys) as list
-  pathways_list = [];
-  pathways_list = Object.getOwnPropertyNames(pathway_dict).map(function(k) {
-    return k;
-  });
-  pathways_list.sort();
-  if (provide_all === true) {
-    pathways_list.unshift("All pathways");
-    pathways_list.unshift("All entities");
-  }
-  pathways_list.unshift(opening_message); // Add select prompt to menu bar
-
-  // Generate drop-down menu for species select
-  menu = [];
-  menu = document.getElementById(selector);
-  for (var i = 0; i < pathways_list.length; i++) {
-    var option = document.createElement("option");
-    option.innerHTML = pathways_list[i];
-    option.value = pathways_list[i];
-    menu.appendChild(option);
-  }
-}
-
-function emptyMenu(selectMenu) {
-  var i;
-  for (i = selectMenu.options.length - 1; i >= 0; i--) {
-    selectMenu.remove(i);
-  }
-}
-
-function parsePathways(pathway_dict, selectedReactions) {
-  var parsed_pathway_dict = {};
-  // from https://stackoverflow.com/a/53606357
-  let checker = (arr, target) => target.every(v => arr.includes(v));
-
-  for (pathway in pathway_dict) {
-    belongs = checker(selectedReactions, pathway_dict[pathway]["reactions"]);
-
-    if (belongs === true) {
-      parsed_pathway_dict[pathway] = pathway_dict[pathway];
-    }
-  }
-
-  return parsed_pathway_dict;
-}
-
 function initialize_nodes(nodes, node_dict, type_dict) {
   var display_analytes_dict = {};
   var display_reactions_dict = {};
@@ -283,8 +186,8 @@ function nearest_neighbors(data, entity_id) {
     display_reactions_dict,
     selector,
     _width,
-    _height
-  );
+    _height,
+    global_motifs)
 }
 
 function parse_kNN_pathway(data, entity_id, kNN) {
@@ -490,7 +393,10 @@ function make_graph(
     display_reactions_dict,
     selector,
     _width,
-    _height) {
+    _height,
+    global_motifs) {
+
+  console.log(new_nodes)
 
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
@@ -567,21 +473,13 @@ function make_graph(
   function getGroup(d, links) {
 
     if (d.compartment === "none") {
-
       for (l in links) {
-
-
         if (d.id === links[l].source.id && links[l].target.compartment !== "none") {
-
           return links[l].target.compartment;
-
         } else if (d.id === links[l].target.id && links[l].source.compartment !== "none") {
-
           return links[l].source.compartment;
-
         } else {}
       }
-
       return "none";
 
     } else {
@@ -651,6 +549,21 @@ function make_graph(
   })
   .attr("id", function(d) {return d.id});
 
+  // for all reactions in pathway
+  if (global_motifs !== undefined) {
+    if (global_motifs.length > 0) {
+      new_nodes.forEach(node=>{
+        let rxn_id = node.id;
+        if (global_motifs.includes(rxn_id)) {
+          d3.selectAll("circle#" + rxn_id)
+            .style("r", "16px")
+            .style("stroke", "purple")
+            .style("stroke-width", "5px")
+        }
+      })
+    }
+  }
+
   function getCategories(nodes) {
 
     var categories = new Set();
@@ -683,13 +596,38 @@ function make_graph(
       .attr("class", "hull")
       .attr("d", drawCluster)
       .style("fill", function(d) {
-        if (d.group !== "none") {
+        if (d.group !== "undefined") {
           return fill[categories[d.group]];
         }
       })
 
+  var timer = 0;
+  var delay = 200;
+  var prevent = false;
+
   circle
+    .on("click", function(d) {
+      timer = setTimeout(function() {
+        if (!prevent) {
+          document.getElementById("reaction_notes").innerHTML = "";
+
+          if (d.synonyms.length > 0) {
+
+            let synonym_string = "";
+            for (let s in d.synonyms) {
+              synonym_string = synonym_string + "<br /> - " + d.synonyms[s]
+            }
+
+            document.getElementById("reaction_notes").innerHTML =
+              "<b><i>" + d.name + " Synonyms</i></b>: " + synonym_string;
+          }
+        }
+        prevent = false;
+      }, delay);
+    })
     .on("dblclick", function(d) {
+      clearTimeout(timer);
+      prevent = true;
       document.getElementById("reaction_notes").innerHTML = "";
 
       if (
@@ -754,7 +692,7 @@ function make_graph(
           .attr("class", "hull")
           .attr("d", drawCluster)
           .style("fill", function(d) {
-            if (d.group !== "none") {
+            if (d.group !== "undefined") {
               return fill[categories[d.group]];
             }
           })
@@ -927,8 +865,8 @@ function make_graph(
         display_reactions_dict,
         selector,
         _width,
-        _height
-      );
+        _height,
+        global_motifs)
     } else {
       graph_genes = false;
       saved_nodes = new_nodes;
@@ -974,8 +912,8 @@ function make_graph(
         new_display_reactions_dict,
         selector,
         _width,
-        _height
-      );
+        _height,
+        global_motifs)
     }
   });
 
@@ -996,67 +934,72 @@ function make_graph(
         display_reactions_dict,
         selector,
         _width,
-        _height
-      );
+        _height,
+        global_motifs)
     } else {
       collapse_reactions = false;
       collapsed_nodes = new_nodes;
       collapsed_links = new_links;
 
       var selection = document.getElementById("pathwayMenu").value;
-      var reactions = collapsed_pathway_dict[selection]["reactions"];
-      var collapsed_reaction_dictionary = data.collapsed_reaction_dictionary;
 
-      // Parse through each reaction listed and get the component parts
-      var components = [];
-      for (rxn in reactions) {
-        var target_rxns = collapsed_reaction_dictionary[reactions[rxn]];
-        components.push(reactions[rxn]);
-        for (x in target_rxns["reactants"]) {
-          components.push(target_rxns["reactants"][x]);
-        }
-        for (x in target_rxns["products"]) {
-          components.push(target_rxns["products"][x]);
-        }
-        for (x in target_rxns["modifiers"]) {
-          components.push(target_rxns["modifiers"][x][0]);
-        }
-        for (x in target_rxns["additional_components"]) {
-          components.push(target_rxns["additional_components"][x]);
+      for (x in data.mod_collapsed_pathways) {
+        if (data.mod_collapsed_pathways[x]['name'] === selection) {
+          let reactions = data.mod_collapsed_pathways[x]["reactions"];
+
+          // Parse through each reaction listed and get the component parts
+          var components = [];
+          for (rxn in reactions) {
+            var target_rxns = data.collapsed_reaction_dictionary[reactions[rxn]];
+            components.push(reactions[rxn]);
+            for (x in target_rxns["reactants"]) {
+              components.push(target_rxns["reactants"][x]);
+            }
+            for (x in target_rxns["products"]) {
+              components.push(target_rxns["products"][x]);
+            }
+            for (x in target_rxns["modifiers"]) {
+              components.push(target_rxns["modifiers"][x][0]);
+            }
+            for (x in target_rxns["additional_components"]) {
+              components.push(target_rxns["additional_components"][x]);
+            }
+          }
+          var newer_elements = get_nodes_links(data, components);
+          var newer_nodes = newer_elements[0];
+          var newer_links = newer_elements[1];
+
+          // Initialize variables
+          var new_node_dict = {};
+          var new_type_dict = {};
+
+          var new_node_elements = initialize_nodes(
+            newer_nodes,
+            new_node_dict,
+            new_type_dict
+          );
+          var new_node_dict = new_node_elements[0];
+          var new_type_dict = new_node_elements[1];
+          var new_display_analytes_dict = new_node_elements[2];
+          var new_display_reactions_dict = new_node_elements[3];
+          var new_entity_id_dict = new_node_elements[4];
+
+          make_graph(
+            data,
+            newer_nodes,
+            newer_links,
+            new_type_dict,
+            new_node_dict,
+            new_entity_id_dict,
+            new_display_analytes_dict,
+            new_display_reactions_dict,
+            selector,
+            _width,
+            _height,
+            global_motifs)
+        } else {
         }
       }
-      var newer_elements = get_nodes_links(data, components);
-      var newer_nodes = newer_elements[0];
-      var newer_links = newer_elements[1];
-
-      // Initialize variables
-      var new_node_dict = {};
-      var new_type_dict = {};
-
-      var new_node_elements = initialize_nodes(
-        newer_nodes,
-        new_node_dict,
-        new_type_dict
-      );
-      var new_node_dict = new_node_elements[0];
-      var new_type_dict = new_node_elements[1];
-      var new_display_analytes_dict = new_node_elements[2];
-      var new_display_reactions_dict = new_node_elements[3];
-      var new_entity_id_dict = new_node_elements[4];
-
-      make_graph(
-        data,
-        newer_nodes,
-        newer_links,
-        new_type_dict,
-        new_node_dict,
-        new_entity_id_dict,
-        new_display_analytes_dict,
-        new_display_reactions_dict,
-        selector,
-        _width,
-        _height
-      );
     }
   });
 
@@ -1084,11 +1027,13 @@ function make_graph(
     for (i in hulls) {
 
       var hull_space = d3.polygonHull(hulls[i]);
-      hullset.push({
-        group: i,
-        path: hull_space,
-        centroid: d3.polygonCentroid(hull_space)
-      });
+      if (i !== undefined) {
+        hullset.push({
+          group: i,
+          path: hull_space,
+          centroid: d3.polygonCentroid(hull_space)
+        });
+      }
     }
 
     return hullset;
@@ -1228,8 +1173,8 @@ function change() {
       display_reactions_dict,
       selector,
       _width,
-      _height
-    );
+      _height,
+      global_motifs);
   } else {
     // Get kNN of entity selected
     var mod_selection = determineWidth(selection);
@@ -1241,21 +1186,4 @@ function change() {
     var entity_dictionary = parseEntities(data.nodes);
     nearest_neighbors(data, entity_dictionary[selection]);
   }
-}
-
-// Check number of categories
-function checkCategories(categories) {
-  //change to > 1 after testing
-  console.log(data)
-  if (data.categories.length > 1) {
-    timecourse = true;
-    timecourse_fill =
-      '<div id="play-button" align="center">Pause<div id="bar" align="center"></div></div>';
-    document.getElementById("slider").innerHTML = timecourse_fill;
-
-    //buildSlider();
-  } else {
-    timecourse = false;
-  }
-  return timecourse;
 }

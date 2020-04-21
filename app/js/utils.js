@@ -122,3 +122,19 @@ function determineWidth(input) {
 
   return mod_selection;
 }
+
+// Populate dictionary to access component reactions for each pathway
+function make_pathway_dictionary(data, database_key) {
+  // Get pathway name and ID
+  var pathways = data[database_key];
+  var pathway_dict = {};
+  for (var key in pathways) {
+    pathway_dict[pathways[key]["name"]] = {
+      id: pathways[key]["name"],
+      reactome: pathways[key]["reactome"],
+      reactions: pathways[key]["reactions"]
+    };
+  }
+
+  return pathway_dict;
+}

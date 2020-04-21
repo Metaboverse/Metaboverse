@@ -77,7 +77,8 @@ def build_graph(
         species_id,
         gene_reference,
         compartment_reference,
-        component_database):
+        component_database,
+        reverse_metabolite_dictionary):
     """Build graph
     - Add nodes and edges
     - Map names to objects in the graph for display
@@ -101,7 +102,8 @@ def build_graph(
             species_id=species_id,
             gene_reference=gene_reference,
             compartment_reference=compartment_reference,
-            component_database=component_database)
+            component_database=component_database,
+            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
 
     return G, network
 
@@ -117,7 +119,8 @@ def process_reactions(
         species_id,
         gene_reference,
         compartment_reference,
-        component_database):
+        component_database,
+        reverse_metabolite_dictionary):
     """
     """
     new_components = []
@@ -179,7 +182,8 @@ def process_reactions(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
-            compartment_reference=compartment_reference)
+            compartment_reference=compartment_reference,
+            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
 
         if len(component_database[reactant]['hasPart']) > 0:
             graph.nodes()[reactant]['complex'] = 'true'
@@ -194,7 +198,8 @@ def process_reactions(
                 uniprot_reference=uniprot_reference,
                 gene_reference=gene_reference,
                 component_database=component_database,
-                compartment_reference=compartment_reference)
+                compartment_reference=compartment_reference,
+                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
             for x in additional_components:
                 new_components.append(x)
         else:
@@ -219,7 +224,8 @@ def process_reactions(
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
-                    compartment_reference=compartment_reference)
+                    compartment_reference=compartment_reference,
+                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
             except:
                 pass
 
@@ -244,7 +250,8 @@ def process_reactions(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
-            compartment_reference=compartment_reference)
+            compartment_reference=compartment_reference,
+            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
 
         if len(component_database[product]['hasPart']) > 0:
             graph.nodes()[product]['complex'] = 'true'
@@ -259,7 +266,8 @@ def process_reactions(
                 uniprot_reference=uniprot_reference,
                 gene_reference=gene_reference,
                 component_database=component_database,
-                compartment_reference=compartment_reference)
+                compartment_reference=compartment_reference,
+                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
             for x in additional_components:
                 new_components.append(x)
         else:
@@ -285,7 +293,8 @@ def process_reactions(
                         species_reference=species_reference,
                         name_reference=name_reference,
                         protein_reference=protein_reference,
-                        compartment_reference=compartment_reference)
+                        compartment_reference=compartment_reference,
+                        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
                 except:
                     pass
 
@@ -319,7 +328,8 @@ def process_reactions(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
-            compartment_reference=compartment_reference)
+            compartment_reference=compartment_reference,
+            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
 
         if len(component_database[id]['hasPart']) > 0:
             graph.nodes()[id]['complex'] = 'true'
@@ -334,7 +344,8 @@ def process_reactions(
                 uniprot_reference=uniprot_reference,
                 gene_reference=gene_reference,
                 component_database=component_database,
-                compartment_reference=compartment_reference)
+                compartment_reference=compartment_reference,
+                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
             for x in additional_components:
                 new_components.append(x)
         else:
@@ -359,7 +370,8 @@ def process_reactions(
                         species_reference=species_reference,
                         name_reference=name_reference,
                         protein_reference=protein_reference,
-                        compartment_reference=compartment_reference)
+                        compartment_reference=compartment_reference,
+                        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
                 except:
                     pass
 
@@ -381,7 +393,8 @@ def add_node_edge(
         species_reference,
         name_reference,
         protein_reference,
-        compartment_reference):
+        compartment_reference,
+        reverse_metabolite_dictionary):
     """Add node and edge information to graph
     """
 
@@ -398,6 +411,11 @@ def add_node_edge(
     except:
         graph.nodes()[id]['compartment'] = 'none'
         graph.nodes()[id]['compartment_name'] = 'none'
+
+    if map_id in reverse_metabolite_dictionary.keys():
+        graph.nodes()[id]['synonyms'] = reverse_metabolite_dictionary[map_id]
+    else:
+        graph.nodes()[id]['synonyms'] = []
 
     if type == 'reactant':
         graph.add_edges_from([
@@ -442,7 +460,8 @@ def check_complexes(
         uniprot_reference,
         gene_reference,
         component_database,
-        compartment_reference):
+        compartment_reference,
+        reverse_metabolite_dictionary):
     """Check if species being added is in complex dictionary
     - If record exists, add nodes and edges for the new relationship.
     - If record contains a UniProt ID, cross reference with Ensembl database
@@ -474,7 +493,8 @@ def check_complexes(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference)
+                compartment_reference=compartment_reference,
+                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
 
             try:
                 gene = protein_reference[component_id]
@@ -494,7 +514,8 @@ def check_complexes(
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
-                    compartment_reference=compartment_reference)
+                    compartment_reference=compartment_reference,
+                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
             except:
                 pass
 
@@ -533,7 +554,8 @@ def check_complexes(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference)
+                compartment_reference=compartment_reference,
+                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
 
     return graph, add_components
 
@@ -881,6 +903,64 @@ def broadcast_values(
 
     return graph
 
+def make_motif_reaction_dictionary(
+        network,
+        updated_reactions,
+        updated_pathway_dictionary):
+
+    simp_dict = {}
+    for k,v in network['reaction_database'].items():
+        simp_dict[k] = []
+
+    for k,v in network['pathway_database'].items():
+
+        for x in network['pathway_database'][k]['reactions']:
+            try:
+                simp_dict[x].append(network['pathway_database'][k]['id'])
+            except:
+                simp_dict[x] = []
+                simp_dict[x].append(network['pathway_database'][k]['id'])
+
+    motif_reaction_dictionary = {}
+    for k,v in updated_reactions.items():
+        motif_reaction_dictionary[k] = []
+
+    for k,v in updated_pathway_dictionary.items():
+
+        for x in updated_pathway_dictionary[k]['reactions']:
+            try:
+                motif_reaction_dictionary[x].append(updated_pathway_dictionary[k]['id'])
+            except:
+                motif_reaction_dictionary[x] = []
+                motif_reaction_dictionary[x].append(updated_pathway_dictionary[k]['id'])
+
+    for k,v in motif_reaction_dictionary.items():
+        if len(v) == 0:
+            comps = k.split('_reaction_')
+            comps = [x.replace('reaction_','') for x in comps]
+
+            for y in comps:
+                _rxn = 'reaction_' + y
+                _paths = simp_dict[_rxn]
+                for z in _paths:
+                    motif_reaction_dictionary[k].append(z)
+
+    return motif_reaction_dictionary
+
+def make_metabolite_synonym_dictionary(
+        network):
+
+    reverse_metabolite_dictionary = {}
+
+    for k, v in network['chebi_synonyms'].items():
+        if v in reverse_metabolite_dictionary.keys():
+            pass
+        else:
+            reverse_metabolite_dictionary[v] = []
+        reverse_metabolite_dictionary[v].append(k)
+
+    return reverse_metabolite_dictionary
+
 def __main__(
         args_dict,
         network,
@@ -905,6 +985,9 @@ def __main__(
         ensembl_reference=reverse_genes)
     progress_feed(args_dict, "model", 1)
 
+    reverse_metabolite_dictionary = make_metabolite_synonym_dictionary(
+        network=network)
+
     # Generate graph
     # Name mapping
     print('Building network...')
@@ -918,7 +1001,8 @@ def __main__(
         species_id=species_id,
         gene_reference=network['ensembl_synonyms'],
         compartment_reference=network['compartment_dictionary'],
-        component_database=network['components_database'])
+        component_database=network['components_database'],
+        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
     progress_feed(args_dict, "model", 9)
 
     # For gene and protein components, add section to reaction database
@@ -982,42 +1066,10 @@ def __main__(
         pathways=network['pathway_database'],
         scale_factor=scale_factor)
 
-    simp_dict = {}
-    for k,v in network['reaction_database'].items():
-        simp_dict[k] = []
-
-    for k,v in network['pathway_database'].items():
-
-        for x in network['pathway_database'][k]['reactions']:
-            try:
-                simp_dict[x].append(network['pathway_database'][k]['id'])
-            except:
-                simp_dict[x] = []
-                simp_dict[x].append(network['pathway_database'][k]['id'])
-
-    motif_reaction_dictionary = {}
-    for k,v in updated_reactions.items():
-        motif_reaction_dictionary[k] = []
-
-    for k,v in updated_pathway_dictionary.items():
-
-        for x in updated_pathway_dictionary[k]['reactions']:
-            try:
-                motif_reaction_dictionary[x].append(updated_pathway_dictionary[k]['id'])
-            except:
-                motif_reaction_dictionary[x] = []
-                motif_reaction_dictionary[x].append(updated_pathway_dictionary[k]['id'])
-
-    for k,v in motif_reaction_dictionary.items():
-        if len(v) == 0:
-            comps = k.split('_reaction_')
-            comps = [x.replace('reaction_','') for x in comps]
-
-            for y in comps:
-                _rxn = 'reaction_' + y
-                _paths = simp_dict[_rxn]
-                for z in _paths:
-                    motif_reaction_dictionary[k].append(z)
+    motif_reaction_dictionary = make_motif_reaction_dictionary(
+        network=network,
+        updated_reactions=updated_reactions,
+        updated_pathway_dictionary=updated_pathway_dictionary)
 
     mod_collapsed_pathways = {}
     for k,v in updated_pathway_dictionary.items():

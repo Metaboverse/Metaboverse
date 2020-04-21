@@ -46,7 +46,7 @@ class MetaGraph{
     // Generate expression and stats dictionaries
     let expression_dict = {};
     let stats_dict = {};
-    for (x in this.nodes) {
+    for (let x in this.nodes) {
       let id = this.nodes[x]['id'];
       let expression = this.nodes[x]['values'];
       let stats = this.nodes[x]['stats'];
@@ -58,6 +58,7 @@ class MetaGraph{
     this.stats_dict = stats_dict;
 
     // Generate stamp view output
+    try {
     this.stamp_svg = d3.select("#stamp-view-svg");
     this.stamp_svg_width = parseFloat(this.stamp_svg.style("width"));
     this.stamp_svg_height = parseFloat(this.stamp_svg.style("height"));
@@ -94,9 +95,9 @@ class MetaGraph{
     this.pathway_svg = d3.select("#pathway-view-svg");
     this.pathway_svg_width = parseFloat(this.pathway_svg.style("width", "45vw"));
     this.pathway_svg_height = parseFloat(this.pathway_svg.style("height", "490px"));
+  } catch(e) {}
 
     this.motifSearch();
-
     }
 
     motifSearch(){
@@ -108,7 +109,12 @@ class MetaGraph{
             .style("visibility", "hidden");
           d3.select(".network-panel")
             .style("visibility", "hidden");
-          this.motifSearch_Avg();
+          let threshold = d3.select("#avg_num").node().value;
+          this.motif = motifSearch_Avg(
+            threshold,
+            this.collapsed_reaction_dict,
+            this.expression_dict,
+            this.path_mapper)
           this.drawMotifSearchResult(this.motif);
         })
 
@@ -120,7 +126,12 @@ class MetaGraph{
             .style("visibility","hidden");
           d3.select(".network-panel")
             .style("visibility","hidden");
-          this.motifSearch_MaxMax();
+          let threshold = d3.select("#maxmax_num").node().value;
+          this.motif = motifSearch_MaxMax(
+            threshold,
+            this.collapsed_reaction_dict,
+            this.expression_dict,
+            this.path_mapper)
           this.drawMotifSearchResult(this.motif);
         })
 
@@ -132,150 +143,15 @@ class MetaGraph{
             .style("visibility","hidden");
           d3.select(".network-panel")
             .style("visibility","hidden");
-          this.motifSearch_MaxMin();
+          let threshold = d3.select("#maxmin_num").node().value;
+          this.motif = motifSearch_MaxMin(
+            threshold,
+            this.collapsed_reaction_dict,
+            this.expression_dict,
+            this.path_mapper)
           this.drawMotifSearchResult(this.motif);
         }
       )
-    }
-
-    motifSearch_Avg(){ // search for motif 1
-      console.log("motif search 1")
-      this.motif = [];
-      let threshold = d3.select("#avg_num").node().value;
-      console.log("Avg threshold set at: ", threshold)
-
-      for(let rxn in this.collapsed_reaction_dict){
-        let reaction = this.collapsed_reaction_dict[rxn];
-        let reactants = reaction.reactants;
-        let products = reaction.products;
-        let source_expression = [];
-        let target_expression = [];
-
-        reactants.forEach(l=>{
-          let reactant_expr = this.expression_dict[l];
-          if(reactant_expr !== null){
-            source_expression.push(parseFloat(reactant_expr));
-          }
-        })
-
-        products.forEach(l=>{
-          let product_expr = this.expression_dict[l];
-          if(product_expr !== null){
-            target_expression.push(parseFloat(product_expr));
-          }
-        })
-
-        let updated_source = source_expression.filter(function (value) {
-            return !Number.isNaN(value);
-        });
-        let updated_target = target_expression.filter(function (value) {
-            return !Number.isNaN(value);
-        });
-
-        if(updated_source.length>0 && updated_target.length>0){
-          let source_avg = this.computeAvg(updated_source);
-          let target_avg = this.computeAvg(updated_target);
-
-          if(Math.abs(source_avg - target_avg)>=threshold){
-            this.motif.push(reaction);
-          }
-        }
-      }
-      for (let m in this.motif) {
-        this.motif[m]['pathways'] = this.path_mapper[this.motif[m]['id']]
-      }
-      console.log(this.motif);
-    }
-
-    motifSearch_MaxMax(){ // MaxMax
-      console.log("motif search 2")
-      this.motif = [];
-      let threshold = d3.select("#maxmax_num").node().value;
-      for(let rxn in this.collapsed_reaction_dict){
-        let reaction = this.collapsed_reaction_dict[rxn];
-        let reactants = reaction.reactants;
-        let products = reaction.products;
-        let source_expression = [];
-        let target_expression = [];
-
-        reactants.forEach(l=>{
-          let reactant_expr = this.expression_dict[l];
-          if(reactant_expr !== null){
-            source_expression.push(parseFloat(reactant_expr));
-          }
-        })
-
-        products.forEach(l=>{
-          let product_expr = this.expression_dict[l];
-          if(product_expr !== null){
-            target_expression.push(parseFloat(product_expr));
-          }
-        })
-
-        let updated_source = source_expression.filter(function (value) {
-            return !Number.isNaN(value);
-        });
-        let updated_target = target_expression.filter(function (value) {
-            return !Number.isNaN(value);
-        });
-
-        if(updated_source.length>0 && updated_target.length>0){
-          let source_max = Math.max(...updated_source);
-          let target_max = Math.max(...updated_target);
-          if(Math.abs(source_max - target_max)>=threshold){
-            this.motif.push(reaction);
-          }
-        }
-      }
-      for (let m in this.motif) {
-        this.motif[m]['pathways'] = this.path_mapper[this.motif[m]['id']]
-      }
-      console.log(this.motif);
-    }
-
-    motifSearch_MaxMin(){ //MaxMin
-      console.log("motif search 3")
-      this.motif = [];
-      let threshold = d3.select("#maxmin_num").node().value;
-      for(let rxn in this.collapsed_reaction_dict){
-        let reaction = this.collapsed_reaction_dict[rxn];
-        let reactants = reaction.reactants;
-        let products = reaction.products;
-        let source_expression = [];
-        let target_expression = [];
-
-        reactants.forEach(l=>{
-          let reactant_expr = this.expression_dict[l];
-          if(reactant_expr !== null){
-            source_expression.push(parseFloat(reactant_expr));
-          }
-        })
-
-        products.forEach(l=>{
-          let product_expr = this.expression_dict[l];
-          if(product_expr !== null){
-            target_expression.push(parseFloat(product_expr));
-          }
-        })
-
-        let updated_source = source_expression.filter(function (value) {
-            return !Number.isNaN(value);
-        });
-        let updated_target = target_expression.filter(function (value) {
-            return !Number.isNaN(value);
-        });
-        if(updated_source.length>0 && updated_target.length>0){
-          let source_max = Math.max(...updated_source);
-          let target_min = Math.min(...updated_target);
-          if(Math.abs(source_max - target_min)>=threshold){
-            this.motif.push(reaction);
-          }
-        }
-      }
-      for (let m in this.motif) {
-        this.motif[m]['pathways'] = this.path_mapper[this.motif[m]['id']]
-      }
-      console.log(this.motif);
     }
 
     drawMotifSearchResult(motif_list){
@@ -572,7 +448,6 @@ class MetaGraph{
       .style("opacity",0.5)
 
     // get pathway names
-    console.log(this.mod_collapsed_pathways)
     let ptg = this.mp_pathway_group.selectAll("text")
       .data(pathway_list);
     ptg.exit().remove();
@@ -588,9 +463,6 @@ class MetaGraph{
 
     graph_genes = true;
     collapse_reactions = true;
-    var selection = this.mod_collapsed_pathways[p].name;
-
-    // Run normal first plot
     var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
 
     // Parse through each reaction listed and get the component parts
@@ -666,7 +538,10 @@ class MetaGraph{
         .style("stroke-width", "5px")
 
     })
+    this.showMotifNames(current_motif);
+  }
 
+  showMotifNames(current_motif) {
     let tg = d3.select("#all-motif-list")
       .select("ul")
       .selectAll("li")
@@ -674,53 +549,6 @@ class MetaGraph{
     tg.exit().remove();
     tg = tg.enter().append("li").merge(tg)
       .html(d => "- " + this.collapsed_reaction_dict[d].name)
-
-  }
-
-  computeAvg(arr){
-    let arr_sum = arr[0];
-    for(let i=1; i<arr.length; i++){
-      arr_sum += arr[i];
-    }
-    let arr_avg = arr_sum / arr.length;
-    return arr_avg;
-  }
-
-  computeMax(node_array){
-    let node_max;
-    node_array.forEach(nd=>{
-      let nd_value = parseFloat(nd.expression)
-      if(!Number.isNaN(nd_value)){
-        if(node_max===undefined){
-          node_max = nd_value;
-        } else if(nd_value > node_max){
-          node_max = nd_value;
-        }
-      }
-    })
-    return node_max;
-  }
-
-  computeMin(node_array){
-    // if the length of the node array is 1, do not return min value (because max_val = min_val in this situation)
-    let node_min;
-    let node_length = 0;
-    node_array.forEach(nd=>{
-      let nd_value = parseFloat(nd.expression)
-      if(!Number.isNaN(nd_value)){
-        if(node_min===undefined){
-          node_min = nd_value;
-        } else if(nd_value > node_min){
-          node_min = nd_value;
-        }
-        node_length += 1;
-      }
-    })
-    if(node_length > 1){
-      return node_min;
-    } else {
-      return;
-    }
   }
 
   createId(id){

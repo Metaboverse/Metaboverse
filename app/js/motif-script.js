@@ -22,7 +22,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var fs = require('fs');
 var app = require('electron').remote.app;
-const exec = require('child_process').exec;
 
 var userDataPath = app.getPath('userData');
 var session_file = userDataPath + "/session_data.json";

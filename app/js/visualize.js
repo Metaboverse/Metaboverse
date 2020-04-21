@@ -26,9 +26,46 @@ var selector = "#graph";
 var _width = window.innerWidth;
 var _height = window.innerHeight - 75;
 
+// find global motifs at beginning, save as list, check each graph for members
+function gatherMotifs(data) {
+
+  let expression_dict = {};
+  for (let x in data.nodes) {
+    let id = data.nodes[x]['id'];
+    let expression = data.nodes[x]['values'];
+    expression_dict[id] = expression;
+  }
+
+  let threshold = 1;
+  let motifs_Avg = motifSearch_Avg(
+      threshold,
+      data.collapsed_reaction_dictionary,
+      expression_dict,
+      data.motif_reaction_dictionary)
+
+  let motifs_MaxMax = motifSearch_MaxMax(
+      threshold,
+      data.collapsed_reaction_dictionary,
+      expression_dict,
+      data.motif_reaction_dictionary)
+
+  let motifs_MaxMin = motifSearch_MaxMin(
+      threshold,
+      data.collapsed_reaction_dictionary,
+      expression_dict,
+      data.motif_reaction_dictionary)
+
+  let all_motifs = motifs_Avg.concat(motifs_MaxMax, motifs_MaxMin);
+
+  let global_motifs = [];
+  for (let m in all_motifs) {
+    global_motifs.push(all_motifs[m].id);
+  }
+  return global_motifs;
+}
+
 // MAIN
 database_url = get_session_info("database_url");
-
 console.log("Database path: " + database_url);
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
@@ -39,6 +76,8 @@ var collapsed_pathway_dict = make_pathway_dictionary(
   data,
   'collapsed_pathway_dictionary');
 var superPathwayDict = make_superPathway_dictionary(data);
+
+var global_motifs = gatherMotifs(data);
 
 //var timecourse = checkCategories(data.categories);
 
