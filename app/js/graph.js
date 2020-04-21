@@ -164,6 +164,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
 }
 
 function linkArc(d) {
+
   var dx = d.target.x - d.source.x;
   var dy = d.target.y - d.source.y;
   var dr = Math.sqrt(dx * dx + dy * dy);
@@ -491,23 +492,19 @@ function make_graph(
     _width,
     _height) {
 
-  console.log(new_nodes);
-  console.log(new_links);
-
-  // Allow flexible window dimensions based on initial window size when opened
-
   // Restart graph
-  d3.select("svg").remove();
+  d3.selectAll("#svg_viewer_id").remove();
 
   // Initialize force graph object
-  var svg = d3
+  var svg_viewer = d3
     .select(selector)
     .append("svg")
+    .attr("id", "svg_viewer_id")
     .attr("width", _width - 5)
     .attr("height", _height - 80)
     .call(
       d3.zoom().on("zoom", function() {
-        svg.attr("transform", d3.event.transform);
+        svg_viewer.attr("transform", d3.event.transform);
       })
     )
     .on("dblclick.zoom", null)
@@ -535,7 +532,7 @@ function make_graph(
     .velocityDecay(0.7);
 
   // Generate edges with style attributes
-  svg
+  svg_viewer
     .append("defs")
     .selectAll("marker")
     .data([
@@ -599,9 +596,9 @@ function make_graph(
     return curve(d.path); // 0.8
   }
 
-  var hullg = svg.append("g")
+  var hullg = svg_viewer.append("g")
 
-  var link = svg
+  var link = svg_viewer
     .append("g")
     .selectAll("path")
     .data(new_links)
@@ -614,12 +611,13 @@ function make_graph(
       return "url(#" + get_link(d) + ")";
     });
 
-  var node = svg
+  var node = svg_viewer
     .selectAll(".node")
     .data(new_nodes)
     .enter()
     .append("g")
     .attr("class", "node")
+    .attr("id", function(d) {return d.id})
     .style("--node_color", function(d) {
       return "rgba(" + d[entity].toString() + ")";
     })
@@ -650,7 +648,8 @@ function make_graph(
     } else {
       return document.createElementNS("http://www.w3.org/2000/svg", "circle");
     }
-  });
+  })
+  .attr("id", function(d) {return d.id});
 
   function getCategories(nodes) {
 
@@ -741,8 +740,6 @@ function make_graph(
       }
     });
 
-    console.log(text)
-
   simulation.on("tick", tick);
 
   // Toggle compartment view
@@ -771,7 +768,7 @@ function make_graph(
 
   d3.select("#saveGraph").on("click", function() {
     saveSVG.saveSvgAsPng(
-      document.getElementsByTagName("svg")[0],
+      document.getElementsByTagName("svg_viewer")[0],
       "plot.png",
       (encoderOptions = 1),
       (scale = 5),
@@ -1096,22 +1093,6 @@ function make_graph(
 
     return hullset;
   }
-
-  /*Revisit labeling hull later
-  var hull_text = hull
-    .append("g")
-    .append("text")
-    .style("display", "inline")
-    .html(function(d) {
-      if (d.group !== "none") {
-        return "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
-        + d.group
-        + "</tspan>";
-      }
-    });
-
-  console.log(hull_text)
-  */
 
   // Draw curved edges
   function tick() {

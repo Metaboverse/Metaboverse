@@ -92,39 +92,11 @@ class MetaGraph{
     // Generate pathway viewer
     // Just get pathway ID and let the viz script do the rest
     this.pathway_svg = d3.select("#pathway-view-svg");
-    console.log(this.pathway_svg)
-    this.pathway_link_svg = this.pathway_svg.append("g")
-      .attr("id", "pathway-link-group");
-    this.pathway_circle_svg = this.pathway_svg.append("g")
-      .attr("id", "pathway-circle-group");
-    this.pathway_svg_width = parseFloat(this.pathway_svg.style("width"));
-    this.pathway_svg_height = parseFloat(this.pathway_svg.style("height"));
+    this.pathway_svg_width = parseFloat(this.pathway_svg.style("width", "45vw"));
+    this.pathway_svg_height = parseFloat(this.pathway_svg.style("height", "490px"));
 
-    this.mp_svg.append("svg:defs").selectAll("marker")
-        .data(["end"])      // Different link/path types can be defined here
-      .enter().append("svg:marker")    // This section adds in the arrows
-        .attr("id", String)
-        .attr("refX", 15)
-        .attr("refY", 0)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-      .append("svg:path")
-        .attr("d", "M0,-5L10,0L0,5");
-
-    this.pathway_svg.append("svg:defs").selectAll("marker")
-        .data(["end"])      // Different link/path types can be defined here
-      .enter().append("svg:marker")    // This section adds in the arrows
-        .attr("id", String)
-        // .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 15)
-        .attr("refY", 0)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-      .append("svg:path")
-        .attr("d", "M0,-5L10,0L0,5");
     this.motifSearch();
+
     }
 
     motifSearch(){
@@ -486,7 +458,7 @@ class MetaGraph{
         }
       })
 
-      let motif_height = 80;
+      let motif_height = 120;
 
       // ***** draw motif glyph *****
       let x_interval = this.mp_svg_width/3;
@@ -498,11 +470,11 @@ class MetaGraph{
       ng = ng.enter().append("circle").merge(ng)
         .attr("cx",(d)=>{
           if(d.current_type==="reactant"){
-            return 50;
+            return 75;
           } else if(d.current_type==="reaction"){
-            return x_interval+50;
+            return x_interval+75;
           } else if (d.current_type ==="product"){
-            return x_interval*2+50;
+            return x_interval*2+75;
           }
         })
         .attr("cy",(d)=>{
@@ -535,16 +507,29 @@ class MetaGraph{
         .data([motif]);
       tg.exit().remove();
       tg = tg.enter().append("text").merge(tg)
-        .attr("x",this.mp_svg_width/4)
+        .attr("x",this.mp_svg_width/12 - 10)
         .attr("y",(motif_height-5))
-        .text(d=>"Reaction: " + this.collapsed_reaction_dict[d.id].name.substring(0, 15) + "...")
-        .style("font-size","11px")
+        .text(function(d) {
+          if (d.collapsed === "true") {
+            var string_length = 40;
+            var string_suffix = " (collapsed)";
+          } else {
+            var string_length = 52;
+            var string_suffix = "";
+          }
+          if (d.name.length < string_length) {
+            return d.name + string_suffix;
+          } else {
+            return d.name.substring(0,string_length) + " ..." + string_suffix;
+          }
+        })
+        .style("font-size","12px")
         .style("font-weight","bold")
 
     // **** draw pathway glyph ****
     let pathway_list = motif.pathways;
     let pathway_height = 20;
-    let margin = {"horizontal":5, "vertical":10, "top":10, "left":5};
+    let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
     this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
     this.mp_svg.attr("height",this.mp_svg_height);
 
@@ -566,6 +551,7 @@ class MetaGraph{
         this.findAllMotif(d, this.motif);
         d3.select("#pathway-view-svg").style("visibility","visible");
         d3.select(".network-panel").style("visibility","visible");
+
       })
       .on("mouseover",(d)=>{
         d3.select("#mp-cover-" + d).style("opacity",0.4);
@@ -574,146 +560,146 @@ class MetaGraph{
         d3.select("#mp-cover-" + d).style("opacity",0);
       })
 
-      let fg = this.mp_pathway_group.selectAll("rect")
-        .data(pathway_list);
-      fg.exit().remove();
-      fg = fg.enter().append("rect").merge(fg)
-        .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
-        .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
-        .attr("width",pathway_width)
-        .attr("height",pathway_height)
-        .attr("fill","lightblue")
-        .style("opacity",0.5)
+    let fg = this.mp_pathway_group.selectAll("rect")
+      .data(pathway_list);
+    fg.exit().remove();
+    fg = fg.enter().append("rect").merge(fg)
+      .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
+      .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
+      .attr("width",pathway_width)
+      .attr("height",pathway_height)
+      .attr("fill","lightblue")
+      .style("opacity",0.5)
 
-      // get pathway names
-      console.log(this.mod_collapsed_pathways)
-      let ptg = this.mp_pathway_group.selectAll("text")
-        .data(pathway_list);
-      ptg.exit().remove();
-      ptg = ptg.enter().append("text").merge(ptg)
-        .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+15)
-        .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
-        .text(d=>this.mod_collapsed_pathways[d].name.substring(0,13) + "...")
-        .style("font-size",9)
+    // get pathway names
+    console.log(this.mod_collapsed_pathways)
+    let ptg = this.mp_pathway_group.selectAll("text")
+      .data(pathway_list);
+    ptg.exit().remove();
+    ptg = ptg.enter().append("text").merge(ptg)
+      .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+10)
+      .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
+      .text(d=>this.mod_collapsed_pathways[d].name.substring(0,24))
+      .style("font-size",9)
 
+  }
+
+  drawPathwayView(p) {
+
+    graph_genes = true;
+    collapse_reactions = true;
+    var selection = this.mod_collapsed_pathways[p].name;
+
+    // Run normal first plot
+    var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
+
+    // Parse through each reaction listed and get the component parts
+    let components = [];
+    var rxn = 0;
+    for (rxn in motif_reactions) {
+      var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
+      components.push(motif_reactions[rxn]);
+      for (x in target_rxns["reactants"]) {
+        components.push(target_rxns["reactants"][x]);
+      }
+      for (x in target_rxns["products"]) {
+        components.push(target_rxns["products"][x]);
+      }
+      for (x in target_rxns["modifiers"]) {
+        components.push(target_rxns["modifiers"][x][0]);
+      }
+      for (x in target_rxns["additional_components"]) {
+        components.push(target_rxns["additional_components"][x]);
+      }
     }
+    var elements = get_nodes_links(this.data, components);
+    var new_nodes = elements[0];
+    var new_links = elements[1];
 
+    // Initialize variables
+    var node_dict = {};
+    var type_dict = {};
 
-    drawPathwayView(p) {
+    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+    var node_dict = node_elements[0];
+    var type_dict = node_elements[1];
+    var display_analytes_dict = node_elements[2];
+    var display_reactions_dict = node_elements[3];
+    var entity_id_dict = node_elements[4];
 
-      graph_genes = true;
-      collapse_reactions = true;
-      var selection = this.mod_collapsed_pathways[p].name;
+    var _width = 0.45 * (window.innerWidth);
+    var _height = 570;
 
-      // Run normal first plot
-      var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
+    make_graph(
+      this.data,
+      new_nodes,
+      new_links,
+      type_dict,
+      node_dict,
+      entity_id_dict,
+      display_analytes_dict,
+      display_reactions_dict,
+      selector,
+      _width,
+      _height
+    );
+  }
 
-      // Parse through each reaction listed and get the component parts
-      let components = [];
-      var rxn = 0;
-      for (rxn in motif_reactions) {
-        var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
-        components.push(motif_reactions[rxn]);
-        for (x in target_rxns["reactants"]) {
-          components.push(target_rxns["reactants"][x]);
-        }
-        for (x in target_rxns["products"]) {
-          components.push(target_rxns["products"][x]);
-        }
-        for (x in target_rxns["modifiers"]) {
-          components.push(target_rxns["modifiers"][x][0]);
-        }
-        for (x in target_rxns["additional_components"]) {
-          components.push(target_rxns["additional_components"][x]);
+  findAllMotif(pathway, motif_list){
+    d3.select(".network-panel").style("visibility","visible");
+    document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.mod_collapsed_pathways[pathway].name + "</b></h6>";
+    let motif_id = [];
+    motif_list.forEach(m=>{
+      motif_id.push(m.id);
+    })
+    let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
+    let current_motif = [];
+    pathway_list.forEach(react_id=>{
+      if(motif_id.indexOf(react_id)!=-1){
+        current_motif.push(react_id);
+      }
+    })
+    current_motif.forEach(react_id=>{
+      d3.selectAll("circle#" + react_id)
+        .style("r", "16px")
+        .style("stroke", "purple")
+        .style("stroke-width", "5px")
+
+    })
+
+    let tg = d3.select("#all-motif-list")
+      .select("ul")
+      .selectAll("li")
+      .data(current_motif);
+    tg.exit().remove();
+    tg = tg.enter().append("li").merge(tg)
+      .html(d => "- " + this.collapsed_reaction_dict[d].name)
+
+  }
+
+  computeAvg(arr){
+    let arr_sum = arr[0];
+    for(let i=1; i<arr.length; i++){
+      arr_sum += arr[i];
+    }
+    let arr_avg = arr_sum / arr.length;
+    return arr_avg;
+  }
+
+  computeMax(node_array){
+    let node_max;
+    node_array.forEach(nd=>{
+      let nd_value = parseFloat(nd.expression)
+      if(!Number.isNaN(nd_value)){
+        if(node_max===undefined){
+          node_max = nd_value;
+        } else if(nd_value > node_max){
+          node_max = nd_value;
         }
       }
-      var elements = get_nodes_links(this.data, components);
-      var new_nodes = elements[0];
-      var new_links = elements[1];
-
-      // Initialize variables
-      var node_dict = {};
-      var type_dict = {};
-
-      var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
-      var node_dict = node_elements[0];
-      var type_dict = node_elements[1];
-      var display_analytes_dict = node_elements[2];
-      var display_reactions_dict = node_elements[3];
-      var entity_id_dict = node_elements[4];
-
-      var _width = 0.45 * (window.innerWidth);
-      var _height = 0.75 * (window.innerHeight);
-
-      make_graph(
-        this.data,
-        new_nodes,
-        new_links,
-        type_dict,
-        node_dict,
-        entity_id_dict,
-        display_analytes_dict,
-        display_reactions_dict,
-        selector,
-        _width,
-        _height
-      );
-    }
-
-    findAllMotif(pathway, motif_list){
-      d3.select(".network-panel").style("visibility","visible");
-      document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.mod_collapsed_pathways[pathway].name + "</b></h6>";
-      console.log(pathway, motif_list)
-      let motif_id = [];
-      motif_list.forEach(m=>{
-        motif_id.push(m.id);
-      })
-      let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
-      let current_motif = [];
-      pathway_list.forEach(react_id=>{
-        if(motif_id.indexOf(react_id)!=-1){
-          current_motif.push(react_id);
-        }
-      })
-      current_motif.forEach(react_id=>{
-        d3.select("#pathway-circle-" + react_id)
-          .attr("stroke-width", 5)
-          .attr("stroke", "gold")
-      })
-
-      let tg = d3.select("#all-motif-list")
-        .select("ul")
-        .selectAll("li")
-        .data(current_motif);
-      tg.exit().remove();
-      tg = tg.enter().append("li").merge(tg)
-        .html(d => "- " + this.collapsed_reaction_dict[d].name)
-
-    }
-
-    computeAvg(arr){
-      let arr_sum = arr[0];
-      for(let i=1; i<arr.length; i++){
-        arr_sum += arr[i];
-      }
-      let arr_avg = arr_sum / arr.length;
-      return arr_avg;
-    }
-
-    computeMax(node_array){
-      let node_max;
-      node_array.forEach(nd=>{
-        let nd_value = parseFloat(nd.expression)
-        if(!Number.isNaN(nd_value)){
-          if(node_max===undefined){
-            node_max = nd_value;
-          } else if(nd_value > node_max){
-            node_max = nd_value;
-          }
-        }
-      })
-      return node_max;
-    }
+    })
+    return node_max;
+  }
 
   computeMin(node_array){
     // if the length of the node array is 1, do not return min value (because max_val = min_val in this situation)

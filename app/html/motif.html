@@ -87,13 +87,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                     <p> Threshold </p>
                                 </div>
                                 <p style="padding-left:15px">
-                                    <input type="number" id="avg_num" min="1" max="2" step="0.2" value="1.5">
+                                    <input type="number" id="avg_num" min="1" max="2" step="0.2" value="1.0">
                                 </p>
                                 <p style="padding-left:15px; padding-top:10px">
-                                        <input type="number" id="maxmax_num" min="1" max="2" step="0.2" value="1.5">
+                                        <input type="number" id="maxmax_num" min="1" max="2" step="0.2" value="1.0">
                                     </p>
                                     <p style="padding-left:15px; padding-top:8px">
-                                            <input type="number" id="maxmin_num" min="1" max="2" step="0.2" value="1.5">
+                                            <input type="number" id="maxmin_num" min="1" max="2" step="0.2" value="1.0">
                                         </p>
 
                             </div>
@@ -106,13 +106,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="frame">
                     <div class="sub-frame" title="List of all motifs found in the global network for the selected motif type with information on how many pathways this motif is found in. Click on the motif to expand.">
                         <h6><b>Identified Motifs</b></h6>
-                        <div id="stamp-view-container" class="scrollable" style="padding-top:10px; padding-left:4%; width:95%; height:90%;">
+                        <div id="stamp-view-container" class="scrollable" style="padding-top:10px; padding-left:0%; width:100%; height:90%;">
                             <svg id="stamp-view-svg" width="28vw" height=100%></svg>
                         </div>
                     </div>
                     <div class="sub-frame" title="List of pathways in which the selected motif is found. Click on the pathway to open up the pathway's visualization.">
                         <h6><b>Motif-Pathway Membership</b></h6>
-                        <div id="motif-pathway-container" class="scrollable" style="padding-top:10px; padding-left:4%; width:95%; height:90%;">
+                        <div id="motif-pathway-container" class="scrollable" style="padding-top:10px; padding-right:0%; width:100%; height:90%;">
                             <svg id="motif-pathway-svg" width="28vw" height=100%></svg>
                         </div>
                     </div>
@@ -121,28 +121,21 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             <div class="col-md-6" >
                 <div class="frame">
                     <div class="network-frame">
-                        <h6><b>Pathway View</b></h6>
-                        <div id="pathway-view-container" style="padding-top:0px; padding-left:0%; width:100%; height:90%;">
-                            <svg id="pathway-view-svg" width="45vw" height="465"></svg>
+                        <div id="pathway_name"></div>
+                        <div id="pathway-view-container" style="margin-top:-25px; padding-left:0%; width:100%; height:100%;">
+                            <div id="pathway-view-svg"></div>
                         </div>
                     </div>
-
-                    <div id="pathway_name"><br />
-                    </div>
-
                     <div class="network-panel" style="visibility:hidden">
-                        <h6><u>All Motifs In This Pathway:</u></h6>
-                        <div class="scrollable" id="all-motif-list" style="height:75%;">
-                            <ul></ul>
-                        </div>
+                      <h6><b><i>All Motifs In This Pathway:</i></b></h6>
+                      <div class="scrollable" id="all-motif-list" style="height:75%;width:45vw;"><ul></ul>
+                      </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
   </body>
-
 
 </html>
