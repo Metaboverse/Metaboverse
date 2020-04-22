@@ -137,21 +137,6 @@ li{
   list-style-type:none;
 }
 
-circle.reactant {
-  fill:Tomato;
-  /* fill: rgb(204,68,75); */
-}
-
-circle.product {
-  fill:DodgerBlue;
-  /* fill: rgb(73,160,181); */
-}
-
-circle.reaction {
-  /* fill:YellowGreen  ; */
-  fill: lightgrey;
-}
-
-circle.other {
-  fill: white;
+circle:hover {
+  r: 12px;
 }

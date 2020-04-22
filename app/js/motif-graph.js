@@ -21,6 +21,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+var sample = 0;
 var selector = "#pathway-view-svg";
 
 class MetaGraph{
@@ -279,8 +280,15 @@ class MetaGraph{
               }
             })
             .attr("class",(d)=>d.current_type)
+            .attr("fill", (d)=>{
+              if (d.values_js === undefined) {
+                return "rgba(191, 191, 191, 1)";
+              } else {
+                return "rgba(" + d.values_js.toString() + ")";
+              }
+            })
             .attr("r",4)
-            .attr("stroke","gray")
+            .attr("stroke","black")
             .attr("id",d=>"stamp-"+i+"-"+d.id)
 
           let mlg = d3.select("#stamp-link-"+i).selectAll("line")
@@ -343,31 +351,60 @@ class MetaGraph{
       let ng = this.mp_motif_circle_group.selectAll("circle")
         .data(mnodes)
       ng.exit().remove();
-      ng = ng.enter().append("circle").merge(ng)
-        .attr("cx",(d)=>{
-          if(d.current_type==="reactant"){
-            return 75;
-          } else if(d.current_type==="reaction"){
-            return x_interval+75;
-          } else if (d.current_type ==="product"){
-            return x_interval*2+75;
+      ng = ng.enter()
+        .append("circle").merge(ng)
+          .attr("cx",(d)=>{
+            if(d.current_type==="reactant"){
+              return 75;
+            } else if(d.current_type==="reaction"){
+              return x_interval+75;
+            } else if (d.current_type ==="product"){
+              return x_interval*2+75;
+            }
+          })
+          .attr("cy",(d)=>{
+            if(d.current_type==="reactant"){
+              return y_interval_r*(d.r_idx)+10;
+            } else if(d.current_type==="reaction"){
+              return motif_height/2;
+            } else if (d.current_type ==="product"){
+              return y_interval_p*(d.p_idx)+10;
+            }
+          })
+          .attr("class",(d)=>d.current_type)
+          .attr("fill", (d)=>{
+            if (d.values_js === undefined) {
+              return "rgba(191, 191, 191, 1)";
+            } else {
+              return "rgba(" + d.values_js.toString() + ")";
+            }
+          })
+          .attr("r",8)
+          .attr("stroke","black")
+          .attr("id",d=>"mp-circle-"+d.id)
+          .html(function(d) {
+          if (d.type === undefined) {
+            // Label other nodes with expression value in parentheses
+            return (
+              "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
+              + d.name
+              + "</tspan>"
+            );
+          } else {
+            return (
+              "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+              + d.name
+              + "</tspan>"
+              + "<tspan x='16' y='.7em'>Value: "
+              + parseFloat(d.values[sample]).toFixed(2)
+              + "</tspan>"
+              + "<tspan x='16' y='1.7em'>Statistic: "
+              + parseFloat(d.stats[sample]).toFixed(2)
+              + "</tspan>"
+            );
           }
-        })
-        .attr("cy",(d)=>{
-          if(d.current_type==="reactant"){
-            return y_interval_r*(d.r_idx)+10;
-          } else if(d.current_type==="reaction"){
-            return motif_height/2;
-          } else if (d.current_type ==="product"){
-            return y_interval_p*(d.p_idx)+10;
-          }
-        })
-        .attr("class",(d)=>d.current_type)
-        .attr("r",8)
-        .attr("stroke","gray")
-        .attr("id",d=>"mp-circle-"+d.id);
+        });
 
-      console.log(mlinks)
       let lg = this.mp_motif_link_group.selectAll("line")
         .data(mlinks);
       lg.exit().remove();
@@ -401,6 +438,8 @@ class MetaGraph{
         })
         .style("font-size","12px")
         .style("font-weight","bold")
+
+    console.log(ng)
 
     // **** draw pathway glyph ****
     let pathway_list = motif.pathways;
