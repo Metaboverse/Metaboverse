@@ -11,5 +11,7 @@
 	"experiment": null,
   "min_value": -5,
   "max_value": 5,
-  "processed": false
+  "processed": false,
+  "current_pathway": null,
+  "provided_data": false
 }

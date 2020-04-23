@@ -1133,8 +1133,15 @@ function parseEntities(nodes) {
 function change() {
   graph_genes = true;
   collapse_reactions = true;
-  var selection = document.getElementById("pathwayMenu").value;
-  var superSelection = document.getElementById("superPathwayMenu").value;
+
+  let current_pathway = get_session_info("current_pathway");
+  if ((current_pathway !== null) & (current_pathway !== "null")) {
+    var selection = data.mod_collapsed_pathways[current_pathway].name; 
+    var superSelection = "All pathways";
+  } else {
+    var selection = document.getElementById("pathwayMenu").value;
+    var superSelection = document.getElementById("superPathwayMenu").value;
+  }
 
   document.getElementById("reaction_notes").innerHTML = "";
 

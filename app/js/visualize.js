@@ -90,5 +90,10 @@ make_menu(
 
 console.log(data)
 
+let current_pathway = get_session_info("current_pathway");
+if ((current_pathway !== null) & (current_pathway !== "null")) {
+  change();
+} else {}
+
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);

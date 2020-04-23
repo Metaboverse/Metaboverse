@@ -22,7 +22,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 var sample = 0;
-var selector = "#pathway-view-svg";
+
+database_url = get_session_info("database_url");
+console.log("Database path: " + database_url);
 
 class MetaGraph{
   constructor(graphdata){
@@ -462,7 +464,8 @@ class MetaGraph{
       .attr("id",(d)=>"mp-cover-"+d)
       .style("opacity",0)
       .on("click",(d)=>{
-        this.drawPathwayView(d);
+
+        this.drawPathwayView(d, "#pathway-view-svg");
         this.findAllMotif(d, this.motif);
         d3.select("#pathway-view-svg").style("visibility","visible");
         d3.select(".network-panel").style("visibility","visible");
@@ -498,11 +501,14 @@ class MetaGraph{
 
   }
 
-  drawPathwayView(p) {
+  drawPathwayView(p, selector) {
 
+    console.log(p)
     graph_genes = true;
     collapse_reactions = true;
     var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
+
+    update_session_info("current_pathway", p);
 
     // Parse through each reaction listed and get the component parts
     let components = [];
@@ -558,7 +564,9 @@ class MetaGraph{
 
   findAllMotif(pathway, motif_list){
     d3.select(".network-panel").style("visibility","visible");
-    document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.mod_collapsed_pathways[pathway].name + "</b></h6>" ;
+    let current_pathway = this.mod_collapsed_pathways[pathway].name;
+    document.getElementById("pathway_name").innerHTML = "<h6><b>" + current_pathway + "</b></h6>" ;
+
     let motif_id = [];
     motif_list.forEach(m=>{
       motif_id.push(m.id);
@@ -593,4 +601,8 @@ class MetaGraph{
   createId(id){
     return id.replace(/[^a-zA-Z0-9]/g, "")
   }
+}
+
+function runPathway() {
+  console.log(current_pathway)
 }

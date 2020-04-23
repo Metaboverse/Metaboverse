@@ -127,6 +127,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <center>
           <div id="content"></div>
           <script>
+            update_session_info("current_pathway", null);
+
             $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
 
             var dbURL = get_session_info("database_url");
