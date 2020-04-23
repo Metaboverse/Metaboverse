@@ -140,3 +140,22 @@ li{
 circle:hover {
   r: 12px;
 }
+
+.motif_button {
+  border-radius: 5px;
+  background: var(--motif_color);
+  border: 2px solid black;
+  width: 80px;
+  height: 35px;
+  text-align: center;
+  display: inline-block;
+  line-height: 25px;
+  text-shadow: none;
+  padding-top:4px;
+}
+
+.motif_button:hover {
+  background: var(--highlight_color);
+  text-shadow: none;
+
+}

@@ -28,6 +28,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 <html>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" >
   <link rel="stylesheet" href="../css/motif.css">
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/visualize.css" />
@@ -68,37 +69,39 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="row">
                         <div class="col-md-4">
                             <div class="content">
-                                <div style="height:50px">
-                                    <p> Type </p>
+                                <div style="height:50px; padding-left:5px">
+                                    <p> Motif Type </p>
                                 </div>
                                 <p>
-                                    <input type="button" id="motif1" class = "btn btn-danger btn-sm" value="Avg" title="Compare the average values between reactants and products that pass the provided threshold.">
+                                  <div class="motif_button" id="motif1" style="--motif_color:#1b9e77; --highlight_color:#7cc08e;  margin-top:-20px;" title="Compare the average values between reactants and products that pass the provided threshold."><font size="3" color="white">Average</font>
+                                  </div>
                                 </p>
                                 <p>
-                                    <input type="button" id="motif2" class = "btn btn-info btn-sm" value="MaxMax" title="Compare the absolute maximum values between reactants and products that pass the provided threshold.">
+                                  <div class="motif_button" id="motif2" style="--motif_color:#d95f02; --highlight_color:#fdbd4f; margin-top:13px;" title="Compare the absolute maximum values between reactants and products that pass the provided threshold."><font size="3" color="white">MaxMax</font></div>
                                 </p>
                                 <p>
-                                    <input type="button" id="motif3" class = "btn btn-success btn-sm" value="MaxMin" title="Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold.">
+                                  <div class="motif_button" id="motif3" style="--motif_color:#7570b3; --highlight_color:#b19cd9; margin-top:13px;" title="Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold."><font size="3" color="white">MaxMin</font></div>
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <div class="content">
-                                <div style="height:50px">
-                                    <p> Threshold </p>
+                                <div style="height:50px; padding-left:25px">
+                                  <p> Threshold </p>
                                 </div>
-                                <p style="padding-left:15px">
-                                    <input type="number" id="avg_num" min="1" max="2" step="0.2" value="1.0">
+
+                                <p style="padding-left:30px">
+                                  <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
-                                <p style="padding-left:15px; padding-top:10px">
-                                        <input type="number" id="maxmax_num" min="1" max="2" step="0.2" value="1.0">
-                                    </p>
-                                    <p style="padding-left:15px; padding-top:8px">
-                                            <input type="number" id="maxmin_num" min="1" max="2" step="0.2" value="1.0">
-                                        </p>
-
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -128,7 +131,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="network-panel" style="visibility:hidden">
-                      <h6><b><i>All Motifs In This Pathway:</i></b></h6>
+                      <h6><b><i>All Motifs In This Pathway:</i></b>
+                      <a href="visualize.html" onclick="window.open(this.href, 'mywin', 'left=20,top=20,width=1400,height=900,toolbar=1,resizable=1'); return false;"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a></h6>
                       <div class="scrollable" id="all-motif-list" style="height:75%;width:45vw;"><ul></ul>
                       </div>
                     </div>
@@ -136,7 +140,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
     </div>
-
   </body>
 
 </html>

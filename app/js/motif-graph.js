@@ -364,11 +364,11 @@ class MetaGraph{
           })
           .attr("cy",(d)=>{
             if(d.current_type==="reactant"){
-              return y_interval_r*(d.r_idx)+10;
+              return y_interval_r*(d.r_idx)+20;
             } else if(d.current_type==="reaction"){
               return motif_height/2;
             } else if (d.current_type ==="product"){
-              return y_interval_p*(d.p_idx)+10;
+              return y_interval_p*(d.p_idx)+20;
             }
           })
           .attr("class",(d)=>d.current_type)
@@ -558,7 +558,7 @@ class MetaGraph{
 
   findAllMotif(pathway, motif_list){
     d3.select(".network-panel").style("visibility","visible");
-    document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.mod_collapsed_pathways[pathway].name + "</b></h6>";
+    document.getElementById("pathway_name").innerHTML = "<h6><b>" + this.mod_collapsed_pathways[pathway].name + "</b></h6>" ;
     let motif_id = [];
     motif_list.forEach(m=>{
       motif_id.push(m.id);
