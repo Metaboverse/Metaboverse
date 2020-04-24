@@ -100,12 +100,17 @@ def add_collapsed_components(
     graph.nodes()[rxn]['stats_js'] = convert_rgba(
         rgba_tuples=colors)
 
-    for x in ref[rxn]['reactants'] + ref[rxn]['products'] + [
-            x[0] for x in ref[rxn]['modifiers']]:
+    for x in ref[rxn]['reactants'] + ref[rxn]['products']:
         graph.add_edges_from([
             (x, rxn)])
         graph.edges()[(x, rxn)]['type'] = 'collapsed'
         graph.edges()[(x, rxn)]['sub_type'] = 'collapsed'
+
+    for x in ref[rxn]['modifiers']:
+        graph.add_edges_from([
+            (x[0], rxn)])
+        graph.edges()[(x[0], rxn)]['type'] = 'collapsed_' + x[1]
+        graph.edges()[(x[0], rxn)]['sub_type'] = 'collapsed_' + x[1]
 
     return graph
 

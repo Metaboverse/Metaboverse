@@ -371,7 +371,7 @@ function get_link(d) {
     if (
       d.sub_type === "metabolite_component" ||
       d.sub_type === "protein_component" ||
-      d.sub_type === "gene_component"
+      d.sub_type === "gene_component" 
     ) {
       return d.sub_type;
     } else {
@@ -443,6 +443,8 @@ function make_graph(
     .selectAll("marker")
     .data([
       "collapsed",
+      "collapsed_catalyst",
+      "collapsed_inhibitor",
       "reaction",
       "reactant",
       "product",
@@ -651,9 +653,7 @@ function make_graph(
   var text = node
     .append("text")
     .html(function(d) {
-      if (type_dict[d.name] === "reaction" ||
-        type_dict[d.name] === "collapsed"
-      ) {
+      if (type_dict[d.name] === "reaction") {
         // Label other nodes with expression value in parentheses
         return (
           "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
@@ -661,6 +661,12 @@ function make_graph(
           + "</tspan>"
           + "<tspan x='16' y='1.7em'>Compartment: "
           + d.compartment_display
+          + "</tspan>"
+        );
+      } else if (type_dict[d.name] === "collapsed") {
+        return (
+          "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
+          + d.name
           + "</tspan>"
         );
       } else {
@@ -950,6 +956,8 @@ function make_graph(
           // Parse through each reaction listed and get the component parts
           var components = [];
           for (rxn in reactions) {
+
+
             var target_rxns = data.collapsed_reaction_dictionary[reactions[rxn]];
             components.push(reactions[rxn]);
             for (x in target_rxns["reactants"]) {
@@ -1136,7 +1144,7 @@ function change() {
 
   let current_pathway = get_session_info("current_pathway");
   if ((current_pathway !== null) & (current_pathway !== "null")) {
-    var selection = data.mod_collapsed_pathways[current_pathway].name; 
+    var selection = data.mod_collapsed_pathways[current_pathway].name;
     var superSelection = "All pathways";
   } else {
     var selection = document.getElementById("pathwayMenu").value;

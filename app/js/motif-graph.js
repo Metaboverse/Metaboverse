@@ -321,7 +321,7 @@ class MetaGraph{
       let mnodes_id = [];
       let r_idx = 0;
       let p_idx = 0;
-      console.log(motif)
+
       motif.current_type = "reaction";
       motif.reactants.forEach(l=>{
         if(mnodes_id.indexOf(l)===-1){
@@ -384,28 +384,6 @@ class MetaGraph{
           .attr("r",8)
           .attr("stroke","black")
           .attr("id",d=>"mp-circle-"+d.id)
-          .html(function(d) {
-          if (d.type === undefined) {
-            // Label other nodes with expression value in parentheses
-            return (
-              "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
-              + d.name
-              + "</tspan>"
-            );
-          } else {
-            return (
-              "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
-              + d.name
-              + "</tspan>"
-              + "<tspan x='16' y='.7em'>Value: "
-              + parseFloat(d.values[sample]).toFixed(2)
-              + "</tspan>"
-              + "<tspan x='16' y='1.7em'>Statistic: "
-              + parseFloat(d.stats[sample]).toFixed(2)
-              + "</tspan>"
-            );
-          }
-        });
 
       let lg = this.mp_motif_link_group.selectAll("line")
         .data(mlinks);
@@ -441,8 +419,6 @@ class MetaGraph{
         .style("font-size","12px")
         .style("font-weight","bold")
 
-    console.log(ng)
-
     // **** draw pathway glyph ****
     let pathway_list = motif.pathways;
     let pathway_height = 20;
@@ -464,7 +440,6 @@ class MetaGraph{
       .attr("id",(d)=>"mp-cover-"+d)
       .style("opacity",0)
       .on("click",(d)=>{
-
         this.drawPathwayView(d, "#pathway-view-svg");
         this.findAllMotif(d, this.motif);
         d3.select("#pathway-view-svg").style("visibility","visible");
@@ -514,6 +489,12 @@ class MetaGraph{
     let components = [];
     var rxn = 0;
     for (rxn in motif_reactions) {
+
+      if (motif_reactions[rxn] === "reaction_10765844_reaction_10756400") {
+        console.log(motif_reactions[rxn])
+        console.log(this.collapsed_reaction_dict[motif_reactions[rxn]])
+      }
+
       var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
       components.push(motif_reactions[rxn]);
       for (x in target_rxns["reactants"]) {
@@ -529,6 +510,8 @@ class MetaGraph{
         components.push(target_rxns["additional_components"][x]);
       }
     }
+
+    console.log(components)
     var elements = get_nodes_links(this.data, components);
     var new_nodes = elements[0];
     var new_links = elements[1];

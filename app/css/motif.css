@@ -137,8 +137,16 @@ li{
   list-style-type:none;
 }
 
-circle:hover {
-  r: 12px;
+circle text {
+  display: none;
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
+}
+
+circle:hover text {
+  display: inline;
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
 }
 
 .motif_button {

@@ -45,6 +45,12 @@ def test():
     __main__(
         args_dict=args_dict)
 
+def check_db():
+
+    network_url = '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle'
+    with open(network_url, 'rb') as network_file:
+        network = pickle.load(network_file)
+
 def read_network(
         network_url):
     """Read in network from previous curation module

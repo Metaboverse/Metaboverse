@@ -28,8 +28,6 @@ var session_file = userDataPath + "/session_data.json";
 let database_url = JSON.parse(
   fs.readFileSync(session_file).toString())["database_url"];
 
-console.log("Database path: " + database_url);
-
 showMotifs = function(_callback) {
 
   d3.json(database_url).then(data=>{
