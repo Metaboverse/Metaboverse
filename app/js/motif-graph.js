@@ -436,10 +436,10 @@ class MetaGraph{
           .attr("x",start_x + 10)
           .attr("y",start_y + 21)
           .text(d=> {
-            if (d.name.length < 44) {
+            if (d.name.length < 48) {
               return d.name;
             } else {
-              return d.name.substring(0,41) + " ...";
+              return d.name.substring(0,45) + " ...";
             }
           })
           .style("font-size","14px")

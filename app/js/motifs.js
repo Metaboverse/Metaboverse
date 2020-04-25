@@ -11,10 +11,12 @@ function modifiersChecked() {
 }
 
 function parseComponents(
-    reactants,
-    products,
-    modifiers,
+    reaction,
     expression_dict) {
+
+  let reactants = reaction.reactants;
+  let products = reaction.products;
+  let modifiers = reaction.modifiers;
 
   let source_expression = [];
   let target_expression = [];
@@ -79,14 +81,8 @@ function motifSearch_Avg(
 
   for(let rxn in collapsed_reaction_dict){
     let reaction = collapsed_reaction_dict[rxn];
-    let reactants = reaction.reactants;
-    let products = reaction.products;
-    let modifiers = reaction.modifiers;
-
     let comps = parseComponents(
-      reactants,
-      products,
-      modifiers,
+      reaction,
       expression_dict)
     let updated_source = comps[0];
     let updated_target = comps[1];
@@ -121,14 +117,8 @@ function motifSearch_MaxMax(
 
   for(let rxn in collapsed_reaction_dict){
     let reaction = collapsed_reaction_dict[rxn];
-    let reactants = reaction.reactants;
-    let products = reaction.products;
-    let modifiers = reaction.modifiers;
-
     let comps = parseComponents(
-      reactants,
-      products,
-      modifiers,
+      reaction,
       expression_dict)
     let updated_source = comps[0];
     let updated_target = comps[1];
@@ -162,14 +152,8 @@ function motifSearch_MaxMin(
 
   for(let rxn in collapsed_reaction_dict){
     let reaction = collapsed_reaction_dict[rxn];
-    let reactants = reaction.reactants;
-    let products = reaction.products;
-    let modifiers = reaction.modifiers;
-
     let comps = parseComponents(
-      reactants,
-      products,
-      modifiers,
+      reaction,
       expression_dict)
     let updated_source = comps[0];
     let updated_target = comps[1];
@@ -203,14 +187,8 @@ function motifSearch_Sustained(
 
   for(let rxn in collapsed_reaction_dict){
     let reaction = collapsed_reaction_dict[rxn];
-    let reactants = reaction.reactants;
-    let products = reaction.products;
-    let modifiers = reaction.modifiers;
-
     let comps = parseComponents(
-      reactants,
-      products,
-      modifiers,
+      reaction,
       expression_dict)
     let updated_source = comps[0];
     let updated_target = comps[1];
@@ -279,14 +257,8 @@ function motifSearch_PathMax(
     let reactions = mod_collapsed_pathways[pathway].reactions;
     for (rxn in reactions) {
       let reaction = collapsed_reaction_dict[reactions[rxn]];
-      let reactants = reaction.reactants;
-      let products = reaction.products;
-      let modifiers = reaction.modifiers;
-
       let comps = parseComponents(
-        reactants,
-        products,
-        modifiers,
+        reaction,
         expression_dict)
       let updated_source = comps[0];
       let updated_target = comps[1];
