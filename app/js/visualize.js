@@ -38,24 +38,33 @@ function gatherMotifs(data) {
 
   let threshold = 1;
   let motifs_Avg = motifSearch_Avg(
-      threshold,
-      data.collapsed_reaction_dictionary,
-      expression_dict,
-      data.motif_reaction_dictionary)
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    data.motif_reaction_dictionary)
 
   let motifs_MaxMax = motifSearch_MaxMax(
-      threshold,
-      data.collapsed_reaction_dictionary,
-      expression_dict,
-      data.motif_reaction_dictionary)
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    data.motif_reaction_dictionary)
 
   let motifs_MaxMin = motifSearch_MaxMin(
-      threshold,
-      data.collapsed_reaction_dictionary,
-      expression_dict,
-      data.motif_reaction_dictionary)
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    data.motif_reaction_dictionary)
 
-  let all_motifs = motifs_Avg.concat(motifs_MaxMax, motifs_MaxMin);
+  let motifs_Sustained = motifSearch_Sustained(
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    data.motif_reaction_dictionary)
+
+  let all_motifs = motifs_Avg.concat(
+    motifs_MaxMax,
+    motifs_MaxMin,
+    motifs_Sustained);
 
   let global_motifs = [];
   for (let m in all_motifs) {

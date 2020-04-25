@@ -82,6 +82,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <p>
                                   <div class="motif_button" id="motif3" style="--motif_color:#7570b3; --highlight_color:#b19cd9; margin-top:13px;" title="Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold."><font size="3" color="white">MaxMin</font></div>
                                 </p>
+                                <p>
+                                  <div class="motif_button" id="motif4" style="--motif_color:#e7298a; --highlight_color:#e78ac3; margin-top:13px;" title="Find instances of sustained perturbation along a reaction."><font size="3" color="white">Sustained</font></div>
+                                </p>
+                                <p>
+                                  <div class="motif_button" id="motif5" style="--motif_color:#66a61e; --highlight_color:#a6d854; margin-top:13px;" title="Compare the absolute maximum and minimum values across a pathway."><font size="3" color="white">PathMax</font></div>
+                                </p>
+                                <br />
+                                <br />
+                                <br />
+                                <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label><br>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -89,7 +99,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <div style="height:50px; padding-left:25px">
                                   <p> Threshold </p>
                                 </div>
-
                                 <p style="padding-left:30px">
                                   <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
@@ -100,6 +109,20 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <br />
                                 <p style="padding-left:30px;">
                                   <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <br />
+                                <br />
+                                <p style="padding-left:45px; margin-top:-38px">
+                                  <input style="width: 100px; height: 100px;" type="checkbox" id="use_modifiers" name="use_modifiers" onclick='modifiersChecked()' value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.">
                                 </p>
                             </div>
                         </div>

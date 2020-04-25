@@ -118,7 +118,9 @@ class MetaGraph{
             this.collapsed_reaction_dict,
             this.expression_dict,
             this.path_mapper)
-          this.drawMotifSearchResult(this.motif);
+          if (this.motif !== undefined) {
+            this.drawMotifSearchResult(this.motif);
+          }
         })
 
       d3.select("#motif2")
@@ -135,7 +137,9 @@ class MetaGraph{
             this.collapsed_reaction_dict,
             this.expression_dict,
             this.path_mapper)
-          this.drawMotifSearchResult(this.motif);
+          if (this.motif !== undefined) {
+            this.drawMotifSearchResult(this.motif);
+          }
         })
 
       d3.select("#motif3")
@@ -152,7 +156,51 @@ class MetaGraph{
             this.collapsed_reaction_dict,
             this.expression_dict,
             this.path_mapper)
-          this.drawMotifSearchResult(this.motif);
+          if (this.motif !== undefined) {
+            this.drawMotifSearchResult(this.motif);
+          }
+        }
+      )
+
+      d3.select("#motif4")
+        .on("click", ()=>{
+          d3.select("#motif-pathway-svg")
+            .style("visibility","hidden");
+          d3.select("#pathway-view-svg")
+            .style("visibility","hidden");
+          d3.select(".network-panel")
+            .style("visibility","hidden");
+          let threshold = d3.select("#sustained_num").node().value;
+          this.motif = motifSearch_Sustained(
+            threshold,
+            this.collapsed_reaction_dict,
+            this.expression_dict,
+            this.path_mapper)
+          if (this.motif !== undefined) {
+            this.drawMotifSearchResult(this.motif);
+          }
+        }
+      )
+
+      d3.select("#motif5")
+        .on("click", ()=>{
+          d3.select("#motif-pathway-svg")
+            .style("visibility","hidden");
+          d3.select("#pathway-view-svg")
+            .style("visibility","hidden");
+          d3.select(".network-panel")
+            .style("visibility","hidden");
+          let threshold = d3.select("#pathmax_num").node().value;
+          this.motif = motifSearch_PathMax(
+            threshold,
+            this.mod_collapsed_pathways,
+            this.collapsed_reaction_dict,
+            this.expression_dict,
+            this.path_mapper)
+
+          if (this.motif !== undefined) {
+            this.drawMotifSearchResultPathway(this.motif);
+          }
         }
       )
     }
@@ -172,145 +220,230 @@ class MetaGraph{
       let stamp_width = this.stamp_svg_width / 3
         - this.stamp_svg_margin.horizontal;
 
-        let sg = this.stamp_svg_selection_group.selectAll("rect")
-          .data(motif_list);
+      let sg = this.stamp_svg_selection_group.selectAll("rect")
+        .data(motif_list);
+      sg.exit().remove();
+      sg = sg.enter().append("rect").merge(sg)
+        .attr("x",(d,i)=>this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal))
+        .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical))
+        .attr("width",stamp_width)
+        .attr("height",stamp_height)
+        .attr("fill","lightgray")
+        .attr("id",(d)=>"stamp-cover-"+d.id)
+        .style("opacity",0)
+        .on("click",(d)=>{
+          this.drawMotifPathway(d);
+          d3.select("#motif-pathway-svg").style("visibility","visible");
+        })
+        .on("mouseover",(d)=>{
+          d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
+        })
+        .on("mouseout",(d)=>{
+          d3.select("#stamp-cover-"+d.id).style("opacity",0);
+        });
+
+      let fg = this.stamp_svg_frame_group.selectAll("rect")
+        .data(motif_list);
+      fg.exit().remove();
+      fg = fg.enter().append("rect").merge(fg)
+        .attr("x",(d,i)=>this.stamp_svg_margin.left + i % 3
+          * (stamp_width + this.stamp_svg_margin.horizontal))
+        .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i / 3 )
+          * (stamp_height + this.stamp_svg_margin.vertical))
+        .attr("width",stamp_width)
+        .attr("height",stamp_height)
+        .attr("stroke","lightgray")
+        .attr("fill","white")
+
+      let cg = this.stamp_svg_circle_group.selectAll("g")
+        .data(motif_list);
+      cg.exit().remove();
+      cg = cg.enter().append("g").merge(cg)
+        .attr("id",(d,i)=>"stamp-circle-"+i);
+
+      let lg = this.stamp_svg_link_group.selectAll("g")
+        .data(motif_list);
+      lg.exit().remove();
+      lg = lg.enter().append("g").merge(lg)
+        .attr("id",(d,i)=>"stamp-link-"+i);
+
+      for(let i=0; i<motif_list.length; i++){
+        let mnodes = [];
+        let mnodes_id = [];
+        let mlinks = [];
+        let r_idx = 0;
+        let p_idx = 0;
+        // Add reaction node
+        this.node_dict[motif_list[i].id].current_type = "reaction";
+        mnodes.push(this.node_dict[motif_list[i].id]);
+
+        // Add reactant nodes
+        motif_list[i].reactants.forEach(l=>{
+          if(mnodes_id.indexOf(l)===-1){
+            this.node_dict[l].current_type = "reactant";
+            this.node_dict[l].r_idx = r_idx;
+            mnodes.push(this.node_dict[l]);
+            mnodes_id.push(l);
+            mlinks.push({'source': l, 'target': motif_list[i].id});
+            r_idx += 1;
+          }
+        })
+
+        // Add product nodes
+        motif_list[i].products.forEach(l=>{
+          if(mnodes_id.indexOf(l)===-1){
+            this.node_dict[l].current_type = "product";
+            this.node_dict[l].p_idx = p_idx;
+            mnodes.push(this.node_dict[l]);
+            mnodes_id.push(l);
+            mlinks.push({'source': motif_list[i].id, 'target': l});
+            p_idx += 1;
+          }
+        })
+
+        let start_x = this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal);
+        let start_y = this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical);
+        let x_interval = stamp_width/3;
+        let y_interval_r = (stamp_height-20)/r_idx;
+        let y_interval_p = (stamp_height-20)/p_idx;
+
+        let mg = d3.select("#stamp-circle-"+i).selectAll("circle")
+          .data(mnodes);
+        mg.exit().remove();
+        mg = mg.enter().append("circle").merge(mg)
+          .attr("cx",(d)=>{
+            if(d.current_type==="reactant"){
+              return start_x + 15;
+            } else if(d.current_type==="reaction"){
+              return start_x + x_interval+15;
+            } else if (d.current_type ==="product"){
+              return start_x + x_interval*2+15;
+            }
+          })
+          .attr("cy",(d)=>{
+            if(d.current_type==="reactant"){
+              return start_y + y_interval_r*(d.r_idx)+10;
+            } else if(d.current_type==="reaction"){
+              return start_y + 20;
+            } else if (d.current_type ==="product"){
+              return start_y + y_interval_p*(d.p_idx)+10;
+            }
+          })
+          .attr("class",(d)=>d.current_type)
+          .attr("fill", (d)=>{
+            if (d.values_js === undefined) {
+              return "rgba(191, 191, 191, 1)";
+            } else {
+              return "rgba(" + d.values_js.toString() + ")";
+            }
+          })
+          .attr("r",4)
+          .attr("stroke","black")
+          .attr("id",d=>"stamp-"+i+"-"+d.id)
+
+        let mlg = d3.select("#stamp-link-"+i).selectAll("line")
+          .data(mlinks);
+        mlg.exit().remove();
+        mlg = mlg.enter().append("line").merge(mlg)
+          .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
+          .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
+          .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
+          .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
+          .attr("stroke","gray")
+
+        let tg = d3.select("#stamp-circle-"+i).selectAll("text")
+          .data([motif_list[i]]);
+        tg.exit().remove();
+        tg = tg.enter().append("text").merge(tg)
+          .attr("x",start_x + 10)
+          .attr("y",start_y + 45)
+          .text(d=>d.pathways.length + " pathways")
+          .style("font-size","11px")
+      }
+    }
+
+    drawMotifSearchResultPathway(motif_list){
+      //Change this to sort by p-values
+      //motif_list.sort(function(a,b){
+      //  console.log(a.pathways)
+      //  return d3.descending(a.pathways.length, b.pathways.length)
+      //})
+
+      let stamp_height = 30;
+      this.stamp_svg_height = Math.ceil(
+        motif_list.length)
+        * (stamp_height + this.stamp_svg_margin.vertical);
+      this.stamp_svg.attr("height",this.stamp_svg_height);
+
+      let stamp_width = this.stamp_svg_width
+        - this.stamp_svg_margin.horizontal - 5;
+
+      let sg = this.stamp_svg_selection_group.selectAll("rect")
+        .data(motif_list);
         sg.exit().remove();
         sg = sg.enter().append("rect").merge(sg)
-          .attr("x",(d,i)=>this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal))
-          .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical))
+          .attr("x",5)
+          .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i)*(stamp_height+this.stamp_svg_margin.vertical))
           .attr("width",stamp_width)
           .attr("height",stamp_height)
           .attr("fill","lightgray")
           .attr("id",(d)=>"stamp-cover-"+d.id)
           .style("opacity",0)
           .on("click",(d)=>{
-            this.drawMotifPathway(d);
-            d3.select("#motif-pathway-svg").style("visibility","visible");
+            document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>" ;
+            this.drawPathwayView(d.id, "#pathway-view-svg");
+            d3.select("#pathway-view-svg").style("visibility","visible");
+            d3.select(".network-panel").style("visibility","visible");
           })
           .on("mouseover",(d)=>{
-            d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
+            d3.select("#stamp-cover-" + d.id).style("opacity",0.4);
           })
           .on("mouseout",(d)=>{
-            d3.select("#stamp-cover-"+d.id).style("opacity",0);
-          });
+            d3.select("#stamp-cover-" + d.id).style("opacity",0);
+          })
 
-        let fg = this.stamp_svg_frame_group.selectAll("rect")
-          .data(motif_list);
+      let fg = this.stamp_svg_frame_group.selectAll("rect")
+        .data(motif_list);
         fg.exit().remove();
         fg = fg.enter().append("rect").merge(fg)
-          .attr("x",(d,i)=>this.stamp_svg_margin.left + i % 3
-            * (stamp_width + this.stamp_svg_margin.horizontal))
-          .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i / 3 )
+          .attr("x",5)
+          .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i)
             * (stamp_height + this.stamp_svg_margin.vertical))
           .attr("width",stamp_width)
           .attr("height",stamp_height)
           .attr("stroke","lightgray")
           .attr("fill","white")
 
-        let cg = this.stamp_svg_circle_group.selectAll("g")
-          .data(motif_list);
-        cg.exit().remove();
-        cg = cg.enter().append("g").merge(cg)
-          .attr("id",(d,i)=>"stamp-circle-"+i);
+      d3.selectAll("circle").remove();
+      d3.selectAll("line").remove();
+      d3.selectAll("text").remove();
 
-        let lg = this.stamp_svg_link_group.selectAll("g")
-          .data(motif_list);
-        lg.exit().remove();
-        lg = lg.enter().append("g").merge(lg)
-          .attr("id",(d,i)=>"stamp-link-"+i);
+      let cg = this.stamp_svg_circle_group.selectAll("g")
+        .data(motif_list);
+      cg.exit().remove();
+      cg = cg.enter().append("g").merge(cg)
+        .attr("id",(d,i)=>"stamp-circle-"+i);
+      console.log(cg)
+      for(let i=0; i<motif_list.length; i++){
 
-        for(let i=0; i<motif_list.length; i++){
-          let mnodes = [];
-          let mnodes_id = [];
-          let mlinks = [];
-          let r_idx = 0;
-          let p_idx = 0;
-          // Add reaction node
-          this.node_dict[motif_list[i].id].current_type = "reaction";
-          mnodes.push(this.node_dict[motif_list[i].id]);
+        let start_x = 5;
+        let start_y = this.stamp_svg_margin.top + Math.floor(i)*(stamp_height+this.stamp_svg_margin.vertical);
 
-          // Add reactant nodes
-          motif_list[i].reactants.forEach(l=>{
-            if(mnodes_id.indexOf(l)===-1){
-              this.node_dict[l].current_type = "reactant";
-              this.node_dict[l].r_idx = r_idx;
-              mnodes.push(this.node_dict[l]);
-              mnodes_id.push(l);
-              mlinks.push({'source': l, 'target': motif_list[i].id});
-              r_idx += 1;
+        let tg = d3.select("#stamp-circle-"+i).selectAll("text")
+          .data([motif_list[i]]);
+        tg.exit().remove();
+        tg = tg.enter().append("text").merge(tg)
+          .attr("x",start_x + 10)
+          .attr("y",start_y + 21)
+          .text(d=> {
+            if (d.name.length < 44) {
+              return d.name;
+            } else {
+              return d.name.substring(0,41) + " ...";
             }
           })
-
-          // Add product nodes
-          motif_list[i].products.forEach(l=>{
-            if(mnodes_id.indexOf(l)===-1){
-              this.node_dict[l].current_type = "product";
-              this.node_dict[l].p_idx = p_idx;
-              mnodes.push(this.node_dict[l]);
-              mnodes_id.push(l);
-              mlinks.push({'source': motif_list[i].id, 'target': l});
-              p_idx += 1;
-            }
-          })
-
-          let start_x = this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal);
-          let start_y = this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical);
-          let x_interval = stamp_width/3;
-          let y_interval_r = (stamp_height-20)/r_idx;
-          let y_interval_p = (stamp_height-20)/p_idx;
-
-          let mg = d3.select("#stamp-circle-"+i).selectAll("circle")
-            .data(mnodes);
-          mg.exit().remove();
-          mg = mg.enter().append("circle").merge(mg)
-            .attr("cx",(d)=>{
-              if(d.current_type==="reactant"){
-                return start_x + 15;
-              } else if(d.current_type==="reaction"){
-                return start_x + x_interval+15;
-              } else if (d.current_type ==="product"){
-                return start_x + x_interval*2+15;
-              }
-            })
-            .attr("cy",(d)=>{
-              if(d.current_type==="reactant"){
-                return start_y + y_interval_r*(d.r_idx)+10;
-              } else if(d.current_type==="reaction"){
-                return start_y + 20;
-              } else if (d.current_type ==="product"){
-                return start_y + y_interval_p*(d.p_idx)+10;
-              }
-            })
-            .attr("class",(d)=>d.current_type)
-            .attr("fill", (d)=>{
-              if (d.values_js === undefined) {
-                return "rgba(191, 191, 191, 1)";
-              } else {
-                return "rgba(" + d.values_js.toString() + ")";
-              }
-            })
-            .attr("r",4)
-            .attr("stroke","black")
-            .attr("id",d=>"stamp-"+i+"-"+d.id)
-
-          let mlg = d3.select("#stamp-link-"+i).selectAll("line")
-            .data(mlinks);
-          mlg.exit().remove();
-          mlg = mlg.enter().append("line").merge(mlg)
-            .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
-            .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
-            .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
-            .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
-            .attr("stroke","gray")
-
-          let tg = d3.select("#stamp-circle-"+i).selectAll("text")
-            .data([motif_list[i]]);
-          tg.exit().remove();
-          tg = tg.enter().append("text").merge(tg)
-            .attr("x",start_x + 10)
-            .attr("y",start_y + 45)
-            .text(d=>d.pathways.length + " pathways")
-            .style("font-size","11px")
+          .style("font-size","14px")
+          .style("font-weight","bold")
       }
     }
 
@@ -478,7 +611,6 @@ class MetaGraph{
 
   drawPathwayView(p, selector) {
 
-    console.log(p)
     graph_genes = true;
     collapse_reactions = true;
     var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
@@ -489,11 +621,6 @@ class MetaGraph{
     let components = [];
     var rxn = 0;
     for (rxn in motif_reactions) {
-
-      if (motif_reactions[rxn] === "reaction_10765844_reaction_10756400") {
-        console.log(motif_reactions[rxn])
-        console.log(this.collapsed_reaction_dict[motif_reactions[rxn]])
-      }
 
       var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
       components.push(motif_reactions[rxn]);
@@ -511,7 +638,6 @@ class MetaGraph{
       }
     }
 
-    console.log(components)
     var elements = get_nodes_links(this.data, components);
     var new_nodes = elements[0];
     var new_links = elements[1];
