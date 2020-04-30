@@ -24,7 +24,7 @@
   "devDependencies": {
     "d3": "^5.15.0",
     "electron": "^8.1.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "minimist": "^1.2.5",
     "wine": "^0.9.13",
     "zerorpc": "^0.9.8"
