@@ -1,0 +1,357 @@
+<!--
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8" />
+
+<title>Metaboverse</title>
+
+<html>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/visualize.css" />
+  <link rel="stylesheet" href="../css/timecourse.css" />
+
+  <head>
+    <!-- menu -->
+    <menu>
+      <font size="3.25px">
+        <menuitem style="float:right">
+          <a
+            href="https://github.com/Metaboverse/Metaboverse/issues"
+            target="_blank"
+            >Contact Us</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a href="cite.html">Cite</a>
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/"
+            target="_blank"
+            >Documentation</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html"
+            target="_blank"
+            >FAQs</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html"
+            target="_blank"
+            >First Time?</a
+          >
+        </menuitem>
+        <menuitem style="float:right">
+          <a
+            href="https://metaboverse.readthedocs.io/en/latest/content/overview.html"
+            target="_blank"
+            >About</a
+          >
+        </menuitem>
+        <menuitem style="float:left">
+          <a href="index.html">Metaboverse</a>
+        </menuitem>
+        <menuitem style="float:left">
+          <a href="build.html">Back</a>
+        </menuitem>
+      </font>
+    </menu>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <font style="font-family: sans-serif" size="2">
+        <b><u>Legend</u></b>
+        <button
+          class="info"
+          title="Click and drag the background to pan, or use the mouse wheel to zoom."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <br />
+        <b>&#10095;&#10095;&nbsp;&#10023;&nbsp;Connectivity Mapping&nbsp;&#10023;&nbsp;&#10094;&#10094;</b>
+        <br />
+        <br />
+        Value Threshold:&nbsp;
+        <input
+          type="number"
+          name="conn_value_button"
+          id="conn_value_button"
+          min="0"
+          max="100.000"
+          value="3"
+        />
+        <button
+          id="play_button_value"
+          class="play_button"
+          onchange="run_value_connections()"
+          title="Change value and click to modify the perturbation threshold for a reaction to appear in the window."
+        >
+        &#10148;
+        </button>
+        <br />
+        Stat Threshold:
+        <input
+          type="number"
+          name="conn_stat_button"
+          id="conn_stat_button"
+          min="0"
+          max="1.0000000"
+          value="0.00000001"
+        />
+
+        <button
+          id="play_button_stat"
+          class="play_button"
+          onchange="run_stat_connections()"
+          title="Change value and click to modify the perturbation threshold for a reaction to appear in the window."
+        >
+        &#10148;
+        </button>
+        <br />
+        <br />
+        <b>Entity Values</b>
+        <br />
+        <br />
+        <div title="Double-click to display reaction notes.">
+          <span class="dot" style="--dot_color: grey"></span>
+          Reaction
+        </div>
+        <br />
+        <div title="Value was found in user data.">
+          <span class="dot" style="--dot_color: white"></span>
+          Measured
+        </div>
+        <div
+          title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values."
+        >
+          <span
+            class="dot"
+            style="--dot_color: white;border-style: dashed;margin-left:10px;"
+          ></span>
+          Inferred
+        </div>
+        <br />
+        <canvas
+          title="Colormap value for entity measurement."
+          id="seismic_node"
+          class="dot"
+          width="12"
+          height="12"
+          style="background-color:none"
+        ></canvas>
+        <div id="entity_type"></div>
+        <br />
+        <canvas id="seismic_canvas" width="220" height="15"></canvas>
+        <br />
+        <br />
+        <b>Relationship Types</b>
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="arrow">
+          <div class="line" style="--arrow_color: grey"></div>
+          <div class="point" style="--arrow_color: grey">
+            &nbsp;&nbsp;&nbsp;Core
+          </div>
+        </div>
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="arrow">
+          <div class="line" style="--arrow_color: green"></div>
+          <div class="point" style="--arrow_color: green">
+            &nbsp;&nbsp;&nbsp;Catalyst
+          </div>
+        </div>
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="arrow">
+          <div class="line" style="--arrow_color: red"></div>
+          <div class="point" style="--arrow_color: red">
+            &nbsp;&nbsp;&nbsp;Inhibitor
+          </div>
+        </div>
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="arrow">
+          <div class="line2"></div>
+          <div style="margin-left: 17px;">&nbsp;&nbsp;&nbsp;Components</div>
+        </div>
+        <br />
+        &nbsp;
+        <span class="dot" style="--dot_color: white"></span>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: blue;margin-top: 4px;"></div>
+          <div class="point" style="--arrow_color: blue;margin-top: 0px;">
+            &nbsp;&nbsp;&nbsp;Metabolite
+          </div>
+        </div>
+        <br />
+        &nbsp;
+        <span class="square" style="--dot_color: white"></span>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: orange"></div>
+          <div class="point" style="--arrow_color: orange">
+            &nbsp;&nbsp;&nbsp;Protein
+          </div>
+        </div>
+        <br />
+        <span class="ellip" style="--dot_color: white"></span>
+        <div class="arrow">
+          <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
+          <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">
+            &nbsp;&nbsp;&nbsp;Gene
+          </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <b><u>Options</u></b>
+        <button
+          class="info"
+          title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <br />
+        <div title="Click to turn feature labels on or off.">
+          <button id="toggleAnalytes">Features</button>
+        </div>
+        <div title="Click to turn reaction labels on or off.">
+          <button id="toggleReactions">Reactions</button>
+        </div>
+        <div title="Click to turn expression and statistical values on or off.">
+          <button id="toggleExpression">Expression</button>
+        </div>
+        <br />
+        <div title="Click to toggle gene nodes (remove or display).">
+          <button id="toggleGenes">Toggle Genes</button>
+        </div>
+        <div
+          title="Click to toggle between mapping expression or statistical color values."
+        >
+          <button id="toggleColors">Highlight Values/Stats</button>
+        </div>
+        <br />
+        <div title="Click to toggle between showing or hiding compartment shading">
+          <button id="toggleCompartments">Toggle Compartments</button>
+        </div>
+        <div title="Click to save the current graph view">
+          <button id="saveGraph">Save Graph</button>
+        </div>
+        <br />
+        <br />
+        # Nearest neighbors:
+        <input
+          type="number"
+          name="kNN_button"
+          id="kNN_button"
+          onchange="kNN_input()"
+          min="1"
+          max="9"
+          value="1"
+        />
+        <button
+          class="info"
+          title="Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion)"
+        >
+          <i>i</i>
+        </button>
+        <br />
+        Hub threshold:
+        <input
+          type="number"
+          name="hub_button"
+          id="hub_button"
+          onchange="hub_input()"
+          min="1"
+          max="9999999"
+        />
+        <button
+          class="info"
+          title="Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <br />
+        <b><u>Warnings:</u></b>
+        <br />
+        <div id="warning_line_1"><br /></div>
+        <div id="warning_line_2"><br /><br /></div>
+        <br />
+        <br />
+        <b><u>Selection Type:</u></b>
+        <br />
+        <div id="type_selection_type"><br /></div>
+        <br />
+        <br />
+        <br />
+        <b><u>Current Selection:</u></b>
+        <br />
+        <div id="type_selection"><br /></div>
+        <br />
+        <br />
+        <b><u>Notes:</u></b>
+        <button
+          class="info"
+          title="Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        <div id="reaction_notes"></div>
+        <br />
+        <br />
+        <br />
+      </font>
+    </div>
+    <br />
+    <br />
+    <h1 style="padding-left:275px;">Global Reaction Connectivity</h1>
+
+    <!--Colorbar pointer label-->
+    <font style="font-family: sans-serif" size="1">
+      <div id="displayValue" class="displayValue"></div>
+    </font>
+
+    <!--Put timecourse placeholder here-->
+    <div id="slider" align="center"></div>
+    <br />
+
+    <!--Graph space-->
+    <div id="graph" align="center"></div>
+
+    <!--Scripts-->
+    <script src="../js/utils.js"></script>
+    <script src="../js/motifs.js"></script>
+    <script src="../js/graph.js"></script>
+    <script src="../js/connectivity.js"></script>
+    <script src="../js/timecourse.js"></script>
+    <script src="../js/js-colormaps.js"></script>
+  </body>
+</html>

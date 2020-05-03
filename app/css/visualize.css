@@ -316,3 +316,15 @@ div {
   padding-top: 6px;
   padding-right: 1px;
 }
+
+#conn_value_button {
+  border-radius: 5px;
+}
+
+#conn_stat_button {
+  border-radius: 5px;
+}
+
+#play_button {
+  border-radius: 5px;
+}

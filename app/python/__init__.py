@@ -26,8 +26,5 @@ __dependencies__ = [
     'scipy',
     'scikit-learn',
     'matplotlib<3.0.0,>=2.1.1',
-    'seaborn',
-    'plotly',
-    'plotly_express',
     'networkx'
     ]

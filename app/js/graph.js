@@ -371,7 +371,7 @@ function get_link(d) {
     if (
       d.sub_type === "metabolite_component" ||
       d.sub_type === "protein_component" ||
-      d.sub_type === "gene_component" 
+      d.sub_type === "gene_component"
     ) {
       return d.sub_type;
     } else {
@@ -795,8 +795,9 @@ function make_graph(
     }
   });
 
+
   $("#toggleColors").click(function(e) {
-    if (toggle_c === false) {
+    if (entity === "values_js") {
       entity = "stats_js";
       node.style("--node_color", function(d) {
         return "rgba(" + d[entity].toString() + ")";

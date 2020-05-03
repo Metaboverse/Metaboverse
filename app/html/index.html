@@ -64,7 +64,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </audio>
     -->
     <div class="title">
-
+      <br />
+      <br />
       <div id="graph" align="center"></div>
       <script src="../js/network.js"></script>
 
@@ -80,13 +81,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <p>
         <font size="2">
           <center>
-            v <text id="getVersion"></text>
+            v <text id="getVersion"></text> &nbsp;&nbsp;&nbsp;&nbsp; &copy; 2019-2020
           </center>
         </font>
         <br>
         <font size="2">
           <center>
-            &copy; 2019-2020
+
           </center>
         </font>
       </p>
@@ -121,8 +122,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <br>
         </font>
       </center>
-      <br>
-      <br>
+
       <p>
         <center>
           <div id="content"></div>
@@ -136,7 +136,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             if (dbURL !== null) {
               defaultValue = dbURL;
               $("#content").replaceWith(
-                '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+                '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
               );
             }
 

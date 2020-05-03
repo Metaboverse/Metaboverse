@@ -25,8 +25,8 @@ import os
 
 """Import internal dependencies
 """
-from app.python.__init__ import __version__
-from app.python.__init__ import __dependencies__
+from __init__ import __version__
+from __init__ import __dependencies__
 
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
@@ -35,14 +35,12 @@ setup(
     name = 'Metaboverse',
     version = __version__,
     description = 'A toolkit for navigating and analyzing biological networks',
-    long_description = open('README.md').read(),
-    long_description_content_type='text/markdown',
-    author = 'Jordan Berg',
+    author = 'Jordan A. Berg',
     author_email = 'jordan.berg@biochem.utah.edu',
     url = 'https://github.com/j-berg/Metaboverse',
     packages = ['metaboverse'],
     exclude= ['tests','docs','recipes'],
-    package_dir = {'metaboverse': 'app/python'},
+    package_dir = {'metaboverse': '.'},
     license = 'GPL-3.0',
     zip_safe = False,
     install_requires = __dependencies__,

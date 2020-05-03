@@ -114,7 +114,6 @@ function execute(command, callback) {
 runBuild = function(_callback) {
 
   if (get_session_info("processed") === true) {
-    console.log("I made it")
     var elem = document.getElementById("progressBar");
     elem.style.width = "100%";
     elem.innerHTML = "100%";
@@ -167,20 +166,23 @@ runBuild = function(_callback) {
 
 function displayOptions() {
   update_session_info("current_pathway", null);
+  database_url = get_session_info("database_url");
+  var data = JSON.parse(fs.readFileSync(database_url).toString());
   if (
     (transcriptomics === true) |
     (proteomics === true) |
     (metabolomics === true) |
     (get_session_info("provided_data") === true) |
-    (get_session_info("provided_data") === "true")
+    (get_session_info("provided_data") === "true") |
+    (data.categories.length > 0)
   ) {
     $("#content").replaceWith(
-      '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+      '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
     update_session_info("provided_data", true);
   } else {
     $("#content").replaceWith(
-      '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+      '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
   }
 }

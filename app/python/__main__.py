@@ -35,10 +35,47 @@ from python.curate.__main__ import __main__ as curate
 from python.analyze.__main__ import __main__ as analyze
 from python.utils import progress_feed, update_session
 
+def check_dependencies():
+
+    try:
+        import pandas
+    except:
+        os.system('pip install pandas')
+    try:
+        import numpy
+    except:
+        os.system('pip install numpy')
+    try:
+        import scipy
+    except:
+        os.system('pip install scipy')
+    try:
+        import networkx
+    except:
+        os.system('pip install networkx')
+    try:
+        import pickle
+    except:
+        os.system('pip install pickle')
+    try:
+        import sklearn
+    except:
+        os.system('pip install scikit-learn')
+    try:
+        import argparse
+    except:
+        os.system('pip install argparse')
+    try:
+        import matplotlib
+    except:
+        os.system('pip install matplotlib<3.0.0,>=2.1.1')
+
 """Run metaboverse
 """
 def main(
         args=None):
+
+    check_dependencies()
 
     # Read in arguments
     args, args_dict = parse_arguments(
