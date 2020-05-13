@@ -30,6 +30,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <link rel="stylesheet" href="../css/network.css">
 
   <script src="../js/variables.js"></script>
+  <script src="../js/launch.js"></script>
   <script src="../js/utils.js"></script>
 
   <head>
@@ -45,6 +46,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
         <menuItem style="float:left"><a href="curate.html">Back</a></menuItem>
+        <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
       </font>
     </menu>
 
@@ -76,38 +78,71 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </font>
     <center>
       <font size="3">
-        Drag and drop transcriptomics data:
+        Load transcriptomics data:
           <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to gene identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropTranscriptomics" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('transcriptomics-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedTranscriptomics" class="selectedData">
+        </div>
+        <input id="transcriptomics-input" type="file" name="name" style="display: none;" />
+
 
         <br>
         <br>
         <br>
-        Drag and drop proteomics data:
+        Load proteomics data:
           <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to protein identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropProteomics" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('proteomics-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedProteomics" class="selectedData">
+        </div>
+        <input id="proteomics-input" type="file" name="name" style="display: none;" />
 
         <br>
         <br>
         <br>
-        Drag and drop metabolomics data:
+        Load metabolomics data:
           <button class="info" title="This datatype will accept any tab-delimited dataset with mappings to metabolite identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropMetabolomics" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('metabolomics-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedMetabolomics" class="selectedData">
+        </div>
+        <input id="metabolomics-input" type="file" name="name" style="display: none;" />
 
         <br>
         <br>
         <br>
-        Drag and drop metadata table:
+        Load metadata table:
           <button class="info" title="This datatype will accept any tab-delimited metadata table. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
         <br>
         <br>
-        <input id="dropMetadata" type="file" accept="[*.tsv,*.txt]">
+        <div id="dropDatabase" onclick="document.getElementById('metadata-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedMetadata" class="selectedData">
+        </div>
+        <input id="metadata-input" type="file" name="name" style="display: none;" />
       </font>
 
       <br>
@@ -121,8 +156,26 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <font size="3">
         <form>
+          Experiment Name:
+            <button
+              class="info"
+              title="Enter a name for your experiment (no spaces preferred)">
+              <i>i</i>
+            </button>
+            <br>
+            <br>
+            <input type="text" class="experimentName" id="updateExperimentName">
+            </input>
+        </form>
+        <br>
+        <br>
+        <form>
           Experiment Type:
-            <button class="info" title="Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter."><i>i</i></button>
+            <button
+              class="info"
+              title="Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter.">
+              <i>i</i>
+            </button>
             <br>
             <br>
             <select name="dropdown" id="updateExperiment">
@@ -133,46 +186,51 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             </select>
         </form>
         <br>
-        <form>
-          Normalization:
-          <button class="info" title="Select the normalization type you would like to perform. Please see the documentation for more information on selecting this parameter."><i>i</i></button>
-          <br>
-          <br>
-          <select name="dropdown" id="updateNormalization">
-            <option value="normType1" selected>No Normalization</option>
-            <option value="normType2">Log Scale (coming soon)</option>
-            <option value="normType3">Z-Score (coming soon)</option>
-          </select>
-        </form>
         <br>
-
-        <input type="checkbox" id="updateCollapse">Collapse entities with missing data
-        <button class="info" title="Check this box to collapse entities for which there is no expression/abundance data."><i>i</i></button>
-        <br>
-
-        <br>
-        <input type="checkbox" id="updateSplit">Split duplicate entities
-        <button class="info" title="Check this box to split duplicate entities within a pathway view into seperate entities. See the documentation for more information."><i>i</i></button>
-        <br>
-
-        <br>
-        <br>
-        Drag and drop blacklist list:
-          <button class="info" title="Provide a tab-delimited table with no column names and the first column filled with a list of entities to ignore in pathway drawing. See the documentation for more information."><i>i</i></button>
-        <br>
-        <br>
-        <input id="dropBlacklist" type="file" accept="[*.tsv,*.txt]">
-
       </font>
-
       <br>
-      <br>
-      <br>
-      <a href="../html/build.html"><div id="continue"><font size="3">Curate</font></div></a>
-
+      <a href="build.html"><div id="continue"><font size="3">Curate</font></div></a>
       <br>
       <br>
       <br>
       </center>
+
+      <script>
+        // If user goes back to this page, force re-curation
+        update_session_info("processed", false);
+
+        // Transcriptomics
+        var transcriptomicsURL = get_session_info("transcriptomics");
+        var defaultTranscriptomics = "No file selected";
+        if (transcriptomicsURL !== null) {
+          defaultTranscriptomics = transcriptomicsURL;
+        }
+        $('#selectedTranscriptomics').append('<font size="2">' + defaultTranscriptomics + '</font>');
+
+        // Proteomics
+        var proteomicsURL = get_session_info("proteomics");
+        var defaultProteomics = "No file selected";
+        if (proteomicsURL !== null) {
+          defaultProteomics = proteomicsURL;
+        }
+        $('#selectedProteomics').append('<font size="2">' + defaultProteomics + '</font>');
+
+        // Metabolomics
+        var metabolomicsURL = get_session_info("metabolomics");
+        var defaultMetabolomics = "No file selected";
+        if (metabolomicsURL !== null) {
+          defaultMetabolomics = metabolomicsURL;
+        }
+        $('#selectedMetabolomics').append('<font size="2">' + defaultMetabolomics + '</font>');
+
+        // Metadata
+        var metadataURL = get_session_info("metadata");
+        var defaultMetadata = "No file selected";
+        if (metadataURL !== null) {
+          defaultMetadata = metadataURL;
+        }
+        $('#selectedMetadata').append('<font size="2">' + defaultMetadata + '</font>');
+      </script>
+
   </body>
 </html>

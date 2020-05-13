@@ -1,12 +1,6 @@
 {
-  "reactions": 0,
-  "chebi": 0,
-  "uniprot": 0,
-  "ensembl": 0,
-  "ncbi": 0,
-  "mirbase": 0,
-  "complex": 0,
-  "master": 0,
-  "write": 0,
-  "graph": 0
+  "curate": 0,
+  "model": 0,
+  "graph": 0,
+  "error", ""
 }

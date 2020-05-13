@@ -21,12 +21,35 @@ from __future__ import print_function
 """Import dependencies
 """
 import pickle
+import pandas as pd
 
 """Import internal dependencies
 """
-from app.python.analyze.prepare_data import __main__ as prepare_data
-from app.python.analyze.model import __main__ as model
-from app.python.utils import progress_feed
+from python.analyze.prepare_data import __main__ as prepare_data
+from python.analyze.model import __main__ as model
+from python.analyze.motif_process import __main__ as motif_search
+from python.utils import progress_feed
+
+def test():
+
+    args_dict = {
+        'network': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle',
+        'metabolomics': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt',
+        'transcriptomics': 'None',
+        'proteomics': 'None',
+        'organism_curation': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle',
+        'species_id': 'SCE',
+        'output_file': '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_global_reactions.json',
+    }
+
+    __main__(
+        args_dict=args_dict)
+
+def check_db():
+
+    network_url = '/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_networks/SCE_metaboverse_db.pickle'
+    with open(network_url, 'rb') as network_file:
+        network = pickle.load(network_file)
 
 def read_network(
         network_url):
@@ -48,27 +71,47 @@ def __main__(
     # Get network curation info
     network = read_network(
         network_url=args_dict['network'])
+    progress_feed(args_dict, "model", 2)
+
+    if args_dict['organism_curation'] != 'None':
+        args_dict['species_id'] = network['species_id']
 
     # Read in data (if any)
-    if args_dict['transcriptomics'].lower() != 'none' \
-    or args_dict['proteomics'].lower() != 'none' \
-    or args_dict['metabolomics'].lower() != 'none':
+    if str(args_dict['transcriptomics']).lower() != 'none' \
+    or str(args_dict['proteomics']).lower() != 'none' \
+    or str(args_dict['metabolomics']).lower() != 'none':
 
         data, stats = prepare_data(
             network=network,
             transcriptomics_url=args_dict['transcriptomics'],
             proteomics_url=args_dict['proteomics'],
             metabolomics_url=args_dict['metabolomics'])
+        progress_feed(args_dict, "model", 3)
+        flag_data = False
 
     else:
-        data = None
-        stats = None
+        data = pd.DataFrame()
+        data['NoSample'] = [0,0,0]
+        data.index = ['dummy_index1', 'dummy_index2', 'dummy_index3']
+
+        stats = pd.DataFrame()
+        stats['NoSample'] = [0,0,0]
+        stats.index = ['dummy_index1', 'dummy_index2', 'dummy_index3']
+
+        progress_feed(args_dict, "model", 3)
+        flag_data = True
 
     # Generate graph
-    model(
+    graph_name = model(
+        args_dict=args_dict,
         network=network,
         data=data,
         stats=stats,
         species_id=args_dict['species_id'],
         output_file=args_dict['output_file'],
-        black_list=args_dict['blacklist'])
+        flag_data=flag_data)
+
+    # Search network for motifs
+    motif_search(
+        model_file=graph_name)
+    progress_feed(args_dict, "model", 10)

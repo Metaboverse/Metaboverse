@@ -27,9 +27,9 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from app.python.curate.load_reactions_db import __main__ as load_reactions
-from app.python.curate.load_complexes_db import __main__ as load_complexes
-from app.python.utils import progress_feed
+from python.curate.load_reactions_db import __main__ as load_reactions
+from python.curate.load_complexes_db import __main__ as load_complexes
+from python.utils import progress_feed
 
 def test():
 
@@ -325,15 +325,14 @@ def __main__(
         args_dict):
     """Curate reactome database
     """
-    #args_dict = {
-    #    'output':'/Users/jordan/Desktop/',
-    #    'species_id':'HSA'}
 
     # Load reactions
     print('Curating Reactome network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
+    progress_feed(args_dict, "curate", 3)
     pathway_database, reaction_database, species_database, \
-        name_database, compartment_dictionary = load_reactions(
+    name_database, compartment_dictionary, \
+    components_database = load_reactions(
         species_id=args_dict['species_id'],
         output_dir=args_dict['output'],
         args_dict=args_dict)
@@ -341,36 +340,44 @@ def __main__(
     print('Loading complex database...')
     complexes_reference = load_complexes(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "curate", 3)
 
     print('Parsing complex database...')
     complexes_reference['complex_dictionary'] = parse_complexes(
         complexes_reference)
+    progress_feed(args_dict, "curate", 2)
 
     print('Finalizing complex database...')
     complexes_reference['complex_dictionary'] = reference_complex_species(
         reference=complexes_reference['complex_dictionary'],
         name_database=name_database)
+    progress_feed(args_dict, "curate", 2)
 
     print('Parsing Ensembl database...')
     ensembl_reference = parse_ensembl_synonyms(
         output_dir=args_dict['output'],
         species_id=args_dict['species_id'])
+    progress_feed(args_dict, "curate", 3)
 
     print('Adding gene IDs to name database...')
     name_database = add_genes(
         name_database=name_database,
         ensembl_reference=ensembl_reference)
+    progress_feed(args_dict, "curate", 2)
 
     print('Parsing UniProt database...')
     uniprot_reference = parse_uniprot_synonyms(
-            output_dir=args_dict['output'],
-            species_id=args_dict['species_id'])
+        output_dir=args_dict['output'],
+        species_id=args_dict['species_id'])
+    progress_feed(args_dict, "curate", 3)
 
     print('Parsing ChEBI database...')
     chebi_reference, uniprot_metabolites = parse_chebi_synonyms(
         output_dir=args_dict['output'])
+    progress_feed(args_dict, "curate", 5)
 
     metaboverse_db = {
+        'species_id': args_dict['species_id'],
         'pathway_database': pathway_database,
         'reaction_database': reaction_database,
         'species_database': species_database,
@@ -380,15 +387,17 @@ def __main__(
         'chebi_synonyms': chebi_reference,
         'uniprot_metabolites': uniprot_metabolites,
         'complex_dictionary': complexes_reference['complex_dictionary'],
-        'compartment_dictionary': compartment_dictionary}
+        'compartment_dictionary': compartment_dictionary,
+        'components_database': components_database}
 
     # Write database to file
     print('Writing metaboverse database to file...')
-    args_dict['network'] = args_dict['species_id'] + '_metaboverse_db.pickle'
+    args_dict['curation'] = args_dict['species_id'] + '_metaboverse_db.pickle'
     write_database(
         output=args_dict['output'],
-        file=args_dict['network'],
+        file=args_dict['curation'],
         database=metaboverse_db)
+    progress_feed(args_dict, "curate", 5)
 
     print('Metaboverse database curation complete.')
 

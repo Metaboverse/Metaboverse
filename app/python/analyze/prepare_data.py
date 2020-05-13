@@ -24,6 +24,28 @@ import os
 import sys
 import pandas as pd
 
+def test():
+
+    def read_network(
+            network_url):
+        """Read in network from previous curation module
+        - was provided as a URL to the file and saved to args_dict['network'] in "curate" sub-module
+        """
+        import pickle
+        with open(network_url, 'rb') as network_file:
+            network = pickle.load(network_file)
+
+        return network
+
+    network = read_network(
+        network_url='/Users/jordan/Desktop/SCE_metaboverse_db.pickle')
+
+    #network['uniprot_synonyms']
+
+    transcriptomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/transcriptomics_mct1_12hr.txt'
+    proteomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/proteomics_mct1_12hr.txt'
+    metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt'
+
 def read_data(
         url,
         delimiter='\t'):
@@ -180,8 +202,8 @@ def format_metabolomics (
         labels='holder',
         axis=1)
 
-    del data_output.index.name
-    del data_unmapped.index.name
+    data_output.index.name = None
+    data_unmapped.index.name = None
 
     return data_output, data_unmapped
 
@@ -206,6 +228,9 @@ def extract_data(
 
     _values = data_c.T[::2].T
     _stats = data_c.T[1::2].T
+
+    _values.columns = [x for x in range(len(_values.columns))]
+    _stats.columns = [x for x in range(len(_stats.columns))]
 
     return _values, _stats
 
@@ -256,8 +281,21 @@ def catenate_data(
 
     combined = pd.concat(array)
     combined = combined.dropna(axis=0)
-
     combined = combined.sort_index()
+
+    removers = [] # Remove non-numbers
+    for idx, row in combined.iterrows():
+        for x in row:
+            try:
+                float(x)
+            except:
+                removers.append(idx)
+
+    combined = combined[~combined.index.isin(removers)]
+
+    for col in combined.columns.tolist():
+        combined[col] = combined[col].astype(float)
+
     combined = combined.groupby(combined.index).mean()
 
     return combined
@@ -269,26 +307,6 @@ def __main__(
         metabolomics_url):
     """Get user data and preprocess
     """
-    #############################
-    #def read_network(
-    #        network_url):
-    #    """Read in network from previous curation module
-    #    - was provided as a URL to the file and saved to args_dict['network'] #    in "curate" sub-module
-    #    """
-    #    import pickle
-    #    with open(network_url, 'rb') as network_file:
-    #        network = pickle.load(network_file)
-    #
-    #    return network
-    #
-    #network = read_network(
-    #    network_url='/Users/jordan/Desktop/HSA_metaboverse_db.pickle')
-    #
-    #transcriptomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/transcriptomics.txt'
-    #proteomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/proteomics.txt'
-    #metabolomics_url='/Users/jordan/Desktop/metaboverse/app/python/analyze/test/metabolomics.txt'
-    #
-    #############################
 
     # Initialize array of filled data
     data_array = []
@@ -299,9 +317,13 @@ def __main__(
 
         transcriptomics = read_data(
             url=transcriptomics_url)
+        e_sym = {}
+        for k, v in network['ensembl_synonyms'].items():
+            e_sym[v] = k
+            e_sym[k] = k
         transcriptomics, transcriptomics_unmapped = format_data(
             data=transcriptomics,
-            reference=network['ensembl_synonyms'])
+            reference=e_sym)
         output_unmapped(
             data=transcriptomics_unmapped,
             url=transcriptomics_url)
@@ -315,9 +337,13 @@ def __main__(
 
         proteomics = read_data(
             url=proteomics_url)
+        u_sym = {}
+        for k, v in network['uniprot_synonyms'].items():
+            u_sym[v] = k
+            u_sym[k] = k
         proteomics, proteomics_unmapped = format_data(
             data=proteomics,
-            reference=network['uniprot_synonyms'])
+            reference=u_sym)
         output_unmapped(
             data=proteomics_unmapped,
             url=proteomics_url)
@@ -331,9 +357,13 @@ def __main__(
 
         metabolomics = read_data(
             url=metabolomics_url)
+        c_sym = {}
+        for k, v in network['chebi_synonyms'].items():
+            c_sym[k] = v
+            c_sym[v] = v
         metabolomics, metabolomics_unmapped = format_metabolomics(
             data=metabolomics,
-            chebi_reference=network['chebi_synonyms'],
+            chebi_reference=c_sym,
             other_reference=network['uniprot_metabolites'])
         output_unmapped(
             data=metabolomics_unmapped,
@@ -359,15 +389,5 @@ def __main__(
 
     stats = catenate_data(
         array=stats_array)
-
-    ####################################################
-    #data.to_csv(
-    #    '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_data.txt',
-    #    sep='\t')
-    #
-    #stats.to_csv(
-    #    '/Users/jordan/Desktop/metaboverse/app/python/analyze/test/cat_stats.txt',
-    #    sep='\t')
-    ####################################################
 
     return data, stats

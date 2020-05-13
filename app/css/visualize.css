@@ -66,6 +66,14 @@ path.hull {
   stroke: rgba(0, 0, 0, 1);
   stroke-dasharray: 0, 5 5;
 }
+.link.collapsed_catalyst {
+  stroke: green;
+  stroke-dasharray: 0, 5 5;
+}
+.link.collapsed_inhibitor {
+  stroke: red;
+  stroke-dasharray: 0, 5 5;
+}
 
 #gene_component {
   fill: rgba(165, 55, 253, 1);
@@ -307,4 +315,16 @@ div {
   text-align: center;
   padding-top: 6px;
   padding-right: 1px;
+}
+
+#conn_value_button {
+  border-radius: 5px;
+}
+
+#conn_stat_button {
+  border-radius: 5px;
+}
+
+#play_button {
+  border-radius: 5px;
 }

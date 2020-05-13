@@ -1,5 +1,5 @@
 * {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: sans-serif, Verdana, Geneva, Tahoma;
 }
 
 div.scrollable {
@@ -14,13 +14,13 @@ div.scrollable {
   /* stroke: #999; */
   stroke-opacity: 0.6;
   }
-  
+
 .nodes circle {
   stroke: #fff;
   stroke-width: 1.5px;
   /* fill: rgba(190,23,59,1) */
   }
-  
+
 .labels {
   font-family: sans-serif;
   font-size: 10px;
@@ -137,25 +137,36 @@ li{
   list-style-type:none;
 }
 
-circle.reactant {
-  fill:Tomato;
-  /* fill: rgb(204,68,75); */
+circle text {
+  display: none;
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
 }
 
-circle.product {
-  fill:DodgerBlue;
-  /* fill: rgb(73,160,181); */
+circle:hover text {
+  display: inline;
+  font: 12px sans-serif;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
 }
 
-circle.reaction {
-  /* fill:YellowGreen  ; */
-  fill: rgb(97, 198, 95);
+.motif_button {
+  border-radius: 5px;
+  background: var(--motif_color);
+  border: 2px solid black;
+  width: 80px;
+  height: 35px;
+  text-align: center;
+  display: inline-block;
+  line-height: 25px;
+  text-shadow: none;
+  padding-top:4px;
 }
 
-circle.other {
-  fill: lightgray;
-}
+.motif_button:hover {
+  background: var(--highlight_color);
+  text-shadow: none;
 
+<<<<<<< HEAD
 .dropdown-container {
   /* padding-top: 10px; */
 }
@@ -168,3 +179,6 @@ option {
   font-size: 11px;
 }
 
+=======
+}
+>>>>>>> origin/master

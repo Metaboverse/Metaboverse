@@ -21,7 +21,7 @@ from __future__ import print_function
 
 """Import dependencies
 """
-from app.python.analyze.utils import convert_rgba
+from python.analyze.utils import convert_rgba
 
 def find_values(
         graph,
@@ -40,10 +40,14 @@ def find_values(
     # Allow modifier values to count
     if set(current_inputs) == set(reaction_dictionary[neighbor]['reactants']):
         side_key = 'products'
-        mod_key = 'catalyst'
+        #mod_key = 'catalyst'
     else:
         side_key = 'reactants'
-        mod_key = 'inhibitor'
+        #mod_key = 'inhibitor'
+
+    # Using this to only consider main components during
+    # reaction collapse
+    mod_key = 'impossible_key_to_match'
 
     # Get values for chosen side
     for y in (reaction_dictionary[neighbor][side_key] \
@@ -96,12 +100,17 @@ def add_collapsed_components(
     graph.nodes()[rxn]['stats_js'] = convert_rgba(
         rgba_tuples=colors)
 
-    for x in ref[rxn]['reactants'] + ref[rxn]['products'] + [
-            x[0] for x in ref[rxn]['modifiers']]:
+    for x in ref[rxn]['reactants'] + ref[rxn]['products']:
         graph.add_edges_from([
             (x, rxn)])
         graph.edges()[(x, rxn)]['type'] = 'collapsed'
         graph.edges()[(x, rxn)]['sub_type'] = 'collapsed'
+
+    for x in ref[rxn]['modifiers']:
+        graph.add_edges_from([
+            (x[0], rxn)])
+        graph.edges()[(x[0], rxn)]['type'] = 'collapsed_' + x[1]
+        graph.edges()[(x[0], rxn)]['sub_type'] = 'collapsed_' + x[1]
 
     return graph
 
@@ -145,22 +154,24 @@ def collapse_nodes(
             reaction_dictionary[rxn]['additional_components'])
 
         # Get effective components, where inputs and outputs include modifiers
-        effective_reactants = (
-            reaction_dictionary[rxn]['reactants'] \
-            + (
-                [x[0]
-                for x in reaction_dictionary[rxn]['modifiers']
-                    if x[1] == 'inhibitor']
-            )
-        )
-        effective_products = (
-            reaction_dictionary[rxn]['products'] \
-            + (
-                [x[0]
-                for x in reaction_dictionary[rxn]['modifiers']
-                    if x[1] == 'catalyst']
-            )
-        )
+        #effective_reactants = (
+        #    reaction_dictionary[rxn]['reactants'] \
+        #    + (
+        #        [x[0]
+        #        for x in reaction_dictionary[rxn]['modifiers']
+        #            if x[1] == 'inhibitor']
+        #    )
+        #)
+        #effective_products = (
+        #    reaction_dictionary[rxn]['products'] \
+        #    + (
+        #        [x[0]
+        #        for x in reaction_dictionary[rxn]['modifiers']
+        #            if x[1] == 'catalyst']
+        #    )
+        #)
+        effective_reactants = reaction_dictionary[rxn]['reactants']
+        effective_products = reaction_dictionary[rxn]['products']
 
         # Collect values for effective inputs and outputs
         inputs = []
@@ -230,10 +241,14 @@ def collapse_nodes(
                     if (set(products) \
                             == set(reaction_dictionary[o]['reactants'])):
                         side_key = 'products'
-                        mod_key = 'catalyst'
+                        #mod_key = 'catalyst'
                     else:
                         side_key = 'reactants'
-                        mod_key = 'inhibitor'
+                        #mod_key = 'inhibitor'
+
+                    # Using this to only consider main components during
+                    # reaction collapse
+                    mod_key = 'impossible_key_to_match'
 
                     # Check if values exist for the new side
                     # Allow modifier values to count
@@ -309,10 +324,14 @@ def collapse_nodes(
                     if (set(reactants) \
                             == set(reaction_dictionary[i]['reactants'])):
                         side_key = 'products'
-                        mod_key = 'catalyst'
+                        #mod_key = 'catalyst'
                     else:
                         side_key = 'reactants'
-                        mod_key = 'inhibitor'
+                        #mod_key = 'inhibitor'
+
+                    # Using this to only consider main components during
+                    # reaction collapse
+                    mod_key = 'impossible_key_to_match'
 
                     # Check if values exist for the new side
                     # Allow modifier values to count
@@ -513,6 +532,3 @@ def generate_updated_dictionary(
         }
 
     return updated_pathway_dictionary
-
-def hello():
-    print('hello')

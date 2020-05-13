@@ -27,35 +27,6 @@ html {
   font-family: sans-serif;
 }
 
-/*Main Menu
-*/
-menu {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #343d46;
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-menuitem {
-  float: left;
-}
-
-menuitem a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 10px 16px;
-  text-decoration: none;
-}
-
-menuitem a:hover {
-  background-color: #111;
-}
-
 text {
   font: 12px sans-serif;
   text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
@@ -205,9 +176,47 @@ text {
   text-shadow: none;
 }
 
-a {
+/*Main Menu
+*/
+menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #343d46;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+menuitem {
+  float: left;
+}
+
+menuitem a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 16px;
   text-decoration: none;
+}
+
+menuitem a:hover {
+  background-color: #111;
+  color: white;
+}
+
+a {
   color: black;
+  text-decoration: none;
+  -webkit-text-decoration-skip: objects;
+  margin: 0;
+  padding: 0;
+}
+
+a:hover {
+  color:black;
+  text-decoration:none;
 }
 
 img {
@@ -325,4 +334,48 @@ img {
 
 .info {
   border-radius: 50%;
+}
+
+
+.experimentName {
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+
+#dropDatabase {
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 1px solid grey;
+  width: 75px;
+  height: 15px;
+  text-align: center;
+  display: inline-block;
+  line-height: 15px;
+  text-shadow: none;
+  user-select: none;
+}
+#dropDatabase:active {
+  background: #0080ff;
+  text-shadow: none;
+}
+
+#selectedFile {
+  width: 90px;
+  height: 15px;
+  text-align: left;
+  display: inline-block;
+  line-height: 15px;
+  text-shadow: none;
+  user-select: none;
+}
+
+.selectedData {
+  width: 90px;
+  height: 15px;
+  text-align: left;
+  display: inline-block;
+  line-height: 15px;
+  text-shadow: none;
+  user-select: none;
 }

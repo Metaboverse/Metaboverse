@@ -32,10 +32,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/network.css">
 
-  <!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
-  <script src="../js/launch.js"></script>
   <script src="../js/cite.js"></script>
   <script src="../js/index.js"></script>
+  <script src="../js/launch.js"></script>
   <script src="../js/utils.js"></script>
 
   <head>
@@ -50,8 +49,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
 
-        <menuItem style="float:left"><a href="build.html">Build</a></menuItem>
       </font>
     </menu>
 
@@ -65,7 +64,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </audio>
     -->
     <div class="title">
-
+      <br />
+      <br />
       <div id="graph" align="center"></div>
       <script src="../js/network.js"></script>
 
@@ -81,13 +81,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <p>
         <font size="2">
           <center>
-            v <text id="getVersion"></text>
+            v <text id="getVersion"></text> &nbsp;&nbsp;&nbsp;&nbsp; &copy; 2019-2020
           </center>
         </font>
         <br>
         <font size="2">
           <center>
-            &copy; 2019-2020
+
           </center>
         </font>
       </p>
@@ -103,24 +103,49 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
       <center>
         <font size="3">
-          Drag and drop a pre-existing pathway database
-          <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
+          Load a pre-existing <b>pathway</b> database (ends in .json)
+          <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.json'"><i>i</i></button>
           <br>
           <br>
-          <input id="dropDatabase" type="file" accept="*.json">
+        <div id="dropDatabase" onclick="document.getElementById('database-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedFile">
+        </div>
+        <input id="database-input" type="file" name="name" style="display: none;" onchange="changeInput()" />
+
           <br>
           <br>
-          Note: This step is optional, but if used, file must end in ".json"
+          <br>
         </font>
       </center>
-      <br>
-      <br>
 
       <p>
         <center>
           <div id="content"></div>
           <script>
-            $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>')
+            update_session_info("current_pathway", null);
+
+            $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
+
+            var dbURL = get_session_info("database_url");
+            var defaultValue = "No file selected";
+            if (dbURL !== null) {
+              defaultValue = dbURL;
+              $("#content").replaceWith(
+                '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+              );
+            }
+
+            $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+
+            function changeInput() {
+              update_session_info("processed", true);
+            }
+
           </script>
         </center>
       </p>

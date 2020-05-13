@@ -164,3 +164,20 @@ function hue(h) {
     }
   }
 */
+
+// Check number of categories
+function checkCategories(categories) {
+  //change to > 1 after testing
+  console.log(data)
+  if (data.categories.length > 1) {
+    timecourse = true;
+    timecourse_fill =
+      '<div id="play-button" align="center">Pause<div id="bar" align="center"></div></div>';
+    document.getElementById("slider").innerHTML = timecourse_fill;
+
+    //buildSlider();
+  } else {
+    timecourse = false;
+  }
+  return timecourse;
+}

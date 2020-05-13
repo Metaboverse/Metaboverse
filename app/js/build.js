@@ -25,6 +25,16 @@ var path = require("path");
 var fs = require("fs");
 var $ = require("jquery");
 
+var userDataPath = app.getPath("userData");
+var session_file = userDataPath + "/session_data.json";
+
+// do something in case there are multiple spaces in the session data path
+//if (" " in session_file) {
+//  for
+//}
+var replacer = String(String.fromCharCode(92) + " ");
+var session_format = session_file.replace(" ", replacer)
+
 var progressFile = "data/progress_log.json";
 var scriptFilename = path.join(__dirname, "../python", "__main__.py");
 
@@ -40,12 +50,9 @@ fs.copyFile(
 fs.watch(progressFile, function(event, filename) {
   var elem = document.getElementById("progressBar");
   var sum_values = 0;
-
   var session = JSON.parse(fs.readFileSync(progressFile).toString());
-
   for (j in session) {
     //loop through the array
-
     sum_values += session[j]; //Do the math!
   }
   elem.style.width = sum_values + "%";
@@ -90,7 +97,6 @@ function parseCommand(args_dict) {
       commandString = commandString + " --" + key + " " + args_dict[key];
     }
   }
-
   return commandString;
 }
 
@@ -105,71 +111,78 @@ function execute(command, callback) {
   });
 }
 
-runCurate = function(_callback) {
-  var curateDictionary = {
-    output: getArgument("output"),
-    species_id: getArgument("organism_id"),
-    progress_log: path.resolve("data/progress_log.json")
-  };
+runBuild = function(_callback) {
 
-  var cmd = parseCommand(curateDictionary);
-  console.log(cmd);
-  execute("python " + scriptFilename + " curate " + cmd, output => {
-    console.log(output);
-  });
-  console.log("Hello");
-  return _callback;
-};
+  if (get_session_info("processed") === true) {
+    var elem = document.getElementById("progressBar");
+    elem.style.width = "100%";
+    elem.innerHTML = "100%";
+    displayOptions();
+  } else {
+    curated = getArgument("curation_url")
+    console.log(curated)
+    if (String(curated) !== "None") {
+      graphDictionary = {
+        output: getArgument("output"),
+        output_file: "find",
+        species_id: "find",
+        organism_curation: curated,
+        metadata: getArgument("metadata"),
+        transcriptomics: getArgument("transcriptomics"),
+        proteomics: getArgument("proteomics"),
+        metabolomics: getArgument("metabolomics"),
+        experiment: getArgument("experiment"),
+        progress_log: path.resolve("data/progress_log.json"),
+        session_data: session_format
+      }
+    } else {
+      graphDictionary = {
+        output: getArgument("output"),
+        output_file: getArgument("database_url"),
+        species_id: getArgument("organism_id"),
+        model_file:
+          getArgument("output") +
+          getArgument("organism_id") +
+          "_metaboverse_db.pickle",
+        metadata: getArgument("metadata"),
+        transcriptomics: getArgument("transcriptomics"),
+        proteomics: getArgument("proteomics"),
+        metabolomics: getArgument("metabolomics"),
+        experiment: getArgument("experiment"),
+        progress_log: path.resolve("data/progress_log.json"),
+        session_data: session_format
+      }
+    }
 
-runAnalysis = function() {
-  graphDictionary = {
-    output: getArgument("output"),
-    output_file: getArgument("database_url"),
-    model:
-      getArgument("output") +
-      getArgument("organism_id") +
-      "_metaboverse_db.pickle",
-    metadata: getArgument("metadata"),
-    transcriptomics: getArgument("transcriptomics"),
-    proteomics: getArgument("proteomics"),
-    metabolomics: getArgument("metabolomics"),
-    species_id: getArgument("organism_id"),
-    blacklist: getArgument("blacklist"),
-    experiment: getArgument("experiment"),
-    collapse_missing_reactions: getArgument("collapse_missing_reactions"),
-    split_duplicate_nodes: getArgument("split_duplicate_nodes"),
-    progress_log: path.resolve("data/progress_log.json")
-  };
-  var cmd = parseCommand(graphDictionary);
-  console.log(cmd);
-  execute("python " + scriptFilename + " analyze " + cmd, output => {
-    console.log(output);
-  });
-};
-
-function runBuild() {
-  // call the functions
-  if (getArgument("normalize") === true) {
-    execute("python " + scriptFilename + " preprocess -h", output => {
+    var cmd = parseCommand(graphDictionary);
+    console.log("Running: python " + scriptFilename + " curate " + cmd);
+    execute("python " + scriptFilename + " curate " + cmd, output => {
       console.log(output);
+      update_session_info("processed", true);
     });
+    return _callback;
   }
-
-  runAnalysis();
-}
+};
 
 function displayOptions() {
+  update_session_info("current_pathway", null);
+  database_url = get_session_info("database_url");
+  var data = JSON.parse(fs.readFileSync(database_url).toString());
   if (
     (transcriptomics === true) |
     (proteomics === true) |
-    (metabolomics === true)
+    (metabolomics === true) |
+    (get_session_info("provided_data") === true) |
+    (get_session_info("provided_data") === "true") |
+    (data.categories.length > 0)
   ) {
     $("#content").replaceWith(
-      '<a href="motif.html"><div id="continue"><font size="3">Run Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+      '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
+    update_session_info("provided_data", true);
   } else {
     $("#content").replaceWith(
-      '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>'
+      '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
   }
 }

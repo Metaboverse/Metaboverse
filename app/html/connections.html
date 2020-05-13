@@ -93,6 +93,47 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </button>
         <br />
         <br />
+        <b>&#10095;&#10095;&nbsp;&#10023;&nbsp;Connectivity Mapping&nbsp;&#10023;&nbsp;&#10094;&#10094;</b>
+        <br />
+        <br />
+        Value Threshold:&nbsp;
+        <input
+          type="number"
+          name="conn_value_button"
+          id="conn_value_button"
+          min="0"
+          max="100.000"
+          value="3"
+        />
+        <button
+          id="play_button_value"
+          class="play_button"
+          onchange="run_value_connections()"
+          title="Change value and click to modify the perturbation threshold for a reaction to appear in the window."
+        >
+        &#10148;
+        </button>
+        <br />
+        Stat Threshold:
+        <input
+          type="number"
+          name="conn_stat_button"
+          id="conn_stat_button"
+          min="0"
+          max="1.0000000"
+          value="0.00000001"
+        />
+
+        <button
+          id="play_button_stat"
+          class="play_button"
+          onchange="run_stat_connections()"
+          title="Change value and click to modify the perturbation threshold for a reaction to appear in the window."
+        >
+        &#10148;
+        </button>
+        <br />
+        <br />
         <b>Entity Values</b>
         <br />
         <br />
@@ -210,18 +251,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div title="Click to toggle gene nodes (remove or display).">
           <button id="toggleGenes">Toggle Genes</button>
         </div>
-        <!--
-        <div title="Click to toggle protein nodes (remove or display)">
-          <button id="toggleProteins">Proteins</button>
-        </div>
-        <div title="Click to toggle metabolite nodes (remove or display)">
-          <button id="toggleMetabolites">Metabolites</button>
-        </div>
-        <br>
-        <div title="Click to toggle modifier nodes (remove or display)">
-          <button id="toggleModifiers">Modifiers</button>
-        </div>
-        -->
         <div
           title="Click to toggle between mapping expression or statistical color values."
         >
@@ -233,16 +262,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <div title="Click to save the current graph view">
           <button id="saveGraph">Save Graph</button>
-        </div>
-        <br />
-        <br />
-        <div title="Click to toggle collapse of nodes with no data overlaid.">
-          <button id="collapseNodes">Toggle Collapsed Reactions</button>
-        </div>
-        <div
-          title="Click to open the Reactome representation of the current pathway."
-        >
-          <button id="openPathway">View Curated Pathway Image</button>
         </div>
         <br />
         <br />
@@ -280,7 +299,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </button>
         <br />
         <br />
-        <br />
         <b><u>Warnings:</u></b>
         <br />
         <div id="warning_line_1"><br /></div>
@@ -313,11 +331,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       </font>
     </div>
     <br />
-    <select id="superPathwayMenu" onchange="selectSuperPathway()"></select>
     <br />
-    <br />
-    <select id="pathwayMenu" onchange="selectPathway()"></select>
-    <br />
+    <h1 style="padding-left:275px;">Global Reaction Connectivity</h1>
 
     <!--Colorbar pointer label-->
     <font style="font-family: sans-serif" size="1">
@@ -333,10 +348,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--Scripts-->
     <script src="../js/utils.js"></script>
-    <script src="../js/menu.js"></script>
     <script src="../js/motifs.js"></script>
     <script src="../js/graph.js"></script>
-    <script src="../js/visualize.js"></script>
+    <script src="../js/connectivity.js"></script>
     <script src="../js/timecourse.js"></script>
     <script src="../js/js-colormaps.js"></script>
   </body>

@@ -52,11 +52,28 @@ from multiprocessing import Pool
 import itertools
 import json
 
+"""Update session information
+"""
+def update_session(
+        session_file,
+        key,
+        value):
+
+    if os.path.exists(session_file) and session_file != None:
+
+        with open(session_file) as json_file:
+            session = json.load(json_file)
+            session[key] = value
+
+        with open(session_file, 'w') as outfile:
+            json.dump(session, outfile)
+
 """JS progress feed
 """
 def progress_feed(
         args_dict=None,
-        process=None):
+        process=None,
+        amount=1):
 
     if args_dict != None:
         if 'progress_log' in args_dict:
@@ -66,9 +83,7 @@ def progress_feed(
 
                 with open(feed_file) as json_file:
                     data = json.load(json_file)
-
-                    if data[process] < 10:
-                        data[process] += 1
+                    data[process] += amount
 
                 with open(feed_file, 'w') as outfile:
                     json.dump(data, outfile)

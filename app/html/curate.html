@@ -33,7 +33,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <script src="../js/curate.js"></script>
   <script src="../js/utils.js"></script>
-  <!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
+  <script src="../js/launch.js"></script>
 
   <head>
 
@@ -48,6 +48,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Back</a></menuItem>
+        <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
       </font>
     </menu>
 
@@ -76,26 +77,80 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <center>
       <font size="3">
-        <p>What organism you would like to analyze?</p>
+        Load a pre-existing <b>organism</b> database (ends in .pickle)
+        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.pickle'"><i>i</i></button>
+        <br>
+        <br>
+        <div id="dropDatabase" onclick="document.getElementById('curation-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedFile">
+        </div>
+        <input id="curation-input" type="file" name="name" style="display: none;" />
+        <br />
+        <br />
+        <br />
+        <br />
+        <b><i>OR</i></b>
+        <br />
+        <br />
+        <br />
+        <br />
+        <p>Select the organism you would like to analyze:</p>
         <select id="speciesMenu" onchange="selectOrganism()"></select>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        <br />
         <p>Click on the folder to select output location:
           <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
         </p>
 
-        <button id="selectOutput">Select Output File Name</button>
+        <div id="dropDatabase" onclick="document.getElementById('output-input').click();" style="width: 140px;">
+          <font size="1">
+            Select Output File Name
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedOutput" class="selectedData" style="width: 120px;">
+        </div>
+        <button id="output-input" type="file" name="name" style="display: none;" />
+
+        <br />
+        <br />
 
       </font>
-      <br>
-      <br>
-      <div id="content"></div>
-      <script>
-        $('#content').append('')
-      </script>
+      <br />
     </center>
 
-  </body>
+    <p>
+      <center>
+        <div id="content"></div>
 
+        <script>
+          $('#content').append('<a href=""></a>')
+
+          var curURL = get_session_info("curation_url");
+          var defaultValue = "No file selected";
+          if (curURL !== null) {
+            defaultValue = curURL;
+            $("#content").replaceWith(
+              '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+          }
+          $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+
+          var outputURL = get_session_info("output");
+          var defaultOutput = "No output selected";
+          if (outputURL !== null) {
+            defaultOutput = outputURL;
+          }
+          $('#selectedOutput').append('<font size="2">' + defaultOutput + '</font>');
+
+        </script>
+      </center>
+    </p>
+
+  </body>
 </html>

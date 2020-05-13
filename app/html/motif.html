@@ -4,8 +4,9 @@ Metaboverse is designed for analysis of metabolic networks
 https://github.com/j-berg/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019 Jordan A. Berg
-Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+Copyright (C) 2019  Youjia Zhou, Jordan A. Berg
+  zhou325 <at> sci <dot> utah <dot> edu
+  jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
@@ -26,52 +27,42 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <html>
 
-  <link rel="stylesheet" href="../css/motif.css">
-  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script src="https://d3js.org/d3.v5.js"></script>
-  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" >
+  <link rel="stylesheet" href="../css/motif.css">
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/visualize.css" />
+  <link rel="stylesheet" href="../css/timecourse.css" />
 
+  <script src="../js/utils.js"></script>
+  <script src="../js/graph.js"></script>
+  <script src="../js/motifs.js"></script>
   <script src="../js/motif-graph.js"></script>
   <script src="../js/motif-script.js"></script>
-
+  <script src="../js/timecourse.js"></script>
 
   <head>
-
-
 
     <!-- menu -->
     <menu>
       <font size=3.25px>
-        <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
-        <menuItem style="float:right"><a href="cite.html">Cite</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
-        <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
-        <menuItem style="float:left"><a href="index.html">Back</a></menuItem>
-        
+        <menuItem style="float:right; margin: -3;"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
+        <menuItem style="float:right; margin: -3;"><a href="cite.html">Cite</a></menuItem>
+        <menuItem style="float:right; margin: -3;"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
+        <menuItem style="float:right; margin: -3;"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
+        <menuItem style="float:right; margin: -3;"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
+        <menuItem style="float:right; margin: -3;"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
+        <menuItem style="float:left; margin: -3;"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left; margin: -3;"><a href="build.html">Back</a></menuItem>
       </font>
     </menu>
 
   </head>
 
-  <body>
+  <body onload="showMotifs()">
 
-    <!-- <br>
-    <br>
-    <br>
-    <br>
-    <font size="48" style="font-family: sans-serif">
-      <b>
-        <center>
-          Expression Pattern Search Engine Results
-        </center>
-      </b>
-    <br> -->
     <div class="container-fluid" style="width: 95%; padding-top: 80px">
-        <h3>Motif Search</h3>
+        <h3>Motif Search Results</h3>
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-2">
                 <div class="frame">
@@ -86,41 +77,63 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="content"> 
-                                <div style="height:50px"> 
+                            <div class="content">
+                                <div style="height:50px; padding-left:5px">
                                     <p> Motif Type </p>
                                 </div>
                                 <p>
-                                    <input type="button" id="motif1" class = "btn btn-danger btn-sm" value="Avg">
+                                  <div class="motif_button" id="motif1" style="--motif_color:#1b9e77; --highlight_color:#7cc08e;  margin-top:-20px;" title="Compare the average values between reactants and products that pass the provided threshold."><font size="3" color="white">Average</font>
+                                  </div>
                                 </p>
                                 <p>
-                                    <input type="button" id="motif2" class = "btn btn-info btn-sm" value="MaxMax">
+                                  <div class="motif_button" id="motif2" style="--motif_color:#d95f02; --highlight_color:#fdbd4f; margin-top:13px;" title="Compare the absolute maximum values between reactants and products that pass the provided threshold."><font size="3" color="white">MaxMax</font></div>
                                 </p>
                                 <p>
-                                    <input type="button" id="motif3" class = "btn btn-success btn-sm" value="MaxMin">
-
+                                  <div class="motif_button" id="motif3" style="--motif_color:#7570b3; --highlight_color:#b19cd9; margin-top:13px;" title="Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold."><font size="3" color="white">MaxMin</font></div>
                                 </p>
-                                
+                                <p>
+                                  <div class="motif_button" id="motif4" style="--motif_color:#e7298a; --highlight_color:#e78ac3; margin-top:13px;" title="Find instances of sustained perturbation along a reaction."><font size="3" color="white">Sustained</font></div>
+                                </p>
+                                <p>
+                                  <div class="motif_button" id="motif5" style="--motif_color:#66a61e; --highlight_color:#a6d854; margin-top:13px;" title="Compare the absolute maximum and minimum values across a pathway."><font size="3" color="white">PathMax</font></div>
+                                </p>
+                                <br />
+                                <br />
+                                <br />
+                                <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label><br>
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="content"> 
-                                <div style="height:50px"> 
-                                    <p> Threshold </p>
+                            <div class="content">
+                                <div style="height:50px; padding-left:25px">
+                                  <p> Threshold </p>
                                 </div>
-                                <p style="padding-left:15px">
-                                    <!-- <input type="button" id="motif1-threshold" class = "btn btn-outline-danger btn-sm" value="1.5"> -->
-                                    <input type="number" id="avg_num" min="1" max="2" step="0.2" value="1.5">
+                                <p style="padding-left:30px">
+                                  <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
-                                <p style="padding-left:15px; padding-top:10px">
-                                        <input type="number" id="maxmax_num" min="1" max="2" step="0.2" value="1.5">
-                                    </p>
-                                    <p style="padding-left:15px; padding-top:8px">
-                                            <input type="number" id="maxmin_num" min="1" max="2" step="0.2" value="1.5">
-                                        </p>
-                                
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <br />
+                                <br />
+                                <p style="padding-left:45px; margin-top:-38px">
+                                  <input style="width: 100px; height: 100px;" type="checkbox" id="use_modifiers" name="use_modifiers" onclick='modifiersChecked()' value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.">
+                                </p>
                             </div>
-
                         </div>
                     </div>
                     
@@ -137,16 +150,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <div class="col-md-4">
                 <div class="frame">
-                    <div class="sub-frame">
-                        <h6>Motif View</h6>
-                        <div id="stamp-view-container" class="scrollable" style="padding-top:10px; padding-left:4%; width:95%; height:90%;">
-                            <svg id="stamp-view-svg" width=100% height=100%></svg>
+                    <div class="sub-frame" title="List of all motifs found in the global network for the selected motif type with information on how many pathways this motif is found in. Click on the motif to expand.">
+                        <h6><b>Identified Motifs</b></h6>
+                        <div id="stamp-view-container" class="scrollable" style="padding-top:10px; padding-left:0%; width:100%; height:90%;">
+                            <svg id="stamp-view-svg" width="28vw" height=100%></svg>
                         </div>
                     </div>
-                    <div class="sub-frame">
-                        <h6> Motif-Pathway</h6>
-                        <div id="motif-pathway-container" class="scrollable" style="padding-top:10px; padding-left:4%; width:95%; height:90%;">
-                            <svg id="motif-pathway-svg" width=100% height=100%></svg>
+                    <div class="sub-frame" title="List of pathways in which the selected motif is found. Click on the pathway to open up the pathway's visualization.">
+                        <h6><b>Motif-Pathway Membership</b></h6>
+                        <div id="motif-pathway-container" class="scrollable" style="padding-top:10px; padding-right:0%; width:100%; height:90%;">
+                            <svg id="motif-pathway-svg" width="28vw" height=100%></svg>
                         </div>
                     </div>
                 </div>
@@ -154,24 +167,20 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             <div class="col-md-6" >
                 <div class="frame">
                     <div class="network-frame">
-                        <h6>Pathway View</h6>
-                        <div id="pathway-view-container" style="padding-top:10px; padding-left:4%; width:95%; height:90%;">
-                            <svg id="pathway-view-svg" width="100%" height="480"></svg>
+                        <div id="pathway_name"></div>
+                        <div id="pathway-view-container" style="margin-top:-25px; padding-left:0%; width:100%; height:100%;">
+                            <div id="pathway-view-svg"></div>
                         </div>
                     </div>
                     <div class="network-panel" style="visibility:hidden">
-                        <h6>All Motifs In This Pathway</h6>
-                        <div class="scrollable" id="all-motif-list" style="height:75%;"> 
-                            <ul></ul>
-                        </div>
-                    </div>   
+                      <h6><b><i>All Motifs In This Pathway:</i></b>
+                      <a href="visualize.html" id="open_pathway_viewer" onclick="window.open(this.href, '', 'left=20,top=20,width=1400,height=900,toolbar=1,resizable=1'); return false;"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a></h6>
+                      <div class="scrollable" id="all-motif-list" style="height:75%;width:45vw;"><ul></ul>
+                      </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div> 
-
+    </div>
   </body>
-
-
 </html>

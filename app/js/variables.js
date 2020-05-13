@@ -25,12 +25,12 @@ var fs = require("fs");
 var $ = require("jquery");
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropTranscriptomics").onchange = function(event) {
+  document.getElementById("transcriptomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
     var inputVal = document
-      .getElementById("dropTranscriptomics")
+      .getElementById("transcriptomics-input")
       .value.split(".");
 
     if (
@@ -38,16 +38,14 @@ window.addEventListener("load", function(event) {
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
-
-        update_session_info("transcriptomics", path);
+        $('#selectedTranscriptomics').replaceWith('<font size="2">' + f.path + '</font>');
+        update_session_info("transcriptomics", f.path);
 
         transcriptomics = true;
       } catch (error) {
@@ -61,27 +59,25 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropProteomics").onchange = function(event) {
+  document.getElementById("proteomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropProteomics").value.split(".");
+    var inputVal = document.getElementById("proteomics-input").value.split(".");
 
     if (
       (inputVal[inputVal.length - 1] !== "tsv") &
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
-
-        update_session_info("proteomics", path);
+        $('#selectedProteomics').replaceWith('<font size="2">' + f.path + '</font>');
+        update_session_info("proteomics", f.path);
 
         proteomics = true;
       } catch (error) {
@@ -95,27 +91,26 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropMetabolomics").onchange = function(event) {
+  document.getElementById("metabolomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropMetabolomics").value.split(".");
+    var inputVal = document.getElementById("metabolomics-input").value.split(".");
 
     if (
       (inputVal[inputVal.length - 1] !== "tsv") &
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
+        $('#selectedMetabolomics').replaceWith('<font size="2">' + f.path + '</font>');
 
-        update_session_info("metabolomics", path);
+        update_session_info("metabolomics", f.path);
 
         metabolomics = true;
       } catch (error) {
@@ -129,105 +124,32 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("dropMetadata").onchange = function(event) {
+  document.getElementById("metadata-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("dropMetadata").value.split(".");
+    var inputVal = document.getElementById("metadata-input").value.split(".");
 
     if (
       (inputVal[inputVal.length - 1] !== "tsv") &
       (inputVal[inputVal.length - 1] !== "txt")
     ) {
       alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
       );
-      window.location.reload(false);
     } else {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        path = f.path;
+        $('#selectedMetadata').replaceWith('<font size="2">' + f.path + '</font>');
 
-        update_session_info("metadata", path);
+        update_session_info("metadata", f.path);
       } catch (error) {
         console.log(error);
         alert(
           "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
         );
       }
-    }
-  };
-});
-
-window.addEventListener("load", function(event) {
-  document.getElementById("dropBlacklist").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var inputVal = document.getElementById("dropBlacklist").value.split(".");
-
-    if (
-      (inputVal[inputVal.length - 1] !== "tsv") &
-      (inputVal[inputVal.length - 1] !== "txt")
-    ) {
-      alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work. Restarting page..."
-      );
-      window.location.reload(false);
-    } else {
-      try {
-        f = event.srcElement.files[0];
-        console.log("The file you dragged: ", f);
-        path = f.path;
-
-        update_session_info("blacklist", path);
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
-        );
-      }
-    }
-  };
-});
-
-var collapse = false;
-window.addEventListener("load", function(event) {
-  document.getElementById("updateCollapse").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (collapse === true) {
-      collapse = false;
-    } else {
-      collapse = true;
-    }
-
-    try {
-      update_session_info("collapse_missing_reactions", collapse);
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
-  };
-});
-
-var split = false;
-window.addEventListener("load", function(event) {
-  document.getElementById("updateSplit").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (split === true) {
-      split = false;
-    } else {
-      split = true;
-    }
-
-    try {
-      update_session_info("split_duplicate_nodes", split);
-    } catch (error) {
-      console.log(error);
-      alert(error);
     }
   };
 });
@@ -247,8 +169,7 @@ window.addEventListener("load", function(event) {
       experiment_type = "flux_balance";
     } else if (inputVal === "expType4") {
       experiment_type = "multiple_conditions";
-    } else {
-    }
+    } else {}
 
     try {
       update_session_info("experiment", experiment_type);
@@ -260,27 +181,21 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("updateNormalization").onchange = function(event) {
+  document.getElementById("updateExperimentName").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("updateNormalization").value;
-
-    if (inputVal === "normType1") {
-      normalization_type = null;
-    } else if (inputVal === "normType2") {
-      normalization_type = "log";
-    } else if (inputVal === "normType3") {
-      normalization_type = "z-score";
-    } else if (inputVal === "normType4") {
-    } else {
-    }
+    var inputVal = document.getElementById("updateExperimentName").value.split(".");
 
     try {
-      update_session_info("normalization", normalization_type);
+      console.log("Your provided experiment name: ", inputVal);
+
+      update_session_info("experiment", inputVal);
     } catch (error) {
       console.log(error);
-      alert(error);
+      alert(
+        "Experiment name is not valid."
+      );
     }
-  };
+  }
 });

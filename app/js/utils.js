@@ -1,4 +1,4 @@
-/*
+update_session_info/*
 Metaboverse
 Metaboverse is designed for analysis of metabolic networks
 https://github.com/j-berg/Metaboverse/
@@ -30,26 +30,32 @@ var session_file = userDataPath + "/session_data.json";
 console.log(session_file);
 
 function write_json(session_data) {
-  fs.writeFile(session_file, JSON.stringify(session_data), function(err) {
+  fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {
     if (err) throw err;
     console.log("Session data updated");
   });
 }
 
 function update_session_info(key_update, value_update, abbrev_dict = null) {
-  var session = JSON.parse(fs.readFileSync(session_file).toString());
+
+  var session = JSON.parse(fs.readFileSync(session_file).toString(), "utf8");
+  console.log(session)
+  console.log(key_update)
+  console.log(value_update)
   session[key_update] = value_update;
 
   // Where database output location is, make this the output location
   if (key_update === "database_url") {
     path = value_update.substring(0, value_update.lastIndexOf("/"));
     session["output"] = path + "/";
-  }
+  } else if (key_update === "curation_url") {
+    path = value_update.substring(0, value_update.lastIndexOf("/"));
+    session["output"] = path + "/";
+  } else {}
 
   if ((abbrev_dict !== null) & (key_update === "organism")) {
     session["organism_id"] = abbrev_dict[value_update];
   }
-
   write_json(session);
 }
 
@@ -115,4 +121,20 @@ function determineWidth(input) {
   }
 
   return mod_selection;
+}
+
+// Populate dictionary to access component reactions for each pathway
+function make_pathway_dictionary(data, database_key) {
+  // Get pathway name and ID
+  var pathways = data[database_key];
+  var pathway_dict = {};
+  for (var key in pathways) {
+    pathway_dict[pathways[key]["name"]] = {
+      id: pathways[key]["name"],
+      reactome: pathways[key]["reactome"],
+      reactions: pathways[key]["reactions"]
+    };
+  }
+
+  return pathway_dict;
 }
