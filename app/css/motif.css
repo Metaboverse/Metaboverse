@@ -156,3 +156,15 @@ circle.other {
   fill: lightgray;
 }
 
+.dropdown-container {
+  /* padding-top: 10px; */
+}
+
+label {
+  font-size: 12px;
+}
+
+option {
+  font-size: 11px;
+}
+

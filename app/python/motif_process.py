@@ -26,6 +26,8 @@ def process_data(data_path):
         if node['type'] == 'reaction':
             reaction_nodes.append(node)
     
+    reaction_nodes = reaction_nodes[0:300]
+    
     ### only keep reactant & product links ###       
     links_new = []
     for link in links:
@@ -39,6 +41,8 @@ def process_data(data_path):
         node['pathways'] = []
         reaction_nodes_dict[node['id']] = node
     for link in links_new:
+        link['source_id'] = link['source']
+        link['target_id'] = link['target']
         if link['source'] in reaction_nodes_dict.keys():
             reaction_nodes_dict[link['source']]['links']['product'].append(link)
         elif link['target'] in reaction_nodes_dict.keys():

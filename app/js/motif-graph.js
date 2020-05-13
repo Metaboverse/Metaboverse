@@ -79,12 +79,19 @@ class MetaGraph{
     }
 
     motifSearch(){
+        let value_type_dropdown = document.getElementById("value_type");
+        let value = 'value';
         d3.select("#motif1")
             .on("click", ()=>{
+                if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Expression Values"){
+                    value = "value";
+                } else {
+                    value = "stats";
+                }
                 d3.select("#motif-pathway-svg").style("visibility","hidden");
                 d3.select("#pathway-view-svg").style("visibility","hidden");
                 d3.select(".network-panel").style("visibility","hidden");
-                this.motifSearch_Avg();
+                this.motifSearch_Avg(value);
                 this.drawMotifSearchResult(this.motif);
             })
 
@@ -107,10 +114,10 @@ class MetaGraph{
             })
     }
 
-    motifSearch_Avg(){ // search for motif 1
+    motifSearch_Avg(value){ // search for motif 1
         console.log("motif search 1")
         this.motif = [];
-        let threshold = d3.select("#avg_num").node().value;
+        let threshold = d3.select("#avg_num").node()[value];
         for(let node_id in this.react_nodes){
             let react = this.react_nodes[node_id];
             let source_links = react.links.reactant;
@@ -118,13 +125,13 @@ class MetaGraph{
             let source_expression = [];
             let target_expression = [];
             source_links.forEach(l=>{
-                let source_node = this.other_nodes[l.source];
+                let source_node = this.other_nodes[l.source_id];
                 if(source_node.expression != "None"){
                     source_expression.push(parseFloat(source_node.expression));
                 }
             })
             target_links.forEach(l=>{
-                let target_node = this.other_nodes[l.target];
+                let target_node = this.other_nodes[l.target_id];
                 if(target_node.expression != "None"){
                     target_expression.push(parseFloat(target_node.expression));
                 }
@@ -151,13 +158,13 @@ class MetaGraph{
             let source_expression = [];
             let target_expression = [];
             source_links.forEach(l=>{
-                let source_node = this.other_nodes[l.source];
+                let source_node = this.other_nodes[l.source_id];
                 if(source_node.expression != "None"){
                     source_expression.push(parseFloat(source_node.expression));
                 }
             })
             target_links.forEach(l=>{
-                let target_node = this.other_nodes[l.target];
+                let target_node = this.other_nodes[l.target_id];
                 if(target_node.expression != "None"){
                     target_expression.push(parseFloat(target_node.expression));
                 }
@@ -183,13 +190,13 @@ class MetaGraph{
             let source_expression = [];
             let target_expression = [];
             source_links.forEach(l=>{
-                let source_node = this.other_nodes[l.source];
+                let source_node = this.other_nodes[l.source_id];
                 if(source_node.expression != "None"){
                     source_expression.push(parseFloat(source_node.expression));
                 }
             })
             target_links.forEach(l=>{
-                let target_node = this.other_nodes[l.target];
+                let target_node = this.other_nodes[l.target_id];
                 if(target_node.expression != "None"){
                     target_expression.push(parseFloat(target_node.expression));
                 }
@@ -270,21 +277,21 @@ class MetaGraph{
             let p_idx = 0;
             motif_list[i].current_type = "reaction";
             motif_list[i].links.reactant.forEach(l=>{
-                if(mnodes_id.indexOf(l.source)===-1){
-                    this.other_nodes[l.source].current_type = "reactant";
-                    this.other_nodes[l.source].r_idx = r_idx;
-                    mnodes.push(this.other_nodes[l.source]);
-                    mnodes_id.push(l.source);
+                if(mnodes_id.indexOf(l.source_id)===-1){
+                    this.other_nodes[l.source_id].current_type = "reactant";
+                    this.other_nodes[l.source_id].r_idx = r_idx;
+                    mnodes.push(this.other_nodes[l.source_id]);
+                    mnodes_id.push(l.source_id);
                     mlinks.push(l);
                     r_idx += 1;
                 }
             })
             motif_list[i].links.product.forEach(l=>{
-                if(mnodes_id.indexOf(l.target)===-1){
-                    this.other_nodes[l.target].current_type = "product";
-                    this.other_nodes[l.target].p_idx = p_idx;
-                    mnodes.push(this.other_nodes[l.target]);
-                    mnodes_id.push(l.target);
+                if(mnodes_id.indexOf(l.target_id)===-1){
+                    this.other_nodes[l.target_id].current_type = "product";
+                    this.other_nodes[l.target_id].p_idx = p_idx;
+                    mnodes.push(this.other_nodes[l.target_id]);
+                    mnodes_id.push(l.target_id);
                     mlinks.push(l);
                     p_idx += 1;
                 }
@@ -327,10 +334,10 @@ class MetaGraph{
                 .data(mlinks);
             mlg.exit().remove();
             mlg = mlg.enter().append("line").merge(mlg)
-                .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
-                .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
-                .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
-                .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
+                .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source_id).attr("cx"))
+                .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source_id).attr("cy"))
+                .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target_id).attr("cx"))
+                .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target_id).attr("cy"))
                 .attr("stroke","gray")
 
             let tg = d3.select("#stamp-circle-"+i).selectAll("text")
@@ -353,21 +360,21 @@ class MetaGraph{
         let p_idx = 0;
         motif.current_type = "reaction";
         motif.links.reactant.forEach(l=>{
-            if(mnodes_id.indexOf(l.source)===-1){
-                this.other_nodes[l.source].current_type = "reactant";
-                this.other_nodes[l.source].r_idx = r_idx;
-                mnodes.push(this.other_nodes[l.source]);
-                mnodes_id.push(l.source);
+            if(mnodes_id.indexOf(l.source_id)===-1){
+                this.other_nodes[l.source_id].current_type = "reactant";
+                this.other_nodes[l.source_id].r_idx = r_idx;
+                mnodes.push(this.other_nodes[l.source_id]);
+                mnodes_id.push(l.source_id);
                 mlinks.push(l);
                 r_idx += 1;
             }
         })
         motif.links.product.forEach(l=>{
-            if(mnodes_id.indexOf(l.target)===-1){
-                this.other_nodes[l.target].current_type = "product";
-                this.other_nodes[l.target].p_idx = p_idx;
-                mnodes.push(this.other_nodes[l.target]);
-                mnodes_id.push(l.target);
+            if(mnodes_id.indexOf(l.target_id)===-1){
+                this.other_nodes[l.target_id].current_type = "product";
+                this.other_nodes[l.target_id].p_idx = p_idx;
+                mnodes.push(this.other_nodes[l.target_id]);
+                mnodes_id.push(l.target_id);
                 mlinks.push(l);
                 p_idx += 1;
             }
@@ -410,10 +417,10 @@ class MetaGraph{
             .data(mlinks);
         lg.exit().remove();
         lg = lg.enter().append("line").merge(lg)
-            .attr("x1",(d)=>d3.select("#mp-circle-"+d.source).attr("cx"))
-            .attr("y1",(d)=>d3.select("#mp-circle-"+d.source).attr("cy"))
-            .attr("x2",(d)=>d3.select("#mp-circle-"+d.target).attr("cx"))
-            .attr("y2",(d)=>d3.select("#mp-circle-"+d.target).attr("cy"))
+            .attr("x1",(d)=>d3.select("#mp-circle-"+d.source_id).attr("cx"))
+            .attr("y1",(d)=>d3.select("#mp-circle-"+d.source_id).attr("cy"))
+            .attr("x2",(d)=>d3.select("#mp-circle-"+d.target_id).attr("cx"))
+            .attr("y2",(d)=>d3.select("#mp-circle-"+d.target_id).attr("cy"))
             .attr("stroke","gray")
             .attr("marker-end", "url(#end)");
 
@@ -489,22 +496,23 @@ class MetaGraph{
         let pnodes = [];
         let plinks = [];
         let pnodes_id = [];
+        console.log(react_list)
         
         react_list.forEach(rid=>{
             let react = this.react_nodes[rid];
             if(react){
                 pnodes.push(react);
                 react.links.reactant.forEach(l=>{
-                    if(pnodes_id.indexOf(l.source)===-1){
-                        pnodes.push(this.other_nodes[l.source]);
-                        pnodes_id.push(l.source);
+                    if(pnodes_id.indexOf(l.source_id)===-1){
+                        pnodes.push(this.other_nodes[l.source_id]);
+                        pnodes_id.push(l.source_id);
                     }
                     plinks.push(l);
                 })
                 react.links.product.forEach(l=>{
-                    if(pnodes_id.indexOf(l.target)===-1){
-                        pnodes.push(this.other_nodes[l.target]);
-                        pnodes_id.push(l.target);
+                    if(pnodes_id.indexOf(l.target_id)===-1){
+                        pnodes.push(this.other_nodes[l.target_id]);
+                        pnodes_id.push(l.target_id);
                     }
                     plinks.push(l);
                 })
