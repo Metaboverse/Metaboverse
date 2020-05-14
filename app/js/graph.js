@@ -20,11 +20,11 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const d3 = require("d3");
+var d3 = require("d3");
 var fs = require("fs");
 var saveSVG = require("save-svg-as-png");
 
-var hullPadding = 60;
+const hullPadding = 60;
 const max_nodes = 1500;
 var sample = 0;
 var entity = "values_js";
@@ -519,7 +519,7 @@ function make_graph(
     .attr("class", "node")
     .attr("id", function(d) {return d.id})
     .style("--node_color", function(d) {
-      return "rgba(" + d[entity].toString() + ")";
+      return "rgba(" + d[entity][sample].toString() + ")";
     })
     .style("r", function() {
       return 6;
@@ -652,6 +652,7 @@ function make_graph(
 
   var text = node
     .append("text")
+    .attr("id", function(d) {return d.id})
     .html(function(d) {
       if (type_dict[d.name] === "reaction") {
         // Label other nodes with expression value in parentheses
@@ -800,12 +801,12 @@ function make_graph(
     if (entity === "values_js") {
       entity = "stats_js";
       node.style("--node_color", function(d) {
-        return "rgba(" + d[entity].toString() + ")";
+        return "rgba(" + d[entity][sample].toString() + ")";
       });
     } else {
       entity = "values_js";
       node.style("--node_color", function(d) {
-        return "rgba(" + d[entity].toString() + ")";
+        return "rgba(" + d[entity][sample].toString() + ")";
       });
     }
   });
@@ -1134,7 +1135,6 @@ function parseEntities(nodes) {
       entity_dictionary[nodes[node].name] = nodes[node].id;
     }
   }
-
   return entity_dictionary;
 }
 
@@ -1142,6 +1142,11 @@ function parseEntities(nodes) {
 function change() {
   graph_genes = true;
   collapse_reactions = true;
+
+  if (timecourse === true) {
+    d3.select("circle#dot")
+      .attr("cx", 90)
+  }
 
   let current_pathway = get_session_info("current_pathway");
   if ((current_pathway !== null) & (current_pathway !== "null")) {
