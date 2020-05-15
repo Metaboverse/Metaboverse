@@ -1,3 +1,25 @@
+/*
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/Metaboverse/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019  Youjia Zhou, Jordan A. Berg
+  zhou325 <at> sci <dot> utah <dot> edu
+  jordan <dot> berg <at> biochem <dot> utah <dot> edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 var eval_modifiers = false;
 
@@ -12,7 +34,8 @@ function modifiersChecked() {
 
 function parseComponents(
     reaction,
-    expression_dict) {
+    expression_dict,
+    sample_index) {
 
   let reactants = reaction.reactants;
   let products = reaction.products;
@@ -35,14 +58,14 @@ function parseComponents(
   }
 
   temp_reactants.forEach(l=>{
-    let reactant_expr = expression_dict[l];
+    let reactant_expr = expression_dict[l][sample_index];
     if(reactant_expr !== null){
       source_expression.push(parseFloat(reactant_expr));
     }
   })
 
   temp_products.forEach(l=>{
-    let product_expr = expression_dict[l];
+    let product_expr = expression_dict[l][sample_index];
     if(product_expr !== null){
       target_expression.push(parseFloat(product_expr));
     }
@@ -74,30 +97,36 @@ function motifSearch_Avg(
       collapsed_reaction_dict,
       expression_dict,
       path_mapper,
-      modifiers) {
+      sample_indices) {
   console.log("motif search 1")
   console.log("Avg threshold set at: ", threshold)
   let discovered_motifs = [];
 
-  for(let rxn in collapsed_reaction_dict){
-    let reaction = collapsed_reaction_dict[rxn];
-    let comps = parseComponents(
-      reaction,
-      expression_dict)
-    let updated_source = comps[0];
-    let updated_target = comps[1];
+  for (_idx in sample_indices) {
+    let sample_motifs = [];
 
-    if(updated_source.length>0 && updated_target.length>0){
-      let source_avg = computeAvg(updated_source);
-      let target_avg = computeAvg(updated_target);
+    for(let rxn in collapsed_reaction_dict) {
+      let reaction = collapsed_reaction_dict[rxn];
+      let comps = parseComponents(
+        reaction,
+        expression_dict,
+        _idx)
+      let updated_source = comps[0];
+      let updated_target = comps[1];
 
-      if(Math.abs(source_avg - target_avg)>=threshold){
-        discovered_motifs.push(reaction);
+      if(updated_source.length>0 && updated_target.length>0){
+        let source_avg = computeAvg(updated_source);
+        let target_avg = computeAvg(updated_target);
+
+        if(Math.abs(source_avg - target_avg)>=threshold){
+          sample_motifs.push(reaction);
+        }
       }
     }
-  }
-  for (let m in discovered_motifs) {
-    discovered_motifs[m]['pathways'] = path_mapper[discovered_motifs[m]['id']]
+    for (let m in sample_motifs) {
+      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['id']]
+    }
+    discovered_motifs.push(sample_motifs);
   }
   console.log(discovered_motifs);
   return discovered_motifs;
@@ -110,29 +139,35 @@ function motifSearch_MaxMax(
     collapsed_reaction_dict,
     expression_dict,
     path_mapper,
-    modifiers) {
+    sample_indices) {
   console.log("motif search 2")
   console.log("MaxMax threshold set at: ", threshold)
   let discovered_motifs = [];
 
-  for(let rxn in collapsed_reaction_dict){
-    let reaction = collapsed_reaction_dict[rxn];
-    let comps = parseComponents(
-      reaction,
-      expression_dict)
-    let updated_source = comps[0];
-    let updated_target = comps[1];
+  for (_idx in sample_indices) {
+    let sample_motifs = [];
 
-    if(updated_source.length>0 && updated_target.length>0){
-      let source_max = Math.max(...updated_source);
-      let target_max = Math.max(...updated_target);
-      if(Math.abs(source_max - target_max)>=threshold){
-        discovered_motifs.push(reaction);
+    for(let rxn in collapsed_reaction_dict){
+      let reaction = collapsed_reaction_dict[rxn];
+      let comps = parseComponents(
+        reaction,
+        expression_dict,
+        _idx)
+      let updated_source = comps[0];
+      let updated_target = comps[1];
+
+      if(updated_source.length>0 && updated_target.length>0){
+        let source_max = Math.max(...updated_source);
+        let target_max = Math.max(...updated_target);
+        if(Math.abs(source_max - target_max)>=threshold){
+          sample_motifs.push(reaction);
+        }
       }
     }
-  }
-  for (let m in discovered_motifs) {
-    discovered_motifs[m]['pathways'] = path_mapper[discovered_motifs[m]['id']]
+    for (let m in sample_motifs) {
+      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['id']]
+    }
+    discovered_motifs.push(sample_motifs);
   }
   console.log(discovered_motifs);
   return discovered_motifs;
@@ -145,29 +180,35 @@ function motifSearch_MaxMin(
     collapsed_reaction_dict,
     expression_dict,
     path_mapper,
-    modifiers) {
+    sample_indices) {
   console.log("motif search 3")
   console.log("MaxMin threshold set at: ", threshold)
   let discovered_motifs = [];
 
-  for(let rxn in collapsed_reaction_dict){
-    let reaction = collapsed_reaction_dict[rxn];
-    let comps = parseComponents(
-      reaction,
-      expression_dict)
-    let updated_source = comps[0];
-    let updated_target = comps[1];
+  for (_idx in sample_indices) {
+    let sample_motifs = [];
 
-    if(updated_source.length>0 && updated_target.length>0){
-      let source_max = Math.max(...updated_source);
-      let target_min = Math.min(...updated_target);
-      if(Math.abs(source_max - target_min)>=threshold){
-        discovered_motifs.push(reaction);
+    for(let rxn in collapsed_reaction_dict){
+      let reaction = collapsed_reaction_dict[rxn];
+      let comps = parseComponents(
+        reaction,
+        expression_dict,
+        _idx)
+      let updated_source = comps[0];
+      let updated_target = comps[1];
+
+      if(updated_source.length>0 && updated_target.length>0){
+        let source_max = Math.max(...updated_source);
+        let target_min = Math.min(...updated_target);
+        if(Math.abs(source_max - target_min)>=threshold){
+          sample_motifs.push(reaction);
+        }
       }
     }
-  }
-  for (let m in discovered_motifs) {
-    discovered_motifs[m]['pathways'] = path_mapper[discovered_motifs[m]['id']]
+    for (let m in sample_motifs) {
+      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['id']]
+    }
+    discovered_motifs.push(sample_motifs);
   }
   console.log(discovered_motifs);
   return discovered_motifs;
@@ -180,57 +221,63 @@ function motifSearch_Sustained(
     collapsed_reaction_dict,
     expression_dict,
     path_mapper,
-    modifiers) {
+    sample_indices) {
   console.log("motif search 4")
   console.log("Sustained perturbation threshold set at: ", threshold)
   let discovered_motifs = [];
 
-  for(let rxn in collapsed_reaction_dict){
-    let reaction = collapsed_reaction_dict[rxn];
-    let comps = parseComponents(
-      reaction,
-      expression_dict)
-    let updated_source = comps[0];
-    let updated_target = comps[1];
+  for (_idx in sample_indices) {
+    let sample_motifs = [];
 
-    if(updated_source.length>0 && updated_target.length>0) {
+    for(let rxn in collapsed_reaction_dict){
+      let reaction = collapsed_reaction_dict[rxn];
+      let comps = parseComponents(
+        reaction,
+        expression_dict,
+        _idx)
+      let updated_source = comps[0];
+      let updated_target = comps[1];
 
-      // Sustained up-regulation
-      let up_in = false;
-      let up_out = false;
-      for (i in updated_source) {
-        if (updated_source[i] >= threshold) {
-          up_in = true;
-        }
-      }
-      for (j in updated_target) {
-        if (updated_target[j] >= threshold) {
-          up_out = true;
-        }
-      }
+      if(updated_source.length>0 && updated_target.length>0) {
 
-      // Sustained down-regulation
-      let down_in = false;
-      let down_out = false;
-      for (k in updated_source) {
-        if (updated_source[k] <= -(threshold)) {
-          down_in = true;
+        // Sustained up-regulation
+        let up_in = false;
+        let up_out = false;
+        for (i in updated_source) {
+          if (updated_source[i] >= threshold) {
+            up_in = true;
+          }
         }
-      }
-      for (l in updated_target) {
-        if (updated_target[l] <= -(threshold)) {
-          down_out = true;
+        for (j in updated_target) {
+          if (updated_target[j] >= threshold) {
+            up_out = true;
+          }
         }
-      }
 
-      if (((down_in === true) & (down_out === true)) | ((up_in === true) & (up_out === true))) {
-        discovered_motifs.push(reaction);
+        // Sustained down-regulation
+        let down_in = false;
+        let down_out = false;
+        for (k in updated_source) {
+          if (updated_source[k] <= -(threshold)) {
+            down_in = true;
+          }
+        }
+        for (l in updated_target) {
+          if (updated_target[l] <= -(threshold)) {
+            down_out = true;
+          }
+        }
+
+        if (((down_in === true) & (down_out === true)) | ((up_in === true) & (up_out === true))) {
+          sample_motifs.push(reaction);
+        }
       }
     }
-  }
 
-  for (let m in discovered_motifs) {
-    discovered_motifs[m]['pathways'] = path_mapper[discovered_motifs[m]['id']]
+    for (let m in sample_motifs) {
+      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['id']]
+    }
+    discovered_motifs.push(sample_motifs);
   }
   console.log(discovered_motifs);
   return discovered_motifs;
@@ -244,36 +291,40 @@ function motifSearch_PathMax(
     collapsed_reaction_dict,
     expression_dict,
     path_mapper,
-    modifiers) {
+    sample_indices) {
   console.log("motif search 5")
   console.log("Pathway min/max threshold set at: ", threshold)
   let discovered_motifs = [];
 
-  // For each pathway, get reactions
-  for (pathway in mod_collapsed_pathways) {
+  for (_idx in sample_indices) {
+    let sample_motifs = [];
 
-    let values = [];
+    // For each pathway, get reactions
+    for (pathway in mod_collapsed_pathways) {
 
-    let reactions = mod_collapsed_pathways[pathway].reactions;
-    for (rxn in reactions) {
-      let reaction = collapsed_reaction_dict[reactions[rxn]];
-      let comps = parseComponents(
-        reaction,
-        expression_dict)
-      let updated_source = comps[0];
-      let updated_target = comps[1];
+      let values = [];
 
-      // Combine all values
-      values = values.concat(updated_source, updated_target);
-    }
+      let reactions = mod_collapsed_pathways[pathway].reactions;
+      for (rxn in reactions) {
+        let reaction = collapsed_reaction_dict[reactions[rxn]];
+        let comps = parseComponents(
+          reaction,
+          expression_dict,
+          _idx)
+        let updated_source = comps[0];
+        let updated_target = comps[1];
 
-    if (values.length > 0) {
-      if (Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values)) >= threshold) {
-        discovered_motifs.push(mod_collapsed_pathways[pathway]);
+        // Combine all values
+        values = values.concat(updated_source, updated_target);
+      }
+      if (values.length > 0) {
+        if (Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values)) >= threshold) {
+          sample_motifs.push(mod_collapsed_pathways[pathway]);
+        }
       }
     }
+    discovered_motifs.push(sample_motifs);
   }
-
   console.log(discovered_motifs);
   return discovered_motifs;
   // Get expression for all entities of components

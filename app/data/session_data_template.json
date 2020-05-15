@@ -13,5 +13,6 @@
   "max_value": 5,
   "processed": false,
   "current_pathway": null,
-  "provided_data": false
+  "provided_data": false,
+  "labels": ""
 }

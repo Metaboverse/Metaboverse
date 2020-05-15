@@ -396,10 +396,15 @@ function make_graph(
     _height,
     global_motifs) {
 
-  console.log(new_nodes)
-
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
+
+  // For motif search, display current selected sample with no reset
+  var page_path = window.location.pathname;
+  var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
+  if (page_name === "motif.html") {
+    var sample = d3.select("circle#dot").attr("x");
+  }
 
   // Initialize force graph object
   var svg_viewer = d3

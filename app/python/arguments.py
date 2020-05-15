@@ -259,6 +259,12 @@ def parse_arguments(
         type = str,
         required = False)
     curate_opts.add_argument(
+        '--labels',
+        help = 'Comma separated list of labels to use for multi-condition or timecourse experiments',
+        metavar = 'cond1, cond2, cond3, ...',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
         '-n', '--session_data',
         help = 'Path and filename to session data file',
         metavar = '<path/filename>',

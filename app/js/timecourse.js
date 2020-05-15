@@ -27,6 +27,7 @@ var timeTransition = 8000;
 var numberConditions = 1; // determine based on user data
 var start = 0; // data min index
 var end = 1; // data max index
+var slider_index = 0;
 
 function buildSlider(categories, names) {
 
@@ -42,8 +43,10 @@ function buildSlider(categories, names) {
   var slider = d3
     .select("#slider")
     .append("svg")
-    .attr("width", width - 250)
+    .attr("id", "slide")
+    .attr("width", width)
     .attr("height", 50)
+    .attr("viewBox", [0, -15, width, 50])
     .attr("overflow", "visible");
 
   slider
@@ -104,29 +107,24 @@ function buildSlider(categories, names) {
 
   function hue(h) {
 
+    var slider_index = Math.floor(h + 0.5);
     handle
-      .attr("cx", x(Math.floor(h + 0.5)));
+      .attr("cx", x(slider_index))
+      .attr("x", slider_index);
 
-    //label
-    //  .text(Math.round(h))
-    //  .attr("class", "label")
-    //  .attr("text-anchor", "middle")
-    //  .attr("transform", "translate(" + x(h) + ",7)")
     let node = d3.selectAll("circle")
-    console.log(node)
     node.each(function(d) {
 
       if (d !== undefined) {
 
         // if rectangle, ellipse, circle
         // change fill and text
-
         if (d.sub_type === "metabolite_component") {
           try {
             d3.select("circle#" + d.id)
-              .style("--node_color", function(d) {
-                return "rgba(" + d["values_js"][Math.floor(h + 0.5)].toString() + ")";
-              })
+            .style("--node_color", function(d) {
+              return "rgba(" + d["values_js"][slider_index].toString() + ")";
+            })
             d3.select("text#" + d.id)
               .html(function(d) {
                 return (
@@ -134,10 +132,10 @@ function buildSlider(categories, names) {
                   + d.name
                   + "</tspan>"
                   + "<tspan x='16' y='.7em'>Value: "
-                  + parseFloat(d.values[Math.floor(h + 0.5)]).toFixed(2)
+                  + parseFloat(d.values[slider_index]).toFixed(2)
                   + "</tspan>"
                   + "<tspan x='16' y='1.7em'>Statistic: "
-                  + parseFloat(d.stats[Math.floor(h + 0.5)]).toFixed(2)
+                  + parseFloat(d.stats[slider_index]).toFixed(2)
                   + "</tspan>"
                 );
               })
@@ -147,7 +145,7 @@ function buildSlider(categories, names) {
           try {
             d3.select("ellipse#" + d.id)
               .style("--node_color", function(d) {
-                return "rgba(" + d["values_js"][Math.floor(h + 0.5)].toString() + ")";
+                return "rgba(" + d["values_js"][slider_index].toString() + ")";
               })
             d3.select("text#" + d.id)
               .html(function(d) {
@@ -156,10 +154,10 @@ function buildSlider(categories, names) {
                   + d.name
                   + "</tspan>"
                   + "<tspan x='16' y='.7em'>Value: "
-                  + parseFloat(d.values[Math.floor(h + 0.5)]).toFixed(2)
+                  + parseFloat(d.values[slider_index]).toFixed(2)
                   + "</tspan>"
                   + "<tspan x='16' y='1.7em'>Statistic: "
-                  + parseFloat(d.stats[Math.floor(h + 0.5)]).toFixed(2)
+                  + parseFloat(d.stats[slider_index]).toFixed(2)
                   + "</tspan>"
                 );
               })
@@ -169,7 +167,7 @@ function buildSlider(categories, names) {
           try {
             d3.select("rect#" + d.id)
               .style("--node_color", function(d) {
-                return "rgba(" + d["values_js"][Math.floor(h + 0.5)].toString() + ")";
+                return "rgba(" + d["values_js"][slider_index].toString() + ")";
               })
             d3.select("text#" + d.id)
               .html(function(d) {
@@ -178,10 +176,10 @@ function buildSlider(categories, names) {
                   + d.name
                   + "</tspan>"
                   + "<tspan x='16' y='.7em'>Value: "
-                  + parseFloat(d.values[Math.floor(h + 0.5)]).toFixed(2)
+                  + parseFloat(d.values[slider_index]).toFixed(2)
                   + "</tspan>"
                   + "<tspan x='16' y='1.7em'>Statistic: "
-                  + parseFloat(d.stats[Math.floor(h + 0.5)]).toFixed(2)
+                  + parseFloat(d.stats[slider_index]).toFixed(2)
                   + "</tspan>"
                 );
               })
@@ -189,17 +187,19 @@ function buildSlider(categories, names) {
         }
       }
     })
+
   }
 }
 
 // Check number of categories
-function checkCategories(categories) { //, names) {
-
-  // temp
-  let names = Array("000min", "015min", "030min", "060min", "180min")
+function checkCategories(categories, labels) { //, names) {
 
   if (categories.length > 1) {
     timecourse = true;
+    let names = labels.split(',');
+    names = names.map(function (n) {
+      return n.trim();
+    });
     buildSlider(categories, names);
   } else {
     timecourse = false;

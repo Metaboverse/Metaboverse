@@ -42,14 +42,14 @@ window.addEventListener("load", function(event) {
         console.log("The file you dragged: ", f.path);
         update_session_info("database_url", f.path);
 
-        $('#selectedFile').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedFile').html('<font size="2">' + f.path + '</font>');
         var data = JSON.parse(fs.readFileSync(f.path).toString());
         if (data.categories.length > 0) {
-          $("#content").replaceWith(
+          $("#content").html(
             '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
           );
         } else {
-          $("#content").replaceWith(
+          $("#content").html(
             '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
           );
         }

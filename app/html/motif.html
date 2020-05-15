@@ -60,7 +60,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   </head>
 
   <body onload="showMotifs()">
-
     <div class="container-fluid" style="width: 95%; padding-top: 80px">
         <h3>Motif Search Results</h3>
         <div class="row" style="margin-top: 20px;">
@@ -122,7 +121,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <br />
                                 <br />
                                 <p style="padding-left:45px; margin-top:-38px">
-                                  <input style="width: 100px; height: 100px;" type="checkbox" id="use_modifiers" name="use_modifiers" onclick='modifiersChecked()' value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.">
+                                  <input style="width: 100px; height: 100px;" type="checkbox" id="use_modifiers" name="use_modifiers" onclick='modifiersChecked()' value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers. Please refer to documentation for more information.">
                                 </p>
                             </div>
                         </div>
@@ -163,5 +162,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
     </div>
+    <br />
+    <br />
+    <div id="slider" align="center"></div>
   </body>
 </html>

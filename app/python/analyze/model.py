@@ -706,7 +706,8 @@ def output_graph(
         mod_collapsed_pathways,
         max_value,
         max_stat,
-        categories):
+        categories,
+        labels):
     """Output graph and necessary metadata
     """
 
@@ -721,6 +722,7 @@ def output_graph(
     data['max_value'] = max_value
     data['max_stat'] = max_stat
     data['categories'] = categories
+    data['labels'] = labels
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
@@ -1089,7 +1091,8 @@ def __main__(
         mod_collapsed_pathways=mod_collapsed_pathways,
         max_value=max_value,
         max_stat=max_stat,
-        categories=categories)
+        categories=categories,
+        labels=args_dict['labels'])
     print('Graphing complete.')
     progress_feed(args_dict, "graph", 2)
 

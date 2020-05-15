@@ -88,7 +88,7 @@ var superPathwayDict = make_superPathway_dictionary(data);
 
 var global_motifs = gatherMotifs(data);
 
-var timecourse = checkCategories(data.categories); //, data.names);
+var timecourse = checkCategories(data.categories, data.labels); //, data.names);
 
 make_menu(
   superPathwayDict,

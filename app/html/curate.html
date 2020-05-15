@@ -136,7 +136,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           var defaultValue = "No file selected";
           if (curURL !== null) {
             defaultValue = curURL;
-            $("#content").replaceWith(
+            $("#content").html(
               '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
           }
           $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');

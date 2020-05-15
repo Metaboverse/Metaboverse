@@ -44,7 +44,7 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        $('#selectedTranscriptomics').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedTranscriptomics').html('<font size="2">' + f.path + '</font>');
         update_session_info("transcriptomics", f.path);
 
         transcriptomics = true;
@@ -76,7 +76,7 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        $('#selectedProteomics').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedProteomics').html('<font size="2">' + f.path + '</font>');
         update_session_info("proteomics", f.path);
 
         proteomics = true;
@@ -108,7 +108,7 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        $('#selectedMetabolomics').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedMetabolomics').html('<font size="2">' + f.path + '</font>');
 
         update_session_info("metabolomics", f.path);
 
@@ -124,51 +124,13 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("metadata-input").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var inputVal = document.getElementById("metadata-input").value.split(".");
-
-    if (
-      (inputVal[inputVal.length - 1] !== "tsv") &
-      (inputVal[inputVal.length - 1] !== "txt")
-    ) {
-      alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
-      );
-    } else {
-      try {
-        f = event.srcElement.files[0];
-        console.log("The file you dragged: ", f);
-        $('#selectedMetadata').replaceWith('<font size="2">' + f.path + '</font>');
-
-        update_session_info("metadata", f.path);
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
-        );
-      }
-    }
-  };
-});
-
-window.addEventListener("load", function(event) {
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("updateExperiment").value;
-
-    if (inputVal === "expType1") {
+    var experiment_type = document.getElementById("updateExperiment").value;
+    if (experiment_type === "null") {
       experiment_type = null;
-    } else if (inputVal === "expType2") {
-      experiment_type = "timecourse";
-    } else if (inputVal === "expType3") {
-      experiment_type = "flux_balance";
-    } else if (inputVal === "expType4") {
-      experiment_type = "multiple_conditions";
     } else {}
 
     try {
@@ -176,6 +138,42 @@ window.addEventListener("load", function(event) {
     } catch (error) {
       console.log(error);
       alert(error);
+    }
+
+    // If timecourse or multiple conditions, have user input labels in correct order as listed  in dataframe
+    if ((experiment_type === "timecourse") | (experiment_type === "multiple_conditions")) {
+      $("#nameField").html(
+        "<form>"
+        + "Sample labels: "
+        + "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>"
+        + "<br />"
+        + "<br />"
+        + "<input type='text' class='experimentName' id='updateExperimentLabels'></input>"
+        + "</form>"
+        + "<br />"
+      );
+
+      document.getElementById("updateExperimentLabels").onchange = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var inputVal = document.getElementById("updateExperimentLabels").value;
+
+        try {
+          console.log("Your provided labels: ", inputVal);
+
+          update_session_info("labels", inputVal);
+        } catch (error) {
+          console.log(error);
+          alert(
+            "Labels are not valid."
+          );
+        }
+      }
+      
+    } else {
+      $("#nameField").html('');
+      update_session_info("labels", "");
     }
   };
 });

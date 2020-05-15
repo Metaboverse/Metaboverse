@@ -135,7 +135,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             var defaultValue = "No file selected";
             if (dbURL !== null) {
               defaultValue = dbURL;
-              $("#content").replaceWith(
+              $("#content").html(
                 '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
               );
             }

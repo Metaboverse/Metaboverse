@@ -120,6 +120,9 @@ runBuild = function(_callback) {
     displayOptions();
   } else {
     curated = getArgument("curation_url")
+    let labels = getArgument("labels");
+    labels = labels.replace(/\s/g,'');
+    console.log(labels)
     console.log(curated)
     if (String(curated) !== "None") {
       graphDictionary = {
@@ -132,6 +135,7 @@ runBuild = function(_callback) {
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
         experiment: getArgument("experiment"),
+        labels: labels,
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -149,6 +153,7 @@ runBuild = function(_callback) {
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
         experiment: getArgument("experiment"),
+        labels: labels,
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -176,12 +181,12 @@ function displayOptions() {
     (get_session_info("provided_data") === "true") |
     (data.categories.length > 0)
   ) {
-    $("#content").replaceWith(
+    $("#content").html(
       '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
     update_session_info("provided_data", true);
   } else {
-    $("#content").replaceWith(
+    $("#content").html(
       '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
   }
