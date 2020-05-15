@@ -63,7 +63,7 @@ class MetaGraph{
 
     this.categories = graphdata.categories;
     this.labels = graphdata.labels;
-    let timecourse = checkCategories(this.categories, this.labels);
+    timecourse = checkCategories(this.categories, this.labels);
 
     // Generate stamp view output
     try {
@@ -256,6 +256,7 @@ class MetaGraph{
   }
 
   drawMotifSearchResult(motif_list, indexer){
+
     //Change this to sort by p-values
     //motif_list.sort(function(a,b){
     //  console.log(a.pathways)
@@ -282,7 +283,7 @@ class MetaGraph{
       .attr("id",(d)=>"stamp-cover-"+d.id)
       .style("opacity",0)
       .on("click",(d)=>{
-        this.drawMotifPathway(d, indexer);
+        this.drawMotifPathway(d, indexer, motif_list);
         d3.select("#motif-pathway-svg").style("visibility","visible");
       })
       .on("mouseover",(d)=>{
@@ -441,7 +442,7 @@ class MetaGraph{
         .style("opacity",0)
         .on("click",(d)=>{
           document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>" ;
-          this.drawPathwayView(d.id, "#pathway-view-svg");
+          this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
           d3.select("#pathway-view-svg").style("visibility","visible");
           d3.select(".network-panel").style("visibility","visible");
         })
@@ -497,7 +498,8 @@ class MetaGraph{
     }
   }
 
-  drawMotifPathway(motif, indexer){
+  drawMotifPathway(motif, indexer, motif_list){
+
     // recover graph
     let mnodes = [motif];
     let mlinks = [];
@@ -602,39 +604,39 @@ class MetaGraph{
       .style("font-size","12px")
       .style("font-weight","bold")
 
-  // **** draw pathway glyph ****
-  let pathway_list = motif.pathways;
-  let pathway_height = 20;
-  let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
-  this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
-  this.mp_svg.attr("height",this.mp_svg_height);
+    // **** draw pathway glyph ****
+    let pathway_list = motif.pathways;
+    let pathway_height = 20;
+    let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
+    this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
+    this.mp_svg.attr("height",this.mp_svg_height);
 
-  let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
+    let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
 
-  let sg = this.mp_selection_group.selectAll("rect")
-    .data(pathway_list);
-  sg.exit().remove();
-  sg = sg.enter().append("rect").merge(sg)
-    .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
-    .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
-    .attr("width",pathway_width)
-    .attr("height",pathway_height)
-    .attr("fill","blue")
-    .attr("id",(d)=>"mp-cover-"+d)
-    .style("opacity",0)
-    .on("click",(d)=>{
-      this.drawPathwayView(d, "#pathway-view-svg");
-      this.findAllMotif(d, this.motif);
-      d3.select("#pathway-view-svg").style("visibility","visible");
-      d3.select(".network-panel").style("visibility","visible");
+    let sg = this.mp_selection_group.selectAll("rect")
+      .data(pathway_list);
+    sg.exit().remove();
+    sg = sg.enter().append("rect").merge(sg)
+      .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
+      .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
+      .attr("width",pathway_width)
+      .attr("height",pathway_height)
+      .attr("fill","blue")
+      .attr("id",(d)=>"mp-cover-"+d)
+      .style("opacity",0)
+      .on("click",(d)=>{
+        this.drawPathwayView(d, "#pathway-view-svg", motif_list);
+        this.findAllMotif(d, this.motif);
+        d3.select("#pathway-view-svg").style("visibility","visible");
+        d3.select(".network-panel").style("visibility","visible");
 
-    })
-    .on("mouseover",(d)=>{
-      d3.select("#mp-cover-" + d).style("opacity",0.4);
-    })
-    .on("mouseout",(d)=>{
-      d3.select("#mp-cover-" + d).style("opacity",0);
-    })
+      })
+      .on("mouseover",(d)=>{
+        d3.select("#mp-cover-" + d).style("opacity",0.4);
+      })
+      .on("mouseout",(d)=>{
+        d3.select("#mp-cover-" + d).style("opacity",0);
+      })
 
     let fg = this.mp_pathway_group.selectAll("rect")
       .data(pathway_list);
@@ -659,7 +661,7 @@ class MetaGraph{
 
   }
 
-  drawPathwayView(p, selector) {
+  drawPathwayView(p, selector, motif_list) {
 
     /*
     var page_path = window.location.pathname;
@@ -671,6 +673,7 @@ class MetaGraph{
         .attr("cx", 90)
     }
     */
+    console.log(motif_list)
     graph_genes = true;
     collapse_reactions = true;
     var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
@@ -727,7 +730,8 @@ class MetaGraph{
       display_reactions_dict,
       selector,
       _width,
-      _height
+      _height,
+      motif_list
     );
   }
 

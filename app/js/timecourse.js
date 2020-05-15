@@ -28,6 +28,7 @@ var numberConditions = 1; // determine based on user data
 var start = 0; // data min index
 var end = 1; // data max index
 var slider_index = 0;
+var timecourse = false;
 
 function buildSlider(categories, names) {
 
@@ -185,9 +186,41 @@ function buildSlider(categories, names) {
               })
           } catch(err) {}
         }
+
+        // if reaction and in current motif set, enlarge, if not, reset
+        try {
+          if (global_motifs !== undefined) {
+            if (global_motifs[slider_index] !== undefined) {
+              if (global_motifs[slider_index].length > 0) {
+                if (global_motifs[slider_index].includes(d.id)) {
+                  d3.selectAll("circle#" + d.id)
+                    .style("r", "16px")
+                    .style("stroke", "purple")
+                    .style("stroke-width", "5px")
+                } else {
+                  d3.selectAll("circle#" + d.id)
+                  .style("stroke", "black")
+                  .style("stroke-width", "1px")
+                  .style("--node_color", function(d) {
+                    return "rgba(" + d[entity][slider_index].toString() + ")";
+                  })
+                  .style("r", function() {
+                    return 6;
+                  })
+                  .style("stroke-dasharray", function(d) {
+                    if (d.inferred === "true" || d.type === "collapsed") {
+                      return "2,2";
+                    } else {
+                      return "none";
+                    }
+                  })
+                }
+              }
+            }
+          }
+        } catch(err) {}
       }
     })
-
   }
 }
 

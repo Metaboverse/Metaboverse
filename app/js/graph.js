@@ -404,6 +404,8 @@ function make_graph(
   var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
   if (page_name === "motif.html") {
     var sample = d3.select("circle#dot").attr("x");
+  } else {
+    var sample = slider_index;
   }
 
   // Initialize force graph object
@@ -556,18 +558,38 @@ function make_graph(
   })
   .attr("id", function(d) {return d.id});
 
-  // for all reactions in pathway
-  if (global_motifs !== undefined) {
-    if (global_motifs.length > 0) {
-      new_nodes.forEach(node=>{
-        let rxn_id = node.id;
-        if (global_motifs.includes(rxn_id)) {
-          d3.selectAll("circle#" + rxn_id)
-            .style("r", "16px")
-            .style("stroke", "purple")
-            .style("stroke-width", "5px")
-        }
-      })
+  // Motif page will only send the current time-point's motifs
+  if (page_name === "motif.html") {
+    if (global_motifs !== undefined) {
+      let motif_ids = [];
+      for (key in global_motifs) {
+        motif_ids.push(global_motifs[key].id)
+      }
+      if (motif_ids.length > 0) {
+        new_nodes.forEach(node=>{
+          let rxn_id = node.id;
+          if (motif_ids.includes(rxn_id)) {
+            d3.selectAll("circle#" + rxn_id)
+              .style("r", "16px")
+              .style("stroke", "purple")
+              .style("stroke-width", "5px")
+          }
+        })
+      }
+    }
+  } else {
+    if (global_motifs[sample] !== undefined) {
+      if (global_motifs[sample].length > 0) {
+        new_nodes.forEach(node=>{
+          let rxn_id = node.id;
+          if (global_motifs[sample].includes(rxn_id)) {
+            d3.selectAll("circle#" + rxn_id)
+              .style("r", "16px")
+              .style("stroke", "purple")
+              .style("stroke-width", "5px")
+          }
+        })
+      }
     }
   }
 
