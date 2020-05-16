@@ -19,8 +19,6 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var value_threshold = 2.5; // ~1.5 fold
-var stat_threshold = 0.01;
 var sample = 0;
 var last_click = 0;
 
