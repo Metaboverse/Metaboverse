@@ -402,10 +402,10 @@ function make_graph(
   // For motif search, display current selected sample with no reset
   var page_path = window.location.pathname;
   var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
-  if (page_name === "motif.html") {
+  if ((page_name === "motif.html") & (timecourse === true)) {
     var sample = d3.select("circle#dot").attr("x");
   } else {
-    var sample = slider_index;
+    var sample = 0;
   }
 
   // Initialize force graph object

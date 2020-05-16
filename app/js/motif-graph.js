@@ -625,8 +625,10 @@ class MetaGraph{
       .attr("id",(d)=>"mp-cover-"+d)
       .style("opacity",0)
       .on("click",(d)=>{
+        console.log(d)
+        console.log(motif_list)
         this.drawPathwayView(d, "#pathway-view-svg", motif_list);
-        this.findAllMotif(d, this.motif);
+        this.findAllMotif(d, this.motif[indexer]);
         d3.select("#pathway-view-svg").style("visibility","visible");
         d3.select(".network-panel").style("visibility","visible");
 
@@ -736,6 +738,7 @@ class MetaGraph{
   }
 
   findAllMotif(pathway, motif_list){
+
     d3.select(".network-panel").style("visibility","visible");
     let current_pathway = this.mod_collapsed_pathways[pathway].name;
     document.getElementById("pathway_name").innerHTML = "<h6><b>" + current_pathway + "</b></h6>" ;
@@ -762,6 +765,7 @@ class MetaGraph{
   }
 
   showMotifNames(current_motif) {
+
     let tg = d3.select("#all-motif-list")
       .select("ul")
       .selectAll("li")

@@ -9,7 +9,7 @@ Instructions for building app for distribution:
 If modules not installed:
 -------------------------
 1) Run 'npm install electron --save-dev'
-2) Run 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle --save'
+2) Run 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save'
 
 To run demo app:
 ----------------
