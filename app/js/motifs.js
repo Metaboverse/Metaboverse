@@ -303,7 +303,6 @@ function motifSearch_PathMax(
     for (pathway in mod_collapsed_pathways) {
 
       let values = [];
-
       let reactions = mod_collapsed_pathways[pathway].reactions;
       for (rxn in reactions) {
         let reaction = collapsed_reaction_dict[reactions[rxn]];
@@ -325,7 +324,6 @@ function motifSearch_PathMax(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
   // Get expression for all entities of components
   // Compare min/max
@@ -333,4 +331,66 @@ function motifSearch_PathMax(
   // Will need to reformat motif display since just showing pathways, not reactions (make dummy reactions?)
   // Make sorting index for later that is also output
 
+}
+
+//Path coverage comparison
+//let threshold = d3.select("#pathcov_num").node().value;
+function motifSearch_PathCov(
+    threshold,
+    min_coverage,
+    mod_collapsed_pathways,
+    collapsed_reaction_dict,
+    stats_dict,
+    path_mapper,
+    sample_indices) {
+  console.log("motif search 6")
+  console.log("threshold set at: ", threshold)
+  let discovered_motifs = [];
+
+  for (_idx in sample_indices) {
+    let sample_motifs = [];
+
+    // For each pathway, get reactions
+    for (pathway in mod_collapsed_pathways) {
+
+      let values = 0;
+      let total = 0;
+
+      let reactions = mod_collapsed_pathways[pathway].reactions;
+      for (rxn in reactions) {
+        let reaction = collapsed_reaction_dict[reactions[rxn]];
+        let comps = parseComponents(
+          reaction,
+          stats_dict,
+          _idx)
+        let updated_source = comps[0].filter(stat => stat < threshold);
+        let updated_target = comps[1].filter(stat => stat < threshold);
+
+        // Check that at least one component in the reaction meets thresholding
+        // criteria
+        if (updated_source.length + updated_target.length > 0) {
+          values = values + 1;
+        }
+        total = total + 1;
+      }
+
+      let cov = values / total;
+      if (cov >= min_coverage) {
+        sample_motifs.push([
+          mod_collapsed_pathways[pathway],
+          cov,
+          values,
+          total
+        ]);
+      }
+    }
+
+    sample_motifs.sort(function(one, two) {
+      return two[1] - one[1];
+    });
+
+    discovered_motifs[_idx] = sample_motifs;
+  }
+  console.log(discovered_motifs);
+  return discovered_motifs;
 }

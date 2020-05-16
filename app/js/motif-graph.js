@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 var sample = 0;
 var last_click = 0;
+var cov_threshold = 0.1;
 
 database_url = get_session_info("database_url");
 console.log("Database path: " + database_url);
@@ -236,6 +237,41 @@ class MetaGraph{
           this.expression_dict,
           this.path_mapper,
           this.categories)
+
+        console.log(this.motif)
+        console.log(timecourse)
+        if (this.motif !== undefined) {
+          if (timecourse === true) {
+            d3.select("svg#slide")
+              .on("click", ()=>{
+                let sample_idx = d3.select("circle#dot").attr("x");
+                if (sample_idx !== last_click) {
+                  reset_objects();
+                  this.drawMotifSearchResultPathway(this.motif[sample_idx]);
+                last_click = sample_idx;
+                }
+              })
+          }
+          this.drawMotifSearchResultPathway(this.motif[0]);
+        }
+      }
+    )
+
+    d3.select("#motif6")
+      .on("click", ()=>{
+        highlight_selection("#pathcov_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#pathcov_num").node().value;
+        this.motif = motifSearch_PathCov(
+          threshold,
+          cov_threshold,
+          this.mod_collapsed_pathways,
+          this.collapsed_reaction_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.categories)
+
         if (this.motif !== undefined) {
           if (timecourse === true) {
             d3.select("svg#slide")
@@ -410,6 +446,7 @@ class MetaGraph{
         .attr("y",start_y + 45)
         .text(d=>d.pathways.length + " pathways")
         .style("font-size","11px")
+        .style("font-weight","normal")
     }
   }
 
@@ -420,6 +457,23 @@ class MetaGraph{
     //  return d3.descending(a.pathways.length, b.pathways.length)
     //})
 
+    // modifier for path coverage motif
+    var coverage_true = false;
+    var motif_dict = {};
+    if (motif_list[0].constructor === Array) {
+      coverage_true = true;
+    }
+
+    if (coverage_true === true) {
+      var original_list = motif_list;
+      motif_list = [];
+      for (let x in original_list) {
+        motif_list.push(original_list[x][0])
+        motif_dict[original_list[x][0]["id"]] = String(original_list[x][2]).concat("/", String(original_list[x][3]));
+      }
+    }
+
+    console.log(motif_dict)
     let stamp_height = 30;
     this.stamp_svg_height = Math.ceil(
       motif_list.length)
@@ -465,9 +519,10 @@ class MetaGraph{
         .attr("stroke","lightgray")
         .attr("fill","white")
 
-    d3.selectAll("circle").remove();
-    d3.selectAll("line").remove();
-    d3.selectAll("text").remove();
+    // remove previous elements, ignoring timecourse slider
+    d3.selectAll("circle:not(#dot)").remove();
+    d3.selectAll("line:not(#track)").remove();
+    d3.selectAll("text:not(#tick)").remove();
 
     let cg = this.stamp_svg_circle_group.selectAll("g")
       .data(motif_list);
@@ -487,10 +542,18 @@ class MetaGraph{
         .attr("x",start_x + 10)
         .attr("y",start_y + 21)
         .text(d=> {
-          if (d.name.length < 48) {
-            return d.name;
+          if (coverage_true === true) {
+            if (d.name.length < 40) {
+              return d.name + " (" + motif_dict[d.id] + ")";
+            } else {
+              return d.name.substring(0,40) + "... (" + motif_dict[d.id] + ")";
+            }
           } else {
-            return d.name.substring(0,45) + " ...";
+            if (d.name.length < 45) {
+              return d.name;
+            } else {
+              return d.name.substring(0,45) + " ...";
+            }
           }
         })
         .style("font-size","14px")
@@ -804,6 +867,7 @@ function highlight_selection(_selector) {
     "#maxmin_num", //maxmin_num
     "#sustained_num", //sustained_num
     "#pathmax_num", //pathmax_num
+    "#pathcov_num" //pathcov_num
   ]
 
   for (s in _selectors) {

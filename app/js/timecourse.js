@@ -58,6 +58,7 @@ function buildSlider(categories, names) {
   slider
     .append("line")
     .attr("class", "track")
+    .attr("id", "track")
     .attr("x1", x.range()[0])
     .attr("x2", x.range()[1])
     .select(function() {
@@ -87,6 +88,7 @@ function buildSlider(categories, names) {
     .data(x.ticks(numberConditions))
     .enter()
     .append("text")
+    .attr("id", "tick")
     .attr("x", x)
     .attr("text-anchor", "middle")
     .text(function(d, i) {
