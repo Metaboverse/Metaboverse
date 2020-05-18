@@ -62,6 +62,7 @@ class MetaGraph{
     this.expression_dict = expression_dict;
     this.stats_dict = stats_dict;
 
+    this.degree_dict = graphdata.degree_dictionary;
     this.categories = graphdata.categories;
     this.labels = graphdata.labels;
     timecourse = checkCategories(this.categories, this.labels);
@@ -121,6 +122,7 @@ class MetaGraph{
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.path_mapper,
+          this.degree_dict,
           this.categories)
         if (this.motif !== undefined) {
           if (timecourse === true) {
@@ -149,6 +151,7 @@ class MetaGraph{
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.path_mapper,
+          this.degree_dict,
           this.categories)
         if (this.motif !== undefined) {
           if (timecourse === true) {
@@ -177,6 +180,7 @@ class MetaGraph{
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.path_mapper,
+          this.degree_dict,
           this.categories)
         if (this.motif !== undefined) {
           if (timecourse === true) {
@@ -206,6 +210,7 @@ class MetaGraph{
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.path_mapper,
+          this.degree_dict,
           this.categories)
         if (this.motif !== undefined) {
           if (timecourse === true) {
@@ -226,6 +231,67 @@ class MetaGraph{
 
     d3.select("#motif5")
       .on("click", ()=>{
+        highlight_selection("#modreg_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#modreg_num").node().value;
+        this.motif = modifierReg(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        if (this.motif !== undefined) {
+          if (timecourse === true) {
+            d3.select("svg#slide")
+              .on("click", ()=>{
+                let sample_idx = d3.select("circle#dot").attr("x");
+                if (sample_idx !== last_click) {
+                  reset_objects();
+                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                last_click = sample_idx;
+                }
+              })
+          }
+          this.drawMotifSearchResult(this.motif[0], 0);
+        }
+      }
+    )
+
+    d3.select("#motif6")
+      .on("click", ()=>{
+        highlight_selection("#transreg_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#transreg_num").node().value;
+        this.motif = modifierTransport(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        if (this.motif !== undefined) {
+          if (timecourse === true) {
+            d3.select("svg#slide")
+              .on("click", ()=>{
+                let sample_idx = d3.select("circle#dot").attr("x");
+                if (sample_idx !== last_click) {
+                  reset_objects();
+                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                last_click = sample_idx;
+                }
+              })
+          }
+          this.drawMotifSearchResult(this.motif[0], 0);
+        }
+      }
+    )
+
+
+    d3.select("#motif99")
+      .on("click", ()=>{
         highlight_selection("#pathmax_num");
         reset_dot();
         reset_objects();
@@ -236,6 +302,7 @@ class MetaGraph{
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.path_mapper,
+          this.degree_dict,
           this.categories)
 
         console.log(this.motif)
@@ -257,7 +324,7 @@ class MetaGraph{
       }
     )
 
-    d3.select("#motif6")
+    d3.select("#motif100")
       .on("click", ()=>{
         highlight_selection("#pathcov_num");
         reset_dot();
@@ -270,6 +337,7 @@ class MetaGraph{
           this.collapsed_reaction_dict,
           this.stats_dict,
           this.path_mapper,
+          this.degree_dict,
           this.categories)
 
         if (this.motif !== undefined) {
@@ -867,7 +935,9 @@ function highlight_selection(_selector) {
     "#maxmin_num", //maxmin_num
     "#sustained_num", //sustained_num
     "#pathmax_num", //pathmax_num
-    "#pathcov_num" //pathcov_num
+    "#pathcov_num", //pathcov_num
+    "#modreg_num",
+    "#transreg_num"
   ]
 
   for (s in _selectors) {

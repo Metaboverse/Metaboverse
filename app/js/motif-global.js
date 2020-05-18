@@ -59,13 +59,29 @@ function gatherMotifs(data, categories) {
     data.motif_reaction_dictionary,
     categories)
 
+  let motifs_ModReg = modifierReg(
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    data.motif_reaction_dictionary,
+    categories)
+
+  let motifs_ModTrans = modifierTransport(
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    data.motif_reaction_dictionary,
+    categories)
+
 
   let all_motifs = [];
   for (x in categories) {
     all_motifs[x] = motifs_Avg[x].concat(
       motifs_MaxMax[x],
       motifs_MaxMin[x],
-      motifs_Sustained[x]);
+      motifs_Sustained[x],
+      motifs_ModReg[x],
+      motifs_ModTrans[x]);
   }
 
   let global_motifs_reactions = [];

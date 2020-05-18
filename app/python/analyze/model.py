@@ -704,6 +704,7 @@ def output_graph(
         collapsed_reaction_dictionary,
         motif_reaction_dictionary,
         mod_collapsed_pathways,
+        degree_dictionary,
         max_value,
         max_stat,
         categories,
@@ -719,6 +720,7 @@ def output_graph(
     data['collapsed_reaction_dictionary'] = collapsed_reaction_dictionary
     data['motif_reaction_dictionary'] = motif_reaction_dictionary
     data['mod_collapsed_pathways'] = mod_collapsed_pathways
+    data['degree_dictionary'] = degree_dictionary
     data['max_value'] = max_value
     data['max_stat'] = max_stat
     data['categories'] = categories
@@ -1089,6 +1091,7 @@ def __main__(
         collapsed_reaction_dictionary=updated_reactions,
         motif_reaction_dictionary=motif_reaction_dictionary,
         mod_collapsed_pathways=mod_collapsed_pathways,
+        degree_dictionary=degree_dictionary,
         max_value=max_value,
         max_stat=max_stat,
         categories=categories,

@@ -85,15 +85,22 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <div class="motif_button" id="motif4" style="--motif_color:#e7298a; --highlight_color:#e78ac3; margin-top:13px;" title="Find instances of sustained perturbation along a reaction."><font size="3" color="white">Sustained</font></div>
                                 </p>
                                 <p>
-                                  <div class="motif_button" id="motif5" style="--motif_color:#66a61e; --highlight_color:#a6d854; margin-top:13px;" title="Compare the absolute maximum and minimum values across a pathway."><font size="3" color="white">PathMax</font></div>
+                                  <div class="motif_button" id="motif5" style="--motif_color:#66a61e; --highlight_color:#a6d854; margin-top:13px;" title="Find instances with one regulated modifier and one core component in the reaction."><font size="3" color="white">ModReg</font></div>
                                 </p>
                                 <p>
-                                  <div class="motif_button" id="motif6" style="--motif_color:#ffa500; --highlight_color:#ffd000; margin-top:13px;" title="Compare total coverage of reactions with at least one measured component in pathways."><font size="3" color="white">PathCov</font></div>
+                                  <div class="motif_button" id="motif6" style="--motif_color:#ffa500; --highlight_color:#ffd000; margin-top:13px;" title="Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated."><font size="3" color="white">TransReg</font></div>
+                                </p>
+                                <p>
+                                  <div class="motif_button" id="motif99" style="--motif_color:#a384ff; --highlight_color:#c9b7ff; margin-top:13px;" title="Compare the absolute maximum and minimum values across a pathway."><font size="3" color="white">PathMax</font></div>
+                                </p>
+                                <p>
+                                  <div class="motif_button" id="motif100" style="--motif_color:#ffc0cb; --highlight_color:#ffd9df; margin-top:13px;" title="Compare total coverage of reactions with at least one measured component in pathways."><font size="3" color="white">PathCov</font></div>
                                 </p>
                                 <br />
+                                <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label>
                                 <br />
+                                <label for="exclude_hubs"><font size="2"><i>Exclude hubs</i></font></label>
                                 <br />
-                                <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label><br>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -118,6 +125,14 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </p>
                                 <br />
                                 <p style="padding-left:30px;">
+                                  <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <br />
+                                <p style="padding-left:30px;">
                                   <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
                                 <br />
@@ -125,10 +140,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <input type="number" id="pathcov_num" min="0" max="1" step="0.01" value="0.05">
                                 </p>
                                 <br />
-                                <br />
-                                <br />
-                                <p style="padding-left:45px; margin-top:-38px">
+                                <p style="padding-left:45px; margin-top:-42px">
                                   <input style="width: 100px; height: 100px;" type="checkbox" id="use_modifiers" name="use_modifiers" onclick='modifiersChecked()' value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers. Please refer to documentation for more information.">
+                                </p>
+                                <p style="padding-left:45px; margin-top:-87px">
+                                  <input style="width: 100px; height: 100px;" type="checkbox" id="exclude_hubs" name="exclude_hubs" onclick='hubsChecked()' value="true" title="Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers. Please refer to documentation for more information.">
                                 </p>
                             </div>
                         </div>
