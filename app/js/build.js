@@ -124,18 +124,19 @@ runBuild = function(_callback) {
     labels = labels.replace(/\s/g,'');
     console.log(labels)
     console.log(curated)
+
     if (String(curated) !== "None") {
       graphDictionary = {
         output: getArgument("output"),
         output_file: "find",
         species_id: "find",
         organism_curation: curated,
-        metadata: getArgument("metadata"),
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
         experiment: getArgument("experiment"),
         labels: labels,
+        collapse_with_modifiers: getArgument("collapseWithModifiers"),
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -148,12 +149,12 @@ runBuild = function(_callback) {
           getArgument("output") +
           getArgument("organism_id") +
           "_metaboverse_db.pickle",
-        metadata: getArgument("metadata"),
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
         experiment: getArgument("experiment"),
         labels: labels,
+        collapse_with_modifiers: getArgument("collapseWithModifiers"),
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }

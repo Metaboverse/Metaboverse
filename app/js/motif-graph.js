@@ -520,10 +520,6 @@ class MetaGraph{
 
   drawMotifSearchResultPathway(motif_list){
     //Change this to sort by p-values
-    //motif_list.sort(function(a,b){
-    //  console.log(a.pathways)
-    //  return d3.descending(a.pathways.length, b.pathways.length)
-    //})
 
     // modifier for path coverage motif
     var coverage_true = false;
@@ -591,6 +587,7 @@ class MetaGraph{
     d3.selectAll("circle:not(#dot)").remove();
     d3.selectAll("line:not(#track)").remove();
     d3.selectAll("text:not(#tick)").remove();
+    d3.selectAll("#all-motif-list").remove();
 
     let cg = this.stamp_svg_circle_group.selectAll("g")
       .data(motif_list);

@@ -58,3 +58,5 @@ if ((current_pathway !== null) & (current_pathway !== "null")) {
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);
+d3.select("#kNN_button").on("change", change);
+d3.select("#hub_button").on("change", change);

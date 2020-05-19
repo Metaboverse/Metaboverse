@@ -28,6 +28,8 @@ const hullPadding = 60;
 const max_nodes = 1500;
 var sample = 0;
 var entity = "values_js";
+var knn_value = 1;
+var hub_value = 1000000;
 var graph_genes = true;
 var collapse_reactions = true;
 var saved_nodes = [];
@@ -48,7 +50,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
     entity_id_dict[node["name"]] = node["id"];
     entity_id_dict[node["id"]] = node["name"];
 
-    if (node["type"] === "reaction") {
+    if ((node["type"] === "reaction") | (node["type"] === "collapsed")) {
       display_analytes_dict[node["name"]] = "none";
       display_reactions_dict[node["name"]] = "inline";
     } else {
@@ -92,27 +94,77 @@ function transform(d) {
   return "translate(" + d.x + "," + d.y + ")";
 }
 
-function parse_pathway(data, reactions) {
-
-  var reaction_dictionary = data.reaction_dictionary;
+function parse_pathway(
+    data,
+    reactions,
+    reaction_dictionary,
+    degree_dictionary) {
 
   // Parse through each reaction listed and get the component parts
   var components = [];
   for (rxn in reactions) {
     var target_rxns = reaction_dictionary[reactions[rxn]];
-    components.push(reactions[rxn]);
 
-    for (x in target_rxns["reactants"]) {
-      components.push(target_rxns["reactants"][x]);
-    }
-    for (x in target_rxns["products"]) {
-      components.push(target_rxns["products"][x]);
-    }
-    for (x in target_rxns["modifiers"]) {
-      components.push(target_rxns["modifiers"][x][0]);
-    }
-    for (x in target_rxns["additional_components"]) {
-      components.push(target_rxns["additional_components"][x]);
+    if (target_rxns !== undefined) {
+      components.push(reactions[rxn]);
+      for (x in target_rxns["reactants"]) {
+        if (degree_dictionary[target_rxns["reactants"][x]] <= hub_value) {
+          components.push(target_rxns["reactants"][x]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["reactants"][x] +
+              " (" +
+              degree_dictionary[target_rxns["reactants"][x]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
+      }
+      for (x in target_rxns["products"]) {
+        if (degree_dictionary[target_rxns["products"][x]] <= hub_value) {
+          components.push(target_rxns["products"][x]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["products"][x] +
+              " (" +
+              degree_dictionary[target_rxns["products"][x]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
+      }
+      for (x in target_rxns["modifiers"]) {
+        if (degree_dictionary[target_rxns["modifiers"][x][0]] <= hub_value) {
+          components.push(target_rxns["modifiers"][x][0]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["modifiers"][x][0] +
+              " (" +
+              degree_dictionary[target_rxns["modifiers"][x][0]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
+      }
+      for (x in target_rxns["additional_components"]) {
+        if (degree_dictionary[target_rxns["additional_components"][x]] <= hub_value) {
+          components.push(target_rxns["additional_components"][x]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["additional_components"][x] +
+              " (" +
+              degree_dictionary[target_rxns["additional_components"][x]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
+      }
+    } else {
+      console.log("Could not access the following:")
+      console.log(rxn)
+      console.log(reactions[rxn])
+      console.log(reaction_dictionary[reactions[rxn]])
+      alert("Could not access the following id: ", reactions[rxn], ". This could be related to a failure to updated de-duplicated reactions.")
     }
 
   }
@@ -195,49 +247,79 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   document.getElementById("warning_line_1").innerHTML = "<br>";
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
 
-  var reaction_dictionary = data.reaction_dictionary;
+  if (collapse_reactions !== true) {
+    var reaction_dictionary = data.reaction_dictionary;
+  } else {
+    var reaction_dictionary = data.collapsed_reaction_dictionary;
+  }
+  var degree_dictionary = data.degree_dictionary;
 
   // Parse through each reaction where entity is a component
   nn_components = [entity_id];
   for (reaction in reaction_dictionary) {
     //Return all reactions that contain the entity
+    let target_rxns = reaction_dictionary[reaction];
     if (
-      reaction_dictionary[reaction]["reactants"].includes(entity_id) ||
-      reaction_dictionary[reaction]["products"].includes(entity_id) ||
-      reaction_dictionary[reaction]["modifiers"].includes(entity_id) ||
-      reaction_dictionary[reaction]["additional_components"].includes(entity_id)
+      target_rxns["reactants"].includes(entity_id) ||
+      target_rxns["products"].includes(entity_id) ||
+      target_rxns["modifiers"].includes(entity_id) ||
+      target_rxns["additional_components"].includes(entity_id)
     ) {
-      nn_components.push(reaction_dictionary[reaction]["id"]);
-      for (x in reaction_dictionary[reaction]["reactants"]) {
-        nn_components.push(reaction_dictionary[reaction]["reactants"][x]);
+      nn_components.push(target_rxns["id"]);
+      for (x in target_rxns["reactants"]) {
+        if (degree_dictionary[target_rxns["reactants"][x]] <= hub_value) {
+          nn_components.push(target_rxns["reactants"][x]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["reactants"][x] +
+              " (" +
+              degree_dictionary[target_rxns["reactants"][x]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
       }
       for (x in reaction_dictionary[reaction]["products"]) {
-        nn_components.push(reaction_dictionary[reaction]["products"][x]);
+        if (degree_dictionary[target_rxns["products"][x]] <= hub_value) {
+          nn_components.push(target_rxns["products"][x]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["products"][x] +
+              " (" +
+              degree_dictionary[target_rxns["products"][x]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
       }
       for (x in reaction_dictionary[reaction]["modifiers"]) {
-        nn_components.push(reaction_dictionary[reaction]["modifiers"][x][0]);
+        if (degree_dictionary[target_rxns["modifiers"][x][0]] <= hub_value) {
+          nn_components.push(target_rxns["modifiers"][x][0]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["modifiers"][x][0] +
+              " (" +
+              degree_dictionary[target_rxns["modifiers"][x][0]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
       }
       for (x in reaction_dictionary[reaction]["additional_components"]) {
-        nn_components.push(
-          reaction_dictionary[reaction]["additional_components"][x]
-        );
+        if (degree_dictionary[target_rxns["additional_components"][x]] <= hub_value) {
+          nn_components.push(target_rxns["additional_components"][x]);
+        } else {
+          console.log(
+            "Filtering " +
+              target_rxns["additional_components"][x] +
+              " (" +
+              degree_dictionary[target_rxns["additional_components"][x]] +
+              " degrees) -- may cause edge loss"
+          );
+        }
       }
     }
   }
-
-  var nodes = data["nodes"];
-  nodes.forEach(function(node) {
-    if (node.degree > 500) {
-      console.log(
-        "filtering " +
-          node.name +
-          " (" +
-          node.degree +
-          ") -- may cause edge loss"
-      );
-      nn_components = nn_components.filter(x => x !== node.id);
-    }
-  });
 
   // If too many nodes for first neighborhood, stop plotting
   var escape = nn_components.length;
@@ -255,16 +337,21 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     document.getElementById("warning_line_2").innerHTML = "";
 
     // Filter out any components that are above hub threshold for kNN
-    var hub_limit = document.getElementById("hub_button").value;
     var hub_exclusion = new Set();
-    if (hub_limit > 0) {
+    if (hub_value > 0) {
       nodes.forEach(function(node) {
-        if (node.degree > hub_limit) {
+        if (node.degree > hub_value) {
           hub_exclusion.add(node.id);
+          console.log(
+            "Filtering " +
+              node.id +
+              " (" +
+              node.degree +
+              " degrees) -- may cause edge loss"
+          );
         }
       });
     }
-    console.log(hub_exclusion);
 
     n = 1;
     while (n < kNN) {
@@ -357,12 +444,17 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 }
 
 function kNN_input(d) {
-  var knn_value = document.getElementById("kNN_button").value;
+  knn_value = document.getElementById("kNN_button").value;
   console.log("k-NN parameter now set to: " + knn_value);
 }
 
 function hub_input(d) {
-  var hub_value = document.getElementById("hub_button").value;
+  hub_value = document.getElementById("hub_button").value;
+
+  if ((hub_value === null) | (hub_value === "")) {
+    hub_value = 1000000;
+  }
+
   console.log("Hub threshold now set to: " + hub_value);
 }
 
@@ -396,17 +488,18 @@ function make_graph(
     _height,
     global_motifs) {
 
+  console.log(new_nodes)
+
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
 
-  // For motif search, display current selected sample with no reset
-  var page_path = window.location.pathname;
-  var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
-  if ((page_name === "motif.html") & (timecourse === true)) {
+  if (timecourse === true) {
     var sample = d3.select("circle#dot").attr("x");
   } else {
     var sample = 0;
   }
+  console.log("Building graph for sample: ", sample);
+  console.log("Hub threshold set at: ", hub_value);
 
   // Initialize force graph object
   var svg_viewer = d3
@@ -559,6 +652,8 @@ function make_graph(
   .attr("id", function(d) {return d.id});
 
   // Motif page will only send the current time-point's motifs
+  var page_path = window.location.pathname;
+  var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
   if (page_name === "motif.html") {
     if (global_motifs !== undefined) {
       let motif_ids = [];
@@ -913,7 +1008,9 @@ function make_graph(
           new_nodes[x]["type"] !== "gene_component" &&
           new_nodes[x]["sub_type"] !== "gene_component"
         ) {
-          newer_components.push(new_nodes[x]["id"]);
+          if (data.degree_dictionary[new_nodes[x]["id"]] <= hub_value) {
+            newer_components.push(new_nodes[x]["id"]);
+          }
         }
       }
 
@@ -953,8 +1050,8 @@ function make_graph(
   });
 
   d3.select("#collapseNodes").on("click", function() {
+
     if (collapse_reactions === false) {
-      collapse_reactions = true;
       new_nodes = collapsed_nodes;
       new_links = collapsed_links;
 
@@ -971,38 +1068,23 @@ function make_graph(
         _width,
         _height,
         global_motifs)
+      collapse_reactions = true;
     } else {
-      collapse_reactions = false;
       collapsed_nodes = new_nodes;
       collapsed_links = new_links;
 
       var selection = document.getElementById("pathwayMenu").value;
 
-      for (x in data.mod_collapsed_pathways) {
-        if (data.mod_collapsed_pathways[x]['name'] === selection) {
-          let reactions = data.mod_collapsed_pathways[x]["reactions"];
+      for (x in data.pathway_dictionary) {
+        if (data.pathway_dictionary[x]['name'] === selection) {
+          let reactions = data.pathway_dictionary[x]["reactions"];
 
-          // Parse through each reaction listed and get the component parts
-          var components = [];
-          for (rxn in reactions) {
+          var newer_elements = parse_pathway(
+            data,
+            reactions,
+            data.reaction_dictionary,
+            data.degree_dictionary);
 
-
-            var target_rxns = data.collapsed_reaction_dictionary[reactions[rxn]];
-            components.push(reactions[rxn]);
-            for (x in target_rxns["reactants"]) {
-              components.push(target_rxns["reactants"][x]);
-            }
-            for (x in target_rxns["products"]) {
-              components.push(target_rxns["products"][x]);
-            }
-            for (x in target_rxns["modifiers"]) {
-              components.push(target_rxns["modifiers"][x][0]);
-            }
-            for (x in target_rxns["additional_components"]) {
-              components.push(target_rxns["additional_components"][x]);
-            }
-          }
-          var newer_elements = get_nodes_links(data, components);
           var newer_nodes = newer_elements[0];
           var newer_links = newer_elements[1];
 
@@ -1034,6 +1116,7 @@ function make_graph(
             _width,
             _height,
             global_motifs)
+          collapse_reactions = false;
         } else {
         }
       }
@@ -1170,11 +1253,6 @@ function change() {
   graph_genes = true;
   collapse_reactions = true;
 
-  if (timecourse === true) {
-    d3.select("circle#dot")
-      .attr("cx", 90)
-  }
-
   let current_pathway = get_session_info("current_pathway");
   if ((current_pathway !== null) & (current_pathway !== "null")) {
     var selection = data.mod_collapsed_pathways[current_pathway].name;
@@ -1194,8 +1272,13 @@ function change() {
 
   if (superSelection !== "All entities") {
     // Run normal first plot
-    var reactions = pathway_dict[selection]["reactions"];
-    var elements = parse_pathway(data, reactions);
+    var reactions = collapsed_pathway_dict[selection]["reactions"];
+    var elements = parse_pathway(
+      data,
+      reactions,
+      data.collapsed_reaction_dictionary,
+      data.degree_dictionary);
+
     var new_nodes = elements[0];
     var new_links = elements[1];
 

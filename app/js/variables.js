@@ -21,8 +21,20 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 var fs = require("fs");
-
 var $ = require("jquery");
+
+var coll_mos = false;
+
+function collapseWithModifiers() {
+  if (coll_mos === false) {
+    coll_mos = true;
+    update_session_info("collapseWithModifiers", true);
+  } else {
+    coll_mos = false;
+    update_session_info("collapseWithModifiers", false);
+  }
+  console.log("Reaction collapse evaluation with modifiers: ", coll_mos)
+}
 
 window.addEventListener("load", function(event) {
   document.getElementById("transcriptomics-input").onchange = function(event) {
@@ -170,7 +182,7 @@ window.addEventListener("load", function(event) {
           );
         }
       }
-      
+
     } else {
       $("#nameField").html('');
       update_session_info("labels", "");

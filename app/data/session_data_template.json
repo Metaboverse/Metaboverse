@@ -14,5 +14,6 @@
   "processed": false,
   "current_pathway": null,
   "provided_data": false,
+  "collapseWithModifiers": false,
   "labels": ""
 }

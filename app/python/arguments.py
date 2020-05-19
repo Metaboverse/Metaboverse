@@ -246,11 +246,9 @@ def parse_arguments(
         default = 'None',
         required = False)
     curate_opts.add_argument(
-        '-d', '--metadata',
-        help = 'Path and filename of metadata table -- refer to documentation for details on formatting and normalization',
-        metavar = '<path/filename>',
-        type = str,
-        default = 'None',
+        '--collapse_with_modifiers',
+        help = 'Include modifiers when considering a potential reaction collapse.',
+        action = 'store_true',
         required = False)
     curate_opts.add_argument(
         '-e', '--experiment',

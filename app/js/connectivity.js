@@ -140,22 +140,65 @@ function show_graph(data, perturbed_rxns, sample_id) {
   // Parse through each reaction listed and get the component parts
   let components = [];
   var rxn = 0;
+
+  let degree_dictionary = data.degree_dictionary;
+
   for (rxn in perturbed_rxns[sample_id]) {
 
     var target_rxns = data.collapsed_reaction_dictionary[perturbed_rxns[sample_id][rxn]];
 
     components.push(target_rxns.id);
     for (x in target_rxns["reactants"]) {
-      components.push(target_rxns["reactants"][x]);
+      if (degree_dictionary[target_rxns["reactants"][x]] <= hub_value) {
+        components.push(target_rxns["reactants"][x]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["reactants"][x] +
+            " (" +
+            degree_dictionary[target_rxns["reactants"][x]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
     for (x in target_rxns["products"]) {
-      components.push(target_rxns["products"][x]);
+      if (degree_dictionary[target_rxns["products"][x]] <= hub_value) {
+        components.push(target_rxns["products"][x]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["products"][x] +
+            " (" +
+            degree_dictionary[target_rxns["products"][x]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
     for (x in target_rxns["modifiers"]) {
-      components.push(target_rxns["modifiers"][x][0]);
+      if (degree_dictionary[target_rxns["modifiers"][x][0]] <= hub_value) {
+        components.push(target_rxns["modifiers"][x][0]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["modifiers"][x][0] +
+            " (" +
+            degree_dictionary[target_rxns["modifiers"][x][0]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
     for (x in target_rxns["additional_components"]) {
-      components.push(target_rxns["additional_components"][x]);
+      if (degree_dictionary[target_rxns["additional_components"][x]] <= hub_value) {
+        components.push(target_rxns["additional_components"][x]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["additional_components"][x] +
+            " (" +
+            degree_dictionary[target_rxns["additional_components"][x]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
   }
 
@@ -177,6 +220,8 @@ function show_graph(data, perturbed_rxns, sample_id) {
   var _width = window.innerWidth;
   var _height = window.innerHeight - 75;
 
+  console.log("Displaying", new_nodes.length, "connected nodes")
+
   make_graph(
     data,
     new_nodes,
@@ -195,6 +240,7 @@ function show_graph(data, perturbed_rxns, sample_id) {
 
 function run_value_connections() {
 
+  highlight_mapping("#conn_value_button");
   let value_threshold = document.getElementById("conn_value_button").value;
   let perturbed_reactions = collect_perturbations(
     reaction_entity_dictionary,
@@ -216,6 +262,7 @@ function run_value_connections() {
 }
 function run_stat_connections() {
 
+  highlight_mapping("#conn_stat_button");
   let stat_threshold = document.getElementById("conn_stat_button").value;
   let perturbed_reactions = collect_perturbations(
     reaction_entity_dictionary,
@@ -236,8 +283,30 @@ function run_stat_connections() {
   }
 }
 
+function highlight_mapping(_selector) {
+
+  let _selectors = [
+    "#conn_value_button",
+    "#conn_stat_button"
+  ]
+  for (s in _selectors) {
+    d3.select(_selectors[s])
+      .style("background-color", "white");
+  }
+  d3.select(_selector)
+    .style("background-color", "#FF7F7F");
+}
+
+// Initialize slider if timecourse
+if (timecourse === true) {
+  d3.select("circle#dot")
+    .attr("x", 0)
+}
+
 d3.select("#play_button_value").on("click", run_value_connections);
 d3.select("#play_button_stat").on("click", run_stat_connections);
+d3.select("#kNN_button").on("change", run_value_connections);
+d3.select("#hub_button").on("change", run_value_connections);
 
 // Initial play
 run_value_connections();

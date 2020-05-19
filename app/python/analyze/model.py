@@ -69,6 +69,7 @@ def name_graph(
 """
 def build_graph(
         network,
+        pathway_database,
         species_reference,
         name_reference,
         protein_reference,
@@ -87,10 +88,11 @@ def build_graph(
 
     # Initialize graph object
     G = nx.DiGraph()
-
+    key_hash = set()
+    remove_keys = []
     for reactome_id in network.keys():
 
-        G, network = process_reactions(
+        G, network, key_hash, remove_keys = process_reactions(
             graph=G,
             reactome_id=reactome_id,
             network=network,
@@ -103,9 +105,23 @@ def build_graph(
             gene_reference=gene_reference,
             compartment_reference=compartment_reference,
             component_database=component_database,
-            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+            reverse_metabolite_dictionary=reverse_metabolite_dictionary,
+            key_hash=key_hash,
+            remove_keys=remove_keys)
 
-    return G, network
+    # Clean up duplicate reactions by ID
+    for k in remove_keys:
+        del network[k]
+
+    for k, v in pathway_database.items():
+        reactions = pathway_database[k]['reactions']
+        updated_reactions = []
+        for r in reactions:
+            if r not in remove_keys:
+                updated_reactions.append(r)
+        pathway_database[k]['reactions'] = updated_reactions
+
+    return G, network, pathway_database
 
 def process_reactions(
         graph,
@@ -120,264 +136,273 @@ def process_reactions(
         gene_reference,
         compartment_reference,
         component_database,
-        reverse_metabolite_dictionary):
+        reverse_metabolite_dictionary,
+        key_hash,
+        remove_keys):
     """
     """
     new_components = []
 
-    # Get reaction name
-    reaction_id = network[reactome_id]['id']
+    # Get reaction name and check if already addded
     reaction_name = network[reactome_id]['name']
-    reaction_rev = network[reactome_id]['reversible']
-    reaction_notes = network[reactome_id]['notes']
+    sort_name = ''.join(sorted(reaction_name.lower().replace(" ","")))
 
-    reactants = network[reactome_id]['reactants']
-    products = network[reactome_id]['products']
-    modifiers = network[reactome_id]['modifiers'] # ordered list
-    compartment_id = network[reactome_id]['compartment']
-    compartment_name = compartment_reference[compartment_id]
+    if sort_name in key_hash:
+        remove_keys.append(reactome_id)
+    else:
+        key_hash.add(sort_name)
 
-    prot_ref = {}
-    for k, v in uniprot_reference.items():
-        prot_ref[k] = v
-        prot_ref[v] = k
-    uniprot_reference = prot_ref
+        reaction_id = network[reactome_id]['id']
+        reaction_rev = network[reactome_id]['reversible']
+        reaction_notes = network[reactome_id]['notes']
 
-    flipped_ensembl = {}
-    for k, v in gene_reference.items():
-        flipped_ensembl[k] = v
-        flipped_ensembl[v] = k
+        reactants = network[reactome_id]['reactants']
+        products = network[reactome_id]['products']
+        modifiers = network[reactome_id]['modifiers'] # ordered list
+        compartment_id = network[reactome_id]['compartment']
+        compartment_name = compartment_reference[compartment_id]
 
-    # Add reaction node
-    graph.add_node(reaction_id)
-    graph.nodes()[reaction_id]['id'] = reactome_id
-    graph.nodes()[reaction_id]['map_id'] = 'none'
-    graph.nodes()[reaction_id]['name'] = reaction_name
-    graph.nodes()[reaction_id]['reversible'] = reaction_rev
-    graph.nodes()[reaction_id]['notes'] = reaction_notes
-    graph.nodes()[reaction_id]['type'] = 'reaction'
-    graph.nodes()[reaction_id]['sub_type'] = 'reaction'
-    graph.nodes()[reaction_id]['compartment'] = compartment_id
-    graph.nodes()[reaction_id]['compartment_display'] = compartment_name
+        prot_ref = {}
+        for k, v in uniprot_reference.items():
+            prot_ref[k] = v
+            prot_ref[v] = k
+        uniprot_reference = prot_ref
 
-    # Add vanilla element nodes and their edges
-    for reactant in reactants:
+        flipped_ensembl = {}
+        for k, v in gene_reference.items():
+            flipped_ensembl[k] = v
+            flipped_ensembl[v] = k
 
-        if component_database[reactant]['is'] != '':
-            map_id = component_database[reactant]['is']
-        else:
-            map_id = 'none'
+        # Add reaction node
+        graph.add_node(reaction_id)
+        graph.nodes()[reaction_id]['id'] = reactome_id
+        graph.nodes()[reaction_id]['map_id'] = 'none'
+        graph.nodes()[reaction_id]['name'] = reaction_name
+        graph.nodes()[reaction_id]['reversible'] = reaction_rev
+        graph.nodes()[reaction_id]['notes'] = reaction_notes
+        graph.nodes()[reaction_id]['type'] = 'reaction'
+        graph.nodes()[reaction_id]['sub_type'] = 'reaction'
+        graph.nodes()[reaction_id]['compartment'] = compartment_id
+        graph.nodes()[reaction_id]['compartment_display'] = compartment_name
 
-        graph = add_node_edge(
-            graph=graph,
-            id=reactant,
-            map_id=map_id,
-            name=component_database[reactant]['name'],
-            compartment=component_database[reactant]['compartment'],
-            reaction_membership=reaction_id,
-            type='reactant',
-            sub_type=component_database[reactant]['type'],
-            reversible=reaction_rev,
-            complex_reference=complex_reference,
-            species_reference=species_reference,
-            name_reference=name_reference,
-            protein_reference=protein_reference,
-            compartment_reference=compartment_reference,
-            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+        # Add vanilla element nodes and their edges
+        for reactant in reactants:
 
-        if len(component_database[reactant]['hasPart']) > 0:
-            graph.nodes()[reactant]['complex'] = 'true'
-            graph, additional_components = check_complexes(
-                species_id=species_id,
+            if component_database[reactant]['is'] != '':
+                map_id = component_database[reactant]['is']
+            else:
+                map_id = 'none'
+
+            graph = add_node_edge(
                 graph=graph,
                 id=reactant,
+                map_id=map_id,
+                name=component_database[reactant]['name'],
+                compartment=component_database[reactant]['compartment'],
+                reaction_membership=reaction_id,
+                type='reactant',
+                sub_type=component_database[reactant]['type'],
+                reversible=reaction_rev,
                 complex_reference=complex_reference,
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                uniprot_reference=uniprot_reference,
-                gene_reference=gene_reference,
-                component_database=component_database,
                 compartment_reference=compartment_reference,
                 reverse_metabolite_dictionary=reverse_metabolite_dictionary)
-            for x in additional_components:
-                new_components.append(x)
-        else:
-            graph.nodes()[reactant]['complex'] = 'false'
 
-        if component_database[reactant]['type'] == 'protein_component':
-            try:
-                uniprot_id = component_database[reactant]['is']
-                gene = flipped_ensembl[uniprot_reference[uniprot_id]]
-                new_components.append(gene)
-                graph = add_node_edge(
+            if len(component_database[reactant]['hasPart']) > 0:
+                graph.nodes()[reactant]['complex'] = 'true'
+                graph, additional_components = check_complexes(
+                    species_id=species_id,
                     graph=graph,
-                    id=gene,
-                    map_id=gene,
-                    name=gene_reference[gene],
-                    compartment='none',
-                    reaction_membership=reactant,
-                    type='gene_component',
-                    sub_type='gene',
-                    reversible='false',
+                    id=reactant,
                     complex_reference=complex_reference,
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
+                    uniprot_reference=uniprot_reference,
+                    gene_reference=gene_reference,
+                    component_database=component_database,
                     compartment_reference=compartment_reference,
                     reverse_metabolite_dictionary=reverse_metabolite_dictionary)
-            except:
-                pass
+                for x in additional_components:
+                    new_components.append(x)
+            else:
+                graph.nodes()[reactant]['complex'] = 'false'
 
-    for product in products:
+            if component_database[reactant]['type'] == 'protein_component':
+                try:
+                    uniprot_id = component_database[reactant]['is']
+                    gene = flipped_ensembl[uniprot_reference[uniprot_id]]
+                    new_components.append(gene)
+                    graph = add_node_edge(
+                        graph=graph,
+                        id=gene,
+                        map_id=gene,
+                        name=gene_reference[gene],
+                        compartment='none',
+                        reaction_membership=reactant,
+                        type='gene_component',
+                        sub_type='gene',
+                        reversible='false',
+                        complex_reference=complex_reference,
+                        species_reference=species_reference,
+                        name_reference=name_reference,
+                        protein_reference=protein_reference,
+                        compartment_reference=compartment_reference,
+                        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                except:
+                    pass
 
-        if component_database[product]['is'] != '':
-            map_id = component_database[product]['is']
-        else:
-            map_id = 'none'
+        for product in products:
 
-        graph = add_node_edge(
-            graph=graph,
-            id=product,
-            map_id=map_id,
-            name=component_database[product]['name'],
-            compartment=component_database[product]['compartment'],
-            reaction_membership=reaction_id,
-            type='product',
-            sub_type=component_database[product]['type'],
-            reversible=reaction_rev,
-            complex_reference=complex_reference,
-            species_reference=species_reference,
-            name_reference=name_reference,
-            protein_reference=protein_reference,
-            compartment_reference=compartment_reference,
-            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+            if component_database[product]['is'] != '':
+                map_id = component_database[product]['is']
+            else:
+                map_id = 'none'
 
-        if len(component_database[product]['hasPart']) > 0:
-            graph.nodes()[product]['complex'] = 'true'
-            graph, additional_components = check_complexes(
-                species_id=species_id,
+            graph = add_node_edge(
                 graph=graph,
                 id=product,
+                map_id=map_id,
+                name=component_database[product]['name'],
+                compartment=component_database[product]['compartment'],
+                reaction_membership=reaction_id,
+                type='product',
+                sub_type=component_database[product]['type'],
+                reversible=reaction_rev,
                 complex_reference=complex_reference,
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                uniprot_reference=uniprot_reference,
-                gene_reference=gene_reference,
-                component_database=component_database,
                 compartment_reference=compartment_reference,
                 reverse_metabolite_dictionary=reverse_metabolite_dictionary)
-            for x in additional_components:
-                new_components.append(x)
-        else:
-            graph.nodes()[product]['complex'] = 'false'
 
-            if component_database[product]['type'] == 'protein_component':
-                try:
-                    uniprot_id = component_database[product]['is']
-                    gene = flipped_ensembl[uniprot_reference[uniprot_id]]
-                    new_components.append(gene)
+            if len(component_database[product]['hasPart']) > 0:
+                graph.nodes()[product]['complex'] = 'true'
+                graph, additional_components = check_complexes(
+                    species_id=species_id,
+                    graph=graph,
+                    id=product,
+                    complex_reference=complex_reference,
+                    species_reference=species_reference,
+                    name_reference=name_reference,
+                    protein_reference=protein_reference,
+                    uniprot_reference=uniprot_reference,
+                    gene_reference=gene_reference,
+                    component_database=component_database,
+                    compartment_reference=compartment_reference,
+                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                for x in additional_components:
+                    new_components.append(x)
+            else:
+                graph.nodes()[product]['complex'] = 'false'
 
-                    graph = add_node_edge(
-                        graph=graph,
-                        id=gene,
-                        map_id=gene,
-                        name=gene_reference[gene],
-                        compartment='none',
-                        reaction_membership=product,
-                        type='gene_component',
-                        sub_type='gene',
-                        reversible='false',
-                        complex_reference=complex_reference,
-                        species_reference=species_reference,
-                        name_reference=name_reference,
-                        protein_reference=protein_reference,
-                        compartment_reference=compartment_reference,
-                        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
-                except:
-                    pass
+                if component_database[product]['type'] == 'protein_component':
+                    try:
+                        uniprot_id = component_database[product]['is']
+                        gene = flipped_ensembl[uniprot_reference[uniprot_id]]
+                        new_components.append(gene)
 
-    for modifier in modifiers:
+                        graph = add_node_edge(
+                            graph=graph,
+                            id=gene,
+                            map_id=gene,
+                            name=gene_reference[gene],
+                            compartment='none',
+                            reaction_membership=product,
+                            type='gene_component',
+                            sub_type='gene',
+                            reversible='false',
+                            complex_reference=complex_reference,
+                            species_reference=species_reference,
+                            name_reference=name_reference,
+                            protein_reference=protein_reference,
+                            compartment_reference=compartment_reference,
+                            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                    except:
+                        pass
 
-        # Extract modifier type
-        # Formatted as a list of lists with first index of each sub list being
-        # the species ID and the second index being the modifier type
-        # ex: [['species_0', 'inhibitor'], ['species_1', 'catalyst']]
-        # Labeling the edge should allow for differentiation between the same
-        # modifier node acting as a catalyst or inhibitor
-        id = modifier[0]
-        type = modifier[1]
+        for modifier in modifiers:
 
-        if component_database[id]['is'] != '':
-            map_id = component_database[id]['is']
-        else:
-            map_id = 'none'
+            # Extract modifier type
+            # Formatted as a list of lists with first index of each sub list being
+            # the species ID and the second index being the modifier type
+            # ex: [['species_0', 'inhibitor'], ['species_1', 'catalyst']]
+            # Labeling the edge should allow for differentiation between the same
+            # modifier node acting as a catalyst or inhibitor
+            id = modifier[0]
+            type = modifier[1]
 
-        graph = add_node_edge(
-            graph=graph,
-            id=id,
-            map_id=map_id,
-            name=component_database[id]['name'],
-            reaction_membership=reaction_id,
-            compartment=component_database[id]['compartment'],
-            type=type,
-            sub_type=component_database[id]['type'],
-            reversible='false',
-            complex_reference=complex_reference,
-            species_reference=species_reference,
-            name_reference=name_reference,
-            protein_reference=protein_reference,
-            compartment_reference=compartment_reference,
-            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+            if component_database[id]['is'] != '':
+                map_id = component_database[id]['is']
+            else:
+                map_id = 'none'
 
-        if len(component_database[id]['hasPart']) > 0:
-            graph.nodes()[id]['complex'] = 'true'
-            graph, additional_components = check_complexes(
-                species_id=species_id,
+            graph = add_node_edge(
                 graph=graph,
                 id=id,
+                map_id=map_id,
+                name=component_database[id]['name'],
+                reaction_membership=reaction_id,
+                compartment=component_database[id]['compartment'],
+                type=type,
+                sub_type=component_database[id]['type'],
+                reversible='false',
                 complex_reference=complex_reference,
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                uniprot_reference=uniprot_reference,
-                gene_reference=gene_reference,
-                component_database=component_database,
                 compartment_reference=compartment_reference,
                 reverse_metabolite_dictionary=reverse_metabolite_dictionary)
-            for x in additional_components:
-                new_components.append(x)
-        else:
-            graph.nodes()[id]['complex'] = 'false'
 
-            if component_database[id]['type'] == 'protein_component':
-                try:
-                    uniprot_id = component_database[id]['is']
-                    gene = flipped_ensembl[uniprot_reference[uniprot_id]]
-                    new_components.append(gene)
-                    graph = add_node_edge(
-                        graph=graph,
-                        id=gene,
-                        map_id=gene,
-                        name=gene_reference[gene],
-                        compartment='none',
-                        reaction_membership=id,
-                        type='gene_component',
-                        sub_type='gene',
-                        reversible='false',
-                        complex_reference=complex_reference,
-                        species_reference=species_reference,
-                        name_reference=name_reference,
-                        protein_reference=protein_reference,
-                        compartment_reference=compartment_reference,
-                        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
-                except:
-                    pass
+            if len(component_database[id]['hasPart']) > 0:
+                graph.nodes()[id]['complex'] = 'true'
+                graph, additional_components = check_complexes(
+                    species_id=species_id,
+                    graph=graph,
+                    id=id,
+                    complex_reference=complex_reference,
+                    species_reference=species_reference,
+                    name_reference=name_reference,
+                    protein_reference=protein_reference,
+                    uniprot_reference=uniprot_reference,
+                    gene_reference=gene_reference,
+                    component_database=component_database,
+                    compartment_reference=compartment_reference,
+                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                for x in additional_components:
+                    new_components.append(x)
+            else:
+                graph.nodes()[id]['complex'] = 'false'
 
-    network[reactome_id]['additional_components'] = new_components
+                if component_database[id]['type'] == 'protein_component':
+                    try:
+                        uniprot_id = component_database[id]['is']
+                        gene = flipped_ensembl[uniprot_reference[uniprot_id]]
+                        new_components.append(gene)
+                        graph = add_node_edge(
+                            graph=graph,
+                            id=gene,
+                            map_id=gene,
+                            name=gene_reference[gene],
+                            compartment='none',
+                            reaction_membership=id,
+                            type='gene_component',
+                            sub_type='gene',
+                            reversible='false',
+                            complex_reference=complex_reference,
+                            species_reference=species_reference,
+                            name_reference=name_reference,
+                            protein_reference=protein_reference,
+                            compartment_reference=compartment_reference,
+                            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                    except:
+                        pass
 
-    return graph, network
+        network[reactome_id]['additional_components'] = new_components
+
+    return graph, network, key_hash, remove_keys
 
 def add_node_edge(
         graph,
@@ -995,8 +1020,9 @@ def __main__(
     # Generate graph
     # Name mapping
     print('Building network...')
-    G, network['reaction_database'] = build_graph(
+    G, network['reaction_database'], network['pathway_database'] = build_graph(
         network=network['reaction_database'],
+        pathway_database=network['pathway_database'],
         species_reference=network['species_database'],
         name_reference=network['name_database'],
         protein_reference=protein_dictionary,
@@ -1053,18 +1079,19 @@ def __main__(
 
     print('Compiling collapsed reaction reference...')
     # Collapse reactions
-    G, updated_reactions, changed_reactions = collapse_nodes(
+    G, updated_reactions, changed_reactions, removed_reaction = collapse_nodes(
         graph=G,
         reaction_dictionary=network['reaction_database'],
-        samples=len(categories))
+        samples=len(categories),
+        collapse_with_modifiers=args_dict['collapse_with_modifiers'])
     updated_pathway_dictionary = generate_updated_dictionary(
         original_database=network['pathway_database'],
-        update_dictionary=changed_reactions)
+        update_dictionary=changed_reactions,
+        removed_reaction=removed_reaction)
     progress_feed(args_dict, "graph", 8)
 
     # Generate list of super pathways (those with more than 200 reactions)
     print('Compiling super pathways...')
-
     scale_factor = int(len(network['reaction_database'].keys()) * 0.0157)
     super_pathways = compile_pathway_degree(
         pathways=network['pathway_database'],
@@ -1076,7 +1103,7 @@ def __main__(
         updated_pathway_dictionary=updated_pathway_dictionary)
 
     mod_collapsed_pathways = {}
-    for k,v in updated_pathway_dictionary.items():
+    for k, v in updated_pathway_dictionary.items():
         mod_collapsed_pathways[v['id']] = v
 
     # Export graph, pathway membership, pathway degree, other refs

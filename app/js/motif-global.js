@@ -23,6 +23,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 // find global motifs at beginning, save as list, check each graph for members
 function gatherMotifs(data, categories) {
 
+  var excl_hubs = false;
+  var hub_threshold = 100;
+
   let expression_dict = {};
   for (let x in data.nodes) {
     let id = data.nodes[x]['id'];
@@ -36,6 +39,7 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     data.motif_reaction_dictionary,
+    data.degree_dict,
     categories)
 
   let motifs_MaxMax = motifSearch_MaxMax(
@@ -43,6 +47,7 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     data.motif_reaction_dictionary,
+    data.degree_dict,
     categories)
 
   let motifs_MaxMin = motifSearch_MaxMin(
@@ -50,6 +55,7 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     data.motif_reaction_dictionary,
+    data.degree_dict,
     categories)
 
   let motifs_Sustained = motifSearch_Sustained(
@@ -57,6 +63,7 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     data.motif_reaction_dictionary,
+    data.degree_dict,
     categories)
 
   let motifs_ModReg = modifierReg(
@@ -64,6 +71,7 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     data.motif_reaction_dictionary,
+    data.degree_dict,
     categories)
 
   let motifs_ModTrans = modifierTransport(
@@ -71,6 +79,7 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     data.motif_reaction_dictionary,
+    data.degree_dict,
     categories)
 
 
