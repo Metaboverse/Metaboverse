@@ -22,6 +22,7 @@ from __future__ import print_function
 """Import dependencies
 """
 import os
+from datetime import date
 import pandas as pd
 import numpy as np
 from math import sqrt
@@ -733,7 +734,8 @@ def output_graph(
         max_value,
         max_stat,
         categories,
-        labels):
+        labels,
+        metadata):
     """Output graph and necessary metadata
     """
 
@@ -750,6 +752,7 @@ def output_graph(
     data['max_stat'] = max_stat
     data['categories'] = categories
     data['labels'] = labels
+    data['metadata'] = metadata
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
@@ -1108,6 +1111,11 @@ def __main__(
 
     # Export graph, pathway membership, pathway degree, other refs
     print('Exporting graph...')
+    args_dict["max_value"] = max_value
+    args_dict["max_stat"] = max_stat
+    args_dict["database_date"] = date.today().strftime('%Y-%m-%d')
+    args_dict["curation_date"] = network["curation_date"]
+    args_dict["reactome_version"] = network["reactome_version"]
     output_graph(
         graph=G,
         output_name=graph_name,
@@ -1122,7 +1130,8 @@ def __main__(
         max_value=max_value,
         max_stat=max_stat,
         categories=categories,
-        labels=args_dict['labels'])
+        labels=args_dict['labels'],
+        metadata=args_dict)
     print('Graphing complete.')
     progress_feed(args_dict, "graph", 2)
 

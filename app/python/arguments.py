@@ -251,8 +251,14 @@ def parse_arguments(
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
-        '-e', '--experiment',
+        '-e', '--experiment_type',
         help = 'Specify experiment type',
+        metavar = '<default/timecourse/flux/multi-condition>',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
+        '--experiment_name',
+        help = 'Specify experiment name',
         metavar = '<default/timecourse/flux/multi-condition>',
         type = str,
         required = False)

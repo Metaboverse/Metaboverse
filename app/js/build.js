@@ -122,9 +122,6 @@ runBuild = function(_callback) {
     curated = getArgument("curation_url")
     let labels = getArgument("labels");
     labels = labels.replace(/\s/g,'');
-    console.log(labels)
-    console.log(curated)
-
     if (String(curated) !== "None") {
       graphDictionary = {
         output: getArgument("output"),
@@ -134,7 +131,8 @@ runBuild = function(_callback) {
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
-        experiment: getArgument("experiment"),
+        experiment_type: getArgument("experiment_type"),
+        experiment_name: getArgument("experiment_name"),
         labels: labels,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         progress_log: path.resolve("data/progress_log.json"),
@@ -152,7 +150,8 @@ runBuild = function(_callback) {
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
-        experiment: getArgument("experiment"),
+        experiment_type: getArgument("experiment_type"),
+        experiment_name: getArgument("experiment_name"),
         labels: labels,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         progress_log: path.resolve("data/progress_log.json"),
@@ -174,6 +173,11 @@ function displayOptions() {
   update_session_info("current_pathway", null);
   database_url = get_session_info("database_url");
   var data = JSON.parse(fs.readFileSync(database_url).toString());
+  update_session_info("max_value", data.metadata.max_value);
+  update_session_info("max_stat", data.metadata.max_stat);
+  update_session_info("database_date", data.metadata.database_date);
+  update_session_info("curation_date", data.metadata.curation_date);
+  update_session_info("reactome_version", data.metadata.reactome_version);
   if (
     (transcriptomics === true) |
     (proteomics === true) |

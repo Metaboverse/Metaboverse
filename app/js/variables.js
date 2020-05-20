@@ -146,7 +146,7 @@ window.addEventListener("load", function(event) {
     } else {}
 
     try {
-      update_session_info("experiment", experiment_type);
+      update_session_info("experiment_type", experiment_type);
     } catch (error) {
       console.log(error);
       alert(error);
@@ -200,7 +200,7 @@ window.addEventListener("load", function(event) {
     try {
       console.log("Your provided experiment name: ", inputVal);
 
-      update_session_info("experiment", inputVal);
+      update_session_info("experiment_name", inputVal);
     } catch (error) {
       console.log(error);
       alert(

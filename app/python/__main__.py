@@ -44,6 +44,10 @@ def check_dependencies():
     # Check for pip install
 
     try:
+        import requests
+    except:
+        os.system('pip install requests')
+    try:
         import pandas
     except:
         os.system('pip install pandas')
