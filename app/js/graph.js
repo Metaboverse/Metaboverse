@@ -339,7 +339,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     // Filter out any components that are above hub threshold for kNN
     var hub_exclusion = new Set();
     if (hub_value > 0) {
-      nodes.forEach(function(node) {
+      data.nodes.forEach(function(node) {
         if (node.degree > hub_value) {
           hub_exclusion.add(node.id);
           console.log(
