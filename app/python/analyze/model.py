@@ -814,6 +814,22 @@ def infer_protein_values(values, length):
 
     return protein_vals
 
+def infer_protein_stats(stats, length):
+
+    protein_stats = []
+    for i in range(length):
+
+        pos = []
+
+        for j in range(len(stats)):
+
+            if stats[j][i] != None:
+                pos.append(stats[j][i])
+
+        protein_stats.append(max(pos))
+
+    return protein_stats
+
 def broadcast_values(
         graph,
         categories,
@@ -868,7 +884,7 @@ def broadcast_values(
                         rgba_tuples=graph.nodes()[x]['values_rgba'])
 
                 if gene_stats != []:
-                    inferred_stats = infer_protein_values(gene_stats, length)
+                    inferred_stats = infer_protein_stats(gene_stats, length)
 
                     graph.nodes()[x]['inferred'] = 'true'
                     graph.nodes()[x]['stats'] = inferred_stats
@@ -922,7 +938,7 @@ def broadcast_values(
                         rgba_tuples=graph.nodes()[x]['values_rgba'])
 
                 if gene_stats != []:
-                    inferred_stats = infer_protein_values(gene_stats, length)
+                    inferred_stats = infer_protein_stats(gene_stats, length)
 
                     graph.nodes()[x]['inferred'] = 'true'
                     graph.nodes()[x]['stats'] = inferred_stats
