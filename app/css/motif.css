@@ -167,3 +167,29 @@ circle:hover text {
   text-shadow: none;
 
 }
+
+.dropdown-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dropdown-container {
+  font-size: 14px;
+}
+
+/* Select Menu */
+/* The container must be positioned relative: */
+.custom-select {
+  position: relative;
+  width: 95%;
+  height: 35px;
+  /* font-family: Arial; */
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: #4CAF50;
+}

@@ -104,6 +104,8 @@ class MetaGraph{
     }
 
     motifSearch(){
+      let value_type_dropdown = document.getElementById("value_type");
+
       d3.select("#motif1")
         .on("click", ()=>{
           d3.select("#motif-pathway-svg")
@@ -113,11 +115,16 @@ class MetaGraph{
           d3.select(".network-panel")
             .style("visibility", "hidden");
           let threshold = d3.select("#avg_num").node().value;
+          let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
           this.motif = motifSearch_Avg(
             threshold,
             this.collapsed_reaction_dict,
-            this.expression_dict,
-            this.path_mapper)
+            value_dict,
+            this.path_mapper,
+            value_type)
           if (this.motif !== undefined) {
             this.drawMotifSearchResult(this.motif);
           }
@@ -132,10 +139,14 @@ class MetaGraph{
           d3.select(".network-panel")
             .style("visibility","hidden");
           let threshold = d3.select("#maxmax_num").node().value;
+          let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
           this.motif = motifSearch_MaxMax(
             threshold,
             this.collapsed_reaction_dict,
-            this.expression_dict,
+            value_dict,
             this.path_mapper)
           if (this.motif !== undefined) {
             this.drawMotifSearchResult(this.motif);
@@ -151,10 +162,14 @@ class MetaGraph{
           d3.select(".network-panel")
             .style("visibility","hidden");
           let threshold = d3.select("#maxmin_num").node().value;
+          let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
           this.motif = motifSearch_MaxMin(
             threshold,
             this.collapsed_reaction_dict,
-            this.expression_dict,
+            value_dict,
             this.path_mapper)
           if (this.motif !== undefined) {
             this.drawMotifSearchResult(this.motif);
@@ -171,10 +186,14 @@ class MetaGraph{
           d3.select(".network-panel")
             .style("visibility","hidden");
           let threshold = d3.select("#sustained_num").node().value;
+          let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
           this.motif = motifSearch_Sustained(
             threshold,
             this.collapsed_reaction_dict,
-            this.expression_dict,
+            value_dict,
             this.path_mapper)
           if (this.motif !== undefined) {
             this.drawMotifSearchResult(this.motif);
@@ -191,13 +210,16 @@ class MetaGraph{
           d3.select(".network-panel")
             .style("visibility","hidden");
           let threshold = d3.select("#pathmax_num").node().value;
+          let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
           this.motif = motifSearch_PathMax(
             threshold,
             this.mod_collapsed_pathways,
             this.collapsed_reaction_dict,
-            this.expression_dict,
+            value_dict,
             this.path_mapper)
-
           if (this.motif !== undefined) {
             this.drawMotifSearchResultPathway(this.motif);
           }
@@ -211,6 +233,22 @@ class MetaGraph{
       //  console.log(a.pathways)
       //  return d3.descending(a.pathways.length, b.pathways.length)
       //})
+      
+      // Sorting
+      let sort_type_dropdown = document.getElementById("sort_type");
+      let sort_type = sort_type_dropdown.options[sort_type_dropdown.selectedIndex].text;
+      if(sort_type === "Number of Pathways") {
+        motif_list.sort(function(a,b){
+          return d3.descending(a.pathways.length, b.pathways.length);
+        })
+      } else if(sort_type === "Magnitude Change") {
+        motif_list.sort(function(a,b){
+          return d3.descending(a.magnitude_change, b.magnitude_change);
+        })
+      } else if(sort_type === "p-value") {
+
+      }
+
       let stamp_height = 50;
       this.stamp_svg_height = Math.ceil(
         motif_list.length / 3)
@@ -357,7 +395,13 @@ class MetaGraph{
         tg = tg.enter().append("text").merge(tg)
           .attr("x",start_x + 10)
           .attr("y",start_y + 45)
-          .text(d=>d.pathways.length + " pathways")
+          .text(d=>{
+            if(sort_type === "Number of Pathways"){
+              return d.pathways.length + " pathways";
+            } else if(sort_type === "Magnitude Change") {
+              return "Change: "+ Math.round(d.magnitude_change*100)/100;
+            }
+            })
           .style("font-size","11px")
       }
     }

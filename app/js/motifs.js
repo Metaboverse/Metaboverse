@@ -74,9 +74,12 @@ function motifSearch_Avg(
       collapsed_reaction_dict,
       expression_dict,
       path_mapper,
+      value_type,
       modifiers) {
   console.log("motif search 1")
   console.log("Avg threshold set at: ", threshold)
+  console.log(value_type)
+  console.log(expression_dict)
   let discovered_motifs = [];
 
   for(let rxn in collapsed_reaction_dict){
@@ -92,6 +95,7 @@ function motifSearch_Avg(
       let target_avg = computeAvg(updated_target);
 
       if(Math.abs(source_avg - target_avg)>=threshold){
+        reaction.magnitude_change = Math.abs(source_avg - target_avg);
         discovered_motifs.push(reaction);
       }
     }
@@ -127,6 +131,7 @@ function motifSearch_MaxMax(
       let source_max = Math.max(...updated_source);
       let target_max = Math.max(...updated_target);
       if(Math.abs(source_max - target_max)>=threshold){
+        reaction.magnitude_change = Math.abs(source_max - target_max);
         discovered_motifs.push(reaction);
       }
     }
@@ -162,6 +167,7 @@ function motifSearch_MaxMin(
       let source_max = Math.max(...updated_source);
       let target_min = Math.min(...updated_target);
       if(Math.abs(source_max - target_min)>=threshold){
+        reaction.magnitude_change = Math.abs(source_max - target_min);
         discovered_motifs.push(reaction);
       }
     }
@@ -198,6 +204,7 @@ function motifSearch_Sustained(
       // Sustained up-regulation
       let up_in = false;
       let up_out = false;
+      let magnitude_change_up;
       for (i in updated_source) {
         if (updated_source[i] >= threshold) {
           up_in = true;
@@ -208,10 +215,14 @@ function motifSearch_Sustained(
           up_out = true;
         }
       }
+      if(up_in===true && up_out===true) {
+        magnitude_change_up = Math.abs(Math.max(...updated_source) - Math.max(...updated_target));
+      }
 
       // Sustained down-regulation
       let down_in = false;
       let down_out = false;
+      let magnitude_change_down;
       for (k in updated_source) {
         if (updated_source[k] <= -(threshold)) {
           down_in = true;
@@ -222,8 +233,20 @@ function motifSearch_Sustained(
           down_out = true;
         }
       }
+      if(down_in===true && down_out===true) {
+        magnitude_change_down = Math.abs(Math.min(...updated_source) - Math.min(...updated_target));
+      }
 
       if (((down_in === true) & (down_out === true)) | ((up_in === true) & (up_out === true))) {
+        let magnitude_change;
+        if(magnitude_change_up && magnitude_change_down){
+          magnitude_change = Math.max(magnitude_change_up, magnitude_change_down);
+        } else if (magnitude_change_up){
+          magnitude_change = magnitude_change_up;
+        } else if(magnitude_change_down){
+          magnitude_change = magnitude_change_down;
+        }
+        reaction.magnitude_change = magnitude_change;
         discovered_motifs.push(reaction);
       }
     }
@@ -269,6 +292,7 @@ function motifSearch_PathMax(
 
     if (values.length > 0) {
       if (Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values)) >= threshold) {
+        mod_collapsed_pathways[pathway].magnitude_change = Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values));
         discovered_motifs.push(mod_collapsed_pathways[pathway]);
       }
     }

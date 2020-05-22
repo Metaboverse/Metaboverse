@@ -66,8 +66,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-2">
                 <div class="frame">
-                    <div style="padding:5px 10px;">
-                        <label>Select Value Type</label>
+                    <div class="content">
+                        <label class="dropdown-label">Select Value Type</label>
                         <div class="dropdown-container">
                             <select name="value_type" class="custom-select" id="value_type">
                                 <option>Expression Values</option>
@@ -78,7 +78,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="row">
                         <div class="col-md-4">
                             <div class="content">
-                                <div style="height:50px; padding-left:5px">
+                                <div style=" padding-left:0px">
                                     <p> Motif Type </p>
                                 </div>
                                 <p>
@@ -98,14 +98,14 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <div class="motif_button" id="motif5" style="--motif_color:#66a61e; --highlight_color:#a6d854; margin-top:13px;" title="Compare the absolute maximum and minimum values across a pathway."><font size="3" color="white">PathMax</font></div>
                                 </p>
                                 <br />
-                                <br />
-                                <br />
+                                <!-- <br /> -->
+                                <!-- <br /> -->
                                 <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label><br>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <div class="content">
-                                <div style="height:50px; padding-left:25px">
+                                <div style="padding-left:25px">
                                   <p> Threshold </p>
                                 </div>
                                 <p style="padding-left:30px">
@@ -128,21 +128,21 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
                                 <br />
-                                <br />
-                                <br />
+                                <!-- <br /> -->
+                                <!-- <br /> -->
                                 <p style="padding-left:45px; margin-top:-38px">
                                   <input style="width: 100px; height: 100px;" type="checkbox" id="use_modifiers" name="use_modifiers" onclick='modifiersChecked()' value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.">
                                 </p>
                             </div>
                         </div>
                     </div>
-                    
-                    <div style="padding:5px 10px;">
-                        <label>Sort Search Results</label>
+                    <div class="content">
+                        <label class="dropdown-label">Sort Search Results</label>
                         <div class="dropdown-container">
-                            <select name="sort_result" class="custom-select" id="sort_result">
+                            <select name="sort_type" class="custom-select" id="sort_type">
                                 <option>Number of Pathways</option>
                                 <option>Magnitude Change</option>
+                                <option>p-value</option>
                             </select>
                         </div>
                     </div>
