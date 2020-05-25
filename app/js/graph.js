@@ -518,6 +518,9 @@ function make_graph(
     }
   }
 
+  new_nodes = node_keep;
+  new_links = link_keep;
+
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
 
