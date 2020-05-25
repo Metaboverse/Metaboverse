@@ -879,7 +879,7 @@ function make_graph(
 
   d3.select("#saveGraph").on("click", function() {
     saveSVG.saveSvgAsPng(
-      document.getElementsByTagName("svg_viewer")[0],
+      d3.select("#svg_viewer_id")._groups[0][0],
       "plot.png",
       (encoderOptions = 1),
       (scale = 5),
