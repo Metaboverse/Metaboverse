@@ -128,6 +128,15 @@ function buildSlider(categories, names) {
             .style("--node_color", function(d) {
               return "rgba(" + d["values_js"][slider_index].toString() + ")";
             })
+            .style("--node_border", function(d) {
+              if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                return 1;
+              } else if (d.stats[slider_index] < stat_value) {
+                return 2;
+              } else {
+                return 1;
+              }
+            })
             d3.select("text#" + d.id)
               .html(function(d) {
                 return (
@@ -150,6 +159,15 @@ function buildSlider(categories, names) {
               .style("--node_color", function(d) {
                 return "rgba(" + d["values_js"][slider_index].toString() + ")";
               })
+              .style("--node_border", function(d) {
+                if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                  return 1;
+                } else if (d.stats[slider_index] < stat_value) {
+                  return 2;
+                } else {
+                  return 1;
+                }
+              })
             d3.select("text#" + d.id)
               .html(function(d) {
                 return (
@@ -171,6 +189,15 @@ function buildSlider(categories, names) {
             d3.select("rect#" + d.id)
               .style("--node_color", function(d) {
                 return "rgba(" + d["values_js"][slider_index].toString() + ")";
+              })
+              .style("--node_border", function(d) {
+                if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                  return 1;
+                } else if (d.stats[slider_index] < stat_value) {
+                  return 2;
+                } else {
+                  return 1;
+                }
               })
             d3.select("text#" + d.id)
               .html(function(d) {
@@ -196,15 +223,23 @@ function buildSlider(categories, names) {
               if (global_motifs[slider_index].length > 0) {
                 if (global_motifs[slider_index].includes(d.id)) {
                   d3.selectAll("circle#" + d.id)
-                    .style("r", "16px")
+                    .style("r", "10px")
                     .style("stroke", "purple")
-                    .style("stroke-width", "5px")
+                    .style("--node_border", 5)
                 } else {
                   d3.selectAll("circle#" + d.id)
                   .style("stroke", "black")
-                  .style("stroke-width", "1px")
                   .style("--node_color", function(d) {
                     return "rgba(" + d[entity][slider_index].toString() + ")";
+                  })
+                  .style("--node_border", function(d) {
+                    if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                      return 1;
+                    } else if (d.stats[slider_index] < stat_value) {
+                      return 2;
+                    } else {
+                      return 1;
+                    }
                   })
                   .style("r", function() {
                     return 6;

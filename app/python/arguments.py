@@ -251,6 +251,11 @@ def parse_arguments(
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
+        '--broadcast_genes',
+        help = 'Broadcast gene values to proteins where protein values not available.',
+        action = 'store_true',
+        required = False)
+    curate_opts.add_argument(
         '-e', '--experiment_type',
         help = 'Specify experiment type',
         metavar = '<default/timecourse/flux/multi-condition>',
@@ -266,6 +271,12 @@ def parse_arguments(
         '--labels',
         help = 'Comma separated list of labels to use for multi-condition or timecourse experiments',
         metavar = 'cond1, cond2, cond3, ...',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
+        '--blacklist',
+        help = 'Comma separated list of names for metabolites, etc., to ignore in the analysis and visualization.',
+        metavar = 'H+, H2O, etc...',
         type = str,
         required = False)
     curate_opts.add_argument(

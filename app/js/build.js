@@ -122,6 +122,8 @@ runBuild = function(_callback) {
     curated = getArgument("curation_url")
     let labels = getArgument("labels");
     labels = labels.replace(/\s/g,'');
+    let blacklist = getArgument("blacklist");
+    blacklist = blacklist.replace(/\s/g,'');
     if (String(curated) !== "None") {
       graphDictionary = {
         output: getArgument("output"),
@@ -134,7 +136,9 @@ runBuild = function(_callback) {
         experiment_type: getArgument("experiment_type"),
         experiment_name: getArgument("experiment_name"),
         labels: labels,
+        blacklist: blacklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
+        broadcast_genes: getArgument("broadcastGeneExpression"),
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -153,7 +157,9 @@ runBuild = function(_callback) {
         experiment_type: getArgument("experiment_type"),
         experiment_name: getArgument("experiment_name"),
         labels: labels,
+        blacklist: blacklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
+        broadcast_genes: getArgument("broadcastGeneExpression"),
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -178,6 +184,7 @@ function displayOptions() {
   update_session_info("database_date", data.metadata.database_date);
   update_session_info("curation_date", data.metadata.curation_date);
   update_session_info("reactome_version", data.metadata.reactome_version);
+  update_session_info("blacklist", data.metadata.blacklist);
   if (
     (transcriptomics === true) |
     (proteomics === true) |

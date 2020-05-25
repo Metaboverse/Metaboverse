@@ -366,17 +366,11 @@ def __main__(
 
         metabolomics = read_data(
             url=metabolomics_url)
-        c_sym = {}
-        for k, v in network['chebi_synonyms'].items():
-            c_sym[k] = v
-            c_sym[v] = v
-        metabolomics, metabolomics_unmapped = format_metabolomics(
-            data=metabolomics,
-            chebi_reference=c_sym,
-            other_reference=network['uniprot_metabolites'])
-        output_unmapped(
-            data=metabolomics_unmapped,
-            url=metabolomics_url)
+        #metabolomics, metabolomics_unmapped = format_metabolomics(
+        #    data=metabolomics)
+        #output_unmapped(
+        #    data=metabolomics_unmapped,
+        #    url=metabolomics_url)
         metabolomics, metabolomics_stats = extract_data(
             data=metabolomics)
 

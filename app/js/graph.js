@@ -30,6 +30,7 @@ var sample = 0;
 var entity = "values_js";
 var knn_value = 1;
 var hub_value = 1000000;
+var stat_value = 0.05;
 var graph_genes = true;
 var collapse_reactions = true;
 var saved_nodes = [];
@@ -448,6 +449,16 @@ function kNN_input(d) {
   console.log("k-NN parameter now set to: " + knn_value);
 }
 
+function stat_input(d) {
+  stat_value = document.getElementById("stat_button").value;
+
+  if ((stat_value === null) | (stat_value === "")) {
+    stat_value = 1;
+  }
+
+  console.log("Stat threshold now set to: " + stat_value);
+}
+
 function hub_input(d) {
   hub_value = document.getElementById("hub_button").value;
 
@@ -488,16 +499,38 @@ function make_graph(
     _height,
     global_motifs) {
 
-  console.log(new_nodes)
+  /*
+  id_blacklist = [];
+  for (n in new_nodes) {
+    if (data.metadata.blacklist.includes(new_nodes[n].name)) {
+      id_blacklist.push(new_nodes[n].id);
+      new_nodes.splice(n, 1);
+    }
+  }
+
+  for (l in new_links) {
+    if (id_blacklist.includes(new_links[l].target) | id_blacklist.includes(new_links[l].source)) {
+      console.log(new_links[l])
+      new_links.splice(l, 1);
+    }
+  }
+
+
+  // Try removing from other dicts? Or are other dicts full size?
+  */
 
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
 
   if (timecourse === true) {
     var sample = d3.select("circle#dot").attr("x");
+    if (sample === null) {
+      sample = 0;
+    }
   } else {
     var sample = 0;
   }
+
   console.log("Building graph for sample: ", sample);
   console.log("Hub threshold set at: ", hub_value);
 
@@ -621,6 +654,15 @@ function make_graph(
     .style("--node_color", function(d) {
       return "rgba(" + d[entity][sample].toString() + ")";
     })
+    .style("--node_border", function(d) {
+      if ((d['stats'][sample] === undefined) | (d['stats'][sample] === null)) {
+        return 1;
+      } else if (d['stats'][sample] < stat_value) {
+        return 2;
+      } else {
+        return 1;
+      }
+    })
     .style("r", function() {
       return 6;
     })
@@ -665,9 +707,9 @@ function make_graph(
           let rxn_id = node.id;
           if (motif_ids.includes(rxn_id)) {
             d3.selectAll("circle#" + rxn_id)
-              .style("r", "16px")
+              .style("r", "10px")
               .style("stroke", "purple")
-              .style("stroke-width", "5px")
+              .style("--node_border", 5)
           }
         })
       }
@@ -679,9 +721,9 @@ function make_graph(
           let rxn_id = node.id;
           if (global_motifs[sample].includes(rxn_id)) {
             d3.selectAll("circle#" + rxn_id)
-              .style("r", "16px")
+              .style("r", "10px")
               .style("stroke", "purple")
-              .style("stroke-width", "5px")
+              .style("--node_border", 5)
           }
         })
       }

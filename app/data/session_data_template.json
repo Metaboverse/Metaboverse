@@ -15,6 +15,7 @@
   "current_pathway": null,
   "provided_data": false,
   "collapseWithModifiers": false,
+  "broadcastGeneExpression": true,
   "labels": "",
   "database_date": "",
   "curation_date": "",

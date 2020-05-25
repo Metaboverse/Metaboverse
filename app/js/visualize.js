@@ -60,3 +60,4 @@ d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);
 d3.select("#kNN_button").on("change", change);
 d3.select("#hub_button").on("change", change);
+d3.select("#stat_button").on("change", change);

@@ -24,6 +24,7 @@ var fs = require("fs");
 var $ = require("jquery");
 
 var coll_mos = false;
+var broadcast_gene = true;
 
 function collapseWithModifiers() {
   if (coll_mos === false) {
@@ -34,6 +35,17 @@ function collapseWithModifiers() {
     update_session_info("collapseWithModifiers", false);
   }
   console.log("Reaction collapse evaluation with modifiers: ", coll_mos)
+}
+
+function broadcastGeneExpression() {
+  if (broadcast_gene === false) {
+    broadcast_gene = true;
+    update_session_info("broadcastGeneExpression", true);
+  } else {
+    broadcast_gene = false;
+    update_session_info("broadcastGeneExpression", false);
+  }
+  console.log("Broadcast gene expression values: ", broadcast_gene)
 }
 
 window.addEventListener("load", function(event) {
@@ -208,4 +220,30 @@ window.addEventListener("load", function(event) {
       );
     }
   }
+});
+
+window.addEventListener("load", function(event) {
+
+  var inputVal = document.getElementById("updateBlacklist").value;
+  update_session_info("blacklist", inputVal);
+  
+  document.getElementById("updateBlacklist").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var inputVal = document.getElementById("updateBlacklist").value;
+
+    try {
+      console.log("Your provided blacklisted entities: ", inputVal);
+
+      update_session_info("blacklist", inputVal);
+    } catch (error) {
+      console.log(error);
+      alert(
+        "IDs are not valid."
+      );
+    }
+  }
+
+
 });

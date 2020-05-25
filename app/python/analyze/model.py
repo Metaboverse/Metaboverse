@@ -45,6 +45,7 @@ from python.utils import progress_feed
 
 def test():
 
+    args_dict = {'output': '/Users/jordan/Desktop/'}
     output_file = "/Users/jordan/Desktop/test.json"
     species_id = "SCE"
     network_url = "/Users/jordan/Desktop/SCE_metaboverse_db.pickle"
@@ -79,8 +80,7 @@ def build_graph(
         species_id,
         gene_reference,
         compartment_reference,
-        component_database,
-        reverse_metabolite_dictionary):
+        component_database):
     """Build graph
     - Add nodes and edges
     - Map names to objects in the graph for display
@@ -106,7 +106,6 @@ def build_graph(
             gene_reference=gene_reference,
             compartment_reference=compartment_reference,
             component_database=component_database,
-            reverse_metabolite_dictionary=reverse_metabolite_dictionary,
             key_hash=key_hash,
             remove_keys=remove_keys)
 
@@ -137,7 +136,6 @@ def process_reactions(
         gene_reference,
         compartment_reference,
         component_database,
-        reverse_metabolite_dictionary,
         key_hash,
         remove_keys):
     """
@@ -208,8 +206,7 @@ def process_reactions(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference,
-                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                compartment_reference=compartment_reference)
 
             if len(component_database[reactant]['hasPart']) > 0:
                 graph.nodes()[reactant]['complex'] = 'true'
@@ -224,8 +221,7 @@ def process_reactions(
                     uniprot_reference=uniprot_reference,
                     gene_reference=gene_reference,
                     component_database=component_database,
-                    compartment_reference=compartment_reference,
-                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                    compartment_reference=compartment_reference)
                 for x in additional_components:
                     new_components.append(x)
             else:
@@ -250,8 +246,7 @@ def process_reactions(
                         species_reference=species_reference,
                         name_reference=name_reference,
                         protein_reference=protein_reference,
-                        compartment_reference=compartment_reference,
-                        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                        compartment_reference=compartment_reference)
                 except:
                     pass
 
@@ -276,8 +271,7 @@ def process_reactions(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference,
-                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                compartment_reference=compartment_reference)
 
             if len(component_database[product]['hasPart']) > 0:
                 graph.nodes()[product]['complex'] = 'true'
@@ -292,8 +286,7 @@ def process_reactions(
                     uniprot_reference=uniprot_reference,
                     gene_reference=gene_reference,
                     component_database=component_database,
-                    compartment_reference=compartment_reference,
-                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                    compartment_reference=compartment_reference)
                 for x in additional_components:
                     new_components.append(x)
             else:
@@ -319,8 +312,7 @@ def process_reactions(
                             species_reference=species_reference,
                             name_reference=name_reference,
                             protein_reference=protein_reference,
-                            compartment_reference=compartment_reference,
-                            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                            compartment_reference=compartment_reference)
                     except:
                         pass
 
@@ -354,8 +346,7 @@ def process_reactions(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference,
-                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                compartment_reference=compartment_reference)
 
             if len(component_database[id]['hasPart']) > 0:
                 graph.nodes()[id]['complex'] = 'true'
@@ -370,8 +361,7 @@ def process_reactions(
                     uniprot_reference=uniprot_reference,
                     gene_reference=gene_reference,
                     component_database=component_database,
-                    compartment_reference=compartment_reference,
-                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                    compartment_reference=compartment_reference)
                 for x in additional_components:
                     new_components.append(x)
             else:
@@ -396,8 +386,7 @@ def process_reactions(
                             species_reference=species_reference,
                             name_reference=name_reference,
                             protein_reference=protein_reference,
-                            compartment_reference=compartment_reference,
-                            reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                            compartment_reference=compartment_reference)
                     except:
                         pass
 
@@ -419,8 +408,7 @@ def add_node_edge(
         species_reference,
         name_reference,
         protein_reference,
-        compartment_reference,
-        reverse_metabolite_dictionary):
+        compartment_reference):
     """Add node and edge information to graph
     """
 
@@ -437,11 +425,6 @@ def add_node_edge(
     except:
         graph.nodes()[id]['compartment'] = 'none'
         graph.nodes()[id]['compartment_name'] = 'none'
-
-    if map_id in reverse_metabolite_dictionary.keys():
-        graph.nodes()[id]['synonyms'] = reverse_metabolite_dictionary[map_id]
-    else:
-        graph.nodes()[id]['synonyms'] = []
 
     if type == 'reactant':
         graph.add_edges_from([
@@ -486,8 +469,7 @@ def check_complexes(
         uniprot_reference,
         gene_reference,
         component_database,
-        compartment_reference,
-        reverse_metabolite_dictionary):
+        compartment_reference):
     """Check if species being added is in complex dictionary
     - If record exists, add nodes and edges for the new relationship.
     - If record contains a UniProt ID, cross reference with Ensembl database
@@ -519,8 +501,7 @@ def check_complexes(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference,
-                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                compartment_reference=compartment_reference)
 
             try:
                 gene = protein_reference[component_id]
@@ -540,8 +521,7 @@ def check_complexes(
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
-                    compartment_reference=compartment_reference,
-                    reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                    compartment_reference=compartment_reference)
             except:
                 pass
 
@@ -580,8 +560,7 @@ def check_complexes(
                 species_reference=species_reference,
                 name_reference=name_reference,
                 protein_reference=protein_reference,
-                compartment_reference=compartment_reference,
-                reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+                compartment_reference=compartment_reference)
 
     return graph, add_components
 
@@ -593,23 +572,101 @@ def uniprot_ensembl_reference(
     """
 
     new_dict = {}
-
     for k, v in uniprot_reference.items():
-
         try:
             new_dict[k] = ensembl_reference[v]
-
         except:
             pass
 
     return new_dict
+
+def parse_attributes(
+        dataframe,
+        name_reference,
+        chebi_mapper,
+        metabolite_mapper,
+        ignore_enantiomers=True):
+
+    dataframe_dict = {}
+    for index, row in dataframe.iterrows():
+        dataframe_dict[index] = {
+            'values': list(row),
+            'mapping_synonyms': [],
+            'display_synonyms': [],
+            'chebi_ids': set()
+        }
+
+        if index in name_reference.keys():
+            dataframe_dict[index]['mapping_synonyms'] = [index, name_reference[index]]
+            dataframe_dict[index]['display_synonyms'] = [index, name_reference[index]]
+
+            dataframe_dict[name_reference[index]] = {
+                'values': list(row),
+                'mapping_synonyms': [],
+                'display_synonyms': [],
+                'chebi_ids': set()
+            }
+            dataframe_dict[name_reference[index]]['mapping_synonyms'] = [index, name_reference[index]]
+            dataframe_dict[name_reference[index]]['display_synonyms'] = [index, name_reference[index]]
+
+        else:
+            _i = ''.join(c.lower() for c in str(index) if c.isalnum())
+
+            try:
+                __i = metabolite_mapper['mapping_dictionary'][_i]
+                dataframe_dict[index]['mapping_synonyms'] = \
+                    metabolite_mapper['hmdb_dictionary'][__i]
+                dataframe_dict[index]['display_synonyms'] = \
+                    metabolite_mapper['display_dictionary'][__i]
+            except:
+
+                try:
+                    # remove last letter
+                    __i = metabolite_mapper['mapping_dictionary'][_i[:-1]]
+                    dataframe_dict[index]['mapping_synonyms'] = \
+                        metabolite_mapper['hmdb_dictionary'][__i]
+                    dataframe_dict[index]['display_synonyms'] = \
+                        metabolite_mapper['display_dictionary'][__i]
+                except:
+                    if _i[0] == 'd' or _i[0] == 'l' and ignore_enantiomers == True:
+                        try:
+                            __i = metabolite_mapper['mapping_dictionary'][_i[1:]]
+                            dataframe_dict[index]['mapping_synonyms'] = \
+                                metabolite_mapper['hmdb_dictionary'][__i]
+                            dataframe_dict[index]['display_synonyms'] = \
+                                metabolite_mapper['display_dictionary'][__i]
+                        except:
+                            print("Unable to map: ", index)
+
+                    else:
+                        print("Unable to map: ", index)
+
+    dataframe_mapper = {}
+    chebi_synonyms = {}
+    for k, v in dataframe_dict.items():
+
+        if k in chebi_mapper:
+            dataframe_dict[k]['chebi_ids'].add(chebi_mapper[k])
+
+        for s in dataframe_dict[k]['mapping_synonyms']:
+            if s in chebi_mapper:
+                dataframe_dict[k]['chebi_ids'].add(chebi_mapper[s])
+            else:
+                dataframe_dict[k]['chebi_ids'].add(s)
+        for id in list(dataframe_dict[k]['chebi_ids']):
+            dataframe_mapper[id] = dataframe_dict[k]['values']
+            chebi_synonyms[id] = dataframe_dict[k]['display_synonyms']
+
+    return dataframe_mapper, chebi_synonyms
 
 def map_attributes(
         graph,
         data,
         stats,
         name_reference,
-        degree_dictionary):
+        degree_dictionary,
+        chebi_mapper,
+        metabolite_mapper):
     """Data overlay
     - Map repo id to species_id
     - If a node is a complex, take average of neighbors that are not
@@ -624,24 +681,35 @@ def map_attributes(
 
     # Re-index data and stats
     data_renamed = data.copy()
-    data_renamed = data.rename(index=name_reference)
+    #data_renamed = data.rename(index=name_reference)
     data_renamed = data_renamed.loc[data_renamed.index.dropna()]
     data_max = abs(data_renamed).max().max()
 
     stats_renamed = stats.copy()
-    stats_renamed = stats.rename(index=name_reference)
+    #stats_renamed = stats.rename(index=name_reference)
     stats_renamed = stats_renamed.loc[stats_renamed.index.dropna()]
     stats_logged = -1 * np.log10(stats_renamed + 1e-100)
 
     stats_max = abs(stats_logged).max().max()
 
-    data_dict = {}
-    for index, row in data_renamed.iterrows():
-        data_dict[index] = list(row)
+    data_dict, chebi_synonyms = parse_attributes(
+        dataframe=data_renamed,
+        name_reference=name_reference,
+        chebi_mapper=chebi_mapper,
+        metabolite_mapper=metabolite_mapper,
+        ignore_enantiomers=True)
 
-    stats_dict = {}
-    for index, row in stats_renamed.iterrows():
-        stats_dict[index] = list(row)
+    stats_dict, chebi_synonyms = parse_attributes(
+        dataframe=stats_renamed,
+        name_reference=name_reference,
+        chebi_mapper=chebi_mapper,
+        metabolite_mapper=metabolite_mapper,
+        ignore_enantiomers=True)
+
+    data_renamed = None
+    stats_renamed = None
+    chebi_mapper = None
+    metabolite_mapper = None
 
     for current_id in list(graph.nodes()):
 
@@ -649,8 +717,11 @@ def map_attributes(
         map_id = graph.nodes()[current_id]['map_id']
 
         # Add degree
-        #try:
         graph.nodes()[x]['degree'] = degree_dictionary[current_id]
+        if map_id != 'none' and map_id in chebi_synonyms:
+            graph.nodes()[x]['synonyms'] = chebi_synonyms[map_id]
+        else:
+            graph.nodes()[x]['synonyms'] = []
 
         if map_id in set(data_dict.keys()) \
         and map_id in set(stats_dict.keys()):
@@ -687,8 +758,6 @@ def map_attributes(
             graph.nodes()[x]['stats_rgba'] = colors
             graph.nodes()[x]['stats_js'] = convert_rgba(
                 rgba_tuples=colors)
-        #except:
-        #    graph.remove_node(x)
 
     return graph, data_max, stats_max
 
@@ -735,6 +804,7 @@ def output_graph(
         max_stat,
         categories,
         labels,
+        blacklist,
         metadata):
     """Output graph and necessary metadata
     """
@@ -752,6 +822,7 @@ def output_graph(
     data['max_stat'] = max_stat
     data['categories'] = categories
     data['labels'] = labels
+    data['blacklist'] = blacklist
     data['metadata'] = metadata
 
     with open(output_name, 'w') as f:
@@ -834,66 +905,68 @@ def broadcast_values(
         graph,
         categories,
         max_value,
-        max_stat):
+        max_stat,
+        broadcast_genes=True):
     """
     """
 
     u = graph.to_undirected()
     length = len(categories)
 
-    for x in graph.nodes():
+    if broadcast_genes == True:
+        for x in graph.nodes():
 
-        if None not in graph.nodes()[x]['values'] \
-        and None not in graph.nodes()[x]['stats']:
-            pass
+            if None not in graph.nodes()[x]['values'] \
+            and None not in graph.nodes()[x]['stats']:
+                pass
 
-        else:
+            else:
 
-            # 1. sub_type == 'protein_component' && type == 'complex_component'
-            #       find edges
-            #       find nodes type == 'gene_component'
-            #       for x in values:
-            #           take min, max, avg of genes to broadcast
-            #           mark as inferred
+                # 1. sub_type == 'protein_component' && type == 'complex_component'
+                #       find edges
+                #       find nodes type == 'gene_component'
+                #       for x in values:
+                #           take min, max, avg of genes to broadcast
+                #           mark as inferred
 
-            if graph.nodes()[x]['sub_type'] == 'protein_component' \
-            and graph.nodes()[x]['type'] == 'complex_component':
+                if graph.nodes()[x]['sub_type'] == 'protein_component' \
+                and graph.nodes()[x]['type'] == 'complex_component':
 
-                gene_values = []
-                gene_stats = []
-                for neighbor in u[x]:
+                    gene_values = []
+                    gene_stats = []
+                    for neighbor in u[x]:
 
-                    if graph.nodes()[neighbor]['sub_type'] == 'gene':
-                        gene_values.append(graph.nodes()[neighbor]['values'])
-                        gene_stats.append(graph.nodes()[neighbor]['stats'])
+                        if graph.nodes()[neighbor]['sub_type'] == 'gene':
+                            gene_values.append(graph.nodes()[neighbor]['values'])
+                            gene_stats.append(graph.nodes()[neighbor]['stats'])
 
-                # Remove None and avg
-                gene_values = remove_nulls(gene_values)
-                gene_stats = remove_nulls(gene_stats)
+                    # Remove None and avg
+                    gene_values = remove_nulls(gene_values)
+                    gene_stats = remove_nulls(gene_stats)
 
-                # Mark as inferred if this is possible
-                if gene_values != []:
-                    inferred_values = infer_protein_values(gene_values, length)
+                    # Mark as inferred if this is possible
+                    if gene_values != []:
+                        inferred_values = infer_protein_values(gene_values, length)
 
-                    graph.nodes()[x]['inferred'] = 'true'
-                    graph.nodes()[x]['values'] = inferred_values
-                    graph.nodes()[x]['values_rgba'] = extract_value(
-                        value_array=inferred_values,
-                        max_value=max_value)
-                    graph.nodes()[x]['values_js'] = convert_rgba(
-                        rgba_tuples=graph.nodes()[x]['values_rgba'])
+                        graph.nodes()[x]['inferred'] = 'true'
+                        graph.nodes()[x]['values'] = inferred_values
+                        graph.nodes()[x]['values_rgba'] = extract_value(
+                            value_array=inferred_values,
+                            max_value=max_value)
+                        graph.nodes()[x]['values_js'] = convert_rgba(
+                            rgba_tuples=graph.nodes()[x]['values_rgba'])
 
-                if gene_stats != []:
-                    inferred_stats = infer_protein_stats(gene_stats, length)
+                    if gene_stats != []:
+                        inferred_stats = infer_protein_stats(gene_stats, length)
 
-                    graph.nodes()[x]['inferred'] = 'true'
-                    graph.nodes()[x]['stats'] = inferred_stats
-                    graph.nodes()[x]['stats_rgba'] = extract_value(
-                        value_array=inferred_stats,
-                        max_value=max_stat,
-                        type="stats")
-                    graph.nodes()[x]['stats_js'] = convert_rgba(
-                        rgba_tuples=graph.nodes()[x]['stats_rgba'])
+                        graph.nodes()[x]['inferred'] = 'true'
+                        graph.nodes()[x]['stats'] = inferred_stats
+                        graph.nodes()[x]['stats_rgba'] = extract_value(
+                            value_array=inferred_stats,
+                            max_value=max_stat,
+                            type="stats")
+                        graph.nodes()[x]['stats_js'] = convert_rgba(
+                            rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
     for x in graph.nodes():
 
@@ -996,18 +1069,23 @@ def make_motif_reaction_dictionary(
     return motif_reaction_dictionary
 
 def make_metabolite_synonym_dictionary(
-        network):
+        network,
+        output_dir,
+        ref_url='https://sourceforge.net/projects/metaboverse/files/utils/metabolite_mapping.pickle.zip/download'):
 
-    reverse_metabolite_dictionary = {}
+    output_dir = '/Users/jordan/Desktop/'
 
-    for k, v in network['chebi_synonyms'].items():
-        if v in reverse_metabolite_dictionary.keys():
-            pass
-        else:
-            reverse_metabolite_dictionary[v] = []
-        reverse_metabolite_dictionary[v].append(k)
+    print("Downloading metabolite mapper...")
+    os.system('curl -L ' + ref_url + ' -o ' + output_dir + 'metabolite_mapping.pickle.zip')
+    print("Unzipping metabolite mapper...")
+    os.system('unzip ' + output_dir + 'metabolite_mapping.pickle.zip -d ' + output_dir)
+    print("Parsing HMDB metabolite records...")
+    with open(output_dir + 'metabolite_mapping.pickle', 'rb') as ref_file:
+        metabolite_mapper = pickle.load(ref_file)
+    os.remove(output_dir + 'metabolite_mapping.pickle.zip')
+    os.remove(output_dir + 'metabolite_mapping.pickle')
 
-    return reverse_metabolite_dictionary
+    return metabolite_mapper
 
 def __main__(
         args_dict,
@@ -1033,9 +1111,6 @@ def __main__(
         ensembl_reference=reverse_genes)
     progress_feed(args_dict, "model", 1)
 
-    reverse_metabolite_dictionary = make_metabolite_synonym_dictionary(
-        network=network)
-
     # Generate graph
     # Name mapping
     print('Building network...')
@@ -1050,8 +1125,7 @@ def __main__(
         species_id=species_id,
         gene_reference=network['ensembl_synonyms'],
         compartment_reference=network['compartment_dictionary'],
-        component_database=network['components_database'],
-        reverse_metabolite_dictionary=reverse_metabolite_dictionary)
+        component_database=network['components_database'])
     progress_feed(args_dict, "model", 9)
 
     # For gene and protein components, add section to reaction database
@@ -1071,16 +1145,32 @@ def __main__(
     for k, v in network['uniprot_synonyms'].items():
         name_reference[v] = k
         name_reference[k] = k
+
+    # add any mapping IDs
+    # Add synonyms
+    # Change name to user provided if available
+    metabolite_mapper = make_metabolite_synonym_dictionary(
+        network=network,
+        output_dir=args_dict['output'])
+
+    chebi_mapper = {}
     for k, v in network['chebi_synonyms'].items():
-        name_reference[k] = v
-        name_reference[v] = v
+        _k = ''.join(c.lower() for c in str(k) if c.isalnum())
+        chebi_mapper[_k] = v
+        chebi_mapper[k] = v
+    for k, v in network['uniprot_metabolites'].items():
+        _k = ''.join(c.lower() for c in str(k) if c.isalnum())
+        chebi_mapper[_k] = v
+        chebi_mapper[k] = v
 
     G, max_value, max_stat = map_attributes(
         graph=G,
         data=data,
         stats=stats,
         name_reference=name_reference,
-        degree_dictionary=degree_dictionary)
+        degree_dictionary=degree_dictionary,
+        chebi_mapper=chebi_mapper,
+        metabolite_mapper=metabolite_mapper)
     progress_feed(args_dict, "graph", 5)
 
     if flag_data == True:
@@ -1089,11 +1179,18 @@ def __main__(
 
     print('Broadcasting values where available...')
     categories = data.columns.tolist()
+
+    if 'broadcast_genes' in args_dict and args_dict['broadcast_genes'] == True:
+        broadcast_genes = True
+    else:
+        broadcast_genes = False
+
     G = broadcast_values(
         graph=G,
         categories=categories,
         max_value=max_value,
-        max_stat=max_stat)
+        max_stat=max_stat,
+        broadcast_genes=broadcast_genes)
     progress_feed(args_dict, "graph", 10)
 
     print('Compiling collapsed reaction reference...')
@@ -1147,6 +1244,7 @@ def __main__(
         max_stat=max_stat,
         categories=categories,
         labels=args_dict['labels'],
+        blacklist=args_dict['blacklist'],
         metadata=args_dict)
     print('Graphing complete.')
     progress_feed(args_dict, "graph", 2)
