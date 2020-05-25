@@ -1222,6 +1222,15 @@ def __main__(
     for k, v in updated_pathway_dictionary.items():
         mod_collapsed_pathways[v['id']] = v
 
+    # Final name mapping for chebi
+    reverse_chebi = {}
+    for k, v in network['chebi_synonyms'].items():
+        reverse_chebi[v] = k
+    for node in G.nodes():
+        if 'chebi' in G.nodes()[node]['name'].lower():
+            if G.nodes()[node]['name'] in reverse_chebi.keys():
+                G.nodes()[node]['name'] = reverse_chebi[G.nodes()[node]['name']]
+
     # Export graph, pathway membership, pathway degree, other refs
     print('Exporting graph...')
     args_dict["max_value"] = max_value

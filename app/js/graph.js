@@ -499,25 +499,24 @@ function make_graph(
     _height,
     global_motifs) {
 
-  /*
+  // Final update to prevent plotting of blacklisted nodes
+  node_keep = [];
   id_blacklist = [];
   for (n in new_nodes) {
     if (data.metadata.blacklist.includes(new_nodes[n].name)) {
       id_blacklist.push(new_nodes[n].id);
-      new_nodes.splice(n, 1);
+    } else {
+      node_keep.push(new_nodes[n]);
     }
   }
 
+  link_keep = [];
   for (l in new_links) {
     if (id_blacklist.includes(new_links[l].target) | id_blacklist.includes(new_links[l].source)) {
-      console.log(new_links[l])
-      new_links.splice(l, 1);
+    } else {
+      link_keep.push(new_links[l]);
     }
   }
-
-
-  // Try removing from other dicts? Or are other dicts full size?
-  */
 
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
@@ -599,7 +598,7 @@ function make_graph(
     .attr("refX", 15.7)
     .attr("refY", -0.18)
     .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
+    .attr("markerHeight", 10)
     .attr("orient", "auto")
     .append("path")
     .attr("d", "M0, -5L10, 0L0, 5");
