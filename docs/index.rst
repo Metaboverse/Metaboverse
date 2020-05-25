@@ -28,7 +28,7 @@ Table of contents
    content/general-usage
    content/faqs
    content/updates
-|
+
 =======
 License
 =======
