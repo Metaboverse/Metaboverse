@@ -148,6 +148,8 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
+
+  update_session_info("labels", "none");
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -197,7 +199,7 @@ window.addEventListener("load", function(event) {
 
     } else {
       $("#nameField").html('');
-      update_session_info("labels", "");
+      update_session_info("labels", "0");
     }
   };
 });
@@ -226,7 +228,7 @@ window.addEventListener("load", function(event) {
 
   var inputVal = document.getElementById("updateBlacklist").value;
   update_session_info("blacklist", inputVal);
-  
+
   document.getElementById("updateBlacklist").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();

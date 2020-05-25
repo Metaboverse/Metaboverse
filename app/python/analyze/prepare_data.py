@@ -342,6 +342,9 @@ def __main__(
             url=transcriptomics_url)
         transcriptomics, transcriptomics_stats = extract_data(
             data=transcriptomics)
+        transcriptomics_length = len(transcriptomics.columns.tolist())
+    else:
+        transcriptomics_length = 0
 
     # Process proteomics
     if proteomics_url.lower() != 'none':
@@ -360,6 +363,9 @@ def __main__(
             url=proteomics_url)
         proteomics, proteomics_stats = extract_data(
             data=proteomics)
+        proteomics_length = len(proteomics.columns.tolist())
+    else:
+        proteomics_length = 0
 
     # Process metabolomics
     if metabolomics_url.lower() != 'none':
@@ -373,6 +379,9 @@ def __main__(
         #    url=metabolomics_url)
         metabolomics, metabolomics_stats = extract_data(
             data=metabolomics)
+        metabolomics_length = len(metabolomics.columns.tolist())
+    else:
+        metabolomics_length = 0
 
     # Check for broadcasting
     if proteomics_url.lower() == 'none' \
@@ -385,11 +394,14 @@ def __main__(
                 protein_dictionary=network['uniprot_synonyms'])
 
     # Allow for unequal filling
-    lengths = [
-        len(transcriptomics.columns.tolist()),
-        len(proteomics.columns.tolist()),
-        len(metabolomics.columns.tolist()),
-        ]
+    lengths = []
+    for x in [
+        transcriptomics_length,
+        proteomics_length,
+        metabolomics_length,
+    ]:
+        if x != 0:
+            lengths.append(x)
 
     if sum(lengths) != 3 and len(list(set(lengths))) == 2:
 
@@ -420,7 +432,7 @@ def __main__(
                 _max=_max)
 
     else:
-        raise Exception("When providing multi-omic timecourse data with unequals times, other omics types must match the maximum number of time points or must only provide one time point.")
+        print("When providing multi-omic timecourse data with unequals times, other omics types must match the maximum number of time points or must only provide one time point.")
 
     # Initialize array of filled data
     data_array = []

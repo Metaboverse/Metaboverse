@@ -536,6 +536,8 @@ function make_graph(
   console.log("Building graph for sample: ", sample);
   console.log("Hub threshold set at: ", hub_value);
 
+  console.log(new_nodes)
+
   // Initialize force graph object
   var svg_viewer = d3
     .select(selector)

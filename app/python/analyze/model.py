@@ -723,9 +723,22 @@ def map_attributes(
         else:
             graph.nodes()[x]['synonyms'] = []
 
-        if map_id in set(data_dict.keys()) \
-        and map_id in set(stats_dict.keys()):
+        if graph.nodes()[x]['type'] == 'reaction':
+            colors = [reaction_color for x in range(n)]
 
+            graph.nodes()[x]['values'] = [None for x in range(n)]
+            graph.nodes()[x]['values_rgba'] = colors
+            graph.nodes()[x]['values_js'] = convert_rgba(
+                rgba_tuples=colors)
+
+            graph.nodes()[x]['stats'] = [None for x in range(n)]
+            graph.nodes()[x]['stats_rgba'] = colors
+            graph.nodes()[x]['stats_js'] = convert_rgba(
+                rgba_tuples=colors)
+
+        elif map_id in set(data_dict.keys()) \
+        and map_id in set(stats_dict.keys()) \
+        and map_id != 'none':
             graph.nodes()[x]['values'] = data_dict[map_id]
             graph.nodes()[x]['values_rgba'] = extract_value(
                 value_array=data_dict[map_id],
@@ -742,12 +755,7 @@ def map_attributes(
                 rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
         else:
-
-            if graph.nodes()[x]['type'] == 'reaction':
-                colors = [reaction_color for x in range(n)]
-
-            else:
-                colors = [missing_color for x in range(n)]
+            colors = [missing_color for x in range(n)]
 
             graph.nodes()[x]['values'] = [None for x in range(n)]
             graph.nodes()[x]['values_rgba'] = colors
@@ -920,6 +928,9 @@ def broadcast_values(
             and None not in graph.nodes()[x]['stats']:
                 pass
 
+            elif graph.nodes()[x]['type'] == 'reaction':
+                pass
+
             else:
 
                 # 1. sub_type == 'protein_component' && type == 'complex_component'
@@ -972,6 +983,9 @@ def broadcast_values(
 
         if None not in graph.nodes()[x]['values'] \
         and None not in graph.nodes()[x]['stats']:
+            pass
+
+        elif graph.nodes()[x]['type'] == 'reaction':
             pass
 
         else:
