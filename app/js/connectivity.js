@@ -28,25 +28,26 @@ var selector = "#graph";
 var _width = window.innerWidth;
 var _height = window.innerHeight - 75;
 
-// MAIN
-database_url = get_session_info("database_url");
-console.log("Database path: " + database_url);
-
-var data = JSON.parse(fs.readFileSync(database_url).toString());
-var global_motifs = gatherMotifs(data, data.categories);
-timecourse = checkCategories(data.categories, data.labels);
-
 // Allow absolute threshold or p-value
 // Allow omics selection
 graph_genes = true;
 collapse_reactions = true;
 
-//data.collapsed_reaction_dictionary;
-//data.mod_collapsed_pathways;
-collapsed_pathway_dict = make_pathway_dictionary(
-  data,
-  "collapsed_pathway_dictionary"
-)
+// MAIN
+database_url = get_session_info("database_url");
+console.log("Database path: " + database_url);
+
+var data = JSON.parse(fs.readFileSync(database_url).toString());
+var superPathwayDict = make_superPathway_dictionary(data);
+var global_motifs = gatherMotifs(data, data.categories);
+timecourse = checkCategories(data.categories, data.labels); //, data.names);
+
+make_menu(
+  superPathwayDict,
+  "superPathwayMenu",
+  "Select a category...",
+  (provide_all = true)
+);
 
 var path_mapper = data.motif_reaction_dictionary
 
@@ -94,6 +95,37 @@ for (rxn in data.collapsed_reaction_dictionary) {
   reaction_entity_dictionary[r.id] = entities;
 }
 
+// Initialize slider if timecourse
+if (timecourse === true) {
+  d3.select("circle#dot")
+    .attr("x", 0)
+}
+
+var selected_reactions = [];
+d3.select("#superPathwayMenu").on("change", changeSuperConnect);
+d3.select("#play_button_value").on("click", run_value_connections);
+d3.select("#play_button_stat").on("click", run_stat_connections);
+d3.select("#kNN_button").on("change", run_value_connections);
+d3.select("#hub_button").on("change", run_value_connections);
+
+function changeSuperConnect() {
+  var superSelection = document.getElementById("superPathwayMenu").value;
+
+  if (superSelection === "All entities" | superSelection === "All pathways") {
+    selected_reactions = [];
+    for (x in data.collapsed_reaction_dictionary) {
+      selected_reactions.push(x)
+    }
+  } else {
+    let reactome_id = superPathwayDict[superSelection]["reactome_id"]
+    selected_reactions =
+      data.collapsed_pathway_dictionary[reactome_id]['reactions']
+  }
+
+  // Initial play
+  run_value_connections();
+}
+
 function collect_perturbations(
       reaction_entity_dictionary,
       mapping_dictionary,
@@ -108,23 +140,25 @@ function collect_perturbations(
     for (rxn in reaction_entity_dictionary) {
 
       let perturbed_true = false;
-      for (e in reaction_entity_dictionary[rxn]) {
+      if (selected_reactions.includes(rxn) === true) {
 
-        let entity = reaction_entity_dictionary[rxn][e];
-        if (entity in mapping_dictionary) {
+        for (e in reaction_entity_dictionary[rxn]) {
 
-          if (type === "value") {
-            if (Math.abs(mapping_dictionary[entity][sample]) >= threshold) {
-              perturbed_true = true;
-            }
-          } else if (type === "stat") {
-            if (Math.abs(mapping_dictionary[entity][sample]) <= threshold) {
-              perturbed_true = true;
+          let entity = reaction_entity_dictionary[rxn][e];
+          if (entity in mapping_dictionary) {
+
+            if (type === "value") {
+              if (Math.abs(mapping_dictionary[entity][sample]) >= threshold) {
+                perturbed_true = true;
+              }
+            } else if (type === "stat") {
+              if (Math.abs(mapping_dictionary[entity][sample]) <= threshold) {
+                perturbed_true = true;
+              }
             }
           }
         }
       }
-
       if (perturbed_true === true) {
         sample_perturbations.push(rxn);
       }
@@ -296,17 +330,3 @@ function highlight_mapping(_selector) {
   d3.select(_selector)
     .style("background-color", "#FF7F7F");
 }
-
-// Initialize slider if timecourse
-if (timecourse === true) {
-  d3.select("circle#dot")
-    .attr("x", 0)
-}
-
-d3.select("#play_button_value").on("click", run_value_connections);
-d3.select("#play_button_stat").on("click", run_stat_connections);
-d3.select("#kNN_button").on("change", run_value_connections);
-d3.select("#hub_button").on("change", run_value_connections);
-
-// Initial play
-run_value_connections();

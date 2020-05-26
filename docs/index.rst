@@ -12,6 +12,8 @@ About
 =================
 | `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ allows for the interactive exploration of metabolic pathways, integrating transcriptomics, proteomics, metabolomics data and more.
 |
+| To access the most recent version of our manuscript describing Metaboverse, please click `here <https://github.com/Metaboverse/manuscript/blob/master/output/manuscript.pdf>`_.
+|
 =================
 Table of contents
 =================

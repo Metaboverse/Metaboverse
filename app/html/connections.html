@@ -104,7 +104,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           id="conn_value_button"
           min="0"
           max="100.000"
-          value="2"
+          value="1"
         />
         <button
           id="play_button_value"
@@ -122,7 +122,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           id="conn_stat_button"
           min="0"
           max="1.0000000"
-          value="0.000001"
+          value="0.00001"
         />
 
         <button
@@ -354,7 +354,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br />
     <br />
     <h1 style="padding-left:275px;">Global Reaction Connectivity</h1>
-
+    <select id="superPathwayMenu" onchange="selectSuperPathway()" style="margin-top:-5px;"></select>
+    <br />
     <!--Colorbar pointer label-->
     <font style="font-family: sans-serif" size="1">
       <div id="displayValue" class="displayValue"></div>
@@ -369,6 +370,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <!--Scripts-->
     <script src="../js/utils.js"></script>
+    <script src="../js/menu.js"></script>
     <script src="../js/motifs.js"></script>
     <script src="../js/motif-global.js"></script>
     <script src="../js/timecourse.js"></script>

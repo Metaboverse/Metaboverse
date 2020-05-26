@@ -47,8 +47,8 @@ def test():
 
     args_dict = {'output': '/Users/jordan/Desktop/'}
     output_file = "/Users/jordan/Desktop/test.json"
-    species_id = "SCE"
-    network_url = "/Users/jordan/Desktop/SCE_metaboverse_db.pickle"
+    species_id = "HSA"
+    network_url = "/Users/jordan/Desktop/HSA_metaboverse_db.pickle"
     with open(network_url, 'rb') as network_file:
         network = pickle.load(network_file)
 
@@ -75,6 +75,7 @@ def build_graph(
         species_reference,
         name_reference,
         protein_reference,
+        chebi_mapper,
         uniprot_reference,
         complexes,
         species_id,
@@ -100,6 +101,7 @@ def build_graph(
             species_reference=species_reference,
             name_reference=name_reference,
             protein_reference=protein_reference,
+            chebi_mapper=chebi_mapper,
             uniprot_reference=uniprot_reference,
             complex_reference=complexes,
             species_id=species_id,
@@ -130,6 +132,7 @@ def process_reactions(
         species_reference,
         name_reference,
         protein_reference,
+        chebi_mapper,
         uniprot_reference,
         complex_reference,
         species_id,
@@ -218,6 +221,7 @@ def process_reactions(
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
+                    chebi_mapper=chebi_mapper,
                     uniprot_reference=uniprot_reference,
                     gene_reference=gene_reference,
                     component_database=component_database,
@@ -283,6 +287,7 @@ def process_reactions(
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
+                    chebi_mapper=chebi_mapper,
                     uniprot_reference=uniprot_reference,
                     gene_reference=gene_reference,
                     component_database=component_database,
@@ -358,6 +363,7 @@ def process_reactions(
                     species_reference=species_reference,
                     name_reference=name_reference,
                     protein_reference=protein_reference,
+                    chebi_mapper=chebi_mapper,
                     uniprot_reference=uniprot_reference,
                     gene_reference=gene_reference,
                     component_database=component_database,
@@ -466,6 +472,7 @@ def check_complexes(
         species_reference,
         name_reference,
         protein_reference,
+        chebi_mapper,
         uniprot_reference,
         gene_reference,
         component_database,
@@ -530,6 +537,11 @@ def check_complexes(
                 map_id = name = x
                 sub_type = 'metabolite_component'
 
+            elif x.lower in chebi_mapper.keys():
+                name = x
+                map_id = chebi_mapper[x]
+                sub_type = 'metabolite_component'
+
             elif 'mi' in x.lower():
                 map_id = name = x
                 sub_type = 'mirna_component'
@@ -538,18 +550,22 @@ def check_complexes(
                 map_id = name = x
                 sub_type = 'other'
 
-            try:
-                component_id = name_reference[name]
-                display_name = species_reference[component_id]
-            except:
-                display_name = component_id = x
+            if x.lower in chebi_mapper.keys():
+                component_id = map_id
+                display_name = x
+            else:
+                try:
+                    component_id = name_reference[name]
+                    display_name = species_reference[component_id]
+                except:
+                    display_name = component_id = x
 
             add_components.append(component_id)
 
             graph = add_node_edge(
                 graph=graph,
                 id=component_id,
-                map_id=component_id,
+                map_id=map_id,
                 name=display_name,
                 compartment='none',
                 reaction_membership=id,
@@ -1125,6 +1141,16 @@ def __main__(
         ensembl_reference=reverse_genes)
     progress_feed(args_dict, "model", 1)
 
+    chebi_mapper = {}
+    for k, v in network['chebi_synonyms'].items():
+        _k = ''.join(c.lower() for c in str(k) if c.isalnum())
+        chebi_mapper[_k] = v
+        chebi_mapper[k] = v
+    for k, v in network['uniprot_metabolites'].items():
+        _k = ''.join(c.lower() for c in str(k) if c.isalnum())
+        chebi_mapper[_k] = v
+        chebi_mapper[k] = v
+
     # Generate graph
     # Name mapping
     print('Building network...')
@@ -1134,6 +1160,7 @@ def __main__(
         species_reference=network['species_database'],
         name_reference=network['name_database'],
         protein_reference=protein_dictionary,
+        chebi_mapper=chebi_mapper,
         uniprot_reference=network['uniprot_synonyms'],
         complexes=network['complex_dictionary'],
         species_id=species_id,
@@ -1166,16 +1193,6 @@ def __main__(
     metabolite_mapper = make_metabolite_synonym_dictionary(
         network=network,
         output_dir=args_dict['output'])
-
-    chebi_mapper = {}
-    for k, v in network['chebi_synonyms'].items():
-        _k = ''.join(c.lower() for c in str(k) if c.isalnum())
-        chebi_mapper[_k] = v
-        chebi_mapper[k] = v
-    for k, v in network['uniprot_metabolites'].items():
-        _k = ''.join(c.lower() for c in str(k) if c.isalnum())
-        chebi_mapper[_k] = v
-        chebi_mapper[k] = v
 
     G, max_value, max_stat = map_attributes(
         graph=G,
