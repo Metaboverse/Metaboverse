@@ -66,10 +66,19 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-2">
                 <div class="frame">
+                    <div class="content">
+                        <label class="dropdown-label">Select Value Type</label>
+                        <div class="dropdown-container">
+                            <select name="value_type" class="custom-select" id="value_type">
+                                <option>Expression Values</option>
+                                <option>Stats</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="content">
-                                <div style="height:50px; padding-left:5px">
+                                <div style=" padding-left:0px">
                                     <p> Motif Type </p>
                                 </div>
                                 <p>
@@ -106,7 +115,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                         <div class="col-md-8">
                             <div class="content">
-                                <div style="height:50px; padding-left:25px">
+                                <div style="padding-left:25px">
                                   <p> Threshold </p>
                                 </div>
                                 <p style="padding-left:30px">
@@ -148,6 +157,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <input style="width: 15px; height: 15px;" type="checkbox" id="exclude_hubs" name="exclude_hubs" onclick='hubsChecked()' value="true" title="Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers.">
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <label class="dropdown-label">Sort Search Results</label>
+                        <div class="dropdown-container">
+                            <select name="sort_type" class="custom-select" id="sort_type">
+                                <option>Number of Pathways</option>
+                                <option>Magnitude Change</option>
+                                <option>Stats Significance</option>
+                            </select>
                         </div>
                     </div>
                 </div>

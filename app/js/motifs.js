@@ -274,10 +274,15 @@ function motifSearch_Avg(
       collapsed_reaction_dict,
       expression_dict,
       path_mapper,
+      value_type,
+      stats_dict,
+      modifiers
       degree_dict,
       sample_indices) {
   console.log("motif search 1")
   console.log("Avg threshold set at: ", threshold)
+  console.log(value_type)
+  console.log(expression_dict)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -298,8 +303,33 @@ function motifSearch_Avg(
         let target_avg = computeAvg(updated_target);
 
         if(Math.abs(source_avg - target_avg)>=threshold){
-          sample_motifs.push(reaction);
-        }
+          // get p-values
+          let p_source;
+          let p_target;
+          if (value_type === "Expression Values"){
+            let stats_comps = parseComponents(
+              reaction,
+              stats_dict);
+            if(stats_comps[0].length > 0){
+              p_source = Math.min(...stats_comps[0]);
+            } else {
+              p_source = 1.01; // It should be "null", but for sorting purpose, I cheat a little bit by setting the value to be 1.01.
+            }
+            if(stats_comps[1].length > 0){
+              p_target = Math.min(...stats_comps[1]);
+            } else {
+              p_target = 1.01;
+            }
+
+          } else { // value_type === "Stats"
+            p_source = Math.min(...updated_source);
+            p_target = Math.min(...updated_target);
+          }
+          reaction.p_values = {"source":p_source, "target":p_target};
+          reaction.magnitude_change = Math.abs(source_avg - target_avg);
+          if(Math.abs(source_avg - target_avg)>=threshold){
+            sample_motifs.push(reaction);
+          }
       }
     }
     for (let m in sample_motifs) {
@@ -318,6 +348,9 @@ function motifSearch_MaxMax(
     collapsed_reaction_dict,
     expression_dict,
     path_mapper,
+    value_type,
+    stats_dict,
+    modifiers
     degree_dict,
     sample_indices) {
   console.log("motif search 2")
@@ -341,8 +374,32 @@ function motifSearch_MaxMax(
         let source_max = Math.max(...updated_source);
         let target_max = Math.max(...updated_target);
         if(Math.abs(source_max - target_max)>=threshold){
+          // get p-values
+          let p_source;
+          let p_target;
+          if (value_type === "Expression Values"){
+            let stats_comps = parseComponents(
+              reaction,
+              stats_dict);
+            if(stats_comps[0].length > 0){
+              p_source = Math.min(...stats_comps[0]);
+            } else {
+              p_source = 1.01; // It should be "null", but for sorting purpose, I cheat a little bit by setting the value to be 1.01.
+            }
+            if(stats_comps[1].length > 0){
+              p_target = Math.min(...stats_comps[1]);
+            } else {
+              p_target = 1.01;
+            }
+
+          } else { // value_type === "Stats"
+            p_source = Math.min(...updated_source);
+            p_target = Math.min(...updated_target);
+          }
+          reaction.p_values = {"source":p_source, "target":p_target};
+          reaction.magnitude_change = Math.abs(source_max - target_max);
           sample_motifs.push(reaction);
-        }
+
       }
     }
     for (let m in sample_motifs) {
@@ -361,6 +418,9 @@ function motifSearch_MaxMin(
     collapsed_reaction_dict,
     expression_dict,
     path_mapper,
+    value_type,
+    stats_dict,
+    modifiers
     degree_dict,
     sample_indices) {
   console.log("motif search 3")
@@ -384,8 +444,32 @@ function motifSearch_MaxMin(
         let source_max = Math.max(...updated_source);
         let target_min = Math.min(...updated_target);
         if(Math.abs(source_max - target_min)>=threshold){
+          // get p-values
+          let p_source;
+          let p_target;
+          if (value_type === "Expression Values"){
+            let stats_comps = parseComponents(
+              reaction,
+              stats_dict);
+            if(stats_comps[0].length > 0){
+              p_source = Math.min(...stats_comps[0]);
+            } else {
+              p_source = 1.01; // It should be "null", but for sorting purpose, I cheat a little bit by setting the value to be 1.01.
+            }
+            if(stats_comps[1].length > 0){
+              p_target = Math.min(...stats_comps[1]);
+            } else {
+              p_target = 1.01;
+            }
+
+          } else { // value_type === "Stats"
+            p_source = Math.min(...updated_source);
+            p_target = Math.min(...updated_target);
+          }
+          reaction.p_values = {"source":p_source, "target":p_target};
+          reaction.magnitude_change = Math.abs(source_max - target_min);
           sample_motifs.push(reaction);
-        }
+
       }
     }
     for (let m in sample_motifs) {
@@ -411,7 +495,8 @@ function motifSearch_Sustained(
   console.log("Sustained perturbation threshold set at: ", threshold)
   let discovered_motifs = [];
 
-  for (_idx in sample_indices) {
+      
+      for (_idx in sample_indices) {
     let sample_motifs = [];
 
     for(let rxn in collapsed_reaction_dict){
@@ -423,42 +508,60 @@ function motifSearch_Sustained(
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
+      
+       if(updated_source.length>0 && updated_target.length>0) {
 
-      if(updated_source.length>0 && updated_target.length>0) {
 
-        // Sustained up-regulation
-        let up_in = [];
-        let up_out = [];
-        for (i in updated_source) {
-          if (updated_source[i] >= threshold) {
-            up_in.push(updated_source[i]);
-          }
+      // Sustained up-regulation
+      let up_in = false;
+      let up_out = false;
+      let magnitude_change_up;
+      for (i in updated_source) {
+        if (updated_source[i] >= threshold) {
+          up_in = true;
+
         }
         for (j in updated_target) {
           if (updated_target[j] >= threshold) {
-            up_out.push(updated_source[j]);
+            up_out = true;
           }
         }
 
-        // Sustained down-regulation
-        let down_in = [];
-        let down_out = [];
-        for (k in updated_source) {
-          if (updated_source[k] <= -(threshold)) {
-            down_in.push(updated_source[k]);
-          }
+      }
+      if(up_in===true && up_out===true) {
+        magnitude_change_up = Math.abs(Math.max(...updated_source) - Math.max(...updated_target));
+      }
+
+      // Sustained down-regulation
+      let down_in = false;
+      let down_out = false;
+      let magnitude_change_down;
+      for (k in updated_source) {
+        if (updated_source[k] <= -(threshold)) {
+          down_in = true;
+
         }
         for (l in updated_target) {
           if (updated_target[l] <= -(threshold)) {
             down_out.push(updated_target[l]);
           }
         }
+      }
+      if(down_in===true && down_out===true) {
+        magnitude_change_down = Math.abs(Math.min(...updated_source) - Math.min(...updated_target));
+      }
 
-        if (((down_in.length > 0) & (down_out.length > 0)) | ((up_in.length > 0) & (up_out.length > 0))) {
-          if ((!down_in === down_out) | (!up_in === up_out)) {
-            sample_motifs.push(reaction);
-          }
+      if (((down_in === true) && (down_out === true)) || ((up_in === true) && (up_out === true))) {
+        let magnitude_change;
+        if(magnitude_change_up && magnitude_change_down){
+          magnitude_change = Math.max(magnitude_change_up, magnitude_change_down);
+        } else if (magnitude_change_up!=undefined){
+          magnitude_change = magnitude_change_up;
+        } else if(magnitude_change_down!=undefined){
+          magnitude_change = magnitude_change_down;
         }
+        reaction.magnitude_change = magnitude_change;
+        sample_motifs.push(reaction);
       }
     }
 
@@ -566,6 +669,11 @@ function motifSearch_PathCov(
         total = total + 1;
       }
 
+    if (values.length > 0) {
+      if (Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values)) >= threshold) {
+        mod_collapsed_pathways[pathway].magnitude_change = Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values));
+        discovered_motifs.push(mod_collapsed_pathways[pathway]);
+/*
       let cov = values / total;
       if (cov >= min_coverage) {
         sample_motifs.push([
@@ -574,6 +682,7 @@ function motifSearch_PathCov(
           values,
           total
         ]);
+*/
       }
     }
 

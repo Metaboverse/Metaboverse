@@ -105,7 +105,15 @@ class MetaGraph{
       this.pathway_svg = d3.select("#pathway-view-svg");
       this.pathway_svg_width = parseFloat(this.pathway_svg.style("width", "45vw"));
       this.pathway_svg_height = parseFloat(this.pathway_svg.style("height", "490px"));
-    } catch(e) {}
+
+    this.sort_type_dropdown = document.getElementById("sort_type");
+    let that = this;
+    this.sort_type_dropdown.onchange = function() {
+      if(that.motif !== undefined){
+        that.drawMotifSearchResult(that.motif);
+      }
+    }
+  } catch(e) {}
     this.motifSearch();
   }
 
@@ -117,10 +125,17 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#avg_num").node().value;
+      let value_dict = this.expression_dict;
+          let value_type = value_type_dropdown.options[value_type_dropdown.selectedIndex].text;
+          if(value_type === "Stats"){
+            value_dict = this.stats_dict;
+          }
         this.motif = motifSearch_Avg(
           threshold,
           this.collapsed_reaction_dict,
-          this.expression_dict,
+          value_type,
+          value_dict,
+          this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
@@ -146,10 +161,15 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#maxmax_num").node().value;
+            let value_dict = this.expression_dict;
+          let value_type = value_type_dropdown.options[value_type_dropdown.selectedIndex].text;
+          if(value_type === "Stats"){
         this.motif = motifSearch_MaxMax(
           threshold,
           this.collapsed_reaction_dict,
-          this.expression_dict,
+          value_dict,
+          value_type,
+          this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
@@ -175,10 +195,17 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#maxmin_num").node().value;
+  let value_dict = this.expression_dict;
+          let value_type = value_type_dropdown.options[value_type_dropdown.selectedIndex].text;
+          if(value_type === "Stats"){
+            value_dict = this.stats_dict;
+          }
         this.motif = motifSearch_MaxMin(
           threshold,
           this.collapsed_reaction_dict,
-          this.expression_dict,
+          value_dict,
+          value_type,
+          this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
@@ -205,10 +232,16 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#sustained_num").node().value;
+      let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
         this.motif = motifSearch_Sustained(
           threshold,
           this.collapsed_reaction_dict,
-          this.expression_dict,
+          value_dict,
+          value_type,
+          this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
@@ -235,10 +268,16 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#modreg_num").node().value;
+      let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
         this.motif = modifierReg(
           threshold,
           this.collapsed_reaction_dict,
-          this.expression_dict,
+          value_dict,
+          value_type,
+          this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
@@ -258,36 +297,44 @@ class MetaGraph{
         }
       }
     )
+  
+        d3.select("#motif6")
+    .on("click", ()=>{
+      highlight_selection("#transreg_num");
+      reset_dot();
+      reset_objects();
+      let threshold = d3.select("#transreg_num").node().value;
+          let value_dict = this.expression_dict;
+          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
+            value_dict = this.stats_dict;
+          }
+      this.motif = modifierTransport(
+        threshold,
+        this.collapsed_reaction_dict,
+        value_dict,
+          value_type,
+          this.stats_dict,
+        this.path_mapper,
+        this.degree_dict,
+        this.categories)
+      if (this.motif !== undefined) {
+        if (timecourse === true) {
+          d3.select("svg#slide")
+            .on("click", ()=>{
+              let sample_idx = d3.select("circle#dot").attr("x");
+              if (sample_idx !== last_click) {
+                reset_objects();
+                this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+              last_click = sample_idx;
+              }
+            })
+        }
+        this.drawMotifSearchResult(this.motif[0], 0);
+      }
+    }
+  )
 
-    d3.select("#motif6")
-      .on("click", ()=>{
-        highlight_selection("#transreg_num");
-        reset_dot();
-        reset_objects();
-        let threshold = d3.select("#transreg_num").node().value;
-        this.motif = modifierTransport(
-          threshold,
-          this.collapsed_reaction_dict,
-          this.expression_dict,
-          this.path_mapper,
-          this.degree_dict,
-          this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              })
-          }
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
-      }
-    )
+
 
 
     d3.select("#motif99")
@@ -352,8 +399,160 @@ class MetaGraph{
                 }
               })
           }
-          this.drawMotifSearchResultPathway(this.motif[0]);
+                    this.drawMotifSearchResultPathway(this.motif[0]);
         }
+      
+        
+    drawMotifSearchResult(motif_list){
+      //Change this to sort by p-values
+      //motif_list.sort(function(a,b){
+      //  console.log(a.pathways)
+      //  return d3.descending(a.pathways.length, b.pathways.length)
+      //})
+      
+      // Sorting
+      // let sort_type_dropdown = document.getElementById("sort_type");
+      let sort_type = this.sort_type_dropdown.options[this.sort_type_dropdown.selectedIndex].text;
+      if(sort_type === "Number of Pathways") {
+        motif_list.sort(function(a,b){
+          return d3.descending(a.pathways.length, b.pathways.length);
+        })
+      } else if(sort_type === "Magnitude Change") {
+        motif_list.sort(function(a,b){
+          return d3.descending(a.magnitude_change, b.magnitude_change);
+        })
+      } else if(sort_type === "Stats Significance") {
+        let motif_significance = {'both':[], 'source':[], 'target':[], 'none':[]};
+        motif_list.forEach(m=>{
+          if(m.p_values.source <= 0.05 && m.p_values.target <= 0.05){
+            m.significance_type = 'Both significant';
+            motif_significance.both.push(m);
+          } else if(m.p_values.source <= 0.05) {
+            m.significance_type = 'Source significant';
+            motif_significance.source.push(m);
+          } else if(m.p_values.target <= 0.05) {
+            m.significance_type = 'Target significant';
+            motif_significance.target.push(m);
+          } else { // both > 0.05
+            m.significance_type = 'Both not significant';
+            motif_significance.none.push(m);
+          }
+        })
+        motif_significance.both.sort(function(a,b){
+          return d3.ascending(a.p_values.source, b.p_values.source) || d3.ascending(a.p_values.target, b.p_values.target);
+        })
+        motif_significance.source.sort(function(a,b){
+          return d3.ascending(a.p_values.source, b.p_values.source) || d3.ascending(a.p_values.target, b.p_values.target);
+        })
+        motif_significance.target.sort(function(a,b){
+          return d3.ascending(a.p_values.target, b.p_values.target) || d3.ascending(a.p_values.source, b.p_values.source);
+        })
+        motif_significance.none.sort(function(a,b) {
+          return d3.ascending(a.p_values.source, b.p_values.source) || d3.ascending(a.p_values.target, b.p_values.target);
+        })
+        motif_list = motif_significance.both.concat(motif_significance.source, motif_significance.target, motif_significance.none);
+      }
+
+      let stamp_height = 50;
+      this.stamp_svg_height = Math.ceil(
+        motif_list.length / 3)
+        * (stamp_height + this.stamp_svg_margin.vertical);
+      this.stamp_svg.attr("height",this.stamp_svg_height);
+
+      let stamp_width = this.stamp_svg_width / 3
+        - this.stamp_svg_margin.horizontal;
+
+      let sg = this.stamp_svg_selection_group.selectAll("rect")
+        .data(motif_list);
+      sg.exit().remove();
+      sg = sg.enter().append("rect").merge(sg)
+        .attr("x",(d,i)=>this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal))
+        .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical))
+        .attr("width",stamp_width)
+        .attr("height",stamp_height)
+        .attr("fill","lightgray")
+        .attr("id",(d)=>"stamp-cover-"+d.id)
+        .style("opacity",0)
+        .on("click",(d)=>{
+          this.drawMotifPathway(d);
+          d3.select("#motif-pathway-svg").style("visibility","visible");
+        })
+        .on("mouseover",(d)=>{
+          d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
+        })
+        .on("mouseout",(d)=>{
+          d3.select("#stamp-cover-"+d.id).style("opacity",0);
+        });
+      
+        })
+
+        let start_x = this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal);
+        let start_y = this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical);
+        let x_interval = stamp_width/3;
+        let y_interval_r = (stamp_height-20)/r_idx;
+        let y_interval_p = (stamp_height-20)/p_idx;
+
+        let mg = d3.select("#stamp-circle-"+i).selectAll("circle")
+          .data(mnodes);
+        mg.exit().remove();
+        mg = mg.enter().append("circle").merge(mg)
+          .attr("cx",(d)=>{
+            if(d.current_type==="reactant"){
+              return start_x + 15;
+            } else if(d.current_type==="reaction"){
+              return start_x + x_interval+15;
+            } else if (d.current_type ==="product"){
+              return start_x + x_interval*2+15;
+            }
+          })
+          .attr("cy",(d)=>{
+            if(d.current_type==="reactant"){
+              return start_y + y_interval_r*(d.r_idx)+10;
+            } else if(d.current_type==="reaction"){
+              return start_y + 20;
+            } else if (d.current_type ==="product"){
+              return start_y + y_interval_p*(d.p_idx)+10;
+            }
+          })
+          .attr("class",(d)=>d.current_type)
+          .attr("fill", (d)=>{
+            if (d.values_js === undefined) {
+              return "rgba(191, 191, 191, 1)";
+            } else {
+              return "rgba(" + d.values_js.toString() + ")";
+            }
+          })
+          .attr("r",4)
+          .attr("stroke","black")
+          .attr("id",d=>"stamp-"+i+"-"+d.id)
+
+        let mlg = d3.select("#stamp-link-"+i).selectAll("line")
+          .data(mlinks);
+        mlg.exit().remove();
+        mlg = mlg.enter().append("line").merge(mlg)
+          .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
+          .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
+          .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
+          .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
+          .attr("stroke","gray")
+
+        let tg = d3.select("#stamp-circle-"+i).selectAll("text")
+          .data([motif_list[i]]);
+        tg.exit().remove();
+        tg = tg.enter().append("text").merge(tg)
+          .attr("x",start_x + 10)
+          .attr("y",start_y + 45)
+          .text(d=>{
+            if(sort_type === "Number of Pathways"){
+              return d.pathways.length + " pathways";
+            } else if(sort_type === "Magnitude Change") {
+              return "Change: "+ Math.round(d.magnitude_change*100)/100;
+            } else if(sort_type === "Stats Significance"){
+              return d.significance_type;
+            }
+            })
+          .style("font-size","11px")
+
       }
     )
 
