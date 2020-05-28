@@ -27,10 +27,13 @@ function gatherMotifs(data, categories) {
   var hub_threshold = 100;
 
   let expression_dict = {};
+  let stats_dict = {};
   for (let x in data.nodes) {
     let id = data.nodes[x]['id'];
     let expression = data.nodes[x]['values'];
+    let stats = data.nodes[x]['stats'];
     expression_dict[id] = expression;
+    stats_dict[id] = stats;
   }
 
   let threshold = 1;
@@ -38,6 +41,7 @@ function gatherMotifs(data, categories) {
     threshold,
     data.collapsed_reaction_dictionary,
     expression_dict,
+    stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dict,
     categories)
@@ -46,6 +50,16 @@ function gatherMotifs(data, categories) {
     threshold,
     data.collapsed_reaction_dictionary,
     expression_dict,
+    stats_dict,
+    data.motif_reaction_dictionary,
+    data.degree_dict,
+    categories)
+
+  let motifs_MinMin = motifSearch_MinMin(
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dict,
     categories)
@@ -54,6 +68,16 @@ function gatherMotifs(data, categories) {
     threshold,
     data.collapsed_reaction_dictionary,
     expression_dict,
+    stats_dict,
+    data.motif_reaction_dictionary,
+    data.degree_dict,
+    categories)
+
+  let motifs_MinMax = motifSearch_MinMax(
+    threshold,
+    data.collapsed_reaction_dictionary,
+    expression_dict,
+    stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dict,
     categories)
@@ -62,6 +86,7 @@ function gatherMotifs(data, categories) {
     threshold,
     data.collapsed_reaction_dictionary,
     expression_dict,
+    stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dict,
     categories)
@@ -70,6 +95,7 @@ function gatherMotifs(data, categories) {
     threshold,
     data.collapsed_reaction_dictionary,
     expression_dict,
+    stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dict,
     categories)
@@ -78,16 +104,18 @@ function gatherMotifs(data, categories) {
     threshold,
     data.collapsed_reaction_dictionary,
     expression_dict,
+    stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dict,
     categories)
-
 
   let all_motifs = [];
   for (x in categories) {
     all_motifs[x] = motifs_Avg[x].concat(
       motifs_MaxMax[x],
+      motifs_MinMin[x],
       motifs_MaxMin[x],
+      motifs_MinMax[x],
       motifs_Sustained[x],
       motifs_ModReg[x],
       motifs_ModTrans[x]);

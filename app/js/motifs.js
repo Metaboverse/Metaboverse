@@ -435,7 +435,7 @@ function motifSearch_MinMin(
         let source_min = Math.min(...source_values);
         let target_min = Math.min(...target_values);
 
-        if(Math.abs(source_max - target_max)>=threshold){
+        if(Math.abs(source_min - target_min)>=threshold){
           let source_index = source_values.indexOf(source_min);
           let target_index = target_values.indexOf(target_min);
           let p_source = source_stats[source_index];
@@ -465,9 +465,8 @@ function motifSearch_MaxMin(
     threshold,
     collapsed_reaction_dict,
     expression_dict,
-    path_mapper,
-    value_type,
     stats_dict,
+    path_mapper,
     degree_dict,
     sample_indices) {
   console.log("motif search MaxMin")
@@ -526,9 +525,8 @@ function motifSearch_MinMax(
     threshold,
     collapsed_reaction_dict,
     expression_dict,
-    path_mapper,
-    value_type,
     stats_dict,
+    path_mapper,
     degree_dict,
     sample_indices) {
   console.log("motif search MinMax")
