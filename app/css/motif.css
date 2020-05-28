@@ -46,7 +46,7 @@ div.scrollable {
   border: 1px solid lightgray;
   background-color: rgb(247,247,249);
   border-radius: 5px;
-  height:650px;
+  height:700px;
 }
 
 .content {
@@ -63,7 +63,7 @@ div.scrollable {
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height:310px;
+  height:330px;
 }
 
 .network-frame {
@@ -84,9 +84,6 @@ div.scrollable {
   margin-right:10px;
   padding-top:5px;
   padding-left:5px;
-  /* border: 1px solid lightgray; */
-  /* background-color: white; */
-  /* border-radius: 5px; */
   height:120px;
 }
 
@@ -175,6 +172,8 @@ circle:hover text {
 
 .dropdown-container {
   font-size: 14px;
+  width: 165px;
+  margin-top:-10px;
 }
 
 /* Select Menu */

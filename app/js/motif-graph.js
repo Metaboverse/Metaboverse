@@ -103,21 +103,15 @@ class MetaGraph{
       // Generate pathway viewer
       // Just get pathway ID and let the viz script do the rest
       this.pathway_svg = d3.select("#pathway-view-svg");
-      this.pathway_svg_width = parseFloat(this.pathway_svg.style("width", "45vw"));
-      this.pathway_svg_height = parseFloat(this.pathway_svg.style("height", "490px"));
-
-    this.sort_type_dropdown = document.getElementById("sort_type");
-    let that = this;
-    this.sort_type_dropdown.onchange = function() {
-      if(that.motif !== undefined){
-        that.drawMotifSearchResult(that.motif);
-      }
-    }
+      this.pathway_svg_width = parseFloat(
+        this.pathway_svg.style("width", "45vw"));
+      this.pathway_svg_height = parseFloat(
+        this.pathway_svg.style("height", "490px"));
   } catch(e) {}
     this.motifSearch();
   }
 
-  motifSearch(){
+  motifSearch() {
 
     d3.select("#motif1")
       .on("click", ()=>{
@@ -125,16 +119,11 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#avg_num").node().value;
-      let value_dict = this.expression_dict;
-          let value_type = value_type_dropdown.options[value_type_dropdown.selectedIndex].text;
-          if(value_type === "Stats"){
-            value_dict = this.stats_dict;
-          }
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = motifSearch_Avg(
           threshold,
           this.collapsed_reaction_dict,
-          value_type,
-          value_dict,
+          this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
@@ -146,29 +135,37 @@ class MetaGraph{
                 let sample_idx = d3.select("circle#dot").attr("x");
                 if (sample_idx !== last_click) {
                   reset_objects();
-                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
           this.drawMotifSearchResult(this.motif[0], 0);
         }
-      })
+      }
+    )
 
-    d3.select("#motif2")
+    d3.select("#motif2_1")
       .on("click", ()=>{
         highlight_selection("#maxmax_num");
         reset_dot();
         reset_objects();
         let threshold = d3.select("#maxmax_num").node().value;
-            let value_dict = this.expression_dict;
-          let value_type = value_type_dropdown.options[value_type_dropdown.selectedIndex].text;
-          if(value_type === "Stats"){
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = motifSearch_MaxMax(
           threshold,
           this.collapsed_reaction_dict,
-          value_dict,
-          value_type,
+          this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
@@ -180,31 +177,79 @@ class MetaGraph{
                 let sample_idx = d3.select("circle#dot").attr("x");
                 if (sample_idx !== last_click) {
                   reset_objects();
-                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
           this.drawMotifSearchResult(this.motif[0], 0);
         }
-      })
+      }
+    )
 
-    d3.select("#motif3")
+    d3.select("#motif2_2")
+      .on("click", ()=>{
+        highlight_selection("#minmin_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#minmin_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = motifSearch_MinMin(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        if (this.motif !== undefined) {
+          if (timecourse === true) {
+            d3.select("svg#slide")
+              .on("click", ()=>{
+                let sample_idx = d3.select("circle#dot").attr("x");
+                if (sample_idx !== last_click) {
+                  reset_objects();
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
+                last_click = sample_idx;
+                }
+              }
+            )
+          }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
+          this.drawMotifSearchResult(this.motif[0], 0);
+        }
+      }
+    )
+
+    d3.select("#motif3_1")
       .on("click", ()=>{
         highlight_selection("#maxmin_num");
         reset_dot();
         reset_objects();
         let threshold = d3.select("#maxmin_num").node().value;
-  let value_dict = this.expression_dict;
-          let value_type = value_type_dropdown.options[value_type_dropdown.selectedIndex].text;
-          if(value_type === "Stats"){
-            value_dict = this.stats_dict;
-          }
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = motifSearch_MaxMin(
           threshold,
           this.collapsed_reaction_dict,
-          value_dict,
-          value_type,
+          this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
@@ -216,11 +261,63 @@ class MetaGraph{
                 let sample_idx = d3.select("circle#dot").attr("x");
                 if (sample_idx !== last_click) {
                   reset_objects();
-                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
+          this.drawMotifSearchResult(this.motif[0], 0);
+        }
+      }
+    )
+
+    d3.select("#motif3_2")
+      .on("click", ()=>{
+        highlight_selection("#minmax_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#minmax_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = motifSearch_MinMax(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        if (this.motif !== undefined) {
+          if (timecourse === true) {
+            d3.select("svg#slide")
+              .on("click", ()=>{
+                let sample_idx = d3.select("circle#dot").attr("x");
+                if (sample_idx !== last_click) {
+                  reset_objects();
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
+                last_click = sample_idx;
+                }
+              }
+            )
+          }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
           this.drawMotifSearchResult(this.motif[0], 0);
         }
       }
@@ -232,15 +329,11 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#sustained_num").node().value;
-      let value_dict = this.expression_dict;
-          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
-            value_dict = this.stats_dict;
-          }
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = motifSearch_Sustained(
           threshold,
           this.collapsed_reaction_dict,
-          value_dict,
-          value_type,
+          this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
@@ -252,11 +345,21 @@ class MetaGraph{
                 let sample_idx = d3.select("circle#dot").attr("x");
                 if (sample_idx !== last_click) {
                   reset_objects();
-                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
           this.drawMotifSearchResult(this.motif[0], 0);
         }
       }
@@ -268,15 +371,11 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#modreg_num").node().value;
-      let value_dict = this.expression_dict;
-          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
-            value_dict = this.stats_dict;
-          }
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = modifierReg(
           threshold,
           this.collapsed_reaction_dict,
-          value_dict,
-          value_type,
+          this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
@@ -288,54 +387,67 @@ class MetaGraph{
                 let sample_idx = d3.select("circle#dot").attr("x");
                 if (sample_idx !== last_click) {
                   reset_objects();
-                  this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
+            })
           this.drawMotifSearchResult(this.motif[0], 0);
         }
       }
     )
-  
-        d3.select("#motif6")
-    .on("click", ()=>{
-      highlight_selection("#transreg_num");
-      reset_dot();
-      reset_objects();
-      let threshold = d3.select("#transreg_num").node().value;
-          let value_dict = this.expression_dict;
-          if(value_type_dropdown.options[value_type_dropdown.selectedIndex].text === "Stats"){
-            value_dict = this.stats_dict;
-          }
-      this.motif = modifierTransport(
-        threshold,
-        this.collapsed_reaction_dict,
-        value_dict,
-          value_type,
+
+    d3.select("#motif6")
+      .on("click", ()=>{
+        highlight_selection("#transreg_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#transreg_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = modifierTransport(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
           this.stats_dict,
-        this.path_mapper,
-        this.degree_dict,
-        this.categories)
-      if (this.motif !== undefined) {
-        if (timecourse === true) {
-          d3.select("svg#slide")
-            .on("click", ()=>{
-              let sample_idx = d3.select("circle#dot").attr("x");
-              if (sample_idx !== last_click) {
-                reset_objects();
-                this.drawMotifSearchResult(this.motif[sample_idx], sample_idx);
-              last_click = sample_idx;
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        if (this.motif !== undefined) {
+          if (timecourse === true) {
+            d3.select("svg#slide")
+              .on("click", ()=>{
+                let sample_idx = d3.select("circle#dot").attr("x");
+                if (sample_idx !== last_click) {
+                  reset_objects();
+                  this.drawMotifSearchResult(
+                    this.motif[sample_idx], sample_idx);
+                last_click = sample_idx;
+                }
               }
+            )
+          }
+          d3.select("#sort_type")
+            .on("change", ()=>{
+              reset_objects();
+              this.sort_type_dropdown = document.getElementById("sort_type");
+              let sample_idx = d3.select("circle#dot").attr("x");
+              this.drawMotifSearchResult(
+                this.motif[sample_idx], sample_idx);
             })
+          this.drawMotifSearchResult(this.motif[0], 0);
         }
-        this.drawMotifSearchResult(this.motif[0], 0);
       }
-    }
-  )
-
-
-
+    )
 
     d3.select("#motif99")
       .on("click", ()=>{
@@ -343,17 +455,16 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#pathmax_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = motifSearch_PathMax(
           threshold,
           this.mod_collapsed_pathways,
           this.collapsed_reaction_dict,
           this.expression_dict,
+          this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
-
-        console.log(this.motif)
-        console.log(timecourse)
         if (this.motif !== undefined) {
           if (timecourse === true) {
             d3.select("svg#slide")
@@ -364,7 +475,8 @@ class MetaGraph{
                   this.drawMotifSearchResultPathway(this.motif[sample_idx]);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
           this.drawMotifSearchResultPathway(this.motif[0]);
         }
@@ -377,16 +489,17 @@ class MetaGraph{
         reset_dot();
         reset_objects();
         let threshold = d3.select("#pathcov_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
         this.motif = motifSearch_PathCov(
           threshold,
           cov_threshold,
           this.mod_collapsed_pathways,
           this.collapsed_reaction_dict,
+          this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
-
         if (this.motif !== undefined) {
           if (timecourse === true) {
             d3.select("svg#slide")
@@ -397,60 +510,58 @@ class MetaGraph{
                   this.drawMotifSearchResultPathway(this.motif[sample_idx]);
                 last_click = sample_idx;
                 }
-              })
+              }
+            )
           }
-                    this.drawMotifSearchResultPathway(this.motif[0]);
+          this.drawMotifSearchResultPathway(this.motif[0]);
         }
-      
-        
-    drawMotifSearchResult(motif_list){
-      //Change this to sort by p-values
-      //motif_list.sort(function(a,b){
-      //  console.log(a.pathways)
-      //  return d3.descending(a.pathways.length, b.pathways.length)
-      //})
-      
-      // Sorting
-      // let sort_type_dropdown = document.getElementById("sort_type");
-      let sort_type = this.sort_type_dropdown.options[this.sort_type_dropdown.selectedIndex].text;
-      if(sort_type === "Number of Pathways") {
+      }
+    )}
+
+    drawMotifSearchResult(motif_list, indexer) {
+
+      let sort_type = this.sort_type_dropdown.value;
+      if (sort_type === "Sort Number of Pathways") {
         motif_list.sort(function(a,b){
           return d3.descending(a.pathways.length, b.pathways.length);
         })
-      } else if(sort_type === "Magnitude Change") {
+      } else if (sort_type === "Sort Magnitude Change") {
         motif_list.sort(function(a,b){
           return d3.descending(a.magnitude_change, b.magnitude_change);
         })
-      } else if(sort_type === "Stats Significance") {
-        let motif_significance = {'both':[], 'source':[], 'target':[], 'none':[]};
+      } else if(sort_type === "Sort Statistical Significance") {
+        let motif_significance = {
+          'both': [],
+          'one': [],
+          'none': []
+        };
         motif_list.forEach(m=>{
           if(m.p_values.source <= 0.05 && m.p_values.target <= 0.05){
             m.significance_type = 'Both significant';
             motif_significance.both.push(m);
           } else if(m.p_values.source <= 0.05) {
             m.significance_type = 'Source significant';
-            motif_significance.source.push(m);
+            motif_significance.one.push(m);
           } else if(m.p_values.target <= 0.05) {
             m.significance_type = 'Target significant';
-            motif_significance.target.push(m);
+            motif_significance.one.push(m);
           } else { // both > 0.05
             m.significance_type = 'Both not significant';
             motif_significance.none.push(m);
           }
         })
         motif_significance.both.sort(function(a,b){
-          return d3.ascending(a.p_values.source, b.p_values.source) || d3.ascending(a.p_values.target, b.p_values.target);
+          return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
         })
-        motif_significance.source.sort(function(a,b){
-          return d3.ascending(a.p_values.source, b.p_values.source) || d3.ascending(a.p_values.target, b.p_values.target);
-        })
-        motif_significance.target.sort(function(a,b){
-          return d3.ascending(a.p_values.target, b.p_values.target) || d3.ascending(a.p_values.source, b.p_values.source);
+        motif_significance.one.sort(function(a,b){
+          return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
         })
         motif_significance.none.sort(function(a,b) {
-          return d3.ascending(a.p_values.source, b.p_values.source) || d3.ascending(a.p_values.target, b.p_values.target);
+          return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
         })
-        motif_list = motif_significance.both.concat(motif_significance.source, motif_significance.target, motif_significance.none);
+        motif_list = motif_significance.both.concat(
+          motif_significance.one,
+          motif_significance.none);
       }
 
       let stamp_height = 50;
@@ -474,7 +585,7 @@ class MetaGraph{
         .attr("id",(d)=>"stamp-cover-"+d.id)
         .style("opacity",0)
         .on("click",(d)=>{
-          this.drawMotifPathway(d);
+          this.drawMotifPathway(d, indexer, motif_list);
           d3.select("#motif-pathway-svg").style("visibility","visible");
         })
         .on("mouseover",(d)=>{
@@ -483,7 +594,64 @@ class MetaGraph{
         .on("mouseout",(d)=>{
           d3.select("#stamp-cover-"+d.id).style("opacity",0);
         });
-      
+
+      let fg = this.stamp_svg_frame_group.selectAll("rect")
+        .data(motif_list);
+      fg.exit().remove();
+      fg = fg.enter().append("rect").merge(fg)
+        .attr("x",(d,i)=>this.stamp_svg_margin.left + i % 3
+          * (stamp_width + this.stamp_svg_margin.horizontal))
+        .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i / 3 )
+          * (stamp_height + this.stamp_svg_margin.vertical))
+        .attr("width",stamp_width)
+        .attr("height",stamp_height)
+        .attr("stroke","lightgray")
+        .attr("fill","white")
+
+      let cg = this.stamp_svg_circle_group.selectAll("g")
+        .data(motif_list);
+      cg.exit().remove();
+      cg = cg.enter().append("g").merge(cg)
+        .attr("id",(d,i)=>"stamp-circle-"+i);
+
+      let lg = this.stamp_svg_link_group.selectAll("g")
+        .data(motif_list);
+      lg.exit().remove();
+      lg = lg.enter().append("g").merge(lg)
+        .attr("id",(d,i)=>"stamp-link-"+i);
+
+      for (let i=0; i<motif_list.length; i++) {
+        let mnodes = [];
+        let mnodes_id = [];
+        let mlinks = [];
+        let r_idx = 0;
+        let p_idx = 0;
+        // Add reaction node
+        this.node_dict[motif_list[i].id].current_type = "reaction";
+        mnodes.push(this.node_dict[motif_list[i].id]);
+
+        // Add reactant nodes
+        motif_list[i].reactants.forEach(l=>{
+          if(mnodes_id.indexOf(l)===-1){
+            this.node_dict[l].current_type = "reactant";
+            this.node_dict[l].r_idx = r_idx;
+            mnodes.push(this.node_dict[l]);
+            mnodes_id.push(l);
+            mlinks.push({'source': l, 'target': motif_list[i].id});
+            r_idx += 1;
+          }
+        })
+
+        // Add product nodes
+        motif_list[i].products.forEach(l=>{
+          if(mnodes_id.indexOf(l)===-1){
+            this.node_dict[l].current_type = "product";
+            this.node_dict[l].p_idx = p_idx;
+            mnodes.push(this.node_dict[l]);
+            mnodes_id.push(l);
+            mlinks.push({'source': motif_list[i].id, 'target': l});
+            p_idx += 1;
+          }
         })
 
         let start_x = this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal);
@@ -516,357 +684,196 @@ class MetaGraph{
           })
           .attr("class",(d)=>d.current_type)
           .attr("fill", (d)=>{
-            if (d.values_js === undefined) {
+            if (d.values_js[indexer] === undefined) {
               return "rgba(191, 191, 191, 1)";
             } else {
-              return "rgba(" + d.values_js.toString() + ")";
+              return "rgba(" + d.values_js[indexer].toString() + ")";
             }
           })
           .attr("r",4)
           .attr("stroke","black")
           .attr("id",d=>"stamp-"+i+"-"+d.id)
 
-        let mlg = d3.select("#stamp-link-"+i).selectAll("line")
-          .data(mlinks);
-        mlg.exit().remove();
-        mlg = mlg.enter().append("line").merge(mlg)
-          .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
-          .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
-          .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
-          .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
-          .attr("stroke","gray")
+          let mlg = d3.select("#stamp-link-"+i).selectAll("line")
+            .data(mlinks);
+          mlg.exit().remove();
+          mlg = mlg.enter().append("line").merge(mlg)
+            .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
+            .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
+            .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
+            .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
+            .attr("stroke","gray")
+
+          let tg = d3.select("#stamp-circle-"+i).selectAll("text")
+            .data([motif_list[i]]);
+          tg.exit().remove();
+          tg = tg.enter().append("text").merge(tg)
+            .attr("x",start_x + 10)
+            .attr("y",start_y + 45)
+            .text(function(d) {
+              if (sort_type === "Sort Number of Pathways") {
+                return d.pathways.length + " pathways";
+              } else if (sort_type === "Sort Magnitude Change") {
+                return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
+              } else if (sort_type === "Sort Statistical Significance") {
+                return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
+              }
+            })
+            .style("font-size","11px")
+            .style("font-weight","normal")
+      }
+    }
+
+    drawMotifSearchResultPathway(motif_list) {
+      //Change this to sort by p-values
+
+      // modifier for path coverage motif
+      var coverage_true = false;
+      var motif_dict = {};
+      if (motif_list[0].constructor === Array) {
+        coverage_true = true;
+      }
+
+      if (coverage_true === true) {
+        var original_list = motif_list;
+        motif_list = [];
+        for (let x in original_list) {
+          motif_list.push(original_list[x][0])
+          motif_dict[original_list[x][0]["id"]] = String(original_list[x][2]).concat("/", String(original_list[x][3]));
+        }
+      }
+
+      console.log(motif_dict)
+      let stamp_height = 30;
+      this.stamp_svg_height = Math.ceil(
+        motif_list.length)
+        * (stamp_height + this.stamp_svg_margin.vertical);
+      this.stamp_svg.attr("height",this.stamp_svg_height);
+
+      let stamp_width = this.stamp_svg_width
+        - this.stamp_svg_margin.horizontal - 5;
+
+      let sg = this.stamp_svg_selection_group.selectAll("rect")
+        .data(motif_list);
+        sg.exit().remove();
+        sg = sg.enter().append("rect").merge(sg)
+          .attr("x",5)
+          .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i)*(stamp_height+this.stamp_svg_margin.vertical))
+          .attr("width",stamp_width)
+          .attr("height",stamp_height)
+          .attr("fill","lightgray")
+          .attr("id",(d)=>"stamp-cover-"+d.id)
+          .style("opacity",0)
+          .on("click",(d)=>{
+            document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>" ;
+            this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
+            d3.select("#pathway-view-svg").style("visibility","visible");
+            d3.select(".network-panel").style("visibility","visible");
+          })
+          .on("mouseover",(d)=>{
+            d3.select("#stamp-cover-" + d.id).style("opacity",0.4);
+          })
+          .on("mouseout",(d)=>{
+            d3.select("#stamp-cover-" + d.id).style("opacity",0);
+          })
+
+      let fg = this.stamp_svg_frame_group.selectAll("rect")
+        .data(motif_list);
+        fg.exit().remove();
+        fg = fg.enter().append("rect").merge(fg)
+          .attr("x",5)
+          .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i)
+            * (stamp_height + this.stamp_svg_margin.vertical))
+          .attr("width",stamp_width)
+          .attr("height",stamp_height)
+          .attr("stroke","lightgray")
+          .attr("fill","white")
+
+      // remove previous elements, ignoring timecourse slider
+      d3.selectAll("circle:not(#dot)").remove();
+      d3.selectAll("line:not(#track)").remove();
+      d3.selectAll("text:not(#tick)").remove();
+      d3.selectAll("#all-motif-list").remove();
+
+      let cg = this.stamp_svg_circle_group.selectAll("g")
+        .data(motif_list);
+      cg.exit().remove();
+      cg = cg.enter().append("g").merge(cg)
+        .attr("id",(d,i)=>"stamp-circle-"+i);
+      console.log(cg)
+      for (let i=0; i<motif_list.length; i++) {
+
+        let start_x = 5;
+        let start_y = this.stamp_svg_margin.top
+          + Math.floor(i)*(stamp_height+this.stamp_svg_margin.vertical);
 
         let tg = d3.select("#stamp-circle-"+i).selectAll("text")
           .data([motif_list[i]]);
         tg.exit().remove();
         tg = tg.enter().append("text").merge(tg)
           .attr("x",start_x + 10)
-          .attr("y",start_y + 45)
-          .text(d=>{
-            if(sort_type === "Number of Pathways"){
-              return d.pathways.length + " pathways";
-            } else if(sort_type === "Magnitude Change") {
-              return "Change: "+ Math.round(d.magnitude_change*100)/100;
-            } else if(sort_type === "Stats Significance"){
-              return d.significance_type;
+          .attr("y",start_y + 21)
+          .text(d=> {
+            if (coverage_true === true) {
+              if (d.name.length < 40) {
+                return d.name + " (" + motif_dict[d.id] + ")";
+              } else {
+                return d.name.substring(0,40) + "... (" + motif_dict[d.id] + ")";
+              }
+            } else {
+              if (d.name.length < 45) {
+                return d.name;
+              } else {
+                return d.name.substring(0,45) + " ...";
+              }
             }
-            })
-          .style("font-size","11px")
-
+          })
+          .style("font-size","14px")
+          .style("font-weight","bold")
       }
-    )
+    }
 
-  }
+    drawMotifPathway(motif, indexer, motif_list) {
 
-  drawMotifSearchResult(motif_list, indexer){
-
-    //Change this to sort by p-values
-    //motif_list.sort(function(a,b){
-    //  console.log(a.pathways)
-    //  return d3.descending(a.pathways.length, b.pathways.length)
-    //})
-    let stamp_height = 50;
-    this.stamp_svg_height = Math.ceil(
-      motif_list.length / 3)
-      * (stamp_height + this.stamp_svg_margin.vertical);
-    this.stamp_svg.attr("height",this.stamp_svg_height);
-
-    let stamp_width = this.stamp_svg_width / 3
-      - this.stamp_svg_margin.horizontal;
-
-    let sg = this.stamp_svg_selection_group.selectAll("rect")
-      .data(motif_list);
-    sg.exit().remove();
-    sg = sg.enter().append("rect").merge(sg)
-      .attr("x",(d,i)=>this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal))
-      .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical))
-      .attr("width",stamp_width)
-      .attr("height",stamp_height)
-      .attr("fill","lightgray")
-      .attr("id",(d)=>"stamp-cover-"+d.id)
-      .style("opacity",0)
-      .on("click",(d)=>{
-        this.drawMotifPathway(d, indexer, motif_list);
-        d3.select("#motif-pathway-svg").style("visibility","visible");
-      })
-      .on("mouseover",(d)=>{
-        d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
-      })
-      .on("mouseout",(d)=>{
-        d3.select("#stamp-cover-"+d.id).style("opacity",0);
-      });
-
-    let fg = this.stamp_svg_frame_group.selectAll("rect")
-      .data(motif_list);
-    fg.exit().remove();
-    fg = fg.enter().append("rect").merge(fg)
-      .attr("x",(d,i)=>this.stamp_svg_margin.left + i % 3
-        * (stamp_width + this.stamp_svg_margin.horizontal))
-      .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i / 3 )
-        * (stamp_height + this.stamp_svg_margin.vertical))
-      .attr("width",stamp_width)
-      .attr("height",stamp_height)
-      .attr("stroke","lightgray")
-      .attr("fill","white")
-
-    let cg = this.stamp_svg_circle_group.selectAll("g")
-      .data(motif_list);
-    cg.exit().remove();
-    cg = cg.enter().append("g").merge(cg)
-      .attr("id",(d,i)=>"stamp-circle-"+i);
-
-    let lg = this.stamp_svg_link_group.selectAll("g")
-      .data(motif_list);
-    lg.exit().remove();
-    lg = lg.enter().append("g").merge(lg)
-      .attr("id",(d,i)=>"stamp-link-"+i);
-
-    for(let i=0; i<motif_list.length; i++){
-      let mnodes = [];
-      let mnodes_id = [];
+      // recover graph
+      let mnodes = [motif];
       let mlinks = [];
+      let mnodes_id = [];
       let r_idx = 0;
       let p_idx = 0;
-      // Add reaction node
-      this.node_dict[motif_list[i].id].current_type = "reaction";
-      mnodes.push(this.node_dict[motif_list[i].id]);
 
-      // Add reactant nodes
-      motif_list[i].reactants.forEach(l=>{
+      motif.current_type = "reaction";
+      motif.reactants.forEach(l=>{
         if(mnodes_id.indexOf(l)===-1){
           this.node_dict[l].current_type = "reactant";
           this.node_dict[l].r_idx = r_idx;
           mnodes.push(this.node_dict[l]);
           mnodes_id.push(l);
-          mlinks.push({'source': l, 'target': motif_list[i].id});
+          mlinks.push({'source': l, 'target': motif.id});
           r_idx += 1;
         }
       })
-
-      // Add product nodes
-      motif_list[i].products.forEach(l=>{
+      motif.products.forEach(l=>{
         if(mnodes_id.indexOf(l)===-1){
           this.node_dict[l].current_type = "product";
           this.node_dict[l].p_idx = p_idx;
           mnodes.push(this.node_dict[l]);
           mnodes_id.push(l);
-          mlinks.push({'source': motif_list[i].id, 'target': l});
+          mlinks.push({'source': motif.id, 'target': l});
           p_idx += 1;
         }
       })
 
-      let start_x = this.stamp_svg_margin.left + i%3*(stamp_width+this.stamp_svg_margin.horizontal);
-      let start_y = this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical);
-      let x_interval = stamp_width/3;
-      let y_interval_r = (stamp_height-20)/r_idx;
-      let y_interval_p = (stamp_height-20)/p_idx;
+      let motif_height = 120;
 
-      let mg = d3.select("#stamp-circle-"+i).selectAll("circle")
-        .data(mnodes);
-      mg.exit().remove();
-      mg = mg.enter().append("circle").merge(mg)
-        .attr("cx",(d)=>{
-          if(d.current_type==="reactant"){
-            return start_x + 15;
-          } else if(d.current_type==="reaction"){
-            return start_x + x_interval+15;
-          } else if (d.current_type ==="product"){
-            return start_x + x_interval*2+15;
-          }
-        })
-        .attr("cy",(d)=>{
-          if(d.current_type==="reactant"){
-            return start_y + y_interval_r*(d.r_idx)+10;
-          } else if(d.current_type==="reaction"){
-            return start_y + 20;
-          } else if (d.current_type ==="product"){
-            return start_y + y_interval_p*(d.p_idx)+10;
-          }
-        })
-        .attr("class",(d)=>d.current_type)
-        .attr("fill", (d)=>{
-          if (d.values_js[indexer] === undefined) {
-            return "rgba(191, 191, 191, 1)";
-          } else {
-            return "rgba(" + d.values_js[indexer].toString() + ")";
-          }
-        })
-        .attr("r",4)
-        .attr("stroke","black")
-        .attr("id",d=>"stamp-"+i+"-"+d.id)
-
-      let mlg = d3.select("#stamp-link-"+i).selectAll("line")
-        .data(mlinks);
-      mlg.exit().remove();
-      mlg = mlg.enter().append("line").merge(mlg)
-        .attr("x1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cx"))
-        .attr("y1",(d)=>d3.select("#stamp-"+i+"-"+d.source).attr("cy"))
-        .attr("x2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cx"))
-        .attr("y2",(d)=>d3.select("#stamp-"+i+"-"+d.target).attr("cy"))
-        .attr("stroke","gray")
-
-      let tg = d3.select("#stamp-circle-"+i).selectAll("text")
-        .data([motif_list[i]]);
-      tg.exit().remove();
-      tg = tg.enter().append("text").merge(tg)
-        .attr("x",start_x + 10)
-        .attr("y",start_y + 45)
-        .text(d=>d.pathways.length + " pathways")
-        .style("font-size","11px")
-        .style("font-weight","normal")
-    }
-  }
-
-  drawMotifSearchResultPathway(motif_list){
-    //Change this to sort by p-values
-
-    // modifier for path coverage motif
-    var coverage_true = false;
-    var motif_dict = {};
-    if (motif_list[0].constructor === Array) {
-      coverage_true = true;
-    }
-
-    if (coverage_true === true) {
-      var original_list = motif_list;
-      motif_list = [];
-      for (let x in original_list) {
-        motif_list.push(original_list[x][0])
-        motif_dict[original_list[x][0]["id"]] = String(original_list[x][2]).concat("/", String(original_list[x][3]));
-      }
-    }
-
-    console.log(motif_dict)
-    let stamp_height = 30;
-    this.stamp_svg_height = Math.ceil(
-      motif_list.length)
-      * (stamp_height + this.stamp_svg_margin.vertical);
-    this.stamp_svg.attr("height",this.stamp_svg_height);
-
-    let stamp_width = this.stamp_svg_width
-      - this.stamp_svg_margin.horizontal - 5;
-
-    let sg = this.stamp_svg_selection_group.selectAll("rect")
-      .data(motif_list);
-      sg.exit().remove();
-      sg = sg.enter().append("rect").merge(sg)
-        .attr("x",5)
-        .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i)*(stamp_height+this.stamp_svg_margin.vertical))
-        .attr("width",stamp_width)
-        .attr("height",stamp_height)
-        .attr("fill","lightgray")
-        .attr("id",(d)=>"stamp-cover-"+d.id)
-        .style("opacity",0)
-        .on("click",(d)=>{
-          document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>" ;
-          this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
-          d3.select("#pathway-view-svg").style("visibility","visible");
-          d3.select(".network-panel").style("visibility","visible");
-        })
-        .on("mouseover",(d)=>{
-          d3.select("#stamp-cover-" + d.id).style("opacity",0.4);
-        })
-        .on("mouseout",(d)=>{
-          d3.select("#stamp-cover-" + d.id).style("opacity",0);
-        })
-
-    let fg = this.stamp_svg_frame_group.selectAll("rect")
-      .data(motif_list);
-      fg.exit().remove();
-      fg = fg.enter().append("rect").merge(fg)
-        .attr("x",5)
-        .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i)
-          * (stamp_height + this.stamp_svg_margin.vertical))
-        .attr("width",stamp_width)
-        .attr("height",stamp_height)
-        .attr("stroke","lightgray")
-        .attr("fill","white")
-
-    // remove previous elements, ignoring timecourse slider
-    d3.selectAll("circle:not(#dot)").remove();
-    d3.selectAll("line:not(#track)").remove();
-    d3.selectAll("text:not(#tick)").remove();
-    d3.selectAll("#all-motif-list").remove();
-
-    let cg = this.stamp_svg_circle_group.selectAll("g")
-      .data(motif_list);
-    cg.exit().remove();
-    cg = cg.enter().append("g").merge(cg)
-      .attr("id",(d,i)=>"stamp-circle-"+i);
-    console.log(cg)
-    for(let i=0; i<motif_list.length; i++){
-
-      let start_x = 5;
-      let start_y = this.stamp_svg_margin.top + Math.floor(i)*(stamp_height+this.stamp_svg_margin.vertical);
-
-      let tg = d3.select("#stamp-circle-"+i).selectAll("text")
-        .data([motif_list[i]]);
-      tg.exit().remove();
-      tg = tg.enter().append("text").merge(tg)
-        .attr("x",start_x + 10)
-        .attr("y",start_y + 21)
-        .text(d=> {
-          if (coverage_true === true) {
-            if (d.name.length < 40) {
-              return d.name + " (" + motif_dict[d.id] + ")";
-            } else {
-              return d.name.substring(0,40) + "... (" + motif_dict[d.id] + ")";
-            }
-          } else {
-            if (d.name.length < 45) {
-              return d.name;
-            } else {
-              return d.name.substring(0,45) + " ...";
-            }
-          }
-        })
-        .style("font-size","14px")
-        .style("font-weight","bold")
-    }
-  }
-
-  drawMotifPathway(motif, indexer, motif_list){
-
-    // recover graph
-    let mnodes = [motif];
-    let mlinks = [];
-    let mnodes_id = [];
-    let r_idx = 0;
-    let p_idx = 0;
-
-    motif.current_type = "reaction";
-    motif.reactants.forEach(l=>{
-      if(mnodes_id.indexOf(l)===-1){
-        this.node_dict[l].current_type = "reactant";
-        this.node_dict[l].r_idx = r_idx;
-        mnodes.push(this.node_dict[l]);
-        mnodes_id.push(l);
-        mlinks.push({'source': l, 'target': motif.id});
-        r_idx += 1;
-      }
-    })
-    motif.products.forEach(l=>{
-      if(mnodes_id.indexOf(l)===-1){
-        this.node_dict[l].current_type = "product";
-        this.node_dict[l].p_idx = p_idx;
-        mnodes.push(this.node_dict[l]);
-        mnodes_id.push(l);
-        mlinks.push({'source': motif.id, 'target': l});
-        p_idx += 1;
-      }
-    })
-
-    let motif_height = 120;
-
-    // ***** draw motif glyph *****
-    let x_interval = this.mp_svg_width/3;
-    let y_interval_r = (motif_height-20)/r_idx;
-    let y_interval_p = (motif_height-20)/p_idx;
-    let ng = this.mp_motif_circle_group.selectAll("circle")
-      .data(mnodes)
-    ng.exit().remove();
-    ng = ng.enter()
-      .append("circle").merge(ng)
+      // ***** draw motif glyph *****
+      let x_interval = this.mp_svg_width/3;
+      let y_interval_r = (motif_height-20)/r_idx;
+      let y_interval_p = (motif_height-20)/p_idx;
+      let ng = this.mp_motif_circle_group.selectAll("circle")
+        .data(mnodes)
+      ng.exit().remove();
+      ng = ng.enter().append("circle").merge(ng)
         .attr("cx",(d)=>{
           if(d.current_type==="reactant"){
             return 75;
@@ -897,214 +904,204 @@ class MetaGraph{
         .attr("stroke","black")
         .attr("id",d=>"mp-circle-"+d.id)
 
-    let lg = this.mp_motif_link_group.selectAll("line")
-      .data(mlinks);
-    lg.exit().remove();
-    lg = lg.enter().append("line").merge(lg)
-      .attr("x1",(d)=>d3.select("#mp-circle-"+d.source).attr("cx"))
-      .attr("y1",(d)=>d3.select("#mp-circle-"+d.source).attr("cy"))
-      .attr("x2",(d)=>d3.select("#mp-circle-"+d.target).attr("cx"))
-      .attr("y2",(d)=>d3.select("#mp-circle-"+d.target).attr("cy"))
-      .attr("stroke","gray")
-      .attr("marker-end", "url(#end)");
+      let lg = this.mp_motif_link_group.selectAll("line")
+        .data(mlinks);
+      lg.exit().remove();
+      lg = lg.enter().append("line").merge(lg)
+        .attr("x1",(d)=>d3.select("#mp-circle-"+d.source).attr("cx"))
+        .attr("y1",(d)=>d3.select("#mp-circle-"+d.source).attr("cy"))
+        .attr("x2",(d)=>d3.select("#mp-circle-"+d.target).attr("cx"))
+        .attr("y2",(d)=>d3.select("#mp-circle-"+d.target).attr("cy"))
+        .attr("stroke","gray")
+        .attr("marker-end", "url(#end)");
 
-    let tg = this.mp_motif_circle_group.selectAll("text")
-      .data([motif]);
-    tg.exit().remove();
-    tg = tg.enter().append("text").merge(tg)
-      .attr("x",this.mp_svg_width/12 - 10)
-      .attr("y",(motif_height-5))
-      .text(function(d) {
-        if (d.collapsed === "true") {
-          var string_length = 40;
-          var string_suffix = " (collapsed)";
-        } else {
-          var string_length = 52;
-          var string_suffix = "";
-        }
-        if (d.name.length < string_length) {
-          return d.name + string_suffix;
-        } else {
-          return d.name.substring(0,string_length) + " ..." + string_suffix;
-        }
-      })
-      .style("font-size","12px")
-      .style("font-weight","bold")
+      let tg = this.mp_motif_circle_group.selectAll("text")
+        .data([motif]);
+      tg.exit().remove();
+      tg = tg.enter().append("text").merge(tg)
+        .attr("x",this.mp_svg_width/12 - 10)
+        .attr("y",(motif_height-5))
+        .text(function(d) {
+          if (d.collapsed === "true") {
+            var string_length = 40;
+            var string_suffix = " (collapsed)";
+          } else {
+            var string_length = 52;
+            var string_suffix = "";
+          }
+          if (d.name.length < string_length) {
+            return d.name + string_suffix;
+          } else {
+            return d.name.substring(0,string_length) + " ..." + string_suffix;
+          }
+        })
+        .style("font-size","12px")
+        .style("font-weight","bold")
 
-    // **** draw pathway glyph ****
-    let pathway_list = motif.pathways;
-    let pathway_height = 20;
-    let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
-    this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
-    this.mp_svg.attr("height",this.mp_svg_height);
+      // **** draw pathway glyph ****
+      let pathway_list = motif.pathways;
+      let pathway_height = 20;
+      let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
+      this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
+      this.mp_svg.attr("height",this.mp_svg_height);
 
-    let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
+      let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
 
-    let sg = this.mp_selection_group.selectAll("rect")
-      .data(pathway_list);
-    sg.exit().remove();
-    sg = sg.enter().append("rect").merge(sg)
-      .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
-      .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
-      .attr("width",pathway_width)
-      .attr("height",pathway_height)
-      .attr("fill","blue")
-      .attr("id",(d)=>"mp-cover-"+d)
-      .style("opacity",0)
-      .on("click",(d)=>{
-        console.log(d)
-        console.log(motif_list)
-        this.drawPathwayView(d, "#pathway-view-svg", motif_list);
-        this.findAllMotif(d, this.motif[indexer]);
-        d3.select("#pathway-view-svg").style("visibility","visible");
-        d3.select(".network-panel").style("visibility","visible");
+      let sg = this.mp_selection_group.selectAll("rect")
+        .data(pathway_list);
+      sg.exit().remove();
+      sg = sg.enter().append("rect").merge(sg)
+        .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
+        .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
+        .attr("width",pathway_width)
+        .attr("height",pathway_height)
+        .attr("fill","blue")
+        .attr("id",(d)=>"mp-cover-"+d)
+        .style("opacity",0)
+        .on("click",(d)=>{
+          console.log(d)
+          console.log(motif_list)
+          this.drawPathwayView(d, "#pathway-view-svg", motif_list);
+          this.findAllMotif(d, this.motif[indexer]);
+          d3.select("#pathway-view-svg").style("visibility","visible");
+          d3.select(".network-panel").style("visibility","visible");
 
-      })
-      .on("mouseover",(d)=>{
-        d3.select("#mp-cover-" + d).style("opacity",0.4);
-      })
-      .on("mouseout",(d)=>{
-        d3.select("#mp-cover-" + d).style("opacity",0);
-      })
+        })
+        .on("mouseover",(d)=>{
+          d3.select("#mp-cover-" + d).style("opacity",0.4);
+        })
+        .on("mouseout",(d)=>{
+          d3.select("#mp-cover-" + d).style("opacity",0);
+        })
 
-    let fg = this.mp_pathway_group.selectAll("rect")
-      .data(pathway_list);
-    fg.exit().remove();
-    fg = fg.enter().append("rect").merge(fg)
-      .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
-      .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
-      .attr("width",pathway_width)
-      .attr("height",pathway_height)
-      .attr("fill","lightblue")
-      .style("opacity",0.5)
+      let fg = this.mp_pathway_group.selectAll("rect")
+        .data(pathway_list);
+      fg.exit().remove();
+      fg = fg.enter().append("rect").merge(fg)
+        .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal))
+        .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical))
+        .attr("width",pathway_width)
+        .attr("height",pathway_height)
+        .attr("fill","lightblue")
+        .style("opacity",0.5);
 
-    // get pathway names
-    let ptg = this.mp_pathway_group.selectAll("text")
-      .data(pathway_list);
-    ptg.exit().remove();
-    ptg = ptg.enter().append("text").merge(ptg)
-      .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+10)
-      .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
-      .text(d=>this.mod_collapsed_pathways[d].name.substring(0,24))
-      .style("font-size",9)
-
-  }
-
-  drawPathwayView(p, selector, motif_list) {
-
-    /*
-    var page_path = window.location.pathname;
-    var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
-    if (page_name === "motif.html") {
-
-    } else if (timecourse === true) {
-      d3.select("circle#dot")
-        .attr("cx", 90)
-    }
-    */
-    console.log(motif_list)
-    graph_genes = true;
-    collapse_reactions = true;
-    var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
-
-    update_session_info("current_pathway", p);
-
-    // Parse through each reaction listed and get the component parts
-    let components = [];
-    var rxn = 0;
-    for (rxn in motif_reactions) {
-
-      var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
-      components.push(motif_reactions[rxn]);
-      for (let x in target_rxns["reactants"]) {
-        components.push(target_rxns["reactants"][x]);
-      }
-      for (let x in target_rxns["products"]) {
-        components.push(target_rxns["products"][x]);
-      }
-      for (let x in target_rxns["modifiers"]) {
-        components.push(target_rxns["modifiers"][x][0]);
-      }
-      for (let x in target_rxns["additional_components"]) {
-        components.push(target_rxns["additional_components"][x]);
-      }
+      // get pathway names
+      let ptg = this.mp_pathway_group.selectAll("text")
+        .data(pathway_list);
+      ptg.exit().remove();
+      ptg = ptg.enter().append("text").merge(ptg)
+        .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+10)
+        .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
+        .text(d=>this.mod_collapsed_pathways[d].name.substring(0,24))
+        .style("font-size",9)
     }
 
-    var elements = get_nodes_links(this.data, components);
-    var new_nodes = elements[0];
-    var new_links = elements[1];
+    drawPathwayView(p, selector, motif_list) {
 
-    // Initialize variables
-    var node_dict = {};
-    var type_dict = {};
+      console.log(motif_list)
+      graph_genes = true;
+      collapse_reactions = true;
+      var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
 
-    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
-    var node_dict = node_elements[0];
-    var type_dict = node_elements[1];
-    var display_analytes_dict = node_elements[2];
-    var display_reactions_dict = node_elements[3];
-    var entity_id_dict = node_elements[4];
+      update_session_info("current_pathway", p);
 
-    var _width = 0.45 * (window.innerWidth);
-    var _height = 570;
+      // Parse through each reaction listed and get the component parts
+      let components = [];
+      var rxn = 0;
+      for (rxn in motif_reactions) {
 
-    make_graph(
-      this.data,
-      new_nodes,
-      new_links,
-      type_dict,
-      node_dict,
-      entity_id_dict,
-      display_analytes_dict,
-      display_reactions_dict,
-      selector,
-      _width,
-      _height,
-      motif_list
-    );
-  }
-
-  findAllMotif(pathway, motif_list){
-
-    d3.select(".network-panel").style("visibility","visible");
-    let current_pathway = this.mod_collapsed_pathways[pathway].name;
-    document.getElementById("pathway_name").innerHTML = "<h6><b>" + current_pathway + "</b></h6>" ;
-
-    let motif_id = [];
-    motif_list.forEach(m=>{
-      motif_id.push(m.id);
-    })
-    let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
-    let current_motif = [];
-    pathway_list.forEach(react_id=>{
-      if(motif_id.indexOf(react_id)!=-1){
-        current_motif.push(react_id);
+        var target_rxns = this.collapsed_reaction_dict[motif_reactions[rxn]];
+        components.push(motif_reactions[rxn]);
+        for (let x in target_rxns["reactants"]) {
+          components.push(target_rxns["reactants"][x]);
+        }
+        for (let x in target_rxns["products"]) {
+          components.push(target_rxns["products"][x]);
+        }
+        for (let x in target_rxns["modifiers"]) {
+          components.push(target_rxns["modifiers"][x][0]);
+        }
+        for (let x in target_rxns["additional_components"]) {
+          components.push(target_rxns["additional_components"][x]);
+        }
       }
-    })
-    current_motif.forEach(react_id=>{
-      d3.selectAll("circle#" + react_id)
-        .style("r", "16px")
-        .style("stroke", "purple")
-        .style("stroke-width", "5px")
 
-    })
-    this.showMotifNames(current_motif);
-  }
+      var elements = get_nodes_links(this.data, components);
+      var new_nodes = elements[0];
+      var new_links = elements[1];
 
-  showMotifNames(current_motif) {
+      // Initialize variables
+      var node_dict = {};
+      var type_dict = {};
 
-    let tg = d3.select("#all-motif-list")
-      .select("ul")
-      .selectAll("li")
-      .data(current_motif);
-    tg.exit().remove();
-    tg = tg.enter().append("li").merge(tg)
-      .html(d => "- " + this.collapsed_reaction_dict[d].name)
-  }
+      var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+      var node_dict = node_elements[0];
+      var type_dict = node_elements[1];
+      var display_analytes_dict = node_elements[2];
+      var display_reactions_dict = node_elements[3];
+      var entity_id_dict = node_elements[4];
 
-  createId(id){
-    return id.replace(/[^a-zA-Z0-9]/g, "")
-  }
+      var _width = 0.45 * (window.innerWidth);
+      var _height = 570;
+
+      make_graph(
+        this.data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        display_analytes_dict,
+        display_reactions_dict,
+        selector,
+        _width,
+        _height,
+        motif_list
+      );
+    }
+
+    findAllMotif(pathway, motif_list){
+
+      d3.select(".network-panel").style("visibility","visible");
+      let current_pathway = this.mod_collapsed_pathways[pathway].name;
+      document.getElementById("pathway_name").innerHTML = "<h6><b>" + current_pathway + "</b></h6>" ;
+
+      let motif_id = [];
+      motif_list.forEach(m=>{
+        motif_id.push(m.id);
+      })
+      let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
+      let current_motif = [];
+      pathway_list.forEach(react_id=>{
+        if(motif_id.indexOf(react_id)!=-1){
+          current_motif.push(react_id);
+        }
+      })
+      current_motif.forEach(react_id=>{
+        d3.selectAll("circle#" + react_id)
+          .style("r", "16px")
+          .style("stroke", "purple")
+          .style("stroke-width", "5px")
+
+      })
+      this.showMotifNames(current_motif);
+    }
+
+    showMotifNames(current_motif) {
+
+      let tg = d3.select("#all-motif-list")
+        .select("ul")
+        .selectAll("li")
+        .data(current_motif);
+      tg.exit().remove();
+      tg = tg.enter().append("li").merge(tg)
+        .html(d => "- " + this.collapsed_reaction_dict[d].name)
+    }
+
+    createId(id){
+      return id.replace(/[^a-zA-Z0-9]/g, "")
+    }
+
 }
 
 function reset_dot() {
@@ -1121,6 +1118,13 @@ function reset_objects() {
     .style("visibility", "hidden");
   d3.select(".network-panel")
     .style("visibility", "hidden");
+}
+
+function reset_all() {
+  d3.selectAll("circle:not(#dot)").remove();
+  d3.selectAll("line:not(#track)").remove();
+  d3.selectAll("text:not(#tick)").remove();
+  d3.selectAll("#all-motif-list").remove();
 }
 
 function highlight_selection(_selector) {

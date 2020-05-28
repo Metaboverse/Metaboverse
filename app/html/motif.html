@@ -61,20 +61,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   </head>
 
   <body onload="showMotifs()">
-    <div class="container-fluid" style="width: 95%; padding-top: 80px">
-        <h3>Motif Search Results</h3>
+    <div class="container-fluid" style="width: 95%; padding-top: 45px">
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-2">
-                <div class="frame">
-                    <div class="content">
-                        <label class="dropdown-label">Select Value Type</label>
-                        <div class="dropdown-container">
-                            <select name="value_type" class="custom-select" id="value_type">
-                                <option>Expression Values</option>
-                                <option>Stats</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="frame" style="height:780px; width:190px;">
+
                     <div class="row">
                         <div class="col-md-4">
                             <div class="content">
@@ -86,10 +77,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   </div>
                                 </p>
                                 <p>
-                                  <div class="motif_button" id="motif2" style="--motif_color:#d95f02; --highlight_color:#fdbd4f; margin-top:13px;" title="Compare the absolute maximum values between reactants and products that pass the provided threshold."><font size="3" color="white">MaxMax</font></div>
+                                  <div class="motif_button" id="motif2_1" style="--motif_color:#d95f02; --highlight_color:#fdbd4f; margin-top:13px;" title="Compare the absolute minimum values between reactants and products that pass the provided threshold."><font size="3" color="white">MaxMax</font></div>
                                 </p>
                                 <p>
-                                  <div class="motif_button" id="motif3" style="--motif_color:#7570b3; --highlight_color:#b19cd9; margin-top:13px;" title="Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold."><font size="3" color="white">MaxMin</font></div>
+                                  <div class="motif_button" id="motif2_2" style="--motif_color:#d95f02; --highlight_color:#fdbd4f; margin-top:-8px;" title="Compare the absolute maximum values between reactants and products that pass the provided threshold."><font size="3" color="white">MinMin</font></div>
+                                </p>
+                                <p>
+                                  <div class="motif_button" id="motif3_1" style="--motif_color:#7570b3; --highlight_color:#b19cd9; margin-top:13px;" title="Compare the absolute maximum and minimum values between reactants and products, respectively, that pass the provided threshold.."><font size="3" color="white">MaxMin</font></div>
+                                </p>
+                                <p>
+                                  <div class="motif_button" id="motif3_2" style="--motif_color:#7570b3; --highlight_color:#b19cd9; margin-top:-8px;" title="Compare the absolute minimum and maximum values between reactants and products, respectively, that pass the provided threshold."><font size="3" color="white">MinMax</font></div>
                                 </p>
                                 <p>
                                   <div class="motif_button" id="motif4" style="--motif_color:#e7298a; --highlight_color:#e78ac3; margin-top:13px;" title="Find instances of sustained perturbation along a reaction."><font size="3" color="white">Sustained</font></div>
@@ -107,7 +104,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <div class="motif_button" id="motif100" style="--motif_color:#ffc0cb; --highlight_color:#ffd9df; margin-top:13px;" title="Compare total coverage of reactions with at least one measured component in pathways."><font size="3" color="white">PathCov</font></div>
                                 </p>
                                 <br />
-                                <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label>
+                                <label for="use_modifiers" style="margin-top:-5px"><font size="2" ><i>Use modifiers</i></font></label>
                                 <br />
                                 <label for="exclude_hubs"><font size="2"><i>Exclude hubs</i></font></label>
                                 <br />
@@ -125,9 +122,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <p style="padding-left:30px;">
                                   <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="minmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
                                 <br />
                                 <p style="padding-left:30px;">
                                   <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                                </p>
+                                <p style="padding-left:30px;">
+                                  <input type="number" id="minmax_num" min="0.2" max="10" step="0.2" value="1.0">
                                 </p>
                                 <br />
                                 <p style="padding-left:30px;">
@@ -160,45 +163,44 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="content">
-                        <label class="dropdown-label">Sort Search Results</label>
                         <div class="dropdown-container">
                             <select name="sort_type" class="custom-select" id="sort_type">
-                                <option>Number of Pathways</option>
-                                <option>Magnitude Change</option>
-                                <option>Stats Significance</option>
+                                <option>Sort Statistical Significance</option>
+                                <option>Sort Magnitude Change</option>
+                                <option>Sort Number of Pathways</option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="frame">
+            <div class="col-md-4" style="position:absolute; margin-left:205px;">
+                <div class="frame" style="width:435px;">
                     <div class="sub-frame" title="List of all motifs found in the global network for the selected motif type with information on how many pathways this motif is found in. Click on the motif to expand.">
                         <h6><b>Identified Motifs</b></h6>
-                        <div id="stamp-view-container" class="scrollable" style="padding-top:10px; padding-left:0%; width:100%; height:90%;">
-                            <svg id="stamp-view-svg" width="28vw" height=100%></svg>
+                        <div id="stamp-view-container" class="scrollable" style="padding-top:10px; padding-left:0; width:405px; height:90%;">
+                            <svg id="stamp-view-svg" width="100%" height=100%></svg>
                         </div>
                     </div>
                     <div class="sub-frame" title="List of pathways in which the selected motif is found. Click on the pathway to open up the pathway's visualization.">
                         <h6><b>Motif-Pathway Membership</b></h6>
-                        <div id="motif-pathway-container" class="scrollable" style="padding-top:10px; padding-right:0%; width:100%; height:90%;">
-                            <svg id="motif-pathway-svg" width="28vw" height=100%></svg>
+                        <div id="motif-pathway-container" class="scrollable" style="padding-top:10px; padding-right:0; width:405px; height:90%;">
+                            <svg id="motif-pathway-svg" width="100%" height=100%></svg>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" >
-                <div class="frame">
-                    <div class="network-frame">
+            <div class="col-md-6" style="position: absolute; margin-left:655px; ">
+                <div class="frame" >
+                    <div class="network-frame" style="width:49vw;margin-right:10px;">
                         <div id="pathway_name"></div>
-                        <div id="pathway-view-container" style="margin-top:-25px; padding-left:0%; width:100%; height:100%;">
+                        <div id="pathway-view-container" style="margin-top:-25px;">
                             <div id="pathway-view-svg"></div>
                         </div>
                     </div>
                     <div class="network-panel" style="visibility:hidden">
                       <h6><b><i>All Motifs In This Pathway:</i></b>
                       <a href="visualize.html" id="open_pathway_viewer" onclick="window.open(this.href, '', 'left=20,top=20,width=1400,height=900,toolbar=1,resizable=1'); return false;"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a></h6>
-                      <div class="scrollable" id="all-motif-list" style="height:75%;width:45vw;"><ul></ul>
+                      <div class="scrollable" id="all-motif-list" style="height:75%;"><ul></ul>
                       </div>
                     </div>
                 </div>
@@ -207,6 +209,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </div>
     <br />
     <br />
-    <div id="slider" align="center"></div>
+    <div id="slider" align="center" style="margin-top:-75px;"></div>
   </body>
 </html>
