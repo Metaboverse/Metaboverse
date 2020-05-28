@@ -41,6 +41,8 @@ function make_superPathway_dictionary(data) {
   for (var key in superPathways) {
     superPathwayDict[superPathways[key]["name"]] = {
       id: superPathways[key]["name"],
+      pathway_id: superPathways[key]["id"],
+      reactome_id: superPathways[key]["reactome"],
       reactions: superPathways[key]["reactions"]
     };
   }

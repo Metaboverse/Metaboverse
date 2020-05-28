@@ -21,7 +21,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Metaboverse'
-copyright = '2019, Jordan A. Berg, et. al.'
+copyright = '2019-2020, Jordan A. Berg, et. al.'
 author = 'Jordan A. Berg, et. al.'
 
 # The short X.Y version
@@ -41,7 +41,8 @@ release = '0.0.0-alpha'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.autosectionlabel'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -102,12 +103,12 @@ html_short_title = project + " v" + release
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'images/metaboverse_logo.png'
+html_logo = 'content/images/metaboverse_logo.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = 'images/metaboverse_logo.png'
+html_favicon = 'content/images/metaboverse_logo.png'
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -120,7 +121,7 @@ html_favicon = 'images/metaboverse_logo.png'
 #html_sidebars = {'index': ['sidebar.html', 'searchbox.html']}
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-html_show_sphinx = False
+html_show_sphinx = True
 
 
 # -- Options for HTMLHelp output ---------------------------------------------

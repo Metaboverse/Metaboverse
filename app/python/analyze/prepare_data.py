@@ -38,13 +38,13 @@ def test():
         return network
 
     network = read_network(
-        network_url='/Users/jordan/Desktop/SCE_metaboverse_db.pickle')
+        network_url='/Users/jordan/Desktop/metaboverse_data/databases/SCE_metaboverse_db.pickle')
 
     #network['uniprot_synonyms']
 
-    transcriptomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/transcriptomics_mct1_12hr.txt'
-    proteomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/proteomics_mct1_12hr.txt'
-    metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/metabolomics_mct1_030min.txt'
+    transcriptomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_data/transcriptomics_mct1_12hr.txt'
+    proteomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_data/proteomics_mct1_12hr.txt'
+    metabolomics_url='/Users/jordan/Desktop/metaboverse_data/sce_mct1_omics/_data/metabolomics_mct1_timecourse.txt'
 
 def read_data(
         url,
@@ -225,6 +225,7 @@ def extract_data(
     - Formatting follows fold change, p-values, etc...
     """
     data_c = data.copy()
+    data_c.index = [d.lstrip().rstrip() for d in data_c.index.tolist()]
 
     _values = data_c.T[::2].T
     _stats = data_c.T[1::2].T
@@ -271,6 +272,22 @@ def broadcast_transcriptomics(
 
     return proteomics, proteomics_stats
 
+def copy_columns(
+        data,
+        stats,
+        _max):
+    """Copy data columns for every time point provided by the user
+    """
+
+    counter = 1
+
+    while counter < _max:
+        data[counter] = data[0]
+        stats[counter] = stats[0]
+        counter += 1
+
+    return data, stats
+
 def catenate_data(
         array):
     """Combine data
@@ -308,10 +325,6 @@ def __main__(
     """Get user data and preprocess
     """
 
-    # Initialize array of filled data
-    data_array = []
-    stats_array = []
-
     # Process transcriptomics
     if transcriptomics_url.lower() != 'none':
 
@@ -329,8 +342,9 @@ def __main__(
             url=transcriptomics_url)
         transcriptomics, transcriptomics_stats = extract_data(
             data=transcriptomics)
-        data_array.append(transcriptomics)
-        stats_array.append(transcriptomics_stats)
+        transcriptomics_length = len(transcriptomics.columns.tolist())
+    else:
+        transcriptomics_length = 0
 
     # Process proteomics
     if proteomics_url.lower() != 'none':
@@ -349,29 +363,25 @@ def __main__(
             url=proteomics_url)
         proteomics, proteomics_stats = extract_data(
             data=proteomics)
-        data_array.append(proteomics)
-        stats_array.append(proteomics_stats)
+        proteomics_length = len(proteomics.columns.tolist())
+    else:
+        proteomics_length = 0
 
     # Process metabolomics
     if metabolomics_url.lower() != 'none':
 
         metabolomics = read_data(
             url=metabolomics_url)
-        c_sym = {}
-        for k, v in network['chebi_synonyms'].items():
-            c_sym[k] = v
-            c_sym[v] = v
-        metabolomics, metabolomics_unmapped = format_metabolomics(
-            data=metabolomics,
-            chebi_reference=c_sym,
-            other_reference=network['uniprot_metabolites'])
-        output_unmapped(
-            data=metabolomics_unmapped,
-            url=metabolomics_url)
+        #metabolomics, metabolomics_unmapped = format_metabolomics(
+        #    data=metabolomics)
+        #output_unmapped(
+        #    data=metabolomics_unmapped,
+        #    url=metabolomics_url)
         metabolomics, metabolomics_stats = extract_data(
             data=metabolomics)
-        data_array.append(metabolomics)
-        stats_array.append(metabolomics_stats)
+        metabolomics_length = len(metabolomics.columns.tolist())
+    else:
+        metabolomics_length = 0
 
     # Check for broadcasting
     if proteomics_url.lower() == 'none' \
@@ -382,6 +392,61 @@ def __main__(
                 transcriptomics_stats=transcriptomics_stats,
                 gene_dictionary=network['ensembl_synonyms'],
                 protein_dictionary=network['uniprot_synonyms'])
+
+    # Allow for unequal filling
+    lengths = []
+    for x in [
+        transcriptomics_length,
+        proteomics_length,
+        metabolomics_length,
+    ]:
+        if x != 0:
+            lengths.append(x)
+
+    if sum(lengths) != 3 and len(list(set(lengths))) == 2:
+
+        _max = max(lengths)
+
+        if transcriptomics_url.lower() != 'none' \
+        and len(transcriptomics.columns.tolist()) != _max \
+        and len(transcriptomics.columns.tolist()) == 1:
+            transcriptomics, transcriptomics_stats = copy_columns(
+                data=transcriptomics,
+                stats=transcriptomics_stats,
+                _max=_max)
+
+        if proteomics_url.lower() != 'none' \
+        and len(proteomics.columns.tolist()) != _max \
+        and len(proteomics.columns.tolist()) == 1:
+            proteomics, proteomics_stats = copy_columns(
+                data=proteomics,
+                stats=proteomics_stats,
+                _max=_max)
+
+        if metabolomics_url.lower() != 'none' \
+        and len(metabolomics.columns.tolist()) != _max \
+        and len(metabolomics.columns.tolist()) == 1:
+            metabolomics, metabolomics_stats = copy_columns(
+                data=metabolomics,
+                stats=metabolomics_stats,
+                _max=_max)
+
+    else:
+        print("When providing multi-omic timecourse data with unequals times, other omics types must match the maximum number of time points or must only provide one time point.")
+
+    # Initialize array of filled data
+    data_array = []
+    stats_array = []
+
+    if transcriptomics_url.lower() != 'none':
+        data_array.append(transcriptomics)
+        stats_array.append(transcriptomics_stats)
+    if proteomics_url.lower() != 'none':
+        data_array.append(proteomics)
+        stats_array.append(proteomics_stats)
+    if metabolomics_url.lower() != 'none':
+        data_array.append(metabolomics)
+        stats_array.append(metabolomics_stats)
 
     # Combine data
     data = catenate_data(

@@ -82,7 +82,7 @@ window.addEventListener("load", function(event) {
 
         console.log(filename);
         update_session_info("database_url", filename);
-        $('#selectedOutput').replaceWith('<font size="2">' + filename + '</font>');
+        $('#selectedOutput').html('<font size="2">' + filename + '</font>');
       })
       .catch(err => {
         console.log(err);
@@ -98,7 +98,7 @@ var species_change = false;
 
 function check_changes() {
   if ((output_change === true) & (species_change === true)) {
-    $('#content').replaceWith('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+    $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
   }
 }
 
@@ -119,9 +119,9 @@ window.addEventListener("load", function(event) {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
         update_session_info("curation_url", f.path);
-        $('#selectedFile').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedFile').html('<font size="2">' + f.path + '</font>');
 
-        $('#content').replaceWith('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
       } catch (error) {
         console.log(error);
         alert(

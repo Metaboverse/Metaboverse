@@ -37,6 +37,16 @@ from python.utils import progress_feed, update_session
 
 def check_dependencies():
 
+    # Figure out how to run this first on script load so it doesn't exit when it cant find a dependency yet
+
+    # Check for python3 install
+
+    # Check for pip install
+
+    try:
+        import requests
+    except:
+        os.system('pip install requests')
     try:
         import pandas
     except:

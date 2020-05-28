@@ -7,11 +7,17 @@
   "transcriptomics": null,
 	"proteomics": null,
 	"metabolomics": null,
-	"metadata": null,
-	"experiment": null,
-  "min_value": -5,
+	"experiment_type": null,
+  "experiment_name": null,
   "max_value": 5,
+  "max_stat": 1,
   "processed": false,
   "current_pathway": null,
-  "provided_data": false
+  "provided_data": false,
+  "collapseWithModifiers": false,
+  "broadcastGeneExpression": true,
+  "labels": "",
+  "database_date": "",
+  "curation_date": "",
+  "reactome_version": ""
 }

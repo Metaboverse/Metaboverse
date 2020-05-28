@@ -1,0 +1,73 @@
+<!--
+Metaboverse
+Metaboverse is designed for analysis of metabolic networks
+https://github.com/j-berg/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8">
+
+<title>Metaboverse</title>
+
+<html>
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <head>
+
+    <!-- menu -->
+    <menu>
+      <font size=3.25px>
+        <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
+        <menuItem style="float:right"><a href="cite.html">Cite</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
+        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
+        <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
+        <menuItem style="float:left"><a href="index.html">Back</a></menuItem>
+      </font>
+    </menu>
+
+  </head>
+
+  <body onload="loadSessionData()">
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <center>
+    <h1>
+      Metaboverse Session Data:
+    </h1>
+    This page contains the current session data for the database loaded.
+    </center>
+    <br>
+
+    <div style="text-align: center;">
+      <div id="session_data" style="display: inline-block; text-align: left;">
+      </div>
+    </div>
+  </body>
+  <script src="../js/session.js"></script>
+  <script src="../js/utils.js"></script>
+
+</html>

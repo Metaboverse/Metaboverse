@@ -19,9 +19,8 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var value_threshold = 2.5; // ~1.5 fold
-var stat_threshold = 0.01;
-var position = 0;
+var sample = 0;
+var last_click = 0;
 
 var selection = null;
 var superSelection = null;
@@ -29,76 +28,26 @@ var selector = "#graph";
 var _width = window.innerWidth;
 var _height = window.innerHeight - 75;
 
-// find global motifs at beginning, save as list, check each graph for members
-function gatherMotifs(data) {
-
-  let expression_dict = {};
-  for (let x in data.nodes) {
-    let id = data.nodes[x]['id'];
-    let expression = data.nodes[x]['values'];
-    expression_dict[id] = expression;
-  }
-
-  let threshold = 1;
-  let motifs_Avg = motifSearch_Avg(
-    threshold,
-    data.collapsed_reaction_dictionary,
-    expression_dict,
-    data.motif_reaction_dictionary)
-
-  let motifs_MaxMax = motifSearch_MaxMax(
-    threshold,
-    data.collapsed_reaction_dictionary,
-    expression_dict,
-    data.motif_reaction_dictionary)
-
-  let motifs_MaxMin = motifSearch_MaxMin(
-    threshold,
-    data.collapsed_reaction_dictionary,
-    expression_dict,
-    data.motif_reaction_dictionary)
-
-  let motifs_Sustained = motifSearch_Sustained(
-    threshold,
-    data.collapsed_reaction_dictionary,
-    expression_dict,
-    data.motif_reaction_dictionary)
-
-  let all_motifs = motifs_Avg.concat(
-    motifs_MaxMax,
-    motifs_MaxMin,
-    motifs_Sustained);
-
-  let global_motifs = [];
-  for (let m in all_motifs) {
-    global_motifs.push(all_motifs[m].id);
-  }
-  return global_motifs;
-}
+// Allow absolute threshold or p-value
+// Allow omics selection
+graph_genes = true;
+collapse_reactions = true;
 
 // MAIN
 database_url = get_session_info("database_url");
 console.log("Database path: " + database_url);
 
 var data = JSON.parse(fs.readFileSync(database_url).toString());
+var superPathwayDict = make_superPathway_dictionary(data);
+var global_motifs = gatherMotifs(data, data.categories);
+timecourse = checkCategories(data.categories, data.labels); //, data.names);
 
-var global_motifs = gatherMotifs(data);
-
-//var timecourse = checkCategories(data.categories);
-
-console.log(data)
-
-// Allow absolute threshold or p-value
-// Allow omics selection
-graph_genes = true;
-collapse_reactions = true;
-
-//data.collapsed_reaction_dictionary;
-//data.mod_collapsed_pathways;
-collapsed_pathway_dict = make_pathway_dictionary(
-  data,
-  "collapsed_pathway_dictionary"
-)
+make_menu(
+  superPathwayDict,
+  "superPathwayMenu",
+  "Select a category...",
+  (provide_all = true)
+);
 
 var path_mapper = data.motif_reaction_dictionary
 
@@ -146,63 +95,144 @@ for (rxn in data.collapsed_reaction_dictionary) {
   reaction_entity_dictionary[r.id] = entities;
 }
 
+// Initialize slider if timecourse
+if (timecourse === true) {
+  d3.select("circle#dot")
+    .attr("x", 0)
+}
+
+var selected_reactions = [];
+d3.select("#superPathwayMenu").on("change", changeSuperConnect);
+d3.select("#play_button_value").on("click", run_value_connections);
+d3.select("#play_button_stat").on("click", run_stat_connections);
+d3.select("#kNN_button").on("change", run_value_connections);
+d3.select("#hub_button").on("change", run_value_connections);
+
+function changeSuperConnect() {
+  var superSelection = document.getElementById("superPathwayMenu").value;
+
+  if (superSelection === "All entities" | superSelection === "All pathways") {
+    selected_reactions = [];
+    for (x in data.collapsed_reaction_dictionary) {
+      selected_reactions.push(x)
+    }
+  } else {
+    let reactome_id = superPathwayDict[superSelection]["reactome_id"]
+    selected_reactions =
+      data.collapsed_pathway_dictionary[reactome_id]['reactions']
+  }
+
+  // Initial play
+  run_value_connections();
+}
+
 function collect_perturbations(
       reaction_entity_dictionary,
       mapping_dictionary,
       threshold,
-      type) {
+      type,
+      sample_indices) {
 
   let perturbed_reactions = [];
-  for (rxn in reaction_entity_dictionary) {
+  for (sample in sample_indices) {
 
-    let perturbed_true = false;
-    for (e in reaction_entity_dictionary[rxn]) {
+    let sample_perturbations = [];
+    for (rxn in reaction_entity_dictionary) {
 
-      let entity = reaction_entity_dictionary[rxn][e];
-      if (entity in mapping_dictionary) {
+      let perturbed_true = false;
+      if (selected_reactions.includes(rxn) === true) {
 
-        if (type === "value") {
-          if (Math.abs(mapping_dictionary[entity][position]) >= threshold) {
-            perturbed_true = true;
-          }
-        } else if (type === "stat") {
-          if (Math.abs(mapping_dictionary[entity][position]) <= threshold) {
-            perturbed_true = true;
+        for (e in reaction_entity_dictionary[rxn]) {
+
+          let entity = reaction_entity_dictionary[rxn][e];
+          if (entity in mapping_dictionary) {
+
+            if (type === "value") {
+              if (Math.abs(mapping_dictionary[entity][sample]) >= threshold) {
+                perturbed_true = true;
+              }
+            } else if (type === "stat") {
+              if (Math.abs(mapping_dictionary[entity][sample]) <= threshold) {
+                perturbed_true = true;
+              }
+            }
           }
         }
       }
+      if (perturbed_true === true) {
+        sample_perturbations.push(rxn);
+      }
     }
-
-    if (perturbed_true === true) {
-      perturbed_reactions.push(rxn);
-    }
+    perturbed_reactions[sample] = sample_perturbations;
   }
-
   return perturbed_reactions;
 }
 
-function show_graph(data, perturbed_rxns) {
+function show_graph(data, perturbed_rxns, sample_id) {
 
-  console.log("Plotting", perturbed_rxns.length, "perturbed reactions...")
+  console.log("Plotting", perturbed_rxns[sample_id].length, "perturbed reactions...")
   // Parse through each reaction listed and get the component parts
   let components = [];
   var rxn = 0;
-  for (rxn in perturbed_rxns) {
 
-    var target_rxns = data.collapsed_reaction_dictionary[perturbed_rxns[rxn]];
+  let degree_dictionary = data.degree_dictionary;
+
+  for (rxn in perturbed_rxns[sample_id]) {
+
+    var target_rxns = data.collapsed_reaction_dictionary[perturbed_rxns[sample_id][rxn]];
 
     components.push(target_rxns.id);
     for (x in target_rxns["reactants"]) {
-      components.push(target_rxns["reactants"][x]);
+      if (degree_dictionary[target_rxns["reactants"][x]] <= hub_value) {
+        components.push(target_rxns["reactants"][x]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["reactants"][x] +
+            " (" +
+            degree_dictionary[target_rxns["reactants"][x]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
     for (x in target_rxns["products"]) {
-      components.push(target_rxns["products"][x]);
+      if (degree_dictionary[target_rxns["products"][x]] <= hub_value) {
+        components.push(target_rxns["products"][x]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["products"][x] +
+            " (" +
+            degree_dictionary[target_rxns["products"][x]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
     for (x in target_rxns["modifiers"]) {
-      components.push(target_rxns["modifiers"][x][0]);
+      if (degree_dictionary[target_rxns["modifiers"][x][0]] <= hub_value) {
+        components.push(target_rxns["modifiers"][x][0]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["modifiers"][x][0] +
+            " (" +
+            degree_dictionary[target_rxns["modifiers"][x][0]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
     for (x in target_rxns["additional_components"]) {
-      components.push(target_rxns["additional_components"][x]);
+      if (degree_dictionary[target_rxns["additional_components"][x]] <= hub_value) {
+        components.push(target_rxns["additional_components"][x]);
+      } else {
+        console.log(
+          "Filtering " +
+            target_rxns["additional_components"][x] +
+            " (" +
+            degree_dictionary[target_rxns["additional_components"][x]] +
+            " degrees) -- may cause edge loss"
+        );
+      }
     }
   }
 
@@ -224,6 +254,8 @@ function show_graph(data, perturbed_rxns) {
   var _width = window.innerWidth;
   var _height = window.innerHeight - 75;
 
+  console.log("Displaying", new_nodes.length, "connected nodes")
+
   make_graph(
     data,
     new_nodes,
@@ -235,34 +267,66 @@ function show_graph(data, perturbed_rxns) {
     display_reactions_dict,
     selector,
     _width,
-    _height
+    _height,
+    global_motifs
   );
 }
 
 function run_value_connections() {
 
+  highlight_mapping("#conn_value_button");
   let value_threshold = document.getElementById("conn_value_button").value;
   let perturbed_reactions = collect_perturbations(
     reaction_entity_dictionary,
     expression_dict,
     value_threshold,
-    "value");
-  show_graph(data, perturbed_reactions);
+    "value",
+    data.categories);
+  show_graph(data, perturbed_reactions, 0);
+  if (timecourse === true) {
+    d3.select("svg#slide")
+      .on("click", ()=>{
+        let sample_idx = d3.select("circle#dot").attr("x");
+        if (sample_idx !== last_click) {
+          show_graph(data, perturbed_reactions, sample_idx);
+        last_click = sample_idx;
+        }
+      })
+  }
 }
-
 function run_stat_connections() {
 
+  highlight_mapping("#conn_stat_button");
   let stat_threshold = document.getElementById("conn_stat_button").value;
   let perturbed_reactions = collect_perturbations(
     reaction_entity_dictionary,
     stats_dict,
     stat_threshold,
-    "value");
-  show_graph(data, perturbed_reactions);
+    "stat",
+    data.categories);
+  show_graph(data, perturbed_reactions, 0);
+  if (timecourse === true) {
+    d3.select("svg#slide")
+      .on("click", ()=>{
+        let sample_idx = d3.select("circle#dot").attr("x");
+        if (sample_idx !== last_click) {
+          show_graph(data, perturbed_reactions, sample_idx);
+        last_click = sample_idx;
+        }
+      })
+  }
 }
 
-d3.select("#play_button_value").on("click", run_value_connections);
-d3.select("#play_button_stat").on("click", run_stat_connections);
+function highlight_mapping(_selector) {
 
-// Initial play
-run_value_connections();
+  let _selectors = [
+    "#conn_value_button",
+    "#conn_stat_button"
+  ]
+  for (s in _selectors) {
+    d3.select(_selectors[s])
+      .style("background-color", "white");
+  }
+  d3.select(_selector)
+    .style("background-color", "#FF7F7F");
+}

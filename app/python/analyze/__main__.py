@@ -27,7 +27,6 @@ import pandas as pd
 """
 from python.analyze.prepare_data import __main__ as prepare_data
 from python.analyze.model import __main__ as model
-from python.analyze.motif_process import __main__ as motif_search
 from python.utils import progress_feed
 
 def test():
@@ -111,7 +110,4 @@ def __main__(
         output_file=args_dict['output_file'],
         flag_data=flag_data)
 
-    # Search network for motifs
-    motif_search(
-        model_file=graph_name)
     progress_feed(args_dict, "model", 10)

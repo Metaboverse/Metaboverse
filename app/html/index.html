@@ -49,6 +49,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
         <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
 
       </font>
@@ -70,7 +71,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <script src="../js/network.js"></script>
 
       <font style="font-family: sans-serif">
-      <font size="48">
+      <font size="40">
         <b>
           <center>
             Metaboverse
@@ -85,11 +86,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           </center>
         </font>
         <br>
-        <font size="2">
-          <center>
-
-          </center>
-        </font>
       </p>
 
       <center>
@@ -135,7 +131,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             var defaultValue = "No file selected";
             if (dbURL !== null) {
               defaultValue = dbURL;
-              $("#content").replaceWith(
+              $("#content").html(
                 '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
               );
             }

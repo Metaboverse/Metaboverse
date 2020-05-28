@@ -120,18 +120,25 @@ runBuild = function(_callback) {
     displayOptions();
   } else {
     curated = getArgument("curation_url")
-    console.log(curated)
+    let labels = getArgument("labels");
+    labels = labels.replace(/\s/g,'');
+    let blacklist = getArgument("blacklist");
+    blacklist = blacklist.replace(/\s/g,'');
     if (String(curated) !== "None") {
       graphDictionary = {
         output: getArgument("output"),
         output_file: "find",
         species_id: "find",
         organism_curation: curated,
-        metadata: getArgument("metadata"),
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
-        experiment: getArgument("experiment"),
+        experiment_type: getArgument("experiment_type"),
+        experiment_name: getArgument("experiment_name"),
+        labels: labels,
+        blacklist: blacklist,
+        collapse_with_modifiers: getArgument("collapseWithModifiers"),
+        broadcast_genes: getArgument("broadcastGeneExpression"),
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -144,11 +151,15 @@ runBuild = function(_callback) {
           getArgument("output") +
           getArgument("organism_id") +
           "_metaboverse_db.pickle",
-        metadata: getArgument("metadata"),
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
-        experiment: getArgument("experiment"),
+        experiment_type: getArgument("experiment_type"),
+        experiment_name: getArgument("experiment_name"),
+        labels: labels,
+        blacklist: blacklist,
+        collapse_with_modifiers: getArgument("collapseWithModifiers"),
+        broadcast_genes: getArgument("broadcastGeneExpression"),
         progress_log: path.resolve("data/progress_log.json"),
         session_data: session_format
       }
@@ -168,6 +179,12 @@ function displayOptions() {
   update_session_info("current_pathway", null);
   database_url = get_session_info("database_url");
   var data = JSON.parse(fs.readFileSync(database_url).toString());
+  update_session_info("max_value", data.metadata.max_value);
+  update_session_info("max_stat", data.metadata.max_stat);
+  update_session_info("database_date", data.metadata.database_date);
+  update_session_info("curation_date", data.metadata.curation_date);
+  update_session_info("reactome_version", data.metadata.reactome_version);
+  update_session_info("blacklist", data.metadata.blacklist);
   if (
     (transcriptomics === true) |
     (proteomics === true) |
@@ -176,12 +193,12 @@ function displayOptions() {
     (get_session_info("provided_data") === "true") |
     (data.categories.length > 0)
   ) {
-    $("#content").replaceWith(
+    $("#content").html(
       '<a href="motif.html"><div id="continue"><font size="3">View Motif Search</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
     update_session_info("provided_data", true);
   } else {
-    $("#content").replaceWith(
+    $("#content").html(
       '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a>'
     );
   }

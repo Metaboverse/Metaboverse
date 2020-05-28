@@ -23,6 +23,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 const { ipcRenderer } = require("electron");
 var $ = require("jquery");
 
+var $ = require("jquery");
+var reactome_api = "https://reactome.org/ContentService/data/species/all";
+
 // Drop pre-existing metabolic network database for further analysis
 window.addEventListener("load", function(event) {
   document.getElementById("database-input").onchange = function(event) {
@@ -42,18 +45,46 @@ window.addEventListener("load", function(event) {
         console.log("The file you dragged: ", f.path);
         update_session_info("database_url", f.path);
 
-        $('#selectedFile').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedFile').html('<font size="2">' + f.path + '</font>');
         var data = JSON.parse(fs.readFileSync(f.path).toString());
         if (data.categories.length > 0) {
-          $("#content").replaceWith(
+          $("#content").html(
             '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
           );
         } else {
-          $("#content").replaceWith(
+          $("#content").html(
             '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
           );
         }
-
+        // Load session data values into current session
+        var abbreviation_dict = {};
+        $.getJSON(reactome_api, function(d) {
+          d.forEach(function(datum) {
+            abbreviation_dict[datum["abbreviation"]] = datum["displayName"];
+          });
+          update_session_info("organism",
+            abbreviation_dict[data.metadata.species_id]);
+        });
+        update_session_info("curation_url", data.metadata.organism_curation);
+        update_session_info("output", data.metadata.output);
+        update_session_info("organism_id", data.metadata.species_id);
+        update_session_info("transcriptomics", data.metadata.transcriptomics);
+        update_session_info("proteomics", data.metadata.proteomics);
+        update_session_info("metabolomics", data.metadata.metabolomics);
+        update_session_info("experiment_name", data.metadata.experiment_name);
+        update_session_info("experiment_type", data.metadata.experiment_type);
+        update_session_info("max_value", data.metadata.max_value);
+        update_session_info("max_stat", data.metadata.max_stat);
+        update_session_info("processed", true);
+        update_session_info("collapseWithModifiers",
+          data.metadata.collapse_with_modifiers);
+          update_session_info("broadcastGeneExpression",
+            data.metadata.broadcastGeneExpression);
+        update_session_info("labels", data.metadata.labels);
+        update_session_info("blacklist", data.metadata.blacklist);
+        update_session_info("database_date", data.metadata.database_date);
+        update_session_info("curation_date", data.metadata.curation_date);
+        update_session_info("reactome_version", data.metadata.reactome_version);
 
       } catch (error) {
         console.log(error);

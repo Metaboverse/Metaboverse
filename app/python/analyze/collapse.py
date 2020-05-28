@@ -23,11 +23,51 @@ from __future__ import print_function
 """
 from python.analyze.utils import convert_rgba
 
+def generate_updated_dictionary(
+        original_database,
+        update_dictionary,
+        removed_reaction):
+    """Back-reference collapsed reactions from pathways
+    """
+
+    updated_pathway_dictionary = {}
+    for k, v in original_database.items():
+
+        key = reactome = v['reactome']
+        id = v['id']
+        name = v['name']
+        reactions = v['reactions']
+        new_reactions = []
+
+        for k, v in update_dictionary.items():
+            if type(k) is tuple:
+                l = list(k)
+                if set(l) <= set(reactions):
+                    if v not in removed_reaction:
+                        new_reactions.append(v)
+                        reactions = list(set(reactions) - set(v))
+            else:
+                l = [k]
+                if l in reactions or k in reactions:
+                    if v not in removed_reaction:
+                        new_reactions.append(v)
+                        reactions = list(set(reactions) - set(v))
+
+        updated_pathway_dictionary[reactome] = {
+            'id': id,
+            'reactome': reactome,
+            'name': name,
+            'reactions': new_reactions
+        }
+
+    return updated_pathway_dictionary
+
 def find_values(
         graph,
         reaction_dictionary,
         neighbor,
-        current_inputs):
+        current_inputs,
+        collapse_with_modifiers):
     """Are there any values for either side of the reaction?
     - There can only be one side with values for this situation to be valid in
     this context
@@ -40,14 +80,20 @@ def find_values(
     # Allow modifier values to count
     if set(current_inputs) == set(reaction_dictionary[neighbor]['reactants']):
         side_key = 'products'
-        #mod_key = 'catalyst'
+        if collapse_with_modifiers == True or collapse_with_modifiers == "True":
+            mod_key = 'catalyst'
+        else:
+            # Using this to only consider main components during
+            # reaction collapse
+            mod_key = 'impossible_key_to_match'
     else:
         side_key = 'reactants'
-        #mod_key = 'inhibitor'
-
-    # Using this to only consider main components during
-    # reaction collapse
-    mod_key = 'impossible_key_to_match'
+        if collapse_with_modifiers == True or collapse_with_modifiers == "True":
+            mod_key = 'inhibitor'
+        else:
+            # Using this to only consider main components during
+            # reaction collapse
+            mod_key = 'impossible_key_to_match'
 
     # Get values for chosen side
     for y in (reaction_dictionary[neighbor][side_key] \
@@ -58,7 +104,8 @@ def find_values(
         for z in graph.nodes()[y]['values']:
             values.append(z)
 
-    # Return the names of the successful values
+    # Return the only the names of reactants or products (no modifiers) if
+    # there are at least one measured value for the reaction
     if len(values) > 0 \
             and any([False if v is None else True for v in values]):
         eval_items = reaction_dictionary[neighbor][side_key]
@@ -117,7 +164,8 @@ def add_collapsed_components(
 def collapse_nodes(
         graph,
         reaction_dictionary,
-        samples):
+        samples,
+        collapse_with_modifiers):
     """After values are broadcast, collapse network by creating new reaction
     dictionary
     Methods:
@@ -137,6 +185,8 @@ def collapse_nodes(
     changed_reactions = {} # For mapping collapsed reactions post-processing
     # This makes sure that collapsed reactions are not added twice
     collapsed_options = []
+    removed_reaction = set() # for reactions that are collapsed, make sure the
+    # original reactions are removed from the final reaction dictionary
 
     for rxn in list(reaction_dictionary.keys()):
 
@@ -154,24 +204,36 @@ def collapse_nodes(
             reaction_dictionary[rxn]['additional_components'])
 
         # Get effective components, where inputs and outputs include modifiers
-        #effective_reactants = (
-        #    reaction_dictionary[rxn]['reactants'] \
-        #    + (
-        #        [x[0]
-        #        for x in reaction_dictionary[rxn]['modifiers']
-        #            if x[1] == 'inhibitor']
-        #    )
-        #)
-        #effective_products = (
-        #    reaction_dictionary[rxn]['products'] \
-        #    + (
-        #        [x[0]
-        #        for x in reaction_dictionary[rxn]['modifiers']
-        #            if x[1] == 'catalyst']
-        #    )
-        #)
-        effective_reactants = reaction_dictionary[rxn]['reactants']
-        effective_products = reaction_dictionary[rxn]['products']
+        # Get real components for reaction end matching
+        if collapse_with_modifiers == "True" or collapse_with_modifiers == True:
+            real_reactants = reaction_dictionary[rxn]['reactants']
+            effective_reactants = (
+                reaction_dictionary[rxn]['reactants'] \
+                + (
+                    [x[0]
+                    for x in reaction_dictionary[rxn]['modifiers']
+                        if x[1] == 'inhibitor']
+                )
+            )
+
+            real_products = reaction_dictionary[rxn]['products']
+            effective_products = (
+                reaction_dictionary[rxn]['products'] \
+                + (
+                    [x[0]
+                    for x in reaction_dictionary[rxn]['modifiers']
+                        if x[1] == 'catalyst']
+                )
+            )
+            real_modifiers = reaction_dictionary[rxn]['modifiers']
+        else:
+            real_reactants = effective_reactants = (
+                reaction_dictionary[rxn]['reactants']
+            )
+            real_products = effective_products = (
+                reaction_dictionary[rxn]['products']
+            )
+            real_modifiers = reaction_dictionary[rxn]['modifiers']
 
         # Collect values for effective inputs and outputs
         inputs = []
@@ -218,37 +280,49 @@ def collapse_nodes(
                     reaction_dictionary[neighbor_key]['reactants'])
                 neighbor_products = (
                     reaction_dictionary[neighbor_key]['products'])
+                neighbor_modifiers = (
+                    reaction_dictionary[neighbor_key]['modifiers'])
 
                 # If the current reaction's neighbors inputs or outputs match,
                 # append that reaction to the current reaction's neighbors list
-                if (effective_reactants == neighbor_reactants \
-                        or effective_reactants == neighbor_products) \
+
+                ### Testing: Making sure the reaction inputs and outputs are not identical
+                if (real_reactants == neighbor_reactants \
+                        or real_reactants == neighbor_products) \
+                        and real_reactants + real_products != \
+                            neighbor_reactants + neighbor_products \
+                        and real_modifiers != neighbor_modifiers \
                         and neighbor_key != key:
                     input_neighbors.append(neighbor_key)
-                if (effective_products == neighbor_reactants \
-                        or effective_products == neighbor_products) \
+                if (real_products == neighbor_reactants \
+                        or real_products == neighbor_products) \
+                        and real_reactants + real_products != \
+                            neighbor_reactants + neighbor_products \
+                        and real_modifiers != neighbor_modifiers \
                         and neighbor_key != key:
                     output_neighbors.append(neighbor_key)
 
             # Run one-sided bridging for reactions where inputs exist and
-            # outputs have neighbors
+            # outputs have neighbors (could be with the neighbor's reactants
+            # or products)
             if reactants_exist and len(output_neighbors) != 0:
 
                 # For all output reaction neighbor options...
                 for o in output_neighbors:
-
                     # Find side that doesn't match the current reaction outputs
-                    if (set(products) \
+                    if (set(real_products) \
                             == set(reaction_dictionary[o]['reactants'])):
                         side_key = 'products'
-                        #mod_key = 'catalyst'
+                        if collapse_with_modifiers == True or collapse_with_modifiers == "True":
+                            mod_key = 'catalyst'
+                        else:
+                            mod_key = 'impossible_key_to_match'
                     else:
                         side_key = 'reactants'
-                        #mod_key = 'inhibitor'
-
-                    # Using this to only consider main components during
-                    # reaction collapse
-                    mod_key = 'impossible_key_to_match'
+                        if collapse_with_modifiers == True or collapse_with_modifiers == "True":
+                            mod_key = 'inhibitor'
+                        else:
+                            mod_key = 'impossible_key_to_match'
 
                     # Check if values exist for the new side
                     # Allow modifier values to count
@@ -270,6 +344,8 @@ def collapse_nodes(
                             collapsed_options.append(set([rxn, o]))
                             add = id + '_' + reaction_dictionary[o]['id']
                             changed_reactions[(rxn, o)] = add
+                            removed_reaction.add(id)
+                            removed_reaction.add(reaction_dictionary[o]['id'])
                             updated_reactions[add] = {
                                 'collapsed': 'true',
                                 'collapsed_reactions': [rxn, o],
@@ -289,7 +365,6 @@ def collapse_nodes(
                                     + reaction_dictionary[o][
                                         'additional_components']
                             }
-
                             graph = add_collapsed_components(
                                 graph=graph,
                                 rxn=add,
@@ -324,14 +399,16 @@ def collapse_nodes(
                     if (set(reactants) \
                             == set(reaction_dictionary[i]['reactants'])):
                         side_key = 'products'
-                        #mod_key = 'catalyst'
+                        if collapse_with_modifiers == True or collapse_with_modifiers == "True":
+                            mod_key = 'catalyst'
+                        else:
+                            mod_key = 'impossible_key_to_match'
                     else:
                         side_key = 'reactants'
-                        #mod_key = 'inhibitor'
-
-                    # Using this to only consider main components during
-                    # reaction collapse
-                    mod_key = 'impossible_key_to_match'
+                        if collapse_with_modifiers == True or collapse_with_modifiers == "True":
+                            mod_key = 'inhibitor'
+                        else:
+                            mod_key = 'impossible_key_to_match'
 
                     # Check if values exist for the new side
                     # Allow modifier values to count
@@ -352,6 +429,8 @@ def collapse_nodes(
                             collapsed_options.append(set([rxn, i]))
                             add = id + '_' + reaction_dictionary[i]['id']
                             changed_reactions[(rxn, i)] = add
+                            removed_reaction.add(id)
+                            removed_reaction.add(reaction_dictionary[i]['id'])
                             updated_reactions[add] = {
                                 'collapsed': 'true',
                                 'collapsed_reactions': [rxn, i],
@@ -372,7 +451,6 @@ def collapse_nodes(
                                 'additional_components': additional_components \
                                     + reaction_dictionary[i]['additional_components']
                             }
-
                             graph = add_collapsed_components(
                                 graph=graph,
                                 rxn=add,
@@ -412,12 +490,14 @@ def collapse_nodes(
                                 graph=graph,
                                 reaction_dictionary=reaction_dictionary,
                                 neighbor=i,
-                                current_inputs=reactants)
+                                current_inputs=reactants,
+                                collapse_with_modifiers=collapse_with_modifiers)
                             eval_j = find_values(
                                 graph=graph,
                                 reaction_dictionary=reaction_dictionary,
                                 neighbor=j,
-                                current_inputs=products)
+                                current_inputs=products,
+                                collapse_with_modifiers=collapse_with_modifiers)
 
                             # If both neighbor reactions have values and the
                             # the collapsed reaction is not already in the
@@ -430,6 +510,9 @@ def collapse_nodes(
                                 collapsed_options.append(set([rxn, i, j]))
                                 add = i + '_' + rxn + '_' + j
                                 changed_reactions[(rxn, i, j)] = add
+                                removed_reaction.add(rxn)
+                                removed_reaction.add(i)
+                                removed_reaction.add(j)
                                 updated_reactions[add] = {
                                     'collapsed': 'true',
                                     'collapsed_reactions': [rxn, i, j],
@@ -453,7 +536,6 @@ def collapse_nodes(
                                         + reaction_dictionary[i]['additional_components']\
                                         + reaction_dictionary[j]['additional_components']
                                 }
-
                                 graph = add_collapsed_components(
                                     graph=graph,
                                     rxn=add,
@@ -492,43 +574,8 @@ def collapse_nodes(
                         'additional_components': additional_components
                     }
 
-    return graph, updated_reactions, changed_reactions
+    for k in removed_reaction:
+        if k in updated_reactions:
+            del updated_reactions[k]
 
-def generate_updated_dictionary(
-        original_database,
-        update_dictionary):
-    """Back-reference collapsed reactions from pathways
-    """
-
-    updated_pathway_dictionary = {}
-
-    for k, v in original_database.items():
-
-        key = reactome = v['reactome']
-        id = v['id']
-        name = v['name']
-        reactions = v['reactions']
-        new_reactions = []
-
-        for k, v in update_dictionary.items():
-
-            if type(k) is tuple:
-                l = list(k)
-                if set(l) <= set(reactions):
-                    new_reactions.append(v)
-                    reactions = list(set(reactions) - set(v))
-
-            else:
-                l = [k]
-                if l in reactions or k in reactions:
-                    new_reactions.append(v)
-                    reactions = list(set(reactions) - set(v))
-
-        updated_pathway_dictionary[reactome] = {
-            'id': id,
-            'reactome': reactome,
-            'name': name,
-            'reactions': new_reactions
-        }
-
-    return updated_pathway_dictionary
+    return graph, updated_reactions, changed_reactions, removed_reaction

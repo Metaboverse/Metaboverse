@@ -21,8 +21,32 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 var fs = require("fs");
-
 var $ = require("jquery");
+
+var coll_mos = false;
+var broadcast_gene = true;
+
+function collapseWithModifiers() {
+  if (coll_mos === false) {
+    coll_mos = true;
+    update_session_info("collapseWithModifiers", true);
+  } else {
+    coll_mos = false;
+    update_session_info("collapseWithModifiers", false);
+  }
+  console.log("Reaction collapse evaluation with modifiers: ", coll_mos)
+}
+
+function broadcastGeneExpression() {
+  if (broadcast_gene === false) {
+    broadcast_gene = true;
+    update_session_info("broadcastGeneExpression", true);
+  } else {
+    broadcast_gene = false;
+    update_session_info("broadcastGeneExpression", false);
+  }
+  console.log("Broadcast gene expression values: ", broadcast_gene)
+}
 
 window.addEventListener("load", function(event) {
   document.getElementById("transcriptomics-input").onchange = function(event) {
@@ -44,7 +68,7 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        $('#selectedTranscriptomics').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedTranscriptomics').html('<font size="2">' + f.path + '</font>');
         update_session_info("transcriptomics", f.path);
 
         transcriptomics = true;
@@ -76,7 +100,7 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        $('#selectedProteomics').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedProteomics').html('<font size="2">' + f.path + '</font>');
         update_session_info("proteomics", f.path);
 
         proteomics = true;
@@ -108,7 +132,7 @@ window.addEventListener("load", function(event) {
       try {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
-        $('#selectedMetabolomics').replaceWith('<font size="2">' + f.path + '</font>');
+        $('#selectedMetabolomics').html('<font size="2">' + f.path + '</font>');
 
         update_session_info("metabolomics", f.path);
 
@@ -124,58 +148,58 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener("load", function(event) {
-  document.getElementById("metadata-input").onchange = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
 
-    var inputVal = document.getElementById("metadata-input").value.split(".");
-
-    if (
-      (inputVal[inputVal.length - 1] !== "tsv") &
-      (inputVal[inputVal.length - 1] !== "txt")
-    ) {
-      alert(
-        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
-      );
-    } else {
-      try {
-        f = event.srcElement.files[0];
-        console.log("The file you dragged: ", f);
-        $('#selectedMetadata').replaceWith('<font size="2">' + f.path + '</font>');
-
-        update_session_info("metadata", f.path);
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
-        );
-      }
-    }
-  };
-});
-
-window.addEventListener("load", function(event) {
+  update_session_info("labels", "none");
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("updateExperiment").value;
-
-    if (inputVal === "expType1") {
+    var experiment_type = document.getElementById("updateExperiment").value;
+    if (experiment_type === "null") {
       experiment_type = null;
-    } else if (inputVal === "expType2") {
-      experiment_type = "timecourse";
-    } else if (inputVal === "expType3") {
-      experiment_type = "flux_balance";
-    } else if (inputVal === "expType4") {
-      experiment_type = "multiple_conditions";
     } else {}
 
     try {
-      update_session_info("experiment", experiment_type);
+      update_session_info("experiment_type", experiment_type);
     } catch (error) {
       console.log(error);
       alert(error);
+    }
+
+    // If timecourse or multiple conditions, have user input labels in correct order as listed  in dataframe
+    if ((experiment_type === "timecourse") | (experiment_type === "multiple_conditions")) {
+      $("#nameField").html(
+        "<form>"
+        + "Sample labels: "
+        + "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>"
+        + "<br />"
+        + "<br />"
+        + "<input type='text' class='experimentName' id='updateExperimentLabels'></input>"
+        + "</form>"
+        + "<br />"
+      );
+
+      document.getElementById("updateExperimentLabels").onchange = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var inputVal = document.getElementById("updateExperimentLabels").value;
+
+        try {
+          console.log("Your provided labels: ", inputVal);
+
+          update_session_info("labels", inputVal);
+        } catch (error) {
+          console.log(error);
+          alert(
+            "Labels are not valid."
+          );
+        }
+      }
+
+    } else {
+      $("#nameField").html('');
+      update_session_info("labels", "0");
     }
   };
 });
@@ -190,7 +214,7 @@ window.addEventListener("load", function(event) {
     try {
       console.log("Your provided experiment name: ", inputVal);
 
-      update_session_info("experiment", inputVal);
+      update_session_info("experiment_name", inputVal);
     } catch (error) {
       console.log(error);
       alert(
@@ -198,4 +222,30 @@ window.addEventListener("load", function(event) {
       );
     }
   }
+});
+
+window.addEventListener("load", function(event) {
+
+  var inputVal = document.getElementById("updateBlacklist").value;
+  update_session_info("blacklist", inputVal);
+
+  document.getElementById("updateBlacklist").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var inputVal = document.getElementById("updateBlacklist").value;
+
+    try {
+      console.log("Your provided blacklisted entities: ", inputVal);
+
+      update_session_info("blacklist", inputVal);
+    } catch (error) {
+      console.log(error);
+      alert(
+        "IDs are not valid."
+      );
+    }
+  }
+
+
 });

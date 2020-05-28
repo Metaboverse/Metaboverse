@@ -22,6 +22,8 @@ from __future__ import print_function
 """
 import os
 import re
+import requests
+from datetime import date
 import pickle
 import pandas as pd
 
@@ -292,6 +294,15 @@ def reference_complex_species(
 
     return new_dict
 
+def get_reactome_version():
+    """Get most recent Reactome database version at time of curation
+    """
+    reactome_url = "https://reactome.org/tag/release"
+    f = requests.get(reactome_url)
+    matches = re.findall("Version (.*) Released", f.text);
+    current_version = max(matches)
+    return current_version
+
 def write_database(
         output,
         file,
@@ -388,7 +399,10 @@ def __main__(
         'uniprot_metabolites': uniprot_metabolites,
         'complex_dictionary': complexes_reference['complex_dictionary'],
         'compartment_dictionary': compartment_dictionary,
-        'components_database': components_database}
+        'components_database': components_database,
+        'curation_date': date.today().strftime('%Y-%m-%d'),
+        'reactome_version': get_reactome_version()
+    }
 
     # Write database to file
     print('Writing metaboverse database to file...')

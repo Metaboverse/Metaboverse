@@ -1,4 +1,4 @@
-# ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/images/metaboverse_banner.png)
+# ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/content/images/metaboverse_banner.png)
 
 A Biological and Metabolic Networks Analysis Platform
 

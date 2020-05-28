@@ -47,6 +47,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Back</a></menuItem>
         <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
       </font>
@@ -136,7 +137,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           var defaultValue = "No file selected";
           if (curURL !== null) {
             defaultValue = curURL;
-            $("#content").replaceWith(
+            $("#content").html(
               '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
           }
           $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');

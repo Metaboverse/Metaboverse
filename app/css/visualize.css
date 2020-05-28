@@ -131,14 +131,14 @@ path.hull {
 .node circle {
   fill: var(--node_color);
   stroke: black;
-  stroke-width: 1px;
+  stroke-width: var(--node_border);
   r: 6px;
 }
 
 .node rect {
   fill: var(--node_color);
   stroke: black;
-  stroke-width: 1px;
+  stroke-width: var(--node_border);
   width: 12px;
   height: 12px;
   x: -6;
@@ -148,7 +148,7 @@ path.hull {
 .node ellipse {
   fill: var(--node_color);
   stroke: black;
-  stroke-width: 1px;
+  stroke-width: var(--node_border);
   rx: 10;
   ry: 4;
 }
@@ -235,6 +235,10 @@ path.hull {
 }
 
 #hub_button {
+  border-radius: 5px;
+}
+
+#stat_button {
   border-radius: 5px;
 }
 

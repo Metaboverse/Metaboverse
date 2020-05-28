@@ -327,7 +327,7 @@ img {
 }
 
 #progressRange {
-  width: 50%;
+  width: 40%;
   background-color: white;
   border-radius: 10px;
 }
@@ -342,6 +342,11 @@ img {
   border-radius: 3px;
 }
 
+.blacklist {
+  border: 1px solid black;
+  border-radius: 3px;
+  width: 300px;
+}
 
 #dropDatabase {
   border-radius: 5px;

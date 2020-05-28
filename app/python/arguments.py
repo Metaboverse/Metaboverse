@@ -246,16 +246,37 @@ def parse_arguments(
         default = 'None',
         required = False)
     curate_opts.add_argument(
-        '-d', '--metadata',
-        help = 'Path and filename of metadata table -- refer to documentation for details on formatting and normalization',
-        metavar = '<path/filename>',
-        type = str,
-        default = 'None',
+        '--collapse_with_modifiers',
+        help = 'Include modifiers when considering a potential reaction collapse.',
+        action = 'store_true',
         required = False)
     curate_opts.add_argument(
-        '-e', '--experiment',
+        '--broadcast_genes',
+        help = 'Broadcast gene values to proteins where protein values not available.',
+        action = 'store_true',
+        required = False)
+    curate_opts.add_argument(
+        '-e', '--experiment_type',
         help = 'Specify experiment type',
         metavar = '<default/timecourse/flux/multi-condition>',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
+        '--experiment_name',
+        help = 'Specify experiment name',
+        metavar = '<default/timecourse/flux/multi-condition>',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
+        '--labels',
+        help = 'Comma separated list of labels to use for multi-condition or timecourse experiments',
+        metavar = 'cond1, cond2, cond3, ...',
+        type = str,
+        required = False)
+    curate_opts.add_argument(
+        '--blacklist',
+        help = 'Comma separated list of names for metabolites, etc., to ignore in the analysis and visualization.',
+        metavar = 'H+, H2O, etc...',
         type = str,
         required = False)
     curate_opts.add_argument(

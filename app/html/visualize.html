@@ -74,6 +74,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuitem style="float:left">
           <a href="index.html">Metaboverse</a>
         </menuitem>
+        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
         <menuitem style="float:left">
           <a href="build.html">Back</a>
         </menuitem>
@@ -221,16 +222,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div title="Click to toggle modifier nodes (remove or display)">
           <button id="toggleModifiers">Modifiers</button>
         </div>
-        -->
         <div
           title="Click to toggle between mapping expression or statistical color values."
         >
           <button id="toggleColors">Highlight Values/Stats</button>
         </div>
-        <br />
+        -->
         <div title="Click to toggle between showing or hiding compartment shading">
           <button id="toggleCompartments">Toggle Compartments</button>
         </div>
+        <br />
         <div title="Click to save the current graph view">
           <button id="saveGraph">Save Graph</button>
         </div>
@@ -275,6 +276,23 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <button
           class="info"
           title="Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections."
+        >
+          <i>i</i>
+        </button>
+        <br />
+        Statistic threshold:
+        <input
+          type="number"
+          name="stat_button"
+          id="stat_button"
+          onchange="stat_input()"
+          min="000"
+          max="1.0"
+          value="0.05"
+        />
+        <button
+          class="info"
+          title="Provide a value to threshold statistical value where node borders are bolded."
         >
           <i>i</i>
         </button>
@@ -325,8 +343,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </font>
 
     <!--Put timecourse placeholder here-->
-    <div id="slider" align="center"></div>
-    <br />
+    <div id="slider" align="center" style="margin-top:15px;"></div>
 
     <!--Graph space-->
     <div id="graph" align="center"></div>
@@ -335,9 +352,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <script src="../js/utils.js"></script>
     <script src="../js/menu.js"></script>
     <script src="../js/motifs.js"></script>
+    <script src="../js/motif-global.js"></script>
+    <script src="../js/timecourse.js"></script>
     <script src="../js/graph.js"></script>
     <script src="../js/visualize.js"></script>
-    <script src="../js/timecourse.js"></script>
     <script src="../js/js-colormaps.js"></script>
   </body>
 </html>

@@ -19,163 +19,258 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var width = window.innerWidth * 0.7;
+var d3 = require("d3");
+
+var width = window.innerWidth * 0.8;
 var height = window.innerHeight * 0.8;
 var timeTransition = 8000;
-var numberConditions = 5; // determine based on user data
-var start = 90; // data min
-var end = 160; // data max
+var numberConditions = 1; // determine based on user data
+var start = 0; // data min index
+var end = 1; // data max index
+var slider_index = 0;
+var timecourse = false;
 
-var x = d3
-  .scaleLinear()
-  .domain([start, end])
-  .range([90, width - 200])
-  .clamp(true);
+function buildSlider(categories, names) {
 
-var slider = d3
-  .select("#bar")
-  .append("svg")
-  .attr("width", width - 250)
-  .attr("height", 50)
-  .attr("overflow", "visible");
+  end = Math.max(...categories);
+  numberConditions = categories.length;
 
-slider
-  .append("g")
-  .attr("class", "slider")
-  .attr("transform", "translate(" + 50 + "," + height / 2 + ")");
+  var x = d3
+    .scaleLinear()
+    .domain([start, end])
+    .range([90, width - 200])
+    .clamp(true);
 
-slider
-  .append("line")
-  .attr("class", "track")
-  .attr("x1", x.range()[0])
-  .attr("x2", x.range()[1])
-  .select(function() {
-    return this.parentNode.appendChild(this.cloneNode(true));
-  })
-  .attr("class", "track-inset")
-  .select(function() {
-    return this.parentNode.appendChild(this.cloneNode(true));
-  })
-  .attr("class", "track-overlay")
-  .call(
-    d3
-      .drag()
-      .on("start.interrupt", function() {
-        slider.interrupt();
-      })
-      .on("start drag", function() {
-        hue(x.invert(d3.event.x));
-      })
-  );
+  var slider = d3
+    .select("#slider")
+    .append("svg")
+    .attr("id", "slide")
+    .attr("width", width)
+    .attr("height", 50)
+    .attr("viewBox", [0, -15, width, 50])
+    .attr("overflow", "visible");
 
-slider
-  .insert("g", ".track-overlay")
-  .attr("class", "ticks")
-  .attr("transform", "translate(0," + 18 + ")")
-  .selectAll("text")
-  .data(x.ticks(numberConditions))
-  .enter()
-  .append("text")
-  .attr("x", x)
-  .attr("text-anchor", "middle")
-  .text(function(d) {
-    return d;
-  });
+  slider
+    .append("g")
+    .attr("class", "slider")
+    .attr("transform", "translate(" + 50 + "," + height / 2 + ")");
 
-var handle = slider
-  .insert("circle", ".track-overlay")
-  .attr("class", "handle")
-  .attr("r", 12);
+  slider
+    .append("line")
+    .attr("class", "track")
+    .attr("id", "track")
+    .attr("x1", x.range()[0])
+    .attr("x2", x.range()[1])
+    .select(function() {
+      return this.parentNode.appendChild(this.cloneNode(true));
+    })
+    .attr("class", "track-inset")
+    .select(function() {
+      return this.parentNode.appendChild(this.cloneNode(true));
+    })
+    .attr("class", "track-overlay")
+    .call(
+      d3
+        .drag()
+        .on("start.interrupt", function() {
+          slider.interrupt();
+        })
+        .on("start drag", function() {
+          hue(x.invert(d3.event.x));
+        })
+    );
 
-/*
-slider.transition() // Gratuitous intro!
-    .duration(timeTransition)
+  slider
+    .insert("g", ".track-overlay")
+    .attr("class", "ticks")
+    .attr("transform", "translate(0," + 24 + ")")
+    .selectAll("text")
+    .data(x.ticks(numberConditions))
+    .enter()
+    .append("text")
+    .attr("id", "tick")
+    .attr("x", x)
+    .attr("text-anchor", "middle")
+    .text(function(d, i) {
+      return names[i];
+    });
+
+  var handle = slider
+    .insert("circle", ".track-overlay")
+    .attr("id", "dot")
+    .attr("class", "handle")
+    .attr("r", 12);
+
+  slider.transition() // Gratuitous intro!
+    .duration(1)
     .tween("hue", function() {
-      var i = d3.interpolate(start, end);
+      var i = d3.interpolate(end, start);
       return function(t) { hue(i(t)); };
     });
-*/
 
-var playButton = d3.select("#play-button");
-/*
-playButton.on("click", function() {
-  var button = d3.select(this);
-  if (button.text() == "Pause") {
+  function hue(h) {
 
-    slider.transition() // Gratuitous intro!
-        .duration(0)
-        .tween("hue", function() {
-          var i = d3.interpolate(x.invert(handle.attr("cx")), x.invert(handle.attr("cx")));
-          return function(t) { hue(i(t)); };
-        });
+    var slider_index = Math.floor(h + 0.5);
+    handle
+      .attr("cx", x(slider_index))
+      .attr("x", slider_index);
 
-    button.text("Play");
+    let node = d3.selectAll("circle")
+    node.each(function(d) {
 
-  } else {
+      if (d !== undefined) {
 
-    // If button at end, start it back from the beginning
-    if (x.invert(handle.attr("cx")) > end - 1) {
-      starter = start
-    } else {
-      starter = x.invert(handle.attr("cx"))
-    }
+        // if rectangle, ellipse, circle
+        // change fill and text
+        if (d.sub_type === "metabolite_component") {
+          try {
+            d3.select("circle#" + d.id)
+            .style("--node_color", function(d) {
+              return "rgba(" + d["values_js"][slider_index].toString() + ")";
+            })
+            .style("--node_border", function(d) {
+              if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                return 1;
+              } else if (d.stats[slider_index] < stat_value) {
+                return 2;
+              } else {
+                return 1;
+              }
+            })
+            d3.select("text#" + d.id)
+              .html(function(d) {
+                return (
+                  "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+                  + d.name
+                  + "</tspan>"
+                  + "<tspan x='16' y='.7em'>Value: "
+                  + parseFloat(d.values[slider_index]).toFixed(2)
+                  + "</tspan>"
+                  + "<tspan x='16' y='1.7em'>Statistic: "
+                  + parseFloat(d.stats[slider_index]).toFixed(2)
+                  + "</tspan>"
+                );
+              })
+          } catch(err) {}
+        }
+        if (d.sub_type === "gene") {
+          try {
+            d3.select("ellipse#" + d.id)
+              .style("--node_color", function(d) {
+                return "rgba(" + d["values_js"][slider_index].toString() + ")";
+              })
+              .style("--node_border", function(d) {
+                if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                  return 1;
+                } else if (d.stats[slider_index] < stat_value) {
+                  return 2;
+                } else {
+                  return 1;
+                }
+              })
+            d3.select("text#" + d.id)
+              .html(function(d) {
+                return (
+                  "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+                  + d.name
+                  + "</tspan>"
+                  + "<tspan x='16' y='.7em'>Value: "
+                  + parseFloat(d.values[slider_index]).toFixed(2)
+                  + "</tspan>"
+                  + "<tspan x='16' y='1.7em'>Statistic: "
+                  + parseFloat(d.stats[slider_index]).toFixed(2)
+                  + "</tspan>"
+                );
+              })
+          } catch(err) {}
+        }
+        if (d.sub_type === "protein_component") {
+          try {
+            d3.select("rect#" + d.id)
+              .style("--node_color", function(d) {
+                return "rgba(" + d["values_js"][slider_index].toString() + ")";
+              })
+              .style("--node_border", function(d) {
+                if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                  return 1;
+                } else if (d.stats[slider_index] < stat_value) {
+                  return 2;
+                } else {
+                  return 1;
+                }
+              })
+            d3.select("text#" + d.id)
+              .html(function(d) {
+                return (
+                  "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+                  + d.name
+                  + "</tspan>"
+                  + "<tspan x='16' y='.7em'>Value: "
+                  + parseFloat(d.values[slider_index]).toFixed(2)
+                  + "</tspan>"
+                  + "<tspan x='16' y='1.7em'>Statistic: "
+                  + parseFloat(d.stats[slider_index]).toFixed(2)
+                  + "</tspan>"
+                );
+              })
+          } catch(err) {}
+        }
 
-    slider.transition() // Gratuitous intro!
-        .duration(timeTransition - (1000 * end / x.invert(handle.attr("cx"))))
-        .tween("hue", function() {
-          var i = d3.interpolate(starter, end);
-          return function(t) { hue(i(t)); };
-        });
-
-    button.text("Pause");
-  }
-
-})
-
-function hue(h) {
-  handle
-    .attr("cx", x(h));
-  label
-    .text(Math.round(h))
-    .attr("class", "label")
-    .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + x(h) + ",7)")
-
-  node.each(function(d) {
-
-      if (d.time < h) {
-          d3.select(this)
-            .select("circle")
-            .style("fill", "rgba(214, 69, 65, 1)")
-            .style("stroke", "black")
-      } else {
-        d3.select(this)
-          .select("circle")
-          .style("fill", "white")
-          .style("stroke", "black")
+        // if reaction and in current motif set, enlarge, if not, reset
+        try {
+          if (global_motifs !== undefined) {
+            if (global_motifs[slider_index] !== undefined) {
+              if (global_motifs[slider_index].length > 0) {
+                if (global_motifs[slider_index].includes(d.id)) {
+                  d3.selectAll("circle#" + d.id)
+                    .style("r", "10px")
+                    .style("stroke", "purple")
+                    .style("--node_border", 5)
+                } else {
+                  d3.selectAll("circle#" + d.id)
+                  .style("stroke", "black")
+                  .style("--node_color", function(d) {
+                    return "rgba(" + d[entity][slider_index].toString() + ")";
+                  })
+                  .style("--node_border", function(d) {
+                    if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+                      return 1;
+                    } else if (d.stats[slider_index] < stat_value) {
+                      return 2;
+                    } else {
+                      return 1;
+                    }
+                  })
+                  .style("r", function() {
+                    return 6;
+                  })
+                  .style("stroke-dasharray", function(d) {
+                    if (d.inferred === "true" || d.type === "collapsed") {
+                      return "2,2";
+                    } else {
+                      return "none";
+                    }
+                  })
+                }
+              }
+            }
+          }
+        } catch(err) {}
       }
-
     })
-
-    // If slide takes it to the end, reset button
-    if (h > end - 0.01) {
-
-      d3.select("#play-button").text("Play");
-    }
   }
-*/
+}
 
 // Check number of categories
-function checkCategories(categories) {
-  //change to > 1 after testing
-  console.log(data)
-  if (data.categories.length > 1) {
-    timecourse = true;
-    timecourse_fill =
-      '<div id="play-button" align="center">Pause<div id="bar" align="center"></div></div>';
-    document.getElementById("slider").innerHTML = timecourse_fill;
+function checkCategories(categories, labels) { //, names) {
 
-    //buildSlider();
+  if (categories.length > 1) {
+    timecourse = true;
+    let names = labels.split(',');
+    names = names.map(function (n) {
+      return n.trim();
+    });
+    buildSlider(categories, names);
   } else {
     timecourse = false;
   }

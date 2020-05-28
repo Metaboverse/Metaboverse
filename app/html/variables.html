@@ -45,6 +45,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/beginner.html" target="_blank">First Time?</a></menuItem>
         <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
         <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
         <menuItem style="float:left"><a href="curate.html">Back</a></menuItem>
         <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
       </font>
@@ -126,25 +127,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div id="selectedMetabolomics" class="selectedData">
         </div>
         <input id="metabolomics-input" type="file" name="name" style="display: none;" />
-
-        <br>
-        <br>
-        <br>
-        Load metadata table:
-          <button class="info" title="This datatype will accept any tab-delimited metadata table. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
-        <br>
-        <br>
-        <div id="dropDatabase" onclick="document.getElementById('metadata-input').click();">
-          <font size="1">
-            Select File
-          </font>
-        </div>
-        &nbsp;&nbsp;
-        <div id="selectedMetadata" class="selectedData">
-        </div>
-        <input id="metadata-input" type="file" name="name" style="display: none;" />
-      </font>
-
       <br>
       <br>
       <br>
@@ -179,15 +161,43 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             <br>
             <br>
             <select name="dropdown" id="updateExperiment">
-              <option value="expType1" selected>Default</option>
-              <option value="expType2">Time-Course (coming soon)</option>
-              <option value="expType3">Flux Balance (coming soon)</option>
-              <option value="expType4">Multiple Conditions (coming soon)</option>
+              <option value="null" selected>Default</option>
+              <option value="timecourse">Time-Course</option>
+              <option value="multiple_conditions">Multiple Conditions</option>
+              <option value="flux_balance">Flux Balance (coming soon)</option>
             </select>
         </form>
         <br>
         <br>
       </font>
+      <div id="nameField"></div>
+      <div id="updateExperimentLabels"></div>
+      <label for="broadcast_gene_expression"><font size="3" style="margin-left:1vw;"><i>Broadcast gene expression to proteins: </i></font></label>
+      <input style="width: 15px; height: 15px;" type="checkbox" id="broadcast_gene_expression" onclick='broadcastGeneExpression()' value="true" checked="true">
+      <button
+        class="info"
+        title="Check to broadcast gene expression values to proteins when protein values are not available.">
+        <i>i</i>
+      </button>
+      <br>
+      <label for="use_modifiers_in_collapse"><font size="3" style="margin-left:1vw;"><i>Consider modifiers in reaction collapsing: </i></font></label>
+      <input style="width: 15px; height: 15px;" type="checkbox" id="use_modifiers_in_collapse" onclick='collapseWithModifiers()' value="true">
+      <button
+        class="info"
+        title="Check to include modifiers in reaction collapsing. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.">
+        <i>i</i>
+      </button>
+      <br>
+      <br>
+      <br>
+      <form>
+      Blacklisted entities:
+      <button class='info' title='Enter the names for metabolites, etc., to ignore in the analysis and visualization. Names should be separated by a comma. If a spelling of the entity does not seem to be working, try searching for the correct formatting in the total entity list in the Visualization page.'><i>i</i></button>
+      <br />
+      <br />
+      <input type='text' class='blacklist' id='updateBlacklist' value='H+, H2O, CO2, e-'></input>
+      </form>
+      <br>
       <br>
       <a href="build.html"><div id="continue"><font size="3">Curate</font></div></a>
       <br>
