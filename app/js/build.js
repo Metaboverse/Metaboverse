@@ -25,8 +25,12 @@ var path = require("path");
 var fs = require("fs");
 var $ = require("jquery");
 
+var app = require("electron").remote.app;
+var basePath = app.getAppPath();
+
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
+var progress_file = userDataPath + "/progress_log.json"
 
 // do something in case there are multiple spaces in the session data path
 //if (" " in session_file) {
@@ -35,22 +39,21 @@ var session_file = userDataPath + "/session_data.json";
 var replacer = String(String.fromCharCode(92) + " ");
 var session_format = session_file.replace(" ", replacer)
 
-var progressFile = "data/progress_log.json";
-var scriptFilename = path.join(__dirname, "../python", "__main__.py");
+var scriptFilename = path.join(__dirname, "../python", "metaboverse-cli");
 
 fs.copyFile(
-  "data/progress_log_template.json",
-  "data/progress_log.json",
+  basePath + "/data/progress_log_template.json",
+  progress_file,
   err => {
     if (err) throw err;
     console.log("Progress log file was copied for this session");
   }
 );
 
-fs.watch(progressFile, function(event, filename) {
+fs.watch(progress_file, function(event, filename) {
   var elem = document.getElementById("progressBar");
   var sum_values = 0;
-  var session = JSON.parse(fs.readFileSync(progressFile).toString());
+  var session = JSON.parse(fs.readFileSync(progress_file).toString());
   for (j in session) {
     //loop through the array
     sum_values += session[j]; //Do the math!
@@ -166,8 +169,8 @@ runBuild = function(_callback) {
     }
 
     var cmd = parseCommand(graphDictionary);
-    console.log("Running: python " + scriptFilename + " curate " + cmd);
-    execute("python " + scriptFilename + " curate " + cmd, output => {
+    console.log("Running: " + scriptFilename + " curate " + cmd);
+    execute(scriptFilename + " curate " + cmd, output => {
       console.log(output);
       update_session_info("processed", true);
     });

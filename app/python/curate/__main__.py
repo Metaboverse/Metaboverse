@@ -29,9 +29,9 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from python.curate.load_reactions_db import __main__ as load_reactions
-from python.curate.load_complexes_db import __main__ as load_complexes
-from python.utils import progress_feed
+from curate.load_reactions_db import __main__ as load_reactions
+from curate.load_complexes_db import __main__ as load_complexes
+from utils import progress_feed
 
 def test():
 

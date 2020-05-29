@@ -25,7 +25,7 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from python.curate.utils import get_table
+from curate.utils import get_table
 
 """Get tables
 """

@@ -27,13 +27,13 @@ from textwrap import dedent
 
 """Import internal dependencies
 """
-from python.__init__ import __version__
-from python.__init__ import __dependencies__
-from python.utils import check_directories
-from python.utils import check_curate
-from python.utils import check_analyze
-from python.utils import generate_log
-from python.utils import argument_checks
+from __init__ import __version__
+from __init__ import __dependencies__
+from utils import check_directories
+from utils import check_curate
+from utils import check_analyze
+from utils import generate_log
+from utils import argument_checks
 
 __path__  =  os.path.dirname(os.path.realpath(__file__))
 url = 'https://raw.githubusercontent.com/j-berg/Metaboverse/master/metaboverse/__init__.py'

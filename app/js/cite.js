@@ -23,7 +23,7 @@ var $ = require("jquery");
 
 // Get Metaboverse version
 $.ajax({
-  url: "../../__version__.txt",
+  url: "../__version__.txt",
   success: function(version) {
     document.getElementById("getVersion").innerHTML = version;
   }

@@ -25,9 +25,9 @@ import pandas as pd
 
 """Import internal dependencies
 """
-from python.analyze.prepare_data import __main__ as prepare_data
-from python.analyze.model import __main__ as model
-from python.utils import progress_feed
+from analyze.prepare_data import __main__ as prepare_data
+from analyze.model import __main__ as model
+from utils import progress_feed
 
 def test():
 

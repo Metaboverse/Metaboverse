@@ -26,14 +26,14 @@ import pickle
 
 """Import internal dependencies
 """
-from python.__init__ import __version__
-from python.__init__ import __dependencies__
-from python.arguments import parse_arguments
-from python.arguments import get_dependencies
-from python.preprocess.__main__ import __main__ as preprocess
-from python.curate.__main__ import __main__ as curate
-from python.analyze.__main__ import __main__ as analyze
-from python.utils import progress_feed, update_session
+from __init__ import __version__
+from __init__ import __dependencies__
+from arguments import parse_arguments
+from arguments import get_dependencies
+from preprocess.__main__ import __main__ as preprocess
+from curate.__main__ import __main__ as curate
+from analyze.__main__ import __main__ as analyze
+from utils import progress_feed, update_session
 
 def check_dependencies():
 

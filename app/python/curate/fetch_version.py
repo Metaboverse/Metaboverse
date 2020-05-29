@@ -25,7 +25,7 @@ from urllib.request import Request, urlopen
 
 """Import internal dependencies
 """
-from python.curate.__init__ import __reactome_version__
+from curate.__init__ import __reactome_version__
 
 """Set globals
 """

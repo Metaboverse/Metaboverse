@@ -30,7 +30,7 @@ import xml.etree.ElementTree as et
 
 """Import internal dependencies
 """
-from python.utils import progress_feed
+from utils import progress_feed
 
 """Global variables
 """

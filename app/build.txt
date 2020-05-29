@@ -1,10 +1,23 @@
+Instructions for building OS-specific python distribution:
+----------------------------------------------------------
+1) Go to `python` directory
+2) On each operating system:
+  pyinstaller __main__.py --name metaboverse-mac --onefile
+  pyinstaller __main__.py --name metaboverse-windows --onefile
+  pyinstaller __main__.py --name metaboverse-linux --onefile
+3) Move distribution to `python` directory
+
 Instructions for building app for distribution:
 -----------------------------------------------
-1) Go to app directory
+1) Go to `app` directory
 1.1) If modules not installed, run 'npm install electron --save-dev'
 1.2) Update version at `package.json` and `__version__.txt`
 2) Package python code as executable
-3) Run 'electron-packager ./ Metaboverse --platform=darwin'
+3) Run:
+  `electron-packager ./ Metaboverse --platform=darwin`
+  `electron-packager ./ Metaboverse --platform=`
+  `electron-packager ./ Metaboverse --platform=`
+
 
 If modules not installed:
 -------------------------
@@ -15,6 +28,3 @@ To run demo app:
 ----------------
 1) Go to app directory
 2) Run 'npm start'
-
-
-Getting python dependencies installed: https://medium.com/@abulka/electron-python-4e8c807bfa5e

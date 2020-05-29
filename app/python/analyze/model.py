@@ -38,10 +38,10 @@ pmap = matplotlib.cm.get_cmap('Reds')
 
 """Import internal dependencies
 """
-from python.analyze.collapse import collapse_nodes
-from python.analyze.collapse import generate_updated_dictionary
-from python.analyze.utils import convert_rgba
-from python.utils import progress_feed
+from analyze.collapse import collapse_nodes
+from analyze.collapse import generate_updated_dictionary
+from analyze.utils import convert_rgba
+from utils import progress_feed
 
 def test():
 

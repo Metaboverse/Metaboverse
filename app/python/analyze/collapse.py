@@ -21,7 +21,7 @@ from __future__ import print_function
 
 """Import dependencies
 """
-from python.analyze.utils import convert_rgba
+from analyze.utils import convert_rgba
 
 def generate_updated_dictionary(
         original_database,
