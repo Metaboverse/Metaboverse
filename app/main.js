@@ -27,10 +27,19 @@ const path = require("path");
 const fs = require("fs");
 const ipcMain = require("electron").ipcMain;
 const { dialog } = require("electron");
+const image = electron.nativeImage.createFromPath(
+  app.getAppPath() + "/data/icon/metaboverse_logo.iconset/icon_64x64.png"
+);
+app.dock.setIcon(image);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+
+
+
+
 
 function createWindow() {
   // Create the browser window.
@@ -46,7 +55,7 @@ function createWindow() {
     dependencies: {
       zerorpc: "fyears/zerorpc-node"
     },
-    icon: __dirname + "/data/icon/icon.icns"
+    icon: __dirname + "/data/icon/metaboverse_logo.iconset/icon_64x64.png"
   });
 
   // and load the index.html of the app.
