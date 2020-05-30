@@ -1,8 +1,13 @@
+Instructions for updating metabolite mapper:
+--------------------------------------------
+Downloading metabolite mapper
+
 Instructions for building OS-specific python distribution:
 ----------------------------------------------------------
+0) `pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip`
 1) Go to `python` directory
 2) On each operating system:
-  pyinstaller __main__.py --name metaboverse-mac --onefile
+  pyinstaller __main__.py --name metaboverse-mac --onefile --distpath . --hidden-import=pkg_resources.py2_warn --hidden-import=_sysconfigdata
   pyinstaller __main__.py --name metaboverse-windows --onefile
   pyinstaller __main__.py --name metaboverse-linux --onefile
 3) Move distribution to `python` directory
@@ -15,8 +20,7 @@ Instructions for building app for distribution:
 2) Package python code as executable
 3) Run:
   `electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/metaboverse_logo.icns`
-  `electron-packager ./ Metaboverse --platform=`
-  `electron-packager ./ Metaboverse --platform=`
+  `electron-packager ./ Metaboverse --all`
 
 
 If modules not installed:

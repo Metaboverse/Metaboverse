@@ -19,7 +19,6 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 const exec = require("child_process").exec;
 var path = require("path");
 var fs = require("fs");
@@ -39,7 +38,18 @@ var progress_file = userDataPath + "/progress_log.json"
 var replacer = String(String.fromCharCode(92) + " ");
 var session_format = session_file.replace(" ", replacer)
 
-var scriptFilename = path.join(__dirname, "../python", "metaboverse-cli");
+var scriptFilename;
+if (navigator.appVersion.indexOf("Win") != -1) {
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-win");
+} else if (navigator.appVersion.indexOf("Mac") != -1) {
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-mac");
+} else if (navigator.appVersion.indexOf("X11") != -1) {
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-mac");
+} else if (navigator.appVersion.indexOf("Linux") != -1) {
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-linux");
+} else {
+  scriptFilename = "MISSING"
+}
 
 fs.copyFile(
   basePath + "/data/progress_log_template.json",
