@@ -11,3 +11,5 @@ app/Metaboverse-*
 app/data/progress_log.json
 app/Log.out
 app/python/metaboverse-
+app/python/dist
+app/python/build
