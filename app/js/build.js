@@ -37,6 +37,7 @@ var progress_file = userDataPath + "/progress_log.json"
 //}
 var replacer = String(String.fromCharCode(92) + " ");
 var session_format = session_file.replace(" ", replacer)
+var progress_format = progress_file.replace(" ", replacer)
 
 var scriptFilename;
 if (navigator.appVersion.indexOf("Win") != -1) {
@@ -48,7 +49,7 @@ if (navigator.appVersion.indexOf("Win") != -1) {
 } else if (navigator.appVersion.indexOf("Linux") != -1) {
   scriptFilename = path.join(__dirname, "../python", "metaboverse-linux");
 } else {
-  scriptFilename = "MISSING"
+  scriptFilename = path.join(__dirname, "../python", "__main__.py");
 }
 
 fs.copyFile(
@@ -152,7 +153,7 @@ runBuild = function(_callback) {
         blacklist: blacklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
-        progress_log: path.resolve("data/progress_log.json"),
+        progress_log: progress_format,
         session_data: session_format
       }
     } else {
@@ -173,7 +174,7 @@ runBuild = function(_callback) {
         blacklist: blacklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
-        progress_log: path.resolve("data/progress_log.json"),
+        progress_log: progress_format,
         session_data: session_format
       }
     }

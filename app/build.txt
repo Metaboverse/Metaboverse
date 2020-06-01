@@ -4,13 +4,11 @@ Downloading metabolite mapper
 
 Instructions for building OS-specific python distribution:
 ----------------------------------------------------------
-0) `pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip`
+0) `conda install pyinstaller`
 1) Go to `python` directory
 2) On each operating system:
-  pyinstaller __main__.py --name metaboverse-mac --onefile --distpath . --hidden-import=pkg_resources.py2_warn --hidden-import=_sysconfigdata
-  pyinstaller __main__.py --name metaboverse-windows --onefile
-  pyinstaller __main__.py --name metaboverse-linux --onefile
-3) Move distribution to `python` directory
+  pyinstaller __main__.py --name metaboverse-mac --onefile --distpath .
+
 
 Instructions for building app for distribution:
 -----------------------------------------------
