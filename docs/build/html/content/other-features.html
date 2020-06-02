@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Other Features &mdash; Metaboverse 0.0.0-alpha documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/metaboverse_logo.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAQs" href="faqs.html" />
+    <link rel="prev" title="General Usage" href="general-usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Metaboverse
+          
+
+          
+            
+            <img src="../_static/metaboverse_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Metaboverse</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Other Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-a-custom-reaction">Adding a custom reaction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Metaboverse</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Other Features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/other-features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="other-features">
+<span id="other-link"></span><h1>Other Features<a class="headerlink" href="#other-features" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="adding-a-custom-reaction">
+<h2>Adding a custom reaction<a class="headerlink" href="#adding-a-custom-reaction" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Metaboverse primarily relies on annotated reactions as contained in the <a class="reference external" href="https://reactome.org/">Reactome</a> for a given organism. As such, a reaction may exist or exist in another organism that is not annotated in your organism of interest.</div>
+<div class="line">In order to add a reaction, provide a tab-delimited file in the Variables page for Metaboverse. Each line below the table headers should represent an independent reaction record. An example is displayed below. Fields that are not needed for a given reaction can be left blank.</div>
+<div class="line"><br /></div>
+<div class="line">- <strong>Reaction</strong>: Display reaction name</div>
+<div class="line">- <strong>input_genes</strong>: A list of input genes for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>input_proteins</strong>: A list of input proteins for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>input_metabolites</strong>: A list of input metabolites for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>output_genes</strong>: A list of output genes for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>output_proteins</strong>: A list of output proteins for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>output_metabolites</strong>: A list of output metabolites for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>catalyst_genes</strong>: A list of catalyst genes for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>catalyst_proteins</strong>: A list of catalyst proteins for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>catalyst_metabolites</strong>: A list of catalyst metabolites for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>inhibitor_genes</strong>: A list of inhibitor genes for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>inhibitor_proteins</strong>: A list of inhibitor proteins for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>inhibitor_metabolites</strong>: A list of inhibitor metabolites for the reaction. Each entity should be separated by a comma.</div>
+<div class="line">- <strong>Compartment</strong>: The cellular compartment the reaction occurs in.</div>
+<div class="line">- <strong>Direction</strong>: The direction of the reaction. Should be “forward”, “reverse”, or “both”.</div>
+</div>
+<a class="reference internal image-reference" href="../_images/add_reactions.png"><img alt="../_images/add_reactions.png" class="align-center" src="../_images/add_reactions.png" style="width: 700px;" /></a>
+<a class="reference internal image-reference" href="content/images/add_reactions.gif"><img alt="content/images/add_reactions.gif" class="align-center" src="content/images/add_reactions.gif" style="width: 700px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="faqs.html" class="btn btn-neutral float-right" title="FAQs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="general-usage.html" class="btn btn-neutral float-left" title="General Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2020, Jordan A. Berg, et. al.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

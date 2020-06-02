@@ -46,13 +46,13 @@ Regulatory Hotspot Identification (Motif Analysis)
 | Regulatory patterns can be searched for in the global reaction network using this page. Users can select different motif types by clicking on the appropriate buttons and adjusting their thresholds as necessary.
 |
 | Currently, these motif types are available:
-| 1. **Average**: This operates by averaging the measured values on each side of a reaction (inputs vs outputs) and calculating the absolute difference. If that difference is greater than the threshold, that reaction will be registered as a motif.
-| 2. **MaxMax**: Compare the absolute maximum values between reactants and products that pass the provided threshold.
-| 3. **MaxMin**: Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold.
+| 1. **Average**: A reaction whose absolute difference between the average measured values of reactants and the average measured values of products is greater than or equal to the threshold.
+| 2. **MaxMax**: A reaction whose absolute difference between the maximum measured value of reactants and the maximum measured value of products is greater than or equal to the threshold.
+| 3. **MaxMin**: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.
 | 4. **Sustained**: Find instances of sustained perturbation along a reaction where there are both an input and an output that are not the same molecule with changes above the selected threshold.
 | 5. **ModReg**: Find instances with one regulated modifier and one core component in the reaction.
 | 6. **TransReg**: Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.
-| 7. **PathMax**: Compare the absolute maximum and minimum values across a pathway.
+| 7. **PathMax**: A pathway whose absolute difference between the maximum value and the minimum value is greater than or equal to the threshold. Users can switch the type of values to be computed between the expression values and the statistical values (p-values).
 | 8. **PathCov**: Compare total coverage of reactions with at least one measured component in pathways.
 |
 | Users can then select a given motif, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway.

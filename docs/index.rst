@@ -28,6 +28,7 @@ Table of contents
    content/overview
    content/installation
    content/general-usage
+   content/other-features
    content/faqs
    content/updates
 

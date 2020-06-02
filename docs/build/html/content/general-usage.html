@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="FAQs" href="faqs.html" />
+    <link rel="next" title="Other Features" href="other-features.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
@@ -103,6 +103,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#analysis-video-walkthrough">Analysis Video Walkthrough</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
@@ -217,13 +218,13 @@
 <div class="line">Regulatory patterns can be searched for in the global reaction network using this page. Users can select different motif types by clicking on the appropriate buttons and adjusting their thresholds as necessary.</div>
 <div class="line"><br /></div>
 <div class="line">Currently, these motif types are available:</div>
-<div class="line">1. <strong>Average</strong>: This operates by averaging the measured values on each side of a reaction (inputs vs outputs) and calculating the absolute difference. If that difference is greater than the threshold, that reaction will be registered as a motif.</div>
-<div class="line">2. <strong>MaxMax</strong>: Compare the absolute maximum values between reactants and products that pass the provided threshold.</div>
-<div class="line">3. <strong>MaxMin</strong>: Compare the absolute maximum and minimum values between reactants and products, or products and reactants, respectively, that pass the provided threshold.</div>
+<div class="line">1. <strong>Average</strong>: A reaction whose absolute difference between the average measured values of reactants and the average measured values of products is greater than or equal to the threshold.</div>
+<div class="line">2. <strong>MaxMax</strong>: A reaction whose absolute difference between the maximum measured value of reactants and the maximum measured value of products is greater than or equal to the threshold.</div>
+<div class="line">3. <strong>MaxMin</strong>: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.</div>
 <div class="line">4. <strong>Sustained</strong>: Find instances of sustained perturbation along a reaction where there are both an input and an output that are not the same molecule with changes above the selected threshold.</div>
 <div class="line">5. <strong>ModReg</strong>: Find instances with one regulated modifier and one core component in the reaction.</div>
 <div class="line">6. <strong>TransReg</strong>: Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.</div>
-<div class="line">7. <strong>PathMax</strong>: Compare the absolute maximum and minimum values across a pathway.</div>
+<div class="line">7. <strong>PathMax</strong>: A pathway whose absolute difference between the maximum value and the minimum value is greater than or equal to the threshold. Users can switch the type of values to be computed between the expression values and the statistical values (p-values).</div>
 <div class="line">8. <strong>PathCov</strong>: Compare total coverage of reactions with at least one measured component in pathways.</div>
 <div class="line"><br /></div>
 <div class="line">Users can then select a given motif, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway.</div>
@@ -335,7 +336,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="faqs.html" class="btn btn-neutral float-right" title="FAQs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="other-features.html" class="btn btn-neutral float-right" title="Other Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
