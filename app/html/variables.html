@@ -127,6 +127,26 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div id="selectedMetabolomics" class="selectedData">
         </div>
         <input id="metabolomics-input" type="file" name="name" style="display: none;" />
+
+        <!--
+        <br>
+        <br>
+        <br>
+        Load additional reactions:
+          <button class="info" title="This datatype will accept any tab-delimited dataset with additional reactions to be included in the model. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+        <br>
+        <br>
+        <div id="dropDatabase" onclick="document.getElementById('reactions-input').click();">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedReactions" class="selectedData">
+        </div>
+        <input id="reactions-input" type="file" name="name" style="display: none;" />
+        -->
+
       <br>
       <br>
       <br>
@@ -234,12 +254,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         $('#selectedMetabolomics').append('<font size="2">' + defaultMetabolomics + '</font>');
 
         // Metadata
-        var metadataURL = get_session_info("metadata");
-        var defaultMetadata = "No file selected";
-        if (metadataURL !== null) {
-          defaultMetadata = metadataURL;
+        /*var reactionsURL = get_session_info("additional_reactions");
+        var defaultReactions = "No file selected";
+        if (reactionsURL !== null) {
+          defaultReactions = reactionsURL;
         }
-        $('#selectedMetadata').append('<font size="2">' + defaultMetadata + '</font>');
+        $('#selectedReactions').append('<font size="2">' + defaultReactions + '</font>');
+        */
       </script>
 
   </body>

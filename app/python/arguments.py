@@ -245,6 +245,13 @@ def parse_arguments(
         type = str,
         default = 'None',
         required = False)
+    #curate_opts.add_argument(
+    #    '-a', '--additional_reactions',
+    #    help = 'Path and filename of additional reaction table. See #documentation for more details on appropriate file formatting.',
+    #    metavar = '<file.txt, file.tsv>',
+    #    type = str,
+    #    default = 'None',
+    #    required = False)
     curate_opts.add_argument(
         '--collapse_with_modifiers',
         help = 'Include modifiers when considering a potential reaction collapse.',

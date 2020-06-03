@@ -1167,6 +1167,7 @@ def __main__(
         gene_reference=network['ensembl_synonyms'],
         compartment_reference=network['compartment_dictionary'],
         component_database=network['components_database'])
+        #additional_reactions=args_dict['additional_reactions'])
     progress_feed(args_dict, "model", 9)
 
     # For gene and protein components, add section to reaction database

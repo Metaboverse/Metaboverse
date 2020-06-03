@@ -7,6 +7,7 @@
   "transcriptomics": null,
 	"proteomics": null,
 	"metabolomics": null,
+  "additional_reactions": null,
 	"experiment_type": null,
   "experiment_name": null,
   "max_value": 5,

@@ -147,6 +147,40 @@ window.addEventListener("load", function(event) {
   };
 });
 
+/*window.addEventListener("load", function(event) {
+  document.getElementById("reactions-input").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var inputVal = document.getElementById("reactions-input").value.split(".");
+
+    if (
+      (inputVal[inputVal.length - 1] !== "tsv") &
+      (inputVal[inputVal.length - 1] !== "txt")
+    ) {
+      alert(
+        "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
+      );
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f);
+        $('#selectedReactions').html('<font size="2">' + f.path + '</font>');
+
+        update_session_info("additional_reactions", f.path);
+
+        reactions = true;
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Input is not a .txt or .tsv file. You must upload the correct file type for the analyses to work."
+        );
+      }
+    }
+  };
+});
+*/
+
 window.addEventListener("load", function(event) {
 
   update_session_info("labels", "none");
