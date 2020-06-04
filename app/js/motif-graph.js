@@ -33,6 +33,21 @@ class MetaGraph{
 
     // Get the data
     console.log(graphdata)
+    var update_nodes = {};
+    let n;
+    for (n in graphdata.nodes) {
+      update_nodes[graphdata.nodes[n].id] = graphdata.nodes[n];
+    }
+    graphdata.nodes = update_nodes;
+
+    var update_links = {};
+    let l;
+    for (l in graphdata.links) {
+      let link_id = graphdata.links[l].source + "," + graphdata.links[l].target;
+      update_links[link_id] = graphdata.links[l];
+    }
+    graphdata.links = update_links;
+
     this.data = graphdata;
     this.nodes = graphdata.nodes;
     this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
@@ -42,11 +57,6 @@ class MetaGraph{
       "collapsed_pathway_dictionary"
     )
     this.path_mapper = graphdata.motif_reaction_dictionary
-
-    this.node_dict = {};
-    for (let node in this.nodes) {
-      this.node_dict[this.nodes[node]['id']] = this.nodes[node];
-    }
 
     // Generate expression and stats dictionaries
     let expression_dict = {};
@@ -627,15 +637,15 @@ class MetaGraph{
         let r_idx = 0;
         let p_idx = 0;
         // Add reaction node
-        this.node_dict[motif_list[i].id].current_type = "reaction";
-        mnodes.push(this.node_dict[motif_list[i].id]);
+        this.nodes[motif_list[i].id].current_type = "reaction";
+        mnodes.push(this.nodes[motif_list[i].id]);
 
         // Add reactant nodes
         motif_list[i].reactants.forEach(l=>{
           if(mnodes_id.indexOf(l)===-1){
-            this.node_dict[l].current_type = "reactant";
-            this.node_dict[l].r_idx = r_idx;
-            mnodes.push(this.node_dict[l]);
+            this.nodes[l].current_type = "reactant";
+            this.nodes[l].r_idx = r_idx;
+            mnodes.push(this.nodes[l]);
             mnodes_id.push(l);
             mlinks.push({'source': l, 'target': motif_list[i].id});
             r_idx += 1;
@@ -645,9 +655,9 @@ class MetaGraph{
         // Add product nodes
         motif_list[i].products.forEach(l=>{
           if(mnodes_id.indexOf(l)===-1){
-            this.node_dict[l].current_type = "product";
-            this.node_dict[l].p_idx = p_idx;
-            mnodes.push(this.node_dict[l]);
+            this.nodes[l].current_type = "product";
+            this.nodes[l].p_idx = p_idx;
+            mnodes.push(this.nodes[l]);
             mnodes_id.push(l);
             mlinks.push({'source': motif_list[i].id, 'target': l});
             p_idx += 1;
@@ -845,9 +855,9 @@ class MetaGraph{
       motif.current_type = "reaction";
       motif.reactants.forEach(l=>{
         if(mnodes_id.indexOf(l)===-1){
-          this.node_dict[l].current_type = "reactant";
-          this.node_dict[l].r_idx = r_idx;
-          mnodes.push(this.node_dict[l]);
+          this.nodes[l].current_type = "reactant";
+          this.nodes[l].r_idx = r_idx;
+          mnodes.push(this.nodes[l]);
           mnodes_id.push(l);
           mlinks.push({'source': l, 'target': motif.id});
           r_idx += 1;
@@ -855,9 +865,9 @@ class MetaGraph{
       })
       motif.products.forEach(l=>{
         if(mnodes_id.indexOf(l)===-1){
-          this.node_dict[l].current_type = "product";
-          this.node_dict[l].p_idx = p_idx;
-          mnodes.push(this.node_dict[l]);
+          this.nodes[l].current_type = "product";
+          this.nodes[l].p_idx = p_idx;
+          mnodes.push(this.nodes[l]);
           mnodes_id.push(l);
           mlinks.push({'source': motif.id, 'target': l});
           p_idx += 1;

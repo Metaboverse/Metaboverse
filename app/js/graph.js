@@ -38,7 +38,60 @@ var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
 
-function initialize_nodes(nodes, node_dict, type_dict) {
+function checkReaction(
+    reaction,
+    element) {
+  // Check that element is included in reaction components
+
+  if (reaction["reactants"].includes(element)
+      || reaction["products"].includes(element)
+      || reaction["modifiers"].includes(element)
+      || reaction["additional_components"].includes(element)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function checkPlotting(
+    data,
+    reaction) {
+  // Check whether a neighboring reaction should be included
+
+  let these_degrees = [];
+  let rxn_comps = [];
+  for (x in reaction["reactants"]) {
+    these_degrees.push(data.nodes[reaction["reactants"][x]].degree);
+    rxn_comps.push(data.nodes[reaction["reactants"][x]].name);
+  }
+  for (x in reaction["products"]) {
+    these_degrees.push(data.nodes[reaction["products"][x]].degree);
+    rxn_comps.push(data.nodes[reaction["products"][x]].name);
+  }
+  for (x in reaction["modifiers"]) {
+    these_degrees.push(data.nodes[reaction["modifiers"][x][0]].degree);
+    rxn_comps.push(data.nodes[reaction["modifiers"][x][0]].name);
+  }
+  for (x in reaction["additional_components"]) {
+    these_degrees.push(data.nodes[reaction["additional_components"][x]].degree);
+    rxn_comps.push(data.nodes[reaction["additional_components"][x]].name);
+  }
+  let _max = Math.max(...these_degrees);
+
+  let blacklisted_node = false;
+  for (r in rxn_comps) {
+    if (data.blacklist.includes(rxn_comps[r])) {
+      blacklisted_node = true;
+    }
+  }
+
+  return [_max, blacklisted_node];
+}
+
+function initialize_nodes(
+    nodes,
+    node_dict,
+    type_dict) {
   var display_analytes_dict = {};
   var display_reactions_dict = {};
   var entity_id_dict = {};
@@ -51,7 +104,7 @@ function initialize_nodes(nodes, node_dict, type_dict) {
     entity_id_dict[node["name"]] = node["id"];
     entity_id_dict[node["id"]] = node["name"];
 
-    if ((node["type"] === "reaction") | (node["type"] === "collapsed")) {
+    if ((node["type"] === "reaction") || (node["type"] === "collapsed")) {
       display_analytes_dict[node["name"]] = "none";
       display_reactions_dict[node["name"]] = "inline";
     } else {
@@ -175,30 +228,31 @@ function parse_pathway(
 }
 
 function get_nodes_links(data, components) {
-  var nodes = data["nodes"];
-  var links = data["links"];
+  var nodes = data.nodes;
+  var links = data.links;
+
+  components = [...new Set(components)];
+  console.log(components)
 
   // Parse the nodes of interest
   var add_nodes = [];
-  nodes.forEach(function(node) {
-    if (components.includes(node["id"])) {
-      var node_copy = $.extend(true, {}, node);
+  for (c in components) {
+    if (components[c] in nodes) {
+      var node_copy = $.extend(true, {}, nodes[components[c]]);
       add_nodes.push(node_copy);
     }
-  });
+  }
 
   var add_links = [];
-  // Parse out links of interest
-  links.forEach(function(link) {
-    if (
-      components.includes(link.source) &&
-      components.includes(link.target) &&
-      link.source !== link.target
-    ) {
-      var link_copy = $.extend(true, {}, link);
-      add_links.push(link_copy);
+  for (c1 in components) {
+    for (c2 in components) {
+      _key = components[c1] + "," + components[c2];
+      if (_key in links && components[c1] !== components[c2]) {
+        var link_copy = $.extend(true, {}, links[_key]);
+        add_links.push(link_copy);
+      }
     }
-  });
+  }
 
   return [add_nodes, add_links];
 }
@@ -260,12 +314,9 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   for (reaction in reaction_dictionary) {
     //Return all reactions that contain the entity
     let target_rxns = reaction_dictionary[reaction];
-    if (
-      target_rxns["reactants"].includes(entity_id) ||
-      target_rxns["products"].includes(entity_id) ||
-      target_rxns["modifiers"].includes(entity_id) ||
-      target_rxns["additional_components"].includes(entity_id)
-    ) {
+    if (checkReaction(
+        target_rxns,
+        entity_id) === true) {
       nn_components.push(target_rxns["id"]);
       for (x in target_rxns["reactants"]) {
         if (degree_dictionary[target_rxns["reactants"][x]] <= hub_value) {
@@ -338,82 +389,66 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     document.getElementById("warning_line_2").innerHTML = "";
 
     // Filter out any components that are above hub threshold for kNN
-    var hub_exclusion = new Set();
-    if (hub_value > 0) {
-      data.nodes.forEach(function(node) {
-        if (node.degree > hub_value) {
-          hub_exclusion.add(node.id);
-          console.log(
-            "Filtering " +
-              node.id +
-              " (" +
-              node.degree +
-              " degrees) -- may cause edge loss"
-          );
-        }
-      });
-    }
-
     n = 1;
+    nn_components = [...new Set(nn_components)];
     while (n < kNN) {
       var components = [];
 
       for (element in nn_components) {
-        for (reaction in reaction_dictionary) {
-          //Return all reactions that contain the entity
-          if (
-            (reaction_dictionary[reaction]["reactants"].includes(
-              nn_components[element]
-            ) ||
-              reaction_dictionary[reaction]["products"].includes(
-                nn_components[element]
-              ) ||
-              reaction_dictionary[reaction]["modifiers"].includes(
-                nn_components[element]
-              ) ||
-              reaction_dictionary[reaction]["additional_components"].includes(
-                nn_components[element]
-              )) &&
-            !hub_exclusion.has(reaction_dictionary[reaction]["id"])
-          ) {
-            components.push(reaction_dictionary[reaction]["id"]);
+        if (data.nodes[nn_components[element]].degree <= hub_value) {
 
-            for (x in reaction_dictionary[reaction]["reactants"]) {
-              if (
-                !hub_exclusion.has(
-                  reaction_dictionary[reaction]["reactants"][x]
-                )
-              ) {
-                components.push(reaction_dictionary[reaction]["reactants"][x]);
-              }
-            }
-            for (x in reaction_dictionary[reaction]["products"]) {
-              if (
-                !hub_exclusion.has(reaction_dictionary[reaction]["products"][x])
-              ) {
-                components.push(reaction_dictionary[reaction]["products"][x]);
-              }
-            }
-            for (x in reaction_dictionary[reaction]["modifiers"]) {
-              if (
-                !hub_exclusion.has(
-                  reaction_dictionary[reaction]["modifiers"][x][0]
-                )
-              ) {
-                components.push(
-                  reaction_dictionary[reaction]["modifiers"][x][0]
-                );
-              }
-            }
-            for (x in reaction_dictionary[reaction]["additional_components"]) {
-              if (
-                !hub_exclusion.has(
-                  reaction_dictionary[reaction]["additional_components"][x]
-                )
-              ) {
-                components.push(
-                  reaction_dictionary[reaction]["additional_components"][x]
-                );
+          for (reaction in reaction_dictionary) {
+            //Return all reactions that contain the entity
+            if (checkReaction(
+                reaction_dictionary[reaction],
+                nn_components[element]) === true) {
+
+              let outputs = checkPlotting(
+                data,
+                reaction_dictionary[reaction])
+              let _max = outputs[0];
+              let blacklisted_node = outputs[1];
+
+              if (_max > hub_value) {
+                console.log("Not plotting reaction: " + reaction_dictionary[reaction]["id"] + "; entity with too many connections.")
+              } else if (blacklisted_node === true) {
+                console.log("Not plotting reaction: " + reaction_dictionary[reaction]["id"] + "; contains blacklisted entity.")
+              } else {
+                components.push(reaction_dictionary[reaction]["id"]);
+
+                for (x in reaction_dictionary[reaction]["reactants"]) {
+                  if (
+                    data.nodes[reaction_dictionary[reaction]["reactants"][x]].degree <= hub_value
+                  ) {
+                    components.push(reaction_dictionary[reaction]["reactants"][x]);
+                  }
+                }
+                for (x in reaction_dictionary[reaction]["products"]) {
+                  data.nodes[reaction_dictionary[reaction]["products"][x]]
+                  if (
+                    data.nodes[reaction_dictionary[reaction]["products"][x]].degree <= hub_value
+                  ) {
+                    components.push(reaction_dictionary[reaction]["products"][x]);
+                  }
+                }
+                for (x in reaction_dictionary[reaction]["modifiers"]) {
+                  if (
+                    data.nodes[reaction_dictionary[reaction]["modifiers"][x][0]].degree <= hub_value
+                  ) {
+                    components.push(
+                      reaction_dictionary[reaction]["modifiers"][x][0]
+                    );
+                  }
+                }
+                for (x in reaction_dictionary[reaction]["additional_components"]) {
+                  if (
+                    data.nodes[reaction_dictionary[reaction]["additional_components"][x]].degree <= hub_value
+                  ) {
+                    components.push(
+                      reaction_dictionary[reaction]["additional_components"][x]
+                    );
+                  }
+                }
               }
             }
           }
@@ -422,7 +457,6 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
       // Only combine the lists if they pass the threshold
       escape = escape + components.length;
-
       if (escape > max_nodes) {
         console.log(escape);
         document.getElementById("warning_line_1").innerHTML =
@@ -452,7 +486,7 @@ function kNN_input(d) {
 function stat_input(d) {
   stat_value = document.getElementById("stat_button").value;
 
-  if ((stat_value === null) | (stat_value === "")) {
+  if ((stat_value === null) || (stat_value === "")) {
     stat_value = 1;
   }
 
@@ -462,7 +496,7 @@ function stat_input(d) {
 function hub_input(d) {
   hub_value = document.getElementById("hub_button").value;
 
-  if ((hub_value === null) | (hub_value === "")) {
+  if ((hub_value === null) || (hub_value === "")) {
     hub_value = 1000000;
   }
 
@@ -512,7 +546,7 @@ function make_graph(
 
   link_keep = [];
   for (l in new_links) {
-    if (id_blacklist.includes(new_links[l].target) | id_blacklist.includes(new_links[l].source)) {
+    if (id_blacklist.includes(new_links[l].target) || id_blacklist.includes(new_links[l].source)) {
     } else {
       link_keep.push(new_links[l]);
     }
@@ -659,7 +693,7 @@ function make_graph(
       return "rgba(" + d[entity][sample].toString() + ")";
     })
     .style("--node_border", function(d) {
-      if ((d['stats'][sample] === undefined) | (d['stats'][sample] === null)) {
+      if ((d['stats'][sample] === undefined) || (d['stats'][sample] === null)) {
         return 1;
       } else if (d['stats'][sample] < stat_value) {
         return 2;
@@ -1216,14 +1250,6 @@ function make_graph(
     hull
       .data(convexHulls(new_nodes, new_links, getGroup, offset))
       .attr("d", drawCluster);
-
-    /*Revisit labeling hull later
-    hull_text
-      .attr("transform", function(d) {
-        return "translate(" + d.centroid + ")";
-      });
-    */
-
   }
 
   function dragsubject() {
@@ -1300,7 +1326,7 @@ function change() {
   collapse_reactions = true;
 
   let current_pathway = get_session_info("current_pathway");
-  if ((current_pathway !== null) & (current_pathway !== "null")) {
+  if ((current_pathway !== null) && (current_pathway !== "null")) {
     var selection = data.mod_collapsed_pathways[current_pathway].name;
     var superSelection = "All pathways";
   } else {

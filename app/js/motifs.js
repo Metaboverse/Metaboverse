@@ -285,13 +285,13 @@ function computeAvg(arr){
 // search for motif 1
 //let threshold = d3.select("#avg_num").node().value;
 function motifSearch_Avg(
-      threshold,
-      collapsed_reaction_dict,
-      expression_dict,
-      stats_dict,
-      path_mapper,
-      degree_dict,
-      sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   console.log("motif search Avg")
   console.log("Avg threshold set at: ", threshold)
 
@@ -343,13 +343,13 @@ function motifSearch_Avg(
 // MaxMax
 //let threshold = d3.select("#maxmax_num").node().value;
 function motifSearch_MaxMax(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   console.log("motif search MaxMax")
   console.log("MaxMax threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -402,13 +402,13 @@ function motifSearch_MaxMax(
 // MinMin
 //let threshold = d3.select("#minmin_num").node().value;
 function motifSearch_MinMin(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   console.log("motif search MinMin")
   console.log("MinMin threshold set at: ", threshold)
   let discovered_motifs = [];

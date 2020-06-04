@@ -236,6 +236,9 @@ def process_reactions(
                     uniprot_id = component_database[reactant]['is']
                     gene = flipped_ensembl[uniprot_reference[uniprot_id]]
                     new_components.append(gene)
+                    print(uniprot_id)
+                    print(gene)
+
                     graph = add_node_edge(
                         graph=graph,
                         id=gene,
