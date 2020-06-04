@@ -67,7 +67,13 @@ fs.watch(progress_file, function(event, filename) {
   var session = JSON.parse(fs.readFileSync(progress_file).toString());
   for (j in session) {
     //loop through the array
-    sum_values += session[j]; //Do the math!
+    if (sum_values += session[j] < 100) {
+      sum_values += session[j]; //Do the math!
+    }
+    if (sum_values >= 100) {
+      sum_values = 100;
+      break;
+    }
   }
   elem.style.width = sum_values + "%";
   elem.innerHTML = sum_values + "%";
@@ -114,14 +120,16 @@ function parseCommand(args_dict) {
   return commandString;
 }
 
-function callback() {
-  console.log("finished");
-}
-
 function execute(command, callback) {
   exec(command, (error, stdout, stderr) => {
     callback(stdout);
-    callback(stderr);
+    if (stdout.toLowerCase().includes("exception")
+        | stdout.toLowerCase().includes("error")
+        | stderr.toLowerCase().includes("exception")
+        | stderr.toLowerCase().includes("error")) {
+      alert("Metaboverse Build encountered an error             \n\n" + stderr);
+      callback(stderr);
+    }
   });
 }
 
