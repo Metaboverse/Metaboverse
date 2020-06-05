@@ -31,7 +31,7 @@ patterns, and trends from multi-omic data within the context of the metabolic
 network and other global reaction networks. This framework will be foundational
 in increasing our ability to holistically understand static and temporal
 metabolic events and shifts and gene-metabolite intra-cooperativity.
-Metaboverse is freely available under a GPL-3.0 license at https://github.com/Metaboverse.
+Metaboverse is freely available under a GPL-3.0 license.
 ```
 Walkthroughs and additional usage information can be found in the documentation:
 ```
