@@ -236,8 +236,6 @@ def process_reactions(
                     uniprot_id = component_database[reactant]['is']
                     gene = flipped_ensembl[uniprot_reference[uniprot_id]]
                     new_components.append(gene)
-                    print(uniprot_id)
-                    print(gene)
 
                     graph = add_node_edge(
                         graph=graph,
@@ -514,16 +512,20 @@ def check_complexes(
                 compartment_reference=compartment_reference)
 
             try:
-                gene = protein_reference[component_id]
+                if x in protein_reference.keys():
+                    gene = protein_reference[x]
+                    name = gene_reference[gene]
+                else:
+                    gene = name = display_name
                 add_components.append(gene)
 
                 graph = add_node_edge(
                     graph=graph,
                     id=gene,
                     map_id=gene,
-                    name=gene_reference[gene],
+                    name=name,
                     compartment='none',
-                    reaction_membership=component_id,
+                    reaction_membership=x,
                     type='gene_component',
                     sub_type='gene',
                     reversible='false',
@@ -533,7 +535,11 @@ def check_complexes(
                     protein_reference=protein_reference,
                     compartment_reference=compartment_reference)
             except:
-                pass
+                print('---------------')
+                print(x)
+                print(name)
+                print(display_name)
+                print('=================')
 
         else:
             if 'chebi' in x.lower():
@@ -607,6 +613,7 @@ def parse_attributes(
         ignore_enantiomers=True):
 
     dataframe_dict = {}
+    non_mappers = []
     for index, row in dataframe.iterrows():
         dataframe_dict[index] = {
             'values': list(row),
@@ -655,10 +662,10 @@ def parse_attributes(
                             dataframe_dict[index]['display_synonyms'] = \
                                 metabolite_mapper['display_dictionary'][__i]
                         except:
-                            print("Unable to map: ", index)
+                            non_mappers.append(index)
 
                     else:
-                        print("Unable to map: ", index)
+                        non_mappers.append(index)
 
     dataframe_mapper = {}
     chebi_synonyms = {}
@@ -676,7 +683,7 @@ def parse_attributes(
             dataframe_mapper[id] = dataframe_dict[k]['values']
             chebi_synonyms[id] = dataframe_dict[k]['display_synonyms']
 
-    return dataframe_mapper, chebi_synonyms
+    return dataframe_mapper, chebi_synonyms, non_mappers
 
 def map_attributes(
         graph,
@@ -711,19 +718,21 @@ def map_attributes(
 
     stats_max = abs(stats_logged).max().max()
 
-    data_dict, chebi_synonyms = parse_attributes(
+    data_dict, chebi_synonyms, non_mappers1 = parse_attributes(
         dataframe=data_renamed,
         name_reference=name_reference,
         chebi_mapper=chebi_mapper,
         metabolite_mapper=metabolite_mapper,
         ignore_enantiomers=True)
 
-    stats_dict, chebi_synonyms = parse_attributes(
+    stats_dict, chebi_synonyms, non_mappers2 = parse_attributes(
         dataframe=stats_renamed,
         name_reference=name_reference,
         chebi_mapper=chebi_mapper,
         metabolite_mapper=metabolite_mapper,
         ignore_enantiomers=True)
+
+    non_mappers = [set(non_mappers1 + non_mappers2)]
 
     data_renamed = None
     stats_renamed = None
@@ -734,6 +743,7 @@ def map_attributes(
 
         x = current_id
         map_id = graph.nodes()[current_id]['map_id']
+        backup_mapper = graph.nodes()[current_id]['name']
 
         # Add degree
         graph.nodes()[x]['degree'] = degree_dictionary[current_id]
@@ -773,6 +783,24 @@ def map_attributes(
             graph.nodes()[x]['stats_js'] = convert_rgba(
                 rgba_tuples=graph.nodes()[x]['stats_rgba'])
 
+        elif backup_mapper in set(data_dict.keys()) \
+        and backup_mapper in set(stats_dict.keys()) \
+        and backup_mapper != 'none':
+            graph.nodes()[x]['values'] = data_dict[backup_mapper]
+            graph.nodes()[x]['values_rgba'] = extract_value(
+                value_array=data_dict[backup_mapper],
+                max_value=data_max)
+            graph.nodes()[x]['values_js'] = convert_rgba(
+                rgba_tuples=graph.nodes()[x]['values_rgba'])
+
+            graph.nodes()[x]['stats'] = stats_dict[backup_mapper]
+            graph.nodes()[x]['stats_rgba'] = extract_value(
+                value_array=stats_dict[backup_mapper],
+                max_value=stats_max,
+                type="stats")
+            graph.nodes()[x]['stats_js'] = convert_rgba(
+                rgba_tuples=graph.nodes()[x]['stats_rgba'])
+
         else:
             colors = [missing_color for x in range(n)]
 
@@ -786,7 +814,7 @@ def map_attributes(
             graph.nodes()[x]['stats_js'] = convert_rgba(
                 rgba_tuples=colors)
 
-    return graph, data_max, stats_max
+    return graph, data_max, stats_max, non_mappers
 
 def extract_value(
         value_array,
@@ -832,7 +860,8 @@ def output_graph(
         categories,
         labels,
         blacklist,
-        metadata):
+        metadata,
+        unmapped):
     """Output graph and necessary metadata
     """
 
@@ -851,6 +880,7 @@ def output_graph(
     data['labels'] = labels
     data['blacklist'] = blacklist
     data['metadata'] = metadata
+    data['unmapped'] = unmapped
 
     with open(output_name, 'w') as f:
         json.dump(data, f, indent=4) # Parse out as array for javascript
@@ -1127,6 +1157,7 @@ def __main__(
         stats,
         species_id,
         output_file,
+        unmapped,
         flag_data=False):
     """Generate graph object for visualization
     """
@@ -1198,7 +1229,7 @@ def __main__(
         network=network,
         output_dir=args_dict['output'])
 
-    G, max_value, max_stat = map_attributes(
+    G, max_value, max_stat, non_mappers = map_attributes(
         graph=G,
         data=data,
         stats=stats,
@@ -1267,6 +1298,12 @@ def __main__(
                 G.nodes()[node]['name'] = reverse_chebi[G.nodes()[node]['name']]
 
     # Export graph, pathway membership, pathway degree, other refs
+    #unmapped['metabolites_unmapped'] = []
+    #for x in non_mappers:
+    #    if x not in data.index.tolist():
+    #        unmapped['metabolites_unmapped'].append(x)
+    #print(unmapped)
+
     print('Exporting graph...')
     args_dict["max_value"] = max_value
     args_dict["max_stat"] = max_stat
@@ -1289,7 +1326,8 @@ def __main__(
         categories=categories,
         labels=args_dict['labels'],
         blacklist=args_dict['blacklist'],
-        metadata=args_dict)
+        metadata=args_dict,
+        unmapped=unmapped)
     print('Graphing complete.')
     progress_feed(args_dict, "graph", 2)
 

@@ -232,7 +232,6 @@ function get_nodes_links(data, components) {
   var links = data.links;
 
   components = [...new Set(components)];
-  console.log(components)
 
   // Parse the nodes of interest
   var add_nodes = [];
@@ -507,8 +506,7 @@ function get_link(d) {
   if (d.type === "complex_component") {
     if (
       d.sub_type === "metabolite_component" ||
-      d.sub_type === "protein_component" ||
-      d.sub_type === "gene_component"
+      d.sub_type === "protein_component"
     ) {
       return d.sub_type;
     } else {
@@ -569,8 +567,6 @@ function make_graph(
 
   console.log("Building graph for sample: ", sample);
   console.log("Hub threshold set at: ", hub_value);
-
-  console.log(new_nodes)
 
   // Initialize force graph object
   var svg_viewer = d3
@@ -645,7 +641,9 @@ function make_graph(
   var offset = 30;
   function getGroup(d, links) {
 
-    if (d.compartment === "none") {
+    if (d.type === "gene_component") {
+      return "none"
+    } else if (d.compartment === "none") {
       for (l in links) {
         if (d.id === links[l].source.id && links[l].target.compartment !== "none") {
           return links[l].target.compartment;
@@ -772,7 +770,7 @@ function make_graph(
 
     var categories = new Set();
     for (n in nodes) {
-      if (nodes[n].compartment == "none") {
+      if (nodes[n].compartment === "none" || nodes[n].type === "gene_component") {
         categories.add("none");
       } else {
         categories.add(nodes[n].compartment);
@@ -800,7 +798,7 @@ function make_graph(
       .attr("class", "hull")
       .attr("d", drawCluster)
       .style("fill", function(d) {
-        if (d.group !== "undefined") {
+        if (d.group !== "undefined" && d.group !== "none") {
           return fill[categories[d.group]];
         }
       })
@@ -847,7 +845,11 @@ function make_graph(
         var mod_selection = determineWidth(d["name"]);
         document.getElementById("type_selection").innerHTML = mod_selection;
 
-        graph_genes = true;
+        if (data.metadata.transcriptomics !== null) {
+          graph_genes = true;
+        } else {
+          graph_genes = false;
+        }
         nearest_neighbors(data, entity_id_dict[d["name"]]);
       }
     });
@@ -1086,7 +1088,7 @@ function make_graph(
       for (x in new_nodes) {
         if (
           new_nodes[x]["type"] !== "gene_component" &&
-          new_nodes[x]["sub_type"] !== "gene_component"
+          new_nodes[x]["sub_type"] !== "gene"
         ) {
           if (data.degree_dictionary[new_nodes[x]["id"]] <= hub_value) {
             newer_components.push(new_nodes[x]["id"]);
@@ -1322,7 +1324,12 @@ function parseEntities(nodes) {
 
 // Graphing
 function change() {
-  graph_genes = true;
+
+  if (data.metadata.transcriptomics !== null) {
+    graph_genes = true;
+  } else {
+    graph_genes = false;
+  }
   collapse_reactions = true;
 
   let current_pathway = get_session_info("current_pathway");
@@ -1385,7 +1392,6 @@ function change() {
     document.getElementById("type_selection_type").innerHTML =
       "Nearest Neighbor";
 
-    graph_genes = true;
     var entity_dictionary = parseEntities(data.nodes);
     nearest_neighbors(data, entity_dictionary[selection]);
   }
