@@ -84,10 +84,10 @@ path.hull {
 }
 
 #protein_component {
-  fill: orange;
+  fill: #ff4500;
 }
 .link.protein_component {
-  stroke: orange;
+  stroke: #ff4500;
   stroke-dasharray: 0, 2 1;
 }
 
