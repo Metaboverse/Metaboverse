@@ -74,7 +74,6 @@ function interpolateLinearly(x, values) {
 function drawColormap(object_id, bar_width, max_value, theme) {
 
   var points = [];
-
   var c = document.getElementById(String(object_id));
   var ctx = c.getContext("2d");
 
@@ -90,9 +89,7 @@ function drawColormap(object_id, bar_width, max_value, theme) {
       display_value = (- max_value + ((2 * max_value) * (i / bar_width)));
     } else {
       display_value = (i / bar_width) * max_value;
-
     }
-
     points.push({
       x: ctx.canvas.offsetLeft + i,
       y: ctx.canvas.offsetTop,
@@ -101,9 +98,7 @@ function drawColormap(object_id, bar_width, max_value, theme) {
       value: display_value
     });
   };
-
   return [points, ctx.canvas.offsetLeft - 1];
-
 };
 
 function handleMouseMove(e, points, theme) {
@@ -117,8 +112,6 @@ function handleMouseMove(e, points, theme) {
   } else {
     display_value = (labels[mouseX].value).toFixed(1);;
   };
-
-
 
   var x = (e.clientX + 15) + 'px',
       y = (e.clientY + 10) + 'px';
@@ -151,8 +144,6 @@ $("#seismic_canvas")
     d.innerHTML = "";
     d.style.display = "none";
   });
-
-
 
 toggle_c = true;
 d3.select("#toggleColors")
@@ -189,11 +180,9 @@ d3.select("#toggleColors")
         });
 
     } else {
-
       document.getElementById('entity_type').innerHTML = "Entity statistic (-log<sub>10</sub>Statistic)"
 
       toggle_c = false;
-
       var max_value = data.max_stat;
       var ignore = drawColormap('seismic_node', 12, max_value, 'Reds');
       var points = drawColormap('seismic_canvas', 220, max_value, 'Reds');
@@ -216,6 +205,7 @@ d3.select("#toggleColors")
           var d = document.getElementById('displayValue');
           d.innerHTML = "";
           d.style.display = "none";
-        });
+        }
+      );
     }
 });
