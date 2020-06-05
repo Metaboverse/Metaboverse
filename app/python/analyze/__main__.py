@@ -80,7 +80,7 @@ def __main__(
     or str(args_dict['proteomics']).lower() != 'none' \
     or str(args_dict['metabolomics']).lower() != 'none':
 
-        data, stats = prepare_data(
+        data, stats, unmapped = prepare_data(
             network=network,
             transcriptomics_url=args_dict['transcriptomics'],
             proteomics_url=args_dict['proteomics'],
@@ -108,6 +108,7 @@ def __main__(
         stats=stats,
         species_id=args_dict['species_id'],
         output_file=args_dict['output_file'],
+        unmapped=unmapped,
         flag_data=flag_data)
 
     progress_feed(args_dict, "model", 10)

@@ -88,7 +88,7 @@ def format_data(
     data_output.index = data_output.index.to_series().replace(reference)
     data_unmapped = data_output.copy()
 
-    data_output = data_output[data_output.index.isin(reference_ids)]
+    #data_output = data_output[data_output.index.isin(reference_ids)]
     data_unmapped = data_unmapped[~data_unmapped.index.isin(reference_ids)]
 
     return data_output, data_unmapped
@@ -455,4 +455,9 @@ def __main__(
     stats = catenate_data(
         array=stats_array)
 
-    return data, stats
+    unmapped = {
+        'transcriptomics_unmapped': transcriptomics_unmapped.index.tolist(),
+        'proteomics_unmapped': proteomics_unmapped.index.tolist()
+    }
+
+    return data, stats, unmapped
