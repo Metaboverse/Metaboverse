@@ -15,7 +15,23 @@ https://github.com/Metaboverse/manuscript/blob/master/output/manuscript.pdf
 ```
 Briefly,    
 ```
-Metabolism and other biological interactions and reactions are complex, each with variable inputs, outputs, and modifiers. The harmony between these factors consequently determines the health and stability of a cell or organism. Perturbations to these components often have rippling downstream effects. These effects can be difficult to trace across the global reaction network, particularly when the effects occur between canonical representations of pathways. Researchers have primarily utilized reductionist approaches to understanding these systems; however, these methods are limit the scope of the analysis. Even the power of systems-centric -omics approaches can be limited when only a  handful of high magnitude signals in the data are prioritized. To address these challenges, we developed Metaboverse, an interactive desktop app for the exploration and automated extraction of potential regulatory events, patterns, and trends from multi-omic data within the context of the metabolic network and other global reaction networks. This framework will be foundational in increasing our ability to holistically understand static and temporal metabolic events and shifts and gene-metabolite intra-cooperativity. Metaboverse is freely available under a GPL-3.0 license at [https://github.com/Metaboverse/](https://github.com/Metaboverse/).
+Metabolism and other biological interactions and reactions are complex, each
+with variable inputs, outputs, and modifiers. The harmony between these factors
+consequently determines the health and stability of a cell or organism.
+Perturbations to these components often have rippling downstream effects. These
+effects can be difficult to trace across the global reaction network,
+particularly when the effects occur between canonical representations of
+pathways. Researchers have primarily utilized reductionist approaches to
+understanding these systems; however, these methods are limit the scope of the
+analysis. Even the power of systems-centric -omics approaches can be limited
+when only a  handful of high magnitude signals in the data are prioritized. To
+address these challenges, we developed Metaboverse, an interactive desktop app
+for the exploration and automated extraction of potential regulatory events,
+patterns, and trends from multi-omic data within the context of the metabolic
+network and other global reaction networks. This framework will be foundational
+in increasing our ability to holistically understand static and temporal
+metabolic events and shifts and gene-metabolite intra-cooperativity.
+Metaboverse is freely available under a GPL-3.0 license at https://github.com/Metaboverse.
 ```
 Walkthroughs and additional usage information can be found in the documentation:
 ```
