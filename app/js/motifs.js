@@ -648,7 +648,7 @@ function motifSearch_Sustained(
         let magnitude_change_down;
         for (k in source_values) {
           if (source_values[k] <= -(threshold)) {
-            down_in.push(source_values[l]);
+            down_in.push(source_values[k]);
           }
         }
         for (l in target_values) {
