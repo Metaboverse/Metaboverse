@@ -2,38 +2,36 @@
 
 A Biological and Metabolic Networks Analysis Platform
 
-`WARNING: This repository is currently under development. When the software is complete and stable enough for beta testing, the alpha tag will be removed.`   
+`WARNING: This repository is currently under development. When the software is complete and stable enough for beta testing, the beta tag will be removed.`   
 To receive updates, join our mailing list by emailing `metaboverse@gmail.com`
 
 [![Build Status](https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.org/Metaboverse/Metaboverse)
 [![Documentation Status](https://readthedocs.org/projects/metaboverse/badge/?version=latest)](https://metaboverse.readthedocs.io/en/latest/?badge=latest)
 
-## Demo
-A demo version of Metaboverse can be found for MacOS [here](https://github.com/Metaboverse/Metaboverse/releases/download/metaboverse-v0.0.1b/Metaboverse-darwin-x64-demo.zip). Right-click on the Metaboverse icon within the `.zip` folder to launch Metaboverse. A mock human metabolic network is available as a `.json` file with this `.zip` folder. This can be dragged and dropped into the Metaboverse home page to explore the metabolic networks and get an idea for some of the functionality within Metaboverse. However, much more is planned.
-
 ## What does Metaboverse do?
-- Curates metabolic model
-- Maps networks or sub-networks interactively
-- Overlays selected network with transcriptomics, proteomics, and/or metabolomics data
-- Performs trend analysis across networks
-- Allows for nearest-neighbor exploration
+A current draft of the manuscript describing Metaboverse can be found here:
+```
+https://github.com/Metaboverse/manuscript/blob/master/output/manuscript.pdf
+```
+Briefly,    
+```
+Metabolism and other biological interactions and reactions are complex, each with variable inputs, outputs, and modifiers. The harmony between these factors consequently determines the health and stability of a cell or organism. Perturbations to these components often have rippling downstream effects. These effects can be difficult to trace across the global reaction network, particularly when the effects occur between canonical representations of pathways. Researchers have primarily utilized reductionist approaches to understanding these systems; however, these methods are limit the scope of the analysis. Even the power of systems-centric -omics approaches can be limited when only a  handful of high magnitude signals in the data are prioritized. To address these challenges, we developed Metaboverse, an interactive desktop app for the exploration and automated extraction of potential regulatory events, patterns, and trends from multi-omic data within the context of the metabolic network and other global reaction networks. This framework will be foundational in increasing our ability to holistically understand static and temporal metabolic events and shifts and gene-metabolite intra-cooperativity. Metaboverse is freely available under a GPL-3.0 license at [https://github.com/Metaboverse/](https://github.com/Metaboverse/).
+```
+Walkthroughs and additional usage information can be found in the documentation:
+```
+https://metaboverse.readthedocs.io/en/latest
+```
 
 ## Getting started
 
 ### Requirements
 - An internet connection for network curation
-- Python
-- PyPi
+- The Metaboverse app
 
 ### Installation
-0. For alpha-testing, download from this address:
+0. For beta-testing, download the appropriate Metaboverse app `.zip` file for your operating system from this address:
 ```
-https://github.com/Metaboverse/Metaboverse/releases/download/metaboverse-v0.0.1b/Metaboverse-darwin-x64-demo.zip
+https://github.com/Metaboverse/Metaboverse/releases/download/metaboverse-v0.1.0b/
 ```
 1. Unzip the downloaded folder
-2. Navigate into the folder and double-click the file named `Metaboverse`
-3. Drag the provided `.json` file to the appropriate input field to interact with a test network.
-
-### Other information
-- If a page seems to be malfunctioning during the alpha release stage, please press `Ctrl + r` to refresh the page, then try the operation again
-- Need to install metaboverse CLI with python
+2. Open the `Metaboverse` app
