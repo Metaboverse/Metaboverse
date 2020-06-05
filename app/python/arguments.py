@@ -32,7 +32,6 @@ from __init__ import __dependencies__
 from utils import check_directories
 from utils import check_curate
 from utils import check_analyze
-from utils import generate_log
 from utils import argument_checks
 
 __path__  =  os.path.dirname(os.path.realpath(__file__))
@@ -50,26 +49,6 @@ description_table  =  """\
         |    curate             |   Curate network with optional user data   |
         +-----------------------+--------------------------------------------+
 """
-
-"""Check dependencies
-"""
-def get_dependencies(
-        args_dict,
-        dependencies):
-
-    # Make dependencies log
-    os.system(
-        'echo \"Conda dependencies:\n===================\" >> '
-        + str(args_dict['log_loc']) + 'dependencies.log')
-
-    for d in dependencies:
-        os.system(
-            'pip freeze | grep -i \"' + str(d) + '\" >> '
-            + str(args_dict['log_loc']) + 'dependencies.log')
-
-    os.system(
-        'echo \"R dependencies:\n===================\" >> '
-        + str(args_dict['log_loc']) + 'dependencies.log')
 
 """Check arguments
 """
@@ -97,29 +76,14 @@ def check_arguments(
     or args_dict['output'].lower() == 'none':
         args_dict['output'] = args_dict['output_file'].rsplit('/', 1)[0] + '/'
 
-    args_dict = generate_log(args_dict)
+
 
     # Print out user commands to log file
-    os.system(
-        'echo \"======================\nUser commands summary:\n======================\"'
-        + str(args_dict['log']))
+    print('Metaboverse version: ' + str(__version__))
     print('======================\nUser commands summary:\n======================')
 
-    os.system(
-        'echo \"Metaboverse version: ' + str(__version__) + '\"'
-        + str(args_dict['log']))
-    print('Metaboverse version: ' + str(__version__))
-
     for key, value in args_dict.items():
-
-        os.system(
-            'echo \"' + str(key) + ': ' + str(value) + '\"'
-            + str(args_dict['log']))
         print(str(key) + ': ' + str(value))
-
-    os.system(
-        'echo \"=====================\nEnd commands summary\n=====================\n\"'
-        + str(args_dict['log']))
     print('=====================\nEnd commands summary\n=====================\n')
 
     return args_dict

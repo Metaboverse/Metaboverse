@@ -39,7 +39,6 @@ import sysconfig
 from __init__ import __version__
 from __init__ import __dependencies__
 from arguments import parse_arguments
-from arguments import get_dependencies
 from preprocess.__main__ import __main__ as preprocess
 from curate.__main__ import __main__ as curate
 from analyze.__main__ import __main__ as analyze
@@ -162,8 +161,6 @@ def main(
         raise Exception('Invalid sub-module selected')
 
     # Exit
-    # Check log file for errors and exceptions
-    #get_dependencies(args_dict)
     sys.stdout.flush()
 
 """Run main
