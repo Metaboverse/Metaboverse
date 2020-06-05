@@ -58,6 +58,8 @@ function createWindow() {
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
+
+    /*
     var userDataPath = app.getPath("userData");
     var session_file = userDataPath + "/session_data.json";
     var session = JSON.parse(fs.readFileSync(session_file).toString());
@@ -87,6 +89,7 @@ function createWindow() {
         console.log(checkboxChecked);
       });
     }
+    */
 
     fs.unlinkSync(session_file);
     mainWindow = null;
