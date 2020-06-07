@@ -59,7 +59,7 @@ function loadSessionData() {
 
     "Reaction collapse used modifiers?": "collapseWithModifiers",
     "Gene expression broadcast to missing proteins?": "broadcastGeneExpression",
-    "Blacklisted nodes": "blacklist"
+    "Blocklisted nodes": "blocklist"
   };
 
   let display = "";

@@ -81,7 +81,7 @@ window.addEventListener("load", function(event) {
           update_session_info("broadcastGeneExpression",
             data.metadata.broadcastGeneExpression);
         update_session_info("labels", data.metadata.labels);
-        update_session_info("blacklist", data.metadata.blacklist);
+        update_session_info("blocklist", data.metadata.blocklist);
         update_session_info("database_date", data.metadata.database_date);
         update_session_info("curation_date", data.metadata.curation_date);
         update_session_info("reactome_version", data.metadata.reactome_version);

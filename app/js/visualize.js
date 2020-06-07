@@ -67,7 +67,7 @@ for (l in data.links) {
 }
 data.links = update_links;
 
-data.blacklist = data.blacklist.split(",")
+data.blocklist = data.blocklist.split(",")
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);

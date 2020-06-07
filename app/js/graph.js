@@ -78,14 +78,14 @@ function checkPlotting(
   }
   let _max = Math.max(...these_degrees);
 
-  let blacklisted_node = false;
+  let blocklisted_node = false;
   for (r in rxn_comps) {
-    if (data.blacklist.includes(rxn_comps[r])) {
-      blacklisted_node = true;
+    if (data.blocklist.includes(rxn_comps[r])) {
+      blocklisted_node = true;
     }
   }
 
-  return [_max, blacklisted_node];
+  return [_max, blocklisted_node];
 }
 
 function initialize_nodes(
@@ -406,12 +406,12 @@ function parse_kNN_pathway(data, entity_id, kNN) {
                 data,
                 reaction_dictionary[reaction])
               let _max = outputs[0];
-              let blacklisted_node = outputs[1];
+              let blocklisted_node = outputs[1];
 
               if (_max > hub_value) {
                 console.log("Not plotting reaction: " + reaction_dictionary[reaction]["id"] + "; entity with too many connections.")
-              } else if (blacklisted_node === true) {
-                console.log("Not plotting reaction: " + reaction_dictionary[reaction]["id"] + "; contains blacklisted entity.")
+              } else if (blocklisted_node === true) {
+                console.log("Not plotting reaction: " + reaction_dictionary[reaction]["id"] + "; contains blocklisted entity.")
               } else {
                 components.push(reaction_dictionary[reaction]["id"]);
 
@@ -531,12 +531,12 @@ function make_graph(
     _height,
     global_motifs) {
 
-  // Final update to prevent plotting of blacklisted nodes
+  // Final update to prevent plotting of blocklisted nodes
   node_keep = [];
-  id_blacklist = [];
+  id_blocklist = [];
   for (n in new_nodes) {
-    if (data.metadata.blacklist.includes(new_nodes[n].name)) {
-      id_blacklist.push(new_nodes[n].id);
+    if (data.metadata.blocklist.includes(new_nodes[n].name)) {
+      id_blocklist.push(new_nodes[n].id);
     } else {
       node_keep.push(new_nodes[n]);
     }
@@ -544,7 +544,7 @@ function make_graph(
 
   link_keep = [];
   for (l in new_links) {
-    if (id_blacklist.includes(new_links[l].target) || id_blacklist.includes(new_links[l].source)) {
+    if (id_blocklist.includes(new_links[l].target) || id_blocklist.includes(new_links[l].source)) {
     } else {
       link_keep.push(new_links[l]);
     }

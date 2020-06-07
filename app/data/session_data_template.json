@@ -18,6 +18,7 @@
   "collapseWithModifiers": false,
   "broadcastGeneExpression": true,
   "labels": "",
+  "blocklist": "",
   "database_date": "",
   "curation_date": "",
   "reactome_version": ""

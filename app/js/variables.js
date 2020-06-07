@@ -1,4 +1,4 @@
-/*
+locklist/*
 Metaboverse
 Metaboverse is designed for analysis of metabolic networks
 https://github.com/j-berg/Metaboverse/
@@ -260,19 +260,19 @@ window.addEventListener("load", function(event) {
 
 window.addEventListener("load", function(event) {
 
-  var inputVal = document.getElementById("updateBlacklist").value;
-  update_session_info("blacklist", inputVal);
+  var inputVal = document.getElementById("updateBlocklist").value;
+  update_session_info("blocklist", inputVal);
 
-  document.getElementById("updateBlacklist").onchange = function(event) {
+  document.getElementById("updateBlocklist").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("updateBlacklist").value;
+    var inputVal = document.getElementById("updateBlocklist").value;
 
     try {
-      console.log("Your provided blacklisted entities: ", inputVal);
+      console.log("Your provided blocklisted entities: ", inputVal);
 
-      update_session_info("blacklist", inputVal);
+      update_session_info("blocklist", inputVal);
     } catch (error) {
       console.log(error);
       alert(
