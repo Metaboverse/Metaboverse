@@ -95,6 +95,21 @@ for (rxn in data.collapsed_reaction_dictionary) {
   reaction_entity_dictionary[r.id] = entities;
 }
 
+var update_nodes = {};
+for (n in data.nodes) {
+  update_nodes[data.nodes[n].id] = data.nodes[n];
+}
+data.nodes = update_nodes;
+
+var update_links = {};
+for (l in data.links) {
+  let link_id = data.links[l].source + "," + data.links[l].target;
+  update_links[link_id] = data.links[l];
+}
+data.links = update_links;
+
+data.blocklist = data.blocklist.split(",")
+
 // Initialize slider if timecourse
 if (timecourse === true) {
   d3.select("circle#dot")

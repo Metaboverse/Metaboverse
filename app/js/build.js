@@ -1,4 +1,4 @@
-blocklist/*
+/*
 Metaboverse
 Metaboverse is designed for analysis of metabolic networks
 https://github.com/j-berg/Metaboverse/
