@@ -532,11 +532,21 @@ function make_graph(
     global_motifs) {
 
   // Final update to prevent plotting of blocklisted nodes
-  node_keep = [];
   id_blocklist = [];
+  if (graph_genes === false) {
+    for (n in new_nodes) {
+      if (new_nodes[n].type === "gene_component") {
+        id_blocklist.push(new_nodes[n].id)
+      }
+    }
+  }
+
+  node_keep = [];
   for (n in new_nodes) {
-    if (data.metadata.blocklist.includes(new_nodes[n].name)) {
+    if (data.metadata.blocklist.split(",").includes(new_nodes[n].name)) {
       id_blocklist.push(new_nodes[n].id);
+    } else if (id_blocklist.includes(new_nodes[n].id)) {
+
     } else {
       node_keep.push(new_nodes[n]);
     }
@@ -544,14 +554,16 @@ function make_graph(
 
   link_keep = [];
   for (l in new_links) {
+
     if (id_blocklist.includes(new_links[l].target) || id_blocklist.includes(new_links[l].source)) {
+    } else if (id_blocklist.includes(new_links[l].target.id) || id_blocklist.includes(new_links[l].source.id)) {
     } else {
       link_keep.push(new_links[l]);
     }
   }
 
-  new_nodes = node_keep;
-  new_links = link_keep;
+  graph_nodes = node_keep;
+  graph_links = link_keep;
 
   // Restart graph
   d3.selectAll("#svg_viewer_id").remove();
@@ -587,11 +599,11 @@ function make_graph(
   const forceY = d3.forceY(_height / 2).strength(0.015);
 
   const simulation = d3
-    .forceSimulation(new_nodes)
+    .forceSimulation(graph_nodes)
     .force(
       "link",
       d3
-        .forceLink(new_links)
+        .forceLink(graph_links)
         .id(d => d.id)
         .distance(40)
         .strength(1)
@@ -670,7 +682,7 @@ function make_graph(
   var link = svg_viewer
     .append("g")
     .selectAll("path")
-    .data(new_links)
+    .data(graph_links)
     .enter()
     .append("path")
     .attr("class", function(d) {
@@ -682,7 +694,7 @@ function make_graph(
 
   var node = svg_viewer
     .selectAll(".node")
-    .data(new_nodes)
+    .data(graph_nodes)
     .enter()
     .append("g")
     .attr("class", "node")
@@ -739,7 +751,7 @@ function make_graph(
         motif_ids.push(global_motifs[key].id)
       }
       if (motif_ids.length > 0) {
-        new_nodes.forEach(node=>{
+        graph_nodes.forEach(node=>{
           let rxn_id = node.id;
           if (motif_ids.includes(rxn_id)) {
             d3.selectAll("circle#" + rxn_id)
@@ -753,7 +765,7 @@ function make_graph(
   } else {
     if (global_motifs[sample] !== undefined) {
       if (global_motifs[sample].length > 0) {
-        new_nodes.forEach(node=>{
+        graph_nodes.forEach(node=>{
           let rxn_id = node.id;
           if (global_motifs[sample].includes(rxn_id)) {
             d3.selectAll("circle#" + rxn_id)
@@ -787,13 +799,13 @@ function make_graph(
     return category_key
   }
 
-  var categories = getCategories(new_nodes);
+  var categories = getCategories(graph_nodes);
   var fill = d3.schemeCategory10;
 
   hullg.selectAll("path.hull").remove();
   hull = hullg
     .selectAll("path.hull")
-      .data(convexHulls(new_nodes, new_links, getGroup, offset))
+      .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
     .enter().append("path")
       .attr("class", "hull")
       .attr("d", drawCluster)
@@ -898,7 +910,7 @@ function make_graph(
       toggle_comp = true;
       hull = hullg
         .selectAll("path.hull")
-          .data(convexHulls(new_nodes, new_links, getGroup, offset))
+          .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
         .enter().append("path")
           .attr("class", "hull")
           .attr("d", drawCluster)
@@ -1063,72 +1075,22 @@ function make_graph(
   d3.select("#toggleGenes").on("click", function() {
     if (graph_genes === false) {
       graph_genes = true;
-      new_nodes = saved_nodes;
-      new_links = saved_links;
-
-      make_graph(
-        data,
-        new_nodes,
-        new_links,
-        type_dict,
-        node_dict,
-        entity_id_dict,
-        display_analytes_dict,
-        display_reactions_dict,
-        selector,
-        _width,
-        _height,
-        global_motifs)
     } else {
       graph_genes = false;
-      saved_nodes = new_nodes;
-      saved_links = new_links;
-
-      var newer_components = [];
-      for (x in new_nodes) {
-        if (
-          new_nodes[x]["type"] !== "gene_component" &&
-          new_nodes[x]["sub_type"] !== "gene"
-        ) {
-          if (data.degree_dictionary[new_nodes[x]["id"]] <= hub_value) {
-            newer_components.push(new_nodes[x]["id"]);
-          }
-        }
-      }
-
-      var newer_elements = get_nodes_links(data, newer_components);
-      var newer_nodes = newer_elements[0];
-      var newer_links = newer_elements[1];
-
-      // Initialize variables
-      var new_node_dict = {};
-      var new_type_dict = {};
-
-      var new_node_elements = initialize_nodes(
-        newer_nodes,
-        new_node_dict,
-        new_type_dict
-      );
-      var new_node_dict = new_node_elements[0];
-      var new_type_dict = new_node_elements[1];
-      var new_display_analytes_dict = new_node_elements[2];
-      var new_display_reactions_dict = new_node_elements[3];
-      var new_entity_id_dict = new_node_elements[4];
-
-      make_graph(
-        data,
-        newer_nodes,
-        newer_links,
-        new_type_dict,
-        new_node_dict,
-        new_entity_id_dict,
-        new_display_analytes_dict,
-        new_display_reactions_dict,
-        selector,
-        _width,
-        _height,
-        global_motifs)
     }
+    make_graph(
+      data,
+      new_nodes,
+      new_links,
+      type_dict,
+      node_dict,
+      entity_id_dict,
+      display_analytes_dict,
+      display_reactions_dict,
+      selector,
+      _width,
+      _height,
+      global_motifs)
   });
 
   d3.select("#collapseNodes").on("click", function() {
@@ -1250,7 +1212,7 @@ function make_graph(
     text
       .attr("transform", transform);
     hull
-      .data(convexHulls(new_nodes, new_links, getGroup, offset))
+      .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
       .attr("d", drawCluster);
   }
 
@@ -1325,7 +1287,7 @@ function parseEntities(nodes) {
 // Graphing
 function change() {
 
-  if (data.metadata.transcriptomics !== null) {
+  if (data.metadata.transcriptomics !== "None") {
     graph_genes = true;
   } else {
     graph_genes = false;
