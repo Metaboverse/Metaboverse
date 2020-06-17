@@ -58,6 +58,10 @@ class MetaGraph{
     )
     this.path_mapper = graphdata.motif_reaction_dictionary
 
+    console.log(this.path_mapper)
+    console.log(this.collapsed_reaction_dict)
+
+
     // Generate expression and stats dictionaries
     let expression_dict = {};
     let stats_dict = {};
@@ -76,6 +80,13 @@ class MetaGraph{
     this.categories = graphdata.categories;
     this.labels = graphdata.labels;
     timecourse = checkCategories(this.categories, this.labels);
+
+    let superPaths = make_superPathway_dictionary(graphdata);
+    let superPathList = [];
+    for (let k in superPaths) {
+      superPathList.push(superPaths[k].pathway_id);
+    }
+    this.superPathwayDict = superPathList;
 
     // Generate stamp view output
     try {
@@ -546,7 +557,8 @@ class MetaGraph{
           'none': []
         };
         motif_list.forEach(m=>{
-          if(m.p_values.source <= 0.05 && m.p_values.target <= 0.05){
+          if (m.p_values === undefined) {
+          } else if (m.p_values.source <= 0.05 && m.p_values.target <= 0.05){
             m.significance_type = 'Both significant';
             motif_significance.both.push(m);
           } else if(m.p_values.source <= 0.05) {
@@ -574,6 +586,10 @@ class MetaGraph{
           motif_significance.none);
       }
 
+
+      console.log(motif_list)
+
+
       let stamp_height = 50;
       this.stamp_svg_height = Math.ceil(
         motif_list.length / 3)
@@ -591,7 +607,15 @@ class MetaGraph{
         .attr("y",(d,i)=>this.stamp_svg_margin.top + Math.floor(i/3)*(stamp_height+this.stamp_svg_margin.vertical))
         .attr("width",stamp_width)
         .attr("height",stamp_height)
-        .attr("fill","lightgray")
+        .attr("fill",d=>{
+          if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
+            return "green";
+          } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
+            return "orange";
+          } else {
+            return "lightgrey";
+          }
+        })
         .attr("id",(d)=>"stamp-cover-"+d.id)
         .style("opacity",0)
         .on("click",(d)=>{
@@ -753,7 +777,6 @@ class MetaGraph{
         }
       }
 
-      console.log(motif_dict)
       let stamp_height = 30;
       this.stamp_svg_height = Math.ceil(
         motif_list.length)
@@ -949,7 +972,14 @@ class MetaGraph{
         .style("font-weight","bold")
 
       // **** draw pathway glyph ****
-      let pathway_list = motif.pathways;
+      let pathway_list_pre = [...new Set(motif.pathways)];
+      let pathway_list = [];
+      for (let path in pathway_list_pre) {
+        if (!this.superPathwayDict.includes(pathway_list_pre[path])) {
+          pathway_list.push(pathway_list_pre[path]);
+        }
+      }
+
       let pathway_height = 20;
       let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
       this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
@@ -969,10 +999,14 @@ class MetaGraph{
         .attr("id",(d)=>"mp-cover-"+d)
         .style("opacity",0)
         .on("click",(d)=>{
-          console.log(d)
-          console.log(motif_list)
-          this.drawPathwayView(d, "#pathway-view-svg", motif_list);
-          this.findAllMotif(d, this.motif[indexer]);
+          if (d.length !== 0) {
+            this.drawPathwayView(d, "#pathway-view-svg", motif_list);
+            this.findAllMotif(d, this.motif[indexer]);
+          } else {
+            this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
+            this.findAllMotif(motif, this.motif[indexer]);
+          }
+
           d3.select("#pathway-view-svg").style("visibility","visible");
           d3.select(".network-panel").style("visibility","visible");
 
@@ -1002,18 +1036,28 @@ class MetaGraph{
       ptg = ptg.enter().append("text").merge(ptg)
         .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+10)
         .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
-        .text(d=>this.mod_collapsed_pathways[d].name.substring(0,24))
+        .text(d=>{
+          if (pathway_list[0].length === 0) {
+            return "View collapsed reaction";
+          } else {
+            return this.mod_collapsed_pathways[d].name.substring(0,24);
+          }
+        })
         .style("font-size",9)
     }
 
     drawPathwayView(p, selector, motif_list) {
 
-      console.log(motif_list)
       graph_genes = true;
       collapse_reactions = true;
-      var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
 
-      update_session_info("current_pathway", p);
+      if (typeof(p) === "string") {
+        var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
+        update_session_info("current_pathway", p);
+      } else {
+        var motif_reactions = [p.id];
+        update_session_info("current_pathway", null);
+      }
 
       // Parse through each reaction listed and get the component parts
       let components = [];
@@ -1072,29 +1116,38 @@ class MetaGraph{
 
     findAllMotif(pathway, motif_list){
 
+      console.log(pathway)
+
       d3.select(".network-panel").style("visibility","visible");
-      let current_pathway = this.mod_collapsed_pathways[pathway].name;
-      document.getElementById("pathway_name").innerHTML = "<h6><b>" + current_pathway + "</b></h6>" ;
 
-      let motif_id = [];
-      motif_list.forEach(m=>{
-        motif_id.push(m.id);
-      })
-      let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
       let current_motif = [];
-      pathway_list.forEach(react_id=>{
-        if(motif_id.indexOf(react_id)!=-1){
-          current_motif.push(react_id);
-        }
-      })
-      current_motif.forEach(react_id=>{
-        d3.selectAll("circle#" + react_id)
-          .style("r", "16px")
-          .style("stroke", "purple")
-          .style("stroke-width", "5px")
+      if (typeof(pathway) === "string") {
+        let current_pathway = this.mod_collapsed_pathways[pathway].name;
+        document.getElementById("pathway_name").innerHTML = "<h6><b>" + current_pathway + "</b></h6>" ;
 
-      })
-      this.showMotifNames(current_motif);
+        let motif_id = [];
+        motif_list.forEach(m=>{
+          motif_id.push(m.id);
+        })
+        let pathway_list = this.mod_collapsed_pathways[pathway].reactions;
+
+        pathway_list.forEach(react_id=>{
+          if(motif_id.indexOf(react_id)!=-1){
+            current_motif.push(react_id);
+          }
+        })
+        current_motif.forEach(react_id=>{
+          d3.selectAll("circle#" + react_id)
+            .style("r", "16px")
+            .style("stroke", "purple")
+            .style("stroke-width", "5px")
+
+        })
+        this.showMotifNames(current_motif);
+      } else {
+        current_motif = pathway.name.split(" // ");
+        this.showCollapsedNames(current_motif);
+      }
     }
 
     showMotifNames(current_motif) {
@@ -1108,10 +1161,20 @@ class MetaGraph{
         .html(d => "- " + this.collapsed_reaction_dict[d].name)
     }
 
+    showCollapsedNames(current_motif) {
+
+      let tg = d3.select("#all-motif-list")
+        .select("ul")
+        .selectAll("li")
+        .data(current_motif);
+      tg.exit().remove();
+      tg = tg.enter().append("li").merge(tg)
+        .html(d => "- " + d)
+    }
+
     createId(id){
       return id.replace(/[^a-zA-Z0-9]/g, "")
     }
-
 }
 
 function reset_dot() {
@@ -1143,6 +1206,8 @@ function highlight_selection(_selector) {
     "#avg_num", //avg_num
     "#maxmax_num", //maxmax_num
     "#maxmin_num", //maxmin_num
+    "#minmax_num", //minmax_num
+    "#minmin_num", //minmin_num
     "#sustained_num", //sustained_num
     "#pathmax_num", //pathmax_num
     "#pathcov_num", //pathcov_num
