@@ -7,8 +7,8 @@ Instructions for building OS-specific python distribution:
 0) `conda config --add channels bioconda`
 1) `conda config --add channels conda-forge`
 2) `conda update python; conda update conda; conda install pyinstaller`
-3) `conda install pandas numpy scipy scikit-learn matplotlib networkx`
-4) Go to `python` directory in `metaboverse-cli`
+3) `conda install pandas numpy scipy scikit-learn matplotlib networkx requests`
+4) Go to `metaboverse_cli` directory in `metaboverse-cli`
 5) On each operating system:
   pyinstaller metaboverse-mac.spec
   mv dist/metaboverse-mac .
