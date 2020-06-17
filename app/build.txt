@@ -8,7 +8,7 @@ Instructions for building OS-specific python distribution:
 1) `conda config --add channels conda-forge`
 2) `conda update python; conda update conda; conda install pyinstaller`
 3) `conda install pandas numpy scipy scikit-learn matplotlib networkx`
-4) Go to `python` directory
+4) Go to `python` directory in `metaboverse-cli`
 5) On each operating system:
   pyinstaller metaboverse-mac.spec
   mv dist/metaboverse-mac .
@@ -27,10 +27,10 @@ Instructions for building app for distribution:
 1) Go to `app` directory
 1.1) If modules not installed, run 'npm install electron --save-dev'
 1.2) Update version at `package.json` and `__version__.txt`
-2) Package python code as executable
+2) Package python code as executable for each OS
 3) Run:
-  `electron-packager ./ Metaboverse --platform=darwin`
-  `electron-packager ./ Metaboverse --all --icon=data/icon/metaboverse_logo.icns`
+  `electron-packager ./ Metaboverse --platform=darwin,linux,win32 --icon=data/icon/metaboverse_logo.icns`
+4) For each executable, open "Get Info" and drag and drop .icns file for each icon
 
 If modules not installed:
 -------------------------

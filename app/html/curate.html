@@ -72,10 +72,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           </center>
         </b>
     </p>
-
-    <br>
-    <br>
-
+    <br />
     <center>
       <font size="3">
         Load a pre-existing <b>organism</b> database (ends in .pickle)
@@ -99,16 +96,19 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br />
         <br />
         <br />
-        <br />
         <p>Select the organism you would like to analyze:</p>
         <select id="speciesMenu" onchange="selectOrganism()"></select>
+        <br />
+        <br />
+        <br />
+        <br />
+        <b><i>AND</i></b>
         <br />
         <br />
         <br />
         <p>Click on the folder to select output location:
           <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
         </p>
-
         <div id="dropDatabase" onclick="document.getElementById('output-input').click();" style="width: 140px;">
           <font size="1">
             Select Output File Name
@@ -121,13 +121,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
         <br />
         <br />
-
       </font>
       <br />
     </center>
 
     <p>
       <center>
+        <br />
         <div id="content"></div>
 
         <script>

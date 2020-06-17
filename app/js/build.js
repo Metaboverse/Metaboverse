@@ -147,9 +147,15 @@ runBuild = function(_callback) {
     let blocklist = getArgument("blocklist");
     blocklist = blocklist.replace(/\s/g,'');
     if (String(curated) !== "None") {
+      let db_url;
+      if (String(getArgument("database_url")) === "None") {
+        db_url = "find";
+      } else {
+        db_url = getArgument("database_url");
+      }
       graphDictionary = {
         output: getArgument("output"),
-        output_file: "find",
+        output_file: db_url,
         species_id: "find",
         organism_curation: curated,
         transcriptomics: getArgument("transcriptomics"),

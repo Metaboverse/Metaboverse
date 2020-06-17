@@ -46,7 +46,7 @@ function createWindow() {
     dependencies: {
       zerorpc: "fyears/zerorpc-node"
     },
-    icon: __dirname + "/data/icon/metaboverse_logo.iconset/icon_64x64.png"
+    icon: path.join(__dirname, "data/icon/metaboverse_logo.icns")
   });
 
   // and load the index.html of the app.
