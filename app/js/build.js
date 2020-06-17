@@ -208,7 +208,14 @@ runBuild = function(_callback) {
 function displayOptions() {
   update_session_info("current_pathway", null);
   database_url = get_session_info("database_url");
-  var data = JSON.parse(fs.readFileSync(database_url).toString());
+  try {
+    var data = JSON.parse(fs.readFileSync(database_url).toString());
+  } catch(e) {
+    alert('Failed to open: \n' + database_url)
+    var elem = document.getElementById("progressBar");
+    elem.style.width = "0%";
+    elem.innerHTML = "0%";
+  }
   update_session_info("max_value", data.metadata.max_value);
   update_session_info("max_stat", data.metadata.max_stat);
   update_session_info("database_date", data.metadata.database_date);

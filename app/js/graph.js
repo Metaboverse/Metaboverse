@@ -378,6 +378,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
     document.getElementById("warning_line_1").innerHTML =
       '<i style="color: red;">Too many entities to plot</i><br><i style="color: red;">Will not plot</i>';
     document.getElementById("warning_line_2").innerHTML = "<br>";
+    alert("Too many entities to plot")
     kNN = 0;
     nn_components = [];
   }
@@ -463,6 +464,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
           n +
           " neighborhood(s)</i>";
         document.getElementById("warning_line_2").innerHTML = "";
+        alert("Too many entities to plot. Will only plot first " + n + " neighborhood(s)")
         n = kNN + 2;
       } else {
         nn_components = nn_components.concat(components);

@@ -30,7 +30,12 @@ var _height = window.innerHeight - 75;
 database_url = get_session_info("database_url");
 console.log("Database path: " + database_url);
 
-var data = JSON.parse(fs.readFileSync(database_url).toString());
+try {
+  var data = JSON.parse(fs.readFileSync(database_url).toString());
+} catch(e) {
+  alert('Failed to open: \n' + database_url)
+}
+
 var pathway_dict = make_pathway_dictionary(
   data,
   'pathway_dictionary');

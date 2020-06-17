@@ -798,7 +798,7 @@ class MetaGraph{
           .attr("id",(d)=>"stamp-cover-"+d.id)
           .style("opacity",0)
           .on("click",(d)=>{
-            document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>" ;
+            document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
             this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
             d3.select("#pathway-view-svg").style("visibility","visible");
             d3.select(".network-panel").style("visibility","visible");
@@ -1003,6 +1003,7 @@ class MetaGraph{
             this.drawPathwayView(d, "#pathway-view-svg", motif_list);
             this.findAllMotif(d, this.motif[indexer]);
           } else {
+            document.getElementById("pathway_name").innerHTML = "<h6><b>Collapsed Reaction</h6></b>";
             this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
             this.findAllMotif(motif, this.motif[indexer]);
           }
@@ -1116,8 +1117,6 @@ class MetaGraph{
 
     findAllMotif(pathway, motif_list){
 
-      console.log(pathway)
-
       d3.select(".network-panel").style("visibility","visible");
 
       let current_motif = [];
@@ -1201,6 +1200,8 @@ function reset_all() {
 }
 
 function highlight_selection(_selector) {
+
+  document.getElementById("pathway_name").innerHTML = "<h6><b> </b></h6>"
 
   let _selectors = [
     "#avg_num", //avg_num

@@ -37,7 +37,11 @@ collapse_reactions = true;
 database_url = get_session_info("database_url");
 console.log("Database path: " + database_url);
 
-var data = JSON.parse(fs.readFileSync(database_url).toString());
+try {
+  var data = JSON.parse(fs.readFileSync(database_url).toString());
+} catch(e) {
+  alert('Failed to open: \n' + database_url)
+}
 var superPathwayDict = make_superPathway_dictionary(data);
 var global_motifs = gatherMotifs(data, data.categories);
 timecourse = checkCategories(data.categories, data.labels); //, data.names);
