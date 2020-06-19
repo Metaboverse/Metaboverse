@@ -586,10 +586,6 @@ class MetaGraph{
           motif_significance.none);
       }
 
-
-      console.log(motif_list)
-
-
       let stamp_height = 50;
       this.stamp_svg_height = Math.ceil(
         motif_list.length / 3)
@@ -599,6 +595,7 @@ class MetaGraph{
       let stamp_width = this.stamp_svg_width / 3
         - this.stamp_svg_margin.horizontal;
 
+      let clicked_stamp_reaction;
       let sg = this.stamp_svg_selection_group.selectAll("rect")
         .data(motif_list);
       sg.exit().remove();
@@ -619,6 +616,12 @@ class MetaGraph{
         .attr("id",(d)=>"stamp-cover-"+d.id)
         .style("opacity",0)
         .on("click",(d)=>{
+          for (let rxn in motif_list) {
+            if (motif_list[rxn].id !== d.id) {
+              d3.select("#stamp-cover-" + motif_list[rxn].id).style("opacity",0);
+            }
+          }
+          clicked_stamp_reaction = d.id;
           this.drawMotifPathway(d, indexer, motif_list);
           d3.select("#motif-pathway-svg").style("visibility","visible");
         })
@@ -626,7 +629,9 @@ class MetaGraph{
           d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
         })
         .on("mouseout",(d)=>{
-          d3.select("#stamp-cover-"+d.id).style("opacity",0);
+          if (d.id !== clicked_stamp_reaction) {
+            d3.select("#stamp-cover-" + d.id).style("opacity",0);
+          }
         });
 
       let fg = this.stamp_svg_frame_group.selectAll("rect")
@@ -786,6 +791,7 @@ class MetaGraph{
       let stamp_width = this.stamp_svg_width
         - this.stamp_svg_margin.horizontal - 5;
 
+      let clicked_stamp_reaction;
       let sg = this.stamp_svg_selection_group.selectAll("rect")
         .data(motif_list);
         sg.exit().remove();
@@ -798,6 +804,12 @@ class MetaGraph{
           .attr("id",(d)=>"stamp-cover-"+d.id)
           .style("opacity",0)
           .on("click",(d)=>{
+            for (let rxn in motif_list) {
+              if (motif_list[rxn].id !== d.id) {
+                d3.select("#stamp-cover-" + motif_list[rxn].id).style("opacity",0);
+              }
+            }
+            clicked_stamp_reaction = d.id;
             document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
             this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
             d3.select("#pathway-view-svg").style("visibility","visible");
@@ -807,7 +819,9 @@ class MetaGraph{
             d3.select("#stamp-cover-" + d.id).style("opacity",0.4);
           })
           .on("mouseout",(d)=>{
-            d3.select("#stamp-cover-" + d.id).style("opacity",0);
+            if (d.id !== clicked_stamp_reaction) {
+              d3.select("#stamp-cover-" + d.id).style("opacity",0);
+            }
           })
 
       let fg = this.stamp_svg_frame_group.selectAll("rect")
@@ -987,6 +1001,7 @@ class MetaGraph{
 
       let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
 
+      let clicked_stamp_pathway;
       let sg = this.mp_selection_group.selectAll("rect")
         .data(pathway_list);
       sg.exit().remove();
@@ -999,6 +1014,12 @@ class MetaGraph{
         .attr("id",(d)=>"mp-cover-"+d)
         .style("opacity",0)
         .on("click",(d)=>{
+          for (let path in pathway_list) {
+            if (pathway_list[path] !== d) {
+              d3.select("#mp-cover-" + pathway_list[path]).style("opacity",0);
+            }
+          }
+          clicked_stamp_pathway = d;
           if (d.length !== 0) {
             this.drawPathwayView(d, "#pathway-view-svg", motif_list);
             this.findAllMotif(d, this.motif[indexer]);
@@ -1007,16 +1028,16 @@ class MetaGraph{
             this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
             this.findAllMotif(motif, this.motif[indexer]);
           }
-
           d3.select("#pathway-view-svg").style("visibility","visible");
           d3.select(".network-panel").style("visibility","visible");
-
         })
         .on("mouseover",(d)=>{
           d3.select("#mp-cover-" + d).style("opacity",0.4);
         })
         .on("mouseout",(d)=>{
-          d3.select("#mp-cover-" + d).style("opacity",0);
+          if (d !== clicked_stamp_pathway) {
+            d3.select("#mp-cover-" + d).style("opacity",0);
+          }
         })
 
       let fg = this.mp_pathway_group.selectAll("rect")
