@@ -41,7 +41,7 @@ var progress_format = progress_file.replace(" ", replacer)
 
 var scriptFilename;
 if (navigator.appVersion.indexOf("Win") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-win");
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-win.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
   scriptFilename = path.join(__dirname, "../python", "metaboverse-mac");
 } else if (navigator.appVersion.indexOf("X11") != -1) {

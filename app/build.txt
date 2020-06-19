@@ -29,7 +29,9 @@ Instructions for building app for distribution:
 1.2) Update version at `package.json` and `__version__.txt`
 2) Package python code as executable for each OS
 3) Run:
-  `electron-packager ./ Metaboverse --platform=darwin,linux,win32 --icon=data/icon/metaboverse_logo.icns`
+  -  `electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-mac --ignore=metaboverse-linux --overwrite`
+  - `electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-win --ignore=metaboverse-linux --overwrite`
+  - `electron-packager ./ Metaboverse --platform=linux --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-mac --ignore=metaboverse-win --overwrite`
 4) For each executable, open "Get Info" and drag and drop .icns file for each icon
 
 If modules not installed:

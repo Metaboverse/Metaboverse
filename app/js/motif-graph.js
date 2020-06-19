@@ -616,6 +616,10 @@ class MetaGraph{
         .attr("id",(d)=>"stamp-cover-"+d.id)
         .style("opacity",0)
         .on("click",(d)=>{
+          document.getElementById("pathway_name").innerHTML = "<h6><b></b></h6>";
+          d3.select("#pathway-view-svg").style("visibility","hidden");
+          d3.select(".network-panel").style("visibility","hidden");
+
           for (let rxn in motif_list) {
             if (motif_list[rxn].id !== d.id) {
               d3.select("#stamp-cover-" + motif_list[rxn].id).style("opacity",0);
@@ -764,8 +768,6 @@ class MetaGraph{
     }
 
     drawMotifSearchResultPathway(motif_list) {
-      //Change this to sort by p-values
-
       // modifier for path coverage motif
       var coverage_true = false;
       var motif_dict = {};
@@ -1117,7 +1119,7 @@ class MetaGraph{
       var display_reactions_dict = node_elements[3];
       var entity_id_dict = node_elements[4];
 
-      var _width = 0.45 * (window.innerWidth);
+      var _width = (0.45 * window.innerWidth) + 50;
       var _height = 570;
 
       make_graph(
