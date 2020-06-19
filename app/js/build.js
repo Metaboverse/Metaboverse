@@ -36,8 +36,8 @@ var progress_file = userDataPath + "/progress_log.json"
 //  for
 //}
 var replacer = String(String.fromCharCode(92) + " ");
-var session_format = session_file.replace(" ", replacer)
-var progress_format = progress_file.replace(" ", replacer)
+var session_format = session_file.replace(/ /g, replacer)
+var progress_format = progress_file.replace(/ /g, replacer)
 
 var scriptFilename;
 if (navigator.appVersion.indexOf("Win") != -1) {

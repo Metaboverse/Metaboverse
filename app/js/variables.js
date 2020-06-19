@@ -243,11 +243,13 @@ window.addEventListener("load", function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("updateExperimentName").value.split(".");
+    var inputVal = document.getElementById("updateExperimentName").value
+        //.split(".");
 
     try {
+      var replacer = String(String.fromCharCode(92) + " ");
+      var inputVal = inputVal.replace(/ /g, replacer)
       console.log("Your provided experiment name: ", inputVal);
-
       update_session_info("experiment_name", inputVal);
     } catch (error) {
       console.log(error);
