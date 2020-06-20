@@ -889,17 +889,26 @@ function make_graph(
           + "</tspan>"
         );
       } else {
-        return (
-          "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
-          + d.name
-          + "</tspan>"
-          + "<tspan x='16' y='.7em'>Value: "
-          + parseFloat(d.values[sample]).toFixed(2)
-          + "</tspan>"
-          + "<tspan x='16' y='1.7em'>Statistic: "
-          + parseFloat(d.stats[sample]).toFixed(2)
-          + "</tspan>"
-        );
+        if (d.values[sample] === null
+        && d.stats[sample] === null) {
+          return (
+            "<tspan dx='16' y='0em' style='font-weight: bold;'>"
+            + d.name
+            + "</tspan>"
+          );
+        } else {
+          return (
+            "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+            + d.name
+            + "</tspan>"
+            + "<tspan x='16' y='.7em'>Value: "
+            + parseFloat(d.values[sample]).toFixed(2)
+            + "</tspan>"
+            + "<tspan x='16' y='1.7em'>Statistic: "
+            + parseFloat(d.stats[sample]).toFixed(2)
+            + "</tspan>"
+          );
+        }
       }
     });
 
