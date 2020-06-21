@@ -10,21 +10,22 @@ A current draft of the manuscript describing Metaboverse can be found [here](htt
 
 Briefly,    
 ```
-Metabolism and its component reactions are complex, each with variable inputs,
-outputs, and modifiers. The harmony between these factors consequently
-determines the health and stability of a cell or organism. Perturbations to any
-component of a reaction can have rippling downstream effects, which can be
-difficult to trace across the global reaction network, particularly when the
-effects occur between canonical representations of pathways. Researchers have
-primarily utilized reductionist approaches to understand metabolic reaction
-systems; however, customary methods often limit the scope of the analysis. Even
-the power of systems-centric omics approaches can be limited when only a
-handful of high magnitude signals in the data are prioritized. To address these
-challenges, we developed Metaboverse, an interactive tool for the exploration
-and automated extraction of potential regulatory events, patterns, and trends
-from multi-omic data within the context of the metabolic network and other
-global reaction networks. This framework will be foundational in increasing our
-ability to holistically understand static and temporal metabolic events and
+Metabolism and its component reactions are complex, each with variable
+inputs, outputs, and modifiers. The harmony between these factors
+consequently determines the health and stability of a cell or organism.
+Perturbations to any component of a reaction can have rippling downstream
+effects, which can be difficult to trace across the global reaction network,
+particularly when the effects occur between canonical representations of
+pathways. Researchers have primarily utilized reductionist approaches to
+understand metabolic reaction systems; however, customary methods often
+limit the scope of the analysis. Even the power of systems-centric omics
+approaches can be limited when only a handful of high magnitude signals in
+the data are prioritized. To address these challenges, we developed
+Metaboverse, an interactive tool for the exploration and automated extraction
+of potential regulatory events, patterns, and trends from multi-omic data
+within the context of the metabolic network and other global reaction
+networks. This framework will be foundational in increasing our ability to
+holistically understand static and temporal metabolic events and
 perturbations as well as gene-metabolite intra-cooperativity.
 ```
 Walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
