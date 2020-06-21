@@ -44,6 +44,7 @@
     "plotly.js-dist": "^1.54.1",
     "save-svg-as-png": "^1.4.17",
     "string-pixel-width": "^1.10.0",
-    "unpickle": "^0.2.0"
+    "unpickle": "^0.2.0",
+    "xvfb": "^0.3.0"
   }
 }

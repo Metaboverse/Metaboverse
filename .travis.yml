@@ -21,4 +21,4 @@ before_script:
 
 script:
   - cd app
-  - npm test
+  - xvfb-run npm test
