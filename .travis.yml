@@ -1,11 +1,9 @@
 language: node_js
 node_js:
-  - node
-  - "14"
-  - "13"
   - "12"
   - "11"
   - "10"
+  - "9"
 dist: xenial
 
 before_install:
