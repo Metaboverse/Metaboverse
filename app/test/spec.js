@@ -1,6 +1,4 @@
-const Application = require('spectron').Application
 const assert = require('assert')
-const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
 
 let graph_loc = path.join(__dirname, '../js/graph.js')
