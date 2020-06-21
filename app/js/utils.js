@@ -27,8 +27,6 @@ var app = require("electron").remote.app;
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
 
-console.log(session_file);
-
 function write_json(session_data) {
   fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {
     if (err) throw err;

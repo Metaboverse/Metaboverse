@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "test": "node test.js",
+    "test": "mocha",
     "start": "electron ."
   },
   "resolutions": {
@@ -26,6 +26,7 @@
     "electron": "^8.1.1",
     "jquery": "^3.5.0",
     "minimist": "^1.2.5",
+    "mocha": "^8.0.1",
     "wine": "^0.9.13",
     "zerorpc": "^0.9.8"
   },

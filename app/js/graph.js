@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var d3 = require("d3");
 var fs = require("fs");
 var saveSVG = require("save-svg-as-png");
+var assert = require('assert')
 
 const hullPadding = 60;
 const max_nodes = 1500;
@@ -39,8 +40,15 @@ var collapsed_nodes = [];
 var collapsed_links = [];
 
 function test() {
-  console.log('hi');
+  describe('graph.js', function () {
+    describe('kNN()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      });
+    });
+  });
 };
+module.exports = test
 
 function checkReaction(
     reaction,

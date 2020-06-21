@@ -21,6 +21,18 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+var assert = require('assert');
+function test() {
+  describe('motifs.js', function () {
+    describe('modifiersChecked()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      });
+    });
+  });
+};
+module.exports = test
+
 var eval_modifiers = false;
 var excl_hubs = false;
 var hub_threshold = 100;
