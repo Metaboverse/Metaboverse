@@ -41,15 +41,15 @@ var progress_format = progress_file.replace(/ /g, replacer)
 
 var scriptFilename;
 if (navigator.appVersion.indexOf("Win") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-win.exe");
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-win.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-mac");
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-mac");
 } else if (navigator.appVersion.indexOf("X11") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-mac");
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-mac");
 } else if (navigator.appVersion.indexOf("Linux") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-linux");
+  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-linux");
 } else {
-  scriptFilename = path.join(__dirname, "../python", "__main__.py");
+  console.log("Unable to locate metaboverse-cli binary")
 }
 
 fs.copyFile(
