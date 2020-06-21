@@ -1,34 +1,21 @@
-language: python
-python:
-  - 2.7
-  - 3.5
-  - 3.6
-  - 3.7
-dist: xenial
+language: node_js
+node_js:
+  - node
+  - "14"
+  - "13"
+  - "12"
+  - "11"
+  - "10"
 
 before_install:
 - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
 
 install:
-- pip install -r requirements.txt
-- pip install codecov
-- pip install .
-- python setup.py install
+- npm install electron --save-dev
+- npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
 
 before_script:
 
 script:
-- coverage run tests/__main__.py
-#- coverage run -a tests/format_test.py
-
-#after_success:
-#- codecov
-
-#deploy:
-#  provider: pypi
-#  user: j-berg
-#  password:
-#    secure:
-#  skip_existing: true
-#  on:
-#    tags: true
+- cd app
+- npm test
