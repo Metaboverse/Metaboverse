@@ -20,22 +20,241 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-var assert = require('assert');
-function test() {
-  describe('motifs.js', function () {
-    describe('modifiersChecked()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      });
-    });
-  });
-};
-module.exports = test
-
 var eval_modifiers = false;
 var excl_hubs = false;
 var hub_threshold = 100;
+
+function test() {
+  var assert = require('assert');
+  var { JSDOM } = require('jsdom');
+  var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+  var { window } = jsdom;
+  $ = global.jQuery = require('jquery')(window);
+
+  let test_components = ['N1', 'N2']
+  let test_reaction = {
+    'R1': {
+      'reactants': ['N1'],
+      'products': ['N2'],
+      'modifiers': [['N3','catalyst']]
+    }
+  }
+  let test_expression_dict = {
+    'N1': [0.9, 1],
+    'N2': [0.8, 2],
+    'N3': [0.7, 3]
+  }
+  let test_stats_dict = {
+    'N1': [0.1, 1],
+    'N2': [0.2, 2],
+    'N3': [null, null]
+  }
+  let test_degree_dict = {
+    'N1': 1000,
+    'N2': 10,
+    'N3': 1
+  }
+
+  describe('motifs.js', function () {
+    // modifiersChecked()
+    describe('modifiersChecked()', function () {
+      it('should return false if eval_modifiers true, and vice versa', function () {
+        assert(eval_modifiers === false);
+        modifiersChecked();
+        assert(eval_modifiers === true);
+        modifiersChecked();
+        assert(eval_modifiers === false);
+      })
+    })
+    // hubsChecked()
+    describe('hubsChecked()', function () {
+      it('should return false if excl_hubs true, and vice versa', function () {
+        assert(excl_hubs === false);
+        hubsChecked();
+        assert(excl_hubs === true);
+        hubsChecked();
+        assert(excl_hubs === false);
+      })
+    })
+    // cleanHubs()
+    describe('cleanHubs()', function () {
+      it('should filter out nodes with a degree higher than the threshold', function () {
+      let test_excl_hubs = true
+      let test_filter_hubs = cleanHubs(
+          test_excl_hubs,
+          test_components,
+          test_degree_dict,
+          50)
+      assert(test_filter_hubs.length === 1)
+      assert(test_filter_hubs[0] === 'N2')
+      })
+    })
+    // parseComponents()
+    describe('parseComponents()', function () {
+      it('should parse component values after degree cleaning', function () {
+        excl_hubs = false;
+        let test_items, test_updated_source, test_updated_target;
+        test_items = parseComponents(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        assert(test_updated_source.length === 1)
+        assert(test_updated_source[0][0] === 0.9)
+        assert(test_updated_source[0][1] === 0.1)
+        assert(test_updated_target.length === 1)
+        assert(test_updated_target[0][0] === 0.8)
+        assert(test_updated_target[0][1] === 0.2)
+        excl_hubs = true;
+        test_items = parseComponents(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        assert(test_updated_source.length === 0)
+        assert(test_updated_target.length === 1)
+        assert(test_updated_target[0][0] === 0.8)
+        assert(test_updated_target[0][1] === 0.2)
+      })
+    })
+    // parseComponentsMod()
+    describe('parseComponentsMod()', function () {
+      it('should parse component values after degree cleaning with modifiers considered', function () {
+
+        excl_hubs = false;
+        let test_items, test_updated_core, test_updated_mods;
+        test_items = parseComponentsMod(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        assert(test_items.length === 2)
+        assert(test_updated_source.length === 2)
+        assert(test_updated_target.length === 0)
+        assert(test_updated_source[0][0] === 0.9)
+        assert(test_updated_source[0][1] === 0.1)
+        assert(test_updated_source[1][0] === 0.8)
+        assert(test_updated_source[1][1] === 0.2)
+      })
+    })
+    // parseComponentsTrans()
+    describe('parseComponentsTrans()', function () {
+      it('should parse component values after degree cleaning with modifiers considered', function () {
+        excl_hubs = false;
+        let test_items, test_updated_core, test_updated_mods;
+        test_items = parseComponentsTrans(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        test_updated_modifiers = test_items[2];
+        assert(test_items.length === 3)
+        assert(test_updated_source.length === 1)
+        assert(test_updated_source[0][0] === 0.9)
+        assert(test_updated_source[0][1] === 0.1)
+        assert(test_updated_target.length === 1)
+        assert(test_updated_target[0][0] === 0.8)
+        assert(test_updated_target[0][1] === 0.2)
+        assert(test_updated_modifiers.length === 0)
+      })
+    })
+    // computeAvg()
+    describe('computeAvg()', function () {
+      it('should return the average of the input array', function () {
+        let test_array, test_array_out;
+        test_array = [0,1,2];
+        test_array_out = computeAvg(test_array)
+        assert(test_array_out === 1)
+        test_array = [0,1,null];
+        test_array_out = computeAvg(test_array)
+        assert(test_array_out === 0.5)
+        test_array = [null,null];
+        test_array_out = computeAvg(test_array)
+        assert(test_array_out === 0)
+      })
+    })
+    // motifSearch_MaxMax()
+    describe('motifSearch_MaxMax()', function () {
+      it('should return -1 when the value is not present', function () {
+        let test_threshold = 50;
+        let test_sample_indices = [0,1];
+        let test_collapsed_reaction_dict
+        let test_path_mapper
+
+        motifSearch_MaxMax(
+            test_threshold,
+            test_collapsed_reaction_dict,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+      })
+    })
+    // motifSearch_MinMin()
+    describe('motifSearch_MinMin()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // motifSearch_MaxMin()
+    describe('motifSearch_MaxMin()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // motifSearch_MinMax()
+    describe('motifSearch_MinMax()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // motifSearch_Sustained()
+    describe('motifSearch_Sustained()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // motifSearch_PathMax()
+    describe('motifSearch_PathMax()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // motifSearch_PathCov()
+    describe('motifSearch_PathCov()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // modifierReg()
+    describe('modifierReg()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+    // modifierTransport()
+    describe('modifierTransport()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+  })
+  // reset script variables
+}
+module.exports = test
 
 function modifiersChecked() {
   if (eval_modifiers === false) {
@@ -287,10 +506,15 @@ function parseComponentsTrans(
 
 function computeAvg(arr){
   let arr_sum = arr[0];
+  let arr_len = arr.length;
   for(let i=1; i<arr.length; i++){
-    arr_sum += arr[i];
+    if (arr[i] !== null) {
+      arr_sum += arr[i];
+    } else {
+      arr_len -= 1;
+    }
   }
-  let arr_avg = arr_sum / arr.length;
+  let arr_avg = arr_sum / arr_len;
   return arr_avg;
 }
 

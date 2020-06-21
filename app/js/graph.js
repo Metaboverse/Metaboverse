@@ -41,13 +41,35 @@ var collapsed_links = [];
 
 function test() {
   describe('graph.js', function () {
-    describe('kNN()', function () {
+    // get_nodes_links()
+    describe('get_nodes_links()', function () {
       it('should return -1 when the value is not present', function () {
         assert.equal([1, 2, 3].indexOf(4), -1);
-      });
-    });
-  });
-};
+      })
+    })
+
+    // parse_kNN_pathway()
+    describe('parse_kNN_pathway()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+
+    // checkReaction()
+    describe('checkReaction()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+
+    // get_link()
+    describe('get_link()', function () {
+      it('should return -1 when the value is not present', function () {
+        assert.equal([1, 2, 3].indexOf(4), -1);
+      })
+    })
+  })
+}
 module.exports = test
 
 function checkReaction(

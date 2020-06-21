@@ -36,7 +36,7 @@ Walkthroughs and additional usage information can be found in the [documentation
 - The Metaboverse app for your operating system
 
 ### Installation
-0. Download the appropriate Metaboverse app `.zip` file for your operating system from [this location](https://github.com/Metaboverse/Metaboverse/releases/latest).
-1. Unzip the downloaded folder
-2. Open the `Metaboverse` app
-3. Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/general-usage.html) for more information.
+- Download the appropriate Metaboverse app `.zip` file for your operating system from [this location](https://github.com/Metaboverse/Metaboverse/releases/latest).
+- Unzip the downloaded folder
+- Open the `Metaboverse` app
+- Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/general-usage.html) for more information.
