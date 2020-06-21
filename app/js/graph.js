@@ -38,6 +38,10 @@ var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
 
+function test() {
+  console.log('hi');
+};
+
 function checkReaction(
     reaction,
     element) {
