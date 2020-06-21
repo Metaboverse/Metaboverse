@@ -18,7 +18,10 @@ install:
   - npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
 
 before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 
 script:
   - cd app
-  - xvfb-run npm test
+  - npm test
