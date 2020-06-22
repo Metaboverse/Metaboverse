@@ -1373,42 +1373,131 @@ function change() {
 function test() {
   var assert = require('assert')
 
-  let test_data;
-  let test_components;
-
+  let test_data = {
+    'nodes': {
+      'N1':{'id':'n1'},
+      'N2':{'id':'n2'},
+      'N3':{'id':'n3'},
+      'N4':{'id':'n4'},
+      'N5':{'id':'n5'},
+      'N6':{'id':'n6'},
+      'N7':{'id':'n7'},
+      'N8':{'id':'n8'},
+      'N9':{'id':'n9'},
+      'N10':{'id':'n10'},
+      'N11':{'id':'n11'},
+    },
+    'links': {
+      'N1,N2':{'id':'l1'},
+      'N2,N3':{'id':'l2'},
+      'N3,N4':{'id':'l3'},
+      'N4,N5':{'id':'l4'},
+      'N5,N6':{'id':'l5'},
+      'N6,N1':{'id':'l6'},
+      'N6,N3':{'id':'l7'},
+      'N3,N7':{'id':'l8'},
+      'N7,N8':{'id':'l9'},
+      'N8,N9':{'id':'l10'},
+      'N9,N10':{'id':'l11'},
+      'N10,N11':{'id':'l12'},
+    }
+  };
+  let test_components = ['N1','N4','N5'];
 
   describe('graph.js', function () {
     // get_nodes_links()
     describe('get_nodes_links()', function () {
-      it('', function () {
+      it('should return 3 nodes and 1 link', function () {
 
-        //let sustained_results = get_nodes_links(
-        //    test_data,
-        //    test_components
-        //)
-        //assert(sustained_results[0].length === 1)
-
+        let test_items = get_nodes_links(
+            test_data,
+            test_components
+        )
+        let test_nodes = test_items[0];
+        let test_links = test_items[1];
+        assert(test_nodes[0].id === 'n1')
+        assert(test_nodes[1].id === 'n4')
+        assert(test_nodes[2].id === 'n5')
+        assert(test_links[0].id === 'l4')
 
       })
     })
-
     // parse_kNN_pathway()
     describe('parse_kNN_pathway()', function () {
-      it('', function () {
+      it('should return ...', function () {
+
+        let test_data_kNN = {
+          'nodes': {
+            'N1': {
+              'name': 'n1',
+              'degree': 10
+            },
+          },
+          'blocklist': [],
+          'reaction_dictionary': {
+
+          },
+          'collapsed_reaction_dictionary': {
+
+          },
+          'degree_dictionary': {}
+
+        }
+        console.log(collapse_reactions)
+        //let test_new_elements = parse_kNN_pathway(
+        //  test_data_kNN,
+        //  test_entity_id,
+        //  test_kNN)
+        //console.log(test_new_elements)
+
+
+
 
       })
     })
-
     // checkReaction()
     describe('checkReaction()', function () {
-      it('', function () {
-
+      it('should return true and false, respectively', function () {
+        let test_reaction_1 = {
+          'reactants':['N1'],
+          'products':['N2','N3','N4'],
+          'modifiers':[['N5','catalyst'],['N6','inhibitor']],
+          'additional_components':['G1']
+        }
+        let test_output;
+        test_output_reaction_1 = checkReaction(
+          test_reaction_1,
+          'N1'
+        )
+        assert(test_output_reaction_1 === true)
+        let test_output_reaction_2 = checkReaction(
+          test_reaction_1,
+          'N6'
+        )
+        assert(test_output_reaction_2 === false)
       })
     })
-
     // get_link()
     describe('get_link()', function () {
-      it('', function () {
+      it('should return metabolite_component, not_complex_component, and protein_component, respectively', function () {
+        let test_link1 = {
+          'type':'complex_component',
+          'sub_type':'metabolite_component'
+        }
+        let test_out1 = get_link(test_link1)
+        assert(test_out1 === 'metabolite_component')
+        let test_link2 = {
+          'type':'not_complex_component',
+          'sub_type':'ppp_component'
+        }
+        let test_out2 = get_link(test_link2)
+        assert(test_out2 === 'not_complex_component')
+        let test_link3 = {
+          'type':'complex_component',
+          'sub_type':'protein_component'
+        }
+        let test_out3 = get_link(test_link3)
+        assert(test_out3 === 'protein_component')
 
       })
     })
