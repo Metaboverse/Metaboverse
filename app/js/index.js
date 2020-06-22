@@ -28,6 +28,19 @@ window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();
 
+  $.ajax({
+    url: "../__version__.txt",
+    success: function(version) {
+      $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
+        _v = String(version)
+        _c = String(d[0].name)
+        if (!_c.includes(_v)) {
+          alert("A more current version of Metaboverse is available: " + _c)
+        }
+      })
+    }
+  });
+
   update_session_info("current_pathway", null);
 
   $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
