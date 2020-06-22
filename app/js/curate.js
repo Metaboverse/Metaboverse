@@ -51,16 +51,60 @@ $.getJSON(reactome_api, function(data) {
 });
 
 // Change user selection based on input
-function selectOrganism() {
-  var selection = document.getElementById("speciesMenu").value;
-  console.log("User selected:", abbreviation_dict[selection]);
-  update_session_info("organism", selection, (abbrev_dict = abbreviation_dict));
-  species_change = true;
-  check_changes();
-}
-
-// Select output directory from pop-out menu
 window.addEventListener("load", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  document.getElementById("speciesMenu").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var selection = document.getElementById("speciesMenu").value;
+    console.log("User selected:", abbreviation_dict[selection]);
+    update_session_info("organism", selection, (abbrev_dict = abbreviation_dict));
+    species_change = true;
+    check_changes();
+  }
+
+  $('#content').append('<a href=""></a>')
+  var curURL = get_session_info("curation_url");
+  var defaultValue = "No file selected";
+  if (curURL !== null) {
+    defaultValue = curURL;
+    $("#content").html(
+      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+  }
+  $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+
+  var outputURL = get_session_info("output");
+  var defaultOutput = "No output selected";
+  if (outputURL !== null) {
+    defaultOutput = outputURL;
+  }
+  $('#selectedOutput').append('<font size="2">' + defaultOutput + '</font>');
+
+  document.getElementById("menurefresh").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    refresh_session()
+  }
+
+  document.getElementById("dropDatabaseOutput").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById('output-input').click();
+  }
+
+  document.getElementById("dropDatabaseCuration").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById('curation-input').click();
+  }
+
+  // Select output directory from pop-out menu
   document.getElementById("output-input").onclick = function(event) {
     filename = dialog
       .showSaveDialog({
@@ -91,19 +135,8 @@ window.addEventListener("load", function(event) {
     output_change = true;
     check_changes();
   };
-});
 
-var output_change = false;
-var species_change = false;
-
-function check_changes() {
-  if ((output_change === true) & (species_change === true)) {
-    $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
-  }
-}
-
-// Drop pre-existing metabolic network curation for further analysis
-window.addEventListener("load", function(event) {
+  // Drop pre-existing metabolic network curation for further analysis
   document.getElementById("curation-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -131,6 +164,15 @@ window.addEventListener("load", function(event) {
     }
   };
 });
+
+var output_change = false;
+var species_change = false;
+
+function check_changes() {
+  if ((output_change === true) & (species_change === true)) {
+    $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+  }
+}
 
 ipcRenderer.on("curation-input", (event, data) => {
   $("#curation-input").text(data);

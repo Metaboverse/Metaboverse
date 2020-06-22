@@ -23,7 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 const { ipcRenderer } = require("electron");
 var $ = require("jquery");
 
-function loadSessionData() {
+window.addEventListener("load", function(event) {
 
   let session_items = {
 
@@ -64,7 +64,6 @@ function loadSessionData() {
 
   let display = "";
   for (item in session_items) {
-    console.log(item)
     if (item.includes("spacer")) {
       display = display
         + "<h4>" + session_items[item] + "</h4>";
@@ -90,5 +89,5 @@ function loadSessionData() {
         + "<br />";
     }
   }
-  document.getElementById("session_data").innerHTML = display;
-}
+  document.getElementById("display-session").innerHTML = display;
+})

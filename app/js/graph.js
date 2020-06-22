@@ -376,7 +376,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   var escape = nn_components.length;
   if (escape > max_nodes) {
     document.getElementById("warning_line_1").innerHTML =
-      '<i style="color: red;">Too many entities to plot</i><br><i style="color: red;">Will not plot</i>';
+      '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
     document.getElementById("warning_line_2").innerHTML = "<br>";
     alert("Too many entities to plot")
     kNN = 0;
@@ -385,7 +385,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 
   if (kNN > 1) {
     document.getElementById("warning_line_1").innerHTML =
-      '<i style="color: red;">Please wait<br><br></i>';
+      '<i class="red-text">Please wait<br><br></i>';
     document.getElementById("warning_line_2").innerHTML = "";
 
     // Filter out any components that are above hub threshold for kNN
@@ -460,7 +460,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
       if (escape > max_nodes) {
         console.log(escape);
         document.getElementById("warning_line_1").innerHTML =
-          '<i style="color: red;">Too many entities to plot. Will only plot first ' +
+          '<i class="red-text">Too many entities to plot. Will only plot first ' +
           n +
           " neighborhood(s)</i>";
         document.getElementById("warning_line_2").innerHTML = "";
@@ -482,26 +482,25 @@ function parse_kNN_pathway(data, entity_id, kNN) {
 function kNN_input(d) {
   knn_value = document.getElementById("kNN_button").value;
   console.log("k-NN parameter now set to: " + knn_value);
+  change();
 }
 
 function stat_input(d) {
   stat_value = document.getElementById("stat_button").value;
-
   if ((stat_value === null) || (stat_value === "")) {
     stat_value = 1;
   }
-
   console.log("Stat threshold now set to: " + stat_value);
+  change();
 }
 
 function hub_input(d) {
   hub_value = document.getElementById("hub_button").value;
-
   if ((hub_value === null) || (hub_value === "")) {
     hub_value = 1000000;
   }
-
   console.log("Hub threshold now set to: " + hub_value);
+  change();
 }
 
 function get_link(d) {
@@ -875,7 +874,7 @@ function make_graph(
       if (type_dict[d.name] === "reaction") {
         // Label other nodes with expression value in parentheses
         return (
-          "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
+          "<tspan dx='16' y='.31em' class='bold-text'>"
           + d.name
           + "</tspan>"
           + "<tspan x='16' y='1.7em'>Compartment: "
@@ -884,7 +883,7 @@ function make_graph(
         );
       } else if (type_dict[d.name] === "collapsed") {
         return (
-          "<tspan dx='16' y='.31em' style='font-weight: bold;'>"
+          "<tspan dx='16' y='.31em' class='bold-text'>"
           + d.name
           + "</tspan>"
         );
@@ -892,20 +891,26 @@ function make_graph(
         if (d.values[sample] === null
         && d.stats[sample] === null) {
           return (
-            "<tspan dx='16' y='0em' style='font-weight: bold;'>"
+            "<tspan dx='16' y='0em' class='bold-text'>"
             + d.name
             + "</tspan>"
           );
         } else {
+          let display_stat;
+          if (parseFloat(d.stats[sample]) < 0.01) {
+            display_stat = "< 0.01"
+          } else {
+            display_stat = parseFloat(d.stats[sample]).toFixed(2)
+          }
           return (
-            "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
+            "<tspan dx='16' y='-.5em' class='bold-text'>"
             + d.name
             + "</tspan>"
             + "<tspan x='16' y='.7em'>Value: "
             + parseFloat(d.values[sample]).toFixed(2)
             + "</tspan>"
             + "<tspan x='16' y='1.7em'>Statistic: "
-            + parseFloat(d.stats[sample]).toFixed(2)
+            + display_stat
             + "</tspan>"
           );
         }
@@ -966,30 +971,48 @@ function make_graph(
         if (type_dict[d.name] === "reaction") {
           // If reaction node, do not display expression value
           return (
-            "<tspan dx='16' y='.31em' style='font-weight: bold;'>" +
+            "<tspan dx='16' y='.31em' class='bold-text'>" +
             d.name +
             "</tspan>"
+            + "<tspan x='16' y='1.7em'>Compartment: "
+            + d.compartment_display
+            + "</tspan>"
           );
         } else {
           // Label other nodes with expression value in parentheses
-          return (
-            "<tspan dx='16' y='-.5em' style='font-weight: bold;'>" +
-            d.name +
-            "</tspan>" +
-            "<tspan x='16' y='.7em'>Value: " +
-            parseFloat(d.values[sample]).toFixed(2) +
-            "</tspan>" +
-            "<tspan x='16' y='1.7em'>Statistic: " +
-            parseFloat(d.stats[sample]).toFixed(2) +
-            "</tspan>"
-          );
+          if (d.values[sample] === null
+          && d.stats[sample] === null) {
+            return (
+              "<tspan dx='16' y='0em' class='bold-text'>"
+              + d.name
+              + "</tspan>"
+            );
+          } else {
+            let display_stat;
+            if (parseFloat(d.stats[sample]) < 0.01) {
+              display_stat = "< 0.01"
+            } else {
+              display_stat = parseFloat(d.stats[sample]).toFixed(2)
+            }
+            return (
+              "<tspan dx='16' y='-.5em' class='bold-text'>"
+              + d.name
+              + "</tspan>"
+              + "<tspan x='16' y='.7em'>Value: "
+              + parseFloat(d.values[sample]).toFixed(2)
+              + "</tspan>"
+              + "<tspan x='16' y='1.7em'>Statistic: "
+              + display_stat
+              + "</tspan>"
+            );
+          }
         }
       });
     } else {
       toggle_e = false;
       text.html(function(d) {
         return (
-          "<tspan dx='16' y='.31em' style='font-weight: bold;'>" +
+          "<tspan dx='16' y='.31em' class='bold-text'>" +
           d.name +
           "</tspan>"
         );

@@ -198,7 +198,6 @@ runBuild = function(_callback) {
     var cmd = parseCommand(graphDictionary);
     console.log("Running: " + scriptFilename + " curate " + cmd);
     execute(scriptFilename + " curate " + cmd, output => {
-      console.log(output);
       update_session_info("processed", true);
     });
     return _callback;
@@ -211,7 +210,7 @@ function displayOptions() {
   try {
     var data = JSON.parse(fs.readFileSync(database_url).toString());
   } catch(e) {
-    alert('Failed to open: \n' + database_url)
+    alert('Failed to open database URL: \n' + database_url)
     var elem = document.getElementById("progressBar");
     elem.style.width = "0%";
     elem.innerHTML = "0%";
@@ -240,3 +239,16 @@ function displayOptions() {
     );
   }
 }
+
+window.addEventListener("load", function(event) {
+  $('#content').append('')
+  runBuild()
+
+  document.getElementById("menurefresh").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    refresh_session()
+  }
+
+})

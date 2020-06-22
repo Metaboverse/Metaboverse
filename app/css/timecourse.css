@@ -24,6 +24,14 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   margin-left: 225px;
 }
 
+.slider-motif {
+  margin-top:-75px;
+}
+
+.slider-viz {
+  margin-top:15px;
+}
+
 .track,
 .track-inset,
 .track-overlay {

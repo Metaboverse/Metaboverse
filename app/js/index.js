@@ -22,12 +22,40 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { ipcRenderer } = require("electron");
 var $ = require("jquery");
-
-var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
-// Drop pre-existing metabolic network database for further analysis
 window.addEventListener("load", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  update_session_info("current_pathway", null);
+
+  $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
+
+  var dbURL = get_session_info("database_url");
+  var defaultValue = "No file selected";
+  if (dbURL !== null) {
+    defaultValue = dbURL;
+    $("#content").html(
+      '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+    );
+  }
+  $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+
+  document.getElementById("menurefresh").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    refresh_session()
+  }
+
+  document.getElementById("dropDatabase").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById('database-input').click();
+  }
+
   document.getElementById("database-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -44,7 +72,7 @@ window.addEventListener("load", function(event) {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f.path);
         update_session_info("database_url", f.path);
-
+        update_session_info("processed", true);
         $('#selectedFile').html('<font size="2">' + f.path + '</font>');
         var data = JSON.parse(fs.readFileSync(f.path).toString());
         if (data.categories.length > 0) {
@@ -94,8 +122,6 @@ window.addEventListener("load", function(event) {
         window.location.reload(false);
       }
     }
-
-
   };
 });
 

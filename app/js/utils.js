@@ -38,9 +38,6 @@ function update_session_info(key_update, value_update, abbrev_dict = null) {
 
   try {
     var session = JSON.parse(fs.readFileSync(session_file).toString(), "utf8");
-    console.log(session)
-    console.log(key_update)
-    console.log(value_update)
     session[key_update] = value_update;
 
     // Where database output location is, make this the output location

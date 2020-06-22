@@ -30,14 +30,17 @@ Instructions for building app for distribution:
 2) Package python code as executable for each OS
 3) Run:
   -  `electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-mac --ignore=metaboverse-linux --overwrite`
-  - `electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-win --ignore=metaboverse-linux --overwrite`
-  - `electron-packager ./ Metaboverse --platform=linux --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-mac --ignore=metaboverse-win --overwrite`
+  - `electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-win.exe --ignore=metaboverse-linux --overwrite`
+  - `electron-packager ./ Metaboverse --platform=linux --icon=data/icon/metaboverse_logo.icns --ignore=metaboverse-mac --ignore=metaboverse-win.exe --overwrite`
 4) For each executable, open "Get Info" and drag and drop .icns file for each icon
 
 If modules not installed:
 -------------------------
-1) Run 'npm install electron --save-dev'
-2) Run 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save'
+1) Run 'npm install electron electron-packager --save-dev'
+2) Run 'npm install --save-dev --save-exact jsdom jsdom-global`
+3) Run 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save'
+
+Fix any vulnerabilities at each step by following their instructions
 
 To run demo app:
 ----------------

@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ 'self';">
 <title>Metaboverse</title>
 
 <html>
@@ -33,49 +33,49 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <!-- menu -->
     <menu>
       <font size="3.25px">
-        <menuitem style="float:right">
+        <menuitem id="menuright">
           <a
             href="https://github.com/Metaboverse/Metaboverse/issues"
             target="_blank"
             >Contact Us</a
           >
         </menuitem>
-        <menuitem style="float:right">
+        <menuitem id="menuright">
           <a href="cite.html">Cite</a>
         </menuitem>
-        <menuitem style="float:right">
+        <menuitem id="menuright">
           <a
             href="https://metaboverse.readthedocs.io/en/latest/"
             target="_blank"
             >Documentation</a
           >
         </menuitem>
-        <menuitem style="float:right">
+        <menuitem id="menuright">
           <a
             href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html"
             target="_blank"
             >FAQs</a
           >
         </menuitem>
-        <menuitem style="float:right">
+        <menuitem id="menuright">
           <a
             href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html"
             target="_blank"
             >First Time?</a
           >
         </menuitem>
-        <menuitem style="float:right">
+        <menuitem id="menuright">
           <a
             href="https://metaboverse.readthedocs.io/en/latest/content/overview.html"
             target="_blank"
             >About</a
           >
         </menuitem>
-        <menuitem style="float:left">
+        <menuitem id="menuleft">
           <a href="index.html">Metaboverse</a>
         </menuitem>
-        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
-        <menuitem style="float:left">
+        <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
+        <menuitem id="menuleft">
           <a href="build.html">Back</a>
         </menuitem>
       </font>
@@ -84,7 +84,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <body>
     <div class="sidebar">
-      <font style="font-family: sans-serif" size="2">
+      <font id="styletitle" size="2">
         <b><u>Legend</u></b>
         <button
           class="info"
@@ -109,7 +109,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <button
           id="play_button_value"
           class="play_button"
-          onchange="run_value_connections()"
           title="Change value and click to modify the perturbation threshold for a reaction to appear in the window."
         >
         &#10148;
@@ -128,7 +127,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <button
           id="play_button_stat"
           class="play_button"
-          onchange="run_stat_connections()"
           title="Change value and click to modify the perturbation threshold for a reaction to appear in the window."
         >
         &#10148;
@@ -139,20 +137,19 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br />
         <br />
         <div title="Double-click to display reaction notes.">
-          <span class="dot" style="--dot_color: grey"></span>
+          <span class="dot grey-dot"></span>
           Reaction
         </div>
         <br />
         <div title="Value was found in user data.">
-          <span class="dot" style="--dot_color: white"></span>
+          <span class="dot white-dot"></span>
           Measured
         </div>
         <div
           title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values."
         >
           <span
-            class="dot"
-            style="--dot_color: white;border-style: dashed;margin-left:10px;"
+            class="dot dashed-dot white-dot"
           ></span>
           Inferred
         </div>
@@ -160,10 +157,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <canvas
           title="Colormap value for entity measurement."
           id="seismic_node"
-          class="dot"
+          class="dot seismic_node"
           width="12"
           height="12"
-          style="background-color:none"
         ></canvas>
         <div id="entity_type"></div>
         <br />
@@ -174,24 +170,24 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
-          <div class="line" style="--arrow_color: grey"></div>
-          <div class="point" style="--arrow_color: grey">
+          <div class="line grey-arrow"></div>
+          <div class="point grey-arrow">
             &nbsp;&nbsp;&nbsp;Core
           </div>
         </div>
         <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
-          <div class="line" style="--arrow_color: green"></div>
-          <div class="point" style="--arrow_color: green">
+          <div class="line green-arrow"></div>
+          <div class="point green-arrow">
             &nbsp;&nbsp;&nbsp;Catalyst
           </div>
         </div>
         <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
-          <div class="line" style="--arrow_color: red"></div>
-          <div class="point" style="--arrow_color: red">
+          <div class="line red-arrow"></div>
+          <div class="point red-arrow">
             &nbsp;&nbsp;&nbsp;Inhibitor
           </div>
         </div>
@@ -199,31 +195,31 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div class="arrow">
           <div class="line2"></div>
-          <div style="margin-left: 17px;">&nbsp;&nbsp;&nbsp;Components</div>
+          <div class="component-label">&nbsp;&nbsp;&nbsp;Components</div>
         </div>
         <br />
         &nbsp;
-        <span class="dot" style="--dot_color: white"></span>
+        <span class="dot white-dot"></span>
         <div class="arrow">
-          <div class="line" style="--arrow_color: blue;margin-top: 4px;"></div>
-          <div class="point" style="--arrow_color: blue;margin-top: 0px;">
+          <div class="line blue-arrow arrow-margin-4"></div>
+          <div class="point blue-arrow arrow-margin-0">
             &nbsp;&nbsp;&nbsp;Metabolite
           </div>
         </div>
         <br />
         &nbsp;
-        <span class="square" style="--dot_color: white"></span>
+        <span class="square white-dot"></span>
         <div class="arrow">
-          <div class="line" style="--arrow_color: orange"></div>
-          <div class="point" style="--arrow_color: orange">
+          <div class="line orange-arrow"></div>
+          <div class="point orange-arrow">
             &nbsp;&nbsp;&nbsp;Protein
           </div>
         </div>
         <br />
-        <span class="ellip" style="--dot_color: white"></span>
+        <span class="ellip white-dot"></span>
         <div class="arrow">
-          <div class="line" style="--arrow_color: rgba(165, 55, 253, 1)"></div>
-          <div class="point" style="--arrow_color: rgba(165, 55, 253, 1)">
+          <div class="line arrow-purple"></div>
+          <div class="point arrow-purple">
             &nbsp;&nbsp;&nbsp;Gene
           </div>
         </div>
@@ -274,7 +270,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           type="number"
           name="kNN_button"
           id="kNN_button"
-          onchange="kNN_input()"
           min="1"
           max="9"
           value="1"
@@ -291,7 +286,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           type="number"
           name="hub_button"
           id="hub_button"
-          onchange="hub_input()"
           min="1"
           max="9999999"
         />
@@ -307,7 +301,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           type="number"
           name="stat_button"
           id="stat_button"
-          onchange="stat_input()"
           min="000"
           max="1.0"
           value="0.05"
@@ -353,11 +346,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     </div>
     <br />
     <br />
-    <h1 style="padding-left:275px;">Global Reaction Connectivity</h1>
-    <select id="superPathwayMenu" onchange="selectSuperPathway()" style="margin-top:-5px;"></select>
+    <h1 class="view-global-title">Global Reaction Connectivity</h1>
+    <select id="superPathwayMenu" class="topmargin-minus5"></select>
     <br />
     <!--Colorbar pointer label-->
-    <font style="font-family: sans-serif" size="1">
+    <font id="styletitle" size="1">
       <div id="displayValue" class="displayValue"></div>
     </font>
 

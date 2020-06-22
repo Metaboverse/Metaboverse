@@ -21,6 +21,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 // Modules to control application life and create native browser window
+require('update-electron-app')
+
 const { app, BrowserWindow } = require("electron");
 const { ipcRenderer } = require("electron");
 const path = require("path");

@@ -76,6 +76,6 @@ data.blocklist = data.blocklist.split(",")
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);
-d3.select("#kNN_button").on("change", change);
-d3.select("#hub_button").on("change", change);
-d3.select("#stat_button").on("change", change);
+d3.select("#kNN_button").on("change", kNN_input);
+d3.select("#hub_button").on("change", hub_input);
+d3.select("#stat_button").on("change", stat_input);

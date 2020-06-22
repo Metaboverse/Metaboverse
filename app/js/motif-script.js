@@ -35,3 +35,7 @@ showMotifs = function(_callback) {
   });
   return _callback;
 }
+
+window.addEventListener("load", function(event) {
+  showMotifs()
+})

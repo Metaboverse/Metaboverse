@@ -115,7 +115,7 @@ function buildSlider(categories, names) {
       .attr("cx", x(slider_index))
       .attr("x", slider_index);
 
-    let node = d3.selectAll("circle")
+    let node = d3.selectAll("circle,rect,ellipse")
     node.each(function(d) {
 
       if (d !== undefined) {
@@ -139,17 +139,32 @@ function buildSlider(categories, names) {
             })
             d3.select("text#" + d.id)
               .html(function(d) {
-                return (
-                  "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
-                  + d.name
-                  + "</tspan>"
-                  + "<tspan x='16' y='.7em'>Value: "
-                  + parseFloat(d.values[slider_index]).toFixed(2)
-                  + "</tspan>"
-                  + "<tspan x='16' y='1.7em'>Statistic: "
-                  + parseFloat(d.stats[slider_index]).toFixed(2)
-                  + "</tspan>"
-                );
+                if (d.values[sample] === null
+                && d.stats[sample] === null) {
+                  return (
+                    "<tspan dx='16' y='0em' class='bold-text'>"
+                    + d.name
+                    + "</tspan>"
+                  );
+                } else {
+                  let display_stat;
+                  if (parseFloat(d.stats[sample]) < 0.01) {
+                    display_stat = "< 0.01"
+                  } else {
+                    display_stat = parseFloat(d.stats[sample]).toFixed(2)
+                  }
+                  return (
+                    "<tspan dx='16' y='-.5em' class='bold-text'>"
+                    + d.name
+                    + "</tspan>"
+                    + "<tspan x='16' y='.7em'>Value: "
+                    + parseFloat(d.values[sample]).toFixed(2)
+                    + "</tspan>"
+                    + "<tspan x='16' y='1.7em'>Statistic: "
+                    + display_stat
+                    + "</tspan>"
+                  );
+                }
               })
           } catch(err) {}
         }
@@ -170,17 +185,32 @@ function buildSlider(categories, names) {
               })
             d3.select("text#" + d.id)
               .html(function(d) {
-                return (
-                  "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
-                  + d.name
-                  + "</tspan>"
-                  + "<tspan x='16' y='.7em'>Value: "
-                  + parseFloat(d.values[slider_index]).toFixed(2)
-                  + "</tspan>"
-                  + "<tspan x='16' y='1.7em'>Statistic: "
-                  + parseFloat(d.stats[slider_index]).toFixed(2)
-                  + "</tspan>"
-                );
+                if (d.values[sample] === null
+                && d.stats[sample] === null) {
+                  return (
+                    "<tspan dx='16' y='0em' class='bold-text'>"
+                    + d.name
+                    + "</tspan>"
+                  );
+                } else {
+                  let display_stat;
+                  if (parseFloat(d.stats[sample]) < 0.01) {
+                    display_stat = "< 0.01"
+                  } else {
+                    display_stat = parseFloat(d.stats[sample]).toFixed(2)
+                  }
+                  return (
+                    "<tspan dx='16' y='-.5em' class='bold-text'>"
+                    + d.name
+                    + "</tspan>"
+                    + "<tspan x='16' y='.7em'>Value: "
+                    + parseFloat(d.values[sample]).toFixed(2)
+                    + "</tspan>"
+                    + "<tspan x='16' y='1.7em'>Statistic: "
+                    + display_stat
+                    + "</tspan>"
+                  );
+                }
               })
           } catch(err) {}
         }
@@ -201,17 +231,32 @@ function buildSlider(categories, names) {
               })
             d3.select("text#" + d.id)
               .html(function(d) {
-                return (
-                  "<tspan dx='16' y='-.5em' style='font-weight: bold;'>"
-                  + d.name
-                  + "</tspan>"
-                  + "<tspan x='16' y='.7em'>Value: "
-                  + parseFloat(d.values[slider_index]).toFixed(2)
-                  + "</tspan>"
-                  + "<tspan x='16' y='1.7em'>Statistic: "
-                  + parseFloat(d.stats[slider_index]).toFixed(2)
-                  + "</tspan>"
-                );
+                if (d.values[sample] === null
+                && d.stats[sample] === null) {
+                  return (
+                    "<tspan dx='16' y='0em' class='bold-text'>"
+                    + d.name
+                    + "</tspan>"
+                  );
+                } else {
+                  let display_stat;
+                  if (parseFloat(d.stats[sample]) < 0.01) {
+                    display_stat = "< 0.01"
+                  } else {
+                    display_stat = parseFloat(d.stats[sample]).toFixed(2)
+                  }
+                  return (
+                    "<tspan dx='16' y='-.5em' class='bold-text'>"
+                    + d.name
+                    + "</tspan>"
+                    + "<tspan x='16' y='.7em'>Value: "
+                    + parseFloat(d.values[sample]).toFixed(2)
+                    + "</tspan>"
+                    + "<tspan x='16' y='1.7em'>Statistic: "
+                    + display_stat
+                    + "</tspan>"
+                  );
+                }
               })
           } catch(err) {}
         }

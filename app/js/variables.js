@@ -26,29 +26,74 @@ var $ = require("jquery");
 var coll_mos = false;
 var broadcast_gene = true;
 
-function collapseWithModifiers() {
-  if (coll_mos === false) {
-    coll_mos = true;
-    update_session_info("collapseWithModifiers", true);
-  } else {
-    coll_mos = false;
-    update_session_info("collapseWithModifiers", false);
-  }
-  console.log("Reaction collapse evaluation with modifiers: ", coll_mos)
-}
-
-function broadcastGeneExpression() {
-  if (broadcast_gene === false) {
-    broadcast_gene = true;
-    update_session_info("broadcastGeneExpression", true);
-  } else {
-    broadcast_gene = false;
-    update_session_info("broadcastGeneExpression", false);
-  }
-  console.log("Broadcast gene expression values: ", broadcast_gene)
-}
-
 window.addEventListener("load", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  // If user goes back to this page, force re-curation
+  update_session_info("processed", false);
+
+  // Transcriptomics
+  var transcriptomicsURL = get_session_info("transcriptomics");
+  var defaultTranscriptomics = "No file selected";
+  if (transcriptomicsURL !== null) {
+    defaultTranscriptomics = transcriptomicsURL;
+  }
+  $('#selectedTranscriptomics').append('<font size="2">' + defaultTranscriptomics + '</font>');
+
+  // Proteomics
+  var proteomicsURL = get_session_info("proteomics");
+  var defaultProteomics = "No file selected";
+  if (proteomicsURL !== null) {
+    defaultProteomics = proteomicsURL;
+  }
+  $('#selectedProteomics').append('<font size="2">' + defaultProteomics + '</font>');
+
+  // Metabolomics
+  var metabolomicsURL = get_session_info("metabolomics");
+  var defaultMetabolomics = "No file selected";
+  if (metabolomicsURL !== null) {
+    defaultMetabolomics = metabolomicsURL;
+  }
+  $('#selectedMetabolomics').append('<font size="2">' + defaultMetabolomics + '</font>');
+
+  document.getElementById("menurefresh").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    refresh_session()
+  }
+
+  document.getElementById("use_modifiers_in_collapse").onclick = function(event) {
+    event.stopPropagation();
+    if (coll_mos === false) {
+      coll_mos = true;
+      update_session_info("collapseWithModifiers", true);
+    } else {
+      coll_mos = false;
+      update_session_info("collapseWithModifiers", false);
+    }
+    console.log("Reaction collapse evaluation with modifiers: ", coll_mos)
+  }
+
+  document.getElementById("broadcast_gene_expression").onclick = function(event) {
+    event.stopPropagation();
+    if (broadcast_gene === false) {
+      broadcast_gene = true;
+      update_session_info("broadcastGeneExpression", true);
+    } else {
+      broadcast_gene = false;
+      update_session_info("broadcastGeneExpression", false);
+    }
+    console.log("Broadcast gene expression values: ", broadcast_gene)
+  }
+
+  document.getElementById("transcriptomics-dropDatabase").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    document.getElementById('transcriptomics-input').click();
+  }
+
   document.getElementById("transcriptomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -80,9 +125,13 @@ window.addEventListener("load", function(event) {
       }
     }
   };
-});
 
-window.addEventListener("load", function(event) {
+  document.getElementById("proteomics-dropDatabase").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    document.getElementById('proteomics-input').click();
+  }
+
   document.getElementById("proteomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -112,9 +161,13 @@ window.addEventListener("load", function(event) {
       }
     }
   };
-});
 
-window.addEventListener("load", function(event) {
+  document.getElementById("metabolomics-dropDatabase").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    document.getElementById('metabolomics-input').click();
+  }
+
   document.getElementById("metabolomics-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -145,9 +198,7 @@ window.addEventListener("load", function(event) {
       }
     }
   };
-});
-
-/*window.addEventListener("load", function(event) {
+  /*
   document.getElementById("reactions-input").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -177,11 +228,8 @@ window.addEventListener("load", function(event) {
         );
       }
     }
-  };
-});
-*/
-
-window.addEventListener("load", function(event) {
+  }
+  */
 
   update_session_info("labels", "none");
   document.getElementById("updateExperiment").onchange = function(event) {
@@ -236,9 +284,7 @@ window.addEventListener("load", function(event) {
       update_session_info("labels", "0");
     }
   };
-});
 
-window.addEventListener("load", function(event) {
   document.getElementById("updateExperimentName").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -258,9 +304,6 @@ window.addEventListener("load", function(event) {
       );
     }
   }
-});
-
-window.addEventListener("load", function(event) {
 
   var inputVal = document.getElementById("updateBlocklist").value;
   update_session_info("blocklist", inputVal);
@@ -282,6 +325,4 @@ window.addEventListener("load", function(event) {
       );
     }
   }
-
-
 });

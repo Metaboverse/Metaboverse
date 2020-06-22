@@ -24,6 +24,23 @@ var eval_modifiers = false;
 var excl_hubs = false;
 var hub_threshold = 100;
 
+window.addEventListener("load", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  var path = window.location.pathname;
+  var page = path.split("/").pop();
+  if (page === "motif.html") {
+    document.getElementById("use_modifiers_id").onclick = function(event) {
+      modifiersChecked()
+    }
+
+    document.getElementById("exclude_hubs_id").onclick = function(event) {
+      hubsChecked()
+    }
+  }
+})
+
 function modifiersChecked() {
   if (eval_modifiers === false) {
     eval_modifiers = true;

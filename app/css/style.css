@@ -207,6 +207,22 @@ menuitem a:hover {
   color: white;
 }
 
+#menuright {
+  float:right;
+}
+#menuleft, #menurefresh {
+  float:left;
+}
+
+#menuright-motif {
+  float:right;
+  margin: -3;
+}
+#menuleft-motif {
+  float:left;
+  margin: -3;
+}
+
 a {
   color: black;
   text-decoration: none;
@@ -349,11 +365,15 @@ img {
   width: 300px;
 }
 
-#dropDatabase {
+#dropDatabase,
+#dropDatabaseCuration,
+#dropDatabaseOutput,
+#transcriptomics-dropDatabase,
+#proteomics-dropDatabase,
+#metabolomics-dropDatabase {
   border-radius: 5px;
   background: #f1f1f1;
   border: 1px solid grey;
-  width: 75px;
   height: 15px;
   text-align: center;
   display: inline-block;
@@ -361,10 +381,35 @@ img {
   text-shadow: none;
   user-select: none;
 }
-#dropDatabase:active {
+
+#dropDatabase:active,
+#dropDatabaseCuration:active,
+#dropDatabaseOutput:active,
+#transcriptomics-dropDatabase:active,
+#proteomics-dropDatabase:active,
+#metabolomics-dropDatabase:active {
   background: #0080ff;
   text-shadow: none;
 }
+
+#dropDatabase,
+#dropDatabaseCuration,
+#transcriptomics-dropDatabase,
+#proteomics-dropDatabase,
+#metabolomics-dropDatabase {
+  width: 75px;
+}
+
+#dropDatabaseOutput {
+  width: 140px;
+}
+
+#transcriptomics-input,
+#proteomics-input,
+#metabolomics-input {
+  display: none;
+}
+
 
 #selectedFile {
   width: 90px;
@@ -384,4 +429,65 @@ img {
   line-height: 15px;
   text-shadow: none;
   user-select: none;
+}
+
+#selectedOutput {
+  width: 120px;
+}
+
+#output-input {
+  display: none;
+}
+
+#styletitle {
+  font-family: sans-serif;
+}
+
+#database-input {
+  display: none;
+}
+
+#organism-image {
+  width: 230px;
+  margin-top: 60px;
+}
+
+#variables-image {
+  width: 200px;
+  margin-top: 90px;
+}
+
+#curation-input {
+  display: none;
+}
+
+#broadcast-label,
+#collapse-label {
+  margin-left:1vw;
+}
+
+#broadcast_gene_expression,
+#use_modifiers_in_collapse {
+  width: 15px;
+  height: 15px;
+}
+
+#metaboverse-icon {
+  all: initial;
+  width: 250px;
+  text-align:center;
+}
+
+#cite-text,
+#getVersion {
+  font-size: 16px;
+}
+
+#session-text {
+  text-align: center;
+}
+
+#display-session {
+  display: inline-block;
+  text-align: left;
 }

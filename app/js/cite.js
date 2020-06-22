@@ -28,20 +28,3 @@ $.ajax({
     document.getElementById("getVersion").innerHTML = version;
   }
 });
-
-// Get current Reactome version
-$.ajax({
-  url: "https://reactome.org/tag/release",
-  success: function(result) {
-    var versions = [];
-    let array = [...result.matchAll("Version (.*) Released")];
-
-    for (a in array) {
-      versions.push(array[a][1]);
-    }
-
-    document.getElementById("getReactomeVersion").innerHTML = Math.max(
-      ...versions
-    );
-  }
-});

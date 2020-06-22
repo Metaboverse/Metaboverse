@@ -21,10 +21,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="UTF-8">
-<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-<meta http-equiv="Content-Security-Policy" script-src * data: https://ssl.gstatic.com 'unsafe-inline' 'unsafe-eval'">
-<meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src * data: https://ssl.gstatic.com 'unsafe-inline' 'unsafe-eval'">
- -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ 'self';">
+
 <title>Metaboverse</title>
 
 <html>
@@ -32,8 +30,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/network.css">
 
-  <script src="../js/cite.js"></script>
   <script src="../js/index.js"></script>
+  <script src="../js/cite.js"></script>
   <script src="../js/launch.js"></script>
   <script src="../js/utils.js"></script>
 
@@ -42,15 +40,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <!-- menu -->
     <menu>
       <font size=3.25px>
-        <menuItem style="float:right"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
-        <menuItem style="float:right"><a href="cite.html">Cite</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
-        <menuItem style="float:right"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
-        <menuItem style="float:left"><a href="index.html">Metaboverse</a></menuItem>
-        <menuItem style="float:left"><a href="session.html">Session Data</a></menuItem>
-        <menuItem style="float:left" onclick="refresh_session()"><a>&#x21bb;</a></menuItem>
+        <menuItem id="menuright"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
+        <menuItem id="menuright"><a href="cite.html">Cite</a></menuItem>
+        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
+        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
+        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
+        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
+        <menuItem id="menuleft"><a href="index.html">Metaboverse</a></menuItem>
+        <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
+        <menuItem id="menurefresh"><a>&#x21bb;</a></menuItem>
 
       </font>
     </menu>
@@ -58,19 +56,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   </head>
 
   <body>
-    <!--
-    <audio
-        autoplay
-        src="../data/stellardrone-starscape.aac">
-    </audio>
-    -->
     <div class="title">
       <br />
       <br />
       <div id="graph" align="center"></div>
       <script src="../js/network.js"></script>
 
-      <font style="font-family: sans-serif">
+      <font id="styletitle">
       <font size="40">
         <b>
           <center>
@@ -103,7 +95,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.json'"><i>i</i></button>
           <br>
           <br>
-        <div id="dropDatabase" onclick="document.getElementById('database-input').click();">
+        <div id="dropDatabase">
           <font size="1">
             Select File
           </font>
@@ -111,7 +103,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         &nbsp;&nbsp;
         <div id="selectedFile">
         </div>
-        <input id="database-input" type="file" name="name" style="display: none;" onchange="changeInput()" />
+        <input id="database-input" type="file" name="name" />
 
           <br>
           <br>
@@ -122,27 +114,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <p>
         <center>
           <div id="content"></div>
-          <script>
-            update_session_info("current_pathway", null);
 
-            $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
-
-            var dbURL = get_session_info("database_url");
-            var defaultValue = "No file selected";
-            if (dbURL !== null) {
-              defaultValue = dbURL;
-              $("#content").html(
-                '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
-              );
-            }
-
-            $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
-
-            function changeInput() {
-              update_session_info("processed", true);
-            }
-
-          </script>
         </center>
       </p>
 

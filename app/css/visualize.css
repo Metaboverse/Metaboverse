@@ -221,7 +221,6 @@ path.hull {
 #superPathwayMenu {
   font: 16px sans-serif;
   margin-left: 260;
-  margin-top: 35px;
 }
 
 #pathwayMenu {
@@ -261,6 +260,7 @@ path.hull {
   border-bottom: 3px dashed #4c4cff;
   height: 0px;
   float: left;
+
 }
 
 .point {
@@ -331,4 +331,63 @@ div {
 
 #play_button {
   border-radius: 5px;
+}
+
+.grey-dot {
+  --dot_color: grey;
+}
+.white-dot {
+  --dot_color: white;
+}
+.dashed-dot {
+  border-style: dashed;
+  margin-left: 10px;
+}
+
+.seismic_node {
+  background-color:none;
+}
+
+.green-arrow {
+  --arrow_color: green;
+}
+.red-arrow {
+  --arrow_color: red;
+}
+.orange-arrow {
+  --arrow_color: orange;
+}
+.blue-arrow {
+  --arrow_color: blue;
+}
+.arrow-purple {
+  --arrow_color: rgba(165, 55, 253, 1);
+}
+.arrow-margin-0 {
+  margin-top: 0px;
+}
+.arrow-margin-4 {
+  margin-top: 4px;
+}
+.grey-arrow {
+  --arrow_color: grey;
+}
+.component-label {
+  margin-left: 17px;
+}
+.bold-text {
+  font-weight: bold;
+}
+.red-text {
+  color: red;
+}
+.view-global-title {
+  padding-left:275px;
+}
+.topmargin-minus5 {
+  margin-top:-5px;
+  margin-bottom:10px;
+}
+.topmargin-plus35 {
+  margin-top: 35px;
 }
