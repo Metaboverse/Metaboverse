@@ -298,8 +298,10 @@ function nearest_neighbors(data, entity_id) {
 
 function parse_kNN_pathway(data, entity_id, kNN) {
   // Reset warning messages
-  document.getElementById("warning_line_1").innerHTML = "<br>";
-  document.getElementById("warning_line_2").innerHTML = "<br><br>";
+  try {
+    document.getElementById("warning_line_1").innerHTML = "<br>";
+    document.getElementById("warning_line_2").innerHTML = "<br><br>";
+  } catch(e) {}
 
   if (collapse_reactions !== true) {
     var reaction_dictionary = data.reaction_dictionary;
@@ -375,19 +377,23 @@ function parse_kNN_pathway(data, entity_id, kNN) {
   // If too many nodes for first neighborhood, stop plotting
   var escape = nn_components.length;
   if (escape > max_nodes) {
-    document.getElementById("warning_line_1").innerHTML =
-      '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
-    document.getElementById("warning_line_2").innerHTML = "<br>";
-    alert("Too many entities to plot")
+    try {
+      document.getElementById("warning_line_1").innerHTML =
+        '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
+      document.getElementById("warning_line_2").innerHTML = "<br>";
+      alert("Too many entities to plot")
+    } catch(e) {}
+
     kNN = 0;
     nn_components = [];
   }
 
   if (kNN > 1) {
-    document.getElementById("warning_line_1").innerHTML =
-      '<i class="red-text">Please wait<br><br></i>';
-    document.getElementById("warning_line_2").innerHTML = "";
-
+    try {
+      document.getElementById("warning_line_1").innerHTML =
+        '<i class="red-text">Please wait<br><br></i>';
+      document.getElementById("warning_line_2").innerHTML = "";
+    } catch(e) {}
     // Filter out any components that are above hub threshold for kNN
     n = 1;
     nn_components = [...new Set(nn_components)];
@@ -459,17 +465,21 @@ function parse_kNN_pathway(data, entity_id, kNN) {
       escape = escape + components.length;
       if (escape > max_nodes) {
         console.log(escape);
-        document.getElementById("warning_line_1").innerHTML =
-          '<i class="red-text">Too many entities to plot. Will only plot first ' +
-          n +
-          " neighborhood(s)</i>";
-        document.getElementById("warning_line_2").innerHTML = "";
-        alert("Too many entities to plot. Will only plot first " + n + " neighborhood(s)")
+        try {
+          document.getElementById("warning_line_1").innerHTML =
+            '<i class="red-text">Too many entities to plot. Will only plot first ' +
+            n +
+            " neighborhood(s)</i>";
+          document.getElementById("warning_line_2").innerHTML = "";
+          alert("Too many entities to plot. Will only plot first " + n + " neighborhood(s)")
+        } catch(e) {}
         n = kNN + 2;
       } else {
         nn_components = nn_components.concat(components);
-        document.getElementById("warning_line_1").innerHTML = "<br>";
-        document.getElementById("warning_line_2").innerHTML = "<br><br>";
+        try {
+          document.getElementById("warning_line_1").innerHTML = "<br>";
+          document.getElementById("warning_line_2").innerHTML = "<br><br>";
+        } catch(e) {}
       }
       n = n + 1;
     }
@@ -1451,31 +1461,238 @@ function test() {
 
         let test_data_kNN = {
           'nodes': {
-            'N1': {
-              'name': 'n1',
-              'degree': 10
-            },
+            'R1':{
+              'degree':5,
+              'name':'r1',
+              'id':'R1'},
+            'R2':{
+              'degree':5,
+              'name':'r2',
+              'id':'R2'},
+            'R3':{
+              'degree':5,
+              'name':'r3',
+              'id':'R3'},
+            'R4':{
+              'degree':5,
+              'name':'r4',
+              'id':'R4'},
+            'R5':{
+              'degree':5,
+              'name':'r5',
+              'id':'R5'},
+            'R6':{
+              'degree':5,
+              'name':'r6',
+              'id':'R6'},
+            'N1':{
+              'degree':1000,
+              'name':'n1',
+              'id':'N1'},
+            'N2':{
+              'degree':10,
+              'name':'n2',
+              'id':'N2'},
+            'N3':{
+              'degree':50,
+              'name':'n3',
+              'id':'N3'},
+            'N4':{
+              'degree':9,
+              'name':'n4',
+              'id':'N4'},
+            'N5':{
+              'degree':10,
+              'name':'n5',
+              'id':'N5'},
+            'N6':{
+              'degree':11,
+              'name':'n6',
+              'id':'N6'},
+            'N7':{
+              'degree':10,
+              'name':'n7',
+              'id':'N7'},
+            'N8':{
+              'degree':5,
+              'name':'n8',
+              'id':'N8'},
+            'N9':{
+              'degree':4,
+              'name':'n9',
+              'id':'N9'},
+            'N10':{
+              'degree':3,
+              'name':'n10',
+              'id':'N10'},
+            'N11':{
+              'degree':7,
+              'name':'n11',
+              'id':'N11'}
           },
-          'blocklist': [],
+          'links': {
+            'N7,R1':{'id':'l1'},
+            'R1,N8':{'id':'l2'},
+            'N3,R1':{'id':'l3'},
+            'N5,R2':{'id':'l4'},
+            'N6,R2':{'id':'l5'},
+            'R2,N7':{'id':'l6'},
+            'N11,R2':{'id':'l7'},
+            'N4,R3':{'id':'l8'},
+            'R3,N5':{'id':'l9'},
+            'R3,N6':{'id':'l10'},
+            'N11,R3':{'id':'l11'},
+            'N8,R4':{'id':'l12'},
+            'N9,R4':{'id':'l13'},
+            'R4,N1':{'id':'l14'},
+            'R4,N2':{'id':'l15'},
+            'N2,R5':{'id':'l16'},
+            'R5,N3':{'id':'l17'},
+            'N3,R6':{'id':'l18'},
+            'R4,R6':{'id':'l19'},
+            'R6,N5':{'id':'l20'},
+            'N11,R6':{'id':'l21'},
+            'N1,R6':{'id':'l22'},
+          },
           'reaction_dictionary': {
-
+            'R1': {
+              'id': 'R1',
+              'reactants': ['N7'],
+              'products': ['N8'],
+              'modifiers': [['N3','catalyst']],
+              'additional_components':[]
+            },
+            'R2': {
+              'id': 'R2',
+              'reactants': ['N5','N6'],
+              'products': ['N7'],
+              'modifiers': [['N11','catalyst']],
+              'additional_components':[]
+            },
+            'R3': {
+              'id': 'R3',
+              'reactants': ['N4'],
+              'products': ['N5','N6'],
+              'modifiers': [['N11','inhibitor']],
+              'additional_components':[]
+            },
+            'R4': {
+              'id': 'R4',
+              'reactants': ['N8','N9'],
+              'products': ['N1','N2'],
+              'modifiers': [],
+              'additional_components':[]
+            },
+            'R5': {
+              'id': 'R5',
+              'reactants': ['N2'],
+              'products': ['N3'],
+              'modifiers': [],
+              'additional_components':[]
+            },
+            'R6': {
+              'id': 'R6',
+              'reactants': ['N3','N4'],
+              'products': ['N5'],
+              'modifiers': [['N11','catalyst'],['N1','inhibitor']],
+              'additional_components':[]
+            }
           },
           'collapsed_reaction_dictionary': {
-
+            'R1': {
+              'id': 'R1',
+              'reactants': ['N7'],
+              'products': ['N8'],
+              'modifiers': [['N3','catalyst']],
+              'additional_components':[]
+            },
+            'R2': {
+              'id': 'R2',
+              'reactants': ['N5','N6'],
+              'products': ['N7'],
+              'modifiers': [['N11','catalyst']],
+              'additional_components':[]
+            },
+            'R3': {
+              'id': 'R3',
+              'reactants': ['N4'],
+              'products': ['N5','N6'],
+              'modifiers': [['N11','inhibitor']],
+              'additional_components':[]
+            },
+            'R4': {
+              'id': 'R4',
+              'reactants': ['N8','N9'],
+              'products': ['N1','N2'],
+              'modifiers': [],
+              'additional_components':[]
+            },
+            'R5': {
+              'id': 'R5',
+              'reactants': ['N2'],
+              'products': ['N3'],
+              'modifiers': [],
+              'additional_components':[]
+            },
+            'R6': {
+              'id': 'R6',
+              'reactants': ['N3','N4'],
+              'products': ['N5'],
+              'modifiers': [['N11','catalyst'],['N1','inhibitor']],
+              'additional_components':[]
+            }
           },
-          'degree_dictionary': {}
+          'degree_dictionary': {
+            'N1':1000,
+            'N2':10,
+            'N3':50,
+            'N4':9,
+            'N5':10,
+            'N6':11,
+            'N7':10,
+            'N8':5,
+            'N9':4,
+            'N10':3,
+            'N11':7,
+            'R1':5,
+            'R2':5,
+            'R3':5,
+            'R4':5,
+            'R5':5,
+            'R6':5,
+          },
+          'blocklist': ['n2'],
 
         }
-        console.log(collapse_reactions)
-        //let test_new_elements = parse_kNN_pathway(
-        //  test_data_kNN,
-        //  test_entity_id,
-        //  test_kNN)
-        //console.log(test_new_elements)
-
-
-
-
+        let test_entity_id = "N7";
+        let test_kNN = 1;
+        let test_new_elements = parse_kNN_pathway(
+          test_data_kNN,
+          test_entity_id,
+          test_kNN)
+        let el1 = test_new_elements[0];
+        let el2 = test_new_elements[1];
+        for (el in el1) {
+          if (el1[el].name === 'r3'
+              || el1[el].name === 'r4'
+              || el1[el].name === 'r5'
+              || el1[el].name === 'r6') {
+            assert(false)
+          }
+        }
+        test_kNN = 2;
+        let test_new_elements2 = parse_kNN_pathway(
+          test_data_kNN,
+          test_entity_id,
+          test_kNN)
+        let el1_2 = test_new_elements2[0];
+        let el2_2 = test_new_elements2[1];
+        for (el in el1_2) {
+          if (el1_2[el].name === 'r4'
+              || el1_2[el].name === 'r5') {
+            assert(false)
+          }
+        }
       })
     })
     // checkReaction()
