@@ -24,238 +24,6 @@ var eval_modifiers = false;
 var excl_hubs = false;
 var hub_threshold = 100;
 
-function test() {
-  var assert = require('assert');
-  var { JSDOM } = require('jsdom');
-  var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
-  var { window } = jsdom;
-  $ = global.jQuery = require('jquery')(window);
-
-  let test_components = ['N1', 'N2']
-  let test_reaction = {
-    'R1': {
-      'reactants': ['N1'],
-      'products': ['N2'],
-      'modifiers': [['N3','catalyst']]
-    }
-  }
-  let test_expression_dict = {
-    'N1': [0.9, 1],
-    'N2': [0.8, 2],
-    'N3': [0.7, 3]
-  }
-  let test_stats_dict = {
-    'N1': [0.1, 1],
-    'N2': [0.2, 2],
-    'N3': [null, null]
-  }
-  let test_degree_dict = {
-    'N1': 1000,
-    'N2': 10,
-    'N3': 1
-  }
-
-  describe('motifs.js', function () {
-    // modifiersChecked()
-    describe('modifiersChecked()', function () {
-      it('should return false if eval_modifiers true, and vice versa', function () {
-        assert(eval_modifiers === false);
-        modifiersChecked();
-        assert(eval_modifiers === true);
-        modifiersChecked();
-        assert(eval_modifiers === false);
-      })
-    })
-    // hubsChecked()
-    describe('hubsChecked()', function () {
-      it('should return false if excl_hubs true, and vice versa', function () {
-        assert(excl_hubs === false);
-        hubsChecked();
-        assert(excl_hubs === true);
-        hubsChecked();
-        assert(excl_hubs === false);
-      })
-    })
-    // cleanHubs()
-    describe('cleanHubs()', function () {
-      it('should filter out nodes with a degree higher than the threshold', function () {
-      let test_excl_hubs = true
-      let test_filter_hubs = cleanHubs(
-          test_excl_hubs,
-          test_components,
-          test_degree_dict,
-          50)
-      assert(test_filter_hubs.length === 1)
-      assert(test_filter_hubs[0] === 'N2')
-      })
-    })
-    // parseComponents()
-    describe('parseComponents()', function () {
-      it('should parse component values after degree cleaning', function () {
-        excl_hubs = false;
-        let test_items, test_updated_source, test_updated_target;
-        test_items = parseComponents(
-          test_reaction['R1'],
-          test_expression_dict,
-          test_stats_dict,
-          test_degree_dict,
-          0)
-        test_updated_source = test_items[0];
-        test_updated_target = test_items[1];
-        assert(test_updated_source.length === 1)
-        assert(test_updated_source[0][0] === 0.9)
-        assert(test_updated_source[0][1] === 0.1)
-        assert(test_updated_target.length === 1)
-        assert(test_updated_target[0][0] === 0.8)
-        assert(test_updated_target[0][1] === 0.2)
-        excl_hubs = true;
-        test_items = parseComponents(
-          test_reaction['R1'],
-          test_expression_dict,
-          test_stats_dict,
-          test_degree_dict,
-          0)
-        test_updated_source = test_items[0];
-        test_updated_target = test_items[1];
-        assert(test_updated_source.length === 0)
-        assert(test_updated_target.length === 1)
-        assert(test_updated_target[0][0] === 0.8)
-        assert(test_updated_target[0][1] === 0.2)
-      })
-    })
-    // parseComponentsMod()
-    describe('parseComponentsMod()', function () {
-      it('should parse component values after degree cleaning with modifiers considered', function () {
-
-        excl_hubs = false;
-        let test_items, test_updated_core, test_updated_mods;
-        test_items = parseComponentsMod(
-          test_reaction['R1'],
-          test_expression_dict,
-          test_stats_dict,
-          test_degree_dict,
-          0)
-        test_updated_source = test_items[0];
-        test_updated_target = test_items[1];
-        assert(test_items.length === 2)
-        assert(test_updated_source.length === 2)
-        assert(test_updated_target.length === 0)
-        assert(test_updated_source[0][0] === 0.9)
-        assert(test_updated_source[0][1] === 0.1)
-        assert(test_updated_source[1][0] === 0.8)
-        assert(test_updated_source[1][1] === 0.2)
-      })
-    })
-    // parseComponentsTrans()
-    describe('parseComponentsTrans()', function () {
-      it('should parse component values after degree cleaning with modifiers considered', function () {
-        excl_hubs = false;
-        let test_items, test_updated_core, test_updated_mods;
-        test_items = parseComponentsTrans(
-          test_reaction['R1'],
-          test_expression_dict,
-          test_stats_dict,
-          test_degree_dict,
-          0)
-        test_updated_source = test_items[0];
-        test_updated_target = test_items[1];
-        test_updated_modifiers = test_items[2];
-        assert(test_items.length === 3)
-        assert(test_updated_source.length === 1)
-        assert(test_updated_source[0][0] === 0.9)
-        assert(test_updated_source[0][1] === 0.1)
-        assert(test_updated_target.length === 1)
-        assert(test_updated_target[0][0] === 0.8)
-        assert(test_updated_target[0][1] === 0.2)
-        assert(test_updated_modifiers.length === 0)
-      })
-    })
-    // computeAvg()
-    describe('computeAvg()', function () {
-      it('should return the average of the input array', function () {
-        let test_array, test_array_out;
-        test_array = [0,1,2];
-        test_array_out = computeAvg(test_array)
-        assert(test_array_out === 1)
-        test_array = [0,1,null];
-        test_array_out = computeAvg(test_array)
-        assert(test_array_out === 0.5)
-        test_array = [null,null];
-        test_array_out = computeAvg(test_array)
-        assert(test_array_out === 0)
-      })
-    })
-    // motifSearch_MaxMax()
-    describe('motifSearch_MaxMax()', function () {
-      it('should return -1 when the value is not present', function () {
-        let test_threshold = 50;
-        let test_sample_indices = [0,1];
-        let test_collapsed_reaction_dict
-        let test_path_mapper
-
-        motifSearch_MaxMax(
-            test_threshold,
-            test_collapsed_reaction_dict,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
-      })
-    })
-    // motifSearch_MinMin()
-    describe('motifSearch_MinMin()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // motifSearch_MaxMin()
-    describe('motifSearch_MaxMin()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // motifSearch_MinMax()
-    describe('motifSearch_MinMax()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // motifSearch_Sustained()
-    describe('motifSearch_Sustained()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // motifSearch_PathMax()
-    describe('motifSearch_PathMax()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // motifSearch_PathCov()
-    describe('motifSearch_PathCov()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // modifierReg()
-    describe('modifierReg()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-    // modifierTransport()
-    describe('modifierTransport()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-  })
-  // reset script variables
-}
-module.exports = test
-
 function modifiersChecked() {
   if (eval_modifiers === false) {
     eval_modifiers = true;
@@ -558,12 +326,13 @@ function motifSearch_Avg(
         if (Math.abs(source_avg - target_avg) >= threshold) {
           let p_source = Math.max(...source_stats);
           let p_target = Math.max(...target_stats);
-          reaction.p_values = {
+          let reaction_copy = $.extend(true, {}, reaction);
+          reaction_copy.p_values = {
             "source": p_source,
             "target": p_target
           };
-          reaction.magnitude_change = Math.abs(source_avg - target_avg);
-          sample_motifs.push(reaction);
+          reaction_copy.magnitude_change = Math.abs(source_avg - target_avg);
+          sample_motifs.push(reaction_copy);
         }
       }
     }
@@ -607,7 +376,6 @@ function motifSearch_MaxMax(
       let target_values = updated_target.map((i) => i[0]);
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
-
       if(source_values.length>0 && target_values.length>0){
         let source_max = Math.max(...source_values);
         let target_max = Math.max(...target_values);
@@ -617,16 +385,18 @@ function motifSearch_MaxMax(
           let target_index = target_values.indexOf(target_max);
           let p_source = source_stats[source_index];
           let p_target = target_stats[target_index];
-          reaction.p_values = {
+          let reaction_copy = $.extend(true, {}, reaction);
+          reaction_copy.p_values = {
             "source": p_source,
             "target": p_target
           };
-          reaction.magnitude_change = Math.abs(source_max - target_max);
-          sample_motifs.push(reaction);
+          reaction_copy.magnitude_change = Math.abs(source_max - target_max);
+          sample_motifs.push(reaction_copy);
         }
       }
     }
     for (let m in sample_motifs) {
+      console.log()
       sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['id']]
     }
     discovered_motifs.push(sample_motifs);
@@ -676,12 +446,13 @@ function motifSearch_MinMin(
           let target_index = target_values.indexOf(target_min);
           let p_source = source_stats[source_index];
           let p_target = target_stats[target_index];
-          reaction.p_values = {
+          let reaction_copy = $.extend(true, {}, reaction);
+          reaction_copy.p_values = {
             "source": p_source,
             "target": p_target
           };
-          reaction.magnitude_change = Math.abs(source_min - target_min);
-          sample_motifs.push(reaction);
+          reaction_copy.magnitude_change = Math.abs(source_min - target_min);
+          sample_motifs.push(reaction_copy);
         }
       }
     }
@@ -736,12 +507,13 @@ function motifSearch_MaxMin(
           let target_index = target_values.indexOf(target_min);
           let p_source = source_stats[source_index];
           let p_target = target_stats[target_index];
-          reaction.p_values = {
+          let reaction_copy = $.extend(true, {}, reaction);
+          reaction_copy.p_values = {
             "source": p_source,
             "target": p_target
           };
-          reaction.magnitude_change = Math.abs(source_max - target_min);
-          sample_motifs.push(reaction);
+          reaction_copy.magnitude_change = Math.abs(source_max - target_min);
+          sample_motifs.push(reaction_copy);
         }
       }
     }
@@ -796,12 +568,13 @@ function motifSearch_MinMax(
           let target_index = target_values.indexOf(target_max);
           let p_source = source_stats[source_index];
           let p_target = target_stats[target_index];
-          reaction.p_values = {
+          let reaction_copy = $.extend(true, {}, reaction);
+          reaction_copy.p_values = {
             "source": p_source,
             "target": p_target
           };
-          reaction.magnitude_change = Math.abs(source_min - target_max);
-          sample_motifs.push(reaction);
+          reaction_copy.magnitude_change = Math.abs(source_min - target_max);
+          sample_motifs.push(reaction_copy);
         }
       }
     }
@@ -937,9 +710,10 @@ function motifSearch_Sustained(
               "target": p_target_down
             }
           }
-          reaction.p_values = p_vals;
-          reaction.magnitude_change = magnitude_change;
-          sample_motifs.push(reaction);
+          let reaction_copy = $.extend(true, {}, reaction);
+          reaction_copy.p_values = p_vals;
+          reaction_copy.magnitude_change = magnitude_change;
+          sample_motifs.push(reaction_copy);
         }
       }
     }
@@ -1124,18 +898,18 @@ function modifierReg(
               };
               let magnitude_chg = Math.abs(core_values[x] - modifier_values[y]);
 
+              let reaction_copy = $.extend(true, {}, reaction);
               if(sample_motifs.includes(reaction)) {
-                if (magnitude_chg > reaction.magnitude_change) {
-                  reaction.p_values = p_vals;
-                  reaction.magnitude_change = magnitude_chg;
-                  sample_motifs.push(reaction);
+                if (magnitude_chg > reaction_copy.magnitude_change) {
+                  reaction_copy.p_values = p_vals;
+                  reaction_copy.magnitude_change = magnitude_chg;
+                  sample_motifs.push(reaction_copy);
                 }
               } else {
-                reaction.p_values = p_vals;
-                reaction.magnitude_change = magnitude_chg;
-                sample_motifs.push(reaction);
+                reaction_copy.p_values = p_vals;
+                reaction_copy.magnitude_change = magnitude_chg;
+                sample_motifs.push(reaction_copy);
               }
-
             }
           }
         }
@@ -1208,16 +982,17 @@ function modifierTransport(
               };
               let magnitude_chg = Math.abs(intersect[x] - modifier_values[y]);
 
+              let reaction_copy = $.extend(true, {}, reaction);
               if(sample_motifs.includes(reaction)) {
-                if (magnitude_chg > reaction.magnitude_change) {
-                  reaction.p_values = p_vals;
-                  reaction.magnitude_change = magnitude_chg;
-                  sample_motifs.push(reaction);
+                if (magnitude_chg > reaction_copy.magnitude_change) {
+                  reaction_copy.p_values = p_vals;
+                  reaction_copy.magnitude_change = magnitude_chg;
+                  sample_motifs.push(reaction_copy);
                 }
               } else {
-                reaction.p_values = p_vals;
-                reaction.magnitude_change = magnitude_chg;
-                sample_motifs.push(reaction);
+                reaction_copy.p_values = p_vals;
+                reaction_copy.magnitude_change = magnitude_chg;
+                sample_motifs.push(reaction_copy);
               }
             }
           }
@@ -1232,3 +1007,418 @@ function modifierTransport(
   console.log(discovered_motifs);
   return discovered_motifs;
 }
+
+function test() {
+  var assert = require('assert');
+  var { JSDOM } = require('jsdom');
+  var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+  var { window } = jsdom;
+  $ = global.jQuery = require('jquery')(window);
+
+  let test_sample_indices = [0,1];
+  let test_components = ['N1', 'N2'];
+  let test_reaction = {
+    'R1': {
+      'id': 'R1',
+      'reactants': ['N1'],
+      'products': ['N2'],
+      'modifiers': [['N3','catalyst']]
+    },
+    'R2': {
+      'id': 'R2',
+      'reactants': ['N4','N5'],
+      'products': ['N6'],
+      'modifiers': [['N7','catalyst']]
+    },
+    'R3': {
+      'id': 'R3',
+      'reactants': ['N8'],
+      'products': ['N9','N10'],
+      'modifiers': [['N11','inhibitor']]
+    },
+    'R4': {
+      'id': 'R4',
+      'reactants': ['N12','N13'],
+      'products': ['N14','N15'],
+      'modifiers': []
+    },
+    'R5': {
+      'id': 'R5',
+      'reactants': ['N16'],
+      'products': ['N17'],
+      'modifiers': []
+    },
+    'R6': {
+      'id': 'R6',
+      'reactants': ['N18','N19'],
+      'products': ['N20'],
+      'modifiers': [['N21','catalyst'],['N22','inhibitor']]
+    },
+  }
+  let test_expression_dict = {
+    'N1': [0.9, 1],//
+    'N2': [0.8, 2],
+    'N3': [0.7, 3],//mod
+
+    'N4': [5, 3],
+    'N5': [5, 3],//
+    'N6': [1, 1],
+    'N7': [0, 1],//mod
+
+    'N8': [0.7, 1],//
+    'N9': [0.7, 1],
+    'N10': [null, null],
+    'N11': [3, 3],//mod
+
+    'N12': [0.7, 3],
+    'N13': [0.7, 0],//
+    'N14': [0, 0],
+    'N15': [1, 1],
+
+    'N16': [0.7, 0.7],//
+    'N17': [0.7, 0.7],
+
+    'N18': [0.9, 2],
+    'N19': [0.1, 0.03],//
+    'N20': [7, 3],
+    'N21': [7, 3],//mod
+    'N22': [1, 3]//mod
+  }
+  let test_stats_dict = {
+    'N1': [0.1, 0.05],
+    'N2': [0.2, 0.02],
+    'N3': [null, null],
+    'N4': [0.3, 0.01],
+    'N5': [0.4, 0.02],
+    'N6': [0.5, 0.03],
+    'N7': [0.6, 0.04],
+    'N8': [0.7, 0.05],
+    'N9': [0.8, 0.06],
+    'N10': [null, null],
+    'N11': [0.9, 0.07],
+    'N12': [0.8, 0.08],
+    'N13': [0.7, 0.09],
+    'N14': [0.6, 0.09],
+    'N15': [0.5, 0.08],
+    'N16': [0.4, 0.07],
+    'N17': [0.3, 0.06],
+    'N18': [0.2, 0.05],
+    'N19': [0.1, 0.04],
+    'N20': [0.11, 0.03],
+    'N21': [0.2, 0.02],
+    'N22': [0.3, 0.01]
+  }
+  let test_degree_dict = {
+    'N1': 1000,
+    'N2': 10,
+    'N3': 1,
+    'N4': 3,
+    'N5': 10,
+    'N6': 7,
+    'N7': 6,
+    'N8': 100,
+    'N9': 40,
+    'N10': 24,
+    'N11': 13,
+    'N12': 11,
+    'N13': 4,
+    'N14': 6,
+    'N15': 13,
+    'N16': 9,
+    'N17': 7,
+    'N18': 4,
+    'N19': 5,
+    'N20': 2,
+    'N21': 1,
+    'N22': 99
+  }
+  let test_path_mapper = {
+    'R1': ['P1','P2','P3','P4'],
+    'R2': ['P5','P6'],
+    'R3': ['P5','P9'],
+    'R4': ['P1','P3'],
+    'R5': ['P2','P4'],
+    'R6': ['P1']
+  }
+
+  describe('motifs.js', function () {
+    // modifiersChecked()
+    describe('modifiersChecked()', function () {
+      it('should return false if eval_modifiers true, and vice versa', function () {
+        assert(eval_modifiers === false);
+        modifiersChecked();
+        assert(eval_modifiers === true);
+        modifiersChecked();
+        assert(eval_modifiers === false);
+      })
+    })
+    // hubsChecked()
+    describe('hubsChecked()', function () {
+      it('should return false if excl_hubs true, and vice versa', function () {
+        assert(excl_hubs === false);
+        hubsChecked();
+        assert(excl_hubs === true);
+        hubsChecked();
+        assert(excl_hubs === false);
+      })
+    })
+    // cleanHubs()
+    describe('cleanHubs()', function () {
+      it('should filter out nodes with a degree higher than the threshold', function () {
+      let test_excl_hubs = true
+      let test_filter_hubs = cleanHubs(
+          test_excl_hubs,
+          test_components,
+          test_degree_dict,
+          50)
+      assert(test_filter_hubs.length === 1)
+      assert(test_filter_hubs[0] === 'N2')
+      })
+    })
+    // parseComponents()
+    describe('parseComponents()', function () {
+      it('should parse component values after degree cleaning', function () {
+        excl_hubs = false;
+        let test_items, test_updated_source, test_updated_target;
+        test_items = parseComponents(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        assert(test_updated_source.length === 1)
+        assert(test_updated_source[0][0] === 0.9)
+        assert(test_updated_source[0][1] === 0.1)
+        assert(test_updated_target.length === 1)
+        assert(test_updated_target[0][0] === 0.8)
+        assert(test_updated_target[0][1] === 0.2)
+        excl_hubs = true;
+        test_items = parseComponents(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        assert(test_updated_source.length === 0)
+        assert(test_updated_target.length === 1)
+        assert(test_updated_target[0][0] === 0.8)
+        assert(test_updated_target[0][1] === 0.2)
+      })
+    })
+    // parseComponentsMod()
+    describe('parseComponentsMod()', function () {
+      it('should parse component values after degree cleaning with modifiers considered', function () {
+
+        excl_hubs = false;
+        let test_items, test_updated_core, test_updated_mods;
+        test_items = parseComponentsMod(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        assert(test_items.length === 2)
+        assert(test_updated_source.length === 2)
+        assert(test_updated_target.length === 0)
+        assert(test_updated_source[0][0] === 0.9)
+        assert(test_updated_source[0][1] === 0.1)
+        assert(test_updated_source[1][0] === 0.8)
+        assert(test_updated_source[1][1] === 0.2)
+      })
+    })
+    // parseComponentsTrans()
+    describe('parseComponentsTrans()', function () {
+      it('should parse component values after degree cleaning with modifiers considered', function () {
+        excl_hubs = false;
+        let test_items, test_updated_core, test_updated_mods;
+        test_items = parseComponentsTrans(
+          test_reaction['R1'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        test_updated_source = test_items[0];
+        test_updated_target = test_items[1];
+        test_updated_modifiers = test_items[2];
+        assert(test_items.length === 3)
+        assert(test_updated_source.length === 1)
+        assert(test_updated_source[0][0] === 0.9)
+        assert(test_updated_source[0][1] === 0.1)
+        assert(test_updated_target.length === 1)
+        assert(test_updated_target[0][0] === 0.8)
+        assert(test_updated_target[0][1] === 0.2)
+        assert(test_updated_modifiers.length === 0)
+      })
+    })
+    // computeAvg()
+    describe('computeAvg()', function () {
+      it('should return the average of the input array', function () {
+        let test_array, test_array_out;
+        test_array = [0,1,2];
+        test_array_out = computeAvg(test_array)
+        assert(test_array_out === 1)
+        test_array = [0,1,null];
+        test_array_out = computeAvg(test_array)
+        assert(test_array_out === 0.5)
+        test_array = [null,null];
+        test_array_out = computeAvg(test_array)
+        assert(test_array_out === 0)
+      })
+    })
+    // motifSearch_MaxMax()
+    describe('motifSearch_MaxMax()', function () {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+        let test_threshold = 1;
+        let maxmax_results = motifSearch_MaxMax(
+            test_threshold,
+            test_reaction,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+        assert(maxmax_results[0].length === 2)
+        if (maxmax_results[0][0].magnitude_change === 4
+            && maxmax_results[0][1].magnitude_change === 6.1) {
+        } else {assert(false)}
+        assert(maxmax_results[1].length === 4)
+        if (maxmax_results[1][0].magnitude_change === 1
+            && maxmax_results[1][1].magnitude_change === 2
+            && maxmax_results[1][2].magnitude_change === 2
+            && maxmax_results[1][3].magnitude_change === 1) {
+        } else {assert(false)}
+      })
+    })
+    // motifSearch_Avg()
+    describe('motifSearch_Avg()', function () {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+        let test_threshold = 1;
+        let avg_results = motifSearch_Avg(
+            test_threshold,
+            test_reaction,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+        assert(avg_results[0].length === 2)
+        if (avg_results[0][0].magnitude_change === 4
+            && avg_results[0][1].magnitude_change === 6.5) {
+        } else {assert(false)}
+        assert(avg_results[1].length === 4)
+        if (avg_results[1][0].magnitude_change === 1
+            && avg_results[1][1].magnitude_change === 2
+            && avg_results[1][2].magnitude_change === 1
+            && avg_results[1][3].magnitude_change === 1.985) {
+        } else {assert(false)}
+      })
+    })
+    // motifSearch_MinMin()
+    describe('motifSearch_MinMin()', function () {
+      it('should return 2 motifs for sample 0 and 3 motifs for sample 1', function () {
+        let test_threshold = 1;
+        let minmin_results = motifSearch_MinMin(
+            test_threshold,
+            test_reaction,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+        assert(minmin_results[0].length === 2)
+        if (minmin_results[0][0].magnitude_change === 4
+            && minmin_results[0][1].magnitude_change === 6.9) {
+        } else {assert(false)}
+        assert(minmin_results[1].length === 3)
+        if (minmin_results[1][0].magnitude_change === 1
+            && minmin_results[1][1].magnitude_change === 2
+            && minmin_results[1][2].magnitude_change === 2.97) {
+        } else {assert(false)}
+      })
+    })
+    // motifSearch_MaxMin()
+    describe('motifSearch_MaxMin()', function () {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+        let test_threshold = 1;
+        let maxmin_results = motifSearch_MaxMin(
+            test_threshold,
+            test_reaction,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+        assert(maxmin_results[0].length === 2)
+        if (maxmin_results[0][0].magnitude_change === 4
+            && maxmin_results[0][1].magnitude_change === 6.1) {
+        } else {assert(false)}
+        assert(maxmin_results[1].length === 4)
+        if (maxmin_results[1][0].magnitude_change === 1
+            && maxmin_results[1][1].magnitude_change === 2
+            && maxmin_results[1][2].magnitude_change === 3
+            && maxmin_results[1][3].magnitude_change === 1) {
+        } else {assert(false)}
+      })
+    })
+    // motifSearch_MinMax()
+    describe('motifSearch_MinMax()', function () {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+        let test_threshold = 1;
+        let minmax_results = motifSearch_MinMax(
+            test_threshold,
+            test_reaction,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+        assert(minmax_results[0].length === 2)
+        if (minmax_results[0][0].magnitude_change === 4
+            && minmax_results[0][1].magnitude_change === 6.9) {
+        } else {assert(false)}
+        assert(minmax_results[1].length === 4)
+        if (minmax_results[1][0].magnitude_change === 1
+            && minmax_results[1][1].magnitude_change === 2
+            && minmax_results[1][2].magnitude_change === 1
+            && minmax_results[1][3].magnitude_change === 2.97) {
+        } else {assert(false)}
+      })
+    })
+    // motifSearch_Sustained()
+    describe('motifSearch_Sustained()', function () {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+        let test_threshold = 1;
+        let sustained_results = motifSearch_Sustained(
+            test_threshold,
+            test_reaction,
+            test_expression_dict,
+            test_stats_dict,
+            test_path_mapper,
+            test_degree_dict,
+            test_sample_indices)
+        assert(sustained_results[0].length === 1)
+        if (sustained_results[0][0].magnitude_change === 4) {
+        } else {assert(false)}
+        assert(sustained_results[1].length === 5)
+        if (sustained_results[1][0].magnitude_change === 1
+            && sustained_results[1][1].magnitude_change === 2
+            && sustained_results[1][2].magnitude_change === 0
+            && sustained_results[1][3].magnitude_change === 2
+            && sustained_results[1][4].magnitude_change === 1) {
+        } else {assert(false)}
+
+      })
+    })
+    // motifSearch_PathMax()
+    // motifSearch_PathCov()
+    // modifierReg()
+    // modifierTransport()
+  })
+}
+module.exports = test
