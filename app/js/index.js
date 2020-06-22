@@ -106,8 +106,8 @@ window.addEventListener("load", function(event) {
         update_session_info("processed", true);
         update_session_info("collapseWithModifiers",
           data.metadata.collapse_with_modifiers);
-          update_session_info("broadcastGeneExpression",
-            data.metadata.broadcastGeneExpression);
+        update_session_info("broadcastGeneExpression",
+          data.metadata.broadcastGeneExpression);
         update_session_info("labels", data.metadata.labels);
         update_session_info("blocklist", data.metadata.blocklist);
         update_session_info("database_date", data.metadata.database_date);
