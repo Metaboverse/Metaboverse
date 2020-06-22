@@ -23,7 +23,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var d3 = require("d3");
 var fs = require("fs");
 var saveSVG = require("save-svg-as-png");
-var assert = require('assert')
 
 const hullPadding = 60;
 const max_nodes = 1500;
@@ -38,39 +37,6 @@ var saved_nodes = [];
 var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
-
-function test() {
-  describe('graph.js', function () {
-    // get_nodes_links()
-    describe('get_nodes_links()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-
-    // parse_kNN_pathway()
-    describe('parse_kNN_pathway()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-
-    // checkReaction()
-    describe('checkReaction()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-
-    // get_link()
-    describe('get_link()', function () {
-      it('should return -1 when the value is not present', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-      })
-    })
-  })
-}
-module.exports = test
 
 function checkReaction(
     reaction,
@@ -1403,3 +1369,49 @@ function change() {
     nearest_neighbors(data, entity_dictionary[selection]);
   }
 }
+
+function test() {
+  var assert = require('assert')
+
+  let test_data;
+  let test_components;
+
+
+  describe('graph.js', function () {
+    // get_nodes_links()
+    describe('get_nodes_links()', function () {
+      it('', function () {
+
+        //let sustained_results = get_nodes_links(
+        //    test_data,
+        //    test_components
+        //)
+        //assert(sustained_results[0].length === 1)
+
+
+      })
+    })
+
+    // parse_kNN_pathway()
+    describe('parse_kNN_pathway()', function () {
+      it('', function () {
+
+      })
+    })
+
+    // checkReaction()
+    describe('checkReaction()', function () {
+      it('', function () {
+
+      })
+    })
+
+    // get_link()
+    describe('get_link()', function () {
+      it('', function () {
+
+      })
+    })
+  })
+}
+module.exports = test

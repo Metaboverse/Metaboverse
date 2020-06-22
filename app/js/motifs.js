@@ -1392,7 +1392,7 @@ function test() {
     })
     // motifSearch_Sustained()
     describe('motifSearch_Sustained()', function () {
-      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+      it('should return 1 motifs for sample 0 and 5 motifs for sample 1', function () {
         let test_threshold = 1;
         let sustained_results = motifSearch_Sustained(
             test_threshold,
@@ -1412,7 +1412,6 @@ function test() {
             && sustained_results[1][3].magnitude_change === 2
             && sustained_results[1][4].magnitude_change === 1) {
         } else {assert(false)}
-
       })
     })
     // motifSearch_PathMax()
