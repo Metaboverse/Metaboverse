@@ -22,27 +22,19 @@ Instructions for building OS-specific python distribution:
   mv dist/metaboverse-linux .
   rm -r build dist
 
-Instructions for building app for distribution:
------------------------------------------------
-1) Go to `app` directory
-1.1) If modules not installed, run 'npm install electron --save-dev'
-1.2) Update version at `package.json` and `__version__.txt`
-2) Package python code as executable for each OS
-3) Run:
-  -  `electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/metaboverse_logo.icns --overwrite`
-  - `electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/metaboverse_logo.icns --overwrite`
-  - `electron-packager ./ Metaboverse --platform=linux --icon=data/icon/metaboverse_logo.icns --overwrite`
-4) For each executable, open "Get Info" and drag and drop .icns file for each icon
-
-If modules not installed:
--------------------------
-1) Run 'npm install electron electron-packager --save-dev'
-2) Run 'npm install --save-dev --save-exact jsdom jsdom-global`
-3) Run 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save'
-
-Fix any vulnerabilities at each step by following their instructions
-
 To run demo app:
 ----------------
 1) Go to app directory
 2) Run 'npm start'
+
+Instructions for building app for distribution:
+-----------------------------------------------
+- Update version number in `docs/conf.py`, `build.sh`, `app/__version__.txt`, and `app/package.json
+- Remove `package-lock.json` and `node_modules/`
+- Run: 'npm install electron --save-dev'
+- Run: 'npm install --save-dev --save-exact jsdom jsdom-global`
+- Run: 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save'
+- Fix any vulnerabilities at each step by following their instructions
+- Make sure `package.json` looks correct
+- Run `bash build.sh`
+- Update package icon if necessary
