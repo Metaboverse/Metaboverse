@@ -32,9 +32,10 @@ window.addEventListener("load", function(event) {
     url: "../__version__.txt",
     success: function(version) {
       $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
+        console.log(d)
         _v = String(version)
-        _c = String(d[0].name)
-        if (!_c.includes(_v)) {
+        _c = String(d[d.length - 1].name.split("-")[1])
+        if (!_c.trim() === _v.trim()) {
           alert("A more current version of Metaboverse is available: " + _c)
         }
       })
