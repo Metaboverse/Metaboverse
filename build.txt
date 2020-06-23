@@ -30,11 +30,5 @@ To run demo app:
 Instructions for building app for distribution:
 -----------------------------------------------
 - Update version number in `docs/conf.py`, `build.sh`, `app/__version__.txt`, and `app/package.json
-- Remove `package-lock.json` and `node_modules/`
-- Run: 'npm install electron --save-dev'
-- Run: 'npm install --save-dev --save-exact jsdom jsdom-global`
-- Run: 'npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save'
-- Fix any vulnerabilities at each step by following their instructions
-- Make sure `package.json` looks correct
 - Run `bash build.sh`
 - Update package icon if necessary

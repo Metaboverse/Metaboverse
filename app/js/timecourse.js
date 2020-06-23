@@ -139,8 +139,9 @@ function buildSlider(categories, names) {
             })
             d3.select("text#" + d.id)
               .html(function(d) {
-                if (d.values[sample] === null
-                && d.stats[sample] === null) {
+                console.log(slider_index)
+                if (d.values[slider_index] === null
+                && d.stats[slider_index] === null) {
                   return (
                     "<tspan dx='16' y='0em' class='bold-text'>"
                     + d.name
@@ -148,17 +149,17 @@ function buildSlider(categories, names) {
                   );
                 } else {
                   let display_stat;
-                  if (parseFloat(d.stats[sample]) < 0.01) {
+                  if (parseFloat(d.stats[slider_index]) < 0.01) {
                     display_stat = "< 0.01"
                   } else {
-                    display_stat = parseFloat(d.stats[sample]).toFixed(2)
+                    display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
                   }
                   return (
                     "<tspan dx='16' y='-.5em' class='bold-text'>"
                     + d.name
                     + "</tspan>"
                     + "<tspan x='16' y='.7em'>Value: "
-                    + parseFloat(d.values[sample]).toFixed(2)
+                    + parseFloat(d.values[slider_index]).toFixed(2)
                     + "</tspan>"
                     + "<tspan x='16' y='1.7em'>Statistic: "
                     + display_stat
@@ -185,8 +186,8 @@ function buildSlider(categories, names) {
               })
             d3.select("text#" + d.id)
               .html(function(d) {
-                if (d.values[sample] === null
-                && d.stats[sample] === null) {
+                if (d.values[slider_index] === null
+                && d.stats[slider_index] === null) {
                   return (
                     "<tspan dx='16' y='0em' class='bold-text'>"
                     + d.name
@@ -194,17 +195,17 @@ function buildSlider(categories, names) {
                   );
                 } else {
                   let display_stat;
-                  if (parseFloat(d.stats[sample]) < 0.01) {
+                  if (parseFloat(d.stats[slider_index]) < 0.01) {
                     display_stat = "< 0.01"
                   } else {
-                    display_stat = parseFloat(d.stats[sample]).toFixed(2)
+                    display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
                   }
                   return (
                     "<tspan dx='16' y='-.5em' class='bold-text'>"
                     + d.name
                     + "</tspan>"
                     + "<tspan x='16' y='.7em'>Value: "
-                    + parseFloat(d.values[sample]).toFixed(2)
+                    + parseFloat(d.values[slider_index]).toFixed(2)
                     + "</tspan>"
                     + "<tspan x='16' y='1.7em'>Statistic: "
                     + display_stat
@@ -231,8 +232,8 @@ function buildSlider(categories, names) {
               })
             d3.select("text#" + d.id)
               .html(function(d) {
-                if (d.values[sample] === null
-                && d.stats[sample] === null) {
+                if (d.values[slider_index] === null
+                && d.stats[slider_index] === null) {
                   return (
                     "<tspan dx='16' y='0em' class='bold-text'>"
                     + d.name
@@ -240,17 +241,17 @@ function buildSlider(categories, names) {
                   );
                 } else {
                   let display_stat;
-                  if (parseFloat(d.stats[sample]) < 0.01) {
+                  if (parseFloat(d.stats[slider_index]) < 0.01) {
                     display_stat = "< 0.01"
                   } else {
-                    display_stat = parseFloat(d.stats[sample]).toFixed(2)
+                    display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
                   }
                   return (
                     "<tspan dx='16' y='-.5em' class='bold-text'>"
                     + d.name
                     + "</tspan>"
                     + "<tspan x='16' y='.7em'>Value: "
-                    + parseFloat(d.values[sample]).toFixed(2)
+                    + parseFloat(d.values[slider_index]).toFixed(2)
                     + "</tspan>"
                     + "<tspan x='16' y='1.7em'>Statistic: "
                     + display_stat

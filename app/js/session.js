@@ -52,8 +52,6 @@ window.addEventListener("load", function(event) {
     "Transcriptomics file name": "transcriptomics",
     "Proteomics file name": "proteomics",
     "Metabolomics file name": "metabolomics",
-    "Maximum absolute expression/abundance value": "max_value",
-    "Maximum absolute statistical value": "max_stat",
 
     "spacer5": "Other:",
 
