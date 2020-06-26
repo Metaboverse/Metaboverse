@@ -27,7 +27,9 @@ be foundational in increasing our ability to holistically understand
 static and temporal metabolic events and perturbations as well as gene-
 metabolite intra-cooperativity.
 ```
-Walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
+Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
+
+[![METABOVERSE](https://yt-embed.herokuapp.com/embed?v=ytTIlBKzq-c)](http://www.youtube.com/watch?v=ytTIlBKzq-c "Metaboverse Video Walkthrough")
 
 ## Getting started
 
