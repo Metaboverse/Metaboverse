@@ -145,7 +145,11 @@ runBuild = function(_callback) {
     let labels = getArgument("labels");
     labels = labels.replace(/\s/g,'');
     let blocklist = getArgument("blocklist");
-    blocklist = blocklist.replace(/\s/g,'');
+    if (blocklist === "") {
+      blocklist = "no_blocklist"
+    } else {
+      blocklist = blocklist.replace(/\s/g,'');
+    }
     if (String(curated) !== "None") {
       let db_url;
       if (String(getArgument("database_url")) === "None") {
