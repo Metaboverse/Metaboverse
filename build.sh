@@ -55,3 +55,7 @@ mv app/Metaboverse-win32-x64 ./Metaboverse-win32-x64-${VERSION}
 zip -r ./Metaboverse-darwin-x64-${VERSION}.zip ./Metaboverse-darwin-x64-${VERSION}
 zip -r ./Metaboverse-linux-x64-${VERSION}.zip ./Metaboverse-linux-x64-${VERSION}
 zip -r ./Metaboverse-win32-x64-${VERSION}.zip ./Metaboverse-win32-x64-${VERSION}
+
+shasum -a 256 ./Metaboverse-darwin-x64-${VERSION}.zip
+shasum -a 256 ./Metaboverse-linux-x64-${VERSION}.zip
+shasum -a 256 ./Metaboverse-win32-x64-${VERSION}.zip
