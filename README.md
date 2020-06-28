@@ -42,3 +42,6 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 - Unzip the downloaded folder
 - Open the `Metaboverse` app
 - Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/general-usage.html) for more information.
+
+### Trying out Metaboverse
+You can access some example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files
