@@ -27,6 +27,8 @@ var app = require("electron").remote.app;
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + "/session_data.json";
 
+var replacer = String(String.fromCharCode(92) + " ");
+
 function write_json(session_data) {
   fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {
     if (err) throw err;
@@ -112,7 +114,17 @@ function getArgument(key) {
 
   if (value === null) {
     value = "None";
-  }
+  } else if (
+    key === "database_url"
+    || key === "curation_url"
+    || key === "output"
+    || key === "transcriptomics"
+    || key === "proteomics"
+    || key === "metabolomics"
+    || key === "additional_reactions") {
+    value = value.replace(/ /g, replacer)
+    value = value.replace(/\\\\ /g, replacer)
+  } else {}
 
   return value;
 }
