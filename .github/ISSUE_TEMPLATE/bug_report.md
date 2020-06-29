@@ -21,7 +21,8 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain your problem.    
+If possible, please screenshot the Developer logs which can be found at `View` -> `Toggle Developer Tools` -> `Console` to help us address the bug easier.
 
 **Desktop (please complete the following information):**
  - OS: [e.g. macOS]

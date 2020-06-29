@@ -2,31 +2,20 @@
 
 [![Build Status](https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.org/Metaboverse/Metaboverse)
 [![Documentation Status](https://readthedocs.org/projects/metaboverse/badge/?version=latest)](https://metaboverse.readthedocs.io/en/latest/?badge=latest)
+[![bioRxiv preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2020.06.25.171850-BF2636)](https://www.biorxiv.org/content/10.1101/2020.06.25.171850v1)
 
 ## What does Metaboverse do?
-A current draft of the manuscript describing Metaboverse can be found [here](https://github.com/Metaboverse/manuscript/blob/master/output/manuscript.pdf).
+Integrating multi- or single-omic metabolic data upon the metabolic network can be challenging for a variety of reasons. Metaboverse seeks to simplify this task for users by providing a simple, user-friendly interface for layering their data on a dynamic representation of the metabolic network. Additionally, Metaboverse provides several new tools to enable the contextualization of metabolic data:
+- 90+ model organism networks
+- Integrate two-condition, multi-condition, and timecourse data
+- Search for regulatory events using our regulatory pattern search engine
+- Collapse reactions with intermediate reactions with missing data for easier visualization and analysis of sparse datasets
+- Explore super-pathway-specific reaction perturbation networks
+- Explore proximal reactions to a specific entity across the global reaction network using our Nearest Neighbors search features
+- And more to come!
 
-Briefly,    
-```
-Metabolism and its component reactions are complex, each with variable
-inputs, outputs, and modifiers. The harmony between these factors
-consequently determines the health and stability of a cell or organism.
-Perturbations to any component of a reaction can have rippling downstream
-effects, which can be difficult to trace across the global reaction
-network, particularly when the effects occur between canonical
-representations of pathways. Researchers have primarily utilized
-reductionist approaches to understand metabolic reaction systems; however,
-customary methods often limit the scope of the analysis. Even the power of
-systems-centric omics approaches can be limited when only a handful of
-high magnitude signals in the data are prioritized. To address these
-challenges, we developed Metaboverse, an interactive tool for the
-exploration and automated extraction of potential regulatory events,
-patterns, and trends from multi-omic data within the context of the
-metabolic network and other global reaction networks. This framework will
-be foundational in increasing our ability to holistically understand
-static and temporal metabolic events and perturbations as well as gene-
-metabolite intra-cooperativity.
-```
+*During the development (public beta) phase of Metaboverse, we intend to release an updated version of the software weekly as we incorporate feedback from users.*  
+
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
 
 [![METABOVERSE](https://yt-embed.herokuapp.com/embed?v=ytTIlBKzq-c)](http://www.youtube.com/watch?v=ytTIlBKzq-c "Metaboverse Video Walkthrough")
@@ -43,5 +32,24 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 - Open the `Metaboverse` app
 - Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/general-usage.html) for more information.
 
+### Getting Help
+If you have questions, requests, or bugs to report, please use the [Metaboverse issues forum](https://github.com/Metaboverse/Metaboverse/issues). Please clearly describe the problem, what you have tried, as well as screenshots of any error information. If possible, click on the `View` menu tab, click `Toggle Developer Tools`, click the `Console` tab of the window that opens, and take a screenshot of the output in this panel.
+
 ### Trying out Metaboverse
 You can access some example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files
+
+### How does the underlying code for Metaboverse work?
+Metaboverse is currently segmented into two parts:
+1. [`metaboverse-cli`](https://github.com/Metaboverse/metaboverse-cli): The network curation and modeling utilities that form the back-end of the Metaboverse app. For each release of Metaboverse, OS-specific binaries are generated of the backend and incorporating into the GUI app.
+2. [`Metaboverse` interactive app](https://github.com/Metaboverse/Metaboverse): The platform-independent app for visualizing and exploring data on the metabolic network.
+
+Metaboverse works by doing the following:
+1. Generates an organism-specific reaction network using the [Reactome knowledgebase](https://reactome.org/)
+2. References the [ChEBI](https://www.ebi.ac.uk/chebi/) and [HMDB](https://hmdb.ca/) databases to cross-reference metabolite synonyms.
+3. Generates a network-based reaction model
+4. Layers user data onto the global reaction network
+5. Optionally broadcasts gene expression data to protein expression nodes where protein values are unavailable
+6. Prevent the visualization of certain nodes to create simplified visualizations of pathways
+7. Runs just-in-time searches of the global network for regulatory patterns of interest centered around a reaction
+8. Generates just-in-time visualizations of global or super-pathway-specific perturbation networks
+9. Generates just-in-time general visualization of canonical pathways

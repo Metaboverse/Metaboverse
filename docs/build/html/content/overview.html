@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview &mdash; Metaboverse 0.0.0-alpha documentation</title>
+  <title>Overview &mdash; Metaboverse 0.1.2-beta documentation</title>
   
 
   
@@ -96,6 +96,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#using-metaboverse">Using Metaboverse</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#important-features-of-metaboverse">Important Features of Metaboverse</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#technical-description">Technical Description</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -234,6 +235,26 @@
 <h2>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster than data modeled on a human network. You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working.</div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="technical-description">
+<h2>Technical Description<a class="headerlink" href="#technical-description" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Metaboverse is currently segmented into two parts:</div>
+<div class="line">1. <code class="xref py py-data docutils literal notranslate"><span class="pre">metaboverse-cli</span></code>: The network curation and modeling utilities that form the back-end of the Metaboverse app. For each release of Metaboverse, OS-specific binaries are generated of the backend and incorporating into the GUI app. [<a class="reference external" href="https://github.com/Metaboverse/metaboverse-cli">code</a>]</div>
+<div class="line">2. <code class="xref py py-data docutils literal notranslate"><span class="pre">Metaboverse</span></code> interactive app: The platform-independent app for visualizing and exploring data on the metabolic network. [<a class="reference external" href="https://github.com/Metaboverse/Metaboverse">code</a>]</div>
+<div class="line"><br /></div>
+<div class="line">Metaboverse works by doing the following:</div>
+<div class="line">1. Generates an organism-specific reaction network using the <a class="reference external" href="https://reactome.org/">Reactome Knowledgebase</a></div>
+<div class="line">2. References the <a class="reference external" href="https://www.ebi.ac.uk/chebi/">ChEBI</a> and <a class="reference external" href="https://hmdb.ca/">HMDB</a> databases to cross-reference metabolite synonyms.</div>
+<div class="line">3. Generates a network-based reaction model</div>
+<div class="line">4. Layers user data onto the global reaction network</div>
+<div class="line">5. Optionally broadcasts gene expression data to protein expression nodes where protein values are unavailable</div>
+<div class="line">6. Prevent the visualization of certain nodes to create simplified visualizations of pathways</div>
+<div class="line">7. Runs just-in-time searches of the global network for regulatory patterns of interest centered around a reaction</div>
+<div class="line">8. Generates just-in-time visualizations of global or super-pathway-specific perturbation networks</div>
+<div class="line">9. Generates just-in-time general visualization of canonical pathways</div>
 </div>
 </div>
 </div>
