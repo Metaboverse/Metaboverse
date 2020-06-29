@@ -62,3 +62,21 @@ Important Features of Metaboverse
 Performance
 -------------------
 | Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster than data modeled on a human network. You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working.
+|
+----------------------
+Technical Description
+----------------------
+| Metaboverse is currently segmented into two parts:
+| 1. :data:`metaboverse-cli`: The network curation and modeling utilities that form the back-end of the Metaboverse app. For each release of Metaboverse, OS-specific binaries are generated of the backend and incorporating into the GUI app. [`code <https://github.com/Metaboverse/metaboverse-cli>`_]
+| 2. :data:`Metaboverse` interactive app: The platform-independent app for visualizing and exploring data on the metabolic network. [`code <https://github.com/Metaboverse/Metaboverse>`_]
+|
+| Metaboverse works by doing the following:
+| 1. Generates an organism-specific reaction network using the `Reactome Knowledgebase <https://reactome.org/>`_
+| 2. References the `ChEBI <https://www.ebi.ac.uk/chebi/>`_ and `HMDB <https://hmdb.ca/>`_ databases to cross-reference metabolite synonyms.
+| 3. Generates a network-based reaction model
+| 4. Layers user data onto the global reaction network
+| 5. Optionally broadcasts gene expression data to protein expression nodes where protein values are unavailable
+| 6. Prevent the visualization of certain nodes to create simplified visualizations of pathways
+| 7. Runs just-in-time searches of the global network for regulatory patterns of interest centered around a reaction
+| 8. Generates just-in-time visualizations of global or super-pathway-specific perturbation networks
+| 9. Generates just-in-time general visualization of canonical pathways

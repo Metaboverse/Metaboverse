@@ -5,10 +5,10 @@ Installation
 --------------------
 Basic requirements:
 --------------------
-| * macOS, Windows, or Linux operating system
+| * macOS, Windows, or Linux 64-bit operating system
+| * >= 4 GB RAM
+| * >= 5 GB of open storage space
 | * Internet connection (for curating step)
-| * 5-10 GB of free space
-| * 4 GB RAM
 
 ----------------------------
 Installation Instructions:
