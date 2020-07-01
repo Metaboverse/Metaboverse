@@ -35,6 +35,9 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 ### Getting Help
 If you have questions, requests, or bugs to report, please use the [Metaboverse issues forum](https://github.com/Metaboverse/Metaboverse/issues). Please clearly describe the problem, what you have tried, as well as screenshots of any error information. If possible, click on the `View` menu tab, click `Toggle Developer Tools`, click the `Console` tab of the window that opens, and take a screenshot of the output in this panel.
 
+### Feedback
+Have any feedback? Let us know [here](https://forms.gle/4z51DMnagWRvKhc38).
+
 ### Trying out Metaboverse
 You can access some example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files
 

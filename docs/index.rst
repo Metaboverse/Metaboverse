@@ -40,6 +40,11 @@ License
 | `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ is perpetually open source under a GNU General Public License (v3.0).
 |
 ==========
+Feedback?
+==========
+| Have any feedback? Let us know `here` <https://forms.gle/4z51DMnagWRvKhc38>`_.
+|
+==========
 Questions?
 ==========
 | If you have questions, requests, or bugs to report, please use the `Metaboverse issues forum <https://github.com/Metaboverse/Metaboverse/issues>`_.
