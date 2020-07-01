@@ -44,10 +44,10 @@ function update_session_info(key_update, value_update, abbrev_dict = null) {
     // Where database output location is, make this the output location
     if (key_update === "database_url") {
       file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
-      session["output"] = file_path + path.sep;
+      session["output"] = file_path;
     } else if (key_update === "curation_url") {
       file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
-      session["output"] = file_path + path.sep;
+      session["output"] = file_path;
     } else {}
 
     if ((abbrev_dict !== null) & (key_update === "organism")) {
