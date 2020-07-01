@@ -28,32 +28,24 @@ var app = require("electron").remote.app;
 var basePath = app.getAppPath();
 
 var userDataPath = app.getPath("userData");
-var session_file = userDataPath + "/session_data.json";
-var progress_file = userDataPath + "/progress_log.json"
-
-// do something in case there are multiple spaces in the session data path
-//if (" " in session_file) {
-//  for
-//}
-var replacer = String(String.fromCharCode(92) + " ");
-var session_format = session_file.replace(/ /g, replacer)
-var progress_format = progress_file.replace(/ /g, replacer)
+var session_file = userDataPath + path.sep + "session_data.json";
+var progress_file = userDataPath + path.sep + "progress_log.json"
 
 var scriptFilename;
 if (navigator.appVersion.indexOf("Win") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-win.exe");
+  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-win.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-mac");
+  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-mac");
 } else if (navigator.appVersion.indexOf("X11") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-mac");
+  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-mac");
 } else if (navigator.appVersion.indexOf("Linux") != -1) {
-  scriptFilename = path.join(__dirname, "../python", "metaboverse-cli-linux");
+  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
 } else {
   console.log("Unable to locate metaboverse-cli binary")
 }
 
 fs.copyFile(
-  basePath + "/data/progress_log_template.json",
+  basePath + path.sep + "data" + path.sep + "progress_log_template.json",
   progress_file,
   err => {
     if (err) throw err;
@@ -172,8 +164,8 @@ runBuild = function(_callback) {
         blocklist: blocklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
-        progress_log: progress_format,
-        session_data: session_format
+        progress_log: "\"" + progress_file + "\"",
+        session_data: "\"" + session_file + "\""
       }
     } else {
       graphDictionary = {
@@ -181,9 +173,9 @@ runBuild = function(_callback) {
         output_file: getArgument("database_url"),
         species_id: getArgument("organism_id"),
         model_file:
-          getArgument("output") +
+          getArgument("output").slice(0,-1) +
           getArgument("organism_id") +
-          "_metaboverse_db.pickle",
+          "_metaboverse_db.pickle\"",
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
@@ -194,8 +186,8 @@ runBuild = function(_callback) {
         blocklist: blocklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
-        progress_log: progress_format,
-        session_data: session_format
+        progress_log: "\"" + progress_file + "\"",
+        session_data: "\"" + session_file + "\""
       }
     }
 

@@ -19,18 +19,17 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var path = require("path");
 var fs = require("fs");
-
+var path = require("path");
 var app = require("electron").remote.app;
 var basePath = app.getAppPath();
 
 var userDataPath = app.getPath("userData");
-var session_file = userDataPath + "/session_data.json";
+var session_file = userDataPath + path.sep + "session_data.json";
 
 function refresh_session() {
   fs.copyFile(
-    basePath + "/data/session_data_template.json",
+    basePath + path.sep + "data" + path.sep + "session_data_template.json",
     session_file,
     err => {
       if (err) throw err;

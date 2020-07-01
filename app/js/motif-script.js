@@ -21,10 +21,11 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var fs = require('fs');
+var path = require("path");
 var app = require('electron').remote.app;
 
 var userDataPath = app.getPath('userData');
-var session_file = userDataPath + "/session_data.json";
+var session_file = userDataPath + path.sep + "session_data.json";
 let database_url = JSON.parse(
   fs.readFileSync(session_file).toString())["database_url"];
 

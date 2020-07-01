@@ -21,13 +21,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var $ = require("jquery");
 var fs = require("fs");
+var path = require("path");
 var pixelWidth = require("string-pixel-width");
 
 var app = require("electron").remote.app;
 var userDataPath = app.getPath("userData");
-var session_file = userDataPath + "/session_data.json";
-
-var replacer = String(String.fromCharCode(92) + " ");
+var session_file = userDataPath + path.sep + "session_data.json";
 
 function write_json(session_data) {
   fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {
@@ -44,11 +43,11 @@ function update_session_info(key_update, value_update, abbrev_dict = null) {
 
     // Where database output location is, make this the output location
     if (key_update === "database_url") {
-      path = value_update.substring(0, value_update.lastIndexOf("/"));
-      session["output"] = path + "/";
+      file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
+      session["output"] = file_path + path.sep;
     } else if (key_update === "curation_url") {
-      path = value_update.substring(0, value_update.lastIndexOf("/"));
-      session["output"] = path + "/";
+      file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
+      session["output"] = file_path + path.sep;
     } else {}
 
     if ((abbrev_dict !== null) & (key_update === "organism")) {
@@ -122,8 +121,7 @@ function getArgument(key) {
     || key === "proteomics"
     || key === "metabolomics"
     || key === "additional_reactions") {
-    value = value.replace(/ /g, replacer)
-    value = value.replace(/\\\\ /g, replacer)
+    value = '\"' + value + '\"'
   } else {}
 
   return value;

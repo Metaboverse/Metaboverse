@@ -41,6 +41,7 @@
     "jquery": "^3.5.1",
     "jqueryui": "^1.11.1",
     "jsonpickle": "^1.1.2",
+    "path": "^0.12.7",
     "pickle": "^0.2.0",
     "plotly.js-dist": "^1.54.5",
     "save-svg-as-png": "^1.4.17",

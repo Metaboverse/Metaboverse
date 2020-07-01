@@ -22,7 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { ipcRenderer, ipcMain, remote } = require("electron");
 const { dialog } = require("electron").remote;
-
+var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
@@ -108,7 +108,7 @@ window.addEventListener("load", function(event) {
   document.getElementById("output-input").onclick = function(event) {
     filename = dialog
       .showSaveDialog({
-        defaultPath: "../../",
+        defaultPath: ".." + path.sep + ".." + path.sep,
         properties: ["createDirectory"],
         filters: [
           {
