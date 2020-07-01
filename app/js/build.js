@@ -174,6 +174,7 @@ runBuild = function(_callback) {
         species_id: getArgument("organism_id"),
         model_file:
           getArgument("output").slice(0,-1) +
+          path.sep + 
           getArgument("organism_id") +
           "_metaboverse_db.pickle\"",
         transcriptomics: getArgument("transcriptomics"),
