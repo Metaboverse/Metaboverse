@@ -14,7 +14,7 @@ npm install electron electron-packager mocha wine minimist zerorpc --save-dev
 npm audit fix
 npm install --save-dev --save-exact jsdom jsdom-global
 npm audit fix
-npm install fs d3 jquery string-pixel-width d3-fisheye d3-save-svg jsonpickle plotly.js-dist filereader jpickle pickle save-svg-as-png unpickle update-electron-app xvfb jqueryui --save
+npm install fs path d3 jquery string-pixel-width d3-fisheye d3-save-svg jsonpickle plotly.js-dist filereader jpickle pickle save-svg-as-png unpickle update-electron-app xvfb jqueryui --save
 npm audit fix
 echo "========================================================================"
 cat package.json

@@ -20,10 +20,11 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var $ = require("jquery");
+var path = require("path");
 
 // Get Metaboverse version
 $.ajax({
-  url: "../__version__.txt",
+  url: ".." + path.sep + "__version__.txt",
   success: function(version) {
     document.getElementById("getVersion").innerHTML = version;
   }

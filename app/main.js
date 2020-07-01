@@ -40,17 +40,17 @@ function createWindow() {
     minWidth: 1400,
     minHeight: 900,
     webPreferences: {
-      preload: path.join(__dirname, "js/preload.js"),
+      preload: path.join(__dirname, "js", "preload.js"),
       nodeIntegration: true
     },
     dependencies: {
-      zerorpc: "fyears/zerorpc-node"
+      zerorpc: "fyears" + path.sep + "zerorpc-node"
     },
-    icon: path.join(__dirname, "data/icon/metaboverse_logo.icns")
+    icon: path.join(__dirname, "data", "icon", "metaboverse_logo.icns")
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("html/index.html");
+  mainWindow.loadFile("html" + path.sep + "index.html");
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools()
@@ -146,12 +146,12 @@ app.on("will-quit", exitPyProc);
 var basePath = app.getAppPath();
 
 var userDataPath = app.getPath("userData");
-var session_file = userDataPath + "/session_data.json";
+var session_file = userDataPath + path.sep + "session_data.json";
 
 // Copy session info template each time the app is launched
 
 fs.copyFile(
-  basePath + "/data/session_data_template.json",
+  basePath + path.sep + "data" + path.sep + "session_data_template.json",
   session_file,
   err => {
     if (err) throw err;

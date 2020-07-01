@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 const { ipcRenderer } = require("electron");
+var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
@@ -29,7 +30,7 @@ window.addEventListener("load", function(event) {
   event.stopPropagation();
 
   $.ajax({
-    url: "../__version__.txt",
+    url: ".." + path.sep + "__version__.txt",
     success: function(version) {
       $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
         let _v = String(version.trim().replace(/[^0-9.]/g,''))
@@ -79,7 +80,6 @@ window.addEventListener("load", function(event) {
     event.stopPropagation();
 
     var inputVal = document.getElementById("database-input").value.split(".");
-    console.log(inputVal[inputVal.length - 1])
     if (inputVal[inputVal.length - 1] !== "json") {
       alert(
         "Input is not a .json file. You must upload the correct file type for the analyses to work."
