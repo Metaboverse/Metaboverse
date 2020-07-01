@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=0.1.2b
+VERSION=0.1.3b
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
