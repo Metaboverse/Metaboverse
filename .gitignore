@@ -17,3 +17,4 @@ app/python/dist
 app/python/build
 app/python/metaboverse*
 Metaboverse-*
+app/package-lock.json
