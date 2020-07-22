@@ -32,11 +32,11 @@ var session_file = userDataPath + path.sep + "session_data.json";
 var progress_file = userDataPath + path.sep + "progress_log.json"
 
 var scriptFilename;
+console.log("Operating System information:")
+console.log(navigator.appVersion)
 if (navigator.appVersion.indexOf("Win") != -1) {
   scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-win.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-mac");
-} else if (navigator.appVersion.indexOf("X11") != -1) {
   scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-mac");
 } else if (navigator.appVersion.indexOf("Linux") != -1) {
   scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
@@ -174,7 +174,7 @@ runBuild = function(_callback) {
         species_id: getArgument("organism_id"),
         model_file:
           getArgument("output").slice(0,-1) +
-          path.sep + 
+          path.sep +
           getArgument("organism_id") +
           "_metaboverse_db.pickle\"",
         transcriptomics: getArgument("transcriptomics"),
