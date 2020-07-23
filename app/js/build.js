@@ -115,11 +115,23 @@ function parseCommand(args_dict) {
 function execute(command, callback) {
   exec(command, (error, stdout, stderr) => {
     callback(stdout);
+
     if (stdout.toLowerCase().includes("exception")
         | stdout.toLowerCase().includes("error")
         | stderr.toLowerCase().includes("exception")
         | stderr.toLowerCase().includes("error")) {
-      alert("Metaboverse Build encountered an error             \n\n" + stderr);
+      fs.writeFileSync(
+        getArgument("output").replace(/\"/g,'') + path.sep + "metaboverse_session.log",
+        "Operating System information:\n"
+          + navigator.appVersion + "\n\n\n\n"
+          + stdout + "\n\n\n"
+          + "########\nSTDERR:\n########\n"
+          + stderr,
+        function(err) {
+        if (err) throw err;
+        console.log("Session log written to file");
+      });
+      alert("Metaboverse Build encountered an error -- please check metaboverse_session.log in your output folder for detailed information.");
       callback(stderr);
     }
   });
