@@ -15,6 +15,8 @@
   "keywords": [
     "metabolism",
     "automation",
+    "connectivity",
+    "network",
     "metabolites",
     "genes",
     "proteins"
@@ -23,7 +25,7 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "electron": "^8.3.4",
-    "electron-packager": "^14.2.1",
+    "electron-packager": "^15.0.0",
     "jsdom": "16.2.2",
     "jsdom-global": "3.0.2",
     "minimist": "^1.2.5",

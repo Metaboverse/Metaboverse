@@ -5,16 +5,11 @@ VERSION=0.1.3b
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
-rm app/package-lock.json
 rm -rf app/node_modules/
 
 cd app
 pwd
-npm install electron electron-packager mocha wine minimist zerorpc --save-dev
-npm audit fix
-npm install --save-dev --save-exact jsdom jsdom-global
-npm audit fix
-npm install fs path d3 jquery string-pixel-width d3-fisheye d3-save-svg jsonpickle plotly.js-dist filereader jpickle pickle save-svg-as-png unpickle update-electron-app xvfb jqueryui --save
+npm install
 npm audit fix
 echo "========================================================================"
 cat package.json
