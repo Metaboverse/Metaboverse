@@ -3,6 +3,12 @@ Updates
 ###############
 
 ===========
+v0.1.4-beta
+===========
+| - Fixes `#26 <https://github.com/Metaboverse/Metaboverse/issues/26>`_, where an error log is output if build fails
+| - Removes direct Matplotlib imports in metaboverse-cli modules to prevent unnecessary errors and incompatibilities
+
+===========
 v0.1.3-beta
 ===========
 | - Fixes bug where user paths with spaces were unable to be used ( `#26 <https://github.com/Metaboverse/Metaboverse/issues/26>`_ )

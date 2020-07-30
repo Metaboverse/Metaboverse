@@ -23,10 +23,8 @@ app/python/metaboverse-linux
 app\python\metaboverse-linux
 app/python/metaboverse-win*
 app\python\metaboverse-win*
-app/python/dist
-app\python\dist
-app/python/build
-app\python\build
+app/python
+app\python
 app/python/metaboverse*
 app\python\metaboverse*
 Metaboverse-*
