@@ -227,7 +227,7 @@ circle:hover text {
 
 #frame-motif-1 {
   height:780px;
-  width:190px;
+  width:215px;
 }
 
 #frame-motif-2 {
@@ -322,12 +322,13 @@ circle:hover text {
 }
 
 #col-md-4-motif {
-  position:absolute; margin-left:205px;
+  position:absolute;
+  margin-left:225px;
 }
 
 #col-md-6-motif {
   position: absolute;
-  margin-left:655px;
+  margin-left:670px;
 }
 
 #stamp-view-container,
