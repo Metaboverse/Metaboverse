@@ -38,10 +38,130 @@ var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
 
-// Define the div for the tooltip
+// Define the div for the tooltips
 var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
+d3.select("button#options_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "56px");
+      div
+        .html("Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details.")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
+d3.select("button#knn_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "97px");
+      div
+        .html("Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion).")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
+d3.select("button#hub_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "97px");
+      div
+        .html("Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections.")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
+d3.select("button#stat_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "40px");
+      div
+        .html("Provide a value to threshold statistical value where node borders are bolded.")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
+d3.select("button#notes_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "54px");
+      div
+        .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
+d3.select("button#notes_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "54px");
+      div
+        .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
+d3.select("button#legend_info")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "43px");
+      div
+        .html("Click and drag the background to pan, or use the mouse wheel to zoom.")
+      }
+    )
+  .on("mouseout", function(d) {
+  div.style("opacity", 0);
+  div.html("")
+  }
+);
 
 d3.select("button#shape_legend")
   .on("mouseover", function(d) {
@@ -49,10 +169,10 @@ d3.select("button#shape_legend")
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
-        .style("height", "450px")
+        .style("height", "435px")
         .style("width", "200px");
       div
-        .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Relationships</u></b></font></br></br><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;Core interaction</br><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;Catalyst</br><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;Inhibitor</br><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;Metabolite Component</br><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;Protein Component</br><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;Gene Component</br></br><font size='3'><b><u>Entities</u></b></font></br></br><span class='fas fa-star fa-lg grey-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction</br></br><span class='fas fa-star fa-lg purple-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction</br></br>&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite</br></br>&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex</br></br>&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein</br></br>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;&nbsp;Gene</br></br>* Bolded shapes meet statistical threshold</div>")
+        .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Relationships</u></b></font></br><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;Core interaction</br><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;Catalyst</br><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;Inhibitor</br><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;Metabolite Component</br><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;Protein Component</br><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;Gene Component</br></br><font size='3'><b><u>Entities</u></b></font></br></br><span class='fas fa-star fa-lg grey-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction</br></br><span class='fas fa-star fa-lg purple-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction</br></br>&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite</br></br>&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex</br></br>&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein</br></br>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;&nbsp;Gene</br></br>* Bolded shapes meet statistical threshold</div>")
       }
     )
   .on("mouseout", function(d) {
@@ -836,7 +956,7 @@ function make_graph(
 
     var categories = new Set();
     for (n in nodes) {
-      if (nodes[n].compartment === "none" || nodes[n].type === "gene_component") {
+      if (nodes[n].compartment === "none" || nodes[n].compartment === null || nodes[n].type === "gene_component" || nodes[n].compartment === "undefined" || nodes[n].compartment === undefined) {
         categories.add("none");
       } else {
         categories.add(nodes[n].compartment);
@@ -855,6 +975,7 @@ function make_graph(
 
   var categories = getCategories(graph_nodes);
   var fill = d3.schemeCategory10;
+  var fill2 = d3.schemeTableau10;
 
   hullg.selectAll("path.hull").remove();
   hull = hullg
@@ -865,9 +986,55 @@ function make_graph(
       .attr("d", drawCluster)
       .style("fill", function(d) {
         if (d.group !== "undefined" && d.group !== "none") {
-          return fill[categories[d.group]];
+          if (categories[d.group] > 9) {
+            return fill2[categories[d.group] - 10];
+          } else {
+            return fill[categories[d.group]];
+          }
         }
-      })
+      }
+    )
+
+    let compartment_dictionary = {};
+    for (let _n in graph_nodes) {
+      if (graph_nodes[_n]['compartment'] !== undefined) {
+        compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
+      }
+    }
+    d3.select("button#compartment_legend")
+      .on("mouseover", function(d) {
+        let category_number = 0;
+        let make_string = "";
+        for (let s in categories) {
+          if (s !== null && s !== "none" && s !== undefined && s !== "undefined" && compartment_dictionary[s] !== undefined) {
+            make_string = make_string + "&nbsp;";
+            make_string = make_string + "<span class='ellipse' style='--dot_color:" + hull._groups[0][categories[s]].style.fill + ";'></span>";
+            make_string = make_string + "&nbsp;&nbsp;&nbsp;&nbsp;";
+            make_string = make_string + compartment_dictionary[s];
+            make_string = make_string + "</br>";
+            category_number = category_number + 1;
+          }
+        }
+        // add one for formatting
+        if (category_number > 15) {
+          category_number = category_number + 1;
+        }
+
+        div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", (60 + (15 * category_number * 1.2)).toString() + "px")
+          .style("width", "275px");
+        div
+          .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Compartments</u></b></font></br></br>" + make_string)
+        }
+      )
+      .on("mouseout", function(d) {
+        div.style("opacity", 0);
+        div.html("")
+        category_number = 0;
+      });
 
   var timer = 0;
   var delay = 200;
@@ -984,8 +1151,12 @@ function make_graph(
           .attr("class", "hull")
           .attr("d", drawCluster)
           .style("fill", function(d) {
-            if (d.group !== "undefined") {
-              return fill[categories[d.group]];
+            if (d.group !== "undefined" && d.group !== "none") {
+              if (categories[d.group] > 9) {
+                return fill2[categories[d.group]];
+              } else {
+                return fill[categories[d.group]];
+              }
             }
           })
 
@@ -1273,23 +1444,6 @@ function make_graph(
         });
       }
     }
-
-    d3.select("button#compartment_legend")
-      .on("mouseover", function(d) {
-          div.style("opacity", 0.9);
-          div.html(""
-
-
-
-
-          )
-          .style("left", (d3.event.pageX + 20) + "px")
-          .style("top", (d3.event.pageY - 10) + "px")
-          .style("height", "100px");
-          })
-      .on("mouseout", function(d) {
-          div.style("opacity", 0);
-      });
 
     return hullset;
   }

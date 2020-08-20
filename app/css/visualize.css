@@ -156,6 +156,20 @@ path.hull {
   display: inline-block;
 }
 
+.ellipse {
+  height: 12px;
+  width: 18px;
+  border-style: solid;
+  border-width: thin;
+  background-color: var(--dot_color);
+  stroke: black;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+  margin-top:5px;
+  margin-bottom:-3px;
+}
+
 .square {
   height: 12px;
   width: 12px;

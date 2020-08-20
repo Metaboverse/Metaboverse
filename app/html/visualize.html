@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://reactome.org/ 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://reactome.org/ 'self'; object-src 'none'; trusted-types 'script';">
 <title>Metaboverse</title>
 
 <html>
@@ -88,8 +88,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <font id="styletitle" size="2">
         <b><u>Legend</u></b>
         <button
-          class="info"
-          title="Click and drag the background to pan, or use the mouse wheel to zoom."
+          id="legend_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -144,8 +144,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br />
         <b><u>Options</u></b>
         <button
-          class="info"
-          title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details."
+          id="options_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -164,23 +164,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div title="Click to toggle gene nodes (remove or display).">
           <button id="toggleGenes">Toggle Genes</button>
         </div>
-        <!--
-        <div title="Click to toggle protein nodes (remove or display)">
-          <button id="toggleProteins">Proteins</button>
-        </div>
-        <div title="Click to toggle metabolite nodes (remove or display)">
-          <button id="toggleMetabolites">Metabolites</button>
-        </div>
-        <br>
-        <div title="Click to toggle modifier nodes (remove or display)">
-          <button id="toggleModifiers">Modifiers</button>
-        </div>
-        <div
-          title="Click to toggle between mapping expression or statistical color values."
-        >
-          <button id="toggleColors">Highlight Values/Stats</button>
-        </div>
-        -->
         <div title="Click to toggle between showing or hiding compartment shading">
           <button id="toggleCompartments">Toggle Compartments</button>
         </div>
@@ -210,8 +193,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           value="1"
         />
         <button
-          class="info"
-          title="Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion)"
+          id="knn_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -225,8 +208,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           max="9999999"
         />
         <button
-          class="info"
-          title="Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections."
+          id="hub_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -241,8 +224,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           value="0.05"
         />
         <button
-          class="info"
-          title="Provide a value to threshold statistical value where node borders are bolded."
+          id="stat_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -268,8 +251,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br />
         <b><u>Notes:</u></b>
         <button
-          class="info"
-          title="Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node."
+          id="notes_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
