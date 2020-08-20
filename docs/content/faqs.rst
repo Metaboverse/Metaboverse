@@ -41,3 +41,8 @@ Linux app not launching
 .. code-block:: shell
 
   $ ./Metaboverse
+
+------------------------------------
+Error: :data:`AttributeError: 'float' object has no attribute 'lstrip'`
+------------------------------------
+| If the error, :data:`AttributeError: 'float' object has no attribute 'lstrip'`, appears this is likely caused by missing values in one of the provided data tables. While current procedures should now handle this issue, if this error persists, you might try deleting any trailing whitespace from your data tables.
