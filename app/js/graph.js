@@ -38,6 +38,29 @@ var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
 
+// Define the div for the tooltip
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+d3.select("button#shape_legend")
+  .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "450px")
+        .style("width", "200px");
+      div
+        .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Relationships</u></b></font></br></br><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;Core interaction</br><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;Catalyst</br><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;Inhibitor</br><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;Metabolite Component</br><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;Protein Component</br><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;Gene Component</br></br><font size='3'><b><u>Entities</u></b></font></br></br><span class='fas fa-star fa-lg grey-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction</br></br><span class='fas fa-star fa-lg purple-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction</br></br>&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite</br></br>&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex</br></br>&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein</br></br>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;&nbsp;Gene</br></br>* Bolded shapes meet statistical threshold</div>")
+      }
+    )
+  .on("mouseout", function(d) {
+    div.style("opacity", 0);
+    div.html("")
+  }
+);
+
 function checkReaction(
     reaction,
     element) {
@@ -542,6 +565,8 @@ function make_graph(
     _height,
     global_motifs) {
 
+  console.log(new_nodes)
+
   // Final update to prevent plotting of blocklisted nodes
   id_blocklist = [];
   if (graph_genes === false) {
@@ -710,28 +735,6 @@ function make_graph(
     .append("g")
     .attr("class", "node")
     .attr("id", function(d) {return d.id})
-    .style("--node_color", function(d) {
-      return "rgba(" + d[entity][sample].toString() + ")";
-    })
-    .style("--node_border", function(d) {
-      if ((d['stats'][sample] === undefined) || (d['stats'][sample] === null)) {
-        return 1;
-      } else if (d['stats'][sample] < stat_value) {
-        return 2;
-      } else {
-        return 1;
-      }
-    })
-    .style("r", function() {
-      return 6;
-    })
-    .style("stroke-dasharray", function(d) {
-      if (d.inferred === "true" || d.type === "collapsed") {
-        return "2,2";
-      } else {
-        return "none";
-      }
-    })
     .call(
       d3
         .drag()
@@ -741,16 +744,48 @@ function make_graph(
         .on("end", dragended)
     );
 
-  var circle = node.append(function(d) {
-    if (d.type === "gene_component" || d.sub_type === "gene") {
-      return document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-    } else if (d.complex === "true" || d.sub_type === "protein_component") {
-      return document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    } else {
-      return document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    }
-  })
-  .attr("id", function(d) {return d.id});
+  var circle = node
+    .append("path")
+    .style("fill", function(d) {
+      return "rgba(" + d[entity][sample].toString() + ")";
+     })
+    .style("stroke", "black")
+    .style("stroke-width", function(d) {
+      if ((d['stats'][sample] === undefined) || (d['stats'][sample] === null)) {
+        return 1;
+      } else if (d['stats'][sample] < stat_value) {
+        return 2;
+      } else {
+        return 1;
+      }
+    })
+    .style("stroke-dasharray", function(d) {
+      if (d.inferred === "true" || d.type === "collapsed") {
+        return "2,2";
+      } else {
+        return "none";
+      }
+    })
+    .attr("d", d3.symbol()
+      .size(function(d) {
+        return 175;
+      })
+      .type(function(d) {
+        if (d.type === "gene_component" || d.sub_type === "gene") {
+          return d3.symbolTriangle;
+        } else if (d.complex === "true") {
+          return d3.symbolSquare;
+        } else if (d.sub_type === "protein_component") {
+          return d3.symbolDiamond;
+        }  else if (d.type === "metabolite_component" || d.sub_type === "metabolite_component") {
+          return d3.symbolCircle;
+        } else if (d.type === "reaction" || d.sub_type === "reaction") {
+          return d3.symbolStar;
+        } else {
+          return d3.symbolStar;
+        }
+      }))
+      .attr("id", function(d) {return d.id})
 
   // Motif page will only send the current time-point's motifs
   var page_path = window.location.pathname;
@@ -765,10 +800,14 @@ function make_graph(
         graph_nodes.forEach(node=>{
           let rxn_id = node.id;
           if (motif_ids.includes(rxn_id)) {
-            d3.selectAll("circle#" + rxn_id)
-              .style("r", "10px")
-              .style("stroke", "purple")
-              .style("--node_border", 5)
+            d3.selectAll("path#" + rxn_id)
+            .style("stroke", "purple")
+            .style("stroke-width", 3)
+            .attr("d", d3.symbol()
+              .size(function(d) {
+                return 400;
+              })
+              .type(d3.symbolStar))
           }
         })
       }
@@ -779,10 +818,14 @@ function make_graph(
         graph_nodes.forEach(node=>{
           let rxn_id = node.id;
           if (global_motifs[sample].includes(rxn_id)) {
-            d3.selectAll("circle#" + rxn_id)
-              .style("r", "10px")
+            d3.selectAll("path#" + rxn_id)
               .style("stroke", "purple")
-              .style("--node_border", 5)
+              .style("stroke-width", 3)
+              .attr("d", d3.symbol()
+                .size(function(d) {
+                  return 400;
+                })
+                .type(d3.symbolStar))
           }
         })
       }
@@ -949,17 +992,19 @@ function make_graph(
     } else {
       toggle_comp = false;
       hullg.selectAll("path.hull").remove();
-
   }
 });
 
   d3.select("#saveGraph").on("click", function() {
+
     saveSVG.saveSvgAsPng(
       d3.select("#svg_viewer_id")._groups[0][0],
       "plot.png",
-      (encoderOptions = 1),
-      (scale = 5),
-      (encoderType = "image/png")
+      {
+        encoderOptions: 1,
+        scale: 10,
+        encoderType: "image/png"
+      }
     );
   });
 
@@ -1053,21 +1098,6 @@ function make_graph(
     } else {
       toggle_r = false;
       determine_displays(toggle_a, toggle_r);
-    }
-  });
-
-
-  $("#toggleColors").click(function(e) {
-    if (entity === "values_js") {
-      entity = "stats_js";
-      node.style("--node_color", function(d) {
-        return "rgba(" + d[entity][sample].toString() + ")";
-      });
-    } else {
-      entity = "values_js";
-      node.style("--node_color", function(d) {
-        return "rgba(" + d[entity][sample].toString() + ")";
-      });
     }
   });
 
@@ -1243,6 +1273,23 @@ function make_graph(
         });
       }
     }
+
+    d3.select("button#compartment_legend")
+      .on("mouseover", function(d) {
+          div.style("opacity", 0.9);
+          div.html(""
+
+
+
+
+          )
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", "100px");
+          })
+      .on("mouseout", function(d) {
+          div.style("opacity", 0);
+      });
 
     return hullset;
   }

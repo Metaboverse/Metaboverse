@@ -21,10 +21,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://reactome.org/ 'self';">
 <title>Metaboverse</title>
 
 <html>
+  <link rel="stylesheet" href="../css/fontawesome_v5.0.7.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/visualize.css" />
   <link rel="stylesheet" href="../css/timecourse.css" />
@@ -94,13 +95,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </button>
         <br />
         <br />
-        <b>Entity Values</b>
+        <b>Values</b>
         <br />
-        <br />
-        <div title="Double-click to display reaction notes.">
-          <span class="dot grey-dot"></span>
-          Reaction
-        </div>
         <br />
         <div title="Value was found in user data.">
           <span class="dot white-dot"></span>
@@ -127,63 +123,22 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <canvas id="seismic_canvas" width="220" height="15"></canvas>
         <br />
         <br />
-        <b>Relationship Types</b>
+        <b>Shape Legend</b>
+        <button
+          id="shape_legend"
+          class="info_enhanced"
+        >
+          <i>i</i>
+        </button>
         <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line grey-arrow"></div>
-          <div class="point grey-arrow">
-            &nbsp;&nbsp;&nbsp;Core
-          </div>
-        </div>
         <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line green-arrow"></div>
-          <div class="point green-arrow">
-            &nbsp;&nbsp;&nbsp;Catalyst
-          </div>
-        </div>
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line red-arrow"></div>
-          <div class="point red-arrow">
-            &nbsp;&nbsp;&nbsp;Inhibitor
-          </div>
-        </div>
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line2"></div>
-          <div class="component-label">&nbsp;&nbsp;&nbsp;Components</div>
-        </div>
-        <br />
-        &nbsp;
-        <span class="dot white-dot"></span>
-        <div class="arrow">
-          <div class="line blue-arrow arrow-margin-4"></div>
-          <div class="point blue-arrow arrow-margin-0">
-            &nbsp;&nbsp;&nbsp;Metabolite
-          </div>
-        </div>
-        <br />
-        &nbsp;
-        <span class="square white-dot"></span>
-        <div class="arrow">
-          <div class="line orange-arrow"></div>
-          <div class="point orange-arrow">
-            &nbsp;&nbsp;&nbsp;Protein
-          </div>
-        </div>
-        <br />
-        <span class="ellip white-dot"></span>
-        <div class="arrow">
-          <div class="line arrow-purple"></div>
-          <div class="point arrow-purple">
-            &nbsp;&nbsp;&nbsp;Gene
-          </div>
-        </div>
+        <b>Compartment Legend</b>
+        <button
+          id="compartment_legend"
+          class="info_enhanced"
+        >
+          <i>i</i>
+        </button>
         <br />
         <br />
         <br />
@@ -231,7 +186,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <br />
         <div title="Click to save the current graph view">
-          <button id="saveGraph">Save Graph</button>
+          <button id="saveGraph">Export PNG</button>
         </div>
         <br />
         <br />

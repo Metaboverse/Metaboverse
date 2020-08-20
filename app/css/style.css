@@ -353,6 +353,9 @@ img {
   border-radius: 50%;
 }
 
+.info_enhanced {
+  border-radius: 50%;
+}
 
 .experimentName {
   border: 1px solid black;
