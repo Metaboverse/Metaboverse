@@ -76,7 +76,7 @@ window.addEventListener("load", function(event) {
   }
   $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
 
-  var outputURL = get_session_info("output");
+  var outputURL = get_session_info("database_url");
   var defaultOutput = "No output selected";
   if (outputURL !== null) {
     defaultOutput = outputURL;
