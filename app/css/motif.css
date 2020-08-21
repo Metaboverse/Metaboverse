@@ -72,6 +72,13 @@ div.scrollable {
   height:700px;
 }
 
+.frame-line {
+  border: 1px solid lightgray;
+  background-color: rgb(247,247,249);
+  border-radius: 5px;
+  height:600px;
+}
+
 .content {
   padding-top: 20px;
   padding-left: 15px;
@@ -87,6 +94,19 @@ div.scrollable {
   background-color: white;
   border-radius: 5px;
   height:330px;
+}
+
+.line-sub-frame {
+  margin-top:10px;
+  margin-left:10px;
+  margin-right:10px;
+  padding-top:5px;
+  padding-left:5px;
+  border: 1px solid lightgray;
+  background-color: white;
+  border-radius: 5px;
+  height:380px;
+  width:780px;
 }
 
 .network-frame {
@@ -226,12 +246,19 @@ circle:hover text {
 }
 
 #frame-motif-1 {
-  height:780px;
+  height:820px;
   width:215px;
 }
 
 #frame-motif-2 {
   width:435px;
+}
+
+.frame-motif-3 {
+  width:800px;
+  height:435px;
+  margin-left:240px;
+  margin-top:-50px;
 }
 
 #title-padding {
@@ -339,6 +366,13 @@ circle:hover text {
   height:90%;
 }
 
+#line-plot-container {
+  margin-top:-25px;
+  padding-left:0;
+  width:770px;
+  height:370px;
+}
+
 #network-frame-motif {
   width:49vw;
   margin-right:10px;
@@ -354,4 +388,9 @@ circle:hover text {
 
 #all-motif-list {
   height:75%;
+}
+
+.line-description {
+  padding-left: 15px;
+  padding-right: 5px;
 }

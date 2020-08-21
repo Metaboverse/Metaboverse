@@ -58,10 +58,6 @@ class MetaGraph{
     )
     this.path_mapper = graphdata.motif_reaction_dictionary
 
-    console.log(this.path_mapper)
-    console.log(this.collapsed_reaction_dict)
-
-
     // Generate expression and stats dictionaries
     let expression_dict = {};
     let stats_dict = {};
@@ -129,7 +125,23 @@ class MetaGraph{
       this.pathway_svg_height = parseFloat(
         this.pathway_svg.style("height", "490px"));
   } catch(e) {}
+    this.initLines();
     this.motifSearch();
+  }
+
+  // Add line plot space if time-course/multi-condition
+  initLines() {
+    if (timecourse === true) {
+      $("#frame-line-plots").append(
+        "<div class='frame frame-motif-3'>"
+        + "<div class='line-sub-frame'>"
+        + "<h6><b>Selected Reaction Motif</b></h6>"
+        + "<div id='line-plot-container'></div>"
+        + "</div>"
+        + "<i><font size='2' class='line-description'>View how components of a given reaction change across the time-course or across conditions.</font><br /><font size='2' class='line-description'>Dashed lines indicate an entity with only one representative measurement (i.e., a single timepoint was provided for that datapoint).</font></i>"
+        + "</div><br /><br /><br /"
+      );
+    }
   }
 
   motifSearch() {
@@ -616,6 +628,9 @@ class MetaGraph{
         .attr("id",(d)=>"stamp-cover-"+d.id)
         .style("opacity",0)
         .on("click",(d)=>{
+          if (timecourse === true) {
+            this.generateLines(d);
+          }
           document.getElementById("pathway_name").innerHTML = "<h6><b></b></h6>";
           d3.select("#pathway-view-svg").style("visibility","hidden");
           d3.select(".network-panel").style("visibility","hidden");
@@ -1197,6 +1212,348 @@ class MetaGraph{
     createId(id){
       return id.replace(/[^a-zA-Z0-9]/g, "")
     }
+
+    generateLines(d) {
+
+      d3.select("svg#line-graph").remove();
+      console.log(d)
+      let margin = {top: 50, right: 500, bottom: 50, left: 75};
+      let width = 770;
+      let height = 370;
+      let x_offset = 30;
+      let y_offset = ((height / 2) - 40);
+      let names = this.labels.split(',');
+      let n = this.categories.length - 1;
+
+      let xScale = d3.scaleLinear()
+        .domain([0, n])
+        .range([0, width - 170]);
+
+
+      let all_values = [];
+      for (let r in d.reactants) {
+        for (let x in this.nodes[d.reactants[r]].values) {
+          let _x = this.nodes[d.reactants[r]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      for (let p in d.products) {
+        for (let x in this.nodes[d.products[p]].values) {
+          let _x = this.nodes[d.products[p]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      for (let m in d.modifiers) {
+        for (let x in this.nodes[d.modifiers[m][0]].values) {
+          let _x = this.nodes[d.modifiers[m][0]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      for (let a in d.additional_components) {
+        for (let x in this.nodes[d.additional_components[a]].values) {
+          let _x = this.nodes[d.additional_components[a]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      let lower_bound = Math.min(...all_values) - 1;
+      let upper_bound = Math.max(...all_values) + 1;
+
+      let yScale = d3.scaleLinear()
+        .domain([lower_bound, upper_bound])
+        .range([height - 80, 0]);
+
+      let line_svg = d3.select("#line-plot-container")
+        .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("id", "line-graph")
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      line_svg
+        .append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(" + x_offset + "," + y_offset * 2 + ")")
+        .call(d3.axisBottom(xScale)
+                .tickValues(this.categories)
+                .tickFormat(function(d,i) {
+                  return names[i]
+                })
+              );
+      line_svg
+        .append("g")
+          .attr("class", "y axis")
+        .call(d3.axisLeft(yScale));
+
+      for (let r in d.reactants) {
+        let _i = this.nodes[d.reactants[r]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+
+        if (_v[0] !== null) {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          line_svg
+            .append("path")
+              .datum(_v)
+              .attr("class", "line")
+              .style("fill", "none")
+              .style("stroke-width", "3px")
+              .style("stroke", "#d95f02")
+              .style("stroke-dasharray", dash_instruction)
+              .attr("d", current_line);
+
+          // add nodes and info on hover
+          line_svg
+            .data([_v_])
+            .append("path")
+            .style("fill", "white")
+            .style("stroke", "black")
+            .style("stroke-width", function(d, i) {
+              console.log(d[1][i])
+              if ((d[1][i] === undefined) || (d[1][i] === null)) {
+                return 1;
+              } else if (d[1][i] < 0.5) {
+                return 3;
+              } else {
+                return 1;
+              }
+            })
+            .attr("d", d3.symbol()
+              .size(function(d) {
+                return 100;
+              })
+              .type(function(d) {
+                if (_t === "gene_component") {
+                  return d3.symbolTriangle;
+                } else if (_t === "protein_component") {
+                  return d3.symbolDiamond;
+                }  else if (_t === "metabolite_component") {
+                  return d3.symbolCircle;
+                } else {}
+              }))
+              .attr("cx", function(d, i) {return xScale(i) + x_offset;})
+              .attr("cy", function(d, i) {return yScale(d[0][i]);})
+
+
+        }
+      }
+      for (let p in d.products) {
+        let _i = this.nodes[d.products[p]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+        if (_v[0] !== null) {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          line_svg
+            .append("path")
+              .datum(_v)
+              .attr("class", "line")
+              .style("fill", "none")
+              .style("stroke-width", "3px")
+              .style("stroke", "#7570b3")
+              .style("stroke-dasharray", dash_instruction)
+              .attr("d", current_line);
+              line_svg
+                .data([_v_])
+                .append("path")
+                .style("fill", "white")
+                .style("stroke", "black")
+                .style("stroke-width", function(d, i) {
+                  console.log(d[1][i])
+                  if ((d[1][i] === undefined) || (d[1][i] === null)) {
+                    return 1;
+                  } else if (d[1][i] < 0.5) {
+                    return 3;
+                  } else {
+                    return 1;
+                  }
+                })
+                .attr("d", d3.symbol()
+                  .size(function(d) {
+                    return 100;
+                  })
+                  .type(function(d) {
+                    if (_t === "gene_component") {
+                      return d3.symbolTriangle;
+                    } else if (_t === "protein_component") {
+                      return d3.symbolDiamond;
+                    }  else if (_t === "metabolite_component") {
+                      return d3.symbolCircle;
+                    } else {}
+                  }))
+                  .attr("cx", function(d, i) {return xScale(i) + x_offset;})
+                  .attr("cy", function(d, i) {return yScale(d[0][i]);})
+            }
+      }
+      for (let m in d.modifiers) {
+        let _m = d.modifiers[m][1];
+        let _i = this.nodes[d.modifiers[m][0]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+        if (_v[0] !== null) {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          if (_m === "catalyst") {
+            line_svg
+              .append("path")
+                .datum(_v)
+                .attr("class", "line")
+                .style("fill", "none")
+                .style("stroke-width", "3px")
+                .style("stroke", "#1b9e77")
+                .style("stroke-dasharray", dash_instruction)
+                .attr("d", current_line);
+                //add on.hover
+          } else {
+            line_svg
+              .append("path")
+                .datum(_v)
+                .attr("class", "line")
+                .style("fill", "none")
+                .style("stroke-width", "3px")
+                .style("stroke", "#e7298a")
+                .style("stroke-dasharray", dash_instruction)
+                .attr("d", current_line);
+                //add on.hover
+          }
+          console.log(_v_)
+          line_svg
+            .data([_v_])
+            .append("path")
+            .style("fill", "white")
+            .style("stroke", "black")
+            .style("stroke-width", function(d, i) {
+              console.log(d[1][i])
+              if ((d[1][i] === undefined) || (d[1][i] === null)) {
+                return 1;
+              } else if (d[1][i] < 0.5) {
+                return 3;
+              } else {
+                return 1;
+              }
+            })
+            .attr("d", d3.symbol()
+              .size(function(d) {
+                return 100;
+              })
+              .type(function(d) {
+                if (_t === "gene_component") {
+                  return d3.symbolTriangle;
+                } else if (_t === "protein_component") {
+                  return d3.symbolDiamond;
+                }  else if (_t === "metabolite_component") {
+                  return d3.symbolCircle;
+                } else {}
+              }))
+              .attr("cx", function(d, i) {return xScale(i) + x_offset;})
+              .attr("cy", function(d, i) {return yScale(d[0][i]);})
+        }
+      }
+      for (let a in d.additional_components) {
+        let _i = this.nodes[d.additional_components[a]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+        if (_v[0] !== null) {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          line_svg
+            .append("path")
+              .datum(_v)
+              .attr("class", "line")
+              .style("fill", "none")
+              .style("stroke-width", "3px")
+              .style("stroke", "#808080")
+              .style("stroke-dasharray", dash_instruction)
+              .attr("d", current_line);
+          line_svg
+            .data([_v_])
+            .append("path")
+            .style("fill", "white")
+            .style("stroke", "black")
+            .style("stroke-width", function(d, i) {
+              console.log(d[1][i])
+              if ((d[1][i] === undefined) || (d[1][i] === null)) {
+                return 1;
+              } else if (d[1][i] < 0.5) {
+                return 3;
+              } else {
+                return 1;
+              }
+            })
+            .attr("d", d3.symbol()
+              .size(function(d) {
+                return 100;
+              })
+              .type(function(d) {
+                if (_t === "gene_component") {
+                  return d3.symbolTriangle;
+                } else if (_t === "protein_component") {
+                  return d3.symbolDiamond;
+                }  else if (_t === "metabolite_component") {
+                  return d3.symbolCircle;
+                } else {}
+              }))
+              .attr("cx", function(d, i) {return xScale(i) + x_offset;})
+              .attr("cy", function(d, i) {return yScale(d[0][i]);})
+            }
+      }
+    }
 }
 
 function reset_dot() {
@@ -1213,6 +1570,9 @@ function reset_objects() {
     .style("visibility", "hidden");
   d3.select(".network-panel")
     .style("visibility", "hidden");
+  if (timecourse === true) {
+    d3.select("svg#line-graph").remove();
+  }
 }
 
 function reset_all() {
@@ -1224,6 +1584,9 @@ function reset_all() {
 
 function highlight_selection(_selector) {
 
+  if (timecourse === true) {
+    d3.select("svg#line-graph").remove();
+  }
   document.getElementById("pathway_name").innerHTML = "<h6><b> </b></h6>"
 
   let _selectors = [
