@@ -371,9 +371,9 @@ function parse_pathway(
 }
 
 function get_nodes_links(data, components) {
+
   var nodes = data.nodes;
   var links = data.links;
-
   components = [...new Set(components)];
 
   // Parse the nodes of interest

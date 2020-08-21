@@ -54,11 +54,6 @@ make_menu(
   (provide_all = true)
 );
 
-let current_pathway = get_session_info("current_pathway");
-if ((current_pathway !== null) & (current_pathway !== "null")) {
-  change();
-} else {}
-
 var update_nodes = {};
 for (n in data.nodes) {
   update_nodes[data.nodes[n].id] = data.nodes[n];
@@ -73,6 +68,13 @@ for (l in data.links) {
 data.links = update_links;
 
 data.blocklist = data.blocklist.split(",")
+
+let current_pathway = get_session_info("current_pathway");
+if ((current_pathway !== null) & (current_pathway !== "null")) {
+  change();
+  // set back after opening
+  update_session_info("current_pathway", null);
+} else {}
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);
