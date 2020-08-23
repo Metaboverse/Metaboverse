@@ -206,11 +206,10 @@ function buildSlider(categories, names) {
 
 
 // Check number of categories
-function checkCategories(categories, labels) { //, names) {
+function checkCategories(categories, names) {
 
   if (categories.length > 1) {
     timecourse = true;
-    let names = labels.split(',');
     names = names.map(function (n) {
       return n.trim();
     });
@@ -219,4 +218,17 @@ function checkCategories(categories, labels) { //, names) {
     timecourse = false;
   }
   return timecourse;
+}
+
+function populateExclusions(categories, names) {
+  var select = document.getElementById("exclude_type");
+  for (let i = categories.length - 1; i >= 0; --i) {
+      var option = document.createElement('option');
+      option.text = option.value = names[i];
+      select.add(option, 0);
+  }
+  var option = document.createElement('option');
+  option.text = option.value = "No exclusion";
+  select.add(option, 0);
+  $("#exclude_type").val("No exclusion");
 }

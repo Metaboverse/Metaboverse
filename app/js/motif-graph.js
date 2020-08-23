@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 var sample = 0;
+var exclude_idx = -1;
 var last_click = 0;
 var cov_threshold = 0.1;
 
@@ -75,7 +76,12 @@ class MetaGraph{
     this.degree_dict = graphdata.degree_dictionary;
     this.categories = graphdata.categories;
     this.labels = graphdata.labels;
-    timecourse = checkCategories(this.categories, this.labels);
+    this.names = this.labels.split(',');
+    console.log(this.names)
+    timecourse = checkCategories(this.categories, this.names);
+    if (timecourse === true) {
+      populateExclusions(this.categories, this.names);
+    }
 
     let superPaths = make_superPathway_dictionary(graphdata);
     let superPathList = [];
@@ -144,6 +150,53 @@ class MetaGraph{
     }
   }
 
+  watchSlider() {
+    if (this.motif !== undefined) {
+      if (timecourse === true) {
+        d3.select("svg#slide")
+          .on("click", ()=>{
+            let sample_idx = d3.select("circle#dot").attr("x");
+            this.exclude_type_dropdown = document.getElementById("exclude_type");
+            exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+            if (sample_idx !== last_click) {
+              reset_objects();
+              this.drawMotifSearchResult(
+                this.motif, sample_idx, exclude_idx);
+            last_click = sample_idx;
+            }
+          }
+        )
+      }
+    }
+  }
+
+  watchType() {
+    d3.select("#sort_type")
+      .on("change", ()=>{
+        reset_objects();
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        let sample_idx = d3.select("circle#dot").attr("x");
+        this.exclude_type_dropdown = document.getElementById("exclude_type");
+        exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+        this.drawMotifSearchResult(
+          this.motif, sample_idx, exclude_idx);
+      }
+    )
+  }
+
+  watchExclude() {
+    d3.select("#exclude_type")
+      .on("change", ()=>{
+        reset_objects();
+        this.exclude_type_dropdown = document.getElementById("exclude_type");
+        exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+        let sample_idx = d3.select("circle#dot").attr("x");
+        this.drawMotifSearchResult(
+          this.motif, sample_idx, exclude_idx);
+      }
+    )
+  }
+
   motifSearch() {
 
     d3.select("#motif1")
@@ -161,30 +214,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -203,30 +236,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -245,30 +258,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -287,30 +280,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -329,30 +302,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -371,30 +324,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -413,30 +346,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -455,30 +368,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -551,7 +444,24 @@ class MetaGraph{
       }
     )}
 
-    drawMotifSearchResult(motif_list, indexer) {
+    drawMotifSearchResult(motifs, indexer, exclusion_indexer) {
+
+      let motif_list = [];
+      let current_motifs = motifs[indexer];
+      let subtracting_motifs = motifs[exclusion_indexer];
+      let subtracting_ids = [];
+      if (subtracting_motifs !== undefined) {
+        for (let s in subtracting_motifs) {
+          subtracting_ids.push(subtracting_motifs[s].id);
+        }
+        for (let m in current_motifs) {
+          if (!subtracting_ids.includes(current_motifs[m].id)) {
+            motif_list.push(current_motifs[m]);
+          }
+        }
+      } else {
+        motif_list = current_motifs;
+      }
 
       let sort_type = this.sort_type_dropdown.value;
       if (sort_type === "Sort Number of Pathways") {
@@ -1293,13 +1203,12 @@ class MetaGraph{
         .call(d3.axisLeft(yScale));
 
       for (let r in d.reactants) {
+        console.log('===')
         let _i = this.nodes[d.reactants[r]];
         let _n = _i.name;
         let _t = _i.type;
         let _v = _i.values;
         let _s = _i.stats;
-        let _v_ = [_v, _s];
-
         if (_v[0] !== null) {
           let dash_instruction;
           let _set = new Set(_v)
@@ -1323,36 +1232,48 @@ class MetaGraph{
               .attr("d", current_line);
 
           // add nodes and info on hover
-          line_svg
-            .data([_v_])
-            .append("path")
-            .style("fill", "white")
-            .style("stroke", "black")
-            .style("stroke-width", function(d, i) {
-              console.log(d[1][i])
-              if ((d[1][i] === undefined) || (d[1][i] === null)) {
-                return 1;
-              } else if (d[1][i] < 0.5) {
-                return 3;
-              } else {
-                return 1;
-              }
-            })
-            .attr("d", d3.symbol()
-              .size(function(d) {
-                return 100;
+          /*
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            console.log(_i_)
+            console.log(_v_)
+            console.log(_s_)
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
               })
-              .type(function(d) {
-                if (_t === "gene_component") {
-                  return d3.symbolTriangle;
-                } else if (_t === "protein_component") {
-                  return d3.symbolDiamond;
-                }  else if (_t === "metabolite_component") {
-                  return d3.symbolCircle;
-                } else {}
-              }))
-              .attr("cx", function(d, i) {return xScale(i) + x_offset;})
-              .attr("cy", function(d, i) {return yScale(d[0][i]);})
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {}
+                }))
+              .attr("cx", function() {
+                return 400;})
+              .attr("cy", function() {
+                return 1000;})
+
+          }
+          */
+
 
 
         }
@@ -1385,36 +1306,6 @@ class MetaGraph{
               .style("stroke", "#7570b3")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line);
-              line_svg
-                .data([_v_])
-                .append("path")
-                .style("fill", "white")
-                .style("stroke", "black")
-                .style("stroke-width", function(d, i) {
-                  console.log(d[1][i])
-                  if ((d[1][i] === undefined) || (d[1][i] === null)) {
-                    return 1;
-                  } else if (d[1][i] < 0.5) {
-                    return 3;
-                  } else {
-                    return 1;
-                  }
-                })
-                .attr("d", d3.symbol()
-                  .size(function(d) {
-                    return 100;
-                  })
-                  .type(function(d) {
-                    if (_t === "gene_component") {
-                      return d3.symbolTriangle;
-                    } else if (_t === "protein_component") {
-                      return d3.symbolDiamond;
-                    }  else if (_t === "metabolite_component") {
-                      return d3.symbolCircle;
-                    } else {}
-                  }))
-                  .attr("cx", function(d, i) {return xScale(i) + x_offset;})
-                  .attr("cy", function(d, i) {return yScale(d[0][i]);})
             }
       }
       for (let m in d.modifiers) {
@@ -1460,37 +1351,12 @@ class MetaGraph{
                 .attr("d", current_line);
                 //add on.hover
           }
-          console.log(_v_)
-          line_svg
-            .data([_v_])
-            .append("path")
-            .style("fill", "white")
-            .style("stroke", "black")
-            .style("stroke-width", function(d, i) {
-              console.log(d[1][i])
-              if ((d[1][i] === undefined) || (d[1][i] === null)) {
-                return 1;
-              } else if (d[1][i] < 0.5) {
-                return 3;
-              } else {
-                return 1;
-              }
-            })
-            .attr("d", d3.symbol()
-              .size(function(d) {
-                return 100;
-              })
-              .type(function(d) {
-                if (_t === "gene_component") {
-                  return d3.symbolTriangle;
-                } else if (_t === "protein_component") {
-                  return d3.symbolDiamond;
-                }  else if (_t === "metabolite_component") {
-                  return d3.symbolCircle;
-                } else {}
-              }))
-              .attr("cx", function(d, i) {return xScale(i) + x_offset;})
-              .attr("cy", function(d, i) {return yScale(d[0][i]);})
+
+
+
+
+
+
         }
       }
       for (let a in d.additional_components) {
@@ -1509,8 +1375,10 @@ class MetaGraph{
             dash_instruction = "1 0"
           }
           let current_line = d3.line()
-            .x(function(d, i) { return xScale(i) + x_offset; })
-            .y(function(d, i) { return yScale(d); })
+            .x(function(d, i) {
+              return xScale(i) + x_offset; })
+            .y(function(d, i) {
+              return yScale(d); })
             .curve(d3.curveMonotoneX);
           line_svg
             .append("path")
@@ -1521,36 +1389,7 @@ class MetaGraph{
               .style("stroke", "#808080")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line);
-          line_svg
-            .data([_v_])
-            .append("path")
-            .style("fill", "white")
-            .style("stroke", "black")
-            .style("stroke-width", function(d, i) {
-              console.log(d[1][i])
-              if ((d[1][i] === undefined) || (d[1][i] === null)) {
-                return 1;
-              } else if (d[1][i] < 0.5) {
-                return 3;
-              } else {
-                return 1;
-              }
-            })
-            .attr("d", d3.symbol()
-              .size(function(d) {
-                return 100;
-              })
-              .type(function(d) {
-                if (_t === "gene_component") {
-                  return d3.symbolTriangle;
-                } else if (_t === "protein_component") {
-                  return d3.symbolDiamond;
-                }  else if (_t === "metabolite_component") {
-                  return d3.symbolCircle;
-                } else {}
-              }))
-              .attr("cx", function(d, i) {return xScale(i) + x_offset;})
-              .attr("cy", function(d, i) {return yScale(d[0][i]);})
+
             }
       }
     }
