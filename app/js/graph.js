@@ -56,8 +56,8 @@ d3.select("button#options_info")
       }
     )
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
+    div.style("opacity", 0);
+    div.html("")
   }
 );
 d3.select("button#knn_info")

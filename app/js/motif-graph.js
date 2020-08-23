@@ -1209,7 +1209,7 @@ class MetaGraph{
         let _t = _i.type;
         let _v = _i.values;
         let _s = _i.stats;
-        if (_v[0] !== null) {
+        if (_v[0] !== null && _t !== "complex_component") {
           let dash_instruction;
           let _set = new Set(_v)
           if (_set.size === 1) {
@@ -1230,15 +1230,10 @@ class MetaGraph{
               .style("stroke", "#d95f02")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line);
-
           // add nodes and info on hover
-          /*
           for (let _i_ in this.categories) {
             let _v_ = _v[_i_];
             let _s_ = _s[_i_];
-            console.log(_i_)
-            console.log(_v_)
-            console.log(_s_)
             line_svg
               .append("path")
               .attr("id", function() {return _n + "_" + _i_})
@@ -1266,16 +1261,8 @@ class MetaGraph{
                     return d3.symbolCircle;
                   } else {}
                 }))
-              .attr("cx", function() {
-                return 400;})
-              .attr("cy", function() {
-                return 1000;})
-
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
           }
-          */
-
-
-
         }
       }
       for (let p in d.products) {
@@ -1285,7 +1272,7 @@ class MetaGraph{
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
-        if (_v[0] !== null) {
+        if (_v[0] !== null && _t !== "complex_component") {
           let dash_instruction;
           let _set = new Set(_v)
           if (_set.size === 1) {
@@ -1306,17 +1293,50 @@ class MetaGraph{
               .style("stroke", "#7570b3")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line);
-            }
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
+        }
       }
       for (let m in d.modifiers) {
         let _m = d.modifiers[m][1];
         let _i = this.nodes[d.modifiers[m][0]];
         let _n = _i.name;
-        let _t = _i.type;
+        let _t = _i.sub_type;
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
-        if (_v[0] !== null) {
+        if (_v[0] !== null && _t !== "complex_component") {
           let dash_instruction;
           let _set = new Set(_v)
           if (_set.size === 1) {
@@ -1338,7 +1358,6 @@ class MetaGraph{
                 .style("stroke", "#1b9e77")
                 .style("stroke-dasharray", dash_instruction)
                 .attr("d", current_line);
-                //add on.hover
           } else {
             line_svg
               .append("path")
@@ -1349,14 +1368,40 @@ class MetaGraph{
                 .style("stroke", "#e7298a")
                 .style("stroke-dasharray", dash_instruction)
                 .attr("d", current_line);
-                //add on.hover
           }
-
-
-
-
-
-
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {console.log(_t)}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
         }
       }
       for (let a in d.additional_components) {
@@ -1366,7 +1411,7 @@ class MetaGraph{
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
-        if (_v[0] !== null) {
+        if (_v[0] !== null && _t !== "complex_component") {
           let dash_instruction;
           let _set = new Set(_v)
           if (_set.size === 1) {
@@ -1389,11 +1434,44 @@ class MetaGraph{
               .style("stroke", "#808080")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line);
-
-            }
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
+        }
       }
     }
-}
+  }
+
 
 function reset_dot() {
   if (timecourse === true) {
