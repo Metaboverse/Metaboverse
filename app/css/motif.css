@@ -247,7 +247,7 @@ circle:hover text {
 }
 
 #frame-motif-1 {
-  height:820px;
+  height:810px;
   width:215px;
 }
 
@@ -259,7 +259,14 @@ circle:hover text {
   width:800px;
   height:435px;
   margin-left:240px;
-  margin-top:-50px;
+  margin-top:-435px;
+}
+
+.frame-motif-4 {
+  width:215px;
+  height:400px;
+  margin-left:15px;
+  margin-top:-5px;
 }
 
 #title-padding {
@@ -397,4 +404,8 @@ circle:hover text {
 }
 .
 .icon {
+}
+
+#span {
+  padding-top:15px;
 }

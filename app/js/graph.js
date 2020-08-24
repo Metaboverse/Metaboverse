@@ -165,6 +165,7 @@ d3.select("button#legend_info")
 
 d3.select("button#shape_legend")
   .on("mouseover", function(d) {
+    console.log("asdkjh")
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")

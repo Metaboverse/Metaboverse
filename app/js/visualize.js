@@ -45,7 +45,8 @@ var collapsed_pathway_dict = make_pathway_dictionary(
 var superPathwayDict = make_superPathway_dictionary(data);
 
 var global_motifs = gatherMotifs(data, data.categories);
-timecourse = checkCategories(data.categories, data.labels); //, data.names);
+let names = data.labels.split(',');
+timecourse = checkCategories(data.categories, names); //, data.names);
 
 make_menu(
   superPathwayDict,

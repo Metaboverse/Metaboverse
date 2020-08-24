@@ -145,6 +145,10 @@ path.hull {
   pointer-events: all;
 }
 
+.add-buffer {
+  margin-top:7px;
+}
+
 .dot {
   height: 12px;
   width: 12px;
@@ -154,6 +158,7 @@ path.hull {
   stroke: black;
   border-radius: 50%;
   display: inline-block;
+  margin-top:7px;
 }
 
 .ellipse {
@@ -178,6 +183,7 @@ path.hull {
   background-color: var(--dot_color);
   stroke: black;
   display: inline-block;
+  margin-top:7px;
 }
 
 .diamond {
@@ -189,6 +195,7 @@ path.hull {
   background-color: var(--dot_color);
   stroke: black;
   display: inline-block;
+  margin-top:7px;
 }
 
 .black-triangle {
