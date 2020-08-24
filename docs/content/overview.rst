@@ -12,7 +12,7 @@ Background
 -----------------
 Data Inputs
 -----------------
-| Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log<sub>2</sub> Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition datatable examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
+| Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition datatable examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
 .. image:: images/data_formatting.png
    :width: 700
    :align: center

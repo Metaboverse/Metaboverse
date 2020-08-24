@@ -60,7 +60,7 @@ Regulatory Hotspot Identification (Motif Analysis)
   :width: 700
   :align: center
 |
-| If the model includes timecourse or multi-condition data, the patterns present at each timepoint or condition can be viewed.
+| If the model includes time-course or multi-condition data, the patterns present at each timepoint or condition can be viewed.
 .. image:: images/motif_time.png
   :width: 700
   :align: center
@@ -69,6 +69,11 @@ Regulatory Hotspot Identification (Motif Analysis)
 | a) **Use Modifiers**: Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers.
 | b) **Exclude Hubs**: Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers.
 .. image:: images/motif_options.png
+  :width: 250
+  :align: center
+|
+| Additionally, users can choose how to sort identified motifs, or choose to not return motifs for the selected time-point or condition that were also found in another time-point or condition. For time-course or multi-condition experiments, a pane will appear that will display the behavior of all reaction motif components across all time-points or conditions.
+.. image:: images/motif_options2.png
   :width: 250
   :align: center
 |
