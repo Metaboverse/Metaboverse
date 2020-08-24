@@ -31,7 +31,8 @@
     "minimist": "^1.2.5",
     "mocha": "^8.1.1",
     "wine": "^0.9.13",
-    "zerorpc": "^0.9.8"
+    "zerorpc": "^0.9.8",
+    "serialize-javascript": "^3.1.0"
   },
   "dependencies": {
     "d3": "^5.16.0",
