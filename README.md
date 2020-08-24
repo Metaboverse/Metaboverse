@@ -39,7 +39,8 @@ If you have questions, requests, or bugs to report, please use the [Metaboverse 
 Have any feedback? Let us know [here](https://forms.gle/4z51DMnagWRvKhc38).
 
 ### Trying out Metaboverse
-You can access some example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files
+You can access some example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files.
+With each release archive or Metaboverse, a `test_data.zip` file is included. Unzip this file and read the `README.txt` file for more information on this example dataset.
 
 ### How does the underlying code for Metaboverse work?
 Metaboverse is currently segmented into two parts:
