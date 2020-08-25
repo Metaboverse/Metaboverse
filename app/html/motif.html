@@ -22,7 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://reactome.org/ 'self';">
 <title>Metaboverse</title>
 
 
@@ -67,7 +67,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div id="row-motif" class="row">
             <div class="col-md-2">
                 <div id="frame-motif-1" class="frame">
-
                     <div class="row">
                         <div class="col-md-4">
                             <div class="content">
@@ -164,11 +163,18 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="content">
-                        <div class="dropdown-container">
+                        <div class="dropdown-container" title="Decide how motif results are sorted before being returned to you, the user.">
                             <select name="sort_type" class="custom-select" id="sort_type">
                                 <option>Sort Statistical Significance</option>
                                 <option>Sort Magnitude Change</option>
                                 <option>Sort Number of Pathways</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="content">
+                        <div class="dropdown-container" title="Selections only apply to non-pathway-level motifs (e.g., not PathMax or PathCov).">
+                            <select name="exclude_type" class="custom-select" id="exclude_type">
                             </select>
                         </div>
                     </div>
@@ -191,7 +197,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </div>
             <div id="col-md-6-motif" class="col-md-6">
-                <div class="frame" >
+                <div class="frame">
                     <div id="network-frame-motif" class="network-frame">
                         <div id="pathway_name"></div>
                         <div id="pathway-view-container">
@@ -200,7 +206,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div id="network-panel-motif" class="network-panel">
                       <h6><b><i>All Motifs In This Pathway:</i></b>
-                      <a href="visualize.html" id="open_pathway_viewer" onclick="window.open(this.href, '', 'left=20,top=20,width=1400,height=900,toolbar=1,resizable=1'); return false;"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a></h6>
+                      <a href="visualize.html" id="open_pathway_viewer" ><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a></h6>
                       <div class="scrollable" id="all-motif-list"><ul></ul>
                       </div>
                     </div>
@@ -211,5 +217,77 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br />
     <br />
     <div id="slider" class="slider-motif" align="center"></div>
+    <br />
+    <div id="frame-shape-key">
+      <div class='frame frame-motif-4'>
+        <font size="2">
+        <div style='margin-left:15px;margin-top:10px;'>
+          <font size='3'>
+            <b><u>Relationships</u></b>
+          </font>
+          <br />
+          <div class='arrow'>
+            <div class='line grey-arrow'></div>
+            <div class='point grey-arrow'></div>
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;Core interaction
+          <br />
+          <div class='arrow'>
+            <div class='line green-arrow'></div>
+            <div class='point green-arrow'></div>
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;Catalyst
+          <br />
+          <div class='arrow'>
+            <div class='line red-arrow'></div>
+            <div class='point red-arrow'></div>
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;Inhibitor
+          <br />
+          <div class='arrow'>
+            <div class='line2 blue-arrow'></div>
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component
+          <br />
+          <div class='arrow'>
+            <div class='line2 orange-arrow'></div>
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;Protein Component
+          <br />
+          <div class='arrow'>
+            <div class='line2 purple-arrow'></div>
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;Gene Component
+          <br />
+          <br />
+
+          <font size='3'>
+            <b><u>Entities</u></b>
+          </font>
+          <br />
+          <span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction
+          <br />
+          <span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction
+          <br />
+          &nbsp;<span class='dot white-dot'></span>
+          &nbsp;&nbsp;&nbsp;&nbsp;Metabolite
+          <br />
+          &nbsp;<span class='square white-dot'></span>
+          &nbsp;&nbsp;&nbsp;&nbsp;Complex
+          <br />
+          &nbsp;<span class='diamond white-dot'></span>
+          &nbsp;&nbsp;&nbsp;&nbsp;Protein
+          <br />
+          <div class="add-buffer">
+            &nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>
+            &nbsp;&nbsp;&nbsp;Gene
+            </div>
+          <br />
+          <span class="add-buffer">Bold = meets statistic < 0.05</span>
+        </div>
+        </font>
+      </div>
+    </div>
+    <div id="frame-line-plots"></div>
   </body>
 </html>

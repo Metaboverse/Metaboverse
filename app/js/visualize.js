@@ -45,7 +45,8 @@ var collapsed_pathway_dict = make_pathway_dictionary(
 var superPathwayDict = make_superPathway_dictionary(data);
 
 var global_motifs = gatherMotifs(data, data.categories);
-timecourse = checkCategories(data.categories, data.labels); //, data.names);
+let names = data.labels.split(',');
+timecourse = checkCategories(data.categories, names); //, data.names);
 
 make_menu(
   superPathwayDict,
@@ -53,11 +54,6 @@ make_menu(
   "Select a category...",
   (provide_all = true)
 );
-
-let current_pathway = get_session_info("current_pathway");
-if ((current_pathway !== null) & (current_pathway !== "null")) {
-  change();
-} else {}
 
 var update_nodes = {};
 for (n in data.nodes) {
@@ -73,6 +69,13 @@ for (l in data.links) {
 data.links = update_links;
 
 data.blocklist = data.blocklist.split(",")
+
+let current_pathway = get_session_info("current_pathway");
+if ((current_pathway !== null) & (current_pathway !== "null")) {
+  change();
+  // set back after opening
+  update_session_info("current_pathway", null);
+} else {}
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);

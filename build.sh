@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=0.1.4b
+VERSION=0.2.0b
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
@@ -46,6 +46,10 @@ mv metaboverse-cli-win.exe app/python/
 mv app/Metaboverse-darwin-x64 ./Metaboverse-darwin-x64-${VERSION}
 mv app/Metaboverse-linux-x64 ./Metaboverse-linux-x64-${VERSION}
 mv app/Metaboverse-win32-x64 ./Metaboverse-win32-x64-${VERSION}
+
+cp app/data/test_data.zip ./Metaboverse-darwin-x64-${VERSION}
+cp app/data/test_data.zip ./Metaboverse-linux-x64-${VERSION}
+cp app/data/test_data.zip ./Metaboverse-win32-x64-${VERSION}
 
 zip -r ./Metaboverse-darwin-x64-${VERSION}.zip ./Metaboverse-darwin-x64-${VERSION}
 zip -r ./Metaboverse-linux-x64-${VERSION}.zip ./Metaboverse-linux-x64-${VERSION}

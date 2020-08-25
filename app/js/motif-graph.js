@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 var sample = 0;
+var exclude_idx = -1;
 var last_click = 0;
 var cov_threshold = 0.1;
 
@@ -58,10 +59,6 @@ class MetaGraph{
     )
     this.path_mapper = graphdata.motif_reaction_dictionary
 
-    console.log(this.path_mapper)
-    console.log(this.collapsed_reaction_dict)
-
-
     // Generate expression and stats dictionaries
     let expression_dict = {};
     let stats_dict = {};
@@ -79,7 +76,17 @@ class MetaGraph{
     this.degree_dict = graphdata.degree_dictionary;
     this.categories = graphdata.categories;
     this.labels = graphdata.labels;
-    timecourse = checkCategories(this.categories, this.labels);
+    this.names = this.labels.split(',');
+    console.log(this.names)
+    timecourse = checkCategories(this.categories, this.names);
+    if (timecourse === true) {
+      populateExclusions(this.categories, this.names);
+    } else {
+      var select = document.getElementById("exclude_type");
+      var option = document.createElement('option');
+      option.text = option.value = "No exclusion";
+      select.add(option, 0);
+    }
 
     let superPaths = make_superPathway_dictionary(graphdata);
     let superPathList = [];
@@ -129,7 +136,70 @@ class MetaGraph{
       this.pathway_svg_height = parseFloat(
         this.pathway_svg.style("height", "490px"));
   } catch(e) {}
+    this.initLines();
     this.motifSearch();
+  }
+
+  // Add line plot space if time-course/multi-condition
+  initLines() {
+    if (timecourse === true) {
+      $("#frame-line-plots").append(
+        "<div class='frame frame-motif-3'>"
+        + "<div class='line-sub-frame'>"
+        + "<h6><b>Selected Reaction Motif</b></h6>"
+        + "<div id='line-plot-container'></div>"
+        + "</div>"
+        + "<i><font size='2' class='line-description'>View how components of a given reaction change across the time-course or across conditions.</font><br /><font size='2' class='line-description'>Dashed lines indicate an entity with only one representative measurement (i.e., a single timepoint was provided for that datapoint).</font></i>"
+        + "</div><br /><br /><br /"
+      );
+    }
+  }
+
+  watchSlider() {
+    if (this.motif !== undefined) {
+      if (timecourse === true) {
+        d3.select("svg#slide")
+          .on("click", ()=>{
+            let sample_idx = d3.select("circle#dot").attr("x");
+            this.exclude_type_dropdown = document.getElementById("exclude_type");
+            exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+            if (sample_idx !== last_click) {
+              reset_objects();
+              this.drawMotifSearchResult(
+                this.motif, sample_idx, exclude_idx);
+            last_click = sample_idx;
+            }
+          }
+        )
+      }
+    }
+  }
+
+  watchType() {
+    d3.select("#sort_type")
+      .on("change", ()=>{
+        reset_objects();
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        let sample_idx = d3.select("circle#dot").attr("x");
+        this.exclude_type_dropdown = document.getElementById("exclude_type");
+        exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+        this.drawMotifSearchResult(
+          this.motif, sample_idx, exclude_idx);
+      }
+    )
+  }
+
+  watchExclude() {
+    d3.select("#exclude_type")
+      .on("change", ()=>{
+        reset_objects();
+        this.exclude_type_dropdown = document.getElementById("exclude_type");
+        exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+        let sample_idx = d3.select("circle#dot").attr("x");
+        this.drawMotifSearchResult(
+          this.motif, sample_idx, exclude_idx);
+      }
+    )
   }
 
   motifSearch() {
@@ -149,30 +219,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -191,30 +241,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -233,30 +263,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -275,30 +285,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -317,30 +307,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -359,30 +329,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -401,30 +351,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -443,30 +373,10 @@ class MetaGraph{
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", ()=>{
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResult(
-                    this.motif[sample_idx], sample_idx);
-                last_click = sample_idx;
-                }
-              }
-            )
-          }
-          d3.select("#sort_type")
-            .on("change", ()=>{
-              reset_objects();
-              this.sort_type_dropdown = document.getElementById("sort_type");
-              let sample_idx = d3.select("circle#dot").attr("x");
-              this.drawMotifSearchResult(
-                this.motif[sample_idx], sample_idx);
-            })
-          this.drawMotifSearchResult(this.motif[0], 0);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
       }
     )
 
@@ -539,7 +449,24 @@ class MetaGraph{
       }
     )}
 
-    drawMotifSearchResult(motif_list, indexer) {
+    drawMotifSearchResult(motifs, indexer, exclusion_indexer) {
+
+      let motif_list = [];
+      let current_motifs = motifs[indexer];
+      let subtracting_motifs = motifs[exclusion_indexer];
+      let subtracting_ids = [];
+      if (subtracting_motifs !== undefined) {
+        for (let s in subtracting_motifs) {
+          subtracting_ids.push(subtracting_motifs[s].id);
+        }
+        for (let m in current_motifs) {
+          if (!subtracting_ids.includes(current_motifs[m].id)) {
+            motif_list.push(current_motifs[m]);
+          }
+        }
+      } else {
+        motif_list = current_motifs;
+      }
 
       let sort_type = this.sort_type_dropdown.value;
       if (sort_type === "Sort Number of Pathways") {
@@ -616,6 +543,9 @@ class MetaGraph{
         .attr("id",(d)=>"stamp-cover-"+d.id)
         .style("opacity",0)
         .on("click",(d)=>{
+          if (timecourse === true) {
+            this.generateLines(d);
+          }
           document.getElementById("pathway_name").innerHTML = "<h6><b></b></h6>";
           d3.select("#pathway-view-svg").style("visibility","hidden");
           d3.select(".network-panel").style("visibility","hidden");
@@ -1197,7 +1127,435 @@ class MetaGraph{
     createId(id){
       return id.replace(/[^a-zA-Z0-9]/g, "")
     }
-}
+
+    generateLines(d) {
+
+      d3.select("svg#line-graph").remove();
+      let margin = {top: 50, right: 500, bottom: 50, left: 75};
+      let width = 770;
+      let height = 370;
+      let x_offset = 30;
+      let y_offset = ((height / 2) - 40);
+      let names = this.labels.split(',');
+      let n = this.categories.length - 1;
+
+      let xScale = d3.scaleLinear()
+        .domain([0, n])
+        .range([0, width - 170]);
+
+
+      let all_values = [];
+      for (let r in d.reactants) {
+        for (let x in this.nodes[d.reactants[r]].values) {
+          let _x = this.nodes[d.reactants[r]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      for (let p in d.products) {
+        for (let x in this.nodes[d.products[p]].values) {
+          let _x = this.nodes[d.products[p]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      for (let m in d.modifiers) {
+        for (let x in this.nodes[d.modifiers[m][0]].values) {
+          let _x = this.nodes[d.modifiers[m][0]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      for (let a in d.additional_components) {
+        for (let x in this.nodes[d.additional_components[a]].values) {
+          let _x = this.nodes[d.additional_components[a]].values[x];
+          if (_x !== null) {
+            all_values.push(_x);
+          }
+        }
+      }
+      let lower_bound = Math.min(...all_values) - 1;
+      let upper_bound = Math.max(...all_values) + 1;
+
+      let yScale = d3.scaleLinear()
+        .domain([lower_bound, upper_bound])
+        .range([height - 80, 0]);
+
+      let line_svg = d3.select("#line-plot-container")
+        .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("id", "line-graph")
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      line_svg
+        .append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(" + x_offset + "," + y_offset * 2 + ")")
+        .call(d3.axisBottom(xScale)
+                .tickValues(this.categories)
+                .tickFormat(function(d,i) {
+                  return names[i]
+                })
+              );
+      line_svg
+        .append("g")
+          .attr("class", "y axis")
+        .call(d3.axisLeft(yScale));
+      for (let a in d.additional_components) {
+        let _i = this.nodes[d.additional_components[a]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+        if (_v[0] !== null && _t !== "complex_component") {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) {
+              return xScale(i) + x_offset; })
+            .y(function(d, i) {
+              return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          line_svg
+            .append("path")
+              .datum(_v)
+              .attr("id", function() {return "line_" + _n + "_" + _t})
+              .attr("class", "line")
+              .style("fill", "none")
+              .style("stroke-width", "3px")
+              .style("stroke", "#808080")
+              .style("stroke-dasharray", dash_instruction)
+              .attr("d", current_line)
+              .on("mouseover", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "5px")
+              })
+              .on("mouseout", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "3px")
+              })
+          line_svg
+            .append("text")
+              .attr("id", "_n")
+              .attr("x", xScale(_v.length - 1) + x_offset + 15)
+              .attr("y", yScale(_v[_v.length - 1]) + 5)
+              .style("fill", "#808080")
+              .text(_n);
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
+        }
+      }
+      for (let m in d.modifiers) {
+        let _m = d.modifiers[m][1];
+        let _i = this.nodes[d.modifiers[m][0]];
+        let _n = _i.name;
+        let _t = _i.sub_type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+        if (_v[0] !== null && _t !== "complex_component") {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          if (_m === "catalyst") {
+            line_svg
+              .append("path")
+                .datum(_v)
+                .attr("id", function() {return "line_" + _n + "_" + _t})
+                .attr("class", "line")
+                .style("fill", "none")
+                .style("stroke-width", "3px")
+                .style("stroke", "#1b9e77")
+                .style("stroke-dasharray", dash_instruction)
+                .attr("d", current_line)
+                .on("mouseover", function() {
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "5px")
+                })
+                .on("mouseout", function() {
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "3px")
+                    div.style("opacity", 0);
+                    div.html("")
+                })
+            line_svg
+              .append("text")
+                .attr("id", "_n")
+                .attr("x", xScale(_v.length - 1) + x_offset + 15)
+                .attr("y", yScale(_v[_v.length - 1]) + 5)
+                .style("fill", "#1b9e77")
+                .text(_n);
+          } else {
+            line_svg
+              .append("path")
+                .datum(_v)
+                .attr("id", function() {return "line_" + _n + "_" + _t})
+                .attr("class", "line")
+                .style("fill", "none")
+                .style("stroke-width", "3px")
+                .style("stroke", "#e7298a")
+                .style("stroke-dasharray", dash_instruction)
+                .attr("d", current_line)
+                .on("mouseover", function() {
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "5px")
+                })
+                .on("mouseout", function() {
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "3px")
+                })
+            line_svg
+              .append("text")
+                .attr("id", "_n")
+                .attr("x", xScale(_v.length - 1) + x_offset + 15)
+                .attr("y", yScale(_v[_v.length - 1]) + 5)
+                .style("fill", "#e7298a")
+                .text(_n);
+          }
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {console.log(_t)}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
+        }
+      }
+      for (let r in d.reactants) {
+        let _i = this.nodes[d.reactants[r]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        if (_v[0] !== null && _t !== "complex_component") {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          line_svg
+            .append("path")
+              .datum(_v)
+              .attr("id", function() {return "line_" + _n + "_" + _t})
+              .attr("class", "line")
+              .style("fill", "none")
+              .style("stroke-width", "3px")
+              .style("stroke", "#d95f02")
+              .style("stroke-dasharray", dash_instruction)
+              .attr("d", current_line)
+              .on("mouseover", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "5px")
+              })
+              .on("mouseout", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "3px")
+              })
+          line_svg
+            .append("text")
+              .attr("id", "_n")
+              .attr("x", xScale(0) + x_offset + 15)
+              .attr("y", yScale(_v[0]) + 5)
+              .style("fill", "#d95f02")
+              .text(_n);
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
+        }
+      }
+      for (let p in d.products) {
+        let _i = this.nodes[d.products[p]];
+        let _n = _i.name;
+        let _t = _i.type;
+        let _v = _i.values;
+        let _s = _i.stats;
+        let _v_ = [_v, _s];
+        if (_v[0] !== null && _t !== "complex_component") {
+          let dash_instruction;
+          let _set = new Set(_v)
+          if (_set.size === 1) {
+            dash_instruction = "15 5"
+          } else {
+            dash_instruction = "1 0"
+          }
+          let current_line = d3.line()
+            .x(function(d, i) { return xScale(i) + x_offset; })
+            .y(function(d, i) { return yScale(d); })
+            .curve(d3.curveMonotoneX);
+          line_svg
+            .append("path")
+              .datum(_v)
+              .attr("id", function() {return "line_" + _n + "_" + _t})
+              .attr("class", "line")
+              .style("fill", "none")
+              .style("stroke-width", "3px")
+              .style("stroke", "#7570b3")
+              .style("stroke-dasharray", dash_instruction)
+              .attr("d", current_line)
+              .on("mouseover", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "5px")
+              })
+              .on("mouseout", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "3px")
+              })
+          line_svg
+            .append("text")
+              .attr("id", "_n")
+              .attr("x", xScale(0) + x_offset + 15)
+              .attr("y", yScale(_v[0]) + 5)
+              .style("fill", "#7570b3")
+              .text(_n);
+          // add nodes and info on hover
+          for (let _i_ in this.categories) {
+            let _v_ = _v[_i_];
+            let _s_ = _s[_i_];
+            line_svg
+              .append("path")
+              .attr("id", function() {return _n + "_" + _i_})
+              .style("fill", "white")
+              .style("stroke", "black")
+              .style("stroke-width", function() {
+                if ((_s_ === undefined) || (_s_ === null)) {
+                  return 1;
+                } else if (_s_ < 0.5) {
+                  return 3;
+                } else {
+                  return 1;
+                }
+              })
+              .attr("d", d3.symbol()
+                .size(function() {
+                  return 100;
+                })
+                .type(function() {
+                  if (_t === "gene_component") {
+                    return d3.symbolTriangle;
+                  } else if (_t === "protein_component") {
+                    return d3.symbolDiamond;
+                  }  else if (_t === "metabolite_component") {
+                    return d3.symbolCircle;
+                  } else {}
+                }))
+              .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
+          }
+        }
+      }
+    }
+  }
+
 
 function reset_dot() {
   if (timecourse === true) {
@@ -1213,6 +1571,9 @@ function reset_objects() {
     .style("visibility", "hidden");
   d3.select(".network-panel")
     .style("visibility", "hidden");
+  if (timecourse === true) {
+    d3.select("svg#line-graph").remove();
+  }
 }
 
 function reset_all() {
@@ -1224,6 +1585,9 @@ function reset_all() {
 
 function highlight_selection(_selector) {
 
+  if (timecourse === true) {
+    d3.select("svg#line-graph").remove();
+  }
   document.getElementById("pathway_name").innerHTML = "<h6><b> </b></h6>"
 
   let _selectors = [

@@ -21,10 +21,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://reactome.org/ 'self'; object-src 'none'; trusted-types 'script';">
 <title>Metaboverse</title>
 
 <html>
+  <link rel="stylesheet" href="../css/fontawesome_v5.0.7.css" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/visualize.css" />
   <link rel="stylesheet" href="../css/timecourse.css" />
@@ -87,8 +88,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <font id="styletitle" size="2">
         <b><u>Legend</u></b>
         <button
-          class="info"
-          title="Click and drag the background to pan, or use the mouse wheel to zoom."
+          id="legend_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -136,11 +137,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <b>Entity Values</b>
         <br />
         <br />
-        <div title="Double-click to display reaction notes.">
-          <span class="dot grey-dot"></span>
-          Reaction
-        </div>
-        <br />
         <div title="Value was found in user data.">
           <span class="dot white-dot"></span>
           Measured
@@ -166,70 +162,29 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <canvas id="seismic_canvas" width="220" height="15"></canvas>
         <br />
         <br />
-        <b>Relationship Types</b>
+        <b>Shape Legend</b>
+        <button
+          id="shape_legend"
+          class="info_enhanced"
+        >
+          <i>i</i>
+        </button>
         <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line grey-arrow"></div>
-          <div class="point grey-arrow">
-            &nbsp;&nbsp;&nbsp;Core
-          </div>
-        </div>
         <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line green-arrow"></div>
-          <div class="point green-arrow">
-            &nbsp;&nbsp;&nbsp;Catalyst
-          </div>
-        </div>
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line red-arrow"></div>
-          <div class="point red-arrow">
-            &nbsp;&nbsp;&nbsp;Inhibitor
-          </div>
-        </div>
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="arrow">
-          <div class="line2"></div>
-          <div class="component-label">&nbsp;&nbsp;&nbsp;Components</div>
-        </div>
-        <br />
-        &nbsp;
-        <span class="dot white-dot"></span>
-        <div class="arrow">
-          <div class="line blue-arrow arrow-margin-4"></div>
-          <div class="point blue-arrow arrow-margin-0">
-            &nbsp;&nbsp;&nbsp;Metabolite
-          </div>
-        </div>
-        <br />
-        &nbsp;
-        <span class="square white-dot"></span>
-        <div class="arrow">
-          <div class="line orange-arrow"></div>
-          <div class="point orange-arrow">
-            &nbsp;&nbsp;&nbsp;Protein
-          </div>
-        </div>
-        <br />
-        <span class="ellip white-dot"></span>
-        <div class="arrow">
-          <div class="line arrow-purple"></div>
-          <div class="point arrow-purple">
-            &nbsp;&nbsp;&nbsp;Gene
-          </div>
-        </div>
+        <b>Compartment Legend</b>
+        <button
+          id="compartment_legend"
+          class="info_enhanced"
+        >
+          <i>i</i>
+        </button>
         <br />
         <br />
         <br />
         <b><u>Options</u></b>
         <button
-          class="info"
-          title="Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details."
+          id="options_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -261,7 +216,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <br />
         <div title="Click to save the current graph view">
-          <button id="saveGraph">Save Graph</button>
+          <button id="saveGraph">Export PNG</button>
         </div>
         <br />
         <br />
@@ -275,8 +230,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           value="1"
         />
         <button
-          class="info"
-          title="Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion)"
+          id="knn_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -290,8 +245,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           max="9999999"
         />
         <button
-          class="info"
-          title="Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections."
+          id="hub_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -306,8 +261,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           value="0.05"
         />
         <button
-          class="info"
-          title="Provide a value to threshold statistical value where node borders are bolded."
+          id="stat_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>
@@ -332,8 +287,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <br />
         <b><u>Notes:</u></b>
         <button
-          class="info"
-          title="Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node."
+          id="notes_info"
+          class="info_enhanced"
         >
           <i>i</i>
         </button>

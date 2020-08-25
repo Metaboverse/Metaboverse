@@ -115,23 +115,23 @@ function buildSlider(categories, names) {
       .attr("cx", x(slider_index))
       .attr("x", slider_index);
 
-    let node = d3.selectAll("circle,rect,ellipse")
+    let node = d3.selectAll("path")
     node.each(function(d) {
 
-      if (d !== undefined) {
-
-        // if rectangle, ellipse, circle
-        // change fill and text
-        if (d.sub_type === "metabolite_component") {
-          try {
-            d3.select("circle#" + d.id)
-            .style("--node_color", function(d) {
+      // if rectangle, ellipse, circle
+      // change fill and text
+      try {
+        if (d !== undefined) {
+          if (d.type !== "reaction") {
+            d3.select("path#" + d.id)
+            .style("fill", function(d) {
               return "rgba(" + d["values_js"][slider_index].toString() + ")";
             })
-            .style("--node_border", function(d) {
-              if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
+            .style("stroke", "black")
+            .style("stroke-width", function(d) {
+              if ((d['stats'][slider_index] === undefined) || (d['stats'][slider_index] === null)) {
                 return 1;
-              } else if (d.stats[slider_index] < stat_value) {
+              } else if (d['stats'][slider_index] < stat_value) {
                 return 2;
               } else {
                 return 1;
@@ -167,152 +167,49 @@ function buildSlider(categories, names) {
                   );
                 }
               })
-          } catch(err) {}
-        }
-        if (d.sub_type === "gene") {
-          try {
-            d3.select("ellipse#" + d.id)
-              .style("--node_color", function(d) {
-                return "rgba(" + d["values_js"][slider_index].toString() + ")";
-              })
-              .style("--node_border", function(d) {
-                if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
-                  return 1;
-                } else if (d.stats[slider_index] < stat_value) {
-                  return 2;
-                } else {
-                  return 1;
-                }
-              })
-            d3.select("text#" + d.id)
-              .html(function(d) {
-                if (d.values[slider_index] === null
-                && d.stats[slider_index] === null) {
-                  return (
-                    "<tspan dx='16' y='0em' class='bold-text'>"
-                    + d.name
-                    + "</tspan>"
-                  );
-                } else {
-                  let display_stat;
-                  if (parseFloat(d.stats[slider_index]) < 0.01) {
-                    display_stat = "< 0.01"
-                  } else {
-                    display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
-                  }
-                  return (
-                    "<tspan dx='16' y='-.5em' class='bold-text'>"
-                    + d.name
-                    + "</tspan>"
-                    + "<tspan x='16' y='.7em'>Value: "
-                    + parseFloat(d.values[slider_index]).toFixed(2)
-                    + "</tspan>"
-                    + "<tspan x='16' y='1.7em'>Statistic: "
-                    + display_stat
-                    + "</tspan>"
-                  );
-                }
-              })
-          } catch(err) {}
-        }
-        if (d.sub_type === "protein_component") {
-          try {
-            d3.select("rect#" + d.id)
-              .style("--node_color", function(d) {
-                return "rgba(" + d["values_js"][slider_index].toString() + ")";
-              })
-              .style("--node_border", function(d) {
-                if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
-                  return 1;
-                } else if (d.stats[slider_index] < stat_value) {
-                  return 2;
-                } else {
-                  return 1;
-                }
-              })
-            d3.select("text#" + d.id)
-              .html(function(d) {
-                if (d.values[slider_index] === null
-                && d.stats[slider_index] === null) {
-                  return (
-                    "<tspan dx='16' y='0em' class='bold-text'>"
-                    + d.name
-                    + "</tspan>"
-                  );
-                } else {
-                  let display_stat;
-                  if (parseFloat(d.stats[slider_index]) < 0.01) {
-                    display_stat = "< 0.01"
-                  } else {
-                    display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
-                  }
-                  return (
-                    "<tspan dx='16' y='-.5em' class='bold-text'>"
-                    + d.name
-                    + "</tspan>"
-                    + "<tspan x='16' y='.7em'>Value: "
-                    + parseFloat(d.values[slider_index]).toFixed(2)
-                    + "</tspan>"
-                    + "<tspan x='16' y='1.7em'>Statistic: "
-                    + display_stat
-                    + "</tspan>"
-                  );
-                }
-              })
-          } catch(err) {}
-        }
-
-        // if reaction and in current motif set, enlarge, if not, reset
-        try {
-          if (global_motifs !== undefined) {
-            if (global_motifs[slider_index] !== undefined) {
-              if (global_motifs[slider_index].length > 0) {
-                if (global_motifs[slider_index].includes(d.id)) {
-                  d3.selectAll("circle#" + d.id)
-                    .style("r", "10px")
-                    .style("stroke", "purple")
-                    .style("--node_border", 5)
-                } else {
-                  d3.selectAll("circle#" + d.id)
-                  .style("stroke", "black")
-                  .style("--node_color", function(d) {
-                    return "rgba(" + d[entity][slider_index].toString() + ")";
-                  })
-                  .style("--node_border", function(d) {
-                    if ((d.stats[slider_index] === undefined) | (d.stats[slider_index] === null)) {
-                      return 1;
-                    } else if (d.stats[slider_index] < stat_value) {
-                      return 2;
+            } else {
+              // if reaction and in current motif set, enlarge, if not, reset
+              if (global_motifs !== undefined) {
+                if (global_motifs[slider_index] !== undefined) {
+                  if (global_motifs[slider_index].length > 0) {
+                    let rxn_id = d.id;
+                    if (global_motifs[slider_index].includes(rxn_id)) {
+                      d3.select("path#" + rxn_id)
+                        .style("stroke", "purple")
+                        .style("stroke-width", 3)
+                        .attr("d", d3.symbol()
+                          .size(function(d) {
+                            return 400;
+                          })
+                          .type(d3.symbolStar))
                     } else {
-                      return 1;
+                      d3.select("path#" + rxn_id)
+                      .style("stroke", "black")
+                      .style("stroke-width", 1)
+                      .attr("d", d3.symbol()
+                        .size(function(d) {
+                          return 175;
+                        })
+                        .type(d3.symbolStar))
                     }
-                  })
-                  .style("r", function() {
-                    return 6;
-                  })
-                  .style("stroke-dasharray", function(d) {
-                    if (d.inferred === "true" || d.type === "collapsed") {
-                      return "2,2";
-                    } else {
-                      return "none";
-                    }
-                  })
+                  }
                 }
               }
             }
           }
+
         } catch(err) {}
       }
-    })
+    )
   }
 }
 
+
 // Check number of categories
-function checkCategories(categories, labels) { //, names) {
+function checkCategories(categories, names) {
 
   if (categories.length > 1) {
     timecourse = true;
-    let names = labels.split(',');
     names = names.map(function (n) {
       return n.trim();
     });
@@ -321,4 +218,17 @@ function checkCategories(categories, labels) { //, names) {
     timecourse = false;
   }
   return timecourse;
+}
+
+function populateExclusions(categories, names) {
+  var select = document.getElementById("exclude_type");
+  for (let i = categories.length - 1; i >= 0; --i) {
+      var option = document.createElement('option');
+      option.text = option.value = names[i];
+      select.add(option, 0);
+  }
+  var option = document.createElement('option');
+  option.text = option.value = "No exclusion";
+  select.add(option, 0);
+  $("#exclude_type").val("No exclusion");
 }

@@ -42,7 +42,7 @@ License
 ==========
 Feedback?
 ==========
-| Have any feedback? Let us know `here` <https://forms.gle/4z51DMnagWRvKhc38>`_.
+| Have any feedback? Let us know `here <https://forms.gle/4z51DMnagWRvKhc38>`_.
 |
 ==========
 Questions?

@@ -25,6 +25,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   font-family: sans-serif, Verdana, Geneva, Tahoma;
 }
 
+
 div.scrollable {
   /* width: 100%;
   height: 100%;
@@ -72,6 +73,13 @@ div.scrollable {
   height:700px;
 }
 
+.frame-line {
+  border: 1px solid lightgray;
+  background-color: rgb(247,247,249);
+  border-radius: 5px;
+  height:600px;
+}
+
 .content {
   padding-top: 20px;
   padding-left: 15px;
@@ -87,6 +95,19 @@ div.scrollable {
   background-color: white;
   border-radius: 5px;
   height:330px;
+}
+
+.line-sub-frame {
+  margin-top:10px;
+  margin-left:10px;
+  margin-right:10px;
+  padding-top:5px;
+  padding-left:5px;
+  border: 1px solid lightgray;
+  background-color: white;
+  border-radius: 5px;
+  height:380px;
+  width:780px;
 }
 
 .network-frame {
@@ -226,12 +247,26 @@ circle:hover text {
 }
 
 #frame-motif-1 {
-  height:780px;
-  width:190px;
+  height:810px;
+  width:215px;
 }
 
 #frame-motif-2 {
   width:435px;
+}
+
+.frame-motif-3 {
+  width:800px;
+  height:435px;
+  margin-left:240px;
+  margin-top:-435px;
+}
+
+.frame-motif-4 {
+  width:215px;
+  height:400px;
+  margin-left:15px;
+  margin-top:-5px;
 }
 
 #title-padding {
@@ -322,12 +357,13 @@ circle:hover text {
 }
 
 #col-md-4-motif {
-  position:absolute; margin-left:205px;
+  position:absolute;
+  margin-left:225px;
 }
 
 #col-md-6-motif {
   position: absolute;
-  margin-left:655px;
+  margin-left:670px;
 }
 
 #stamp-view-container,
@@ -336,6 +372,13 @@ circle:hover text {
   padding-left:0;
   width:405px;
   height:90%;
+}
+
+#line-plot-container {
+  margin-top:-25px;
+  padding-left:0;
+  width:770px;
+  height:370px;
 }
 
 #network-frame-motif {
@@ -353,4 +396,16 @@ circle:hover text {
 
 #all-motif-list {
   height:75%;
+}
+
+.line-description {
+  padding-left: 15px;
+  padding-right: 5px;
+}
+.
+.icon {
+}
+
+#span {
+  padding-top:15px;
 }

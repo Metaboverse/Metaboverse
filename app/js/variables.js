@@ -23,9 +23,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var fs = require("fs");
 var $ = require("jquery");
 
-var coll_mos = false;
-var broadcast_gene = true;
-
 window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();
@@ -64,28 +61,40 @@ window.addEventListener("load", function(event) {
     refresh_session()
   }
 
+  console.log(get_session_info("collapseWithModifiers"))
+  if (get_session_info("collapseWithModifiers") === true) {
+    console.log('mod')
+      document.getElementById("use_modifiers_in_collapse").checked = true;
+  } else {
+    console.log('mod_')
+    document.getElementById("use_modifiers_in_collapse").checked = false;
+  }
   document.getElementById("use_modifiers_in_collapse").onclick = function(event) {
     event.stopPropagation();
-    if (coll_mos === false) {
-      coll_mos = true;
+    if (get_session_info("collapseWithModifiers") === false) {
       update_session_info("collapseWithModifiers", true);
     } else {
-      coll_mos = false;
       update_session_info("collapseWithModifiers", false);
     }
-    console.log("Reaction collapse evaluation with modifiers: ", coll_mos)
+    console.log("Reaction collapse evaluation with modifiers: ", get_session_info("collapseWithModifiers"))
   }
 
+console.log(get_session_info("broadcastGeneExpression"))
+  if (get_session_info("broadcastGeneExpression") === true) {
+    console.log('broad')
+    document.getElementById("broadcast_gene_expression").checked = true;
+  } else {
+      console.log('broad_')
+    document.getElementById("broadcast_gene_expression").checked = false;
+  }
   document.getElementById("broadcast_gene_expression").onclick = function(event) {
     event.stopPropagation();
-    if (broadcast_gene === false) {
-      broadcast_gene = true;
+    if (get_session_info("broadcastGeneExpression") === false) {
       update_session_info("broadcastGeneExpression", true);
     } else {
-      broadcast_gene = false;
       update_session_info("broadcastGeneExpression", false);
     }
-    console.log("Broadcast gene expression values: ", broadcast_gene)
+    console.log("Broadcast gene expression values: ", get_session_info("broadcastGeneExpression"))
   }
 
   document.getElementById("transcriptomics-dropDatabase").onclick = function(event) {
@@ -231,13 +240,60 @@ window.addEventListener("load", function(event) {
   }
   */
 
-  update_session_info("labels", "none");
+  if (get_session_info("experiment_name") !== null) {
+    $('#updateExperimentName').val(get_session_info("experiment_name"));
+  }
+
+  if (get_session_info("experiment_type") !== null) {
+    $('#updateExperiment').val(get_session_info("experiment_type"));
+
+    if ((get_session_info("experiment_type") === "timecourse") | (get_session_info("experiment_type") === "multiple_conditions")) {
+      $("#nameField").html(
+        "<form>"
+        + "Sample labels: "
+        + "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>"
+        + "<br />"
+        + "<br />"
+        + "<input type='text' class='experimentName' id='updateExperimentLabels'></input>"
+        + "</form>"
+        + "<br />"
+      );
+      $('#updateExperimentLabels').val(get_session_info("labels"));
+
+      document.getElementById("updateExperimentLabels").onchange = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var inputVal = document.getElementById("updateExperimentLabels").value;
+
+        try {
+          console.log("Your provided labels: ", inputVal);
+
+          update_session_info("labels", inputVal);
+        } catch (error) {
+          console.log(error);
+          alert(
+            "Labels are not valid."
+          );
+        }
+      }
+
+    } else {
+      $("#nameField").html('');
+      update_session_info("labels", "0");
+    }
+  }
+
+
+
+
+
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
     var experiment_type = document.getElementById("updateExperiment").value;
-    if (experiment_type === "null") {
+    if (experiment_type === "null" || experiment_type === null) {
       experiment_type = null;
     } else {}
 
@@ -305,8 +361,7 @@ window.addEventListener("load", function(event) {
     }
   }
 
-  var inputVal = document.getElementById("updateBlocklist").value;
-  update_session_info("blocklist", inputVal);
+  $('#updateBlocklist').val(get_session_info("blocklist"));
 
   document.getElementById("updateBlocklist").onchange = function(event) {
     event.preventDefault();

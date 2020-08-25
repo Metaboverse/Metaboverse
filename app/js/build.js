@@ -147,7 +147,11 @@ runBuild = function(_callback) {
   } else {
     curated = getArgument("curation_url")
     let labels = getArgument("labels");
-    labels = labels.replace(/\s/g,'');
+    if (labels === "") {
+      labels = "0"
+    } else {
+      labels = labels.replace(/\s/g,'');
+    }
     let blocklist = getArgument("blocklist");
     if (blocklist === "") {
       blocklist = "no_blocklist"
