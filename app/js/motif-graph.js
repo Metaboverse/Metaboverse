@@ -81,6 +81,11 @@ class MetaGraph{
     timecourse = checkCategories(this.categories, this.names);
     if (timecourse === true) {
       populateExclusions(this.categories, this.names);
+    } else {
+      var select = document.getElementById("exclude_type");
+      var option = document.createElement('option');
+      option.text = option.value = "No exclusion";
+      select.add(option, 0);
     }
 
     let superPaths = make_superPathway_dictionary(graphdata);
