@@ -170,12 +170,13 @@ d3.select("button#shape_legend")
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
-        .style("height", "435px")
+        .style("height", "375px")
         .style("width", "200px");
-      div
-        .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Relationships</u></b></font></br><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;Core interaction</br><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;Catalyst</br><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;Inhibitor</br><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;Metabolite Component</br><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;Protein Component</br><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;Gene Component</br></br><font size='3'><b><u>Entities</u></b></font></br></br><span class='fas fa-star fa-lg grey-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction</br></br><span class='fas fa-star fa-lg purple-shader'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction</br></br>&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite</br>&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex</br>&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein</br></br>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;&nbsp;Gene</br></br>* Bolded shapes meet statistical threshold</div>")
-      }
-    )
+      div.html(
+        "<font size='2'><div style='margin-left:15px;margin-top:10px;'><font size='3'><b><u>Relationships</u></b></font><br /><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Core interaction<br /><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Catalyst<br /><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Inhibitor<br /><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component<br /><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Protein Component<br /><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Gene Component<br /><br /><font size='3'><b><u>Entities</u></b></font><br /><span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction<br /><span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction<br />&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite<br />&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex<br />&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein<br /><div class='add-buffer'>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;Gene</div><br /><br /><span class='add-buffer'>Bold = statistic < 0.05</span></div></font>"
+      )
+    }
+  )
   .on("mouseout", function(d) {
     div.style("opacity", 0);
     div.html("")
