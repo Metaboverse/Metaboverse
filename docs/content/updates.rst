@@ -5,15 +5,15 @@ Updates
 ===========
 v0.2.0-beta
 ===========
-| * Major
+| *Major*
 | - Fixes issues with missing metabolites during the network mapping stage ( `#37 <https://github.com/Metaboverse/Metaboverse/issues/37>`_ ). Addressed by re-working the metabolite synonym scheme to provide the same coverage of synonym look-up as before, but with more robustness so that some that were difficult to map would start mapping (i.e., Fructose)
 | - Added dynamic line-plots of a selected reaction motif for time-course and multi-condition data ( `#15 <https://github.com/Metaboverse/Metaboverse/issues/15>`_). When exploring motifs on the Motif page for time-course and multi-condition experiments, a new panel appears at the bottom of the page which, for a selected motif, will show those reaction motif's component's behavior across all the time-points or conditions.
 | - Added the option to exclude reaction motifs at a given time-point or condition that appear in another selected time-point or condition. ( `#16 <https://github.com/Metaboverse/Metaboverse/issues/16>`_). For example, if a user has selected to view motifs at a terminal time-point, but they want to know which reactions are motifs at this time-point but not at the initial time-point, they can exclude the motifs that show up at both time-points using the appropriate drop-down menu on the motif page.
-| * Minor
-| - Metaboverse now outputs a table of unmapped metabolites ( ` #35 <https://github.com/Metaboverse/Metaboverse/issues/35>`_).
-| - Exploration pages now have pop-out bubbles with all information for compartments and node/link types ` :data:`7d17d34` <https://github.com/Metaboverse/Metaboverse/commit/7d17d34aca5e900c307e266a07b4d82bd19a222d>`_.
-| - Metaboverse new remembers and provides session info for experiment name, experiment type, labels, etc. and automatically fills those out for the user if returning to a page within the session ` :data:`172d21a` <https://github.com/Metaboverse/Metaboverse/commit/172d21a719bbc855fd46d4d8da223140c512a18f>`_.
-| - Updated minor page formatting to make display more stable between Windows/Linux/Mac ` :data:`52a100d` <https://github.com/Metaboverse/Metaboverse/commit/52a100da0958af75c489165bc2f7c9eaf80294e8>`_.
+| *Minor*
+| - Metaboverse now outputs a table of unmapped metabolites ( `#35 <https://github.com/Metaboverse/Metaboverse/issues/35>`_).
+| - Exploration pages now have pop-out bubbles with all information for compartments and node/link types `:data:`7d17d34` <https://github.com/Metaboverse/Metaboverse/commit/7d17d34aca5e900c307e266a07b4d82bd19a222d>`_.
+| - Metaboverse new remembers and provides session info for experiment name, experiment type, labels, etc. and automatically fills those out for the user if returning to a page within the session `:data:`172d21a` <https://github.com/Metaboverse/Metaboverse/commit/172d21a719bbc855fd46d4d8da223140c512a18f>`_.
+| - Updated minor page formatting to make display more stable between Windows/Linux/Mac `:data:`52a100d` <https://github.com/Metaboverse/Metaboverse/commit/52a100da0958af75c489165bc2f7c9eaf80294e8>`_.
 | - Added test cases to CI for new/updated features
 | - Updated package dependency information
 | - Updated docs and FAQs
