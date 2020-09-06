@@ -50,7 +50,7 @@ timecourse = checkCategories(data.categories, names); //, data.names);
 make_menu(
   superPathwayDict,
   "superPathwayMenu",
-  "Select a category...",
+  "Select a super pathway...",
   (provide_all = true)
 );
 

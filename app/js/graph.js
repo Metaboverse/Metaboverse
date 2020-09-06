@@ -404,7 +404,13 @@ function get_nodes_links(data, components) {
 function nearest_neighbors(data, entity_id) {
   // Get current nearest neighbors value
   var kNN = document.getElementById("kNN_button").value;
-  document.getElementById("pathwayMenu").value = "";
+
+  if (document.getElementById("pathwayMenu") !== null) {
+    document.getElementById("pathwayMenu").value = "Select a pathway";
+  }
+  if (document.getElementById("superPathwayMenu") !== null) {
+    document.getElementById("superPathwayMenu").value = "Select a super pathway...";
+  }
 
   // Curate kNN to node of interest
   var nn_elements = parse_kNN_pathway(data, entity_id, kNN);
@@ -904,7 +910,7 @@ function make_graph(
         } else if (d.type === "reaction" || d.sub_type === "reaction") {
           return d3.symbolStar;
         } else {
-          return d3.symbolStar;
+          return d3.symbolCross;
         }
       }))
       .attr("id", function(d) {return d.id})

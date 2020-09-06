@@ -80,9 +80,14 @@ div.scrollable {
   height:600px;
 }
 
+.col-md-4 {
+  z-index:5;
+}
+
 .content {
   padding-top: 20px;
   padding-left: 15px;
+  padding-right: -15px;
 }
 
 .sub-frame {
