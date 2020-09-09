@@ -1010,7 +1010,6 @@ function make_graph(
         compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
       }
     }
-    console.log(compartment_dictionary)
     d3.select("button#compartment_legend")
       .on("mouseover", function(d) {
         let category_number = 0;
