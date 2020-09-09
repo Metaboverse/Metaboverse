@@ -165,7 +165,6 @@ d3.select("button#legend_info")
 
 d3.select("button#shape_legend")
   .on("mouseover", function(d) {
-    console.log("asdkjh")
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
@@ -965,7 +964,7 @@ function make_graph(
     var categories = new Set();
     for (n in nodes) {
       if (nodes[n].compartment === "none" || nodes[n].compartment === null || nodes[n].type === "gene_component" || nodes[n].compartment === "undefined" || nodes[n].compartment === undefined) {
-        categories.add("none");
+        //categories.add("none");
       } else {
         categories.add(nodes[n].compartment);
       }
@@ -1005,10 +1004,13 @@ function make_graph(
 
     let compartment_dictionary = {};
     for (let _n in graph_nodes) {
-      if (graph_nodes[_n]['compartment'] !== undefined) {
+      if ((graph_nodes[_n]['compartment'] !== undefined)
+      && (graph_nodes[_n]['compartment'] !== "none")
+      && (graph_nodes[_n]['compartment'] !== null)) {
         compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
       }
     }
+    console.log(compartment_dictionary)
     d3.select("button#compartment_legend")
       .on("mouseover", function(d) {
         let category_number = 0;
