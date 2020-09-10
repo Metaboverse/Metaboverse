@@ -21,5 +21,6 @@
   "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2",
   "database_date": "",
   "curation_date": "",
-  "reactome_version": ""
+  "reactome_version": "",
+  "launched": false
 }

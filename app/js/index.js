@@ -29,29 +29,31 @@ window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();
 
-  $.ajax({
-    url: ".." + path.sep + "__version__.txt",
-    success: function(version) {
-      $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
-        let _v = String(version.trim().replace(/[^0-9.]/g,''))
-        let avail_versions = [];
-        let version_dict = {};
-        for (_k in d) {
-          let _this_version = String(d[_k].name.trim().replace(/[^0-9.]/g,''))
-          avail_versions.push(_this_version);
-          version_dict[_this_version] = d[_k].name;
-        }
-        avail_versions = avail_versions.sort();
-        let _c = avail_versions[avail_versions.length - 1]
-        if (_c !== _v) {
-          alert("A more current version of Metaboverse is available:\n\n" + version_dict[_c] + "\n\n\nPlease download this version then close this window and launch the new version.")
-          window.location.replace("https://github.com/Metaboverse/Metaboverse/releases/tag/" + version_dict[_c]);
-        }
-      })
-    }
-  });
-
-  update_session_info("current_pathway", null);
+  let opened = get_session_info("launched");
+  if (opened === false) {
+    update_session_info("launched", true);
+    $.ajax({
+      url: ".." + path.sep + "__version__.txt",
+      success: function(version) {
+        $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
+          let _v = String(version.trim().replace(/[^0-9.]/g,''))
+          let avail_versions = [];
+          let version_dict = {};
+          for (_k in d) {
+            let _this_version = String(d[_k].name.trim().replace(/[^0-9.]/g,''))
+            avail_versions.push(_this_version);
+            version_dict[_this_version] = d[_k].name;
+          }
+          avail_versions = avail_versions.sort();
+          let _c = avail_versions[avail_versions.length - 1]
+          if (_c === _v) {
+            alert("A more current version of Metaboverse is available:\n\n" + version_dict[_c] + "\n\n\nPlease download this version then close this window and launch the new version.")
+            window.open("https://github.com/Metaboverse/Metaboverse/releases/tag/" + version_dict[_c]);
+          }
+        })
+      }
+    });
+  }
 
   $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
 
