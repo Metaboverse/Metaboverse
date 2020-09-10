@@ -123,10 +123,10 @@ if (timecourse === true) {
 
 var selected_reactions = [];
 d3.select("#superPathwayMenu").on("change", changeSuperConnect);
-d3.select("#play_button_value").on("click", run_value_connections);
-d3.select("#play_button_stat").on("click", run_stat_connections);
-d3.select("#kNN_button").on("change", run_value_connections);
-d3.select("#hub_button").on("change", run_value_connections);
+d3.select("#play_button_value").on("click", run_value_perturbations);
+d3.select("#play_button_stat").on("click", run_stat_perturbations);
+d3.select("#kNN_button").on("change", run_value_perturbations);
+d3.select("#hub_button").on("change", run_value_perturbations);
 
 function changeSuperConnect() {
   var superSelection = document.getElementById("superPathwayMenu").value;
@@ -143,7 +143,7 @@ function changeSuperConnect() {
   }
 
   // Initial play
-  run_value_connections();
+  run_value_perturbations();
 }
 
 function collect_perturbations(
@@ -161,12 +161,10 @@ function collect_perturbations(
 
       let perturbed_true = false;
       if (selected_reactions.includes(rxn) === true) {
-
         for (e in reaction_entity_dictionary[rxn]) {
 
           let entity = reaction_entity_dictionary[rxn][e];
           if (entity in mapping_dictionary) {
-
             if (type === "value") {
               if (Math.abs(mapping_dictionary[entity][sample]) >= threshold) {
                 perturbed_true = true;
@@ -191,6 +189,7 @@ function collect_perturbations(
 function show_graph(data, perturbed_rxns, sample_id) {
 
   console.log("Plotting", perturbed_rxns[sample_id].length, "perturbed reactions...")
+  console.log(perturbed_rxns)
   // Parse through each reaction listed and get the component parts
   let components = [];
   var rxn = 0;
@@ -292,7 +291,7 @@ function show_graph(data, perturbed_rxns, sample_id) {
   );
 }
 
-function run_value_connections() {
+function run_value_perturbations() {
 
   highlight_mapping("#conn_value_button");
   let value_threshold = document.getElementById("conn_value_button").value;
@@ -314,7 +313,7 @@ function run_value_connections() {
       })
   }
 }
-function run_stat_connections() {
+function run_stat_perturbations() {
 
   highlight_mapping("#conn_stat_button");
   let stat_threshold = document.getElementById("conn_stat_button").value;

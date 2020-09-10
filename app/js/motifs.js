@@ -58,7 +58,7 @@ function hubsChecked() {
   } else {
     excl_hubs = false;
   }
-  console.log("High hub exlusion (more than", hub_threshold, "connections): ", excl_hubs)
+  console.log("High hub exlusion (more than", hub_threshold, "perturbations): ", excl_hubs)
 }
 
 function cleanHubs(

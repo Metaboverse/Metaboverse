@@ -35,13 +35,17 @@ window.addEventListener("load", function(event) {
       $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
         let _v = String(version.trim().replace(/[^0-9.]/g,''))
         let avail_versions = [];
+        let version_dict = {};
         for (_k in d) {
-          avail_versions.push(String(d[_k].name.trim().replace(/[^0-9.]/g,'')))
+          let _this_version = String(d[_k].name.trim().replace(/[^0-9.]/g,''))
+          avail_versions.push(_this_version);
+          version_dict[_this_version] = d[_k].name;
         }
         avail_versions = avail_versions.sort();
         let _c = avail_versions[avail_versions.length - 1]
         if (_c !== _v) {
-          alert("A more current version of Metaboverse is available: " + _c)
+          alert("A more current version of Metaboverse is available:\n\n" + version_dict[_c] + "\n\n\nPlease download this version then close this window and launch the new version.")
+          window.location.replace("https://github.com/Metaboverse/Metaboverse/releases/tag/" + version_dict[_c]);
         }
       })
     }
@@ -56,7 +60,7 @@ window.addEventListener("load", function(event) {
   if (dbURL !== null) {
     defaultValue = dbURL;
     $("#content").html(
-      '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+      '<a href="motif.html"><div id="continue"><font size="3">Pattern Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
     );
   }
   $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
@@ -95,11 +99,11 @@ window.addEventListener("load", function(event) {
         var data = JSON.parse(fs.readFileSync(f.path).toString());
         if (data.categories.length > 0) {
           $("#content").html(
-            '<a href="motif.html"><div id="continue"><font size="3">View Motif Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+            '<a href="motif.html"><div id="continue"><font size="3">Pattern Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
           );
         } else {
           $("#content").html(
-            '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="connections.html"><div id="continue"><font size="3">Connectivity</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+            '<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
           );
         }
         // Load session data values into current session

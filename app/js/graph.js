@@ -86,7 +86,7 @@ d3.select("button#hub_info")
         .style("width", "200px")
         .style("height", "97px");
       div
-        .html("Provide a value to threshold displayed entities to those that have no more than the number of connections to other entities you provide. By default, graphing will display all entities no matter the number of connections.")
+        .html("Provide a value to threshold displayed entities to those that have no more than the number of perturbations to other entities you provide. By default, graphing will display all entities no matter the number of connections.")
       }
     )
   .on("mouseout", function(d) {
@@ -959,6 +959,18 @@ function make_graph(
     }
   }
 
+
+
+  // if page == connections.html
+  // categories are isolated reaction based on current threshold
+
+
+
+  // else categories are compartments
+
+
+
+
   function getCategories(nodes) {
 
     var categories = new Set();
@@ -984,66 +996,91 @@ function make_graph(
   var fill = d3.schemeCategory10;
   var fill2 = d3.schemeTableau10;
 
-  hullg.selectAll("path.hull").remove();
-  hull = hullg
-    .selectAll("path.hull")
-      .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
-    .enter().append("path")
-      .attr("class", "hull")
-      .attr("d", drawCluster)
-      .style("fill", function(d) {
-        if (d.group !== "undefined" && d.group !== "none") {
-          if (categories[d.group] > 9) {
-            return fill2[categories[d.group] - 10];
-          } else {
-            return fill[categories[d.group]];
-          }
-        }
-      }
-    )
+  if (page_name === "perturbations.html") {
 
-    let compartment_dictionary = {};
-    for (let _n in graph_nodes) {
-      if ((graph_nodes[_n]['compartment'] !== undefined)
-      && (graph_nodes[_n]['compartment'] !== "none")
-      && (graph_nodes[_n]['compartment'] !== null)) {
-        compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
-      }
-    }
-    d3.select("button#compartment_legend")
-      .on("mouseover", function(d) {
-        let category_number = 0;
-        let make_string = "";
-        for (let s in categories) {
-          if (s !== null && s !== "none" && s !== undefined && s !== "undefined" && compartment_dictionary[s] !== undefined) {
-            make_string = make_string + "&nbsp;";
-            make_string = make_string + "<span class='ellipse' style='--dot_color:" + hull._groups[0][categories[s]].style.fill + ";'></span>";
-            make_string = make_string + "&nbsp;&nbsp;&nbsp;&nbsp;";
-            make_string = make_string + compartment_dictionary[s];
-            make_string = make_string + "</br>";
-            category_number = category_number + 1;
+  } else {
+    hullg.selectAll("path.hull").remove();
+    hull = hullg
+      .selectAll("path.hull")
+        .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
+      .enter().append("path")
+        .attr("class", "hull")
+        .attr("d", drawCluster)
+        .style("fill", function(d) {
+          if (d.group !== "undefined" && d.group !== "none") {
+            if (categories[d.group] > 9) {
+              return fill2[categories[d.group] - 10];
+            } else {
+              return fill[categories[d.group]];
+            }
           }
-        }
-        // add one for formatting
-        if (category_number > 15) {
-          category_number = category_number + 1;
-        }
-
-        div
-          .style("opacity", 0.95)
-          .style("left", (d3.event.pageX + 20) + "px")
-          .style("top", (d3.event.pageY - 10) + "px")
-          .style("height", (60 + (15 * category_number * 1.2)).toString() + "px")
-          .style("width", "275px");
-        div
-          .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Compartments</u></b></font></br></br>" + make_string)
         }
       )
-      .on("mouseout", function(d) {
-        div.style("opacity", 0);
-        div.html("")
-        category_number = 0;
-      });
+
+      let compartment_dictionary = {};
+      for (let _n in graph_nodes) {
+        if ((graph_nodes[_n]['compartment'] !== undefined)
+        && (graph_nodes[_n]['compartment'] !== "none")
+        && (graph_nodes[_n]['compartment'] !== null)) {
+          compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
+        }
+      }
+      d3.select("button#compartment_legend")
+        .on("mouseover", function(d) {
+          let adder = 0;
+          let category_number = 0;
+          let make_string = "";
+          for (let s in categories) {
+            if (s !== null && s !== "none" && s !== undefined && s !== "undefined" && compartment_dictionary[s] !== undefined) {
+              // handle a blank category by skipping
+              if (hull._groups[0][categories[s]].style.fill === "") {
+                adder = adder + 1;
+              }
+              make_string = make_string + "&nbsp;";
+              make_string = make_string + "<span class='ellipse' style='--dot_color:" + hull._groups[0][categories[s] + adder].style.fill + ";'></span>";
+              make_string = make_string + "&nbsp;&nbsp;&nbsp;&nbsp;";
+              make_string = make_string + compartment_dictionary[s];
+              make_string = make_string + "</br>";
+              category_number = category_number + 1;
+            }
+          }
+
+          // add one for formatting
+          if (category_number > 15) {
+            category_number = category_number + 1;
+          }
+
+          div
+            .style("opacity", 0.95)
+            .style("left", (d3.event.pageX + 20) + "px")
+            .style("top", (d3.event.pageY - 10) + "px")
+            .style("height", (60 + (15 * category_number * 1.2)).toString() + "px")
+            .style("width", "275px");
+          div
+            .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Compartments</u></b></font></br></br>" + make_string)
+          }
+        )
+        .on("mouseout", function(d) {
+          div.style("opacity", 0);
+          div.html("")
+          category_number = 0;
+        });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   var timer = 0;
   var delay = 200;
@@ -1465,9 +1502,13 @@ function make_graph(
       .attr("transform", transform);
     text
       .attr("transform", transform);
-    hull
-      .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
-      .attr("d", drawCluster);
+    if (page_name === "perturbations.html") {
+    } else {
+      hull
+        .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
+        .attr("d", drawCluster);
+    }
+
   }
 
   function dragsubject() {
