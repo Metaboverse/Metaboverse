@@ -1137,7 +1137,7 @@ function make_graph(
     .append("text")
     .attr("id", function(d) {return d.id})
     .html(function(d) {
-      if (type_dict[d.name] === "reaction") {
+      if (type_dict[d.name] === "reaction" || type_dict[d.name] === "collapsed") {
         // Label other nodes with expression value in parentheses
         return (
           "<tspan dx='16' y='.31em' class='bold-text'>"
