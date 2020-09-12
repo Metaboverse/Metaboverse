@@ -122,52 +122,7 @@ function buildSlider(categories, names) {
       // change fill and text
       try {
         if (d !== undefined) {
-          if (d.type !== "reaction") {
-            d3.select("path#" + d.id)
-            .style("fill", function(d) {
-              return "rgba(" + d["values_js"][slider_index].toString() + ")";
-            })
-            .style("stroke", "black")
-            .style("stroke-width", function(d) {
-              if ((d['stats'][slider_index] === undefined) || (d['stats'][slider_index] === null)) {
-                return 1;
-              } else if (d['stats'][slider_index] < stat_value) {
-                return 2;
-              } else {
-                return 1;
-              }
-            })
-            d3.select("text#" + d.id)
-              .html(function(d) {
-                console.log(slider_index)
-                if (d.values[slider_index] === null
-                && d.stats[slider_index] === null) {
-                  return (
-                    "<tspan dx='16' y='0em' class='bold-text'>"
-                    + d.name
-                    + "</tspan>"
-                  );
-                } else {
-                  let display_stat;
-                  if (parseFloat(d.stats[slider_index]) < 0.01) {
-                    display_stat = "< 0.01"
-                  } else {
-                    display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
-                  }
-                  return (
-                    "<tspan dx='16' y='-.5em' class='bold-text'>"
-                    + d.name
-                    + "</tspan>"
-                    + "<tspan x='16' y='.7em'>Value: "
-                    + parseFloat(d.values[slider_index]).toFixed(2)
-                    + "</tspan>"
-                    + "<tspan x='16' y='1.7em'>Statistic: "
-                    + display_stat
-                    + "</tspan>"
-                  );
-                }
-              })
-            } else {
+          if (d.type === "reaction" || d.type === "collapsed") {
               // if reaction and in current motif set, enlarge, if not, reset
               if (global_motifs !== undefined) {
                 if (global_motifs[slider_index] !== undefined) {
@@ -195,9 +150,54 @@ function buildSlider(categories, names) {
                   }
                 }
               }
+            } else {
+              d3.select("path#" + d.id)
+              .style("fill", function(d) {
+                return "rgba(" + d["values_js"][slider_index].toString() + ")";
+              })
+              .style("stroke", "black")
+              .style("stroke-width", function(d) {
+                if ((d['stats'][slider_index] === undefined) || (d['stats'][slider_index] === null)) {
+                  return 1;
+                } else if (d['stats'][slider_index] < stat_value) {
+                  return 2;
+                } else {
+                  return 1;
+                }
+              })
+              d3.select("text#" + d.id)
+                .html(function(d) {
+                  console.log(slider_index)
+                  if (d.values[slider_index] === null
+                  && d.stats[slider_index] === null) {
+                    return (
+                      "<tspan dx='16' y='0em' class='bold-text'>"
+                      + d.name
+                      + "</tspan>"
+                    );
+                  } else {
+                    let display_stat;
+                    if (parseFloat(d.stats[slider_index]) < 0.01) {
+                      display_stat = "< 0.01"
+                    } else {
+                      display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
+                    }
+                    return (
+                      "<tspan dx='16' y='-.5em' class='bold-text'>"
+                      + d.name
+                      + "</tspan>"
+                      + "<tspan x='16' y='.7em'>Value: "
+                      + parseFloat(d.values[slider_index]).toFixed(2)
+                      + "</tspan>"
+                      + "<tspan x='16' y='1.7em'>Statistic: "
+                      + display_stat
+                      + "</tspan>"
+                    );
+                  }
+                }
+              )
             }
           }
-
         } catch(err) {}
       }
     )

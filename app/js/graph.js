@@ -906,7 +906,7 @@ function make_graph(
           return d3.symbolDiamond;
         }  else if (d.type === "metabolite_component" || d.sub_type === "metabolite_component") {
           return d3.symbolCircle;
-        } else if (d.type === "reaction" || d.sub_type === "reaction") {
+        } else if (d.type === "reaction" || d.sub_type === "reaction" || d.type === "collapsed" || d.sub_type === "collapsed") {
           return d3.symbolStar;
         } else {
           return d3.symbolCross;
