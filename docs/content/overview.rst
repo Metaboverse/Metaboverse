@@ -10,20 +10,34 @@ Background
 | Metaboverse is a cross-platform app built to aid users in contextualizing their data on their model's metabolic and global reaction network. Metaboverse is an interactive tool for exploratory data analysis that searches user data in the context of the metabolic network to identify interesting patterns and trends within the data. Metaboverse will aid users in interactively identifying interesting patterns and regulatory hotspots within their data for further experimental follow-up.
 |
 -----------------
+Important Note
+-----------------
+| If you ever have any questions about using a particular feature, or what a particular button does, try hovering your mouse over the button or feature and often a short explainer will pop out. You can also search the Docs for more in-depth information or refer to the manuscript.
+| For information on symbols in Metaboverse, please refer to the :data:`Shape Legend` and :data:`Compartment Legend` references where applicable.
+|
+-----------------
 Data Inputs
 -----------------
-| Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition datatable examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
+| Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
 .. image:: images/data_formatting.png
    :width: 700
    :align: center
 |
 | Along with single condition experiment set-ups, users can provide timecourse data by sequentially listing the fold change and statistical columns in temporal order in the input data table for that -omic type. Users can provide all paired -omics types for each time point, or provide one -omics table of timecourse data and a table for another -omics type with a single steady-state time point. In every situation, it is vital the user keeps in mind the caveats associated with comparing such mixed data types. Along with timecourse data, users can provide multiple conditions formatted as with the timecourse data.
 |
-| **TL;DR**
+| **Summary**
 | * Each omic input should include fold change and statistal values.
-| * Timecourse data should be repeated fold change and statistical values for each timepoint in order.
+| * Timecourse data should be **repeated fold change and statistical values for each timepoint in order** (see example above).
 | * Multi-condition experiments can be provided as with timecourse data.
 | * Data names should correspond to Ensembl, UniProt, or ChEBI ID and acceptable synonyms.
+|
+-------------------
+Unmapped Data
+-------------------
+| During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`. Data points could be unmapped for two reasons:
+| - The data point is not curated in a reaction within the selected organism's reaction network
+| - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl gene ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
+| We currently have plans for an interactive module that will help users find suitable synonyms for unmapped entities in users' datasets. Please follow this issue` <https://github.com/Metaboverse/Metaboverse/issues/50>`_ for updates on progress of this feature.
 |
 -------------------
 Using Metaboverse
@@ -56,12 +70,15 @@ Important Features of Metaboverse
 |
 | * **Identifying Regulatory Hotspots**: In order to identify reactions where interesting regulatory events are occurring based on the provided -omic data, we introduce a regulatory hotspot search engine, which is based on concepts from `activity motifs <https://www.nature.com/articles/nbt.1499>`_. Several hotspot patterns are pre-programmed into Metaboverse to allow the users to explore different regulatory patterns present in the data. In the future, we plan to include an interactive interface to allow users to design and implement custom search patterns.
 |
-| * **Modeling Perturbed Connectivity**: Users can specify the threshold needed to consider a reaction perturbed and stitch together each of these reactions passing the threshold to reveal a perturbation network. This allows for the visualization of connected perturbations along a pathway and may indicate interesting characteristics of a condition that may complicate certain treatments if, for example, a drug targets a perturbed reaction, but the reaction downstream is also perturbed for independent reasons from the first and could thus reduce efficacy of the drug treatment.
+| * **Modeling Perturbation Networks**: Users can specify the threshold needed to consider a reaction perturbed and stitch together each of these reactions passing the threshold to reveal a perturbation network. This allows for the visualization of connected perturbations along a pathway and may indicate interesting characteristics of a condition that may complicate certain treatments if, for example, a drug targets a perturbed reaction, but the reaction downstream is also perturbed for independent reasons from the first and could thus reduce efficacy of the drug treatment.
+|
+| * **Exploring global consequences of a change**: In the :data:`Exploration` page, you can double-click on any reaction component and explore all connected reactions to this component across the total reaction network, not just the selected pathway. Additionally, you can select :data:`All entities` from the :data:`Select a super-pathway...` drop-down menu to select any component from the total network for this type of exploration.
 |
 -------------------
 Performance
 -------------------
 | Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster than data modeled on a human network. You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working.
+| Currently, for a human network, it may take up to 20 minutes to curate the network with your data. We hope to improve this performance time in the near future, but a lot of this time is directly tied to internet connection and download speed.
 |
 ----------------------
 Technical Description

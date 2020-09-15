@@ -48,9 +48,9 @@ Feedback?
 Questions?
 ==========
 | If you have questions, requests, or bugs to report, please use the `Metaboverse issues forum <https://github.com/Metaboverse/Metaboverse/issues>`_.
+| Generally, for any errors occurring during network building, a file named :data:`metaboverse_session.log` will be output to your specified Output folder. If you receive this file, please upload it to your GitHub Issue.
+| For all other errors, click on the :data:`View` menu tab, click :data:`Toggle Developer Tools`, click the :data:`Console` tab of the window that opens, and take a screenshot of the output in this panel.
 |
-
-
 .. |build-status| image:: https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master
     :target: https://travis-ci.org/Metaboverse/Metaboverse
     :alt: Build Status

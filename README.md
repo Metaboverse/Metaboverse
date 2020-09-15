@@ -13,9 +13,7 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 - Collapse reactions with intermediate reactions with missing data for easier visualization and analysis of sparse datasets
 - Explore super-pathway-specific reaction perturbation networks
 - Explore proximal reactions to a specific entity across the global reaction network using our Nearest Neighbors search features
-- And more to come!
-
-*During the development (public beta) phase of Metaboverse, we intend to release an updated version of the software weekly as we incorporate feedback from users.*  
+- And more to come! We have received many valuable feature requests from the community and encourage these requests!
 
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
 
@@ -25,23 +23,26 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 
 ### Requirements
 - An internet connection for network curation
-- The Metaboverse app for your operating system
+- The most current version of the Metaboverse app for your operating system
 
 ### Installation
 - Download the appropriate Metaboverse app `.zip` file for your operating system from [this location](https://github.com/Metaboverse/Metaboverse/releases/latest).
 - Unzip the downloaded folder
 - Open the `Metaboverse` app
 - Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/general-usage.html) for more information.
+- If you would like to use an example dataset, this is labeled `test_data.zip` and can be found within the `Metaboverse` app folder
 
 ### Getting Help
-If you have questions, requests, or bugs to report, please use the [Metaboverse issues forum](https://github.com/Metaboverse/Metaboverse/issues). Please clearly describe the problem, what you have tried, as well as screenshots of any error information. If possible, click on the `View` menu tab, click `Toggle Developer Tools`, click the `Console` tab of the window that opens, and take a screenshot of the output in this panel.
+If you have questions, requests, or bugs to report, please use the [Metaboverse issues forum](https://github.com/Metaboverse/Metaboverse/issues). Please clearly describe the problem, what you have tried, as well as screenshots of any error information.     
+Generally, for any errors occurring during network building, a file named `metaboverse_session.log` will be output to your specified Output folder. If you receive this file, please upload it to your GitHub Issue.    
+For all other errors, click on the `View` menu tab, click `Toggle Developer Tools`, click the `Console` tab of the window that opens, and take a screenshot of the output in this panel.
 
 ### Feedback
 Have any feedback? Let us know [here](https://forms.gle/4z51DMnagWRvKhc38).
 
 ### Trying out Metaboverse
-You can access some example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files.
-With each release archive or Metaboverse, a `test_data.zip` file is included. Unzip this file and read the `README.txt` file for more information on this example dataset.
+With each release archive or Metaboverse, a `test_data.zip` file is included. Unzip this file and read the `README.txt` file for more information on this example dataset.    
+You can access more example network curations with biological data [here](https://github.com/Metaboverse/manuscript/tree/master/data/databases) -- download the `.json.zip` files.
 
 ### How does the underlying code for Metaboverse work?
 Metaboverse is currently segmented into two parts:

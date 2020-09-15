@@ -41,11 +41,11 @@ Getting Started
   :align: center
 |
 --------------------------------------------------
-Regulatory Hotspot Identification (Motif Analysis)
+Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 --------------------------------------------------
-| Regulatory patterns can be searched for in the global reaction network using this page. Users can select different motif types by clicking on the appropriate buttons and adjusting their thresholds as necessary.
+| Regulatory patterns can be searched for in the global reaction network using this page. Users can select different reaction pattern types by clicking on the appropriate buttons and adjusting their thresholds as necessary.
 |
-| Currently, these motif types are available:
+| Currently, these reaction pattern types are available:
 | 1. **Average**: A reaction whose absolute difference between the average measured values of reactants and the average measured values of products is greater than or equal to the threshold.
 | 2. **MaxMax**: A reaction whose absolute difference between the maximum measured value of reactants and the maximum measured value of products is greater than or equal to the threshold.
 | 3. **MaxMin**: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.
@@ -55,7 +55,7 @@ Regulatory Hotspot Identification (Motif Analysis)
 | 7. **PathMax**: A pathway whose absolute difference between the maximum value and the minimum value is greater than or equal to the threshold. Users can switch the type of values to be computed between the expression values and the statistical values (p-values).
 | 8. **PathCov**: Compare total coverage of reactions with at least one measured component in pathways.
 |
-| Users can then select a given motif, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway.
+| Users can then select a given reaction pattern, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway. In the :data:`Reaction-Pathway Membership` box, a simplified glyph of the reaction is drawn, with inputs (substrates) on the left of the reaction node and outputs (products) on the right of the reaction node. Modifiers and input/output types are not shown in this simplified glyph.
 .. image:: images/motif_search.gif
   :width: 700
   :align: center
@@ -65,25 +65,27 @@ Regulatory Hotspot Identification (Motif Analysis)
   :width: 700
   :align: center
 |
-| Users can also choose to include the following modifications in the motif search:
-| a) **Use Modifiers**: Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers.
-| b) **Exclude Hubs**: Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers.
+| Users can also choose to include the following modifications in the reaction pattern search:
+| a) **Use Modifiers**: Check to include modifiers in reaction pattern analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the reaction pattern analysis to include modifiers.
+| b) **Exclude Hubs**: Exclude high-hub components from consideration in the reaction pattern search. This will remove hubs with more than 100 connections. You will need to re-run the reaction pattern analysis to include modifiers.
 .. image:: images/motif_options.png
   :width: 250
   :align: center
 |
-| Additionally, users can choose how to sort identified motifs, or choose to not return motifs for the selected time-point or condition that were also found in another time-point or condition. For time-course or multi-condition experiments, a pane will appear that will display the behavior of all reaction motif components across all time-points or conditions.
+| Additionally, users can choose how to sort identified reaction patterns, or choose to not return reaction patterns for the selected time-point or condition that were also found in another time-point or condition. For time-course or multi-condition experiments, a pane will appear that will display the behavior of all reaction components across all time-points or conditions.
 .. image:: images/motif_options2.png
   :width: 250
   :align: center
 |
+| For time-course and multi-condition data, a line plot is drawn for a selected reaction with the behavior of that reaction's components across all time-points or conditions.
+|
 -----------------------------------
-General Visualization
+General Pathway Exploration
 -----------------------------------
-| Users can explore classical pathways and all components of the network interactively by navigating to the :data:`Visualization` page.
+| Users can explore classical pathways and all components of the network interactively by navigating to the :data:`Explore` page.
 |
 | a) At the top of the legend, reference to the node types are displayed. Grey nodes are reactions, nodes with solid outlines are measured, and nodes with dashed outlines are inferred using the gene broadcasting feature. Components with significant statistical values based on the threshold (defined in section d) are bolded. Users can hover across the color scale to see what color corresponds to what value.
-| - **Motif reaction nodes will be enlarged and outlined in bold purple.**
+| - **Identified reactions with a reaction pattern will have enlarged nodes and will be outlined in bold purple.**
 | b) Relationship types between nodes are explained in this section of the legend.
 | c) Users can toggle component, reaction, and expression labels on and off using the appropriate buttons. Users can also toggle gene nodes and compartment shading on and off with the appropriate buttons. Users can also press the :data:`Save Graph` to select the viewed network to a :data:`.png` file. Users can decide whether to show collapsed reactions, or to show the full, non-collapsed pathway of reactions that would have been collapsed. Collapsed reactions are displayed by default. Users can also open the selected pathway in Reactome to view a more classical representation of the pathway.
 | d) Users can modify the number of neighbors to plot when double-clicking on a node to expand its nearest reaction neighbors. Users can also select a threshold to not display any node with more than the defined number of connections. By modifying the statistic threshold, users can change the minimum statistical value needed to bold the component node for easy discrimination of significant measurements in the network.
@@ -117,6 +119,8 @@ Nearest Neighborhood Searches
 .. image:: images/neighbor_search.gif
   :width: 700
   :align: center
+|
+| Users can also target an entity for exploration directly by selecting :data:`All entities` in the :data:`Explore` page from the :data:`Select a super-pathway...` drop-down menu.
 |
 -----------------------------------
 Analyzing Previous Models

@@ -7,9 +7,17 @@ v0.3.0-beta
 ===========
 | **Major**
 | - Allows for more flexible gene/protein mapping with Reactome-formatted node names. For example, Reactome will label a gene or protein with its isomer coordinates. Metaboverse now ignores those coordinates during attribute mapping of the user's data.
+| - New naming of modules: :data:`Motif Search` is now called :data:`Pattern Analyis`, :data:`Visualize` is now called :data:`Explore`, and :data:`Connectivity` is now called :data:`Perturbation Networks`. Changed to be more descriptive and accessible to all users from broader backgrounds
 
 | **Minor**
-| - 
+| - Fixed nearest neighbors capabilities in Perturbation Network visualization. In a previous release, a change had interfered with its function.
+| - Use of outdated version will now direct user to the download page for the most recent version
+| - The :data:`Back` button from any of the analysis modules will now redirect back to the index page
+| - Removed compartment visualization from the :data:`Perturbation Networks` page as these often would just clutter the visualization and would not actually be helpful
+| - Fixed reaction node formatting to turn off motif symbols/highlighting when timepoint/condition changed as this had been disabled by a previous change
+| - Fixed collapsed reactions to ensure they were included in all reaction and motif formatting events
+| - General formatting changes
+| - Updated documentation
 
 ===========
 v0.2.0-beta
