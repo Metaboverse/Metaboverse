@@ -297,7 +297,7 @@ div {
 
 #reaction_notes {
   overflow: auto;
-  max-height: 8vh;
+  max-height: 12vh;
 }
 
 #type_selection {

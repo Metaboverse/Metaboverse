@@ -1067,21 +1067,6 @@ function make_graph(
         });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   var timer = 0;
   var delay = 200;
   var prevent = false;
@@ -1092,7 +1077,13 @@ function make_graph(
         if (!prevent) {
           document.getElementById("reaction_notes").innerHTML = "";
 
-          if (d.synonyms.length > 0) {
+          if (
+            type_dict[d["name"]] === "reaction" ||
+            type_dict[d["name"]] === "collapsed"
+          ) {
+            document.getElementById("reaction_notes").innerHTML =
+              "<b><i>" + d.name + "</i></b>: " + d.notes;
+          } else if (d.synonyms.length > 0) {
 
             let synonym_string = "";
             for (let s in d.synonyms) {
