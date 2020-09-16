@@ -531,7 +531,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
       document.getElementById("warning_line_1").innerHTML =
         '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
       document.getElementById("warning_line_2").innerHTML = "<br>";
-      alert("Too many entities to plot")
+      alert("Too many entities to plot. Try decreasing the hub threshold or the number of neighbors (if using more than 1).")
     } catch(e) {}
 
     kNN = 0;
