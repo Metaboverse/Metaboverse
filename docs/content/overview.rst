@@ -37,7 +37,7 @@ Unmapped Data
 | During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`. Data points could be unmapped for two reasons:
 | - The data point is not curated in a reaction within the selected organism's reaction network
 | - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl gene ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
-| We currently have plans for an interactive module that will help users find suitable synonyms for unmapped entities in users' datasets. Please follow this issue` <https://github.com/Metaboverse/Metaboverse/issues/50>`_ for updates on progress of this feature.
+| We currently have plans for an interactive module that will help users find suitable synonyms for unmapped entities in users' datasets. Please follow `this issue <https://github.com/Metaboverse/Metaboverse/issues/50>`_ for updates on progress of this feature.
 |
 -------------------
 Using Metaboverse
@@ -97,3 +97,4 @@ Technical Description
 | 7. Runs just-in-time searches of the global network for regulatory patterns of interest centered around a reaction
 | 8. Generates just-in-time visualizations of global or super-pathway-specific perturbation networks
 | 9. Generates just-in-time general visualization of canonical pathways
+|
