@@ -97,3 +97,4 @@ Technical Description
 | 7. Runs just-in-time searches of the global network for regulatory patterns of interest centered around a reaction
 | 8. Generates just-in-time visualizations of global or super-pathway-specific perturbation networks
 | 9. Generates just-in-time general visualization of canonical pathways
+|
