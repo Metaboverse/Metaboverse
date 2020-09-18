@@ -7,6 +7,7 @@ dist: xenial
 
 before_install:
   - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+  - npm install --save-dev babel-jest regenerator-runtime
   - npm install -g mocha
 
 install:
