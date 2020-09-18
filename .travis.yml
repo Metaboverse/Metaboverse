@@ -7,13 +7,11 @@ dist: xenial
 
 before_install:
   - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
-  - npm install -g mocha
 
 install:
   - cd app/
-  - npm install --save-dev babel-jest regenerator-runtime
-  - npm install electron --save-dev
-  - npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
+  - yarn add electron mocha --save-dev
+  - yarn add fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
 
 before_script:
 
