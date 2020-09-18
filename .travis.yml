@@ -10,8 +10,8 @@ before_install:
 
 install:
   - cd app/
-  - yarn add electron mocha --save-dev
-  - yarn add fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
+  - npm install electron mocha --save-dev
+  - npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
 
 before_script:
 
