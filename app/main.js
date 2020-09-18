@@ -33,9 +33,9 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1450,
-    height: 950,
+    height: 1000,
     minWidth: 1450,
-    minHeight: 950,
+    minHeight: 1000,
     webPreferences: {
       preload: path.join(__dirname, "js", "preload.js"),
       nodeIntegration: true
@@ -43,7 +43,7 @@ function createWindow() {
     dependencies: {
       zerorpc: "fyears" + path.sep + "zerorpc-node"
     },
-    icon: path.join(__dirname, "data", "icon", "metaboverse_logo.icns")
+    icon: path.join(__dirname, "data", "icon", "png", "icon_64x64.png")
   });
 
   // and load the index.html of the app.

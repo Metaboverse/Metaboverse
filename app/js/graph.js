@@ -531,7 +531,7 @@ function parse_kNN_pathway(data, entity_id, kNN) {
       document.getElementById("warning_line_1").innerHTML =
         '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
       document.getElementById("warning_line_2").innerHTML = "<br>";
-      alert("Too many entities to plot")
+      alert("Too many entities to plot. Try decreasing the hub threshold or the number of neighbors (if using more than 1).")
     } catch(e) {}
 
     kNN = 0;
@@ -1067,21 +1067,6 @@ function make_graph(
         });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   var timer = 0;
   var delay = 200;
   var prevent = false;
@@ -1092,7 +1077,13 @@ function make_graph(
         if (!prevent) {
           document.getElementById("reaction_notes").innerHTML = "";
 
-          if (d.synonyms.length > 0) {
+          if (
+            type_dict[d["name"]] === "reaction" ||
+            type_dict[d["name"]] === "collapsed"
+          ) {
+            document.getElementById("reaction_notes").innerHTML =
+              "<b><i>" + d.name + "</i></b>: " + d.notes;
+          } else if (d.synonyms.length > 0) {
 
             let synonym_string = "";
             for (let s in d.synonyms) {

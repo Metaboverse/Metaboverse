@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=0.2.0b
+VERSION=0.3.0b
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
@@ -22,21 +22,21 @@ mv app/python/metaboverse-cli-linux .
 mv app/python/metaboverse-cli-mac .
 cd app
 pwd
-electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/metaboverse_logo.icns --overwrite
+electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/win/metaboverse_logo.ico --overwrite
 cd ..
 
 mv app/python/metaboverse-cli-win.exe .
 mv metaboverse-cli-mac app/python/
 cd app
 pwd
-electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/metaboverse_logo.icns --overwrite
+electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/mac/metaboverse_logo.icns --overwrite
 cd ..
 
 mv app/python/metaboverse-cli-mac .
 mv metaboverse-cli-linux app/python/
 cd app
 pwd
-electron-packager ./ Metaboverse --platform=linux --icon=data/icon/metaboverse_logo.icns --overwrite
+electron-packager ./ Metaboverse --platform=linux --icon=data/icon/png/icon_1024x1024.png --overwrite
 cd ..
 
 pwd
