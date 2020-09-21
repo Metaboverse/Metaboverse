@@ -1209,6 +1209,7 @@ class MetaGraph{
         let _i = this.nodes[d.additional_components[a]];
         let _n = _i.name;
         let _t = _i.type;
+        let _st = _i.subtype;
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
@@ -1274,13 +1275,17 @@ class MetaGraph{
                   return 100;
                 })
                 .type(function() {
-                  if (_t === "gene_component") {
+                  if (_t === "gene_component" || _st === "gene_component") {
                     return d3.symbolTriangle;
-                  } else if (_t === "protein_component") {
+                  } else if (_t === "protein_component" || _st === "protein_component") {
                     return d3.symbolDiamond;
-                  }  else if (_t === "metabolite_component") {
+                  }  else if (_t === "metabolite_component" || _st === "metabolite_component") {
                     return d3.symbolCircle;
-                  } else {}
+                  } else if (_t === "complex_component" || _st === "complex_component") {
+                    return d3.symbolSquare;
+                  } else {
+                    return d3.symbolCross;
+                  }
                 }))
               .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
           }
@@ -1290,11 +1295,12 @@ class MetaGraph{
         let _m = d.modifiers[m][1];
         let _i = this.nodes[d.modifiers[m][0]];
         let _n = _i.name;
-        let _t = _i.sub_type;
+        let _t = _i.type;
+        let _st = _i.sub_type;
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
-        if (_v[0] !== null && _t !== "complex_component") {
+        if (_v[0] !== null && _st !== "complex_component") {
           let dash_instruction;
           let _set = new Set(_v)
           if (_set.size === 1) {
@@ -1384,13 +1390,17 @@ class MetaGraph{
                   return 100;
                 })
                 .type(function() {
-                  if (_t === "gene_component") {
+                  if (_t === "gene_component" || _st === "gene_component") {
                     return d3.symbolTriangle;
-                  } else if (_t === "protein_component") {
+                  } else if (_t === "protein_component" || _st === "protein_component") {
                     return d3.symbolDiamond;
-                  }  else if (_t === "metabolite_component") {
+                  }  else if (_t === "metabolite_component" || _st === "metabolite_component") {
                     return d3.symbolCircle;
-                  } else {console.log(_t)}
+                  } else if (_t === "complex_component" || _st === "complex_component") {
+                    return d3.symbolSquare;
+                  } else {
+                    return d3.symbolCross;
+                  }
                 }))
               .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
           }
@@ -1400,6 +1410,7 @@ class MetaGraph{
         let _i = this.nodes[d.reactants[r]];
         let _n = _i.name;
         let _t = _i.type;
+        let _st = _i.subtype;
         let _v = _i.values;
         let _s = _i.stats;
         if (_v[0] !== null && _t !== "complex_component") {
@@ -1462,13 +1473,17 @@ class MetaGraph{
                   return 100;
                 })
                 .type(function() {
-                  if (_t === "gene_component") {
+                  if (_t === "gene_component" || _st === "gene_component") {
                     return d3.symbolTriangle;
-                  } else if (_t === "protein_component") {
+                  } else if (_t === "protein_component" || _st === "protein_component") {
                     return d3.symbolDiamond;
-                  }  else if (_t === "metabolite_component") {
+                  }  else if (_t === "metabolite_component" || _st === "metabolite_component") {
                     return d3.symbolCircle;
-                  } else {}
+                  } else if (_t === "complex_component" || _st === "complex_component") {
+                    return d3.symbolSquare;
+                  } else {
+                    return d3.symbolCross;
+                  }
                 }))
               .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
           }
@@ -1478,6 +1493,7 @@ class MetaGraph{
         let _i = this.nodes[d.products[p]];
         let _n = _i.name;
         let _t = _i.type;
+        let _st = _i.subtype;
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
@@ -1541,13 +1557,17 @@ class MetaGraph{
                   return 100;
                 })
                 .type(function() {
-                  if (_t === "gene_component") {
+                  if (_t === "gene_component" || _st === "gene_component") {
                     return d3.symbolTriangle;
-                  } else if (_t === "protein_component") {
+                  } else if (_t === "protein_component" || _st === "protein_component") {
                     return d3.symbolDiamond;
-                  }  else if (_t === "metabolite_component") {
+                  }  else if (_t === "metabolite_component" || _st === "metabolite_component") {
                     return d3.symbolCircle;
-                  } else {}
+                  } else if (_t === "complex_component" || _st === "complex_component") {
+                    return d3.symbolSquare;
+                  } else {
+                    return d3.symbolCross;
+                  }
                 }))
               .attr("transform", "translate(" + (xScale(_i_) + x_offset) + "," + (yScale(_v_)) + ")")
           }
