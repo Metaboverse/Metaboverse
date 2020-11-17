@@ -4,6 +4,8 @@
   "output": null,
   "organism": null,
   "organism_id": null,
+  "database_source": "reactome",
+  "sbml_url": "",
   "transcriptomics": null,
 	"proteomics": null,
 	"metabolomics": null,
@@ -21,6 +23,6 @@
   "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2",
   "database_date": "",
   "curation_date": "",
-  "reactome_version": "",
+  "database_version": "",
   "launched": false
 }

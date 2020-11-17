@@ -1,6 +1,6 @@
 /*
 Metaboverse
-Metaboverse is designed for analysis of metabolic networks
+Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
@@ -39,7 +39,7 @@ window.addEventListener("load", function(event) {
     "Organism": "organism",
     "Organism Reactome ID": "organism_id",
     "Date curated": "curation_date",
-    "Reactome version": "reactome_version",
+    "Database version": "database_version",
 
     "spacer3": "Experiment information:",
 

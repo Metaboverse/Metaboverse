@@ -1,6 +1,6 @@
 /*
 Metaboverse
-Metaboverse is designed for analysis of metabolic networks
+Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 

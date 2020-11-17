@@ -1,6 +1,6 @@
 /*
 Metaboverse
-Metaboverse is designed for analysis of metabolic networks
+Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
@@ -192,7 +192,7 @@ runBuild = function(_callback) {
           getArgument("output").slice(0,-1) +
           path.sep +
           getArgument("organism_id") +
-          "_metaboverse_db.pickle\"",
+          ".mvdb\"",
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
@@ -232,7 +232,7 @@ function displayOptions() {
   update_session_info("max_stat", data.metadata.max_stat);
   update_session_info("database_date", data.metadata.database_date);
   update_session_info("curation_date", data.metadata.curation_date);
-  update_session_info("reactome_version", data.metadata.reactome_version);
+  update_session_info("database_version", data.metadata.database_version);
   update_session_info("blocklist", data.metadata.blocklist);
   if (
     (transcriptomics === true) |

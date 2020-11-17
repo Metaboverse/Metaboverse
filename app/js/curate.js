@@ -1,6 +1,6 @@
 /*
 Metaboverse
-Metaboverse is designed for analysis of metabolic networks
+Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
@@ -143,9 +143,9 @@ window.addEventListener("load", function(event) {
 
     var inputVal = document.getElementById("curation-input").value.split(".");
 
-    if (inputVal[inputVal.length - 1] !== "pickle") {
+    if (inputVal[inputVal.length - 1] !== "mvdb") {
       alert(
-        "Input is not a .pickle file. You must upload the correct file type for the analyses to work."
+        "Input is not a .mvdb file. You must upload the correct file type for the analyses to work."
       );
     } else {
       try {
@@ -158,7 +158,7 @@ window.addEventListener("load", function(event) {
       } catch (error) {
         console.log(error);
         alert(
-          "Input is not a .pickle file. You must upload the correct file type for the analyses to work."
+          "Input is not a .mvdb file. You must upload the correct file type for the analyses to work."
         );
       }
     }
