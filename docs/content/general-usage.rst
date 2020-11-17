@@ -36,7 +36,7 @@ Getting Started
   :align: center
 |
 | 5. Build your network model. After your network model has been built, you will have the option to perform regulatory hotspot identification, model perturbation networks, or perform general visualization of pathways and components by clicking on the appropriate buttons at the bottom of the screen that will appear once Metaboverse has finished processing your data.
-.. image:: images/step_five.png
+.. image:: images/build_page.gif
   :width: 700
   :align: center
 |
@@ -56,12 +56,12 @@ Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 | 8. **PathCov**: Compare total coverage of reactions with at least one measured component in pathways.
 |
 | Users can then select a given reaction pattern, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway. In the :data:`Reaction-Pathway Membership` box, a simplified glyph of the reaction is drawn, with inputs (substrates) on the left of the reaction node and outputs (products) on the right of the reaction node. Modifiers and input/output types are not shown in this simplified glyph.
-.. image:: images/motif_search.gif
+.. image:: images/pattern_page.gif
   :width: 700
   :align: center
 |
 | If the model includes time-course or multi-condition data, the patterns present at each timepoint or condition can be viewed.
-.. image:: images/motif_time.png
+.. image:: images/pattern_time.png
   :width: 700
   :align: center
 |
@@ -74,7 +74,7 @@ Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 |
 | Additionally, users can choose how to sort identified reaction patterns, or choose to not return reaction patterns for the selected time-point or condition that were also found in another time-point or condition. For time-course or multi-condition experiments, a pane will appear that will display the behavior of all reaction components across all time-points or conditions.
 .. image:: images/motif_options2.png
-  :width: 250
+  :width: 700
   :align: center
 |
 | For time-course and multi-condition data, a line plot is drawn for a selected reaction with the behavior of that reaction's components across all time-points or conditions.
@@ -86,13 +86,13 @@ General Pathway Exploration
 |
 | a) At the top of the legend, reference to the node types are displayed. Grey nodes are reactions, nodes with solid outlines are measured, and nodes with dashed outlines are inferred using the gene broadcasting feature. Components with significant statistical values based on the threshold (defined in section d) are bolded. Users can hover across the color scale to see what color corresponds to what value.
 | - **Identified reactions with a reaction pattern will have enlarged nodes and will be outlined in bold purple.**
-| b) Relationship types between nodes are explained in this section of the legend.
-| c) Users can toggle component, reaction, and expression labels on and off using the appropriate buttons. Users can also toggle gene nodes and compartment shading on and off with the appropriate buttons. Users can also press the :data:`Save Graph` to select the viewed network to a :data:`.png` file. Users can decide whether to show collapsed reactions, or to show the full, non-collapsed pathway of reactions that would have been collapsed. Collapsed reactions are displayed by default. Users can also open the selected pathway in Reactome to view a more classical representation of the pathway.
+| b) Relationship types between nodes are shown by hovering over the :data:`Shape Legend` icon. Compartment shadings for the selected pathway are shown by hovering over the :data:`Compartment Legend` icon.
+| c) Users can toggle component, reaction, and expression labels on and off using the appropriate buttons. Users can also toggle gene nodes and compartment shading on and off with the appropriate buttons. Users can also press the :data:`Export PNG` to select the viewed network to a :data:`.png` file. Users can decide whether to show collapsed reactions, or to show the full, non-collapsed pathway of reactions that would have been collapsed. Collapsed reactions are displayed by default. Users can also open the selected pathway in Reactome to view a more classical representation of the pathway.
 | d) Users can modify the number of neighbors to plot when double-clicking on a node to expand its nearest reaction neighbors. Users can also select a threshold to not display any node with more than the defined number of connections. By modifying the statistic threshold, users can change the minimum statistical value needed to bold the component node for easy discrimination of significant measurements in the network.
 | e) Metadata about pathways, reactions, and components, along with warnings or errors, will be displayed in this section of the legend.
 | f) Users can select from the following super-menus:
-| - *All entities*: A list of all components (metabolites, proteins, etc.)
-| - *All pathways*: A list of all pathways
+| - *All entities*: A list of all components (metabolites, proteins, etc.). This will draw the nearest neighborhood graph for the selected component.
+| - *All pathways*: A list of all pathways across all super-pathways.
 | - *Other*: A list of selected super-pathways that will group pathways in the next drop-down menu. For example, if selecting :data:`Metabolism`, only pathways related to Metabolism will be shown in the next menu.
 |
 .. image:: images/vis_overview.png
@@ -108,7 +108,7 @@ General Pathway Exploration
 Perturbation Network Modeling
 -----------------------------------
 | Users can explore the role and extent of perturbation within the reaction network in their model by navigating to the appropriate page. Users can modify the perturbation threshold for the fold change or statistical value.
-.. image:: images/perturbation_connectivity.gif
+.. image:: images/perturbations.gif
   :width: 700
   :align: center
 |
@@ -116,7 +116,7 @@ Perturbation Network Modeling
 Nearest Neighborhood Searches
 -----------------------------------
 | Users interested in exploring a components reaction neighborhood can double-click the component to expand this view. The number of reaction neighbors can be selected, and limits on the number of connections a connecting component can have to be displayed can be modified. This hub selection is particularly helpful for connected components that are involved in several reactions.
-.. image:: images/neighbor_search.gif
+.. image:: images/nearest_neighbors.gif
   :width: 700
   :align: center
 |
