@@ -86,9 +86,9 @@ window.addEventListener("load", function(event) {
     event.stopPropagation();
 
     var inputVal = document.getElementById("database-input").value.split(".");
-    if (inputVal[inputVal.length - 1] !== "json") {
+    if (inputVal[inputVal.length - 1] !== "mvrs") {
       alert(
-        "Input is not a .json file. You must upload the correct file type for the analyses to work."
+        "Input is not a .mvrs file. You must upload the correct file type for the analyses to work."
       );
 
     } else {
