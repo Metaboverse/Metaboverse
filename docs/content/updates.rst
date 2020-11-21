@@ -6,12 +6,13 @@ Updates
 v0.4.0-beta (in progress)
 =================================
 | **Major**
-| - Adds the ability to use XML/SBML-formatted database files from BiGG and BioModels as input for network build (however, these networks do not include protein com plex information)
+| - Adds the ability to use XML/SBML-formatted database files from BiGG and BioModels as input for network build (however, these networks do not include protein com plex information) ( `#56 <https://github.com/Metaboverse/Metaboverse/issues/56>`_ and `#57 <https://github.com/Metaboverse/Metaboverse/issues/57>`)
 |
 | **Minor**
-| - Fixes path separator for motif page name identification to allow for including modifiers in motif ID and exclusion of hubs
-| - Fixes CHEBI mapping so that CHEBI IDs provided as input data are more reliably used as mapping IDs if it cannot match the metabolite by name
-| - Fixes issue that arose in :data:`v0.3.0b` where some motif stamps could not be clicked on for viewing for timecourse/multi-condition data where it could not identify the shape for an unknown component type
+| - Fixes path separator for motif page name identification to allow for including modifiers in motif ID and exclusion of hubs ( `#55 <https://github.com/Metaboverse/Metaboverse/issues/55>`_ )
+| - Fixes CHEBI mapping so that CHEBI IDs provided as input data are more reliably used as mapping IDs if it cannot match the metabolite by name ( `#58 <https://github.com/Metaboverse/Metaboverse/issues/58>`_ )
+| - Fixes issue that arose in :data:`v0.3.0b` where some motif stamps could not be clicked on for viewing for timecourse/multi-condition data where it could not identify the shape for an unknown component type ( `#54 <https://github.com/Metaboverse/Metaboverse/issues/54>`_ )
+| - Updates walkthroughs and documentation to address ( `#31 <https://github.com/Metaboverse/Metaboverse/issues/31>`_ ) and update formatting
 
 ===========
 v0.3.0-beta
