@@ -180,6 +180,7 @@ runBuild = function(_callback) {
         blocklist: blocklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
+        broadcast_metabolites: getArgument("broadcastMetabolites"),
         progress_log: "\"" + progress_file + "\"",
         session_data: "\"" + session_file + "\""
       }
@@ -203,6 +204,7 @@ runBuild = function(_callback) {
         blocklist: blocklist,
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
+        broadcast_metabolites: getArgument("broadcastMetabolites"),
         progress_log: "\"" + progress_file + "\"",
         session_data: "\"" + session_file + "\""
       }

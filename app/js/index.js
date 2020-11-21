@@ -132,6 +132,8 @@ window.addEventListener("load", function(event) {
           data.metadata.collapse_with_modifiers);
         update_session_info("broadcastGeneExpression",
           data.metadata.broadcastGeneExpression);
+        update_session_info("broadcastMetabolites",
+          data.metadata.broadcastMetabolites);
         update_session_info("labels", data.metadata.labels);
         update_session_info("blocklist", data.metadata.blocklist);
         update_session_info("database_date", data.metadata.database_date);

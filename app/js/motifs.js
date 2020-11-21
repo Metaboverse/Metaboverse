@@ -21,7 +21,6 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var path = require("path");
-
 var eval_modifiers = false;
 var excl_hubs = false;
 var hub_threshold = 100;
@@ -31,12 +30,12 @@ window.addEventListener("load", function(event) {
   event.stopPropagation();
 
   var user_path = window.location.pathname;
-  var page = user_path.split(path.sep).pop();
+  var page = user_path.split('/').pop();
   if (page === "motif.html") {
+    console.log("Hello")
     document.getElementById("use_modifiers_id").onclick = function(event) {
       modifiersChecked()
     }
-
     document.getElementById("exclude_hubs_id").onclick = function(event) {
       hubsChecked()
     }

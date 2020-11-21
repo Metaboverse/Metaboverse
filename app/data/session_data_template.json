@@ -19,6 +19,7 @@
   "provided_data": false,
   "collapseWithModifiers": false,
   "broadcastGeneExpression": true,
+  "broadcastMetabolites": true,
   "labels": "",
   "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2",
   "database_date": "",

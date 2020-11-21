@@ -79,7 +79,7 @@ window.addEventListener("load", function(event) {
     console.log("Reaction collapse evaluation with modifiers: ", get_session_info("collapseWithModifiers"))
   }
 
-console.log(get_session_info("broadcastGeneExpression"))
+  console.log(get_session_info("broadcastGeneExpression"))
   if (get_session_info("broadcastGeneExpression") === true) {
     console.log('broad')
     document.getElementById("broadcast_gene_expression").checked = true;
@@ -95,6 +95,24 @@ console.log(get_session_info("broadcastGeneExpression"))
       update_session_info("broadcastGeneExpression", false);
     }
     console.log("Broadcast gene expression values: ", get_session_info("broadcastGeneExpression"))
+  }
+
+  console.log(get_session_info("broadcastMetabolites"))
+  if (get_session_info("broadcastMetabolites") === true) {
+    console.log('broadM')
+    document.getElementById("broadcast_metabolite_expression").checked = true;
+  } else {
+      console.log('broadM_')
+    document.getElementById("broadcast_metabolite_expression").checked = false;
+  }
+  document.getElementById("broadcast_metabolite_expression").onclick = function(event) {
+    event.stopPropagation();
+    if (get_session_info("broadcastMetabolites") === false) {
+      update_session_info("broadcastMetabolites", true);
+    } else {
+      update_session_info("broadcastMetabolites", false);
+    }
+    console.log("Broadcast metabolite values: ", get_session_info("broadcastMetabolites"))
   }
 
   document.getElementById("transcriptomics-dropDatabase").onclick = function(event) {

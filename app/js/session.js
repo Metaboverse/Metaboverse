@@ -57,6 +57,7 @@ window.addEventListener("load", function(event) {
 
     "Reaction collapse used modifiers?": "collapseWithModifiers",
     "Gene expression broadcast to missing proteins?": "broadcastGeneExpression",
+    "Metabolites broadcast to protein complexes?": "broadcastMetabolites",
     "Blocklisted nodes": "blocklist"
   };
 
