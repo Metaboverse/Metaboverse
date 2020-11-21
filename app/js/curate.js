@@ -68,13 +68,22 @@ window.addEventListener("load", function(event) {
 
   $('#content').append('<a href=""></a>')
   var curURL = get_session_info("curation_url");
-  var defaultValue = "No file selected";
-  if (curURL !== null) {
-    defaultValue = curURL;
+  var defaultCuration = "No file selected";
+  if (curURL !== null && curURL.split('.').pop().toLowerCase() === 'mvdb') {
+    defaultCuration = curURL;
     $("#content").html(
       '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
   }
-  $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+  $('#selectedFile').append('<font size="2">' + defaultCuration + '</font>');
+
+  var defaultSBML = "No file selected";
+  if (curURL !== null && curURL.split('.').pop().toLowerCase() === 'sbml' || curURL.split('.').pop().toLowerCase() === 'xml') {
+    defaultSBML = curURL;
+    $("#content").html(
+      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+  }
+  $('#selectedSBML').append('<font size="2">' + defaultSBML + '</font>');
+
 
   var outputURL = get_session_info("database_url");
   var defaultOutput = "No output selected";
@@ -102,6 +111,13 @@ window.addEventListener("load", function(event) {
     event.stopPropagation();
 
     document.getElementById('curation-input').click();
+  }
+
+  document.getElementById("dropDatabaseSBML").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById('sbml-input').click();
   }
 
   // Select output directory from pop-out menu
@@ -138,12 +154,11 @@ window.addEventListener("load", function(event) {
 
   // Drop pre-existing metabolic network curation for further analysis
   document.getElementById("curation-input").onchange = function(event) {
+    console.log(document.getElementById("curation-input"))
     event.preventDefault();
     event.stopPropagation();
 
-    var inputVal = document.getElementById("curation-input").value.split(".");
-
-    if (inputVal[inputVal.length - 1] !== "mvdb") {
+    if (document.getElementById("curation-input").value.split('.').pop().toLowerCase() !== "mvdb") {
       alert(
         "Input is not a .mvdb file. You must upload the correct file type for the analyses to work."
       );
@@ -152,13 +167,45 @@ window.addEventListener("load", function(event) {
         f = event.srcElement.files[0];
         console.log("The file you dragged: ", f);
         update_session_info("curation_url", f.path);
+        update_session_info("database_source", "reactome");
         $('#selectedFile').html('<font size="2">' + f.path + '</font>');
-
+        $('#selectedSBML').html('<font size="2">No file selected</font>');
         $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        document.getElementById("curation-input").value = '';
       } catch (error) {
         console.log(error);
         alert(
           "Input is not a .mvdb file. You must upload the correct file type for the analyses to work."
+        );
+      }
+    }
+  };
+
+  // Drop pre-existing BiGG or BioModels network curation for further analysis
+  document.getElementById("sbml-input").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var inputVal = document.getElementById("sbml-input").value.split(".");
+
+    if (document.getElementById("sbml-input").value.split('.').pop().toLowerCase() !== "xml" && document.getElementById("sbml-input").value.split('.').pop().toLowerCase() !== "sbml" ) {
+      alert(
+        "Input is not a .xml or .sbml file. You must upload the correct file type for the analyses to work."
+      );
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f);
+        update_session_info("curation_url", f.path);
+        update_session_info("database_source", "biomodels/bigg");
+        $('#selectedSBML').html('<font size="2">' + f.path + '</font>');
+        $('#selectedFile').html('<font size="2">No file selected</font>');
+        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        document.getElementById("sbml-input").value = '';
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Input is not a .xml or .sbml file. You must upload the correct file type for the analyses to work."
         );
       }
     }
@@ -174,6 +221,11 @@ function check_changes() {
   }
 }
 
-ipcRenderer.on("curation-input", (event, data) => {
-  $("#curation-input").text(data);
-});
+// Now-unused code???
+//ipcRenderer.on("curation-input", (event, data) => {
+//  $("#curation-input").text(data);
+//});
+
+//ipcRenderer.on("sbml-input", (event, data) => {
+//  $("#sbml-input").text(data);
+//});

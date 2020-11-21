@@ -73,8 +73,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br />
     <center>
       <font size="3">
-        Load a pre-existing <b>organism</b> database (ends in .pickle)
-        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.pickle'"><i>i</i></button>
+        Load a pre-existing Metaboverse <b>organism</b> database (ends in .mvdb)
+        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvdb'"><i>i</i></button>
         <br>
         <br>
         <div id="dropDatabaseCuration">
@@ -86,6 +86,27 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <div id="selectedFile">
         </div>
         <input id="curation-input" type="file" name="name" />
+        <br />
+        <br />
+        <br />
+        <br />
+        <b><i>OR</i></b>
+        <br />
+        <br />
+        <br />
+        Load a pre-existing <b>BiGG</b> or <b>BioModels</b> database (ends in .xml or .sbml)
+        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.xml' or '.sbml'"><i>i</i></button>
+        <br>
+        <br>
+        <div id="dropDatabaseSBML">
+          <font size="1">
+            Select File
+          </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedSBML">
+        </div>
+        <input id="sbml-input" type="file" name="name" />
         <br />
         <br />
         <br />
