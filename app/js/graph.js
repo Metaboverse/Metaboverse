@@ -404,11 +404,13 @@ function nearest_neighbors(data, entity_id) {
   // Get current nearest neighbors value
   var kNN = document.getElementById("kNN_button").value;
 
-  if (document.getElementById("pathwayMenu") !== null) {
-    document.getElementById("pathwayMenu").value = "Select a pathway";
-  }
-  if (document.getElementById("superPathwayMenu") !== null) {
-    document.getElementById("superPathwayMenu").value = "Select a super pathway...";
+  if (document.getElementById("superPathwayMenu").value !== "All entities") {
+    if (document.getElementById("pathwayMenu") !== null) {
+      document.getElementById("pathwayMenu").value = "Select a pathway";
+    }
+    if (document.getElementById("superPathwayMenu") !== null) {
+      document.getElementById("superPathwayMenu").value = "Select a super pathway...";
+    }
   }
 
   // Curate kNN to node of interest
@@ -827,7 +829,8 @@ function make_graph(
         } else {}
       }
       return "none";
-
+    } else if (d.compartment === "") {
+      return "none";
     } else {
       return d.compartment;
     }
@@ -1130,14 +1133,22 @@ function make_graph(
     .html(function(d) {
       if (type_dict[d.name] === "reaction" || type_dict[d.name] === "collapsed") {
         // Label other nodes with expression value in parentheses
-        return (
-          "<tspan dx='16' y='.31em' class='bold-text'>"
-          + d.name
-          + "</tspan>"
-          + "<tspan x='16' y='1.7em'>Compartment: "
-          + d.compartment_display
-          + "</tspan>"
-        );
+        if (d.compartment === "") {
+          return (
+            "<tspan dx='16' y='.31em' class='bold-text'>"
+            + d.name
+            + "</tspan>"
+          );
+        } else {
+          return (
+            "<tspan dx='16' y='.31em' class='bold-text'>"
+            + d.name
+            + "</tspan>"
+            + "<tspan x='16' y='1.7em'>Compartment: "
+            + d.compartment_display
+            + "</tspan>"
+          );
+        }
       } else if (type_dict[d.name] === "collapsed") {
         return (
           "<tspan dx='16' y='.31em' class='bold-text'>"
@@ -1233,14 +1244,22 @@ function make_graph(
       text.html(function(d) {
         if (type_dict[d.name] === "reaction") {
           // If reaction node, do not display expression value
-          return (
-            "<tspan dx='16' y='.31em' class='bold-text'>" +
-            d.name +
-            "</tspan>"
-            + "<tspan x='16' y='1.7em'>Compartment: "
-            + d.compartment_display
-            + "</tspan>"
-          );
+          if (d.compartment === "") {
+            return (
+              "<tspan dx='16' y='.31em' class='bold-text'>"
+              + d.name
+              + "</tspan>"
+            );
+          } else {
+            return (
+              "<tspan dx='16' y='.31em' class='bold-text'>" +
+              d.name +
+              "</tspan>"
+              + "<tspan x='16' y='1.7em'>Compartment: "
+              + d.compartment_display
+              + "</tspan>"
+            );
+          }
         } else {
           // Label other nodes with expression value in parentheses
           if (d.values[sample] === null
@@ -1596,6 +1615,8 @@ function change() {
   document.getElementById("type_selection").innerHTML = mod_selection;
   document.getElementById("warning_line_1").innerHTML = "<br>";
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
+  console.log(superSelection)
+  console.log(document.getElementById("superPathwayMenu").value)
 
   if (superSelection !== "All entities") {
     // Run normal first plot
