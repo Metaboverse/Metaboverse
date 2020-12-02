@@ -149,7 +149,7 @@ class MetaGraph{
         + "<h6><b>Selected Reaction Motif</b></h6>"
         + "<div id='line-plot-container'></div>"
         + "</div>"
-        + "<i><font size='2' class='line-description'>View how components of a given reaction change across the time-course or across conditions.</font><br /><font size='2' class='line-description'>Dashed lines indicate an entity with only one representative measurement (i.e., a single timepoint was provided for that datapoint).</font></i>"
+        + "<i><font size='2' class='line-description'>View how <b>measured</b> components of a given reaction change across the time-course or across conditions.</font><br /><font size='2' class='line-description'>Dashed lines indicate an entity with only one representative measurement (i.e., a single timepoint was provided for that datapoint).</font></i>"
         + "</div><br /><br /><br /"
       );
     }
@@ -1207,9 +1207,10 @@ class MetaGraph{
         .call(d3.axisLeft(yScale));
       for (let a in d.additional_components) {
         let _i = this.nodes[d.additional_components[a]];
-        let _n = _i.name;
+        let _n = _i.name.replace(/,/g, '_');
+        let _n_type = _i.name;
         let _t = _i.type;
-        let _st = _i.subtype;
+        let _st = _i.sub_type;
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
@@ -1234,24 +1235,70 @@ class MetaGraph{
               .attr("class", "line")
               .style("fill", "none")
               .style("stroke-width", "3px")
-              .style("stroke", "#808080")
+              .style("stroke", function() {
+                if (_t === "gene_component" || _st === "gene_component") {
+                  return "rgba(165, 55, 253, 1)";
+                } else if (_t === "protein_component" || _st === "protein_component") {
+                  return "orange";
+                }  else if (_t === "metabolite_component" || _st === "metabolite_component") {
+                  return "blue";
+                } else if (_t === "complex_component" || _st === "complex_component") {
+                  return "black";
+                } else {
+                  return "#808080";
+                }
+              })
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line)
               .on("mouseover", function() {
+                let _this;
+                _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                _this.parentNode.appendChild(_this);
                 d3.select("path#" + "line_" + _n + "_" + _t)
                   .style("stroke-width", "5px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "18px")
               })
               .on("mouseout", function() {
                 d3.select("path#" + "line_" + _n + "_" + _t)
                   .style("stroke-width", "3px")
-              })
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "12px")
+              });
           line_svg
             .append("text")
-              .attr("id", "_n")
+              .attr("id", _n + "_" + _t + "_text")
               .attr("x", xScale(_v.length - 1) + x_offset + 15)
               .attr("y", yScale(_v[_v.length - 1]) + 5)
-              .style("fill", "#808080")
-              .text(_n);
+              .style("fill", function() {
+                if (_t === "gene_component" || _st === "gene_component") {
+                  return "rgba(165, 55, 253, 1)";
+                } else if (_t === "protein_component" || _st === "protein_component") {
+                  return "orange";
+                }  else if (_t === "metabolite_component" || _st === "metabolite_component") {
+                  return "blue";
+                } else if (_t === "complex_component" || _st === "complex_component") {
+                  return "black";
+                } else {
+                  return "#808080";
+                }
+              })
+              .text(_n_type)
+              .on("mouseover", function() {
+                let _this;
+                _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                _this.parentNode.appendChild(_this);
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "5px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "18px")
+              })
+              .on("mouseout", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "3px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "12px")
+              });
           // add nodes and info on hover
           for (let _i_ in this.categories) {
             let _v_ = _v[_i_];
@@ -1294,7 +1341,8 @@ class MetaGraph{
       for (let m in d.modifiers) {
         let _m = d.modifiers[m][1];
         let _i = this.nodes[d.modifiers[m][0]];
-        let _n = _i.name;
+        let _n = _i.name.replace(/,/g, '_');
+        let _n_type = _i.name;
         let _t = _i.type;
         let _st = _i.sub_type;
         let _v = _i.values;
@@ -1324,22 +1372,42 @@ class MetaGraph{
                 .style("stroke-dasharray", dash_instruction)
                 .attr("d", current_line)
                 .on("mouseover", function() {
+                  let _this;
+                  _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                  _this.parentNode.appendChild(_this);
                   d3.select("path#" + "line_" + _n + "_" + _t)
                     .style("stroke-width", "5px")
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "18px")
                 })
                 .on("mouseout", function() {
                   d3.select("path#" + "line_" + _n + "_" + _t)
                     .style("stroke-width", "3px")
-                    div.style("opacity", 0);
-                    div.html("")
-                })
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "12px")
+                });
             line_svg
               .append("text")
-                .attr("id", "_n")
+                .attr("id", _n + "_" + _t + "_text")
                 .attr("x", xScale(_v.length - 1) + x_offset + 15)
                 .attr("y", yScale(_v[_v.length - 1]) + 5)
                 .style("fill", "#1b9e77")
-                .text(_n);
+                .text(_n_type)
+                .on("mouseover", function() {
+                  let _this;
+                  _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                  _this.parentNode.appendChild(_this);
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "5px")
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "18px")
+                })
+                .on("mouseout", function() {
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "3px")
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "12px")
+                });
           } else {
             line_svg
               .append("path")
@@ -1348,24 +1416,46 @@ class MetaGraph{
                 .attr("class", "line")
                 .style("fill", "none")
                 .style("stroke-width", "3px")
-                .style("stroke", "#e7298a")
+                .style("stroke", "red")
                 .style("stroke-dasharray", dash_instruction)
                 .attr("d", current_line)
                 .on("mouseover", function() {
+                  let _this;
+                  _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                  _this.parentNode.appendChild(_this);
                   d3.select("path#" + "line_" + _n + "_" + _t)
                     .style("stroke-width", "5px")
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "18px")
                 })
                 .on("mouseout", function() {
                   d3.select("path#" + "line_" + _n + "_" + _t)
                     .style("stroke-width", "3px")
-                })
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "12px")
+                });
             line_svg
               .append("text")
-                .attr("id", "_n")
+                .attr("id", _n + "_" + _t + "_text")
                 .attr("x", xScale(_v.length - 1) + x_offset + 15)
                 .attr("y", yScale(_v[_v.length - 1]) + 5)
-                .style("fill", "#e7298a")
-                .text(_n);
+                .style("fill", "red")
+                .text(_n_type)
+                .on("mouseover", function() {
+                  let _this;
+                  _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                  _this.parentNode.appendChild(_this);
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "5px")
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "18px")
+                })
+                .on("mouseout", function() {
+                  d3.select("path#" + "line_" + _n + "_" + _t)
+                    .style("stroke-width", "3px")
+                  d3.select("text#" + _n + "_" + _t + "_text")
+                    .style("font-size", "12px")
+                });
           }
           // add nodes and info on hover
           for (let _i_ in this.categories) {
@@ -1408,9 +1498,10 @@ class MetaGraph{
       }
       for (let r in d.reactants) {
         let _i = this.nodes[d.reactants[r]];
-        let _n = _i.name;
+        let _n = _i.name.replace(/,/g, '_');
+        let _n_type = _i.name + " (React.)";
         let _t = _i.type;
-        let _st = _i.subtype;
+        let _st = _i.sub_type;
         let _v = _i.values;
         let _s = _i.stats;
         if (_v[0] !== null && _t !== "complex_component") {
@@ -1432,24 +1523,47 @@ class MetaGraph{
               .attr("class", "line")
               .style("fill", "none")
               .style("stroke-width", "3px")
-              .style("stroke", "#d95f02")
+              .style("stroke", "#808080")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line)
               .on("mouseover", function() {
+                let _this;
+                _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                _this.parentNode.appendChild(_this);
                 d3.select("path#" + "line_" + _n + "_" + _t)
                   .style("stroke-width", "5px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "18px")
               })
               .on("mouseout", function() {
                 d3.select("path#" + "line_" + _n + "_" + _t)
                   .style("stroke-width", "3px")
-              })
+                  .style("z-index", "1")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "12px")
+              });
           line_svg
             .append("text")
-              .attr("id", "_n")
+              .attr("id", _n + "_" + _t + "_text")
               .attr("x", xScale(0) + x_offset + 15)
               .attr("y", yScale(_v[0]) + 5)
-              .style("fill", "#d95f02")
-              .text(_n);
+              .style("fill", "#808080")
+              .text(_n_type)
+              .on("mouseover", function() {
+                let _this;
+                _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                _this.parentNode.appendChild(_this);
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "5px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "18px")
+              })
+              .on("mouseout", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "3px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "12px")
+              });
           // add nodes and info on hover
           for (let _i_ in this.categories) {
             let _v_ = _v[_i_];
@@ -1491,9 +1605,10 @@ class MetaGraph{
       }
       for (let p in d.products) {
         let _i = this.nodes[d.products[p]];
-        let _n = _i.name;
+        let _n = _i.name.replace(/,/g, '_');
+        let _n_type = _i.name  + " (Prod.)";
         let _t = _i.type;
-        let _st = _i.subtype;
+        let _st = _i.sub_type;
         let _v = _i.values;
         let _s = _i.stats;
         let _v_ = [_v, _s];
@@ -1516,24 +1631,46 @@ class MetaGraph{
               .attr("class", "line")
               .style("fill", "none")
               .style("stroke-width", "3px")
-              .style("stroke", "#7570b3")
+              .style("stroke", "#808080")
               .style("stroke-dasharray", dash_instruction)
               .attr("d", current_line)
               .on("mouseover", function() {
+                let _this;
+                _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                _this.parentNode.appendChild(_this);
                 d3.select("path#" + "line_" + _n + "_" + _t)
                   .style("stroke-width", "5px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "18px")
               })
               .on("mouseout", function() {
                 d3.select("path#" + "line_" + _n + "_" + _t)
                   .style("stroke-width", "3px")
-              })
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "12px")
+              });
           line_svg
             .append("text")
-              .attr("id", "_n")
+              .attr("id", _n + "_" + _t + "_text")
               .attr("x", xScale(0) + x_offset + 15)
               .attr("y", yScale(_v[0]) + 5)
-              .style("fill", "#7570b3")
-              .text(_n);
+              .style("fill", "#808080")
+              .text(_n_type)
+              .on("mouseover", function() {
+                let _this;
+                _this = d3.select("text#" + _n + "_" + _t + "_text")['_groups'][0][0];
+                _this.parentNode.appendChild(_this);
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "5px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "18px")
+              })
+              .on("mouseout", function() {
+                d3.select("path#" + "line_" + _n + "_" + _t)
+                  .style("stroke-width", "3px")
+                d3.select("text#" + _n + "_" + _t + "_text")
+                  .style("font-size", "12px")
+              });
           // add nodes and info on hover
           for (let _i_ in this.categories) {
             let _v_ = _v[_i_];
