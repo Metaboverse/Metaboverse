@@ -70,14 +70,16 @@ window.addEventListener("load", function(event) {
       let display_item = getArgument(session_items[item]);
       if (display_item === undefined) {
         display_item = "Not provided";
-      } else if (typeof display_item == 'number') {
+      } else if (typeof display_item === 'number') {
         display_item = display_item;
-      } else if (typeof display_item == 'object') {
+      } else if (typeof display_item === 'object') {
         display_item = display_item[0];
-      } else if (display_item == true) {
+      } else if (display_item === true) {
         display_item = "True";
-      } else if (display_item == false) {
+      } else if (display_item === false) {
         display_item = "False";
+      } else if (display_item === "" || display_item === "None") {
+        display_item = "N/A";
       } else {
         display_item = display_item[0].toUpperCase() + display_item.substring(1);
       }

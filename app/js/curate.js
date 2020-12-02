@@ -69,18 +69,23 @@ window.addEventListener("load", function(event) {
   $('#content').append('<a href=""></a>')
   var curURL = get_session_info("curation_url");
   var defaultCuration = "No file selected";
-  if (curURL !== null && curURL.split('.').pop().toLowerCase() === 'mvdb') {
-    defaultCuration = curURL;
-    $("#content").html(
-      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+  console.log(curURL)
+  if (curURL !== null) {
+    if (curURL.split('.').pop().toLowerCase() === 'mvdb') {
+      defaultCuration = curURL;
+      $("#content").html(
+        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+    }
   }
   $('#selectedFile').append('<font size="2">' + defaultCuration + '</font>');
 
   var defaultSBML = "No file selected";
-  if (curURL !== null && curURL.split('.').pop().toLowerCase() === 'sbml' || curURL.split('.').pop().toLowerCase() === 'xml') {
-    defaultSBML = curURL;
-    $("#content").html(
-      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+  if (curURL !== null) {
+    if (curURL.split('.').pop().toLowerCase() === 'sbml' || curURL.split('.').pop().toLowerCase() === 'xml') {
+      defaultSBML = curURL;
+      $("#content").html(
+        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+    }
   }
   $('#selectedSBML').append('<font size="2">' + defaultSBML + '</font>');
 

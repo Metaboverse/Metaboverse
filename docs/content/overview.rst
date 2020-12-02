@@ -40,11 +40,17 @@ Unmapped Data
 | We currently have plans for an interactive module that will help users find suitable synonyms for unmapped entities in users' datasets. Please follow `this issue <https://github.com/Metaboverse/Metaboverse/issues/50>`_ for updates on progress of this feature.
 |
 -------------------
+Output File Types
+-------------------
+| There are two output file types associated with Metaboverse:
+| - :data:`.mvdb`: This is the organismal curation file, containing the underlying network structure for the selected organism, as well as important node mapping information f
+|
+-------------------
 Using Metaboverse
 -------------------
-| Metaboverse first asks users for the organism of interest and an output folder to store all output data and network representations. Afterwards, the user will be directed to provide any -omics data tables, along with some basic metadata, such as experimental setup, timecourse labels, etc. After this input is provided, the network will be modeled with the user's data overlaid. Two files will then be output to the location specified by the user. The first will be a file ending in :data:`.pickle`, which contains the basic information needed to model the organism network without user data. This file can be saved for future usage if the user wishes to remodel data on that organism's network without have to wait for all the necessary source files to download. This file can be provided in leiu of the organism name and file output on the appropriate page.
+| Metaboverse first asks users for the organism of interest and an output folder to store all output data and network representations. Afterwards, the user will be directed to provide any -omics data tables, along with some basic metadata, such as experimental setup, timecourse labels, etc. After this input is provided, the network will be modeled with the user's data overlaid. Two files will then be output to the location specified by the user. The first will be a file ending in :data:`.mvdb`, which contains the basic information needed to model the organism network without user data. This file can be saved for future usage if the user wishes to remodel data on that organism's network without have to wait for all the necessary source files to download. This file can be provided in leiu of the organism name and file output on the appropriate page.
 |
-| The second file ends in :data:`.json` and contains the final network with the user data and user metadata stored. This file will allow for all downstream visualizations and analyses and can be reloaded on the main page of Metaboverse to quickly re-analyze a dataset. Clicking on the :data:`Session Data` tab in the menu on each page of Metaboverse will display the appropriate metadata for that particular model.
+| The second file ends in :data:`.mvrs` and contains the final network with the user data and user metadata stored. This file will allow for all downstream visualizations and analyses and can be reloaded on the main page of Metaboverse to quickly re-analyze a dataset. Clicking on the :data:`Session Data` tab in the menu on each page of Metaboverse will display the appropriate metadata for that particular model.
 |
 | The figure below shows an example of this process.
 .. image:: images/package_overview.png

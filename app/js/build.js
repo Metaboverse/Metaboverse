@@ -120,10 +120,13 @@ function execute(command, callback) {
         | stdout.toLowerCase().includes("error")
         | stderr.toLowerCase().includes("exception")
         | stderr.toLowerCase().includes("error")) {
+      let today = new Date().toISOString().slice(0, 10);
+
       fs.writeFileSync(
         getArgument("output").replace(/\"/g,'') + path.sep + "metaboverse_session.log",
         "Operating System information:\n"
-          + navigator.appVersion + "\n\n\n\n"
+          + navigator.appVersion + "\n"
+          + "Log date: " + today + "\n\n\n\n"
           + stdout + "\n\n\n"
           + "########\nSTDERR:\n########\n"
           + stderr,
@@ -168,7 +171,7 @@ runBuild = function(_callback) {
       graphDictionary = {
         output: getArgument("output"),
         output_file: db_url,
-        species_id: "find",
+        organism_id: "find",
         organism_curation: curated,
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
@@ -189,7 +192,7 @@ runBuild = function(_callback) {
       graphDictionary = {
         output: getArgument("output"),
         output_file: getArgument("database_url"),
-        species_id: getArgument("organism_id"),
+        organism_id: getArgument("organism_id"),
         model_file:
           getArgument("output").slice(0,-1) +
           path.sep +

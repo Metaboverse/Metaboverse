@@ -115,11 +115,11 @@ window.addEventListener("load", function(event) {
             abbreviation_dict[datum["abbreviation"]] = datum["displayName"];
           });
           update_session_info("organism",
-            abbreviation_dict[data.metadata.species_id]);
+            abbreviation_dict[data.metadata.organism_id]);
         });
         update_session_info("curation_url", data.metadata.organism_curation);
         update_session_info("output", data.metadata.output);
-        update_session_info("organism_id", data.metadata.species_id);
+        update_session_info("organism_id", data.metadata.organism_id);
         update_session_info("transcriptomics", data.metadata.transcriptomics);
         update_session_info("proteomics", data.metadata.proteomics);
         update_session_info("metabolomics", data.metadata.metabolomics);
