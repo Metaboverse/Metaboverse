@@ -1,7 +1,7 @@
 {
   "name": "Metaboverse",
-  "version": "0.3.0b",
-  "description": "A metabolic network explorer",
+  "version": "0.3.1b",
+  "description": "Visualizing and Analyzing Metabolic Networks",
   "main": "main.js",
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
@@ -24,7 +24,7 @@
   "author": "Jordan A. Berg; Youjia Zhou",
   "license": "GPL-3.0",
   "devDependencies": {
-    "electron": "^8.3.4",
+    "electron": "^8.5.2",
     "electron-packager": "^15.1.0",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
