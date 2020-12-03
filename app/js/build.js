@@ -214,7 +214,6 @@ runBuild = function(_callback) {
         session_data: "\"" + session_file + "\""
       }
     }
-
     var cmd = parseCommand(graphDictionary);
     console.log("Running: " + scriptFilename + " curate " + cmd);
     execute(scriptFilename + " curate " + cmd, output => {

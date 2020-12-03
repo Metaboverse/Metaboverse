@@ -133,8 +133,8 @@ window.addEventListener("load", function(event) {
         properties: ["createDirectory"],
         filters: [
           {
-            name: "JSON",
-            extensions: ["json", "JSON"]
+            name: "mvrs",
+            extensions: ["mvrs"]
           }
         ]
       })
