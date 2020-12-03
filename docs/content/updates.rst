@@ -9,7 +9,7 @@ v0.4.0-beta (in progress)
 | - Adds the ability to use XML/SBML-formatted database files from BiGG and BioModels as input for network build (however, these networks do not include protein com plex information) ( `#56 <https://github.com/Metaboverse/Metaboverse/issues/56>`_ and `#57 <https://github.com/Metaboverse/Metaboverse/issues/57>`)
 
 =================================
-v0.3.1-beta (in progress)
+v0.3.1-beta
 =================================
 | **Minor**
 | - Fixes path separator for motif page name identification to allow for including modifiers in motif ID and exclusion of hubs ( `#55 <https://github.com/Metaboverse/Metaboverse/issues/55>`_ )
