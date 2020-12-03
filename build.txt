@@ -36,4 +36,4 @@ Instructions for building app for distribution:
 SHASUM256 methods by operating system:
 --------------------------------------
 - Windows: `certUtil -hashfile metaboverse-cli-win.exe SHA256`
-- Mac:
+- Mac/Linux: `shasum -a 256 metaboverse-cli-[os]`
