@@ -37,3 +37,7 @@ SHASUM256 methods by operating system:
 --------------------------------------
 - Windows: `certUtil -hashfile metaboverse-cli-win.exe SHA256`
 - Mac/Linux: `shasum -a 256 metaboverse-cli-[os]`
+
+In case the mac gets a permission denied error during build:
+------------------------------------------------------------
+This probably occurred during pyinstaller compilation -- try deleting the old `dist` and `build` directories and running again. Run `./metaboverse-cli-mac --help` to test, then move to appropriate location in the `Metaboverse` app directory.
