@@ -27,7 +27,7 @@ author = 'Jordan A. Berg, et. al.'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.3.1-beta'
+release = '0.3.2-beta'
 
 
 # -- General configuration ---------------------------------------------------
