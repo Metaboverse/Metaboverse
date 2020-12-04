@@ -3,7 +3,7 @@ Updates
 ###############
 
 =================================
-v0.3.1-beta
+v0.3.2-beta
 =================================
 | **Minor**
 | - Closes  `#59 <https://github.com/Metaboverse/Metaboverse/issues/59>`_  where non-ascii characters in reaction names would break the info extraction. Added a safestring conversion utility to prevent ascii-character issues.
