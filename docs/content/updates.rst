@@ -3,10 +3,10 @@ Updates
 ###############
 
 =================================
-v0.4.0-beta (in progress)
+v0.3.1-beta
 =================================
-| **Major**
-| - Adds the ability to use XML/SBML-formatted database files from BiGG and BioModels as input for network build (however, these networks do not include protein com plex information) ( `#56 <https://github.com/Metaboverse/Metaboverse/issues/56>`_ and `#57 <https://github.com/Metaboverse/Metaboverse/issues/57>`)
+| **Minor**
+| - Closes  `#59 <https://github.com/Metaboverse/Metaboverse/issues/59>`_  where non-ascii characters in reaction names would break the info extraction. Added a safestring conversion utility to prevent ascii-character issues.
 
 =================================
 v0.3.1-beta
