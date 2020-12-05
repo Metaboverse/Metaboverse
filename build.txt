@@ -41,3 +41,9 @@ SHASUM256 methods by operating system:
 In case the mac gets a permission denied error during build:
 ------------------------------------------------------------
 This probably occurred during pyinstaller compilation -- try deleting the old `dist` and `build` directories and running again. Run `./metaboverse-cli-mac --help` to test, then move to appropriate location in the `Metaboverse` app directory.
+
+If having issues setting up test env in Linux:
+----------------------------------------------
+npm config rm proxy
+npm config rm https-proxy
+npm install 
