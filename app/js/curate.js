@@ -139,12 +139,15 @@ window.addEventListener("load", function(event) {
         ]
       })
       .then(result => {
+        let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
+        if (hasExtension === false) {
+            result.filePath = `${ selection.filePath }.${ "mvrs" }`;
+        }
         filename = result.filePath;
         if (filename === undefined) {
           alert("File selection unsuccessful");
           return;
         }
-
         console.log(filename);
         update_session_info("database_url", filename);
         $('#selectedOutput').html('<font size="2">' + filename + '</font>');
