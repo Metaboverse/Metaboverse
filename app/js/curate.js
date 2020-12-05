@@ -141,7 +141,7 @@ window.addEventListener("load", function(event) {
       .then(result => {
         let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
         if (hasExtension === false) {
-            result.filePath = `${ selection.filePath }.${ "mvrs" }`;
+            result.filePath = `${ result.filePath }.${ "mvrs" }`;
         }
         filename = result.filePath;
         if (filename === undefined) {
