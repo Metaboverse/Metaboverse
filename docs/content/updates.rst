@@ -3,6 +3,12 @@ Updates
 ###############
 
 =================================
+v0.4.0-beta (In progress)
+=================================
+| **Minor**
+| - Fixes  `#60 <https://github.com/Metaboverse/Metaboverse/issues/60>`_  , where the :data:`.mvrs` file extension would not be automatically added to the user-provided output file name in Linux.
+
+=================================
 v0.3.2-beta
 =================================
 | **Minor**
