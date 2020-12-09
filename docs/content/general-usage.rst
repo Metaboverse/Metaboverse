@@ -4,7 +4,7 @@
 General Usage
 #############
 
-| The following walkthrough was created using Metaboverse :data:`v0.3.2b`. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
+| The following walkthrough was created using Metaboverse :data:`v0.3.2b` and previous versions. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
 
 -------------------------
 Getting Started
