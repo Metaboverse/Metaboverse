@@ -6,6 +6,15 @@ General Usage
 
 | The following walkthrough was created using Metaboverse :data:`v0.3.2b` and previous versions. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
 
+----------------------------
+Analysis Video Walkthrough
+----------------------------
+| You can watch the Metaboverse walkthrough video here, or continue below for a more detailed walkthrough.
+.. raw:: html
+
+    <iframe width="700" height="450" src="https://www.youtube.com/embed/ytTIlBKzq-c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+|
+
 -------------------------
 Getting Started
 -------------------------
@@ -146,11 +155,4 @@ Publishing Data Analyzed with Metaboverse
 .. image:: images/show_metadata.gif
    :width: 700
    :align: center
-|
-------------------------
-Analysis Video Walkthrough
-------------------------
-.. raw:: html
-
-    <iframe width="700" height="450" src="https://www.youtube.com/embed/ytTIlBKzq-c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 |

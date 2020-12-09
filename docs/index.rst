@@ -1,7 +1,7 @@
 ##############
 Metaboverse
 ##############
-|build-status| |docs| |biorxiv| |downloads| |zenodo|
+|build-status| |docs| |biorxiv| |downloads|
 
 .. image:: content/images/metaboverse_spiral.gif
    :width: 350
@@ -32,6 +32,15 @@ Table of contents
    content/faqs
    content/updates
 
+============================
+Analysis Video Walkthrough
+============================
+| You can watch the Metaboverse walkthrough video here, or go the the  page for a more detailed walkthrough.
+.. raw:: html
+
+   <iframe width="700" height="450" src="https://www.youtube.com/embed/ytTIlBKzq-c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+|
+
 =======
 License
 =======
@@ -48,7 +57,8 @@ Feedback?
 ==========
 Questions?
 ==========
-| - If you have questions, requests, or bugs to report, please use the `Metaboverse issues forum <https://github.com/Metaboverse/Metaboverse/issues>`_. - Please clearly describe the problem, what you have tried, as well as screenshots of any error information.
+| - If you have questions, requests, or bugs to report, please use the `Metaboverse issues forum <https://github.com/Metaboverse/Metaboverse/issues>`_.
+| - Please clearly describe the problem, what you have tried, as well as screenshots of any error information.
 | - Generally, for any errors occurring during network building, a file named :data:`metaboverse_session.log` will be output to your specified Output folder. If you receive this file, please upload it to your GitHub Issue. This will output a lot of information, but you can try self-diagnosing by seeing if there is anything in the last ~10-15 lines of this file that might hint at the issue. Otherwise, we are happy to help diagnose the problem!
 | - It is also often helpful for us to click on the `View` menu tab, click :data:`Toggle Developer Tools`, click the :data:`Console` tab of the window that opens, and take a screenshot of the output in this panel.
 |
