@@ -7,7 +7,7 @@ Overview
 --------------
 Background
 --------------
-| Metaboverse is a cross-platform app built to aid users in contextualizing their data on their model's metabolic and global reaction network. Metaboverse is an interactive tool for exploratory data analysis that searches user data in the context of the metabolic network to identify interesting patterns and trends within the data. Metaboverse will aid users in interactively identifying interesting patterns and regulatory hotspots within their data for further experimental follow-up.
+| Metaboverse is a cross-platform app built to aid users in contextualizing their data on their model's metabolic and global reaction network. Metaboverse is an interactive tool for exploratory data analysis that searches user data in the context of the metabolic network to identify interesting patterns and trends within the data. Metaboverse will aid users in interactively identifying interesting patterns and regulatory hotspots within their data for further experimental follow-up. You can find some of the interesting patterns we have discovered `here <https://www.overleaf.com/read/nyvmfmcxhsdp>`_.
 |
 -----------------
 Important Note
@@ -26,10 +26,12 @@ Data Inputs
 | Along with single condition experiment set-ups, users can provide timecourse data by sequentially listing the fold change and statistical columns in temporal order in the input data table for that -omic type. Users can provide all paired -omics types for each time point, or provide one -omics table of timecourse data and a table for another -omics type with a single steady-state time point. In every situation, it is vital the user keeps in mind the caveats associated with comparing such mixed data types. Along with timecourse data, users can provide multiple conditions formatted as with the timecourse data.
 |
 | **Summary**
-| * Each omic input should include fold change and statistal values.
-| * Timecourse data should be **repeated fold change and statistical values for each timepoint in order** (see example above).
-| * Multi-condition experiments can be provided as with timecourse data.
-| * Data names should correspond to Ensembl, UniProt, or ChEBI ID and acceptable synonyms.
+| - Each omic input should include fold change and statistal values.
+| - Timecourse data should be **repeated fold change and statistical values for each timepoint in order** (see example above).
+| - Multi-condition experiments can be provided as with timecourse data.
+| - Data names should correspond to Ensembl, UniProt, or ChEBI/KEGG/HMDB IDs and acceptable synonyms.
+| - Keep an eye out for measurements with weird characters in their names. This can often cause problems with the data mapping.
+| - Make sure the gene/protein/metabolite column name is blank, as shown in the examples.
 |
 -------------------
 Unmapped Data
@@ -37,13 +39,14 @@ Unmapped Data
 | During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`. Data points could be unmapped for two reasons:
 | - The data point is not curated in a reaction within the selected organism's reaction network
 | - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl gene ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
-| We currently have plans for an interactive module that will help users find suitable synonyms for unmapped entities in users' datasets. Please follow `this issue <https://github.com/Metaboverse/Metaboverse/issues/50>`_ for updates on progress of this feature.
+| - Try searching :data:`Reactome + the name of the unmapped species` online to see if the species goes by another name in Reactome, or if it is missing from the organism curation.
 |
 -------------------
 Output File Types
 -------------------
 | There are two output file types associated with Metaboverse:
-| - :data:`.mvdb`: This is the organismal curation file, containing the underlying network structure for the selected organism, as well as important node mapping information f
+| - :data:`.mvdb`: This is the organismal curation file, containing the underlying network structure for the selected organism, as well as important node mapping information for connecting user-provided gene, protein, and metabolite measurements to the appropriate locations in the network.
+| - :data:`.mvrs`: This is the completed organismal curation file, with your gene/protein/metabolite measurements mapped onto the network. You can load this file on the home page within the Metaboverse app to pick up where you left off in your analysis of the data.
 |
 -------------------
 Using Metaboverse
@@ -62,7 +65,7 @@ Using Metaboverse
 | **TL;DR**
 | * Users specify organism, output location, -omics files, and basic experimental metadata by following the prompts.
 | * User data is layered onto the reaction network.
-| * :data:`.pickle` and :data:`.json` files can be saved to quickly access the organism curation or data model.
+| * :data:`.mvdb` and :data:`.mvrs` files can be saved to quickly access the organism curation or data model. For :data:`v0.3.0b` or earlier, these files ended in :data:`.pickle` and :data:`.json`, respectively.
 | * Once data is modeled on the network, the user can begin interactive analysis of their data.
 |
 ------------------------------------------
@@ -74,7 +77,7 @@ Important Features of Metaboverse
 |
 | * **Dynamic Network Visualization**: The Metaboverse provides an interactive app that allows for dynamic exploration of regulatory hotspots, perturbation networks, and general visualization. Users can add or remove metabolites or other entities from being visualized, which is particularly useful in cases of highly connected metabolites, such as water, which clutter the visualization and do not contribute much to the interpretation of the data. Users can toggle on or off labels and features, drag and rearrange components of the networks, and more.
 |
-| * **Identifying Regulatory Hotspots**: In order to identify reactions where interesting regulatory events are occurring based on the provided -omic data, we introduce a regulatory hotspot search engine, which is based on concepts from `activity motifs <https://www.nature.com/articles/nbt.1499>`_. Several hotspot patterns are pre-programmed into Metaboverse to allow the users to explore different regulatory patterns present in the data. In the future, we plan to include an interactive interface to allow users to design and implement custom search patterns.
+| * **Identifying Regulatory Patterns**: In order to identify reactions where interesting regulatory events are occurring based on the provided -omic data, we introduce a regulatory hotspot search engine, which is based on concepts from `activity motifs <https://www.nature.com/articles/nbt.1499>`_. Several hotspot patterns are pre-programmed into Metaboverse to allow the users to explore different regulatory patterns present in the data. In the future, we plan to include an interactive interface to allow users to design and implement custom search patterns.
 |
 | * **Modeling Perturbation Networks**: Users can specify the threshold needed to consider a reaction perturbed and stitch together each of these reactions passing the threshold to reveal a perturbation network. This allows for the visualization of connected perturbations along a pathway and may indicate interesting characteristics of a condition that may complicate certain treatments if, for example, a drug targets a perturbed reaction, but the reaction downstream is also perturbed for independent reasons from the first and could thus reduce efficacy of the drug treatment.
 |
@@ -83,15 +86,15 @@ Important Features of Metaboverse
 -------------------
 Performance
 -------------------
-| Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster than data modeled on a human network. You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working.
-| Currently, for a human network, it may take up to 20 minutes to curate the network with your data. We hope to improve this performance time in the near future, but a lot of this time is directly tied to internet connection and download speed.
+| Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster (5-10min) than data modeled on a human network (20-30min). You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working. Certain steps that are particular computationally intensive may pause the completion % for a couple minutes, but Metaboverse may still be working.
+| Currently, for a human network, it may take up to 20 minutes to curate the network with your data. We hope to improve this performance time in the near future, but a lot of this time is directly tied to internet connection, download speed, and the sheer size and annotation of the human metabolic network.
 |
 ----------------------
 Technical Description
 ----------------------
 | Metaboverse is currently segmented into two parts:
-| 1. :data:`metaboverse-cli`: The network curation and modeling utilities that form the back-end of the Metaboverse app. For each release of Metaboverse, OS-specific binaries are generated of the backend and incorporating into the GUI app. [`code <https://github.com/Metaboverse/metaboverse-cli>`_]
-| 2. :data:`Metaboverse` interactive app: The platform-independent app for visualizing and exploring data on the metabolic network. [`code <https://github.com/Metaboverse/Metaboverse>`_]
+| 1. :data:`Metaboverse` interactive app: The platform-independent app for visualizing and exploring data on the metabolic network. [`code <https://github.com/Metaboverse/Metaboverse>`_]
+| 2. :data:`metaboverse-cli`: The network curation and modeling utilities that form the back-end of the Metaboverse app. For each release of Metaboverse, OS-specific binaries are generated of the backend and incorporating into the GUI app. [`code <https://github.com/Metaboverse/metaboverse-cli>`_]
 |
 | Metaboverse works by doing the following:
 | 1. Generates an organism-specific reaction network using the `Reactome Knowledgebase <https://reactome.org/>`_

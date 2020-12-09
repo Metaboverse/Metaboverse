@@ -4,6 +4,8 @@
 General Usage
 #############
 
+| The following walkthrough was created using Metaboverse :data:`v0.3.2b`. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
+
 -------------------------
 Getting Started
 -------------------------
@@ -125,22 +127,22 @@ Nearest Neighborhood Searches
 -----------------------------------
 Analyzing Previous Models
 -----------------------------------
-| Users can load a previously modeled network with their data on it by loading the :data:`.json` file output by Metaboverse when originally generated. This is done on the Home page.
-.. image:: images/load_json.gif
+| Users can load a previously modeled network with their data on it by loading the :data:`.mvrs` file output by Metaboverse when originally generated. This is done on the Home page.
+.. image:: images/load_previous.gif
   :width: 700
   :align: center
 |
-| Users can load a previously modeled organism network by loading the :data:`.pickle` file output by Metaboverse when originally generated. This is done on the Curation page.
-.. image:: images/load_pickle.gif
+| Users can load a previously modeled organism network by loading the :data:`.mvdb` file output by Metaboverse when originally generated. This is done on the Curation page.
+.. image:: images/load_curation.gif
   :width: 700
   :align: center
 |
 -----------------------------------------------
 Publishing Data Analyzed with Metaboverse
 -----------------------------------------------
-| When publishing analyses that used Metaboverse, we recommend attaching the appropriate :data:`.json` file that contains the network with your data overlaid as a supplementary file. This will allow for others to easily reproduce and explore your data.
+| When publishing analyses that used Metaboverse, we recommend attaching the appropriate :data:`.mvrs` file that contains the network with your data overlaid as a supplementary file. This will allow for others to easily reproduce and explore your data.
 |
-| Users can explore the metadata related to their Metaboverse model by clicking on the :data:`Session Data` tab in the menu once the :data:`.json` file is loaded.
+| Users can explore the metadata related to their Metaboverse model by clicking on the :data:`Session Data` tab in the menu once the :data:`.mvrs` file is loaded.
 .. image:: images/show_metadata.gif
    :width: 700
    :align: center
