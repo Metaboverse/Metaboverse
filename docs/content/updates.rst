@@ -9,6 +9,12 @@ v0.4.0-beta (In progress)
 | - Fixes  `#60 <https://github.com/Metaboverse/Metaboverse/issues/60>`_  , where the :data:`.mvrs` file extension would not be automatically added to the user-provided output file name in Linux.
 
 =================================
+v0.3.3-beta
+=================================
+| **Minor**
+| - Closes `#63 <https://github.com/Metaboverse/Metaboverse/issues/63>`_ by applying safestr() function to all user input encodings to make sure no errors arise.
+
+=================================
 v0.3.2-beta
 =================================
 | **Minor**
