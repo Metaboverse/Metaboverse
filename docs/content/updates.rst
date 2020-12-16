@@ -12,7 +12,7 @@ v0.4.0-beta (In progress)
 v0.3.3-beta
 =================================
 | **Minor**
-| - Closes `#63 <https://github.com/Metaboverse/Metaboverse/issues/63>`_ by applying safestr() function to all user input encodings to make sure no errors arise.
+| - Closes `#63 <https://github.com/Metaboverse/Metaboverse/issues/63>`_ by applying :data:`safestr()`` function to all user input encodings to make sure no errors arise.
 
 =================================
 v0.3.2-beta
