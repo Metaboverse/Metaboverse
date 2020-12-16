@@ -46,4 +46,9 @@ If having issues setting up test env in Linux:
 ----------------------------------------------
 npm config rm proxy
 npm config rm https-proxy
-npm install 
+npm install
+
+zeromq install error:
+---------------------
+brew install zeromq
+brew install pkg-config
