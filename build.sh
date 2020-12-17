@@ -51,6 +51,9 @@ cp app/data/test_data.zip ./Metaboverse-darwin-x64-${VERSION}
 cp app/data/test_data.zip ./Metaboverse-linux-x64-${VERSION}
 cp app/data/test_data.zip ./Metaboverse-win32-x64-${VERSION}
 
+chmod +x ./Metaboverse-linux-x64-${VERSION}/Metaboverse
+chmod +x ./Metaboverse-linux-x64-${VERSION}/resources/app/python/metaboverse-cli-linux
+
 zip -r ./Metaboverse-darwin-x64-${VERSION}.zip ./Metaboverse-darwin-x64-${VERSION}
 zip -r ./Metaboverse-linux-x64-${VERSION}.zip ./Metaboverse-linux-x64-${VERSION}
 zip -r ./Metaboverse-win32-x64-${VERSION}.zip ./Metaboverse-win32-x64-${VERSION}

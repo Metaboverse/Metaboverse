@@ -52,3 +52,7 @@ zeromq install error:
 ---------------------
 brew install zeromq
 brew install pkg-config
+
+electron-packager install error:
+---------------------
+npm install electron-packager -g
