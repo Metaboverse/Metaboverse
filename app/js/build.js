@@ -127,6 +127,7 @@ function execute(command, callback) {
         "Operating System information:\n"
           + navigator.appVersion + "\n"
           + "Log date: " + today + "\n\n\n\n"
+          + command + "\n"
           + stdout + "\n\n\n"
           + "########\nSTDERR:\n########\n"
           + stderr,
@@ -215,8 +216,8 @@ runBuild = function(_callback) {
       }
     }
     var cmd = parseCommand(graphDictionary);
-    console.log("Running: " + scriptFilename + " curate " + cmd);
-    execute(scriptFilename + " curate " + cmd, output => {
+    console.log("Running: " + scriptFilename + " curate" + cmd);
+    execute(scriptFilename + " curate" + cmd, output => {
       update_session_info("processed", true);
     });
     return _callback;

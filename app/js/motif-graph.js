@@ -558,6 +558,11 @@ class MetaGraph{
           clicked_stamp_reaction = d.id;
           this.drawMotifPathway(d, indexer, motif_list);
           d3.select("#motif-pathway-svg").style("visibility","visible");
+
+          document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
+          this.previewReaction(d, indexer, "#pathway-view-svg");
+          d3.select("#pathway-view-svg").style("visibility","visible");
+          d3.select(".network-panel").style("visibility","visible");
         })
         .on("mouseover",(d)=>{
           d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
@@ -998,6 +1003,60 @@ class MetaGraph{
           }
         })
         .style("font-size",9)
+    }
+
+    previewReaction(d, indexer, selector) {
+
+      let components = [];
+      var rxn = 0;
+      components.push(d.id);
+      for (let x in d["reactants"]) {
+        components.push(d["reactants"][x]);
+      }
+      for (let x in d["products"]) {
+        components.push(d["products"][x]);
+      }
+      for (let x in d["modifiers"]) {
+        components.push(d["modifiers"][x][0]);
+      }
+      for (let x in d["additional_components"]) {
+        components.push(d["additional_components"][x]);
+      }
+
+      var elements = get_nodes_links(this.data, components);
+      var new_nodes = elements[0];
+      var new_links = elements[1];
+
+      // Initialize variables
+      var node_dict = {};
+      var type_dict = {};
+
+      var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+      var node_dict = node_elements[0];
+      var type_dict = node_elements[1];
+      var display_analytes_dict = node_elements[2];
+      var display_reactions_dict = node_elements[3];
+      var entity_id_dict = node_elements[4];
+
+      var _width = (0.45 * window.innerWidth) + 50;
+      var _height = 570;
+
+      make_graph(
+        this.data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        display_analytes_dict,
+        display_reactions_dict,
+        selector,
+        _width,
+        _height,
+        [d]
+      );
+
+
     }
 
     drawPathwayView(p, selector, motif_list) {

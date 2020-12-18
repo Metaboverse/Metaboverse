@@ -23,7 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var path = require("path");
 var eval_modifiers = false;
 var excl_hubs = false;
-var hub_threshold = 100;
+var hub_threshold = 50;
 
 window.addEventListener("load", function(event) {
   event.preventDefault();
