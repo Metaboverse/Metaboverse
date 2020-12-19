@@ -748,9 +748,11 @@ class MetaGraph{
             }
             clicked_stamp_reaction = d.id;
             document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
-            this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
-            d3.select("#pathway-view-svg").style("visibility","visible");
-            d3.select(".network-panel").style("visibility","visible");
+            if (typeof(d.id) === "string" && d.id !== "Collapsed") {
+              this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
+              d3.select("#pathway-view-svg").style("visibility","visible");
+              d3.select(".network-panel").style("visibility","visible");
+            }
           })
           .on("mouseover",(d)=>{
             d3.select("#stamp-cover-" + d.id).style("opacity",0.4);
@@ -931,6 +933,10 @@ class MetaGraph{
         }
       }
 
+      if (pathway_list.length === 0) {
+        pathway_list.push("Collapsed")
+      }
+
       let pathway_height = 20;
       let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
       this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
@@ -957,16 +963,18 @@ class MetaGraph{
             }
           }
           clicked_stamp_pathway = d;
-          if (d.length !== 0) {
-            this.drawPathwayView(d, "#pathway-view-svg", motif_list);
-            this.findAllMotif(d, this.motif[indexer]);
-          } else {
-            document.getElementById("pathway_name").innerHTML = "<h6><b>Collapsed Reaction</h6></b>";
-            this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
-            this.findAllMotif(motif, this.motif[indexer]);
+          if (typeof(d) === "string" && d !== "Collapsed") {
+            if (d.length !== 0) {
+              this.drawPathwayView(d, "#pathway-view-svg", motif_list);
+              this.findAllMotif(d, this.motif[indexer]);
+            } else {
+              document.getElementById("pathway_name").innerHTML = "<h6><b>Collapsed Reaction</h6></b>";
+              this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
+              this.findAllMotif(motif, this.motif[indexer]);
+            }
+            d3.select("#pathway-view-svg").style("visibility","visible");
+            d3.select(".network-panel").style("visibility","visible");
           }
-          d3.select("#pathway-view-svg").style("visibility","visible");
-          d3.select(".network-panel").style("visibility","visible");
         })
         .on("mouseover",(d)=>{
           d3.select("#mp-cover-" + d).style("opacity",0.4);
@@ -996,8 +1004,8 @@ class MetaGraph{
         .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+10)
         .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
         .text(d=>{
-          if (pathway_list[0].length === 0) {
-            return "View collapsed reaction";
+          if (d === "Collapsed") {
+            return "Cross-pathway pattern";
           } else {
             return this.mod_collapsed_pathways[d].name.substring(0,24);
           }
@@ -1063,7 +1071,6 @@ class MetaGraph{
 
       graph_genes = true;
       collapse_reactions = true;
-
       if (typeof(p) === "string") {
         var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
         update_session_info("current_pathway", p);
