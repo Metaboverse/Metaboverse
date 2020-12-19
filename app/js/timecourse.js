@@ -86,7 +86,7 @@ function buildSlider(categories, names) {
     .attr("transform", "translate(0," + 24 + ")")
     .selectAll("text")
     .data(function() {
-      let _range = x.ticks(1);
+      let _range = x.ticks(numberConditions);
       let _iter = Math.min(... _range);
       let _max = Math.max(... _range);
       let _step = (_max - _iter) / (numberConditions - 1);

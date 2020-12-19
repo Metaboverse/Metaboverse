@@ -32,7 +32,6 @@ window.addEventListener("load", function(event) {
   var user_path = window.location.pathname;
   var page = user_path.split('/').pop();
   if (page === "motif.html") {
-    console.log("Hello")
     document.getElementById("use_modifiers_id").onclick = function(event) {
       modifiersChecked()
     }
