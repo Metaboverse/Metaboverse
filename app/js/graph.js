@@ -1423,7 +1423,6 @@ function make_graph(
       for (x in data.pathway_dictionary) {
         if (data.pathway_dictionary[x]['name'] === selection) {
           let reactions = data.pathway_dictionary[x]["reactions"];
-
           var newer_elements = parse_pathway(
             data,
             reactions,
@@ -1616,16 +1615,28 @@ function change() {
   document.getElementById("warning_line_1").innerHTML = "<br>";
   document.getElementById("warning_line_2").innerHTML = "<br><br>";
   console.log(superSelection)
-  console.log(document.getElementById("superPathwayMenu").value)
+  console.log(selection)
 
   if (superSelection !== "All entities") {
     // Run normal first plot
-    var reactions = collapsed_pathway_dict[selection]["reactions"];
-    var elements = parse_pathway(
-      data,
-      reactions,
-      data.collapsed_reaction_dictionary,
-      data.degree_dictionary);
+    var reactions;
+    var elements;
+    if (collapsed_pathway_dict[selection]["reactions"].length === 0) {
+      // If cannot find collapsed reactions, only plot normal
+      reactions = pathway_dict[selection]["reactions"];
+      elements = parse_pathway(
+        data,
+        reactions,
+        data.reaction_dictionary,
+        data.degree_dictionary);
+    } else {
+      reactions = collapsed_pathway_dict[selection]["reactions"];
+      elements = parse_pathway(
+        data,
+        reactions,
+        data.collapsed_reaction_dictionary,
+        data.degree_dictionary);
+    }
 
     var new_nodes = elements[0];
     var new_links = elements[1];
