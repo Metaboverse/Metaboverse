@@ -69,7 +69,7 @@ window.addEventListener("load", function(event) {
     } else {
       let display_item = getArgument(session_items[item]);
       if (display_item === undefined) {
-        display_item = "Not provided";
+        display_item = "Cannot find this information from the file. Sorry!";
       } else if (typeof display_item === 'number') {
         display_item = display_item;
       } else if (typeof display_item === 'object') {

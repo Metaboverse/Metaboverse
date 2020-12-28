@@ -451,8 +451,20 @@ class MetaGraph{
 
     drawMotifSearchResult(motifs, indexer, exclusion_indexer) {
 
+      // Remove collapsed reactions if box unchecked
+      let current_motifs;
+      if (eval_collapsed === false) {
+        current_motifs = [];
+        for (let m in motifs[indexer]) {
+          if (motifs[indexer][m].collapsed === false || motifs[indexer][m].collapsed === "false") {
+            current_motifs.push(motifs[indexer][m]);
+          }
+        }
+      } else {
+        current_motifs = motifs[indexer];
+      }
+
       let motif_list = [];
-      let current_motifs = motifs[indexer];
       let subtracting_motifs = motifs[exclusion_indexer];
       let subtracting_ids = [];
       if (subtracting_motifs !== undefined) {
@@ -1198,8 +1210,8 @@ class MetaGraph{
 
       d3.select("svg#line-graph").remove();
       let margin = {top: 50, right: 500, bottom: 50, left: 75};
-      let width = 770;
-      let height = 370;
+      let width = 1110;
+      let height = 405;
       let x_offset = 30;
       let y_offset = ((height / 2) - 40);
       let names = this.labels.split(',');

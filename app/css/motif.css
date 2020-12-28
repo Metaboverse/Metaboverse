@@ -111,8 +111,8 @@ div.scrollable {
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height:380px;
-  width:780px;
+  height:415px;
+  width:1149px;
 }
 
 .network-frame {
@@ -242,6 +242,10 @@ circle:hover text {
   background-color: #4CAF50;
 }
 
+#checkbox_spacer {
+  margin-top:9px;
+}
+
 #container-fluid-motif {
   width: 95%;
   padding-top: 45px;
@@ -252,7 +256,7 @@ circle:hover text {
 }
 
 #frame-motif-1 {
-  height:810px;
+  height:850px;
   width:215px;
 }
 
@@ -261,10 +265,10 @@ circle:hover text {
 }
 
 .frame-motif-3 {
-  width:800px;
-  height:435px;
+  width:1170px;
+  height:465px;
   margin-left:240px;
-  margin-top:-460px;
+  margin-top:-490px;
 }
 
 .frame-motif-4 {
@@ -346,15 +350,20 @@ circle:hover text {
   padding-left:30px;
 }
 
+#use_collapsed_id {
+  margin-top:5px;
+}
+
 #use_modifiers_id {
   margin-top:5px;
 }
 
 #checkbox-padding {
-  padding-left:45px;
+  padding-left:65px;
   margin-top:0px;
 }
 
+#use_collapsed_id,
 #use_modifiers_id,
 #exclude_hubs_id {
   width: 15px;
@@ -382,8 +391,8 @@ circle:hover text {
 #line-plot-container {
   margin-top:-25px;
   padding-left:0;
-  width:770px;
-  height:370px;
+  width:1139px;
+  height:405px;
 }
 
 #network-frame-motif {

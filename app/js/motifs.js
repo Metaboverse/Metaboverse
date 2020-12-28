@@ -21,6 +21,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var path = require("path");
+var eval_collapsed = true;
 var eval_modifiers = false;
 var excl_hubs = false;
 var hub_threshold = 50;
@@ -32,6 +33,9 @@ window.addEventListener("load", function(event) {
   var user_path = window.location.pathname;
   var page = user_path.split('/').pop();
   if (page === "motif.html") {
+    document.getElementById("use_collapsed_id").onclick = function(event) {
+      collapsedChecked()
+    }
     document.getElementById("use_modifiers_id").onclick = function(event) {
       modifiersChecked()
     }
@@ -40,6 +44,15 @@ window.addEventListener("load", function(event) {
     }
   }
 })
+
+function collapsedChecked() {
+  if (eval_collapsed === false) {
+    eval_collapsed = true;
+  } else {
+    eval_collapsed = false;
+  }
+  console.log("Motif evaluation includes collapsed reactions: ", eval_collapsed)
+}
 
 function modifiersChecked() {
   if (eval_modifiers === false) {
@@ -358,7 +371,7 @@ function motifSearch_Avg(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
+  //console.log(discovered_motifs);
   return discovered_motifs;
 }
 
