@@ -43,6 +43,7 @@ var collapsed_pathway_dict = make_pathway_dictionary(
   data,
   'collapsed_pathway_dictionary');
 var superPathwayDict = make_superPathway_dictionary(data);
+var entity_dictionary = parseEntities(data.nodes);
 
 var global_motifs = gatherMotifs(data, data.categories);
 let names = data.labels.split(',');
