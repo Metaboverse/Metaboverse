@@ -1976,7 +1976,7 @@ function test() {
         let test_kNN = 1;
         let test_new_elements = parse_kNN_pathway(
           test_data_kNN,
-          test_entity_id,
+          [test_entity_id],
           test_kNN)
         let el1 = test_new_elements[0];
         let el2 = test_new_elements[1];
@@ -1991,7 +1991,7 @@ function test() {
         test_kNN = 2;
         let test_new_elements2 = parse_kNN_pathway(
           test_data_kNN,
-          test_entity_id,
+          [test_entity_id],
           test_kNN)
         let el1_2 = test_new_elements2[0];
         let el2_2 = test_new_elements2[1];
