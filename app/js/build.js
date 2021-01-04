@@ -126,9 +126,9 @@ function execute(command, callback) {
         getArgument("output").replace(/\"/g,'') + path.sep + "metaboverse_session.log",
         "Operating System information:\n"
           + navigator.appVersion + "\n"
-          + "Log date: " + today + "\n\n\n\n"
+          + "Log date: " + today + "\n\n"
           + command + "\n"
-          + stdout + "\n\n\n"
+          + stdout + "\n"
           + "########\nSTDERR:\n########\n"
           + stderr,
         function(err) {
