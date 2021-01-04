@@ -7,14 +7,14 @@ v0.4.0-beta
 =================================
 | **Major**
 | - Partial collapse: Addresses  `#51 <https://github.com/Metaboverse/Metaboverse/issues/51>`_  , which introduces partial collapsing to the reaction collapsing utility within Metaboverse. Previously, perfect matches were required between two reactions to collapse the reactions. However, this can be overly stringent in key metabolic pathways where a metabolite that is output by one reaction may not be required for the subsequent reaction (perhaps ATP is produced by reaction A but is not required for reaction B). To perform a partial collapse, Metaboverse operates by largely the same scheme as before, but now checks for a perfect match from each neighboring reaction, and if a perfect match is not available, checks for partial matches by filtering out high-degree nodes (quartile 98 of all non-reaction node degrees) and then checking if at least 30% of the nodes match with its neighbor.
+| - Improvements to nearest neighbor searches where all iterations of a species are included in the graphing. Previously, it would only use the literally selected node to search for neighbors, but Reactome provides separate species IDs for a metabolite's different organelle-localizations, which was complicating these searches.
 
 | **Minor**
 | - Displays a preview of the user-selected reaction in an interactive format on the Pattern Search Analysis page until the user selects a Pathway to visualize. If a reaction is collapsed and spans two pathways, no pathways will be shown and instead a note that the reaction spans two pathways is displayed.
 | - The Pattern Search Analysis page now allows users to filter out collapsed reactions from the search results. By default, collapsed reactions will be displayed until the checkbox is unchecked by the user.
 | - Minor updates to Pattern Search Analysis page to make better usage of blank space
 | - Fixes  `#60 <https://github.com/Metaboverse/Metaboverse/issues/60>`_  , where the :data:`.mvrs` file extension would not be automatically added to the user-provided output file name in Linux.
-| - Addresses  `#62 <https://github.com/Metaboverse/Metaboverse/issues/62>`_  , where the some timecourse/multi-condition slider bars would be improperly formatted.
-
+| - Addresses  `#62 <https://github.com/Metaboverse/Metaboverse/issues/62>`_  , where the some time-course/multi-condition slider bars would be improperly formatted.
 
 =================================
 v0.3.3-beta
