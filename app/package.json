@@ -10,7 +10,8 @@
   },
   "resolutions": {
     "minimist": "^1.2.5",
-    "zeromq": "^5.1.0"
+    "zeromq": "^5.1.0",
+    "wine": "^0.9.13"
   },
   "repository": "https://github.com/Metaboverse/Metaboverse",
   "keywords": [
@@ -32,7 +33,9 @@
     "minimist": "^1.2.5",
     "mocha": "^8.1.1",
     "serialize-javascript": "^3.1.0",
-    "wine": "^0.9.13"
+    "wine": "^0.9.13",
+    "zeromq": "^5.1.0",
+    "zerorpc": "^0.9.8"
   },
   "dependencies": {
     "d3": "^5.16.0",
@@ -51,8 +54,6 @@
     "string-pixel-width": "^1.10.0",
     "svg-crowbar": "^0.6.0",
     "unpickle": "^0.2.0",
-    "xvfb": "^0.3.0",
-    "zeromq": "^5.1.0",
-    "zerorpc": "^0.9.8"
+    "xvfb": "^0.3.0"
   }
 }
