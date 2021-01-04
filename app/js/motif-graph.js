@@ -451,8 +451,20 @@ class MetaGraph{
 
     drawMotifSearchResult(motifs, indexer, exclusion_indexer) {
 
+      // Remove collapsed reactions if box unchecked
+      let current_motifs;
+      if (eval_collapsed === false) {
+        current_motifs = [];
+        for (let m in motifs[indexer]) {
+          if (motifs[indexer][m].collapsed === false || motifs[indexer][m].collapsed === "false") {
+            current_motifs.push(motifs[indexer][m]);
+          }
+        }
+      } else {
+        current_motifs = motifs[indexer];
+      }
+
       let motif_list = [];
-      let current_motifs = motifs[indexer];
       let subtracting_motifs = motifs[exclusion_indexer];
       let subtracting_ids = [];
       if (subtracting_motifs !== undefined) {
@@ -558,6 +570,11 @@ class MetaGraph{
           clicked_stamp_reaction = d.id;
           this.drawMotifPathway(d, indexer, motif_list);
           d3.select("#motif-pathway-svg").style("visibility","visible");
+
+          document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
+          this.previewReaction(d, indexer, "#pathway-view-svg");
+          d3.select("#pathway-view-svg").style("visibility","visible");
+          d3.select(".network-panel").style("visibility","visible");
         })
         .on("mouseover",(d)=>{
           d3.select("#stamp-cover-"+d.id).style("opacity",0.5);
@@ -743,9 +760,11 @@ class MetaGraph{
             }
             clicked_stamp_reaction = d.id;
             document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
-            this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
-            d3.select("#pathway-view-svg").style("visibility","visible");
-            d3.select(".network-panel").style("visibility","visible");
+            if (typeof(d.id) === "string" && d.id !== "Collapsed") {
+              this.drawPathwayView(d.id, "#pathway-view-svg", motif_list);
+              d3.select("#pathway-view-svg").style("visibility","visible");
+              d3.select(".network-panel").style("visibility","visible");
+            }
           })
           .on("mouseover",(d)=>{
             d3.select("#stamp-cover-" + d.id).style("opacity",0.4);
@@ -926,6 +945,10 @@ class MetaGraph{
         }
       }
 
+      if (pathway_list.length === 0) {
+        pathway_list.push("Collapsed")
+      }
+
       let pathway_height = 20;
       let margin = {"horizontal":9, "vertical":10, "top":10, "left":5};
       this.mp_svg_height = Math.ceil(pathway_list.length/3) * (pathway_height+margin.vertical) + motif_height + margin.top;
@@ -952,16 +975,18 @@ class MetaGraph{
             }
           }
           clicked_stamp_pathway = d;
-          if (d.length !== 0) {
-            this.drawPathwayView(d, "#pathway-view-svg", motif_list);
-            this.findAllMotif(d, this.motif[indexer]);
-          } else {
-            document.getElementById("pathway_name").innerHTML = "<h6><b>Collapsed Reaction</h6></b>";
-            this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
-            this.findAllMotif(motif, this.motif[indexer]);
+          if (typeof(d) === "string" && d !== "Collapsed") {
+            if (d.length !== 0) {
+              this.drawPathwayView(d, "#pathway-view-svg", motif_list);
+              this.findAllMotif(d, this.motif[indexer]);
+            } else {
+              document.getElementById("pathway_name").innerHTML = "<h6><b>Collapsed Reaction</h6></b>";
+              this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
+              this.findAllMotif(motif, this.motif[indexer]);
+            }
+            d3.select("#pathway-view-svg").style("visibility","visible");
+            d3.select(".network-panel").style("visibility","visible");
           }
-          d3.select("#pathway-view-svg").style("visibility","visible");
-          d3.select(".network-panel").style("visibility","visible");
         })
         .on("mouseover",(d)=>{
           d3.select("#mp-cover-" + d).style("opacity",0.4);
@@ -991,8 +1016,8 @@ class MetaGraph{
         .attr("x",(d,i)=>margin.left + i%3*(pathway_width+margin.horizontal)+10)
         .attr("y",(d,i)=>motif_height+margin.top + Math.floor(i/3)*(pathway_height+margin.vertical)+12)
         .text(d=>{
-          if (pathway_list[0].length === 0) {
-            return "View collapsed reaction";
+          if (d === "Collapsed") {
+            return "Cross-pathway pattern";
           } else {
             return this.mod_collapsed_pathways[d].name.substring(0,24);
           }
@@ -1000,11 +1025,64 @@ class MetaGraph{
         .style("font-size",9)
     }
 
+    previewReaction(d, indexer, selector) {
+
+      let components = [];
+      var rxn = 0;
+      components.push(d.id);
+      for (let x in d["reactants"]) {
+        components.push(d["reactants"][x]);
+      }
+      for (let x in d["products"]) {
+        components.push(d["products"][x]);
+      }
+      for (let x in d["modifiers"]) {
+        components.push(d["modifiers"][x][0]);
+      }
+      for (let x in d["additional_components"]) {
+        components.push(d["additional_components"][x]);
+      }
+
+      var elements = get_nodes_links(this.data, components);
+      var new_nodes = elements[0];
+      var new_links = elements[1];
+
+      // Initialize variables
+      var node_dict = {};
+      var type_dict = {};
+
+      var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+      var node_dict = node_elements[0];
+      var type_dict = node_elements[1];
+      var display_analytes_dict = node_elements[2];
+      var display_reactions_dict = node_elements[3];
+      var entity_id_dict = node_elements[4];
+
+      var _width = (0.45 * window.innerWidth) + 50;
+      var _height = 570;
+
+      make_graph(
+        this.data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        display_analytes_dict,
+        display_reactions_dict,
+        selector,
+        _width,
+        _height,
+        [d]
+      );
+
+
+    }
+
     drawPathwayView(p, selector, motif_list) {
 
       graph_genes = true;
       collapse_reactions = true;
-
       if (typeof(p) === "string") {
         var motif_reactions = this.mod_collapsed_pathways[p]["reactions"];
         update_session_info("current_pathway", p);
@@ -1132,8 +1210,8 @@ class MetaGraph{
 
       d3.select("svg#line-graph").remove();
       let margin = {top: 50, right: 500, bottom: 50, left: 75};
-      let width = 770;
-      let height = 370;
+      let width = 1110;
+      let height = 405;
       let x_offset = 30;
       let y_offset = ((height / 2) - 40);
       let names = this.labels.split(',');

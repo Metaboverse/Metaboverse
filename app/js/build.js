@@ -126,8 +126,9 @@ function execute(command, callback) {
         getArgument("output").replace(/\"/g,'') + path.sep + "metaboverse_session.log",
         "Operating System information:\n"
           + navigator.appVersion + "\n"
-          + "Log date: " + today + "\n\n\n\n"
-          + stdout + "\n\n\n"
+          + "Log date: " + today + "\n\n"
+          + command + "\n"
+          + stdout + "\n"
           + "########\nSTDERR:\n########\n"
           + stderr,
         function(err) {
@@ -215,8 +216,8 @@ runBuild = function(_callback) {
       }
     }
     var cmd = parseCommand(graphDictionary);
-    console.log("Running: " + scriptFilename + " curate " + cmd);
-    execute(scriptFilename + " curate " + cmd, output => {
+    console.log("Running: " + scriptFilename + " curate" + cmd);
+    execute(scriptFilename + " curate" + cmd, output => {
       update_session_info("processed", true);
     });
     return _callback;
