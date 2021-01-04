@@ -104,6 +104,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <p>
                                   <div class="motif_button" id="motif100" title="Compare total coverage of reactions with at least one measured component in pathways."><font size="3" color="white">PathCov</font></div>
                                 </p>
+                                <label for="use_collapsed"><font size="2"><i>Show&nbspcollapsed reactions</i></font></label>
+                                <br />
                                 <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label>
                                 <br />
                                 <label for="exclude_hubs"><font size="2"><i>Exclude hubs</i></font></label>
@@ -153,6 +155,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                                   <input type="number" id="pathcov_num" min="0" max="1" step="0.01" value="0.05">
                                 </p>
 
+                                <p id="checkbox-padding">
+                                  <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in motif analysis. You will need to re-run the motif to exclude collapsed reactions." checked>
+                                </p>
+                                <div id="checkbox_spacer"></div>
                                 <p id="checkbox-padding">
                                   <input type="checkbox" id="use_modifiers_id" name="use_modifiers" value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers.">
                                 </p>

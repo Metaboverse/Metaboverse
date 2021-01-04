@@ -62,8 +62,8 @@ Questions?
 | - Generally, for any errors occurring during network building, a file named :data:`metaboverse_session.log` will be output to your specified Output folder. If you receive this file, please upload it to your GitHub Issue. This will output a lot of information, but you can try self-diagnosing by seeing if there is anything in the last ~10-15 lines of this file that might hint at the issue. Otherwise, we are happy to help diagnose the problem!
 | - It is also often helpful for us to click on the `View` menu tab, click :data:`Toggle Developer Tools`, click the :data:`Console` tab of the window that opens, and take a screenshot of the output in this panel.
 |
-.. |build-status| image:: https://travis-ci.org/Metaboverse/Metaboverse.svg?branch=master
-    :target: https://travis-ci.org/Metaboverse/Metaboverse
+.. |build-status| image:: https://travis-ci.com/Metaboverse/Metaboverse.svg?branch=master
+    :target: https://travis-ci.com/Metaboverse/Metaboverse
     :alt: Build Status
 
 .. |docs| image:: https://readthedocs.org/projects/metaboverse/badge/?version=latest

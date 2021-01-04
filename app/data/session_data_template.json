@@ -21,7 +21,7 @@
   "broadcastGeneExpression": true,
   "broadcastMetabolites": true,
   "labels": "",
-  "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2",
+  "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2, NAD+, NADH, NADPH, NAAD, ATP, ADP, Pi, PPi, Ca2+",
   "database_date": "",
   "curation_date": "",
   "database_version": "",
