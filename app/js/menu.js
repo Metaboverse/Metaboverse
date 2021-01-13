@@ -4,7 +4,7 @@ Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019-2020 Jordan A. Berg
+Copyright (C) 2019-2021 Jordan A. Berg
   jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
 This program is free software: you can redistribute it and/or modify it under

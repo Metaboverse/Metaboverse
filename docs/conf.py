@@ -21,7 +21,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Metaboverse'
-copyright = '2019-2020, Jordan A. Berg, et. al.'
+copyright = '2019-2021, Jordan A. Berg, et. al.'
 author = 'Jordan A. Berg, et. al.'
 
 # The short X.Y version
