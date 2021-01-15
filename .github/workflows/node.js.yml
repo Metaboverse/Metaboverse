@@ -22,6 +22,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd app; npm ci; npm install electron mocha --save-dev;
-    - run: npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save;
-    - run: cd test; npm test;
+    - name: Install dependencies
+      run: |
+        cd app
+        npm ci
+        npm install electron mocha --save-dev
+        npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
+    - name: Run test
+      run: |
+        cd app/test
+        npm test

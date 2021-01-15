@@ -1,6 +1,6 @@
 # ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/content/images/metaboverse_banner.png)
 
-[![Build Status](https://travis-ci.com/Metaboverse/Metaboverse.svg?branch=master)](https://travis-ci.com/Metaboverse/Metaboverse)
+![Build Status](https://github.com/Metaboverse/Metaboverse/workflows/build/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/metaboverse/badge/?version=latest)](https://metaboverse.readthedocs.io/en/latest/?badge=latest)
 [![bioRxiv preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2020.06.25.171850-BF2636)](https://www.biorxiv.org/content/10.1101/2020.06.25.171850v1)
 [![Github All Releases](https://img.shields.io/github/downloads/Metaboverse/Metaboverse/total.svg)](https://github.com/Metaboverse/Metaboverse/releases/)
