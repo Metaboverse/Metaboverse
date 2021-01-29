@@ -50,48 +50,48 @@ Plotly.newPlot('myDiv', data, layout);
 // For each omics data-type provided, plot timecourse trends (if only one
 // timepoint or condition)
 function volcano(
-    rna_data,
-    protein_data,
-    metabolite_data) {
+  rna_data,
+  protein_data,
+  metabolite_data) {
 
-    /*
-    var trace1 = {
-      x: [1, 2, 3, 4, 5],
-      y: [1, 6, 3, 6, 1],
-      mode: 'markers',
-      type: 'scatter',
-      name: 'Team A',
-      text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
-      marker: { size: 12 }
-    };
+  /*
+  var trace1 = {
+    x: [1, 2, 3, 4, 5],
+    y: [1, 6, 3, 6, 1],
+    mode: 'markers',
+    type: 'scatter',
+    name: 'Team A',
+    text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
+    marker: { size: 12 }
+  };
 
-    var trace2 = {
-      x: [1.5, 2.5, 3.5, 4.5, 5.5],
-      y: [4, 1, 7, 1, 4],
-      mode: 'markers',
-      type: 'scatter',
-      name: 'Team B',
-      text: ['B-a', 'B-b', 'B-c', 'B-d', 'B-e'],
-      marker: { size: 12 }
-    };
+  var trace2 = {
+    x: [1.5, 2.5, 3.5, 4.5, 5.5],
+    y: [4, 1, 7, 1, 4],
+    mode: 'markers',
+    type: 'scatter',
+    name: 'Team B',
+    text: ['B-a', 'B-b', 'B-c', 'B-d', 'B-e'],
+    marker: { size: 12 }
+  };
 
-    var data = [ trace1, trace2 ];
+  var data = [ trace1, trace2 ];
 
-    var layout = {
-      xaxis: {
-        range: [ 0.75, 5.25 ]
-      },
-      yaxis: {
-        range: [0, 8]
-      },
-      title:'Data Labels Hover'
-    };
+  var layout = {
+    xaxis: {
+      range: [ 0.75, 5.25 ]
+    },
+    yaxis: {
+      range: [0, 8]
+    },
+    title:'Data Labels Hover'
+  };
 
-    Plotly.newPlot('myDiv', data, layout);
+  Plotly.newPlot('myDiv', data, layout);
 
-    // Allow user's to select list of elements to highlight
-    // Allow threshold viz
-    */
+  // Allow user's to select list of elements to highlight
+  // Allow threshold viz
+  */
 
 
 }
@@ -99,51 +99,51 @@ function volcano(
 // For each omics data-type provided, plot timecourse trends (if more than one
 // timepoint). Will only work for timecourse data
 function lineTimecourse(
-    rna_data,
-    protein_data,
-    metabolite_data) {
+  rna_data,
+  protein_data,
+  metabolite_data) {
 
-    /*
-    var trace1 = {
-      x: [1, 2, 3, 4],
-      y: [10, 15, 13, 17],
-      type: 'scatter'
-    };
+  /*
+  var trace1 = {
+    x: [1, 2, 3, 4],
+    y: [10, 15, 13, 17],
+    type: 'scatter'
+  };
 
-    var trace2 = {
-      x: [1, 2, 3, 4],
-      y: [16, 5, 11, 9],
-      type: 'scatter'
-    };
+  var trace2 = {
+    x: [1, 2, 3, 4],
+    y: [16, 5, 11, 9],
+    type: 'scatter'
+  };
 
-    var data = [trace1, trace2];
+  var data = [trace1, trace2];
 
-    Plotly.newPlot('myDiv', data);
+  Plotly.newPlot('myDiv', data);
 
-    //Add label on hover
-    // Allow user's to select list of elements to highlight
-    */
+  //Add label on hover
+  // Allow user's to select list of elements to highlight
+  */
 
 
 }
 
 // For each omics data-type provided, plot the statistical distribution
 function pvalDist(
-    rna_stats,
-    protein_stats,
-    metabolite_stats) {
+  rna_stats,
+  protein_stats,
+  metabolite_stats) {
 
-    /*
-    var data = [
-      {
-        x: ['giraffes', 'orangutans', 'monkeys'],
-        y: [20, 14, 23],
-        type: 'bar'
-      }
-    ];
+  /*
+  var data = [
+    {
+      x: ['giraffes', 'orangutans', 'monkeys'],
+      y: [20, 14, 23],
+      type: 'bar'
+    }
+  ];
 
-    Plotly.newPlot('myDiv', data);
-    */
+  Plotly.newPlot('myDiv', data);
+  */
 
 
 }

@@ -20,11 +20,9 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 * {
   font-family: sans-serif, Verdana, Geneva, Tahoma;
 }
-
 
 div.scrollable {
   /* width: 100%;
@@ -37,23 +35,23 @@ div.scrollable {
 .links line {
   /* stroke: #999; */
   stroke-opacity: 0.6;
-  }
+}
 
 .nodes circle {
   stroke: #fff;
   stroke-width: 1.5px;
   /* fill: rgba(190,23,59,1) */
-  }
+}
 
 .labels {
   font-family: sans-serif;
   font-size: 10px;
-  }
+}
 
 #motif_container {
   height: 500px;
   width: 400px;
-  border:0.5px solid grey;
+  border: 0.5px solid grey;
   overflow-y: scroll;
   overflow-x: scroll;
 }
@@ -68,20 +66,20 @@ div.scrollable {
 
 .frame {
   border: 1px solid lightgray;
-  background-color: rgb(247,247,249);
+  background-color: rgb(247, 247, 249);
   border-radius: 5px;
-  height:700px;
+  height: 700px;
 }
 
 .frame-line {
   border: 1px solid lightgray;
-  background-color: rgb(247,247,249);
+  background-color: rgb(247, 247, 249);
   border-radius: 5px;
-  height:600px;
+  height: 600px;
 }
 
 .col-md-4 {
-  z-index:5;
+  z-index: 5;
 }
 
 .content {
@@ -91,69 +89,69 @@ div.scrollable {
 }
 
 .sub-frame {
-  margin-top:10px;
-  margin-left:10px;
-  margin-right:10px;
-  padding-top:5px;
-  padding-left:5px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 5px;
+  padding-left: 5px;
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height:330px;
+  height: 330px;
 }
 
 .line-sub-frame {
-  margin-top:10px;
-  margin-left:10px;
-  margin-right:10px;
-  padding-top:5px;
-  padding-left:5px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 5px;
+  padding-left: 5px;
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height:415px;
-  width:1149px;
+  height: 415px;
+  width: 1149px;
 }
 
 .network-frame {
-  margin-top:10px;
-  margin-left:10px;
-  margin-right:10px;
-  padding-top:5px;
-  padding-left:5px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 5px;
+  padding-left: 5px;
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height:500px;
+  height: 500px;
 }
 
 .network-panel {
-  margin-top:10px;
-  margin-left:10px;
-  margin-right:10px;
-  padding-top:5px;
-  padding-left:5px;
-  height:120px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 5px;
+  padding-left: 5px;
+  height: 120px;
 }
 
 .tooltip-panel {
   /* margin-top:10px; */
-  margin-left:10px;
-  margin-right:10px;
-  padding-top:5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 5px;
   /* padding-left:5px; */
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height:100px;
+  height: 100px;
 }
 
-.tooltip-text{
-  font-size:10px;
+.tooltip-text {
+  font-size: 10px;
 }
 
 p {
-  font-size:13px;
+  font-size: 13px;
   /* color:rgb(62,110,155); */
   color: black;
   font-weight: bold;
@@ -165,22 +163,22 @@ h6 {
 
 td {
   border: 1px solid black;
-  background-color:white;
+  background-color: white;
   width: 80px;
   height: 80px;
 }
 
 td.pathway {
-  padding-left:5px;
+  padding-left: 5px;
   border: 1px solid black;
-  background-color:white;
+  background-color: white;
   width: 80px;
   height: 60px;
 }
 
-li{
-  font-size:14px;
-  list-style-type:none;
+li {
+  font-size: 14px;
+  list-style-type: none;
 }
 
 circle text {
@@ -205,13 +203,12 @@ circle:hover text {
   display: inline-block;
   line-height: 25px;
   text-shadow: none;
-  padding-top:4px;
+  padding-top: 4px;
 }
 
 .motif_button:hover {
   background: var(--highlight_color);
   text-shadow: none;
-
 }
 
 .dropdown-label {
@@ -222,7 +219,7 @@ circle:hover text {
 .dropdown-container {
   font-size: 14px;
   width: 165px;
-  margin-top:-10px;
+  margin-top: -10px;
 }
 
 /* Select Menu */
@@ -235,7 +232,8 @@ circle:hover text {
 }
 
 .custom-select select {
-  display: none; /*hide original SELECT element: */
+  display: none;
+  /*hide original SELECT element: */
 }
 
 .select-selected {
@@ -243,7 +241,7 @@ circle:hover text {
 }
 
 #checkbox_spacer {
-  margin-top:9px;
+  margin-top: 9px;
 }
 
 #container-fluid-motif {
@@ -256,111 +254,111 @@ circle:hover text {
 }
 
 #frame-motif-1 {
-  height:850px;
-  width:215px;
+  height: 850px;
+  width: 215px;
 }
 
 #frame-motif-2 {
-  width:435px;
+  width: 435px;
 }
 
 .frame-motif-3 {
-  width:1170px;
-  height:465px;
-  margin-left:240px;
-  margin-top:-490px;
+  width: 1170px;
+  height: 465px;
+  margin-left: 240px;
+  margin-top: -490px;
 }
 
 .frame-motif-4 {
-  width:215px;
-  height:400px;
-  margin-left:15px;
-  margin-top:-15px;
+  width: 215px;
+  height: 400px;
+  margin-left: 15px;
+  margin-top: -15px;
 }
 
 #title-padding {
-  padding-left:0px;
+  padding-left: 0px;
 }
 
 #motif1 {
-  --motif_color:#1b9e77;
-  --highlight_color:#7cc08e;
-  margin-top:-20px;
+  --motif_color: #1b9e77;
+  --highlight_color: #7cc08e;
+  margin-top: -20px;
 }
 
 #motif2_1 {
-  --motif_color:#d95f02;
-  --highlight_color:#fdbd4f;
-  margin-top:13px;
+  --motif_color: #d95f02;
+  --highlight_color: #fdbd4f;
+  margin-top: 13px;
 }
 
 #motif2_2 {
-  --motif_color:#d95f02;
-  --highlight_color:#fdbd4f;
-  margin-top:-8px;
+  --motif_color: #d95f02;
+  --highlight_color: #fdbd4f;
+  margin-top: -8px;
 }
 
 #motif3_1 {
-  --motif_color:#7570b3;
-  --highlight_color:#b19cd9;
-  margin-top:13px;
+  --motif_color: #7570b3;
+  --highlight_color: #b19cd9;
+  margin-top: 13px;
 }
 
 #motif3_2 {
-  --motif_color:#7570b3;
-  --highlight_color:#b19cd9;
-  margin-top:-8px;
+  --motif_color: #7570b3;
+  --highlight_color: #b19cd9;
+  margin-top: -8px;
 }
 
 #motif4 {
-  --motif_color:#e7298a;
-  --highlight_color:#e78ac3;
-  margin-top:13px;
+  --motif_color: #e7298a;
+  --highlight_color: #e78ac3;
+  margin-top: 13px;
 }
 
 #motif5 {
-  --motif_color:#66a61e;
-  --highlight_color:#a6d854;
-  margin-top:13px;
+  --motif_color: #66a61e;
+  --highlight_color: #a6d854;
+  margin-top: 13px;
 }
 
 #motif6 {
-  --motif_color:#ffa500;
-  --highlight_color:#ffd000;
-  margin-top:13px;
+  --motif_color: #ffa500;
+  --highlight_color: #ffd000;
+  margin-top: 13px;
 }
 
 #motif99 {
-  --motif_color:#a384ff;
-  --highlight_color:#c9b7ff;
-  margin-top:13px;
+  --motif_color: #a384ff;
+  --highlight_color: #c9b7ff;
+  margin-top: 13px;
 }
 
 #motif100 {
-  --motif_color:#ffc0cb;
-  --highlight_color:#ffd9df;
-  margin-top:13px;
+  --motif_color: #ffc0cb;
+  --highlight_color: #ffd9df;
+  margin-top: 13px;
 }
 
 #threshold-title {
-  padding-left:25px;
+  padding-left: 25px;
 }
 
 #threshold-padding {
-  padding-left:30px;
+  padding-left: 30px;
 }
 
 #use_collapsed_id {
-  margin-top:5px;
+  margin-top: 5px;
 }
 
 #use_modifiers_id {
-  margin-top:5px;
+  margin-top: 5px;
 }
 
 #checkbox-padding {
-  padding-left:65px;
-  margin-top:0px;
+  padding-left: 65px;
+  margin-top: 0px;
 }
 
 #use_collapsed_id,
@@ -371,55 +369,54 @@ circle:hover text {
 }
 
 #col-md-4-motif {
-  position:absolute;
-  margin-left:225px;
+  position: absolute;
+  margin-left: 225px;
 }
 
 #col-md-6-motif {
   position: absolute;
-  margin-left:670px;
+  margin-left: 670px;
 }
 
 #stamp-view-container,
 #motif-pathway-container {
-  padding-top:10px;
-  padding-left:0;
-  width:405px;
-  height:90%;
+  padding-top: 10px;
+  padding-left: 0;
+  width: 405px;
+  height: 90%;
 }
 
 #line-plot-container {
-  margin-top:-25px;
-  padding-left:0;
-  width:1139px;
-  height:405px;
+  margin-top: -25px;
+  padding-left: 0;
+  width: 1139px;
+  height: 405px;
 }
 
 #network-frame-motif {
-  width:49vw;
-  margin-right:10px;
+  width: 49vw;
+  margin-right: 10px;
 }
 
 #pathway-view-container {
-  margin-top:-25px;
+  margin-top: -25px;
 }
 
 #network-panel-motif {
-  visibility:hidden;
+  visibility: hidden;
 }
 
 #all-motif-list {
-  height:75%;
+  height: 75%;
 }
 
 .line-description {
   padding-left: 15px;
   padding-right: 5px;
 }
-.
-.icon {
-}
+
+. .icon {}
 
 #span {
-  padding-top:15px;
+  padding-top: 15px;
 }

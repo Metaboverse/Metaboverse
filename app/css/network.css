@@ -19,7 +19,6 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 .link {
   fill: none;
   stroke: #666;
@@ -29,6 +28,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 #up {
   fill: green;
 }
+
 .link.up {
   stroke: green;
 }
@@ -36,6 +36,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 #down {
   fill: red;
 }
+
 .link.down {
   stroke: red;
 }
@@ -43,6 +44,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 #gene {
   fill: rgba(165, 55, 253, 1);
 }
+
 .link.gene {
   stroke: rgba(165, 55, 253, 1);
   stroke-dasharray: 0, 2 1;
@@ -51,6 +53,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 #reaction {
   fill: grey;
 }
+
 .link.reaction {
   stroke: grey;
 }

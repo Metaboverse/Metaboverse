@@ -64,7 +64,7 @@ window.addEventListener("load", function(event) {
   console.log(get_session_info("collapseWithModifiers"))
   if (get_session_info("collapseWithModifiers") === true) {
     console.log('mod')
-      document.getElementById("use_modifiers_in_collapse").checked = true;
+    document.getElementById("use_modifiers_in_collapse").checked = true;
   } else {
     console.log('mod_')
     document.getElementById("use_modifiers_in_collapse").checked = false;
@@ -84,7 +84,7 @@ window.addEventListener("load", function(event) {
     console.log('broad')
     document.getElementById("broadcast_gene_expression").checked = true;
   } else {
-      console.log('broad_')
+    console.log('broad_')
     document.getElementById("broadcast_gene_expression").checked = false;
   }
   document.getElementById("broadcast_gene_expression").onclick = function(event) {
@@ -102,7 +102,7 @@ window.addEventListener("load", function(event) {
     console.log('broadM')
     document.getElementById("broadcast_metabolite_expression").checked = true;
   } else {
-      console.log('broadM_')
+    console.log('broadM_')
     document.getElementById("broadcast_metabolite_expression").checked = false;
   }
   document.getElementById("broadcast_metabolite_expression").onclick = function(event) {
@@ -267,14 +267,14 @@ window.addEventListener("load", function(event) {
 
     if ((get_session_info("experiment_type") === "timecourse") | (get_session_info("experiment_type") === "multiple_conditions")) {
       $("#nameField").html(
-        "<form>"
-        + "Sample labels: "
-        + "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>"
-        + "<br />"
-        + "<br />"
-        + "<input type='text' class='experimentName' id='updateExperimentLabels'></input>"
-        + "</form>"
-        + "<br />"
+        "<form>" +
+        "Sample labels: " +
+        "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>" +
+        "<br />" +
+        "<br />" +
+        "<input type='text' class='experimentName' id='updateExperimentLabels'></input>" +
+        "</form>" +
+        "<br />"
       );
       $('#updateExperimentLabels').val(get_session_info("labels"));
 
@@ -325,14 +325,14 @@ window.addEventListener("load", function(event) {
     // If timecourse or multiple conditions, have user input labels in correct order as listed  in dataframe
     if ((experiment_type === "timecourse") | (experiment_type === "multiple_conditions")) {
       $("#nameField").html(
-        "<form>"
-        + "Sample labels: "
-        + "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>"
-        + "<br />"
-        + "<br />"
-        + "<input type='text' class='experimentName' id='updateExperimentLabels'></input>"
-        + "</form>"
-        + "<br />"
+        "<form>" +
+        "Sample labels: " +
+        "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>" +
+        "<br />" +
+        "<br />" +
+        "<input type='text' class='experimentName' id='updateExperimentLabels'></input>" +
+        "</form>" +
+        "<br />"
       );
 
       document.getElementById("updateExperimentLabels").onchange = function(event) {
@@ -364,7 +364,7 @@ window.addEventListener("load", function(event) {
     event.stopPropagation();
 
     var inputVal = document.getElementById("updateExperimentName").value
-        //.split(".");
+    //.split(".");
 
     try {
       var replacer = String(String.fromCharCode(92) + " ");

@@ -102,8 +102,7 @@ if (m_val !== null) {
 function parseCommand(args_dict) {
   var commandString = "";
   for (key in args_dict) {
-    if (args_dict[key] === false) {
-    } else if (args_dict[key] === true) {
+    if (args_dict[key] === false) {} else if (args_dict[key] === true) {
       commandString = commandString + " --" + key;
     } else {
       commandString = commandString + " --" + key + " " + args_dict[key];
@@ -116,25 +115,25 @@ function execute(command, callback) {
   exec(command, (error, stdout, stderr) => {
     callback(stdout);
 
-    if (stdout.toLowerCase().includes("exception")
-        | stdout.toLowerCase().includes("error")
-        | stderr.toLowerCase().includes("exception")
-        | stderr.toLowerCase().includes("error")) {
+    if (stdout.toLowerCase().includes("exception") |
+      stdout.toLowerCase().includes("error") |
+      stderr.toLowerCase().includes("exception") |
+      stderr.toLowerCase().includes("error")) {
       let today = new Date().toISOString().slice(0, 10);
 
       fs.writeFileSync(
-        getArgument("output").replace(/\"/g,'') + path.sep + "metaboverse_session.log",
-        "Operating System information:\n"
-          + navigator.appVersion + "\n"
-          + "Log date: " + today + "\n\n"
-          + command + "\n"
-          + stdout + "\n"
-          + "########\nSTDERR:\n########\n"
-          + stderr,
+        getArgument("output").replace(/\"/g, '') + path.sep + "metaboverse_session.log",
+        "Operating System information:\n" +
+        navigator.appVersion + "\n" +
+        "Log date: " + today + "\n\n" +
+        command + "\n" +
+        stdout + "\n" +
+        "########\nSTDERR:\n########\n" +
+        stderr,
         function(err) {
-        if (err) throw err;
-        console.log("Session log written to file");
-      });
+          if (err) throw err;
+          console.log("Session log written to file");
+        });
       alert("Metaboverse Build encountered an error -- please check metaboverse_session.log in your output folder for detailed information.");
       callback(stderr);
     }
@@ -154,13 +153,13 @@ runBuild = function(_callback) {
     if (labels === "") {
       labels = "0"
     } else {
-      labels = labels.replace(/\s/g,'');
+      labels = labels.replace(/\s/g, '');
     }
     let blocklist = getArgument("blocklist");
     if (blocklist === "") {
       blocklist = "no_blocklist"
     } else {
-      blocklist = blocklist.replace(/\s/g,'');
+      blocklist = blocklist.replace(/\s/g, '');
     }
     if (String(curated) !== "None") {
       let db_url;
@@ -194,8 +193,7 @@ runBuild = function(_callback) {
         output: getArgument("output"),
         output_file: getArgument("database_url"),
         organism_id: getArgument("organism_id"),
-        model_file:
-          getArgument("output").slice(0,-1) +
+        model_file: getArgument("output").slice(0, -1) +
           path.sep +
           getArgument("organism_id") +
           ".mvdb\"",
@@ -229,7 +227,7 @@ function displayOptions() {
   database_url = get_session_info("database_url");
   try {
     var data = JSON.parse(fs.readFileSync(database_url).toString());
-  } catch(e) {
+  } catch (e) {
     alert('Failed to open database URL: \n' + database_url)
     var elem = document.getElementById("progressBar");
     elem.style.width = "0%";

@@ -33,7 +33,6 @@ Source:
 http://bl.ocks.org/mbostock/1153292
 https://bl.ocks.org/mbostock/1212215
 */
-
 path.hull {
   fill: none;
   fill-opacity: 0.2;
@@ -48,6 +47,7 @@ path.hull {
 #catalyst {
   fill: green;
 }
+
 .link.catalyst {
   stroke: green;
 }
@@ -55,6 +55,7 @@ path.hull {
 #inhibitor {
   fill: red;
 }
+
 .link.inhibitor {
   stroke: red;
 }
@@ -62,14 +63,17 @@ path.hull {
 #collapsed {
   fill: rgba(255, 255, 255, 1);
 }
+
 .link.collapsed {
   stroke: rgba(0, 0, 0, 1);
   stroke-dasharray: 0, 5 5;
 }
+
 .link.collapsed_catalyst {
   stroke: green;
   stroke-dasharray: 0, 5 5;
 }
+
 .link.collapsed_inhibitor {
   stroke: red;
   stroke-dasharray: 0, 5 5;
@@ -78,6 +82,7 @@ path.hull {
 #gene_component {
   fill: rgba(165, 55, 253, 1);
 }
+
 .link.gene_component {
   stroke: rgba(165, 55, 253, 1);
   stroke-dasharray: 0, 2 1;
@@ -86,6 +91,7 @@ path.hull {
 #protein_component {
   fill: #ff4500;
 }
+
 .link.protein_component {
   stroke: #ff4500;
   stroke-dasharray: 0, 2 1;
@@ -94,6 +100,7 @@ path.hull {
 #complex_component {
   fill: rgba(166, 97, 26, 1);
 }
+
 .link.complex_component {
   stroke: rgba(166, 97, 26, 1);
   stroke-dasharray: 0, 2 1;
@@ -102,6 +109,7 @@ path.hull {
 #metabolite_component {
   fill: rgba(0, 55, 253, 1);
 }
+
 .link.metabolite_component {
   stroke: rgba(0, 55, 253, 1);
   stroke-dasharray: 0, 2 1;
@@ -110,6 +118,7 @@ path.hull {
 #reaction {
   fill: grey;
 }
+
 .link.reaction {
   stroke: grey;
 }
@@ -117,6 +126,7 @@ path.hull {
 #reactant {
   fill: grey;
 }
+
 .link.reactant {
   stroke: grey;
 }
@@ -124,6 +134,7 @@ path.hull {
 #product {
   fill: grey;
 }
+
 .link.product {
   stroke: grey;
 }
@@ -146,7 +157,7 @@ path.hull {
 }
 
 .add-buffer {
-  margin-top:7px;
+  margin-top: 7px;
 }
 
 .dot {
@@ -158,7 +169,7 @@ path.hull {
   stroke: black;
   border-radius: 50%;
   display: inline-block;
-  margin-top:7px;
+  margin-top: 7px;
 }
 
 .ellipse {
@@ -171,8 +182,8 @@ path.hull {
   border-radius: 50%;
   display: inline-block;
   opacity: 0.5;
-  margin-top:5px;
-  margin-bottom:-3px;
+  margin-top: 5px;
+  margin-bottom: -3px;
 }
 
 .square {
@@ -183,7 +194,7 @@ path.hull {
   background-color: var(--dot_color);
   stroke: black;
   display: inline-block;
-  margin-top:7px;
+  margin-top: 7px;
 }
 
 .diamond {
@@ -195,7 +206,7 @@ path.hull {
   background-color: var(--dot_color);
   stroke: black;
   display: inline-block;
-  margin-top:7px;
+  margin-top: 7px;
 }
 
 .black-triangle {
@@ -265,7 +276,6 @@ path.hull {
   height: 3px;
   float: left;
   border-bottom: 3px dotted var(--arrow_color);
-
 }
 
 .point {
@@ -357,66 +367,80 @@ div {
 .white-dot {
   --dot_color: white;
 }
+
 .dashed-dot {
   border-style: dashed;
   margin-left: 10px;
 }
 
 .seismic_node {
-  background-color:none;
+  background-color: none;
 }
 
 .green-arrow {
   --arrow_color: green;
 }
+
 .red-arrow {
   --arrow_color: red;
 }
+
 .orange-arrow {
   --arrow_color: orange;
 }
+
 .blue-arrow {
   --arrow_color: blue;
 }
+
 .purple-arrow {
   --arrow_color: rgba(165, 55, 253, 1);
 }
+
 .arrow-margin-0 {
   margin-top: 0px;
 }
+
 .arrow-margin-4 {
   margin-top: 4px;
 }
+
 .grey-arrow {
   --arrow_color: grey;
 }
+
 .component-label {
   margin-left: 17px;
 }
+
 .bold-text {
   font-weight: bold;
 }
+
 .red-text {
   color: red;
 }
+
 .view-global-title {
-  padding-left:315px;
+  padding-left: 315px;
 }
+
 .topmargin-minus5 {
-  margin-top:-5px;
-  margin-bottom:10px;
+  margin-top: -5px;
+  margin-bottom: 10px;
 }
+
 .topmargin-plus35 {
   margin-top: 35px;
 }
 
 div.tooltip {
-    position: absolute;
-    text-align: left;
-    padding: 5px;
-    font: 12px sans-serif;
-    background: white;
-    border: 1px solid black;
-    border-radius: 8px;
-    pointer-events: none;
+  position: absolute;
+  text-align: left;
+  padding: 5px;
+  font: 12px sans-serif;
+  background: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  pointer-events: none;
 }

@@ -23,36 +23,118 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 const d3 = require("d3");
 
 const data = {
-  nodes: [
-    { id: "node1", color: [191, 191, 191, 1] },
-    { id: "node2", color: [191, 191, 191, 1] },
-    { id: "node3", color: [191, 191, 191, 1] },
-    { id: "node4", color: [191, 191, 191, 1] },
-    { id: "node5", color: [191, 191, 191, 1] },
-    { id: "node6", color: [191, 191, 191, 1] },
+  nodes: [{
+      id: "node1",
+      color: [191, 191, 191, 1]
+    },
+    {
+      id: "node2",
+      color: [191, 191, 191, 1]
+    },
+    {
+      id: "node3",
+      color: [191, 191, 191, 1]
+    },
+    {
+      id: "node4",
+      color: [191, 191, 191, 1]
+    },
+    {
+      id: "node5",
+      color: [191, 191, 191, 1]
+    },
+    {
+      id: "node6",
+      color: [191, 191, 191, 1]
+    },
 
-    { id: "node7", color: [255, 255, 255, 1] },
-    { id: "node8", color: [255, 255, 255, 1] },
-    { id: "node9", color: [255, 255, 255, 1] },
-    { id: "node10", color: [255, 255, 255, 1] },
-    { id: "node11", color: [255, 255, 255, 1] },
-    { id: "node12", color: [255, 255, 255, 1] }
+    {
+      id: "node7",
+      color: [255, 255, 255, 1]
+    },
+    {
+      id: "node8",
+      color: [255, 255, 255, 1]
+    },
+    {
+      id: "node9",
+      color: [255, 255, 255, 1]
+    },
+    {
+      id: "node10",
+      color: [255, 255, 255, 1]
+    },
+    {
+      id: "node11",
+      color: [255, 255, 255, 1]
+    },
+    {
+      id: "node12",
+      color: [255, 255, 255, 1]
+    }
   ],
 
-  links: [
-    { source: "node1", target: "node2", type: "reaction" },
-    { source: "node2", target: "node3", type: "reaction" },
-    { source: "node3", target: "node4", type: "reaction" },
-    { source: "node4", target: "node5", type: "reaction" },
-    { source: "node5", target: "node6", type: "reaction" },
-    { source: "node6", target: "node1", type: "reaction" },
+  links: [{
+      source: "node1",
+      target: "node2",
+      type: "reaction"
+    },
+    {
+      source: "node2",
+      target: "node3",
+      type: "reaction"
+    },
+    {
+      source: "node3",
+      target: "node4",
+      type: "reaction"
+    },
+    {
+      source: "node4",
+      target: "node5",
+      type: "reaction"
+    },
+    {
+      source: "node5",
+      target: "node6",
+      type: "reaction"
+    },
+    {
+      source: "node6",
+      target: "node1",
+      type: "reaction"
+    },
 
-    { source: "node7", target: "node1", type: "up" },
-    { source: "node8", target: "node2", type: "down" },
-    { source: "node9", target: "node3", type: "up" },
-    { source: "node10", target: "node4", type: "down" },
-    { source: "node11", target: "node5", type: "up" },
-    { source: "node12", target: "node6", type: "gene" }
+    {
+      source: "node7",
+      target: "node1",
+      type: "up"
+    },
+    {
+      source: "node8",
+      target: "node2",
+      type: "down"
+    },
+    {
+      source: "node9",
+      target: "node3",
+      type: "up"
+    },
+    {
+      source: "node10",
+      target: "node4",
+      type: "down"
+    },
+    {
+      source: "node11",
+      target: "node5",
+      type: "up"
+    },
+    {
+      source: "node12",
+      target: "node6",
+      type: "gene"
+    }
   ]
 };
 
@@ -70,10 +152,10 @@ const simulation = d3
   .force(
     "link",
     d3
-      .forceLink(links)
-      .id(d => d.id)
-      .distance(40)
-      .strength(1)
+    .forceLink(links)
+    .id(d => d.id)
+    .distance(40)
+    .strength(1)
   )
   .force("charge", d3.forceManyBody().strength(-1000))
   .force("center", d3.forceCenter(width / 2, height / 2));

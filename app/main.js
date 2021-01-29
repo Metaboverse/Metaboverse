@@ -21,7 +21,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcRenderer, dialog } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcRenderer,
+  dialog
+} = require("electron");
 const path = require("path");
 const fs = require("fs");
 const ipcMain = require("electron").ipcMain;
@@ -29,6 +34,7 @@ const ipcMain = require("electron").ipcMain;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({

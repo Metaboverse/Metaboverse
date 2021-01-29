@@ -73,21 +73,21 @@ function hubsChecked() {
 }
 
 function cleanHubs(
-    excl_hubs,
-    components,
-    degree_dict,
-    hub_threshold) {
+  excl_hubs,
+  components,
+  degree_dict,
+  hub_threshold) {
 
   let filtered_hubs = components.filter(x => degree_dict[x] <= hub_threshold);
   return filtered_hubs;
 }
 
 function parseComponents(
-    reaction,
-    expression_dict,
-    stats_dict,
-    degree_dict,
-    sample_index) {
+  reaction,
+  expression_dict,
+  stats_dict,
+  degree_dict,
+  sample_index) {
 
   let reactants = reaction.reactants;
   let products = reaction.products;
@@ -127,20 +127,21 @@ function parseComponents(
     clean_products = temp_products;
   }
 
-  clean_reactants.forEach(l=>{
+  clean_reactants.forEach(l => {
     let reactant_expr = expression_dict[l][sample_index];
     let reactant_stat = stats_dict[l][sample_index];
-    if(reactant_expr !== null && reactant_stat !== null){
+    if (reactant_expr !== null && reactant_stat !== null) {
       source_expression.push([
         parseFloat(reactant_expr),
-        parseFloat(reactant_stat)]);
+        parseFloat(reactant_stat)
+      ]);
     }
   })
 
-  clean_products.forEach(l=>{
+  clean_products.forEach(l => {
     let product_expr = expression_dict[l][sample_index];
     let product_stat = stats_dict[l][sample_index];
-    if(product_expr !== null && product_stat !== null){
+    if (product_expr !== null && product_stat !== null) {
       target_expression.push([
         parseFloat(product_expr),
         parseFloat(product_stat),
@@ -149,21 +150,21 @@ function parseComponents(
   })
 
   let updated_source = source_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
   let updated_target = target_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
 
   return [updated_source, updated_target]
 }
 
 function parseComponentsMod(
-    reaction,
-    expression_dict,
-    stats_dict,
-    degree_dict,
-    sample_index) {
+  reaction,
+  expression_dict,
+  stats_dict,
+  degree_dict,
+  sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
   let modifiers = reaction.modifiers;
@@ -193,38 +194,38 @@ function parseComponentsMod(
     clean_modifiers = temp_mods.map(x => x[0]);
   }
 
-  clean_core.forEach(l=>{
+  clean_core.forEach(l => {
     let core_expr = expression_dict[l][sample_index];
     let core_stats = stats_dict[l][sample_index];
-    if(core_expr !== null && core_stats !== null){
+    if (core_expr !== null && core_stats !== null) {
       core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
     }
   })
 
-  clean_modifiers.forEach(l=>{
+  clean_modifiers.forEach(l => {
     let mod_expr = expression_dict[l][sample_index];
     let mod_stats = stats_dict[l][sample_index];
-    if(mod_expr !== null && mod_stats !== null){
+    if (mod_expr !== null && mod_stats !== null) {
       mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
     }
   })
 
   let updated_core = core_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
   let updated_mods = mods_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
 
   return [updated_core, updated_mods]
 }
 
 function parseComponentsTrans(
-    reaction,
-    expression_dict,
-    stats_dict,
-    degree_dict,
-    sample_index) {
+  reaction,
+  expression_dict,
+  stats_dict,
+  degree_dict,
+  sample_index) {
 
   let reactants = reaction.reactants;
   let products = reaction.products;
@@ -264,48 +265,48 @@ function parseComponentsTrans(
     clean_modifiers = temp_modifiers.map(x => x[0]);
   }
 
-  clean_reactants.forEach(l=>{
+  clean_reactants.forEach(l => {
     let reactant_expr = expression_dict[l][sample_index];
     let reactant_stats = stats_dict[l][sample_index];
-    if(reactant_expr !== null && reactant_stats !== null){
+    if (reactant_expr !== null && reactant_stats !== null) {
       source_expression.push([parseFloat(reactant_expr), parseFloat(reactant_stats)]);
     }
   })
 
-  clean_products.forEach(l=>{
+  clean_products.forEach(l => {
     let product_expr = expression_dict[l][sample_index];
     let product_stats = stats_dict[l][sample_index];
-    if(product_expr !== null && product_stats !== null){
+    if (product_expr !== null && product_stats !== null) {
       target_expression.push([parseFloat(product_expr), parseFloat(product_stats)]);
     }
   })
 
-  clean_modifiers.forEach(l=>{
+  clean_modifiers.forEach(l => {
     let modifier_expr = expression_dict[l][sample_index];
     let modifier_stats = stats_dict[l][sample_index];
-    if(modifier_expr !== null && modifier_stats !== null){
+    if (modifier_expr !== null && modifier_stats !== null) {
       modifier_expression.push([parseFloat(modifier_expr), parseFloat(modifier_stats)]);
     }
   })
 
   let updated_source = source_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
   let updated_target = target_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
   let updated_modifier = modifier_expression.filter(function(value) {
-      return !Number.isNaN(value);
+    return !Number.isNaN(value);
   });
 
   return [updated_source, updated_target, updated_modifier]
 }
 
 
-function computeAvg(arr){
+function computeAvg(arr) {
   let arr_sum = arr[0];
   let arr_len = arr.length;
-  for(let i=1; i<arr.length; i++){
+  for (let i = 1; i < arr.length; i++) {
     if (arr[i] !== null) {
       arr_sum += arr[i];
     } else {
@@ -319,13 +320,13 @@ function computeAvg(arr){
 // search for motif 1
 //let threshold = d3.select("#avg_num").node().value;
 function motifSearch_Avg(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search Avg")
   console.log("Avg threshold set at: ", threshold)
 
@@ -334,7 +335,7 @@ function motifSearch_Avg(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict) {
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponents(
         reaction,
@@ -349,7 +350,7 @@ function motifSearch_Avg(
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
 
-      if (source_values.length>0 && target_values.length>0) {
+      if (source_values.length > 0 && target_values.length > 0) {
         let source_avg = computeAvg(source_values);
         let target_avg = computeAvg(target_values);
 
@@ -378,13 +379,13 @@ function motifSearch_Avg(
 // MaxMax
 //let threshold = d3.select("#maxmax_num").node().value;
 function motifSearch_MaxMax(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search MaxMax")
   console.log("MaxMax threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -392,7 +393,7 @@ function motifSearch_MaxMax(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict){
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponents(
         reaction,
@@ -406,11 +407,11 @@ function motifSearch_MaxMax(
       let target_values = updated_target.map((i) => i[0]);
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
-      if(source_values.length>0 && target_values.length>0){
+      if (source_values.length > 0 && target_values.length > 0) {
         let source_max = Math.max(...source_values);
         let target_max = Math.max(...target_values);
 
-        if(Math.abs(source_max - target_max)>=threshold){
+        if (Math.abs(source_max - target_max) >= threshold) {
           let source_index = source_values.indexOf(source_max);
           let target_index = target_values.indexOf(target_max);
           let p_source = source_stats[source_index];
@@ -438,13 +439,13 @@ function motifSearch_MaxMax(
 // MinMin
 //let threshold = d3.select("#minmin_num").node().value;
 function motifSearch_MinMin(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search MinMin")
   console.log("MinMin threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -452,7 +453,7 @@ function motifSearch_MinMin(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict){
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponents(
         reaction,
@@ -467,11 +468,11 @@ function motifSearch_MinMin(
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
 
-      if(source_values.length>0 && target_values.length>0){
+      if (source_values.length > 0 && target_values.length > 0) {
         let source_min = Math.min(...source_values);
         let target_min = Math.min(...target_values);
 
-        if(Math.abs(source_min - target_min)>=threshold){
+        if (Math.abs(source_min - target_min) >= threshold) {
           let source_index = source_values.indexOf(source_min);
           let target_index = target_values.indexOf(target_min);
           let p_source = source_stats[source_index];
@@ -499,13 +500,13 @@ function motifSearch_MinMin(
 //MaxMin
 //let threshold = d3.select("#maxmin_num").node().value;
 function motifSearch_MaxMin(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search MaxMin")
   console.log("MaxMin threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -513,7 +514,7 @@ function motifSearch_MaxMin(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict){
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponents(
         reaction,
@@ -528,11 +529,11 @@ function motifSearch_MaxMin(
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
 
-      if(updated_source.length>0 && updated_target.length>0){
+      if (updated_source.length > 0 && updated_target.length > 0) {
         let source_max = Math.max(...source_values);
         let target_min = Math.min(...target_values);
 
-        if(Math.abs(source_max - target_min)>=threshold){
+        if (Math.abs(source_max - target_min) >= threshold) {
           let source_index = source_values.indexOf(source_max);
           let target_index = target_values.indexOf(target_min);
           let p_source = source_stats[source_index];
@@ -560,13 +561,13 @@ function motifSearch_MaxMin(
 //MinMax
 //let threshold = d3.select("#minmax_num").node().value;
 function motifSearch_MinMax(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search MinMax")
   console.log("MinMax threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -574,7 +575,7 @@ function motifSearch_MinMax(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict){
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponents(
         reaction,
@@ -589,11 +590,11 @@ function motifSearch_MinMax(
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
 
-      if(updated_source.length>0 && updated_target.length>0){
+      if (updated_source.length > 0 && updated_target.length > 0) {
         let source_min = Math.min(...source_values);
         let target_max = Math.max(...target_values);
 
-        if(Math.abs(source_min - target_max)>=threshold){
+        if (Math.abs(source_min - target_max) >= threshold) {
           let source_index = source_values.indexOf(source_min);
           let target_index = target_values.indexOf(target_max);
           let p_source = source_stats[source_index];
@@ -621,13 +622,13 @@ function motifSearch_MinMax(
 //let threshold = d3.select("#sustained_num").node().value;
 // Will not include sustained motif if the value on both sides exactly the same
 function motifSearch_Sustained(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search Sustained")
   console.log("Sustained perturbation threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -635,7 +636,7 @@ function motifSearch_Sustained(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict){
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponents(
         reaction,
@@ -650,7 +651,7 @@ function motifSearch_Sustained(
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
 
-      if(source_values.length>0 && target_values.length>0) {
+      if (source_values.length > 0 && target_values.length > 0) {
 
         // Sustained up-regulation
         let up_in = [];
@@ -675,8 +676,8 @@ function motifSearch_Sustained(
           let target_index = target_values.indexOf(target_up);
           p_source_up = source_stats[source_index];
           p_target_up = target_stats[target_index];
-          magnitude_change_up = Math.abs(source_up
-            - target_up);
+          magnitude_change_up = Math.abs(source_up -
+            target_up);
         }
 
         // Sustained down-regulation
@@ -702,16 +703,16 @@ function motifSearch_Sustained(
           let target_index = target_values.indexOf(target_down);
           p_source_down = source_stats[source_index];
           p_target_down = target_stats[target_index];
-          magnitude_change_down = Math.abs(source_down
-            - target_down);
+          magnitude_change_down = Math.abs(source_down -
+            target_down);
         }
 
-        if (((down_in.length > 0) && (down_out.length > 0))
-            || ((up_in.length > 0) && (up_out.length > 0))) {
+        if (((down_in.length > 0) && (down_out.length > 0)) ||
+          ((up_in.length > 0) && (up_out.length > 0))) {
 
           let magnitude_change;
           let p_vals;
-          if(magnitude_change_up && magnitude_change_down){
+          if (magnitude_change_up && magnitude_change_down) {
             let up_max = Math.max(magnitude_change_up);
             let down_max = Math.max(magnitude_change_down);
             if (up_max >= down_max) {
@@ -727,13 +728,13 @@ function motifSearch_Sustained(
                 "target": p_target_down
               }
             }
-          } else if (magnitude_change_up!=undefined){
+          } else if (magnitude_change_up != undefined) {
             magnitude_change = magnitude_change_up;
             p_vals = {
               "source": p_source_up,
               "target": p_target_up
             }
-          } else if(magnitude_change_down!=undefined){
+          } else if (magnitude_change_down != undefined) {
             magnitude_change = magnitude_change_down;
             p_vals = {
               "source": p_source_down,
@@ -759,14 +760,14 @@ function motifSearch_Sustained(
 //Path max/min comparison
 //let threshold = d3.select("#pathmax_num").node().value;
 function motifSearch_PathMax(
-    threshold,
-    mod_collapsed_pathways,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  mod_collapsed_pathways,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search Pathway")
   console.log("Pathway min/max threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -796,7 +797,7 @@ function motifSearch_PathMax(
         values = values.concat(source_values, target_values);
       }
       if (values.length > 0) {
-        if (Math.abs(Math.max.apply(Math,values) - Math.min.apply(Math,values)) >= threshold) {
+        if (Math.abs(Math.max.apply(Math, values) - Math.min.apply(Math, values)) >= threshold) {
           sample_motifs.push(mod_collapsed_pathways[pathway]);
         }
       }
@@ -815,15 +816,15 @@ function motifSearch_PathMax(
 //Path coverage comparison
 //let threshold = d3.select("#pathcov_num").node().value;
 function motifSearch_PathCov(
-    threshold,
-    min_coverage,
-    mod_collapsed_pathways,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  min_coverage,
+  mod_collapsed_pathways,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   console.log("motif search PathCov")
   console.log("PathCov threshold set at: ", threshold)
   let discovered_motifs = [];
@@ -882,13 +883,13 @@ function motifSearch_PathCov(
 }
 
 function modifierReg(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   // If the net change between at least one modifier and one core component of a
   // reaction is greater than or equal to the threshold, return the reaction
   // *** Checking the "include modifiers" button will have no effect here
@@ -899,7 +900,7 @@ function modifierReg(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict) {
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponentsMod(
         reaction,
@@ -914,10 +915,10 @@ function modifierReg(
       let core_stats = updated_core.map((i) => i[1]);
       let modifier_stats = updated_modifiers.map((i) => i[1]);
 
-      if(core_values.length>0 && modifier_values.length>0){
+      if (core_values.length > 0 && modifier_values.length > 0) {
 
         // Check each core/mod combination for a diff that meets threshold
-        for(x in core_values) {
+        for (x in core_values) {
           for (y in modifier_values) {
             if (Math.abs(core_values[x] - modifier_values[y]) >= threshold) {
               let p_source = core_stats[x];
@@ -929,7 +930,7 @@ function modifierReg(
               let magnitude_chg = Math.abs(core_values[x] - modifier_values[y]);
 
               let reaction_copy = $.extend(true, {}, reaction);
-              if(sample_motifs.includes(reaction)) {
+              if (sample_motifs.includes(reaction)) {
                 if (magnitude_chg > reaction_copy.magnitude_change) {
                   reaction_copy.p_values = p_vals;
                   reaction_copy.magnitude_change = magnitude_chg;
@@ -956,13 +957,13 @@ function modifierReg(
 }
 
 function modifierTransport(
-    threshold,
-    collapsed_reaction_dict,
-    expression_dict,
-    stats_dict,
-    path_mapper,
-    degree_dict,
-    sample_indices) {
+  threshold,
+  collapsed_reaction_dict,
+  expression_dict,
+  stats_dict,
+  path_mapper,
+  degree_dict,
+  sample_indices) {
   // Highlight if modifier changed where inputs and outputs are same (minus
   //    compartment) --> regulation of transport reaction
   // If a componenet on both sides meets threshold and a modifier seperately
@@ -974,7 +975,7 @@ function modifierTransport(
   for (_idx in sample_indices) {
     let sample_motifs = [];
 
-    for(let rxn in collapsed_reaction_dict){
+    for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponentsTrans(
         reaction,
@@ -992,16 +993,16 @@ function modifierTransport(
       let target_stats = updated_target.map((i) => i[1]);
       let modifier_stats = updated_modifier.map((i) => i[1]);
 
-      if (source_values.length>0
-          && target_values.length>0
-          && modifier_values.length>0) {
+      if (source_values.length > 0 &&
+        target_values.length > 0 &&
+        modifier_values.length > 0) {
 
         let intersect = source_values.filter(x => target_values.includes(x));
         for (x in intersect) {
           for (y in modifier_values) {
-            if ((Math.abs(intersect[x] - modifier_values[y]) >= threshold)
-                || (Math.abs(intersect[x]) >= threshold
-                  && Math.abs(modifier_values[y]) >= threshold)) {
+            if ((Math.abs(intersect[x] - modifier_values[y]) >= threshold) ||
+              (Math.abs(intersect[x]) >= threshold &&
+                Math.abs(modifier_values[y]) >= threshold)) {
               let source_index = source_values.indexOf(intersect[x]);
               let target_index = modifier_values.indexOf(modifier_values[y]);
               let p_source = source_stats[x];
@@ -1013,7 +1014,7 @@ function modifierTransport(
               let magnitude_chg = Math.abs(intersect[x] - modifier_values[y]);
 
               let reaction_copy = $.extend(true, {}, reaction);
-              if(sample_motifs.includes(reaction)) {
+              if (sample_motifs.includes(reaction)) {
                 if (magnitude_chg > reaction_copy.magnitude_change) {
                   reaction_copy.p_values = p_vals;
                   reaction_copy.magnitude_change = magnitude_chg;
@@ -1040,36 +1041,46 @@ function modifierTransport(
 
 function test() {
   var assert = require('assert');
-  var { JSDOM } = require('jsdom');
+  var {
+    JSDOM
+  } = require('jsdom');
   var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
-  var { window } = jsdom;
+  var {
+    window
+  } = jsdom;
   $ = global.jQuery = require('jquery')(window);
 
-  let test_sample_indices = [0,1];
+  let test_sample_indices = [0, 1];
   let test_components = ['N1', 'N2'];
   let test_reaction = {
     'R1': {
       'id': 'R1',
       'reactants': ['N1'],
       'products': ['N2'],
-      'modifiers': [['N3','catalyst']]
+      'modifiers': [
+        ['N3', 'catalyst']
+      ]
     },
     'R2': {
       'id': 'R2',
-      'reactants': ['N4','N5'],
+      'reactants': ['N4', 'N5'],
       'products': ['N6'],
-      'modifiers': [['N7','catalyst']]
+      'modifiers': [
+        ['N7', 'catalyst']
+      ]
     },
     'R3': {
       'id': 'R3',
       'reactants': ['N8'],
-      'products': ['N9','N10'],
-      'modifiers': [['N11','inhibitor']]
+      'products': ['N9', 'N10'],
+      'modifiers': [
+        ['N11', 'inhibitor']
+      ]
     },
     'R4': {
       'id': 'R4',
-      'reactants': ['N12','N13'],
-      'products': ['N14','N15'],
+      'reactants': ['N12', 'N13'],
+      'products': ['N14', 'N15'],
       'modifiers': []
     },
     'R5': {
@@ -1080,39 +1091,42 @@ function test() {
     },
     'R6': {
       'id': 'R6',
-      'reactants': ['N18','N19'],
+      'reactants': ['N18', 'N19'],
       'products': ['N20'],
-      'modifiers': [['N21','catalyst'],['N22','inhibitor']]
+      'modifiers': [
+        ['N21', 'catalyst'],
+        ['N22', 'inhibitor']
+      ]
     },
   }
   let test_expression_dict = {
-    'N1': [0.9, 1],//
+    'N1': [0.9, 1], //
     'N2': [0.8, 2],
-    'N3': [0.7, 3],//mod
+    'N3': [0.7, 3], //mod
 
     'N4': [5, 3],
-    'N5': [5, 3],//
+    'N5': [5, 3], //
     'N6': [1, 1],
-    'N7': [0, 1],//mod
+    'N7': [0, 1], //mod
 
-    'N8': [0.7, 1],//
+    'N8': [0.7, 1], //
     'N9': [0.7, 1],
     'N10': [null, null],
-    'N11': [3, 3],//mod
+    'N11': [3, 3], //mod
 
     'N12': [0.7, 3],
-    'N13': [0.7, 0],//
+    'N13': [0.7, 0], //
     'N14': [0, 0],
     'N15': [1, 1],
 
-    'N16': [0.7, 0.7],//
+    'N16': [0.7, 0.7], //
     'N17': [0.7, 0.7],
 
     'N18': [0.9, 2],
-    'N19': [0.1, 0.03],//
+    'N19': [0.1, 0.03], //
     'N20': [7, 3],
-    'N21': [7, 3],//mod
-    'N22': [1, 3]//mod
+    'N21': [7, 3], //mod
+    'N22': [1, 3] //mod
   }
   let test_stats_dict = {
     'N1': [0.1, 0.05],
@@ -1163,18 +1177,18 @@ function test() {
     'N22': 99
   }
   let test_path_mapper = {
-    'R1': ['P1','P2','P3','P4'],
-    'R2': ['P5','P6'],
-    'R3': ['P5','P9'],
-    'R4': ['P1','P3'],
-    'R5': ['P2','P4'],
+    'R1': ['P1', 'P2', 'P3', 'P4'],
+    'R2': ['P5', 'P6'],
+    'R3': ['P5', 'P9'],
+    'R4': ['P1', 'P3'],
+    'R5': ['P2', 'P4'],
     'R6': ['P1']
   }
 
-  describe('motifs.js', function () {
+  describe('motifs.js', function() {
     // modifiersChecked()
-    describe('modifiersChecked()', function () {
-      it('should return false if eval_modifiers true, and vice versa', function () {
+    describe('modifiersChecked()', function() {
+      it('should return false if eval_modifiers true, and vice versa', function() {
         assert(eval_modifiers === false);
         modifiersChecked();
         assert(eval_modifiers === true);
@@ -1183,8 +1197,8 @@ function test() {
       })
     })
     // hubsChecked()
-    describe('hubsChecked()', function () {
-      it('should return false if excl_hubs true, and vice versa', function () {
+    describe('hubsChecked()', function() {
+      it('should return false if excl_hubs true, and vice versa', function() {
         assert(excl_hubs === false);
         hubsChecked();
         assert(excl_hubs === true);
@@ -1193,21 +1207,21 @@ function test() {
       })
     })
     // cleanHubs()
-    describe('cleanHubs()', function () {
-      it('should filter out nodes with a degree higher than the threshold', function () {
-      let test_excl_hubs = true
-      let test_filter_hubs = cleanHubs(
+    describe('cleanHubs()', function() {
+      it('should filter out nodes with a degree higher than the threshold', function() {
+        let test_excl_hubs = true
+        let test_filter_hubs = cleanHubs(
           test_excl_hubs,
           test_components,
           test_degree_dict,
           50)
-      assert(test_filter_hubs.length === 1)
-      assert(test_filter_hubs[0] === 'N2')
+        assert(test_filter_hubs.length === 1)
+        assert(test_filter_hubs[0] === 'N2')
       })
     })
     // parseComponents()
-    describe('parseComponents()', function () {
-      it('should parse component values after degree cleaning', function () {
+    describe('parseComponents()', function() {
+      it('should parse component values after degree cleaning', function() {
         excl_hubs = false;
         let test_items, test_updated_source, test_updated_target;
         test_items = parseComponents(
@@ -1240,8 +1254,8 @@ function test() {
       })
     })
     // parseComponentsMod()
-    describe('parseComponentsMod()', function () {
-      it('should parse component values after degree cleaning with modifiers considered', function () {
+    describe('parseComponentsMod()', function() {
+      it('should parse component values after degree cleaning with modifiers considered', function() {
 
         excl_hubs = false;
         let test_items, test_updated_core, test_updated_mods;
@@ -1263,8 +1277,8 @@ function test() {
       })
     })
     // parseComponentsTrans()
-    describe('parseComponentsTrans()', function () {
-      it('should parse component values after degree cleaning with modifiers considered', function () {
+    describe('parseComponentsTrans()', function() {
+      it('should parse component values after degree cleaning with modifiers considered', function() {
         excl_hubs = false;
         let test_items, test_updated_core, test_updated_mods;
         test_items = parseComponentsTrans(
@@ -1287,161 +1301,173 @@ function test() {
       })
     })
     // computeAvg()
-    describe('computeAvg()', function () {
-      it('should return the average of the input array', function () {
+    describe('computeAvg()', function() {
+      it('should return the average of the input array', function() {
         let test_array, test_array_out;
-        test_array = [0,1,2];
+        test_array = [0, 1, 2];
         test_array_out = computeAvg(test_array)
         assert(test_array_out === 1)
-        test_array = [0,1,null];
+        test_array = [0, 1, null];
         test_array_out = computeAvg(test_array)
         assert(test_array_out === 0.5)
-        test_array = [null,null];
+        test_array = [null, null];
         test_array_out = computeAvg(test_array)
         assert(test_array_out === 0)
       })
     })
     // motifSearch_MaxMax()
-    describe('motifSearch_MaxMax()', function () {
-      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+    describe('motifSearch_MaxMax()', function() {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function() {
         let test_threshold = 1;
         let maxmax_results = motifSearch_MaxMax(
-            test_threshold,
-            test_reaction,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
         assert(maxmax_results[0].length === 2)
-        if (maxmax_results[0][0].magnitude_change === 4
-            && maxmax_results[0][1].magnitude_change === 6.1) {
-        } else {assert(false)}
+        if (maxmax_results[0][0].magnitude_change === 4 &&
+          maxmax_results[0][1].magnitude_change === 6.1) {} else {
+          assert(false)
+        }
         assert(maxmax_results[1].length === 4)
-        if (maxmax_results[1][0].magnitude_change === 1
-            && maxmax_results[1][1].magnitude_change === 2
-            && maxmax_results[1][2].magnitude_change === 2
-            && maxmax_results[1][3].magnitude_change === 1) {
-        } else {assert(false)}
+        if (maxmax_results[1][0].magnitude_change === 1 &&
+          maxmax_results[1][1].magnitude_change === 2 &&
+          maxmax_results[1][2].magnitude_change === 2 &&
+          maxmax_results[1][3].magnitude_change === 1) {} else {
+          assert(false)
+        }
       })
     })
     // motifSearch_Avg()
-    describe('motifSearch_Avg()', function () {
-      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+    describe('motifSearch_Avg()', function() {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function() {
         let test_threshold = 1;
         let avg_results = motifSearch_Avg(
-            test_threshold,
-            test_reaction,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
         assert(avg_results[0].length === 2)
-        if (avg_results[0][0].magnitude_change === 4
-            && avg_results[0][1].magnitude_change === 6.5) {
-        } else {assert(false)}
+        if (avg_results[0][0].magnitude_change === 4 &&
+          avg_results[0][1].magnitude_change === 6.5) {} else {
+          assert(false)
+        }
         assert(avg_results[1].length === 4)
-        if (avg_results[1][0].magnitude_change === 1
-            && avg_results[1][1].magnitude_change === 2
-            && avg_results[1][2].magnitude_change === 1
-            && avg_results[1][3].magnitude_change === 1.985) {
-        } else {assert(false)}
+        if (avg_results[1][0].magnitude_change === 1 &&
+          avg_results[1][1].magnitude_change === 2 &&
+          avg_results[1][2].magnitude_change === 1 &&
+          avg_results[1][3].magnitude_change === 1.985) {} else {
+          assert(false)
+        }
       })
     })
     // motifSearch_MinMin()
-    describe('motifSearch_MinMin()', function () {
-      it('should return 2 motifs for sample 0 and 3 motifs for sample 1', function () {
+    describe('motifSearch_MinMin()', function() {
+      it('should return 2 motifs for sample 0 and 3 motifs for sample 1', function() {
         let test_threshold = 1;
         let minmin_results = motifSearch_MinMin(
-            test_threshold,
-            test_reaction,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
         assert(minmin_results[0].length === 2)
-        if (minmin_results[0][0].magnitude_change === 4
-            && minmin_results[0][1].magnitude_change === 6.9) {
-        } else {assert(false)}
+        if (minmin_results[0][0].magnitude_change === 4 &&
+          minmin_results[0][1].magnitude_change === 6.9) {} else {
+          assert(false)
+        }
         assert(minmin_results[1].length === 3)
-        if (minmin_results[1][0].magnitude_change === 1
-            && minmin_results[1][1].magnitude_change === 2
-            && minmin_results[1][2].magnitude_change === 2.97) {
-        } else {assert(false)}
+        if (minmin_results[1][0].magnitude_change === 1 &&
+          minmin_results[1][1].magnitude_change === 2 &&
+          minmin_results[1][2].magnitude_change === 2.97) {} else {
+          assert(false)
+        }
       })
     })
     // motifSearch_MaxMin()
-    describe('motifSearch_MaxMin()', function () {
-      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+    describe('motifSearch_MaxMin()', function() {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function() {
         let test_threshold = 1;
         let maxmin_results = motifSearch_MaxMin(
-            test_threshold,
-            test_reaction,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
         assert(maxmin_results[0].length === 2)
-        if (maxmin_results[0][0].magnitude_change === 4
-            && maxmin_results[0][1].magnitude_change === 6.1) {
-        } else {assert(false)}
+        if (maxmin_results[0][0].magnitude_change === 4 &&
+          maxmin_results[0][1].magnitude_change === 6.1) {} else {
+          assert(false)
+        }
         assert(maxmin_results[1].length === 4)
-        if (maxmin_results[1][0].magnitude_change === 1
-            && maxmin_results[1][1].magnitude_change === 2
-            && maxmin_results[1][2].magnitude_change === 3
-            && maxmin_results[1][3].magnitude_change === 1) {
-        } else {assert(false)}
+        if (maxmin_results[1][0].magnitude_change === 1 &&
+          maxmin_results[1][1].magnitude_change === 2 &&
+          maxmin_results[1][2].magnitude_change === 3 &&
+          maxmin_results[1][3].magnitude_change === 1) {} else {
+          assert(false)
+        }
       })
     })
     // motifSearch_MinMax()
-    describe('motifSearch_MinMax()', function () {
-      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function () {
+    describe('motifSearch_MinMax()', function() {
+      it('should return 2 motifs for sample 0 and 4 motifs for sample 1', function() {
         let test_threshold = 1;
         let minmax_results = motifSearch_MinMax(
-            test_threshold,
-            test_reaction,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
         assert(minmax_results[0].length === 2)
-        if (minmax_results[0][0].magnitude_change === 4
-            && minmax_results[0][1].magnitude_change === 6.9) {
-        } else {assert(false)}
+        if (minmax_results[0][0].magnitude_change === 4 &&
+          minmax_results[0][1].magnitude_change === 6.9) {} else {
+          assert(false)
+        }
         assert(minmax_results[1].length === 4)
-        if (minmax_results[1][0].magnitude_change === 1
-            && minmax_results[1][1].magnitude_change === 2
-            && minmax_results[1][2].magnitude_change === 1
-            && minmax_results[1][3].magnitude_change === 2.97) {
-        } else {assert(false)}
+        if (minmax_results[1][0].magnitude_change === 1 &&
+          minmax_results[1][1].magnitude_change === 2 &&
+          minmax_results[1][2].magnitude_change === 1 &&
+          minmax_results[1][3].magnitude_change === 2.97) {} else {
+          assert(false)
+        }
       })
     })
     // motifSearch_Sustained()
-    describe('motifSearch_Sustained()', function () {
-      it('should return 1 motifs for sample 0 and 5 motifs for sample 1', function () {
+    describe('motifSearch_Sustained()', function() {
+      it('should return 1 motifs for sample 0 and 5 motifs for sample 1', function() {
         let test_threshold = 1;
         let sustained_results = motifSearch_Sustained(
-            test_threshold,
-            test_reaction,
-            test_expression_dict,
-            test_stats_dict,
-            test_path_mapper,
-            test_degree_dict,
-            test_sample_indices)
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
         assert(sustained_results[0].length === 1)
-        if (sustained_results[0][0].magnitude_change === 4) {
-        } else {assert(false)}
+        if (sustained_results[0][0].magnitude_change === 4) {} else {
+          assert(false)
+        }
         assert(sustained_results[1].length === 5)
-        if (sustained_results[1][0].magnitude_change === 1
-            && sustained_results[1][1].magnitude_change === 2
-            && sustained_results[1][2].magnitude_change === 0
-            && sustained_results[1][3].magnitude_change === 2
-            && sustained_results[1][4].magnitude_change === 1) {
-        } else {assert(false)}
+        if (sustained_results[1][0].magnitude_change === 1 &&
+          sustained_results[1][1].magnitude_change === 2 &&
+          sustained_results[1][2].magnitude_change === 0 &&
+          sustained_results[1][3].magnitude_change === 2 &&
+          sustained_results[1][4].magnitude_change === 1) {} else {
+          assert(false)
+        }
       })
     })
     // motifSearch_PathMax()

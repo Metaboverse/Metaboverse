@@ -27,132 +27,136 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <html>
 
-  <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/style.css">
 
-  <script src="../js/curate.js"></script>
-  <script src="../js/utils.js"></script>
-  <script src="../js/launch.js"></script>
+<script src="../js/curate.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/launch.js"></script>
 
-  <head>
+<head>
 
-    <!-- menu -->
-    <menu>
-      <font size=3.25px>
-        <menuItem id="menuright"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
-        <menuItem id="menuright"><a href="cite.html">Cite</a></menuItem>
-        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
-        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
-        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
-        <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
-        <menuItem id="menuleft"><a href="index.html">Metaboverse</a></menuItem>
-        <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
-        <menuItem id="menuleft"><a href="index.html">Back</a></menuItem>
-        <menuItem id="menurefresh"><a>&#x21bb;</a></menuItem>
-      </font>
-    </menu>
+  <!-- menu -->
+  <menu>
+    <font size=3.25px>
+      <menuItem id="menuright"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
+      <menuItem id="menuright"><a href="cite.html">Cite</a></menuItem>
+      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
+      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
+      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
+      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
+      <menuItem id="menuleft"><a href="index.html">Metaboverse</a></menuItem>
+      <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
+      <menuItem id="menuleft"><a href="index.html">Back</a></menuItem>
+      <menuItem id="menurefresh"><a>&#x21bb;</a></menuItem>
+    </font>
+  </menu>
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <img src="../data/organisms.png" alt="organisms" align="right" id="organism-img">
+  <img src="../data/organisms.png" alt="organisms" align="right" id="organism-img">
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <p>
-      <font size="48" id="styletitle">
-        <b>
-          <center>
-            Curation
-          </center>
-        </b>
-      </font>
-    </p>
-    <br>
-    <center>
-      <font size="3">
-        Load a pre-existing Metaboverse <b>organism</b> database (ends in .mvdb)
-        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvdb'"><i>i</i></button>
-        <br>
-        <br>
-        <div id="dropDatabaseCuration">
-          <font size="1">
-            Select File
-          </font>
-        </div>
-        &nbsp;&nbsp;
-        <div id="selectedFile">
-        </div>
-        <input id="curation-input" type="file" name="name" />
-        <br>
-        <br>
-        <br>
-        <br>
-        <b><i>OR</i></b>
-        <br>
-        <br>
-        <br>
-        Load a pre-existing <b>BiGG</b> or <b>BioModels</b> database (ends in .xml or .sbml)
-        <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.xml' or '.sbml'"><i>i</i></button>
-        <br>
-        <br>
-        <font size="2"><i>Note: Undergoing continued development. Some features may not function properly yet.</i></font>
-        <br>
-        <br>
-        <div id="dropDatabaseSBML">
-          <font size="1">
-            Select File
-          </font>
-        </div>
-        &nbsp;&nbsp;
-        <div id="selectedSBML">
-        </div>
-        <input id="sbml-input" type="file" name="name" />
-        <br>
-        <br>
-        <br>
-        <br>
-        <b><i>OR</i></b>
-        <br>
-        <br>
-        <br>
-        <p>Select the organism you would like to analyze:</p>
-        <select id="speciesMenu"></select>
-        <br>
-        <br>
-        <br>
-        <br>
-        <b><i>AND</i></b>
-        <br>
-        <br>
-        <br>
-        <p>Click on the folder to select output location:
-          <button class="info" title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
-        </p>
-        <div id="dropDatabaseOutput">
-          <font size="1">
-            Select Output File Name
-          </font>
-        </div>
-        &nbsp;&nbsp;
-        <div id="selectedOutput" class="selectedData">
-        </div>
-        <button id="output-input" type="file" name="name" />
-
-        <br>
-        <br>
-      </font>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>
+    <font size="48" id="styletitle">
+      <b>
+        <center>
+          Curation
+        </center>
+      </b>
+    </font>
+  </p>
+  <br>
+  <center>
+    <font size="3">
+      Load a pre-existing Metaboverse <b>organism</b> database (ends in .mvdb)
+      <button class="info"
+        title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvdb'"><i>i</i></button>
       <br>
+      <br>
+      <div id="dropDatabaseCuration">
+        <font size="1">
+          Select File
+        </font>
+      </div>
+      &nbsp;&nbsp;
+      <div id="selectedFile">
+      </div>
+      <input id="curation-input" type="file" name="name" />
+      <br>
+      <br>
+      <br>
+      <br>
+      <b><i>OR</i></b>
+      <br>
+      <br>
+      <br>
+      Load a pre-existing <b>BiGG</b> or <b>BioModels</b> database (ends in .xml or .sbml)
+      <button class="info"
+        title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.xml' or '.sbml'"><i>i</i></button>
+      <br>
+      <br>
+      <font size="2"><i>Note: Undergoing continued development. Some features may not function properly yet.</i></font>
+      <br>
+      <br>
+      <div id="dropDatabaseSBML">
+        <font size="1">
+          Select File
+        </font>
+      </div>
+      &nbsp;&nbsp;
+      <div id="selectedSBML">
+      </div>
+      <input id="sbml-input" type="file" name="name" />
+      <br>
+      <br>
+      <br>
+      <br>
+      <b><i>OR</i></b>
+      <br>
+      <br>
+      <br>
+      <p>Select the organism you would like to analyze:</p>
+      <select id="speciesMenu"></select>
+      <br>
+      <br>
+      <br>
+      <br>
+      <b><i>AND</i></b>
+      <br>
+      <br>
+      <br>
+      <p>Click on the folder to select output location:
+        <button class="info"
+          title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
+      </p>
+      <div id="dropDatabaseOutput">
+        <font size="1">
+          Select Output File Name
+        </font>
+      </div>
+      &nbsp;&nbsp;
+      <div id="selectedOutput" class="selectedData">
+      </div>
+      <button id="output-input" type="file" name="name" />
+
+      <br>
+      <br>
+    </font>
+    <br>
+  </center>
+
+  <p>
+    <center>
+      <br>
+      <div id="content"></div>
     </center>
+  </p>
 
-    <p>
-      <center>
-        <br>
-        <div id="content"></div>
-      </center>
-    </p>
+</body>
 
-  </body>
 </html>

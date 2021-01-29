@@ -20,8 +20,14 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { ipcRenderer, ipcMain, remote } = require("electron");
-const { dialog } = require("electron").remote;
+const {
+  ipcRenderer,
+  ipcMain,
+  remote
+} = require("electron");
+const {
+  dialog
+} = require("electron").remote;
 var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
@@ -131,17 +137,15 @@ window.addEventListener("load", function(event) {
       .showSaveDialog({
         defaultPath: ".." + path.sep + ".." + path.sep,
         properties: ["createDirectory"],
-        filters: [
-          {
-            name: "mvrs",
-            extensions: ["mvrs"]
-          }
-        ]
+        filters: [{
+          name: "mvrs",
+          extensions: ["mvrs"]
+        }]
       })
       .then(result => {
         let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
         if (hasExtension === false) {
-            result.filePath = `${ result.filePath }.${ "mvrs" }`;
+          result.filePath = `${ result.filePath }.${ "mvrs" }`;
         }
         filename = result.filePath;
         if (filename === undefined) {
@@ -196,7 +200,7 @@ window.addEventListener("load", function(event) {
 
     var inputVal = document.getElementById("sbml-input").value.split(".");
 
-    if (document.getElementById("sbml-input").value.split('.').pop().toLowerCase() !== "xml" && document.getElementById("sbml-input").value.split('.').pop().toLowerCase() !== "sbml" ) {
+    if (document.getElementById("sbml-input").value.split('.').pop().toLowerCase() !== "xml" && document.getElementById("sbml-input").value.split('.').pop().toLowerCase() !== "sbml") {
       alert(
         "Input is not a .xml or .sbml file. You must upload the correct file type for the analyses to work."
       );

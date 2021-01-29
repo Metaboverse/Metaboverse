@@ -31,7 +31,7 @@ let database_url = JSON.parse(
 
 showMotifs = function(_callback) {
 
-  d3.json(database_url).then(data=>{
+  d3.json(database_url).then(data => {
     let metaGraph = new MetaGraph(data);
   });
   return _callback;

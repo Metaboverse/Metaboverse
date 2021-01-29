@@ -96,7 +96,10 @@ $(document).ready(function() {
     .mousemove(function(e) {
       var mousex = e.pageX + 20; //Get X coordinates
       var mousey = e.pageY - 25; //Get Y coordinates
-      $(".tooltip").css({ top: mousey, left: mousex });
+      $(".tooltip").css({
+        top: mousey,
+        left: mousex
+      });
     });
 });
 
@@ -114,13 +117,13 @@ function getArgument(key) {
   if (value === null) {
     value = "None";
   } else if (
-    key === "database_url"
-    || key === "curation_url"
-    || key === "output"
-    || key === "transcriptomics"
-    || key === "proteomics"
-    || key === "metabolomics"
-    || key === "additional_reactions") {
+    key === "database_url" ||
+    key === "curation_url" ||
+    key === "output" ||
+    key === "transcriptomics" ||
+    key === "proteomics" ||
+    key === "metabolomics" ||
+    key === "additional_reactions") {
     value = '\"' + value + '\"'
   } else {}
 

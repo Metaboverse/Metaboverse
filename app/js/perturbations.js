@@ -39,7 +39,7 @@ console.log("Database path: " + database_url);
 
 try {
   var data = JSON.parse(fs.readFileSync(database_url).toString());
-} catch(e) {
+} catch (e) {
   alert('Failed to open: \n' + database_url)
 }
 var superPathwayDict = make_superPathway_dictionary(data);
@@ -147,11 +147,11 @@ function changeSuperConnect() {
 }
 
 function collect_perturbations(
-      reaction_entity_dictionary,
-      mapping_dictionary,
-      threshold,
-      type,
-      sample_indices) {
+  reaction_entity_dictionary,
+  mapping_dictionary,
+  threshold,
+  type,
+  sample_indices) {
 
   let perturbed_reactions = [];
   for (sample in sample_indices) {
@@ -207,10 +207,10 @@ function show_graph(data, perturbed_rxns, sample_id) {
       } else {
         console.log(
           "Filtering " +
-            target_rxns["reactants"][x] +
-            " (" +
-            degree_dictionary[target_rxns["reactants"][x]] +
-            " degrees) -- may cause edge loss"
+          target_rxns["reactants"][x] +
+          " (" +
+          degree_dictionary[target_rxns["reactants"][x]] +
+          " degrees) -- may cause edge loss"
         );
       }
     }
@@ -220,10 +220,10 @@ function show_graph(data, perturbed_rxns, sample_id) {
       } else {
         console.log(
           "Filtering " +
-            target_rxns["products"][x] +
-            " (" +
-            degree_dictionary[target_rxns["products"][x]] +
-            " degrees) -- may cause edge loss"
+          target_rxns["products"][x] +
+          " (" +
+          degree_dictionary[target_rxns["products"][x]] +
+          " degrees) -- may cause edge loss"
         );
       }
     }
@@ -233,10 +233,10 @@ function show_graph(data, perturbed_rxns, sample_id) {
       } else {
         console.log(
           "Filtering " +
-            target_rxns["modifiers"][x][0] +
-            " (" +
-            degree_dictionary[target_rxns["modifiers"][x][0]] +
-            " degrees) -- may cause edge loss"
+          target_rxns["modifiers"][x][0] +
+          " (" +
+          degree_dictionary[target_rxns["modifiers"][x][0]] +
+          " degrees) -- may cause edge loss"
         );
       }
     }
@@ -246,10 +246,10 @@ function show_graph(data, perturbed_rxns, sample_id) {
       } else {
         console.log(
           "Filtering " +
-            target_rxns["additional_components"][x] +
-            " (" +
-            degree_dictionary[target_rxns["additional_components"][x]] +
-            " degrees) -- may cause edge loss"
+          target_rxns["additional_components"][x] +
+          " (" +
+          degree_dictionary[target_rxns["additional_components"][x]] +
+          " degrees) -- may cause edge loss"
         );
       }
     }
@@ -304,15 +304,16 @@ function run_value_perturbations() {
   show_graph(data, perturbed_reactions, 0);
   if (timecourse === true) {
     d3.select("svg#slide")
-      .on("click", ()=>{
+      .on("click", () => {
         let sample_idx = d3.select("circle#dot").attr("x");
         if (sample_idx !== last_click) {
           show_graph(data, perturbed_reactions, sample_idx);
-        last_click = sample_idx;
+          last_click = sample_idx;
         }
       })
   }
 }
+
 function run_stat_perturbations() {
 
   highlight_mapping("#conn_stat_button");
@@ -326,11 +327,11 @@ function run_stat_perturbations() {
   show_graph(data, perturbed_reactions, 0);
   if (timecourse === true) {
     d3.select("svg#slide")
-      .on("click", ()=>{
+      .on("click", () => {
         let sample_idx = d3.select("circle#dot").attr("x");
         if (sample_idx !== last_click) {
           show_graph(data, perturbed_reactions, sample_idx);
-        last_click = sample_idx;
+          last_click = sample_idx;
         }
       })
   }

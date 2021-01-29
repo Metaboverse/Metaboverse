@@ -20,7 +20,9 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { ipcRenderer } = require("electron");
+const {
+  ipcRenderer
+} = require("electron");
 var $ = require("jquery");
 
 window.addEventListener("load", function(event) {
@@ -64,8 +66,8 @@ window.addEventListener("load", function(event) {
   let display = "";
   for (item in session_items) {
     if (item.includes("spacer")) {
-      display = display
-        + "<h4>" + session_items[item] + "</h4>";
+      display = display +
+        "<h4>" + session_items[item] + "</h4>";
     } else {
       let display_item = getArgument(session_items[item]);
       if (display_item === undefined) {
@@ -83,11 +85,11 @@ window.addEventListener("load", function(event) {
       } else {
         display_item = display_item[0].toUpperCase() + display_item.substring(1);
       }
-      display = display
-        + "&#8226;&nbsp;&nbsp;&nbsp;&nbsp;"
-        + item + ":&nbsp;"
-        + "<font color='#00008b'>" + display_item + "</font>"
-        + "<br />";
+      display = display +
+        "&#8226;&nbsp;&nbsp;&nbsp;&nbsp;" +
+        item + ":&nbsp;" +
+        "<font color='#00008b'>" + display_item + "</font>" +
+        "<br />";
     }
   }
   document.getElementById("display-session").innerHTML = display;

@@ -28,205 +28,234 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 <html>
-  <link rel="stylesheet" href="../css/bootstrap_v4.0.0.css">
-  <link rel="stylesheet" href="../css/fontawesome_v5.0.7.css">
-  <link rel="stylesheet" href="../css/motif.css">
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/visualize.css" />
-  <link rel="stylesheet" href="../css/timecourse.css" />
+<link rel="stylesheet" href="../css/bootstrap_v4.0.0.css">
+<link rel="stylesheet" href="../css/fontawesome_v5.0.7.css">
+<link rel="stylesheet" href="../css/motif.css">
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/visualize.css" />
+<link rel="stylesheet" href="../css/timecourse.css" />
 
-  <script src="../js/utils.js"></script>
-  <script src="../js/menu.js"></script>
-  <script src="../js/graph.js"></script>
-  <script src="../js/motifs.js"></script>
-  <script src="../js/motif-graph.js"></script>
-  <script src="../js/motif-script.js"></script>
-  <script src="../js/timecourse.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/menu.js"></script>
+<script src="../js/graph.js"></script>
+<script src="../js/motifs.js"></script>
+<script src="../js/motif-graph.js"></script>
+<script src="../js/motif-script.js"></script>
+<script src="../js/timecourse.js"></script>
 
-  <head>
+<head>
 
-    <!-- menu -->
-    <menu>
-      <font size=3.25px>
-        <menuItem id="menuright-motif"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
-        <menuItem id="menuright-motif"><a href="cite.html">Cite</a></menuItem>
-        <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
-        <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
-        <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
-        <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
-        <menuItem id="menuleft-motif"><a href="index.html">Metaboverse</a></menuItem>
-        <menuItem id="menuleft-motif"><a href="session.html">Session Data</a></menuItem>
-        <menuItem id="menuleft-motif"><a href="index.html">Back</a></menuItem>
-      </font>
-    </menu>
+  <!-- menu -->
+  <menu>
+    <font size=3.25px>
+      <menuItem id="menuright-motif"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
+      <menuItem id="menuright-motif"><a href="cite.html">Cite</a></menuItem>
+      <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
+      <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
+      <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
+      <menuItem id="menuright-motif"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
+      <menuItem id="menuleft-motif"><a href="index.html">Metaboverse</a></menuItem>
+      <menuItem id="menuleft-motif"><a href="session.html">Session Data</a></menuItem>
+      <menuItem id="menuleft-motif"><a href="index.html">Back</a></menuItem>
+    </font>
+  </menu>
 
-  </head>
+</head>
 
-  <body>
-    <div id="container-fluid-motif" class="container-fluid">
-        <div id="row-motif" class="row">
-            <div class="col-md-2">
-                <div id="frame-motif-1" class="frame">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="content">
-                                <div id="title-padding">
-                                    <p> Pattern Type </p>
-                                </div>
-                                <p>
-                                  <div class="motif_button" id="motif1" title="Compare the average values between reactants and products that pass the provided threshold."><font size="3" color="white">Average</font>
-                                  </div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif2_1" title="Compare the absolute minimum values between reactants and products that pass the provided threshold."><font size="3" color="white">MaxMax</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif2_2" title="Compare the absolute maximum values between reactants and products that pass the provided threshold."><font size="3" color="white">MinMin</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif3_1" title="Compare the absolute maximum and minimum values between reactants and products, respectively, that pass the provided threshold.."><font size="3" color="white">MaxMin</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif3_2" title="Compare the absolute minimum and maximum values between reactants and products, respectively, that pass the provided threshold."><font size="3" color="white">MinMax</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif4" title="Find instances of sustained perturbation along a reaction."><font size="3" color="white">Sustained</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif5" title="Find instances with one regulated modifier and one core component in the reaction."><font size="3" color="white">ModReg</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif6" title="Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated."><font size="3" color="white">TransReg</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif99" title="Compare the absolute maximum and minimum values across a pathway."><font size="3" color="white">PathMax</font></div>
-                                </p>
-                                <p>
-                                  <div class="motif_button" id="motif100" title="Compare total coverage of reactions with at least one measured component in pathways."><font size="3" color="white">PathCov</font></div>
-                                </p>
-                                <label for="use_collapsed"><font size="2"><i>Show&nbspcollapsed reactions</i></font></label>
-                                <br />
-                                <label for="use_modifiers"><font size="2"><i>Use modifiers</i></font></label>
-                                <br />
-                                <label for="exclude_hubs"><font size="2"><i>Exclude hubs</i></font></label>
-                                <br />
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="content">
-                                <div id="threshold-title">
-                                  <p> Threshold </p>
-                                </div>
-                                <p id="threshold-padding">
-                                  <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <p id="threshold-padding">
-                                  <input type="number" id="minmin_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <p id="threshold-padding">
-                                  <input type="number" id="minmax_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
-                                </p>
-                                <br />
-                                <p id="threshold-padding">
-                                  <input type="number" id="pathcov_num" min="0" max="1" step="0.01" value="0.05">
-                                </p>
-
-                                <p id="checkbox-padding">
-                                  <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in motif analysis. You will need to re-run the motif to exclude collapsed reactions." checked>
-                                </p>
-                                <div id="checkbox_spacer"></div>
-                                <p id="checkbox-padding">
-                                  <input type="checkbox" id="use_modifiers_id" name="use_modifiers" value="true" title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers.">
-                                </p>
-                                <p id="checkbox-padding">
-                                  <input type="checkbox" id="exclude_hubs_id" name="exclude_hubs" value="true" title="Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers.">
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="dropdown-container" title="Decide how motif results are sorted before being returned to you, the user.">
-                            <select name="sort_type" class="custom-select" id="sort_type">
-                                <option>Sort Statistical Significance</option>
-                                <option>Sort Magnitude Change</option>
-                                <option>Sort Number of Pathways</option>
-                            </select>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="content">
-                        <div class="dropdown-container" title="Selections only apply to non-pathway-level motifs (e.g., not PathMax or PathCov).">
-                            <select name="exclude_type" class="custom-select" id="exclude_type">
-                            </select>
-                        </div>
-                    </div>
+<body>
+  <div id="container-fluid-motif" class="container-fluid">
+    <div id="row-motif" class="row">
+      <div class="col-md-2">
+        <div id="frame-motif-1" class="frame">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="content">
+                <div id="title-padding">
+                  <p> Pattern Type </p>
                 </div>
-            </div>
-            <div id="col-md-4-motif" class="col-md-4">
-                <div class="frame" id="frame-motif-2">
-                    <div class="sub-frame" title="List of all motifs found in the global network for the selected motif type with information on how many pathways this motif is found in. Click on the motif to expand.">
-                        <h6><b>Identified Reactions</b></h6>
-                        <div id="stamp-view-container" class="scrollable">
-                            <svg id="stamp-view-svg" width="100%" height=100%></svg>
-                        </div>
-                    </div>
-                    <div class="sub-frame" title="List of pathways in which the selected motif is found. Click on the pathway to open up the pathway's visualization.">
-                        <h6><b>Reaction-Pathway Membership</b></h6>
-                        <div id="motif-pathway-container" class="scrollable">
-                            <svg id="motif-pathway-svg" width="100%" height=100%></svg>
-                        </div>
-                    </div>
+                <p>
+                <div class="motif_button" id="motif1" title="Compare the average values between reactants and products that pass the provided threshold.">
+                  <font size="3" color="white">Average</font>
                 </div>
-            </div>
-            <div id="col-md-6-motif" class="col-md-6">
-                <div class="frame">
-                    <div id="network-frame-motif" class="network-frame">
-                        <div id="pathway_name"></div>
-                        <div id="pathway-view-container">
-                            <div id="pathway-view-svg"></div>
-                        </div>
-                    </div>
-                    <div id="network-panel-motif" class="network-panel">
-                      <h6><b><i>All Motifs In This Pathway:</i></b>
-                      <a href="visualize.html" id="open_pathway_viewer" ><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a></h6>
-                      <div class="scrollable" id="all-motif-list"><ul></ul>
-                      </div>
-                    </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif2_1" title="Compare the absolute minimum values between reactants and products that pass the provided threshold.">
+                  <font size="3" color="white">MaxMax</font>
                 </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif2_2" title="Compare the absolute maximum values between reactants and products that pass the provided threshold.">
+                  <font size="3" color="white">MinMin</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif3_1" title="Compare the absolute maximum and minimum values between reactants and products, respectively, that pass the provided threshold..">
+                  <font size="3" color="white">MaxMin</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif3_2" title="Compare the absolute minimum and maximum values between reactants and products, respectively, that pass the provided threshold.">
+                  <font size="3" color="white">MinMax</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif4" title="Find instances of sustained perturbation along a reaction.">
+                  <font size="3" color="white">Sustained</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif5" title="Find instances with one regulated modifier and one core component in the reaction.">
+                  <font size="3" color="white">ModReg</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif6" title="Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.">
+                  <font size="3" color="white">TransReg</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif99" title="Compare the absolute maximum and minimum values across a pathway.">
+                  <font size="3" color="white">PathMax</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif100" title="Compare total coverage of reactions with at least one measured component in pathways.">
+                  <font size="3" color="white">PathCov</font>
+                </div>
+                </p>
+                <label for="use_collapsed">
+                  <font size="2"><i>Show&nbspcollapsed reactions</i></font>
+                </label>
+                <br />
+                <label for="use_modifiers">
+                  <font size="2"><i>Use modifiers</i></font>
+                </label>
+                <br />
+                <label for="exclude_hubs">
+                  <font size="2"><i>Exclude hubs</i></font>
+                </label>
+                <br />
+              </div>
             </div>
+            <div class="col-md-8">
+              <div class="content">
+                <div id="threshold-title">
+                  <p> Threshold </p>
+                </div>
+                <p id="threshold-padding">
+                  <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <p id="threshold-padding">
+                  <input type="number" id="minmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <p id="threshold-padding">
+                  <input type="number" id="minmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="pathcov_num" min="0" max="1" step="0.01" value="0.05">
+                </p>
+
+                <p id="checkbox-padding">
+                  <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in motif analysis. You will need to re-run the motif to exclude collapsed reactions." checked>
+                </p>
+                <div id="checkbox_spacer"></div>
+                <p id="checkbox-padding">
+                  <input type="checkbox" id="use_modifiers_id" name="use_modifiers" value="true"
+                    title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers.">
+                </p>
+                <p id="checkbox-padding">
+                  <input type="checkbox" id="exclude_hubs_id" name="exclude_hubs" value="true"
+                    title="Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers.">
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="dropdown-container" title="Decide how motif results are sorted before being returned to you, the user.">
+              <select name="sort_type" class="custom-select" id="sort_type">
+                <option>Sort Statistical Significance</option>
+                <option>Sort Magnitude Change</option>
+                <option>Sort Number of Pathways</option>
+              </select>
+            </div>
+          </div>
+          <br />
+          <div class="content">
+            <div class="dropdown-container" title="Selections only apply to non-pathway-level motifs (e.g., not PathMax or PathCov).">
+              <select name="exclude_type" class="custom-select" id="exclude_type">
+              </select>
+            </div>
+          </div>
         </div>
+      </div>
+      <div id="col-md-4-motif" class="col-md-4">
+        <div class="frame" id="frame-motif-2">
+          <div class="sub-frame" title="List of all motifs found in the global network for the selected motif type with information on how many pathways this motif is found in. Click on the motif to expand.">
+            <h6><b>Identified Reactions</b></h6>
+            <div id="stamp-view-container" class="scrollable">
+              <svg id="stamp-view-svg" width="100%" height=100%></svg>
+            </div>
+          </div>
+          <div class="sub-frame" title="List of pathways in which the selected motif is found. Click on the pathway to open up the pathway's visualization.">
+            <h6><b>Reaction-Pathway Membership</b></h6>
+            <div id="motif-pathway-container" class="scrollable">
+              <svg id="motif-pathway-svg" width="100%" height=100%></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="col-md-6-motif" class="col-md-6">
+        <div class="frame">
+          <div id="network-frame-motif" class="network-frame">
+            <div id="pathway_name"></div>
+            <div id="pathway-view-container">
+              <div id="pathway-view-svg"></div>
+            </div>
+          </div>
+          <div id="network-panel-motif" class="network-panel">
+            <h6><b><i>All Motifs In This Pathway:</i></b>
+              <a href="visualize.html" id="open_pathway_viewer"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a>
+            </h6>
+            <div class="scrollable" id="all-motif-list">
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <br />
-    <br />
-    <div id="slider" class="slider-motif" align="center"></div>
-    <br />
-    <div id="frame-shape-key">
-      <div class='frame frame-motif-4'>
-        <font size="2">
+  </div>
+  <br />
+  <br />
+  <div id="slider" class="slider-motif" align="center"></div>
+  <br />
+  <div id="frame-shape-key">
+    <div class='frame frame-motif-4'>
+      <font size="2">
         <div style='margin-left:15px;margin-top:10px;'>
           <font size='3'>
             <b><u>Relationships</u></b>
@@ -287,15 +316,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <div class="add-buffer">
             &nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>
             &nbsp;&nbsp;&nbsp;Gene
-            </div>
+          </div>
           <br />
           <span class="add-buffer">Bold = statistic < 0.05</span>
         </div>
-        </font>
-      </div>
+      </font>
     </div>
-    <br />
-    <br />
-    <div id="frame-line-plots"></div>
-  </body>
+  </div>
+  <br />
+  <br />
+  <div id="frame-line-plots"></div>
+</body>
+
 </html>

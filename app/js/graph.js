@@ -40,168 +40,152 @@ var collapsed_links = [];
 
 // Define the div for the tooltips
 var div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
 d3.select("button#options_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "56px");
-      div
-        .html("Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "56px");
+    div
+      .html("Click on the following buttons to toggle the display of the respective feature. Hover over the button for more details.")
+  })
   .on("mouseout", function(d) {
     div.style("opacity", 0);
     div.html("")
-  }
-);
+  });
 d3.select("button#knn_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "97px");
-      div
-        .html("Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion). You may need to re-click the node to activate a new neighbor number.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "97px");
+    div
+      .html("Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion). You may need to re-click the node to activate a new neighbor number.")
+  })
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
-  }
-);
+    div.style("opacity", 0);
+    div.html("")
+  });
 d3.select("button#hub_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "97px");
-      div
-        .html("Provide a value to threshold displayed entities to those that have no more than the number of perturbations to other entities you provide. By default, graphing will display all entities no matter the number of connections.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "97px");
+    div
+      .html("Provide a value to threshold displayed entities to those that have no more than the number of perturbations to other entities you provide. By default, graphing will display all entities no matter the number of connections.")
+  })
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
-  }
-);
+    div.style("opacity", 0);
+    div.html("")
+  });
 d3.select("button#stat_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "40px");
-      div
-        .html("Provide a value to threshold statistical value where node borders are bolded.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "40px");
+    div
+      .html("Provide a value to threshold statistical value where node borders are bolded.")
+  })
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
-  }
-);
+    div.style("opacity", 0);
+    div.html("")
+  });
 d3.select("button#notes_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "54px");
-      div
-        .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "54px");
+    div
+      .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
+  })
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
-  }
-);
+    div.style("opacity", 0);
+    div.html("")
+  });
 d3.select("button#notes_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "54px");
-      div
-        .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "54px");
+    div
+      .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
+  })
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
-  }
-);
+    div.style("opacity", 0);
+    div.html("")
+  });
 d3.select("button#legend_info")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("width", "200px")
-        .style("height", "43px");
-      div
-        .html("Click and drag the background to pan, or use the mouse wheel to zoom.")
-      }
-    )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("width", "200px")
+      .style("height", "43px");
+    div
+      .html("Click and drag the background to pan, or use the mouse wheel to zoom.")
+  })
   .on("mouseout", function(d) {
-  div.style("opacity", 0);
-  div.html("")
-  }
-);
+    div.style("opacity", 0);
+    div.html("")
+  });
 
 d3.select("button#shape_legend")
   .on("mouseover", function(d) {
-      div
-        .style("opacity", 0.95)
-        .style("left", (d3.event.pageX + 20) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("height", "375px")
-        .style("width", "200px");
-      div.html(
-        "<font size='2'><div style='margin-left:15px;margin-top:10px;'><font size='3'><b><u>Relationships</u></b></font><br /><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Core interaction<br /><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Catalyst<br /><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Inhibitor<br /><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component<br /><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Protein Component<br /><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Gene Component<br /><br /><font size='3'><b><u>Entities</u></b></font><br /><span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction<br /><span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction<br />&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite<br />&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex<br />&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein<br /><div class='add-buffer'>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;Gene</div><br /><br /><span class='add-buffer'>Bold = statistic < 0.05</span></div></font>"
-      )
-    }
-  )
+    div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("height", "375px")
+      .style("width", "200px");
+    div.html(
+      "<font size='2'><div style='margin-left:15px;margin-top:10px;'><font size='3'><b><u>Relationships</u></b></font><br /><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Core interaction<br /><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Catalyst<br /><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Inhibitor<br /><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component<br /><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Protein Component<br /><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Gene Component<br /><br /><font size='3'><b><u>Entities</u></b></font><br /><span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction<br /><span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction<br />&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite<br />&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex<br />&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein<br /><div class='add-buffer'>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;Gene</div><br /><br /><span class='add-buffer'>Bold = statistic < 0.05</span></div></font>"
+    )
+  })
   .on("mouseout", function(d) {
     div.style("opacity", 0);
     div.html("")
-  }
-);
+  });
 
 function checkReaction(
-    reaction,
-    element,
-    element_type) {
+  reaction,
+  element,
+  element_type) {
   // Check that element is included in reaction components
   if (element_type === "list") {
     for (let e in element) {
-      if (reaction["reactants"].includes(element[e])
-          || reaction["products"].includes(element[e])
-          || reaction["modifiers"].includes(element[e])
-          || reaction["additional_components"].includes(element[e])) {
+      if (reaction["reactants"].includes(element[e]) ||
+        reaction["products"].includes(element[e]) ||
+        reaction["modifiers"].includes(element[e]) ||
+        reaction["additional_components"].includes(element[e])) {
         return true;
       }
     }
     return false;
   } else {
-    if (reaction["reactants"].includes(element)
-        || reaction["products"].includes(element)
-        || reaction["modifiers"].includes(element)
-        || reaction["additional_components"].includes(element)) {
+    if (reaction["reactants"].includes(element) ||
+      reaction["products"].includes(element) ||
+      reaction["modifiers"].includes(element) ||
+      reaction["additional_components"].includes(element)) {
       return true;
     } else {
       return false;
@@ -210,8 +194,8 @@ function checkReaction(
 }
 
 function checkPlotting(
-    data,
-    reaction) {
+  data,
+  reaction) {
   // Check whether a neighboring reaction should be included
 
   let these_degrees = [];
@@ -245,9 +229,9 @@ function checkPlotting(
 }
 
 function initialize_nodes(
-    nodes,
-    node_dict,
-    type_dict) {
+  nodes,
+  node_dict,
+  type_dict) {
   var display_analytes_dict = {};
   var display_reactions_dict = {};
   var entity_id_dict = {};
@@ -305,10 +289,10 @@ function transform(d) {
 }
 
 function parse_pathway(
-    data,
-    reactions,
-    reaction_dictionary,
-    degree_dictionary) {
+  data,
+  reactions,
+  reaction_dictionary,
+  degree_dictionary) {
 
   // Parse through each reaction listed and get the component parts
   var components = [];
@@ -323,10 +307,10 @@ function parse_pathway(
         } else {
           console.log(
             "Filtering " +
-              target_rxns["reactants"][x] +
-              " (" +
-              degree_dictionary[target_rxns["reactants"][x]] +
-              " degrees) -- may cause edge loss"
+            target_rxns["reactants"][x] +
+            " (" +
+            degree_dictionary[target_rxns["reactants"][x]] +
+            " degrees) -- may cause edge loss"
           );
         }
       }
@@ -336,10 +320,10 @@ function parse_pathway(
         } else {
           console.log(
             "Filtering " +
-              target_rxns["products"][x] +
-              " (" +
-              degree_dictionary[target_rxns["products"][x]] +
-              " degrees) -- may cause edge loss"
+            target_rxns["products"][x] +
+            " (" +
+            degree_dictionary[target_rxns["products"][x]] +
+            " degrees) -- may cause edge loss"
           );
         }
       }
@@ -349,10 +333,10 @@ function parse_pathway(
         } else {
           console.log(
             "Filtering " +
-              target_rxns["modifiers"][x][0] +
-              " (" +
-              degree_dictionary[target_rxns["modifiers"][x][0]] +
-              " degrees) -- may cause edge loss"
+            target_rxns["modifiers"][x][0] +
+            " (" +
+            degree_dictionary[target_rxns["modifiers"][x][0]] +
+            " degrees) -- may cause edge loss"
           );
         }
       }
@@ -362,10 +346,10 @@ function parse_pathway(
         } else {
           console.log(
             "Filtering " +
-              target_rxns["additional_components"][x] +
-              " (" +
-              degree_dictionary[target_rxns["additional_components"][x]] +
-              " degrees) -- may cause edge loss"
+            target_rxns["additional_components"][x] +
+            " (" +
+            degree_dictionary[target_rxns["additional_components"][x]] +
+            " degrees) -- may cause edge loss"
           );
         }
       }
@@ -467,7 +451,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
   try {
     document.getElementById("warning_line_1").innerHTML = "<br>";
     document.getElementById("warning_line_2").innerHTML = "<br><br>";
-  } catch(e) {}
+  } catch (e) {}
 
   if (collapse_reactions === true) {
     var reaction_dictionary = data.collapsed_reaction_dictionary;
@@ -493,10 +477,10 @@ function parse_kNN_pathway(data, entity_list, kNN) {
           } else {
             console.log(
               "Filtering " +
-                target_rxns["reactants"][x] +
-                " (" +
-                degree_dictionary[target_rxns["reactants"][x]] +
-                " degrees) -- may cause edge loss"
+              target_rxns["reactants"][x] +
+              " (" +
+              degree_dictionary[target_rxns["reactants"][x]] +
+              " degrees) -- may cause edge loss"
             );
           }
         }
@@ -506,10 +490,10 @@ function parse_kNN_pathway(data, entity_list, kNN) {
           } else {
             console.log(
               "Filtering " +
-                target_rxns["products"][x] +
-                " (" +
-                degree_dictionary[target_rxns["products"][x]] +
-                " degrees) -- may cause edge loss"
+              target_rxns["products"][x] +
+              " (" +
+              degree_dictionary[target_rxns["products"][x]] +
+              " degrees) -- may cause edge loss"
             );
           }
         }
@@ -519,10 +503,10 @@ function parse_kNN_pathway(data, entity_list, kNN) {
           } else {
             console.log(
               "Filtering " +
-                target_rxns["modifiers"][x][0] +
-                " (" +
-                degree_dictionary[target_rxns["modifiers"][x][0]] +
-                " degrees) -- may cause edge loss"
+              target_rxns["modifiers"][x][0] +
+              " (" +
+              degree_dictionary[target_rxns["modifiers"][x][0]] +
+              " degrees) -- may cause edge loss"
             );
           }
         }
@@ -532,10 +516,10 @@ function parse_kNN_pathway(data, entity_list, kNN) {
           } else {
             console.log(
               "Filtering " +
-                target_rxns["additional_components"][x] +
-                " (" +
-                degree_dictionary[target_rxns["additional_components"][x]] +
-                " degrees) -- may cause edge loss"
+              target_rxns["additional_components"][x] +
+              " (" +
+              degree_dictionary[target_rxns["additional_components"][x]] +
+              " degrees) -- may cause edge loss"
             );
           }
         }
@@ -551,7 +535,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
         '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
       document.getElementById("warning_line_2").innerHTML = "<br>";
       alert("Too many entities to plot. Try decreasing the hub threshold or the number of neighbors (if using more than 1).")
-    } catch(e) {}
+    } catch (e) {}
 
     kNN = 0;
     nn_components = [];
@@ -562,7 +546,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
       document.getElementById("warning_line_1").innerHTML =
         '<i class="red-text">Please wait<br><br></i>';
       document.getElementById("warning_line_2").innerHTML = "";
-    } catch(e) {}
+    } catch (e) {}
     // Filter out any components that are above hub threshold for kNN
     n = 1;
     nn_components = [...new Set(nn_components)];
@@ -577,7 +561,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
             if (checkReaction(
                 reaction_dictionary[reaction],
                 nn_components[element]) === true,
-                "item") {
+              "item") {
 
               let outputs = checkPlotting(
                 data,
@@ -642,14 +626,14 @@ function parse_kNN_pathway(data, entity_list, kNN) {
             " neighborhood(s)</i>";
           document.getElementById("warning_line_2").innerHTML = "";
           alert("Too many entities to plot. Will only plot first " + n + " neighborhood(s)")
-        } catch(e) {}
+        } catch (e) {}
         n = kNN + 2;
       } else {
         nn_components = nn_components.concat(components);
         try {
           document.getElementById("warning_line_1").innerHTML = "<br>";
           document.getElementById("warning_line_2").innerHTML = "<br><br>";
-        } catch(e) {}
+        } catch (e) {}
       }
       n = n + 1;
     }
@@ -699,18 +683,18 @@ function get_link(d) {
 }
 
 function make_graph(
-    data,
-    new_nodes,
-    new_links,
-    type_dict,
-    node_dict,
-    entity_id_dict,
-    display_analytes_dict,
-    display_reactions_dict,
-    selector,
-    _width,
-    _height,
-    global_motifs) {
+  data,
+  new_nodes,
+  new_links,
+  type_dict,
+  node_dict,
+  entity_id_dict,
+  display_analytes_dict,
+  display_reactions_dict,
+  selector,
+  _width,
+  _height,
+  global_motifs) {
 
   console.log(new_nodes)
 
@@ -738,9 +722,7 @@ function make_graph(
   link_keep = [];
   for (l in new_links) {
 
-    if (id_blocklist.includes(new_links[l].target) || id_blocklist.includes(new_links[l].source)) {
-    } else if (id_blocklist.includes(new_links[l].target.id) || id_blocklist.includes(new_links[l].source.id)) {
-    } else {
+    if (id_blocklist.includes(new_links[l].target) || id_blocklist.includes(new_links[l].source)) {} else if (id_blocklist.includes(new_links[l].target.id) || id_blocklist.includes(new_links[l].source.id)) {} else {
       link_keep.push(new_links[l]);
     }
   }
@@ -786,10 +768,10 @@ function make_graph(
     .force(
       "link",
       d3
-        .forceLink(graph_links)
-        .id(d => d.id)
-        .distance(40)
-        .strength(1)
+      .forceLink(graph_links)
+      .id(d => d.id)
+      .distance(40)
+      .strength(1)
     )
     .force("charge", d3.forceManyBody().strength(-1000))
     .force("center", d3.forceCenter(_width / 2, _height / 2));
@@ -834,6 +816,7 @@ function make_graph(
     .attr("d", "M0, -5L10, 0L0, 5");
 
   var offset = 30;
+
   function getGroup(d, links) {
 
     if (d.type === "gene_component") {
@@ -882,21 +865,23 @@ function make_graph(
     .enter()
     .append("g")
     .attr("class", "node")
-    .attr("id", function(d) {return d.id})
+    .attr("id", function(d) {
+      return d.id
+    })
     .call(
       d3
-        .drag()
-        .subject(dragsubject)
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended)
+      .drag()
+      .subject(dragsubject)
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended)
     );
 
   var circle = node
     .append("path")
     .style("fill", function(d) {
       return "rgba(" + d[entity][sample].toString() + ")";
-     })
+    })
     .style("stroke", "black")
     .style("stroke-width", function(d) {
       if ((d['stats'][sample] === undefined) || (d['stats'][sample] === null)) {
@@ -925,7 +910,7 @@ function make_graph(
           return d3.symbolSquare;
         } else if (d.sub_type === "protein_component") {
           return d3.symbolDiamond;
-        }  else if (d.type === "metabolite_component" || d.sub_type === "metabolite_component") {
+        } else if (d.type === "metabolite_component" || d.sub_type === "metabolite_component") {
           return d3.symbolCircle;
         } else if (d.type === "reaction" || d.sub_type === "reaction" || d.type === "collapsed" || d.sub_type === "collapsed") {
           return d3.symbolStar;
@@ -933,7 +918,9 @@ function make_graph(
           return d3.symbolCross;
         }
       }))
-      .attr("id", function(d) {return d.id})
+    .attr("id", function(d) {
+      return d.id
+    })
 
   // Motif page will only send the current time-point's motifs
   var page_path = window.location.pathname;
@@ -945,17 +932,17 @@ function make_graph(
         motif_ids.push(global_motifs[key].id)
       }
       if (motif_ids.length > 0) {
-        graph_nodes.forEach(node=>{
+        graph_nodes.forEach(node => {
           let rxn_id = node.id;
           if (motif_ids.includes(rxn_id)) {
             d3.selectAll("path#" + rxn_id)
-            .style("stroke", "purple")
-            .style("stroke-width", 3)
-            .attr("d", d3.symbol()
-              .size(function(d) {
-                return 400;
-              })
-              .type(d3.symbolStar))
+              .style("stroke", "purple")
+              .style("stroke-width", 3)
+              .attr("d", d3.symbol()
+                .size(function(d) {
+                  return 400;
+                })
+                .type(d3.symbolStar))
           }
         })
       }
@@ -963,7 +950,7 @@ function make_graph(
   } else {
     if (global_motifs[sample] !== undefined) {
       if (global_motifs[sample].length > 0) {
-        graph_nodes.forEach(node=>{
+        graph_nodes.forEach(node => {
           let rxn_id = node.id;
           if (global_motifs[sample].includes(rxn_id)) {
             d3.selectAll("path#" + rxn_id)
@@ -1005,7 +992,7 @@ function make_graph(
 
     var category_key = new Object();
     var counter = 0;
-    categories.forEach( s => {
+    categories.forEach(s => {
       category_key[s] = counter;
       counter = counter + 1;
     })
@@ -1023,69 +1010,67 @@ function make_graph(
     hullg.selectAll("path.hull").remove();
     hull = hullg
       .selectAll("path.hull")
-        .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
+      .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
       .enter().append("path")
-        .attr("class", "hull")
-        .attr("d", drawCluster)
-        .style("fill", function(d) {
-          if (d.group !== "undefined" && d.group !== "none") {
-            if (categories[d.group] > 9) {
-              return fill2[categories[d.group] - 10];
-            } else {
-              return fill[categories[d.group]];
-            }
+      .attr("class", "hull")
+      .attr("d", drawCluster)
+      .style("fill", function(d) {
+        if (d.group !== "undefined" && d.group !== "none") {
+          if (categories[d.group] > 9) {
+            return fill2[categories[d.group] - 10];
+          } else {
+            return fill[categories[d.group]];
           }
         }
-      )
+      })
 
-      let compartment_dictionary = {};
-      for (let _n in graph_nodes) {
-        if ((graph_nodes[_n]['compartment'] !== undefined)
-        && (graph_nodes[_n]['compartment'] !== "none")
-        && (graph_nodes[_n]['compartment'] !== null)) {
-          compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
-        }
+    let compartment_dictionary = {};
+    for (let _n in graph_nodes) {
+      if ((graph_nodes[_n]['compartment'] !== undefined) &&
+        (graph_nodes[_n]['compartment'] !== "none") &&
+        (graph_nodes[_n]['compartment'] !== null)) {
+        compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
       }
-      d3.select("button#compartment_legend")
-        .on("mouseover", function(d) {
-          let adder = 0;
-          let category_number = 0;
-          let make_string = "";
-          for (let s in categories) {
-            if (s !== null && s !== "none" && s !== undefined && s !== "undefined" && compartment_dictionary[s] !== undefined) {
-              // handle a blank category by skipping
-              if (hull._groups[0][categories[s]].style.fill === "") {
-                adder = adder + 1;
-              }
-              make_string = make_string + "&nbsp;";
-              make_string = make_string + "<span class='ellipse' style='--dot_color:" + hull._groups[0][categories[s] + adder].style.fill + ";'></span>";
-              make_string = make_string + "&nbsp;&nbsp;&nbsp;&nbsp;";
-              make_string = make_string + compartment_dictionary[s];
-              make_string = make_string + "</br>";
-              category_number = category_number + 1;
+    }
+    d3.select("button#compartment_legend")
+      .on("mouseover", function(d) {
+        let adder = 0;
+        let category_number = 0;
+        let make_string = "";
+        for (let s in categories) {
+          if (s !== null && s !== "none" && s !== undefined && s !== "undefined" && compartment_dictionary[s] !== undefined) {
+            // handle a blank category by skipping
+            if (hull._groups[0][categories[s]].style.fill === "") {
+              adder = adder + 1;
             }
-          }
-
-          // add one for formatting
-          if (category_number > 15) {
+            make_string = make_string + "&nbsp;";
+            make_string = make_string + "<span class='ellipse' style='--dot_color:" + hull._groups[0][categories[s] + adder].style.fill + ";'></span>";
+            make_string = make_string + "&nbsp;&nbsp;&nbsp;&nbsp;";
+            make_string = make_string + compartment_dictionary[s];
+            make_string = make_string + "</br>";
             category_number = category_number + 1;
           }
+        }
 
-          div
-            .style("opacity", 0.95)
-            .style("left", (d3.event.pageX + 20) + "px")
-            .style("top", (d3.event.pageY - 10) + "px")
-            .style("height", (60 + (15 * category_number * 1.2)).toString() + "px")
-            .style("width", "275px");
-          div
-            .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Compartments</u></b></font></br></br>" + make_string)
-          }
-        )
-        .on("mouseout", function(d) {
-          div.style("opacity", 0);
-          div.html("")
-          category_number = 0;
-        });
+        // add one for formatting
+        if (category_number > 15) {
+          category_number = category_number + 1;
+        }
+
+        div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", (60 + (15 * category_number * 1.2)).toString() + "px")
+          .style("width", "275px");
+        div
+          .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Compartments</u></b></font></br></br>" + make_string)
+      })
+      .on("mouseout", function(d) {
+        div.style("opacity", 0);
+        div.html("")
+        category_number = 0;
+      });
   }
 
   var timer = 0;
@@ -1148,39 +1133,41 @@ function make_graph(
 
   var text = node
     .append("text")
-    .attr("id", function(d) {return d.id})
+    .attr("id", function(d) {
+      return d.id
+    })
     .html(function(d) {
       if (type_dict[d.name] === "reaction" || type_dict[d.name] === "collapsed") {
         // Label other nodes with expression value in parentheses
         if (d.compartment === "") {
           return (
-            "<tspan dx='16' y='.31em' class='bold-text'>"
-            + d.name
-            + "</tspan>"
+            "<tspan dx='16' y='.31em' class='bold-text'>" +
+            d.name +
+            "</tspan>"
           );
         } else {
           return (
-            "<tspan dx='16' y='.31em' class='bold-text'>"
-            + d.name
-            + "</tspan>"
-            + "<tspan x='16' y='1.7em'>Compartment: "
-            + d.compartment_display
-            + "</tspan>"
+            "<tspan dx='16' y='.31em' class='bold-text'>" +
+            d.name +
+            "</tspan>" +
+            "<tspan x='16' y='1.7em'>Compartment: " +
+            d.compartment_display +
+            "</tspan>"
           );
         }
       } else if (type_dict[d.name] === "collapsed") {
         return (
-          "<tspan dx='16' y='.31em' class='bold-text'>"
-          + d.name
-          + "</tspan>"
+          "<tspan dx='16' y='.31em' class='bold-text'>" +
+          d.name +
+          "</tspan>"
         );
       } else {
-        if (d.values[sample] === null
-        && d.stats[sample] === null) {
+        if (d.values[sample] === null &&
+          d.stats[sample] === null) {
           return (
-            "<tspan dx='16' y='0em' class='bold-text'>"
-            + d.name
-            + "</tspan>"
+            "<tspan dx='16' y='0em' class='bold-text'>" +
+            d.name +
+            "</tspan>"
           );
         } else {
           let display_stat;
@@ -1190,15 +1177,15 @@ function make_graph(
             display_stat = parseFloat(d.stats[sample]).toFixed(2)
           }
           return (
-            "<tspan dx='16' y='-.5em' class='bold-text'>"
-            + d.name
-            + "</tspan>"
-            + "<tspan x='16' y='.7em'>Value: "
-            + parseFloat(d.values[sample]).toFixed(2)
-            + "</tspan>"
-            + "<tspan x='16' y='1.7em'>Statistic: "
-            + display_stat
-            + "</tspan>"
+            "<tspan dx='16' y='-.5em' class='bold-text'>" +
+            d.name +
+            "</tspan>" +
+            "<tspan x='16' y='.7em'>Value: " +
+            parseFloat(d.values[sample]).toFixed(2) +
+            "</tspan>" +
+            "<tspan x='16' y='1.7em'>Statistic: " +
+            display_stat +
+            "</tspan>"
           );
         }
       }
@@ -1213,32 +1200,31 @@ function make_graph(
       toggle_comp = true;
       hull = hullg
         .selectAll("path.hull")
-          .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
+        .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
         .enter().append("path")
-          .attr("class", "hull")
-          .attr("d", drawCluster)
-          .style("fill", function(d) {
-            if (d.group !== "undefined" && d.group !== "none") {
-              if (categories[d.group] > 9) {
-                return fill2[categories[d.group]];
-              } else {
-                return fill[categories[d.group]];
-              }
+        .attr("class", "hull")
+        .attr("d", drawCluster)
+        .style("fill", function(d) {
+          if (d.group !== "undefined" && d.group !== "none") {
+            if (categories[d.group] > 9) {
+              return fill2[categories[d.group]];
+            } else {
+              return fill[categories[d.group]];
             }
-          })
+          }
+        })
 
     } else {
       toggle_comp = false;
       hullg.selectAll("path.hull").remove();
-  }
-});
+    }
+  });
 
   d3.select("#saveGraph").on("click", function() {
 
     saveSVG.saveSvgAsPng(
       d3.select("#svg_viewer_id")._groups[0][0],
-      "plot.png",
-      {
+      "plot.png", {
         encoderOptions: 1,
         scale: 10,
         encoderType: "image/png"
@@ -1265,28 +1251,28 @@ function make_graph(
           // If reaction node, do not display expression value
           if (d.compartment === "") {
             return (
-              "<tspan dx='16' y='.31em' class='bold-text'>"
-              + d.name
-              + "</tspan>"
+              "<tspan dx='16' y='.31em' class='bold-text'>" +
+              d.name +
+              "</tspan>"
             );
           } else {
             return (
               "<tspan dx='16' y='.31em' class='bold-text'>" +
               d.name +
+              "</tspan>" +
+              "<tspan x='16' y='1.7em'>Compartment: " +
+              d.compartment_display +
               "</tspan>"
-              + "<tspan x='16' y='1.7em'>Compartment: "
-              + d.compartment_display
-              + "</tspan>"
             );
           }
         } else {
           // Label other nodes with expression value in parentheses
-          if (d.values[sample] === null
-          && d.stats[sample] === null) {
+          if (d.values[sample] === null &&
+            d.stats[sample] === null) {
             return (
-              "<tspan dx='16' y='0em' class='bold-text'>"
-              + d.name
-              + "</tspan>"
+              "<tspan dx='16' y='0em' class='bold-text'>" +
+              d.name +
+              "</tspan>"
             );
           } else {
             let display_stat;
@@ -1296,15 +1282,15 @@ function make_graph(
               display_stat = parseFloat(d.stats[sample]).toFixed(2)
             }
             return (
-              "<tspan dx='16' y='-.5em' class='bold-text'>"
-              + d.name
-              + "</tspan>"
-              + "<tspan x='16' y='.7em'>Value: "
-              + parseFloat(d.values[sample]).toFixed(2)
-              + "</tspan>"
-              + "<tspan x='16' y='1.7em'>Statistic: "
-              + display_stat
-              + "</tspan>"
+              "<tspan dx='16' y='-.5em' class='bold-text'>" +
+              d.name +
+              "</tspan>" +
+              "<tspan x='16' y='.7em'>Value: " +
+              parseFloat(d.values[sample]).toFixed(2) +
+              "</tspan>" +
+              "<tspan x='16' y='1.7em'>Statistic: " +
+              display_stat +
+              "</tspan>"
             );
           }
         }
@@ -1490,8 +1476,7 @@ function make_graph(
               _height,
               global_motifs)
             collapse_reactions = false;
-          } else {
-          }
+          } else {}
         }
       }
     }
@@ -1509,11 +1494,11 @@ function make_graph(
       var n = nodes[k];
       if (n.size) continue;
       var i = index(n, links),
-          l = hulls[i] || (hulls[i] = []);
-      l.push([n.x-offset, n.y-offset]);
-      l.push([n.x-offset, n.y+offset]);
-      l.push([n.x+offset, n.y-offset]);
-      l.push([n.x+offset, n.y+offset]);
+        l = hulls[i] || (hulls[i] = []);
+      l.push([n.x - offset, n.y - offset]);
+      l.push([n.x - offset, n.y + offset]);
+      l.push([n.x + offset, n.y - offset]);
+      l.push([n.x + offset, n.y + offset]);
     }
 
     // create convex hulls
@@ -1541,8 +1526,7 @@ function make_graph(
       .attr("transform", transform);
     text
       .attr("transform", transform);
-    if (page_name === "perturbations.html") {
-    } else {
+    if (page_name === "perturbations.html") {} else {
       hull
         .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
         .attr("d", drawCluster);
@@ -1568,9 +1552,9 @@ function make_graph(
   function dragended() {
     if (!d3.event.active)
       simulation
-        .alphaTarget(0.05)
-        .alphaMin(0.06)
-        .velocityDecay(0.7);
+      .alphaTarget(0.05)
+      .alphaMin(0.06)
+      .velocityDecay(0.7);
     d3.event.subject.fx = null;
     d3.event.subject.fy = null;
   }
@@ -1716,43 +1700,89 @@ function test() {
 
   let test_data = {
     'nodes': {
-      'N1':{'id':'n1'},
-      'N2':{'id':'n2'},
-      'N3':{'id':'n3'},
-      'N4':{'id':'n4'},
-      'N5':{'id':'n5'},
-      'N6':{'id':'n6'},
-      'N7':{'id':'n7'},
-      'N8':{'id':'n8'},
-      'N9':{'id':'n9'},
-      'N10':{'id':'n10'},
-      'N11':{'id':'n11'},
+      'N1': {
+        'id': 'n1'
+      },
+      'N2': {
+        'id': 'n2'
+      },
+      'N3': {
+        'id': 'n3'
+      },
+      'N4': {
+        'id': 'n4'
+      },
+      'N5': {
+        'id': 'n5'
+      },
+      'N6': {
+        'id': 'n6'
+      },
+      'N7': {
+        'id': 'n7'
+      },
+      'N8': {
+        'id': 'n8'
+      },
+      'N9': {
+        'id': 'n9'
+      },
+      'N10': {
+        'id': 'n10'
+      },
+      'N11': {
+        'id': 'n11'
+      },
     },
     'links': {
-      'N1,N2':{'id':'l1'},
-      'N2,N3':{'id':'l2'},
-      'N3,N4':{'id':'l3'},
-      'N4,N5':{'id':'l4'},
-      'N5,N6':{'id':'l5'},
-      'N6,N1':{'id':'l6'},
-      'N6,N3':{'id':'l7'},
-      'N3,N7':{'id':'l8'},
-      'N7,N8':{'id':'l9'},
-      'N8,N9':{'id':'l10'},
-      'N9,N10':{'id':'l11'},
-      'N10,N11':{'id':'l12'},
+      'N1,N2': {
+        'id': 'l1'
+      },
+      'N2,N3': {
+        'id': 'l2'
+      },
+      'N3,N4': {
+        'id': 'l3'
+      },
+      'N4,N5': {
+        'id': 'l4'
+      },
+      'N5,N6': {
+        'id': 'l5'
+      },
+      'N6,N1': {
+        'id': 'l6'
+      },
+      'N6,N3': {
+        'id': 'l7'
+      },
+      'N3,N7': {
+        'id': 'l8'
+      },
+      'N7,N8': {
+        'id': 'l9'
+      },
+      'N8,N9': {
+        'id': 'l10'
+      },
+      'N9,N10': {
+        'id': 'l11'
+      },
+      'N10,N11': {
+        'id': 'l12'
+      },
     }
   };
-  let test_components = ['N1','N4','N5'];
+  let test_components = ['N1', 'N4', 'N5'];
 
-  describe('graph.js', function () {
+  describe('graph.js', function() {
     // get_nodes_links()
-    describe('get_nodes_links()', function () {
-      it('should return 3 nodes and 1 link', function () {
+    describe('get_nodes_links()', function() {
+      it('should return 3 nodes and 1 link', function() {
 
         let test_items = get_nodes_links(
-            test_data,
-            test_components
+          test_data,
+          test_components
         )
         let test_nodes = test_items[0];
         let test_links = test_items[1];
@@ -1764,146 +1794,216 @@ function test() {
       })
     })
     // parse_kNN_pathway()
-    describe('parse_kNN_pathway()', function () {
-      it('should return ...', function () {
+    describe('parse_kNN_pathway()', function() {
+      it('should return ...', function() {
 
         let test_data_kNN = {
           'nodes': {
-            'R1':{
-              'degree':5,
-              'name':'r1',
-              'id':'R1'},
-            'R2':{
-              'degree':5,
-              'name':'r2',
-              'id':'R2'},
-            'R3':{
-              'degree':5,
-              'name':'r3',
-              'id':'R3'},
-            'R4':{
-              'degree':5,
-              'name':'r4',
-              'id':'R4'},
-            'R5':{
-              'degree':5,
-              'name':'r5',
-              'id':'R5'},
-            'R6':{
-              'degree':5,
-              'name':'r6',
-              'id':'R6'},
-            'N1':{
-              'degree':1000,
-              'name':'n1',
-              'id':'N1'},
-            'N2':{
-              'degree':10,
-              'name':'n2',
-              'id':'N2'},
-            'N3':{
-              'degree':50,
-              'name':'n3',
-              'id':'N3'},
-            'N4':{
-              'degree':9,
-              'name':'n4',
-              'id':'N4'},
-            'N5':{
-              'degree':10,
-              'name':'n5',
-              'id':'N5'},
-            'N6':{
-              'degree':11,
-              'name':'n6',
-              'id':'N6'},
-            'N7':{
-              'degree':10,
-              'name':'n7',
-              'id':'N7'},
-            'N8':{
-              'degree':5,
-              'name':'n8',
-              'id':'N8'},
-            'N9':{
-              'degree':4,
-              'name':'n9',
-              'id':'N9'},
-            'N10':{
-              'degree':3,
-              'name':'n10',
-              'id':'N10'},
-            'N11':{
-              'degree':7,
-              'name':'n11',
-              'id':'N11'}
+            'R1': {
+              'degree': 5,
+              'name': 'r1',
+              'id': 'R1'
+            },
+            'R2': {
+              'degree': 5,
+              'name': 'r2',
+              'id': 'R2'
+            },
+            'R3': {
+              'degree': 5,
+              'name': 'r3',
+              'id': 'R3'
+            },
+            'R4': {
+              'degree': 5,
+              'name': 'r4',
+              'id': 'R4'
+            },
+            'R5': {
+              'degree': 5,
+              'name': 'r5',
+              'id': 'R5'
+            },
+            'R6': {
+              'degree': 5,
+              'name': 'r6',
+              'id': 'R6'
+            },
+            'N1': {
+              'degree': 1000,
+              'name': 'n1',
+              'id': 'N1'
+            },
+            'N2': {
+              'degree': 10,
+              'name': 'n2',
+              'id': 'N2'
+            },
+            'N3': {
+              'degree': 50,
+              'name': 'n3',
+              'id': 'N3'
+            },
+            'N4': {
+              'degree': 9,
+              'name': 'n4',
+              'id': 'N4'
+            },
+            'N5': {
+              'degree': 10,
+              'name': 'n5',
+              'id': 'N5'
+            },
+            'N6': {
+              'degree': 11,
+              'name': 'n6',
+              'id': 'N6'
+            },
+            'N7': {
+              'degree': 10,
+              'name': 'n7',
+              'id': 'N7'
+            },
+            'N8': {
+              'degree': 5,
+              'name': 'n8',
+              'id': 'N8'
+            },
+            'N9': {
+              'degree': 4,
+              'name': 'n9',
+              'id': 'N9'
+            },
+            'N10': {
+              'degree': 3,
+              'name': 'n10',
+              'id': 'N10'
+            },
+            'N11': {
+              'degree': 7,
+              'name': 'n11',
+              'id': 'N11'
+            }
           },
           'links': {
-            'N7,R1':{'id':'l1'},
-            'R1,N8':{'id':'l2'},
-            'N3,R1':{'id':'l3'},
-            'N5,R2':{'id':'l4'},
-            'N6,R2':{'id':'l5'},
-            'R2,N7':{'id':'l6'},
-            'N11,R2':{'id':'l7'},
-            'N4,R3':{'id':'l8'},
-            'R3,N5':{'id':'l9'},
-            'R3,N6':{'id':'l10'},
-            'N11,R3':{'id':'l11'},
-            'N8,R4':{'id':'l12'},
-            'N9,R4':{'id':'l13'},
-            'R4,N1':{'id':'l14'},
-            'R4,N2':{'id':'l15'},
-            'N2,R5':{'id':'l16'},
-            'R5,N3':{'id':'l17'},
-            'N3,R6':{'id':'l18'},
-            'R4,R6':{'id':'l19'},
-            'R6,N5':{'id':'l20'},
-            'N11,R6':{'id':'l21'},
-            'N1,R6':{'id':'l22'},
+            'N7,R1': {
+              'id': 'l1'
+            },
+            'R1,N8': {
+              'id': 'l2'
+            },
+            'N3,R1': {
+              'id': 'l3'
+            },
+            'N5,R2': {
+              'id': 'l4'
+            },
+            'N6,R2': {
+              'id': 'l5'
+            },
+            'R2,N7': {
+              'id': 'l6'
+            },
+            'N11,R2': {
+              'id': 'l7'
+            },
+            'N4,R3': {
+              'id': 'l8'
+            },
+            'R3,N5': {
+              'id': 'l9'
+            },
+            'R3,N6': {
+              'id': 'l10'
+            },
+            'N11,R3': {
+              'id': 'l11'
+            },
+            'N8,R4': {
+              'id': 'l12'
+            },
+            'N9,R4': {
+              'id': 'l13'
+            },
+            'R4,N1': {
+              'id': 'l14'
+            },
+            'R4,N2': {
+              'id': 'l15'
+            },
+            'N2,R5': {
+              'id': 'l16'
+            },
+            'R5,N3': {
+              'id': 'l17'
+            },
+            'N3,R6': {
+              'id': 'l18'
+            },
+            'R4,R6': {
+              'id': 'l19'
+            },
+            'R6,N5': {
+              'id': 'l20'
+            },
+            'N11,R6': {
+              'id': 'l21'
+            },
+            'N1,R6': {
+              'id': 'l22'
+            },
           },
           'reaction_dictionary': {
             'R1': {
               'id': 'R1',
               'reactants': ['N7'],
               'products': ['N8'],
-              'modifiers': [['N3','catalyst']],
-              'additional_components':[]
+              'modifiers': [
+                ['N3', 'catalyst']
+              ],
+              'additional_components': []
             },
             'R2': {
               'id': 'R2',
-              'reactants': ['N5','N6'],
+              'reactants': ['N5', 'N6'],
               'products': ['N7'],
-              'modifiers': [['N11','catalyst']],
-              'additional_components':[]
+              'modifiers': [
+                ['N11', 'catalyst']
+              ],
+              'additional_components': []
             },
             'R3': {
               'id': 'R3',
               'reactants': ['N4'],
-              'products': ['N5','N6'],
-              'modifiers': [['N11','inhibitor']],
-              'additional_components':[]
+              'products': ['N5', 'N6'],
+              'modifiers': [
+                ['N11', 'inhibitor']
+              ],
+              'additional_components': []
             },
             'R4': {
               'id': 'R4',
-              'reactants': ['N8','N9'],
-              'products': ['N1','N2'],
+              'reactants': ['N8', 'N9'],
+              'products': ['N1', 'N2'],
               'modifiers': [],
-              'additional_components':[]
+              'additional_components': []
             },
             'R5': {
               'id': 'R5',
               'reactants': ['N2'],
               'products': ['N3'],
               'modifiers': [],
-              'additional_components':[]
+              'additional_components': []
             },
             'R6': {
               'id': 'R6',
-              'reactants': ['N3','N4'],
+              'reactants': ['N3', 'N4'],
               'products': ['N5'],
-              'modifiers': [['N11','catalyst'],['N1','inhibitor']],
-              'additional_components':[]
+              'modifiers': [
+                ['N11', 'catalyst'],
+                ['N1', 'inhibitor']
+              ],
+              'additional_components': []
             }
           },
           'collapsed_reaction_dictionary': {
@@ -1911,63 +2011,72 @@ function test() {
               'id': 'R1',
               'reactants': ['N7'],
               'products': ['N8'],
-              'modifiers': [['N3','catalyst']],
-              'additional_components':[]
+              'modifiers': [
+                ['N3', 'catalyst']
+              ],
+              'additional_components': []
             },
             'R2': {
               'id': 'R2',
-              'reactants': ['N5','N6'],
+              'reactants': ['N5', 'N6'],
               'products': ['N7'],
-              'modifiers': [['N11','catalyst']],
-              'additional_components':[]
+              'modifiers': [
+                ['N11', 'catalyst']
+              ],
+              'additional_components': []
             },
             'R3': {
               'id': 'R3',
               'reactants': ['N4'],
-              'products': ['N5','N6'],
-              'modifiers': [['N11','inhibitor']],
-              'additional_components':[]
+              'products': ['N5', 'N6'],
+              'modifiers': [
+                ['N11', 'inhibitor']
+              ],
+              'additional_components': []
             },
             'R4': {
               'id': 'R4',
-              'reactants': ['N8','N9'],
-              'products': ['N1','N2'],
+              'reactants': ['N8', 'N9'],
+              'products': ['N1', 'N2'],
               'modifiers': [],
-              'additional_components':[]
+              'additional_components': []
             },
             'R5': {
               'id': 'R5',
               'reactants': ['N2'],
               'products': ['N3'],
               'modifiers': [],
-              'additional_components':[]
+              'additional_components': []
             },
             'R6': {
               'id': 'R6',
-              'reactants': ['N3','N4'],
+              'reactants': ['N3', 'N4'],
               'products': ['N5'],
-              'modifiers': [['N11','catalyst'],['N1','inhibitor']],
-              'additional_components':[]
+              'modifiers': [
+                ['N11', 'catalyst'],
+                ['N1', 'inhibitor']
+              ],
+              'additional_components': []
             }
           },
           'degree_dictionary': {
-            'N1':1000,
-            'N2':10,
-            'N3':50,
-            'N4':9,
-            'N5':10,
-            'N6':11,
-            'N7':10,
-            'N8':5,
-            'N9':4,
-            'N10':3,
-            'N11':7,
-            'R1':5,
-            'R2':5,
-            'R3':5,
-            'R4':5,
-            'R5':5,
-            'R6':5,
+            'N1': 1000,
+            'N2': 10,
+            'N3': 50,
+            'N4': 9,
+            'N5': 10,
+            'N6': 11,
+            'N7': 10,
+            'N8': 5,
+            'N9': 4,
+            'N10': 3,
+            'N11': 7,
+            'R1': 5,
+            'R2': 5,
+            'R3': 5,
+            'R4': 5,
+            'R5': 5,
+            'R6': 5,
           },
           'blocklist': ['n2'],
 
@@ -1981,10 +2090,10 @@ function test() {
         let el1 = test_new_elements[0];
         let el2 = test_new_elements[1];
         for (el in el1) {
-          if (el1[el].name === 'r3'
-              || el1[el].name === 'r4'
-              || el1[el].name === 'r5'
-              || el1[el].name === 'r6') {
+          if (el1[el].name === 'r3' ||
+            el1[el].name === 'r4' ||
+            el1[el].name === 'r5' ||
+            el1[el].name === 'r6') {
             assert(false)
           }
         }
@@ -1996,21 +2105,24 @@ function test() {
         let el1_2 = test_new_elements2[0];
         let el2_2 = test_new_elements2[1];
         for (el in el1_2) {
-          if (el1_2[el].name === 'r4'
-              || el1_2[el].name === 'r5') {
+          if (el1_2[el].name === 'r4' ||
+            el1_2[el].name === 'r5') {
             assert(false)
           }
         }
       })
     })
     // checkReaction()
-    describe('checkReaction()', function () {
-      it('should return true and false, respectively', function () {
+    describe('checkReaction()', function() {
+      it('should return true and false, respectively', function() {
         let test_reaction_1 = {
-          'reactants':['N1'],
-          'products':['N2','N3','N4'],
-          'modifiers':[['N5','catalyst'],['N6','inhibitor']],
-          'additional_components':['G1']
+          'reactants': ['N1'],
+          'products': ['N2', 'N3', 'N4'],
+          'modifiers': [
+            ['N5', 'catalyst'],
+            ['N6', 'inhibitor']
+          ],
+          'additional_components': ['G1']
         }
         let test_output;
         test_output_reaction_1 = checkReaction(
@@ -2028,23 +2140,23 @@ function test() {
       })
     })
     // get_link()
-    describe('get_link()', function () {
-      it('should return metabolite_component, not_complex_component, and protein_component, respectively', function () {
+    describe('get_link()', function() {
+      it('should return metabolite_component, not_complex_component, and protein_component, respectively', function() {
         let test_link1 = {
-          'type':'complex_component',
-          'sub_type':'metabolite_component'
+          'type': 'complex_component',
+          'sub_type': 'metabolite_component'
         }
         let test_out1 = get_link(test_link1)
         assert(test_out1 === 'metabolite_component')
         let test_link2 = {
-          'type':'not_complex_component',
-          'sub_type':'ppp_component'
+          'type': 'not_complex_component',
+          'sub_type': 'ppp_component'
         }
         let test_out2 = get_link(test_link2)
         assert(test_out2 === 'not_complex_component')
         let test_link3 = {
-          'type':'complex_component',
-          'sub_type':'protein_component'
+          'type': 'complex_component',
+          'sub_type': 'protein_component'
         }
         let test_out3 = get_link(test_link3)
         assert(test_out3 === 'protein_component')

@@ -25,269 +25,194 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 <title>Metaboverse</title>
 
 <html>
-  <link rel="stylesheet" href="../css/fontawesome_v5.0.7.css" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/visualize.css" />
-  <link rel="stylesheet" href="../css/timecourse.css" />
+<link rel="stylesheet" href="../css/fontawesome_v5.0.7.css" />
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/visualize.css" />
+<link rel="stylesheet" href="../css/timecourse.css" />
 
-  <head>
-    <!-- menu -->
-    <menu>
-      <font size="3.25px">
-        <menuitem id="menuright">
-          <a
-            href="https://github.com/Metaboverse/Metaboverse/issues"
-            target="_blank"
-            >Contact Us</a
-          >
-        </menuitem>
-        <menuitem id="menuright">
-          <a href="cite.html">Cite</a>
-        </menuitem>
-        <menuitem id="menuright">
-          <a
-            href="https://metaboverse.readthedocs.io/en/latest/"
-            target="_blank"
-            >Documentation</a
-          >
-        </menuitem>
-        <menuitem id="menuright">
-          <a
-            href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html"
-            target="_blank"
-            >FAQs</a
-          >
-        </menuitem>
-        <menuitem id="menuright">
-          <a
-            href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html"
-            target="_blank"
-            >First Time?</a
-          >
-        </menuitem>
-        <menuitem id="menuright">
-          <a
-            href="https://metaboverse.readthedocs.io/en/latest/content/overview.html"
-            target="_blank"
-            >About</a
-          >
-        </menuitem>
-        <menuitem id="menuleft">
-          <a href="index.html">Metaboverse</a>
-        </menuitem>
-        <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
-        <menuitem id="menuleft">
-          <a href="index.html">Back</a>
-        </menuitem>
-      </font>
-    </menu>
-  </head>
-
-  <body>
-    <div class="sidebar">
-      <font id="styletitle" size="2">
-        <b><u>Legend</u></b>
-        <button
-          id="legend_info"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        <br />
-        <b>Values</b>
-        <br />
-        <div title="Value was found in user data.">
-          <span class="dot white-dot"></span>
-          Measured
-        </div>
-        <div
-          title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values."
-        >
-          <span
-            class="dot dashed-dot white-dot"
-          ></span>
-          Inferred
-        </div>
-        <br />
-        <canvas
-          title="Colormap value for entity measurement."
-          id="seismic_node"
-          class="dot seismic_node"
-          width="12"
-          height="12"
-        ></canvas>
-        <div id="entity_type"></div>
-        <br />
-        <canvas id="seismic_canvas" width="220" height="15"></canvas>
-        <br />
-        <br />
-        <b>Shape Legend</b>
-        <button
-          id="shape_legend"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        <br />
-        <b>Compartment Legend</b>
-        <button
-          id="compartment_legend"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        <br />
-        <br />
-        <b><u>Options</u></b>
-        <button
-          id="options_info"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        <br />
-        <div title="Click to turn feature labels on or off.">
-          <button id="toggleAnalytes">Features</button>
-        </div>
-        <div title="Click to turn reaction labels on or off.">
-          <button id="toggleReactions">Reactions</button>
-        </div>
-        <div title="Click to turn expression and statistical values on or off.">
-          <button id="toggleExpression">Expression</button>
-        </div>
-        <br />
-        <div title="Click to toggle gene nodes (remove or display).">
-          <button id="toggleGenes">Toggle Genes</button>
-        </div>
-        <div title="Click to toggle between showing or hiding compartment shading">
-          <button id="toggleCompartments">Toggle Compartments</button>
-        </div>
-        <br />
-        <div title="Click to save the current graph view">
-          <button id="saveGraph">Export PNG</button>
-        </div>
-        <br />
-        <br />
-        <div title="Click to toggle collapse of nodes with no data overlaid.">
-          <button id="collapseNodes">Toggle Collapsed Reactions</button>
-        </div>
-        <div
-          title="Click to open the Reactome representation of the current pathway."
-        >
-          <button id="openPathway">View Curated Pathway Image</button>
-        </div>
-        <br />
-        <br />
-        # Nearest neighbors:
-        <input
-          type="number"
-          name="kNN_button"
-          id="kNN_button"
-          min="1"
-          max="9"
-          value="1"
-        />
-        <button
-          id="knn_info"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        Hub threshold:
-        <input
-          type="number"
-          name="hub_button"
-          id="hub_button"
-          min="1"
-          max="9999999"
-        />
-        <button
-          id="hub_info"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        Statistic threshold:
-        <input
-          type="number"
-          name="stat_button"
-          id="stat_button"
-          min="000"
-          max="1.0"
-          value="0.05"
-        />
-        <button
-          id="stat_info"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        <br />
-        <br />
-        <b><u>Warnings:</u></b>
-        <br />
-        <div id="warning_line_1"><br /></div>
-        <div id="warning_line_2"><br /><br /></div>
-        <br />
-        <br />
-        <b><u>Selection Type:</u></b>
-        <br />
-        <div id="type_selection_type"><br /></div>
-        <br />
-        <br />
-        <br />
-        <b><u>Current Selection:</u></b>
-        <br />
-        <div id="type_selection"><br /></div>
-        <br />
-        <br />
-        <b><u>Notes:</u></b>
-        <button
-          id="notes_info"
-          class="info_enhanced"
-        >
-          <i>i</i>
-        </button>
-        <br />
-        <div id="reaction_notes"></div>
-        <br />
-        <br />
-        <br />
-      </font>
-    </div>
-    <br />
-    <select id="superPathwayMenu" class="topmargin-plus35"></select>
-    <br />
-    <br />
-    <select id="pathwayMenu"></select>
-    <br />
-
-    <!--Colorbar pointer label-->
-    <font id="titlestyle" size="1">
-      <div id="displayValue" class="displayValue"></div>
+<head>
+  <!-- menu -->
+  <menu>
+    <font size="3.25px">
+      <menuitem id="menuright">
+      <a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a>
+      </menuitem>
+      <menuitem id="menuright">
+      <a href="cite.html">Cite</a>
+      </menuitem>
+      <menuitem id="menuright">
+      <a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a>
+      </menuitem>
+      <menuitem id="menuright">
+      <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a>
+      </menuitem>
+      <menuitem id="menuright">
+      <a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a>
+      </menuitem>
+      <menuitem id="menuright">
+      <a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a>
+      </menuitem>
+      <menuitem id="menuleft">
+      <a href="index.html">Metaboverse</a>
+      </menuitem>
+      <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
+      <menuitem id="menuleft">
+      <a href="index.html">Back</a>
+      </menuitem>
     </font>
+  </menu>
+</head>
 
-    <!--Put timecourse placeholder here-->
-    <div id="slider" class="slider-viz" align="center"></div>
+<body>
+  <div class="sidebar">
+    <font id="styletitle" size="2">
+      <b><u>Legend</u></b>
+      <button id="legend_info" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      <br />
+      <b>Values</b>
+      <br />
+      <div title="Value was found in user data.">
+        <span class="dot white-dot"></span>
+        Measured
+      </div>
+      <div title="Value was not found and thus inferred from its component measurements from the user. For example, a gene expression value used to fill in the expression of a protein with missing values.">
+        <span class="dot dashed-dot white-dot"></span>
+        Inferred
+      </div>
+      <br />
+      <canvas title="Colormap value for entity measurement." id="seismic_node" class="dot seismic_node" width="12" height="12"></canvas>
+      <div id="entity_type"></div>
+      <br />
+      <canvas id="seismic_canvas" width="220" height="15"></canvas>
+      <br />
+      <br />
+      <b>Shape Legend</b>
+      <button id="shape_legend" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      <br />
+      <b>Compartment Legend</b>
+      <button id="compartment_legend" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      <br />
+      <br />
+      <b><u>Options</u></b>
+      <button id="options_info" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      <br />
+      <div title="Click to turn feature labels on or off.">
+        <button id="toggleAnalytes">Features</button>
+      </div>
+      <div title="Click to turn reaction labels on or off.">
+        <button id="toggleReactions">Reactions</button>
+      </div>
+      <div title="Click to turn expression and statistical values on or off.">
+        <button id="toggleExpression">Expression</button>
+      </div>
+      <br />
+      <div title="Click to toggle gene nodes (remove or display).">
+        <button id="toggleGenes">Toggle Genes</button>
+      </div>
+      <div title="Click to toggle between showing or hiding compartment shading">
+        <button id="toggleCompartments">Toggle Compartments</button>
+      </div>
+      <br />
+      <div title="Click to save the current graph view">
+        <button id="saveGraph">Export PNG</button>
+      </div>
+      <br />
+      <br />
+      <div title="Click to toggle collapse of nodes with no data overlaid.">
+        <button id="collapseNodes">Toggle Collapsed Reactions</button>
+      </div>
+      <div title="Click to open the Reactome representation of the current pathway.">
+        <button id="openPathway">View Curated Pathway Image</button>
+      </div>
+      <br />
+      <br />
+      # Nearest neighbors:
+      <input type="number" name="kNN_button" id="kNN_button" min="1" max="9" value="1" />
+      <button id="knn_info" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      Hub threshold:
+      <input type="number" name="hub_button" id="hub_button" min="1" max="9999999" />
+      <button id="hub_info" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      Statistic threshold:
+      <input type="number" name="stat_button" id="stat_button" min="000" max="1.0" value="0.05" />
+      <button id="stat_info" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      <br />
+      <br />
+      <b><u>Warnings:</u></b>
+      <br />
+      <div id="warning_line_1"><br /></div>
+      <div id="warning_line_2"><br /><br /></div>
+      <br />
+      <br />
+      <b><u>Selection Type:</u></b>
+      <br />
+      <div id="type_selection_type"><br /></div>
+      <br />
+      <br />
+      <br />
+      <b><u>Current Selection:</u></b>
+      <br />
+      <div id="type_selection"><br /></div>
+      <br />
+      <br />
+      <b><u>Notes:</u></b>
+      <button id="notes_info" class="info_enhanced">
+        <i>i</i>
+      </button>
+      <br />
+      <div id="reaction_notes"></div>
+      <br />
+      <br />
+      <br />
+    </font>
+  </div>
+  <br />
+  <select id="superPathwayMenu" class="topmargin-plus35"></select>
+  <br />
+  <br />
+  <select id="pathwayMenu"></select>
+  <br />
 
-    <!--Graph space-->
-    <div id="graph" align="center"></div>
+  <!--Colorbar pointer label-->
+  <font id="titlestyle" size="1">
+    <div id="displayValue" class="displayValue"></div>
+  </font>
 
-    <!--Scripts-->
-    <script src="../js/utils.js"></script>
-    <script src="../js/menu.js"></script>
-    <script src="../js/motifs.js"></script>
-    <script src="../js/motif-global.js"></script>
-    <script src="../js/timecourse.js"></script>
-    <script src="../js/graph.js"></script>
-    <script src="../js/visualize.js"></script>
-    <script src="../js/js-colormaps.js"></script>
-  </body>
+  <!--Put timecourse placeholder here-->
+  <div id="slider" class="slider-viz" align="center"></div>
+
+  <!--Graph space-->
+  <div id="graph" align="center"></div>
+
+  <!--Scripts-->
+  <script src="../js/utils.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../js/motifs.js"></script>
+  <script src="../js/motif-global.js"></script>
+  <script src="../js/timecourse.js"></script>
+  <script src="../js/graph.js"></script>
+  <script src="../js/visualize.js"></script>
+  <script src="../js/js-colormaps.js"></script>
+</body>
+
 </html>

@@ -19,7 +19,6 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 body,
 html {
   margin: 0;
@@ -187,7 +186,7 @@ menu {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index:100;
+  z-index: 100;
 }
 
 menuitem {
@@ -208,18 +207,20 @@ menuitem a:hover {
 }
 
 #menuright {
-  float:right;
+  float: right;
 }
+
 #menuleft, #menurefresh {
-  float:left;
+  float: left;
 }
 
 #menuright-motif {
-  float:right;
+  float: right;
   margin: -3;
 }
+
 #menuleft-motif {
-  float:left;
+  float: left;
   margin: -3;
 }
 
@@ -232,8 +233,8 @@ a {
 }
 
 a:hover {
-  color:black;
-  text-decoration:none;
+  color: black;
+  text-decoration: none;
 }
 
 img {
@@ -351,7 +352,6 @@ img {
 
 .info {
   border-radius: 50%;
-
 }
 
 .info_enhanced {
@@ -367,8 +367,8 @@ img {
   border: 1px solid black;
   border-radius: 3px;
   width: 700px;
-  padding-left:5px;
-  margin-left:50px;
+  padding-left: 5px;
+  margin-left: 50px;
 }
 
 #dropDatabase,
@@ -418,7 +418,6 @@ img {
 #metabolomics-input {
   display: none;
 }
-
 
 #selectedFile, #selectedSBML {
   width: 90px;
@@ -472,7 +471,7 @@ img {
 
 #broadcast-label,
 #collapse-label {
-  margin-left:1vw;
+  margin-left: 1vw;
 }
 
 #broadcast_gene_expression,
@@ -484,7 +483,7 @@ img {
 #metaboverse-icon {
   all: initial;
   width: 250px;
-  text-align:center;
+  text-align: center;
 }
 
 #cite-text,

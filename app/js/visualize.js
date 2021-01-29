@@ -32,7 +32,7 @@ console.log("Database path: " + database_url);
 
 try {
   var data = JSON.parse(fs.readFileSync(database_url).toString());
-} catch(e) {
+} catch (e) {
   alert('Failed to open: \n' + database_url)
 }
 
