@@ -6,12 +6,12 @@ Updates
 v0.4.2-beta (in progress)
 =================================
 | **Major**
-| - 
+| -
 |
 | **Minor**
 | - Fixes an issue where an empty unmapped dataframe would cause an error (fixed by  `#32e9283 <https://github.com/Metaboverse/metaboverse-cli/commit/32e9283363bb9ce8c4ef2325184ad01d102f4680>`_ )
 | - Fixes an issue the working path would be appended to the organism ID (fixed by  `#91a490d <https://github.com/Metaboverse/metaboverse-cli/commit/91a490dec409c7a27d1b2cc0207ded5dd0fa60c1>`_ )
-
+| - Addresses `issue #67 <https://github.com/Metaboverse/Metaboverse/issues/67>`_ , where experiment name inputs with spaces would cause an error.
 
 
 =================================
