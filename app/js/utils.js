@@ -120,6 +120,7 @@ function getArgument(key) {
     key === "database_url" ||
     key === "curation_url" ||
     key === "output" ||
+    key === "experiment_name" ||
     key === "transcriptomics" ||
     key === "proteomics" ||
     key === "metabolomics" ||
