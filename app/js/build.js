@@ -172,7 +172,7 @@ runBuild = function(_callback) {
         output: getArgument("output"),
         output_file: db_url,
         organism_id: "find",
-        organism_curation: curated,
+        organism_curation_file: curated,
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
@@ -193,7 +193,7 @@ runBuild = function(_callback) {
         output: getArgument("output"),
         output_file: getArgument("database_url"),
         organism_id: getArgument("organism_id"),
-        model_file: getArgument("output").slice(0, -1) +
+        organism_curation_file: getArgument("output").slice(0, -1) +
           path.sep +
           getArgument("organism_id") +
           ".mvdb\"",

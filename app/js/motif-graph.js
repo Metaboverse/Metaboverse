@@ -52,12 +52,23 @@ class MetaGraph {
     this.data = graphdata;
     this.nodes = graphdata.nodes;
     this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
+
+    for (let _c in this.collapsed_reaction_dict) {
+      if (this.collapsed_reaction_dict[_c].collapsed === "true") {
+        console.log(this.collapsed_reaction_dict[_c])
+      }
+    }
+
     this.mod_collapsed_pathways = graphdata.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
       graphdata,
       "collapsed_pathway_dictionary"
     )
     this.path_mapper = graphdata.motif_reaction_dictionary
+
+    if (this.data.metadata.blocklist === null) {
+      this.data.metadata.blocklist = "";
+    }
 
     // Generate expression and stats dictionaries
     let expression_dict = {};
@@ -76,8 +87,13 @@ class MetaGraph {
     this.degree_dict = graphdata.degree_dictionary;
     this.categories = graphdata.categories;
     this.labels = graphdata.labels;
-    this.names = this.labels.split(',');
-    console.log(this.names)
+
+    if (this.labels === null) {
+      this.names = ['0']
+    } else {
+      this.names = this.labels.split(',');
+    }
+
     timecourse = checkCategories(this.categories, this.names);
     if (timecourse === true) {
       populateExclusions(this.categories, this.names);
