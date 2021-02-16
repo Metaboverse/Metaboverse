@@ -1,6 +1,8 @@
 {
   "database_url": null,
   "curation_url": null,
+  "template_url": null,
+  "neighbors_url": null,
   "output": null,
   "organism": null,
   "organism_id": null,
@@ -17,6 +19,7 @@
   "processed": false,
   "current_pathway": null,
   "provided_data": false,
+  "forceNewCuration": false,
   "collapseWithModifiers": false,
   "broadcastGeneExpression": true,
   "broadcastMetabolites": true,

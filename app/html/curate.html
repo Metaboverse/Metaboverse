@@ -73,9 +73,50 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <br>
   <center>
     <font size="3">
-      Load a pre-existing Metaboverse <b>organism</b> database (ends in .mvdb)
+
+      <label for="force_new_curation">
+        <font size="3" id="force-curate-label"><i>Force new curation of all files: </i></font>
+      </label>
+      <input type="checkbox" id="force_new_curation">
+      <button class="info" title="Check to force a fresh curation of all intermediate references and templates.">
+        <i>i</i>
+      </button>
+      <br>
+      <br>
+      <p>Select the organism you would like to analyze:</p>
+      <select id="speciesMenu"></select>
+      <br>
+      <br>
+      <b><i>AND</i></b>
+      <br>
+      <p>Click on the folder to select output location:
+        <button class="info"
+          title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
+      </p>
+      <div id="dropDatabaseOutput">
+        <font size="1">
+          Select Output File Name
+        </font>
+      </div>
+      &nbsp;&nbsp;
+      <div id="selectedOutput" class="selectedData">
+      </div>
+      <button id="output-input" type="file" name="name"></button>
+      <br>
+      <br>
+      <br>
+      <br>
+      <b><i>OR</i></b>
+      <br>
+      <br>
+      <br>
+      <br>
+      Load in <b><i>any</i></b> of the following pre-curated Metaboverse files:
+      <br>
+      <br>
+      &#8226; Load a pre-existing Metaboverse organism database (ends in .mvdb)
       <button class="info"
-        title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvdb'"><i>i</i></button>
+        title="Provide a pre-curated organism reference file. Providing this file will significantly speed up the processing time required to curate your data. This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvdb'"><i>i</i></button>
       <br>
       <br>
       <div id="dropDatabaseCuration">
@@ -89,9 +130,42 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <input id="curation-input" type="file" name="name" />
       <br>
       <br>
+      &#8226; Load a pre-existing Metaboverse organism graph template (ends in _template.mvrs)
+      <button class="info"
+        title="Provide a pre-processed graph template for your organism of interest. Providing this file will significantly speed up the processing time required to curate your data. Note: This step is optional, but if used, file must end in '.mvrs' and will usually have the '_template' filename suffix."><i>i</i></button>
+      <br>
+      <br>
+      <div id="dropGraphTemplate">
+        <font size="1">
+          Select File
+        </font>
+      </div>
+      &nbsp;&nbsp;
+      <div id="selectedTemplate">
+      </div>
+      <input id="template-input" type="file" name="name" />
+      <br>
+      <br>
+      &#8226; Load a pre-existing Metaboverse organism reaction neighbors dictionary (ends in .nbdb)
+      <button class="info"
+        title="Provide a pre-processed reaction neighbors dictionary file for your organism of interest. Providing this file will significantly speed up the processing time required to curate your data. Note: This step is optional, but if used, file must end in '.nbdb'"><i>i</i></button>
+      <br>
+      <br>
+      <div id="dropNeighborDictionary">
+        <font size="1">
+          Select File
+        </font>
+      </div>
+      &nbsp;&nbsp;
+      <div id="selectedNeighbors">
+      </div>
+      <input id="neighbors-input" type="file" name="name" />
+      <br>
+      <br>
       <br>
       <br>
       <b><i>OR</i></b>
+      <br>
       <br>
       <br>
       <br>
@@ -114,42 +188,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <input id="sbml-input" type="file" name="name" />
       <br>
       <br>
-      <br>
-      <br>
-      <b><i>OR</i></b>
-      <br>
-      <br>
-      <br>
-      <p>Select the organism you would like to analyze:</p>
-      <select id="speciesMenu"></select>
-      <br>
-      <br>
-      <br>
-      <br>
-      <b><i>AND</i></b>
-      <br>
-      <br>
-      <br>
-      <p>Click on the folder to select output location:
-        <button class="info"
-          title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
-      </p>
-      <div id="dropDatabaseOutput">
-        <font size="1">
-          Select Output File Name
-        </font>
-      </div>
-      &nbsp;&nbsp;
-      <div id="selectedOutput" class="selectedData">
-      </div>
-      <button id="output-input" type="file" name="name" />
-
-      <br>
-      <br>
     </font>
     <br>
   </center>
-
   <p>
     <center>
       <br>

@@ -373,6 +373,8 @@ img {
 
 #dropDatabase,
 #dropDatabaseCuration,
+#dropGraphTemplate,
+#dropNeighborDictionary,
 #dropDatabaseSBML,
 #dropDatabaseOutput,
 #transcriptomics-dropDatabase,
@@ -391,6 +393,8 @@ img {
 
 #dropDatabase:active,
 #dropDatabaseCuration:active,
+#dropGraphTemplate:active,
+#dropNeighborDictionary:active,
 #dropDatabaseSBML:active,
 #dropDatabaseOutput:active,
 #transcriptomics-dropDatabase:active,
@@ -402,6 +406,8 @@ img {
 
 #dropDatabase,
 #dropDatabaseCuration,
+#dropGraphTemplate,
+#dropNeighborDictionary,
 #dropDatabaseSBML,
 #transcriptomics-dropDatabase,
 #proteomics-dropDatabase,
@@ -419,7 +425,10 @@ img {
   display: none;
 }
 
-#selectedFile, #selectedSBML {
+#selectedFile,
+#selectedTemplate,
+#selectedNeighbors,
+#selectedSBML {
   width: 90px;
   height: 15px;
   text-align: left;
@@ -465,17 +474,23 @@ img {
   margin-top: 90px;
 }
 
-#curation-input, #sbml-input {
+#curation-input,
+#template-input,
+#neighbors-input,
+#sbml-input {
   display: none;
 }
 
 #broadcast-label,
-#collapse-label {
+#collapse-label,
+#force-curate-label {
   margin-left: 1vw;
 }
 
 #broadcast_gene_expression,
-#use_modifiers_in_collapse {
+#broadcast_metabolite_expression,
+#use_modifiers_in_collapse,
+#force_new_curation {
   width: 15px;
   height: 15px;
 }

@@ -73,28 +73,50 @@ window.addEventListener("load", function(event) {
   }
 
   $('#content').append('<a href=""></a>')
+
+  // Get curation reference file from user
   var curURL = get_session_info("curation_url");
   var defaultCuration = "No file selected";
-  console.log(curURL)
   if (curURL !== null) {
     if (curURL.split('.').pop().toLowerCase() === 'mvdb') {
       defaultCuration = curURL;
       $("#content").html(
-        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+      window.scrollTo(0,document.body.scrollHeight);
     }
   }
   $('#selectedFile').append('<font size="2">' + defaultCuration + '</font>');
+
+  // Get network template file from user
+  var templateURL = get_session_info("template_url");
+  var defaultTemplate = "No file selected";
+  if (templateURL !== null) {
+    if (templateURL.split('.').pop().toLowerCase() === 'mvrs') {
+      defaultTemplate = templateURL;
+    }
+  }
+  $('#selectedTemplate').append('<font size="2">' + defaultTemplate + '</font>');
+
+  // Get reaction neighbors dictionary from user
+  var neighborsURL = get_session_info("neighbors_url");
+  var defaultNeighbors = "No file selected";
+  if (neighborsURL !== null) {
+    if (neighborsURL.split('.').pop().toLowerCase() === 'mvrs') {
+      defaultNeighbors = neighborsURL;
+    }
+  }
+  $('#selectedNeighbors').append('<font size="2">' + defaultNeighbors + '</font>');
 
   var defaultSBML = "No file selected";
   if (curURL !== null) {
     if (curURL.split('.').pop().toLowerCase() === 'sbml' || curURL.split('.').pop().toLowerCase() === 'xml') {
       defaultSBML = curURL;
       $("#content").html(
-        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+      window.scrollTo(0,document.body.scrollHeight);
     }
   }
   $('#selectedSBML').append('<font size="2">' + defaultSBML + '</font>');
-
 
   var outputURL = get_session_info("database_url");
   var defaultOutput = "No output selected";
@@ -122,6 +144,20 @@ window.addEventListener("load", function(event) {
     event.stopPropagation();
 
     document.getElementById('curation-input').click();
+  }
+
+  document.getElementById("dropGraphTemplate").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById('template-input').click();
+  }
+
+  document.getElementById("dropNeighborDictionary").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.getElementById('neighbors-input').click();
   }
 
   document.getElementById("dropDatabaseSBML").onclick = function(event) {
@@ -182,12 +218,69 @@ window.addEventListener("load", function(event) {
         update_session_info("database_source", "reactome");
         $('#selectedFile').html('<font size="2">' + f.path + '</font>');
         $('#selectedSBML').html('<font size="2">No file selected</font>');
-        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
         document.getElementById("curation-input").value = '';
+        window.scrollTo(0,document.body.scrollHeight);
       } catch (error) {
         console.log(error);
         alert(
           "Input is not a .mvdb file. You must upload the correct file type for the analyses to work."
+        );
+      }
+    }
+  };
+
+  // Drop pre-existing organism reaction network template for further analysis
+  document.getElementById("template-input").onchange = function(event) {
+    console.log(document.getElementById("template-input"))
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (document.getElementById("template-input").value.split('.').pop().toLowerCase() !== "mvrs") {
+      alert(
+        "Input is not a .mvrs file. You must upload the correct file type for the analyses to work."
+      );
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f);
+        update_session_info("template_url", f.path);
+        update_session_info("database_source", "reactome");
+        $('#selectedTemplate').html('<font size="2">' + f.path + '</font>');
+        $('#selectedSBML').html('<font size="2">No file selected</font>');
+        document.getElementById("template-input").value = '';
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Input is not a .mvrs file. You must upload the correct file type for the analyses to work."
+        );
+      }
+    }
+  };
+
+  // Drop pre-existing reaction neighbors dictionary for further analysis
+  document.getElementById("neighbors-input").onchange = function(event) {
+    console.log(document.getElementById("neighbors-input"))
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (document.getElementById("neighbors-input").value.split('.').pop().toLowerCase() !== "nbdb") {
+      alert(
+        "Input is not a .nbdb file. You must upload the correct file type for the analyses to work."
+      );
+    } else {
+      try {
+        f = event.srcElement.files[0];
+        console.log("The file you dragged: ", f);
+        update_session_info("neighbors_url", f.path);
+        update_session_info("database_source", "reactome");
+        $('#selectedNeighbors').html('<font size="2">' + f.path + '</font>');
+        $('#selectedSBML').html('<font size="2">No file selected</font>');
+        document.getElementById("neighbors-input").value = '';
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Input is not a .nbdb file. You must upload the correct file type for the analyses to work."
         );
       }
     }
@@ -212,8 +305,9 @@ window.addEventListener("load", function(event) {
         update_session_info("database_source", "biomodels/bigg");
         $('#selectedSBML').html('<font size="2">' + f.path + '</font>');
         $('#selectedFile').html('<font size="2">No file selected</font>');
-        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
         document.getElementById("sbml-input").value = '';
+        window.scrollTo(0,document.body.scrollHeight);
       } catch (error) {
         console.log(error);
         alert(
@@ -222,6 +316,25 @@ window.addEventListener("load", function(event) {
       }
     }
   };
+
+  if (get_session_info("forceNewCuration") === true) {
+    document.getElementById("force_new_curation").checked = true;
+  } else {
+    document.getElementById("force_new_curation").checked = false;
+  }
+  document.getElementById("force_new_curation").onclick = function(event) {
+    event.stopPropagation();
+    if (get_session_info("forceNewCuration") === false) {
+      update_session_info("forceNewCuration", true);
+    } else {
+      update_session_info("forceNewCuration", false);
+    }
+    console.log("Force fresh curation: ", get_session_info("forceNewCuration"))
+  }
+
+
+
+
 });
 
 var output_change = false;
@@ -229,15 +342,7 @@ var species_change = false;
 
 function check_changes() {
   if ((output_change === true) & (species_change === true)) {
-    $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a>');
+    $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+    window.scrollTo(0,document.body.scrollHeight);
   }
 }
-
-// Now-unused code???
-//ipcRenderer.on("curation-input", (event, data) => {
-//  $("#curation-input").text(data);
-//});
-
-//ipcRenderer.on("sbml-input", (event, data) => {
-//  $("#sbml-input").text(data);
-//});

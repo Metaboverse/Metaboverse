@@ -173,6 +173,8 @@ runBuild = function(_callback) {
         output_file: db_url,
         organism_id: "find",
         organism_curation_file: curated,
+        neighbor_dictionary_file: getArgument("neighbors_url"),
+        graph_template_file: getArgument("template_url"),
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
@@ -182,6 +184,7 @@ runBuild = function(_callback) {
         experiment_name: getArgument("experiment_name"),
         labels: labels,
         blocklist: blocklist,
+        force_new_curation: getArgument("forceNewCuration"),
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
         broadcast_metabolites: getArgument("broadcastMetabolites"),
@@ -197,6 +200,8 @@ runBuild = function(_callback) {
           path.sep +
           getArgument("organism_id") +
           ".mvdb\"",
+        neighbor_dictionary_file: getArgument("neighbors_url"),
+        graph_template_file: getArgument("template_url"),
         transcriptomics: getArgument("transcriptomics"),
         proteomics: getArgument("proteomics"),
         metabolomics: getArgument("metabolomics"),
@@ -206,6 +211,7 @@ runBuild = function(_callback) {
         experiment_name: getArgument("experiment_name"),
         labels: labels,
         blocklist: blocklist,
+        force_new_curation: getArgument("forceNewCuration"),
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
         broadcast_metabolites: getArgument("broadcastMetabolites"),
