@@ -52,13 +52,6 @@ class MetaGraph {
     this.data = graphdata;
     this.nodes = graphdata.nodes;
     this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
-
-    for (let _c in this.collapsed_reaction_dict) {
-      if (this.collapsed_reaction_dict[_c].collapsed === "true") {
-        console.log(this.collapsed_reaction_dict[_c])
-      }
-    }
-
     this.mod_collapsed_pathways = graphdata.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
       graphdata,
@@ -1037,8 +1030,10 @@ class MetaGraph {
       .text(d => {
         if (d === "Collapsed") {
           return "Cross-pathway pattern";
-        } else {
+        } else if (this.mod_collapsed_pathways[d] !== undefined) {
           return this.mod_collapsed_pathways[d].name.substring(0, 24);
+        } else {
+          return "N/A"
         }
       })
       .style("font-size", 9)

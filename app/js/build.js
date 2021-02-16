@@ -196,10 +196,7 @@ runBuild = function(_callback) {
         output: getArgument("output"),
         output_file: getArgument("database_url"),
         organism_id: getArgument("organism_id"),
-        organism_curation_file: getArgument("output").slice(0, -1) +
-          path.sep +
-          getArgument("organism_id") +
-          ".mvdb\"",
+        organism_curation_file: getArgument("curation_url"),
         neighbor_dictionary_file: getArgument("neighbors_url"),
         graph_template_file: getArgument("template_url"),
         transcriptomics: getArgument("transcriptomics"),
