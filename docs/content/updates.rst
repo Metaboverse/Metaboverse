@@ -3,16 +3,22 @@ Updates
 ###############
 
 =================================
-v0.4.2-beta (in progress)
+v0.5.0-beta (in progress)
 =================================
 | **Major**
-| -
+| - Addresses `issue #66 <https://github.com/Metaboverse/Metaboverse/issues/66>`_ , by hosting curated reference and template files for each organism per version of Metaboverse. Also provided user argument options to directly include already downloaded or curated files (:data:`--organism_curation_file`, :data:`--neighbor_dictionary_file`, :data:`--graph_template_file`). Using pre-downloaded files, this reduced processing time for curating data on the human network from ~30-40 min to ~2 min. These pre-curated files will be processed with each release of Metaboverse and are hosted on SourceForge currently.
 |
 | **Minor**
 | - Fixes an issue where an empty unmapped dataframe would cause an error (fixed by  `#32e9283 <https://github.com/Metaboverse/metaboverse-cli/commit/32e9283363bb9ce8c4ef2325184ad01d102f4680>`_ )
 | - Fixes an issue the working path would be appended to the organism ID (fixed by  `#91a490d <https://github.com/Metaboverse/metaboverse-cli/commit/91a490dec409c7a27d1b2cc0207ded5dd0fa60c1>`_ )
 | - Addresses `issue #67 <https://github.com/Metaboverse/Metaboverse/issues/67>`_ , where experiment name inputs with spaces would cause an error.
 | - Bump required version of Electron to >=9.4.0 (see `pull request #68 <https://github.com/Metaboverse/Metaboverse/pull/68>`_ ).
+| - Removed some unused user arguments from command-line interface.
+| - Fixed an issue where the backend argument parse checker would try to append a file path to the organism ID.
+| - Fixes internal warning for UI when CLI did not output blocklist or labels.
+| - Updated copyright info.
+| - Removed deprecated files.
+| - Migrated from Travis-CI to GitHub Actions.
 
 =================================
 v0.4.0-beta
