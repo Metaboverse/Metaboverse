@@ -3,7 +3,7 @@ Updates
 ###############
 
 =================================
-v0.5.0-beta (in progress)
+v0.5.0-beta
 =================================
 | **Major**
 | - Addresses `issue #66 <https://github.com/Metaboverse/Metaboverse/issues/66>`_ , by hosting curated reference and template files for each organism per version of Metaboverse. Also provided user argument options to directly include already downloaded or curated files (:data:`--organism_curation_file`, :data:`--neighbor_dictionary_file`, :data:`--graph_template_file`). Using pre-downloaded files, this reduced processing time for curating data on the human network from ~30-40 min to ~2 min. These pre-curated files will be processed with each release of Metaboverse and are hosted on SourceForge currently.
