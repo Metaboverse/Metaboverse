@@ -1,6 +1,6 @@
 {
   "name": "Metaboverse",
-  "version": "v0.5.0b",
+  "version": "0.5.0b",
   "description": "Visualizing and Analyzing Metabolic Networks",
   "main": "main.js",
   "scripts": {
