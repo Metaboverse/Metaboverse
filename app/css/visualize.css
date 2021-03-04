@@ -45,11 +45,11 @@ path.hull {
 }
 
 #catalyst {
-  fill: green;
+  fill: #008000;
 }
 
 .link.catalyst {
-  stroke: green;
+  stroke: #008000;
 }
 
 #inhibitor {
@@ -70,7 +70,7 @@ path.hull {
 }
 
 .link.collapsed_catalyst {
-  stroke: green;
+  stroke: #008000;
   stroke-dasharray: 0, 5 5;
 }
 
@@ -116,27 +116,27 @@ path.hull {
 }
 
 #reaction {
-  fill: grey;
+  fill: #666;
 }
 
 .link.reaction {
-  stroke: grey;
+  stroke: #666;
 }
 
 #reactant {
-  fill: grey;
+  fill: #666;
 }
 
 .link.reactant {
-  stroke: grey;
+  stroke: #666;
 }
 
 #product {
-  fill: grey;
+  fill: #666;
 }
 
 .link.product {
-  stroke: grey;
+  stroke: #666;
 }
 
 .node text {

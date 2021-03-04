@@ -39,10 +39,6 @@ SHASUM256 methods by operating system:
 - Windows: `certUtil -hashfile metaboverse-cli-win.exe SHA256`
 - Mac/Linux: `shasum -a 256 metaboverse-cli-[os]`
 
-In case the mac gets a permission denied error during build:
-------------------------------------------------------------
-This probably occurred during pyinstaller compilation -- try deleting the old `dist` and `build` directories and running again. Run `./metaboverse-cli-mac --help` to test, then move to appropriate location in the `Metaboverse` app directory.
-
 If having issues setting up test env in Linux:
 ----------------------------------------------
 npm config rm proxy
@@ -57,3 +53,7 @@ brew install pkg-config
 electron-packager install error:
 ---------------------
 npm install electron-packager -g
+
+mac
+-------
+Need to compile metaboverse-cli and electron package on a mac

@@ -3,6 +3,15 @@ Updates
 ###############
 
 =================================
+v0.6.0 (in progress)
+=================================
+| **Major**
+|
+|
+| **Minor**
+| - Added button to export graph view as SVG on :data:`Visualize` page.
+
+=================================
 v0.5.0-beta
 =================================
 | **Major**

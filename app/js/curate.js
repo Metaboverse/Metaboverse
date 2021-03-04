@@ -20,14 +20,8 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const {
-  ipcRenderer,
-  ipcMain,
-  remote
-} = require("electron");
-const {
-  dialog
-} = require("electron").remote;
+var { ipcRenderer, ipcMain, remote } = require("electron");
+var { dialog } = require("electron").remote;
 var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";

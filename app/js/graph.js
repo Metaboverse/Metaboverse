@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var d3 = require("d3");
 var fs = require("fs");
 var saveSVG = require("save-svg-as-png");
+var { dialog } = require("electron").remote;
 
 const hullPadding = 60;
 const max_nodes = 1500;
@@ -1221,7 +1222,6 @@ function make_graph(
   });
 
   d3.select("#saveGraph").on("click", function() {
-
     saveSVG.saveSvgAsPng(
       d3.select("#svg_viewer_id")._groups[0][0],
       "plot.png", {
@@ -1230,6 +1230,49 @@ function make_graph(
         encoderType: "image/png"
       }
     );
+  });
+
+  d3.select("#saveSVG").on("click", function() {
+    var _this_svg = d3.select("#svg_viewer_id")._groups[0][0].cloneNode(true);
+    var xmlns = "http://www.w3.org/2000/xmlns/";
+    var xlinkns = "http://www.w3.org/1999/xlink";
+    var svgns = "http://www.w3.org/2000/svg";
+    _this_svg.setAttributeNS(xmlns, "xmlns", svgns);
+    _this_svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+
+    var text = fs.readFileSync('./css/visualize.css', {encoding: 'utf-8'});
+    text = text.split('*/')[1];
+
+    var _Serializer = new XMLSerializer();
+    svg_output = _Serializer.serializeToString(_this_svg);
+    var svg_split = svg_output.split("<defs><marker");
+    svg_string = svg_split[0] + "<defs><style>" + text + "</style><marker" + svg_split[1];
+    filename = dialog
+      .showSaveDialog({
+        title: "graph",
+        defaultPath: ".." + path.sep + ".." + path.sep,
+        properties: ["createDirectory"],
+        filters: [{
+          name: "svg",
+          extensions: ["svg"]
+        }]
+      })
+      .then(result => {
+        let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
+        if (hasExtension === false) {
+          result.filePath = `${ result.filePath }.${ "svg" }`;
+        }
+        filename = result.filePath;
+        if (filename === undefined) {
+          alert("File selection unsuccessful");
+          return;
+        }
+        fs.writeFileSync(filename, svg_string, 'utf-8');
+        console.log(filename);;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 
   d3.select("#openPathway").on("click", function() {
