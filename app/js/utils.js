@@ -116,17 +116,7 @@ function getArgument(key) {
 
   if (value === null) {
     value = "None";
-  } else if (
-    key === "database_url" ||
-    key === "curation_url" ||
-    key === "output" ||
-    key === "experiment_name" ||
-    key === "transcriptomics" ||
-    key === "proteomics" ||
-    key === "metabolomics" ||
-    key === "additional_reactions") {
-    value = '\"' + value + '\"'
-  } else {}
+  } 
 
   return value;
 }

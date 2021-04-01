@@ -35,9 +35,9 @@ var scriptFilename;
 console.log("Operating System information:")
 console.log(navigator.appVersion)
 if (navigator.appVersion.indexOf("Win") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-win.exe");
+  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-mac");
+  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-darwin");
 } else if (navigator.appVersion.indexOf("Linux") != -1) {
   scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
 } else {
@@ -58,20 +58,15 @@ fs.watch(progress_file, function(event, filename) {
   var sum_values = 0;
   var session = JSON.parse(fs.readFileSync(progress_file).toString());
   for (j in session) {
-    //loop through the array
-    if (sum_values += session[j] < 100) {
-      sum_values += session[j]; //Do the math!
-    }
-    if (sum_values >= 100) {
-      sum_values = 100;
-      break;
-    }
+    sum_values += session[j];
   }
-  elem.style.width = sum_values + "%";
+  if (sum_values >= 100) {
+    sum_values = 100;
+  }
+  elem.style.width = sum_values + 5 + "%";
   elem.innerHTML = sum_values + "%";
 
   if (sum_values >= 100) {
-    sum_values = 0;
     displayOptions();
   }
 });
@@ -102,10 +97,18 @@ if (m_val !== null) {
 function parseCommand(args_dict) {
   var commandString = "";
   for (key in args_dict) {
-    if (args_dict[key] === false) {} else if (args_dict[key] === true) {
+    if (args_dict[key] === false || args_dict[key] === "false") {
+    } else if (args_dict[key] === true || args_dict[key] === "true") {
       commandString = commandString + " --" + key;
     } else {
-      commandString = commandString + " --" + key + " " + args_dict[key];
+      commandString = commandString
+                    + " --" + key + " \""
+                    + decodeURIComponent(
+                        encodeURIComponent(
+                          args_dict[key]))
+                        .replace(/"/g, '')
+                        .replace(/\\/g, '\\\\')
+                    + "\"";
     }
   }
   return commandString;
@@ -164,14 +167,14 @@ runBuild = function(_callback) {
     if (String(curated) !== "None") {
       let db_url;
       if (String(getArgument("database_url")) === "None") {
-        db_url = "find";
+        db_url = "\"find\"";
       } else {
-        db_url = getArgument("database_url");
+        db_url = String(decodeURIComponent(getArgument("database_url")));
       }
       graphDictionary = {
         output: getArgument("output"),
+        organism_id: "\"find\"",
         output_file: db_url,
-        organism_id: "find",
         organism_curation_file: curated,
         neighbor_dictionary_file: getArgument("neighbors_url"),
         graph_template_file: getArgument("template_url"),
@@ -194,8 +197,8 @@ runBuild = function(_callback) {
     } else {
       graphDictionary = {
         output: getArgument("output"),
-        output_file: getArgument("database_url"),
         organism_id: getArgument("organism_id"),
+        output_file: getArgument("database_url"),
         organism_curation_file: getArgument("curation_url"),
         neighbor_dictionary_file: getArgument("neighbors_url"),
         graph_template_file: getArgument("template_url"),

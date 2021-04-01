@@ -242,7 +242,9 @@ window.addEventListener("load", function(event) {
         update_session_info("database_source", "reactome");
         $('#selectedTemplate').html('<font size="2">' + f.path + '</font>');
         $('#selectedSBML').html('<font size="2">No file selected</font>');
+        $('#content').html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
         document.getElementById("template-input").value = '';
+        window.scrollTo(0,document.body.scrollHeight);
       } catch (error) {
         console.log(error);
         alert(
