@@ -23,7 +23,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var d3 = require("d3");
 var fs = require("fs");
 var saveSVG = require("save-svg-as-png");
-var { dialog } = require("electron").remote;
 
 const hullPadding = 60;
 const max_nodes = 1500;

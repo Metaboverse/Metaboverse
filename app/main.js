@@ -44,8 +44,7 @@ function createWindow() {
     minHeight: 1000,
     webPreferences: {
       preload: path.join(__dirname, "js", "preload.js"),
-      nodeIntegration: true,
-      enableRemoteModule: true
+      nodeIntegration: true
     },
     dependencies: {
       zerorpc: "fyears" + path.sep + "zerorpc-node"
