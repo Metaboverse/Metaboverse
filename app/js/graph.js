@@ -26,6 +26,7 @@ var saveSVG = require("save-svg-as-png");
 
 const hullPadding = 60;
 const max_nodes = 1500;
+var current_node;
 var sample = 0;
 var entity = "values_js";
 var knn_value = 1;
@@ -399,7 +400,7 @@ function get_nodes_links(data, components) {
 function nearest_neighbors(data, entity_id) {
   // Get current nearest neighbors value
   console.log("Nearest Neighbors for " + entity_id)
-  let entity_list = entity_dictionary[entity_id];
+  var entity_list = entity_dictionary[entity_id];
   var kNN = document.getElementById("kNN_button").value;
 
   if (document.getElementById("superPathwayMenu").value !== "All entities") {
@@ -462,6 +463,9 @@ function parse_kNN_pathway(data, entity_list, kNN) {
 
   // Parse through each reaction where entity is a component
   nn_components = $.extend(true, [], entity_list);
+  var nn_components = new Set(nn_components);
+  console.log(entity_list)
+
   for (reaction in reaction_dictionary) {
     //Return all reactions that contain the entity
     let target_rxns = reaction_dictionary[reaction];
@@ -470,10 +474,10 @@ function parse_kNN_pathway(data, entity_list, kNN) {
           target_rxns,
           entity_list,
           "list") === true) {
-        nn_components.push(target_rxns["id"]);
+        nn_components.add(target_rxns["id"]);
         for (x in target_rxns["reactants"]) {
           if (degree_dictionary[target_rxns["reactants"][x]] <= hub_value) {
-            nn_components.push(target_rxns["reactants"][x]);
+            nn_components.add(target_rxns["reactants"][x]);
           } else {
             console.log(
               "Filtering " +
@@ -486,7 +490,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
         }
         for (x in reaction_dictionary[reaction]["products"]) {
           if (degree_dictionary[target_rxns["products"][x]] <= hub_value) {
-            nn_components.push(target_rxns["products"][x]);
+            nn_components.add(target_rxns["products"][x]);
           } else {
             console.log(
               "Filtering " +
@@ -499,7 +503,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
         }
         for (x in reaction_dictionary[reaction]["modifiers"]) {
           if (degree_dictionary[target_rxns["modifiers"][x][0]] <= hub_value) {
-            nn_components.push(target_rxns["modifiers"][x][0]);
+            nn_components.add(target_rxns["modifiers"][x][0]);
           } else {
             console.log(
               "Filtering " +
@@ -512,7 +516,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
         }
         for (x in reaction_dictionary[reaction]["additional_components"]) {
           if (degree_dictionary[target_rxns["additional_components"][x]] <= hub_value) {
-            nn_components.push(target_rxns["additional_components"][x]);
+            nn_components.add(target_rxns["additional_components"][x]);
           } else {
             console.log(
               "Filtering " +
@@ -528,7 +532,8 @@ function parse_kNN_pathway(data, entity_list, kNN) {
   }
 
   // If too many nodes for first neighborhood, stop plotting
-  var escape = nn_components.length;
+  var escape = [...nn_components].length;
+  console.log([...nn_components])
   if (escape > max_nodes) {
     try {
       document.getElementById("warning_line_1").innerHTML =
@@ -538,7 +543,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
     } catch (e) {}
 
     kNN = 0;
-    nn_components = [];
+    nn_components = new Set();
   }
 
   if (kNN > 1) {
@@ -549,7 +554,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
     } catch (e) {}
     // Filter out any components that are above hub threshold for kNN
     n = 1;
-    nn_components = [...new Set(nn_components)];
+    nn_components = [...nn_components];
     while (n < kNN) {
       var components = [];
 
@@ -1120,6 +1125,7 @@ function make_graph(
 
         var mod_selection = determineWidth(d["name"]);
         document.getElementById("type_selection").innerHTML = mod_selection;
+        current_node = d["name"] + "_" + d["type"]
 
         if (data.metadata.transcriptomics !== null) {
           graph_genes = true;
@@ -1127,7 +1133,7 @@ function make_graph(
           graph_genes = false;
         }
         collapse_reactions = true;
-        nearest_neighbors(data, d["name"]);
+        nearest_neighbors(data, current_node);
       }
     });
 
@@ -1448,8 +1454,7 @@ function make_graph(
   d3.select("#collapseNodes").on("click", function() {
 
     if (document.getElementById("type_selection_type").innerHTML === "Nearest Neighbor") {
-      let _target = document.getElementById("type_selection").innerHTML
-        .split("<br>").join("")
+      let _target = current_node;
       if (collapse_reactions === false) {
         collapse_reactions = true;
       } else {
@@ -1633,11 +1638,21 @@ function changeSuper() {
   if (superSelection !== "All entities") {
     make_menu(parsed_pathway_dict, "pathwayMenu", "Select a pathway...");
   } else {
-    make_menu(entity_dictionary, "pathwayMenu", "Select an entity...");
+    // Only show measured entities for "All Entities" drop-down
+    let measured_nodes = {};
+    for (let n in data.nodes) {
+      if (data.nodes[n]['values'][0] !== null) {
+        measured_nodes[data.nodes[n]['name']] = data.nodes[n]['values'];
+      }
+    }
+    make_menu(measured_nodes, "pathwayMenu", "Select an entity...");
   }
 }
 
 // Create dictionary of all entity names and their corresponding entity IDs
+
+// make a general and type specific look-up
+
 function parseEntities(nodes) {
   _entity_dictionary = {};
   for (node in nodes) {
@@ -1646,6 +1661,13 @@ function parseEntities(nodes) {
         _entity_dictionary[nodes[node].name].push(nodes[node].id);
       } else {
         _entity_dictionary[nodes[node].name] = [nodes[node].id];
+      }
+
+      let name_type = nodes[node].name + "_" + nodes[node].type;
+      if (name_type in _entity_dictionary) {
+        _entity_dictionary[name_type].push(nodes[node].id);
+      } else {
+        _entity_dictionary[name_type] = [nodes[node].id];
       }
     }
   }

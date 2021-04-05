@@ -62,6 +62,7 @@ function make_menu(
   pathways_list = Object.getOwnPropertyNames(pathway_dict).map(function(k) {
     return k;
   });
+
   pathways_list.sort();
   if (provide_all === true) {
     pathways_list.unshift("All pathways");

@@ -327,8 +327,6 @@ function motifSearch_Avg(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search Avg")
-  console.log("Avg threshold set at: ", threshold)
 
   let discovered_motifs = [];
 
@@ -386,8 +384,6 @@ function motifSearch_MaxMax(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search MaxMax")
-  console.log("MaxMax threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -432,7 +428,6 @@ function motifSearch_MaxMax(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -446,8 +441,6 @@ function motifSearch_MinMin(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search MinMin")
-  console.log("MinMin threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -492,7 +485,6 @@ function motifSearch_MinMin(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -507,8 +499,6 @@ function motifSearch_MaxMin(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search MaxMin")
-  console.log("MaxMin threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -553,7 +543,6 @@ function motifSearch_MaxMin(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -568,8 +557,6 @@ function motifSearch_MinMax(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search MinMax")
-  console.log("MinMax threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -614,7 +601,6 @@ function motifSearch_MinMax(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -629,8 +615,6 @@ function motifSearch_Sustained(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search Sustained")
-  console.log("Sustained perturbation threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -753,7 +737,6 @@ function motifSearch_Sustained(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -768,8 +751,6 @@ function motifSearch_PathMax(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search Pathway")
-  console.log("Pathway min/max threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -825,8 +806,6 @@ function motifSearch_PathCov(
   path_mapper,
   degree_dict,
   sample_indices) {
-  console.log("motif search PathCov")
-  console.log("PathCov threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -878,7 +857,6 @@ function motifSearch_PathCov(
 
     discovered_motifs[_idx] = sample_motifs;
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -893,8 +871,6 @@ function modifierReg(
   // If the net change between at least one modifier and one core component of a
   // reaction is greater than or equal to the threshold, return the reaction
   // *** Checking the "include modifiers" button will have no effect here
-  console.log("motif search ModReg")
-  console.log("ModReg threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -952,7 +928,6 @@ function modifierReg(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
@@ -968,8 +943,6 @@ function modifierTransport(
   //    compartment) --> regulation of transport reaction
   // If a componenet on both sides meets threshold and a modifier seperately
   // meets threshold, return
-  console.log("motif search TransReg")
-  console.log("TransReg threshold set at: ", threshold)
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -1035,7 +1008,6 @@ function modifierTransport(
     }
     discovered_motifs.push(sample_motifs);
   }
-  console.log(discovered_motifs);
   return discovered_motifs;
 }
 
