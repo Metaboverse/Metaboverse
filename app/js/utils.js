@@ -116,7 +116,7 @@ function getArgument(key) {
 
   if (value === null) {
     value = "None";
-  } 
+  }
 
   return value;
 }
@@ -146,3 +146,66 @@ function make_pathway_dictionary(data, database_key) {
 
   return pathway_dict;
 }
+
+// Hyperlinks listener
+const newBrowserSettings = 'top=500,left=200,frame=false,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes';
+window.addEventListener("load", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  document.getElementById("issues_link").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      'https://github.com/Metaboverse/Metaboverse/issues',
+      '_blank',
+      newBrowserSettings
+    )
+  }
+
+  document.getElementById("docs_link").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      'https://metaboverse.readthedocs.io/en/latest/',
+      '_blank',
+      newBrowserSettings
+    )
+  }
+
+  document.getElementById("faqs_link").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      'https://metaboverse.readthedocs.io/en/latest/content/faqs.html',
+      '_blank',
+      newBrowserSettings
+    )
+  }
+
+  document.getElementById("usage_link").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html',
+      '_blank',
+      newBrowserSettings
+    )
+  }
+
+  document.getElementById("overview_link").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      'https://metaboverse.readthedocs.io/en/latest/content/overview.html',
+      '_blank',
+      newBrowserSettings
+    )
+  }
+
+});

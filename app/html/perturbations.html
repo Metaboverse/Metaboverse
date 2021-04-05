@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://reactome.org/ 'self'; object-src 'none'; trusted-types 'script';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self';">
 <title>Metaboverse</title>
 
 <html>
@@ -30,35 +30,22 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 <link rel="stylesheet" href="../css/visualize.css" />
 <link rel="stylesheet" href="../css/timecourse.css" />
 
+<script src="../js/utils.js"></script>
+
 <head>
   <!-- menu -->
   <menu>
     <font size="3.25px">
-      <menuitem id="menuright">
-      <a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a>
-      </menuitem>
-      <menuitem id="menuright">
-      <a href="cite.html">Cite</a>
-      </menuitem>
-      <menuitem id="menuright">
-      <a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a>
-      </menuitem>
-      <menuitem id="menuright">
-      <a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a>
-      </menuitem>
-      <menuitem id="menuright">
-      <a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a>
-      </menuitem>
-      <menuitem id="menuright">
-      <a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a>
-      </menuitem>
-      <menuitem id="menuleft">
-      <a href="index.html">Metaboverse</a>
-      </menuitem>
+      <menuItem id="menuright"><span id="issues_link" class="highlight_menu">Contact Us</span></menuItem>
+      <menuItem id="menuright"><a href="cite.html">Cite</a></menuItem>
+      <menuItem id="menuright"><span id="docs_link" class="highlight_menu">Documentation</span></menuItem>
+      <menuItem id="menuright"><span id="faqs_link" class="highlight_menu">FAQs</span></menuItem>
+      <menuItem id="menuright"><span id="usage_link" class="highlight_menu">First Time?</span></menuItem>
+      <menuItem id="menuright"><span id="overview_link" class="highlight_menu">About</span></menuItem>
+      <menuItem id="menuleft"><a href="index.html">Metaboverse</a></menuItem>
       <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
-      <menuitem id="menuleft">
-      <a href="index.html">Back</a>
-      </menuitem>
+      <menuItem id="menuleft"><a href="index.html">Back</a></menuItem>
+      <menuItem id="menurefresh"><a>&#x21bb;</a></menuItem>
     </font>
   </menu>
 </head>
@@ -209,7 +196,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <div id="graph" align="center"></div>
 
   <!--Scripts-->
-  <script src="../js/utils.js"></script>
   <script src="../js/menu.js"></script>
   <script src="../js/motifs.js"></script>
   <script src="../js/motif-global.js"></script>

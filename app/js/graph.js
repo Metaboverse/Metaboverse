@@ -1233,9 +1233,9 @@ function make_graph(
 
   d3.select("#saveSVG").on("click", function() {
     var _this_svg = d3.select("#svg_viewer_id")._groups[0][0].cloneNode(true);
-    var xmlns = "http://www.w3.org/2000/xmlns/";
-    var xlinkns = "http://www.w3.org/1999/xlink";
-    var svgns = "http://www.w3.org/2000/svg";
+    var xmlns = "https://www.w3.org/2000/xmlns/";
+    var xlinkns = "https://www.w3.org/1999/xlink";
+    var svgns = "https://www.w3.org/2000/svg";
     _this_svg.setAttributeNS(xmlns, "xmlns", svgns);
     _this_svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
 
@@ -1280,7 +1280,11 @@ function make_graph(
     if (pathway !== "") {
       pathway_id = pathway_dict[pathway].reactome;
       reactome_string = "https://reactome.org/PathwayBrowser/#/" + pathway_id;
-      window.open(reactome_string, "window name", "window settings");
+      window.open(
+        reactome_string,
+        "_blank",
+        "top=500,left=200,frame=false,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes"
+      );
     }
   });
 
@@ -1527,7 +1531,7 @@ function make_graph(
   var cell = node.append("path").attr("class", "cell");
 
   function convexHulls(nodes, links, index, offset) {
-    // Function adapted from: http://bl.ocks.org/GerHobbelt/3071239
+    // Function adapted from: https://bl.ocks.org/GerHobbelt/3071239
 
     var hulls = {};
 

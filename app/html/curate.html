@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src https://reactome.org/ContentService/data/species/all 'self';">
 
 <title>Metaboverse</title>
 
@@ -38,12 +38,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <!-- menu -->
   <menu>
     <font size=3.25px>
-      <menuItem id="menuright"><a href="https://github.com/Metaboverse/Metaboverse/issues" target="_blank">Contact Us</a></menuItem>
+      <menuItem id="menuright"><span id="issues_link" class="highlight_menu">Contact Us</span></menuItem>
       <menuItem id="menuright"><a href="cite.html">Cite</a></menuItem>
-      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/" target="_blank">Documentation</a></menuItem>
-      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/faqs.html" target="_blank">FAQs</a></menuItem>
-      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/general-usage.html" target="_blank">First Time?</a></menuItem>
-      <menuItem id="menuright"><a href="https://metaboverse.readthedocs.io/en/latest/content/overview.html" target="_blank">About</a></menuItem>
+      <menuItem id="menuright"><span id="docs_link" class="highlight_menu">Documentation</span></menuItem>
+      <menuItem id="menuright"><span id="faqs_link" class="highlight_menu">FAQs</span></menuItem>
+      <menuItem id="menuright"><span id="usage_link" class="highlight_menu">First Time?</span></menuItem>
+      <menuItem id="menuright"><span id="overview_link" class="highlight_menu">About</span></menuItem>
       <menuItem id="menuleft"><a href="index.html">Metaboverse</a></menuItem>
       <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
       <menuItem id="menuleft"><a href="index.html">Back</a></menuItem>
@@ -174,7 +174,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.xml' or '.sbml'"><i>i</i></button>
       <br>
       <br>
-      <font size="2"><i>Note: Undergoing continued development. Some features may not function properly yet.</i></font>
+      <font size="2"><i>Note: Undergoing continued development. Some features may not function properly yet. Please report any issues <span id="issues_link" class="highlight_link">here</span></i>.</font>
       <br>
       <br>
       <div id="dropDatabaseSBML">

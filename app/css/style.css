@@ -26,6 +26,12 @@ html {
   font-family: sans-serif;
 }
 
+.highlight_link {
+  color: blue;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 text {
   font: 12px sans-serif;
   text-shadow: 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white, -1px 0 0 white;
@@ -193,7 +199,7 @@ menuitem {
   float: left;
 }
 
-menuitem a {
+menuitem a, .highlight_menu {
   display: block;
   color: white;
   text-align: center;
@@ -201,9 +207,10 @@ menuitem a {
   text-decoration: none;
 }
 
-menuitem a:hover {
+menuitem a:hover, .highlight_menu:hover {
   background-color: #111;
   color: white;
+  cursor: pointer;
 }
 
 #menuright {
