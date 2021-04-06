@@ -3,17 +3,26 @@ Updates
 ###############
 
 =================================
-v0.6.0 (in progress)
+v0.6.0
 =================================
 | **Major**
-|
+| - New database integration: First supported release with the ability to overlay data on BiGG and BioModels network models and enable reaction pattern searching across a wider array of organisms. Note: Network models from these sources can be less uniform as Reactome sources, so users should exercise some caution when using these capabilities and perform some sanity checks (see `issue #73 <https://github.com/Metaboverse/Metaboverse/issues/73>`_).
+| - kNN visualization improved to allow for more stable NN building without error (see `commit 2395cd6 <https://github.com/Metaboverse/Metaboverse/commit/2395cd6fe44167def52ae991b8db5f9559a9eba9>`_).
+| - Neighbors dictionary backend curation is simplified and sped up (see `commit 355abd4 <https://github.com/Metaboverse/metaboverse-cli/commit/355abd4a6c5196bf6b4e46304eb1984d22597d7c>`_).
+| - Improved security policies. Specifically, external websites are opened in an isolated browser window and explicitly are context isolated and unable to access node integration. Enabled GitHub and Reactome URLs (:data:`connect-src`) are more specific (see `commit 96b1c9f <https://github.com/Metaboverse/Metaboverse/commit/96b1c9fa3135cbe2aea97e4a132e57063acbcf38>`_).
 |
 | **Minor**
-| - Added button to export graph view as SVG on :data:`Visualize` page.
+| - Progress bar during network build now update with more incremental steps for longer processes (see `issue #77 <https://github.com/Metaboverse/Metaboverse/issues/77>`_).
+| - New variables for more unified backend processing. Metaboverse v0.6.0 and later will not be compatible with files curated using Metaboverse v0.5.0b or earlier.
+
 
 =================================
-v0.5.0-beta
+Previous versions
 =================================
+
+---------------------------------
+v0.5.0-beta
+---------------------------------
 | **Major**
 | - Addresses `issue #66 <https://github.com/Metaboverse/Metaboverse/issues/66>`_ , by hosting curated reference and template files for each organism per version of Metaboverse. Also provided user argument options to directly include already downloaded or curated files (:data:`--organism_curation_file`, :data:`--neighbor_dictionary_file`, :data:`--graph_template_file`). Using pre-downloaded files, this reduced processing time for curating data on the human network from ~30-40 min to ~2 min. These pre-curated files will be processed with each release of Metaboverse and are hosted on SourceForge currently.
 |
@@ -29,9 +38,10 @@ v0.5.0-beta
 | - Removed deprecated files.
 | - Migrated from Travis-CI to GitHub Actions.
 
-=================================
+
+---------------------------------
 v0.4.0-beta
-=================================
+---------------------------------
 | **Major**
 | - Partial collapse: Addresses  `#51 <https://github.com/Metaboverse/Metaboverse/issues/51>`_  , which introduces partial collapsing to the reaction collapsing utility within Metaboverse. Previously, perfect matches were required between two reactions to collapse the reactions. However, this can be overly stringent in key metabolic pathways where a metabolite that is output by one reaction may not be required for the subsequent reaction (perhaps ATP is produced by reaction A but is not required for reaction B). To perform a partial collapse, Metaboverse operates by largely the same scheme as before, but now checks for a perfect match from each neighboring reaction, and if a perfect match is not available, checks for partial matches by filtering out high-degree nodes (quartile 98 of all non-reaction node degrees) and then checking if at least 30% of the nodes match with its neighbor.
 | - Improvements to nearest neighbor searches where all iterations of a species are included in the graphing. Previously, it would only use the literally selected node to search for neighbors, but Reactome provides separate species IDs for a metabolite's different organelle-localizations, which was complicating these searches.
@@ -43,21 +53,24 @@ v0.4.0-beta
 | - Fixes  `#60 <https://github.com/Metaboverse/Metaboverse/issues/60>`_  , where the :data:`.mvrs` file extension would not be automatically added to the user-provided output file name in Linux.
 | - Addresses  `#62 <https://github.com/Metaboverse/Metaboverse/issues/62>`_  , where the some time-course/multi-condition slider bars would be improperly formatted.
 
-=================================
+
+---------------------------------
 v0.3.3-beta
-=================================
+---------------------------------
 | **Minor**
 | - Closes `#63 <https://github.com/Metaboverse/Metaboverse/issues/63>`_ by applying :data:`safestr()`` function to all user input encodings to make sure no errors arise.
 
-=================================
+
+---------------------------------
 v0.3.2-beta
-=================================
+---------------------------------
 | **Minor**
 | - Closes  `#59 <https://github.com/Metaboverse/Metaboverse/issues/59>`_  where non-ascii characters in reaction names would break the info extraction. Added a safestring conversion utility to prevent ascii-character issues.
 
-=================================
+
+---------------------------------
 v0.3.1-beta
-=================================
+---------------------------------
 | **Minor**
 | - Fixes path separator for motif page name identification to allow for including modifiers in motif ID and exclusion of hubs ( `#55 <https://github.com/Metaboverse/Metaboverse/issues/55>`_ )
 | - Fixes CHEBI mapping so that CHEBI IDs provided as input data are more reliably used as mapping IDs if it cannot match the metabolite by name ( `#58 <https://github.com/Metaboverse/Metaboverse/issues/58>`_ )
@@ -65,13 +78,14 @@ v0.3.1-beta
 | - Addresses  `#59 <https://github.com/Metaboverse/Metaboverse/issues/59>`_  where non-ascii characters in reaction names would break the info extraction. Was not able to recapitulate the error, but this fix, where relevant reaction metadata is forced to a string data-type, should allow for some flexibility here.
 | - Updates walkthroughs and documentation to address ( `#31 <https://github.com/Metaboverse/Metaboverse/issues/31>`_ ) and update formatting
 
-===========
+
+---------------------------------
 v0.3.0-beta
-===========
+---------------------------------
 | **Major**
 | - Allows for more flexible gene/protein mapping with Reactome-formatted node names. For example, Reactome will label a gene or protein with its isomer coordinates. Metaboverse now ignores those coordinates during attribute mapping of the user's data.
 | - New naming of modules: :data:`Motif Search` is now called :data:`Pattern Analyis`, :data:`Visualize` is now called :data:`Explore`, and :data:`Connectivity` is now called :data:`Perturbation Networks`. Changed to be more descriptive and accessible to all users from broader backgrounds
-
+|
 | **Minor**
 | - Fixed nearest neighbors capabilities in Perturbation Network visualization. In a previous release, a change had interfered with its function.
 | - Use of outdated version will now direct user to the download page for the most recent version
@@ -82,14 +96,15 @@ v0.3.0-beta
 | - General formatting changes
 | - Updated documentation
 
-===========
+
+---------------------------------
 v0.2.0-beta
-===========
+---------------------------------
 | **Major**
 | - Fixes issues with missing metabolites during the network mapping stage ( `#37 <https://github.com/Metaboverse/Metaboverse/issues/37>`_ ). Addressed by re-working the metabolite synonym scheme to provide the same coverage of synonym look-up as before, but with more robustness so that some that were difficult to map would start mapping (i.e., Fructose)
 | - Added dynamic line-plots of a selected reaction motif for time-course and multi-condition data ( `#15 <https://github.com/Metaboverse/Metaboverse/issues/15>`_). When exploring motifs on the Motif page for time-course and multi-condition experiments, a new panel appears at the bottom of the page which, for a selected motif, will show those reaction motif's component's behavior across all the time-points or conditions.
 | - Added the option to exclude reaction motifs at a given time-point or condition that appear in another selected time-point or condition. ( `#16 <https://github.com/Metaboverse/Metaboverse/issues/16>`_ ). For example, if a user has selected to view motifs at a terminal time-point, but they want to know which reactions are motifs at this time-point but not at the initial time-point, they can exclude the motifs that show up at both time-points using the appropriate drop-down menu on the motif page.
-
+|
 | **Minor**
 | - Metaboverse now outputs a table of unmapped metabolites ( `#35 <https://github.com/Metaboverse/Metaboverse/issues/35>`_ ).
 | - Exploration pages now have pop-out bubbles with all information for compartments and node/link types `7d17d34 <https://github.com/Metaboverse/Metaboverse/commit/7d17d34aca5e900c307e266a07b4d82bd19a222d>`_.
@@ -99,37 +114,43 @@ v0.2.0-beta
 | - Updated package dependency information
 | - Updated docs and FAQs
 
-===========
+
+---------------------------------
 v0.1.4-beta
-===========
+---------------------------------
 | - Fixes `#26 <https://github.com/Metaboverse/Metaboverse/issues/26>`_, where an error log is output if build fails
 | - Removes direct Matplotlib imports in metaboverse-cli modules to prevent unnecessary errors and incompatibilities
 
-===========
+
+---------------------------------
 v0.1.3-beta
-===========
+---------------------------------
 | - Fixes bug where user paths with spaces were unable to be used ( `#26 <https://github.com/Metaboverse/Metaboverse/issues/26>`_ )
 
-===========
+
+---------------------------------
 v0.1.2-beta
-===========
+---------------------------------
 | - Fixes bug that prevented the curation from running without a blocklist ( `#19 <https://github.com/Metaboverse/Metaboverse/issues/19>`_ )
 | - Fixes bug during data mapping that caused protein or gene values to occasionally map to metabolites ( `#20 <https://github.com/Metaboverse/Metaboverse/issues/20>`_ )
 
-===========
+
+---------------------------------
 v0.1.1-beta
-===========
+---------------------------------
 | - Fixes minor run-time issues with the Metaboverse interactive app
 | - Fixes version alert to let users know if there is a newer version of Metaboverse available
 
-===========
+
+---------------------------------
 v0.1.0-beta
-===========
+---------------------------------
 | Initial beta release
 
-===========
+
+---------------------------------
 v0.0.1-beta
-===========
+---------------------------------
 | Demo pre-release with included human network data file for network visualization and exploration. Currently only available for MacOS.
 |
 | How to run:
@@ -138,4 +159,3 @@ v0.0.1-beta
 | 2. Double-click on :data:`.zip` file to uncompress Metaboverse and the accompanying test file
 | 3. Within the uncompressed folder, right-click on Metaboverse to launch the app
 | 4. Drag and drop the :data:`.json` file to the appropriate load icon and click the Visualize button.
-|
