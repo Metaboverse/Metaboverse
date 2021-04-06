@@ -8,13 +8,13 @@
 
 ## What does Metaboverse do?
 Integrating multi- or single-omic metabolic data upon the metabolic network can be challenging for a variety of reasons. Metaboverse seeks to simplify this task for users by providing a simple, user-friendly interface for layering their data on a dynamic representation of the metabolic network and automatically searching the network for interesting regulatory or other patterns. Additionally, Metaboverse provides several tools to enable the contextualization of metabolic data:
-- 90+ model organism networks from the [Reactome knowledgebase](https://reactome.org/)
+- Organism networks from the [Reactome knowledgebase](https://reactome.org/)
+- Additionally compatibility for integrating BiGG or BioModels networks.
 - Integrate two-condition, multi-condition, and timecourse data
 - Search for regulatory events using our regulatory pattern search engine
 - Collapse reactions with intermediate reactions with missing data for easier visualization and pattern analysis within sparse datasets
 - Explore super-pathway-specific reaction perturbation networks
 - Explore proximal reactions to a specific entity across the global reaction network using our Nearest Neighbors search features
-- And more to come! We have received and implemented many valuable feature requests from the community and encourage these requests!
 
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
 
@@ -44,5 +44,5 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 - Have any feedback? Let us know [here](https://forms.gle/4z51DMnagWRvKhc38).
 - We also have a discussion forum [here](https://github.com/Metaboverse/Metaboverse/discussions).
 
-### Trying out Metaboverse
+### Testing out Metaboverse
 With each release archive or Metaboverse, a `test_data.zip` file is included. Unzip this file and read the `README.txt` file for more information on this example dataset.    
