@@ -464,7 +464,6 @@ function parse_kNN_pathway(data, entity_list, kNN) {
   // Parse through each reaction where entity is a component
   nn_components = $.extend(true, [], entity_list);
   var nn_components = new Set(nn_components);
-  console.log(entity_list)
 
   for (reaction in reaction_dictionary) {
     //Return all reactions that contain the entity
@@ -533,7 +532,6 @@ function parse_kNN_pathway(data, entity_list, kNN) {
 
   // If too many nodes for first neighborhood, stop plotting
   var escape = [...nn_components].length;
-  console.log([...nn_components])
   if (escape > max_nodes) {
     try {
       document.getElementById("warning_line_1").innerHTML =
