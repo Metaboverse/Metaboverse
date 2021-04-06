@@ -36,7 +36,7 @@ Table of contents
 ============================
 Analysis Video Walkthrough
 ============================
-| You can watch the Metaboverse walkthrough video here, or go the the  page for a more detailed walkthrough.
+| You can watch the Metaboverse walkthrough video here, or go the :ref:`general_link` page for a more detailed walkthrough.
 .. raw:: html
 
    <iframe width="700" height="450" src="https://youtube.com/embed/U7m78Tbs5KE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -45,7 +45,7 @@ Analysis Video Walkthrough
 =======
 License
 =======
-| `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.
+| `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ is developed and maintained by `Jordan Berg <https://j-berg.github.io/>`_ in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.
 |
 | `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ is perpetually open-source under a GNU General Public License (v3.0).
 |
