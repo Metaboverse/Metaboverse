@@ -44,6 +44,10 @@ var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
+var div_text = d3.select("body").append("div")
+  .attr("class", "tooltip-text")
+  .style("opacity", 0);
+
 d3.select("button#options_info")
   .on("mouseover", function(d) {
     div
@@ -66,7 +70,7 @@ d3.select("button#knn_info")
       .style("left", (d3.event.pageX + 20) + "px")
       .style("top", (d3.event.pageY - 10) + "px")
       .style("width", "200px")
-      .style("height", "97px");
+      .style("height", "125px");
     div
       .html("Change value to expand number of nearest neighbors to plot for the selected analyte node. To expand neighbors, double-click on a non-reaction node. (Currently limited to 2 neighborhoods due to rapid graph expansion). You may need to re-click the node to activate a new neighbor number.")
   })
@@ -111,24 +115,9 @@ d3.select("button#notes_info")
       .style("left", (d3.event.pageX + 20) + "px")
       .style("top", (d3.event.pageY - 10) + "px")
       .style("width", "200px")
-      .style("height", "54px");
+      .style("height", "30px");
     div
-      .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
-  })
-  .on("mouseout", function(d) {
-    div.style("opacity", 0);
-    div.html("")
-  });
-d3.select("button#notes_info")
-  .on("mouseover", function(d) {
-    div
-      .style("opacity", 0.95)
-      .style("left", (d3.event.pageX + 20) + "px")
-      .style("top", (d3.event.pageY - 10) + "px")
-      .style("width", "200px")
-      .style("height", "54px");
-    div
-      .html("Display reaction details by double-clicking on a reaction node. Display metabolite synonyms by single-clicking on metabolite node.")
+      .html("Display node details by clicking on a node.")
   })
   .on("mouseout", function(d) {
     div.style("opacity", 0);
@@ -159,7 +148,7 @@ d3.select("button#shape_legend")
       .style("height", "375px")
       .style("width", "200px");
     div.html(
-      "<font size='2'><div style='margin-left:15px;margin-top:10px;'><font size='3'><b><u>Relationships</u></b></font><br /><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Core interaction<br /><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Catalyst<br /><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Inhibitor<br /><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component<br /><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Protein Component<br /><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Gene Component<br /><br /><font size='3'><b><u>Entities</u></b></font><br /><span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction<br /><span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Regulated reaction<br />&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite<br />&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex<br />&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein<br /><div class='add-buffer'>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;Gene</div><br /><br /><span class='add-buffer'>Bold = statistic < 0.05</span></div></font>"
+      "<font size='2'><div class='margin-l15 margin-t10'><font size='3'><b><u>Relationships</u></b></font><br /><div class='arrow'><div class='line grey-arrow'></div><div class='point grey-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Core interaction<br /><div class='arrow'><div class='line green-arrow'></div><div class='point green-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Catalyst<br /><div class='arrow'><div class='line red-arrow'></div><div class='point red-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Inhibitor<br /><div class='arrow'><div class='line2 blue-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component<br /><div class='arrow'><div class='line2 orange-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Protein Component<br /><div class='arrow'><div class='line2 purple-arrow'></div></div>&nbsp;&nbsp;&nbsp;&nbsp;Gene Component<br /><br /><font size='3'><b><u>Entities</u></b></font><br /><span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction<br /><span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction Pattern<br />&nbsp;<span class='dot white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Metabolite<br />&nbsp;<span class='square white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Complex<br />&nbsp;<span class='diamond white-dot'></span>&nbsp;&nbsp;&nbsp;&nbsp;Protein<br /><div class='add-buffer'>&nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>&nbsp;&nbsp;&nbsp;Gene</div><br /><br /><span class='add-buffer'>Bold = statistic < 0.05</span></div></font>"
     )
   })
   .on("mouseout", function(d) {
@@ -951,9 +940,6 @@ function make_graph(
 
   // else categories are compartments
 
-
-
-
   function getCategories(nodes) {
 
     var categories = new Set();
@@ -999,7 +985,7 @@ function make_graph(
         }
       })
 
-    let compartment_dictionary = {};
+    var compartment_dictionary = {};
     for (let _n in graph_nodes) {
       if ((graph_nodes[_n]['compartment'] !== undefined) &&
         (graph_nodes[_n]['compartment'] !== "none") &&
@@ -1007,45 +993,6 @@ function make_graph(
         compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
       }
     }
-    d3.select("button#compartment_legend")
-      .on("mouseover", function(d) {
-        let adder = 0;
-        let category_number = 0;
-        let make_string = "";
-        for (let s in categories) {
-          if (s !== null && s !== "none" && s !== undefined && s !== "undefined" && compartment_dictionary[s] !== undefined) {
-            // handle a blank category by skipping
-            if (hull._groups[0][categories[s]].style.fill === "") {
-              adder = adder + 1;
-            }
-            make_string = make_string + "&nbsp;";
-            make_string = make_string + "<span class='ellipse' style='--dot_color:" + hull._groups[0][categories[s] + adder].style.fill + ";'></span>";
-            make_string = make_string + "&nbsp;&nbsp;&nbsp;&nbsp;";
-            make_string = make_string + compartment_dictionary[s];
-            make_string = make_string + "</br>";
-            category_number = category_number + 1;
-          }
-        }
-
-        // add one for formatting
-        if (category_number > 15) {
-          category_number = category_number + 1;
-        }
-
-        div
-          .style("opacity", 0.95)
-          .style("left", (d3.event.pageX + 20) + "px")
-          .style("top", (d3.event.pageY - 10) + "px")
-          .style("height", (60 + (15 * category_number * 1.2)).toString() + "px")
-          .style("width", "275px");
-        div
-          .html("<div style='margin-left:15px;margin-top:15px;'><font size='3'><b><u>Compartments</u></b></font></br></br>" + make_string)
-      })
-      .on("mouseout", function(d) {
-        div.style("opacity", 0);
-        div.html("")
-        category_number = 0;
-      });
   }
 
   var timer = 0;
@@ -1550,7 +1497,18 @@ function make_graph(
     if (page_name === "perturbations.html") {} else {
       hull
         .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
-        .attr("d", drawCluster);
+        .attr("d", drawCluster)
+        .on("mouseover", function(d) {
+          div_text
+            .style("opacity", 1)
+            .style("left", (d3.event.pageX + 10) + "px")
+            .style("top", (d3.event.pageY - 10) + "px")
+            .html("<div class='margin-l5 margin-t5 margin-b5 opacity-1'><font size='2'><b><i>" + compartment_dictionary[d.group] + "</i></b></font></div>")
+        })
+        .on("mouseout", function(d) {
+          div_text.style("opacity", 0);
+          div_text.html("")
+        });
     }
 
   }

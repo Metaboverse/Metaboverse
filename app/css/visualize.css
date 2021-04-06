@@ -449,3 +449,12 @@ div.tooltip {
   border-radius: 8px;
   pointer-events: none;
 }
+
+div.tooltip-text {
+  position: absolute;
+  text-align: left;
+  padding: 5px;
+  font: 12px sans-serif;
+  background: transparent;
+  pointer-events: none;
+}

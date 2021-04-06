@@ -1,0 +1,50 @@
+/*
+Metaboverse
+Visualizing and Analyzing Metabolic Networks
+https://github.com/Metaboverse/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019-2021  Youjia Zhou, Jordan A. Berg
+  zhou325 <at> sci <dot> utah <dot> edu
+  jordan <dot> berg <at> biochem <dot> utah <dot> edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+.margin-l5 {
+  margin-left: 5px;
+}
+
+.margin-l15 {
+  margin-left: 15px;
+}
+
+.margin-t10 {
+  margin-top: 10px;
+}
+
+.margin-t15 {
+  margin-top: 15px;
+}
+
+.margin-t5 {
+  margin-top: 5px;
+}
+
+.margin-b5 {
+  margin-bottom: 5px;
+}
+
+.opacity-1 {
+  opacity: 1;
+}

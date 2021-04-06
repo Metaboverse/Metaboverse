@@ -195,22 +195,9 @@ menu {
   z-index: 100;
 }
 
-menuitem {
+menuItem {
   float: left;
-}
-
-menuitem a, .highlight_menu {
-  display: block;
   color: white;
-  text-align: center;
-  padding: 10px 16px;
-  text-decoration: none;
-}
-
-menuitem a:hover, .highlight_menu:hover {
-  background-color: #111;
-  color: white;
-  cursor: pointer;
 }
 
 #menuright {
@@ -221,14 +208,31 @@ menuitem a:hover, .highlight_menu:hover {
   float: left;
 }
 
-#menuright-motif {
-  float: right;
-  margin: -3;
+menuItem a, .highlight_menu {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 16px;
+  text-decoration: none;
 }
 
-#menuleft-motif {
+menuItem a:hover, .highlight_menu:hover {
+  background-color: #111;
+  color: white;
+  cursor: pointer;
+}
+
+#menuright-motif {
+  float: right;
+}
+
+#menuleft-motif, #menurefresh-motif {
   float: left;
-  margin: -3;
+
+}
+
+.menu-motif {
+  margin-top: -3px;
 }
 
 a {

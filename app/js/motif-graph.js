@@ -750,7 +750,7 @@ class MetaGraph {
     sg.exit().remove();
     sg = sg.enter().append("rect").merge(sg)
       .attr("x", 5)
-      .attr("y", (d, i) => this.stamp_svg_margin.top + Math.floor(i) * (stamp_height + this.stamp_svg_margin.vertical))
+      .attr("y", (d, i) => this.stamp_svg_margin.top + (i * (stamp_height + this.stamp_svg_margin.vertical)))
       .attr("width", stamp_width)
       .attr("height", stamp_height)
       .attr("fill", "lightgray")
@@ -959,28 +959,28 @@ class MetaGraph {
       pathway_list.push("Collapsed")
     }
 
-    let pathway_height = 20;
+    let pathway_height = 25;
     let margin = {
-      "horizontal": 9,
+      "horizontal": 15,
       "vertical": 10,
-      "top": 10,
+      "top": 5,
       "left": 5
     };
-    this.mp_svg_height = Math.ceil(pathway_list.length / 3) * (pathway_height + margin.vertical) + motif_height + margin.top;
+    this.mp_svg_height = Math.ceil(pathway_list.length) * (pathway_height + margin.vertical) + motif_height + margin.top;
     this.mp_svg.attr("height", this.mp_svg_height);
 
-    let pathway_width = (this.mp_svg_width / 3) - margin.horizontal;
+    let pathway_width = (this.mp_svg_width) - margin.horizontal;
 
     let clicked_stamp_pathway;
     let sg = this.mp_selection_group.selectAll("rect")
       .data(pathway_list);
     sg.exit().remove();
     sg = sg.enter().append("rect").merge(sg)
-      .attr("x", (d, i) => margin.left + i % 3 * (pathway_width + margin.horizontal))
-      .attr("y", (d, i) => motif_height + margin.top + Math.floor(i / 3) * (pathway_height + margin.vertical))
+      .attr("x", 5)
+      .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical)))
       .attr("width", pathway_width)
       .attr("height", pathway_height)
-      .attr("fill", "blue")
+      .attr("fill", "lightblue")
       .attr("id", (d) => "mp-cover-" + d)
       .style("opacity", 0)
       .on("click", (d) => {
@@ -1016,11 +1016,11 @@ class MetaGraph {
       .data(pathway_list);
     fg.exit().remove();
     fg = fg.enter().append("rect").merge(fg)
-      .attr("x", (d, i) => margin.left + i % 3 * (pathway_width + margin.horizontal))
-      .attr("y", (d, i) => motif_height + margin.top + Math.floor(i / 3) * (pathway_height + margin.vertical))
+      .attr("x", 5)
+      .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical)))
       .attr("width", pathway_width)
       .attr("height", pathway_height)
-      .attr("fill", "lightblue")
+      .attr("fill", "lightgrey")
       .style("opacity", 0.5);
 
     // get pathway names
@@ -1028,18 +1028,18 @@ class MetaGraph {
       .data(pathway_list);
     ptg.exit().remove();
     ptg = ptg.enter().append("text").merge(ptg)
-      .attr("x", (d, i) => margin.left + i % 3 * (pathway_width + margin.horizontal) + 10)
-      .attr("y", (d, i) => motif_height + margin.top + Math.floor(i / 3) * (pathway_height + margin.vertical) + 12)
+      .attr("x", 15)
+      .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical) + 17))
       .text(d => {
         if (d === "Collapsed") {
           return "Cross-pathway pattern";
         } else if (this.mod_collapsed_pathways[d] !== undefined) {
-          return this.mod_collapsed_pathways[d].name.substring(0, 24);
+          return this.mod_collapsed_pathways[d].name.substring(0, 48);
         } else {
           return "N/A"
         }
       })
-      .style("font-size", 9)
+      .style("font-size", 12)
   }
 
   previewReaction(d, indexer, selector) {
@@ -1204,8 +1204,10 @@ class MetaGraph {
       .selectAll("li")
       .data(current_motif);
     tg.exit().remove();
-    tg = tg.enter().append("li").merge(tg)
-      .html(d => "- " + this.collapsed_reaction_dict[d].name)
+    tg = tg.enter()
+      .append("li")
+      .merge(tg)
+      .html(d => "&bull; " + this.collapsed_reaction_dict[d].name + "&emsp;&emsp;")
   }
 
   showCollapsedNames(current_motif) {

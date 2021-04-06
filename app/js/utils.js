@@ -153,6 +153,9 @@ window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();
 
+  var user_path = window.location.pathname;
+  var page = user_path.split('/').pop();
+
   document.getElementById("issues_link").onclick = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -186,26 +189,49 @@ window.addEventListener("load", function(event) {
     )
   }
 
-  document.getElementById("usage_link").onclick = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
 
-    window.open(
-      'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html',
-      '_blank',
-      newBrowserSettings
-    )
+  if (page !== "motif.html" && page !== "visualize.html" && page !== "perturbations.html") {
+    document.getElementById("usage_link").onclick = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      window.open(
+        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html',
+        '_blank',
+        newBrowserSettings
+      )
+    }
   }
 
   document.getElementById("overview_link").onclick = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    window.open(
-      'https://metaboverse.readthedocs.io/en/latest/content/overview.html',
-      '_blank',
-      newBrowserSettings
-    )
+    if (page === "motif.html") {
+      window.open(
+        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html#regulatory-hotspot-identification-pattern-analysis',
+        '_blank',
+        newBrowserSettings
+      )
+    } else if (page === "visualize.html") {
+      window.open(
+        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html#general-pathway-exploration',
+        '_blank',
+        newBrowserSettings
+      )
+    } else if (page === "perturbations.html") {
+      window.open(
+        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html#perturbation-network-modeling',
+        '_blank',
+        newBrowserSettings
+      )
+    } else {
+      window.open(
+        'https://metaboverse.readthedocs.io/en/latest/content/overview.html',
+        '_blank',
+        newBrowserSettings
+      )
+    }
   }
 
 });
