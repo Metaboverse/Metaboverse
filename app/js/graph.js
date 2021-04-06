@@ -448,11 +448,6 @@ function nearest_neighbors(data, entity_id) {
 }
 
 function parse_kNN_pathway(data, entity_list, kNN) {
-  // Reset warning messages
-  try {
-    document.getElementById("warning_line_1").innerHTML = "<br>";
-    document.getElementById("warning_line_2").innerHTML = "<br><br>";
-  } catch (e) {}
 
   if (collapse_reactions === true) {
     var reaction_dictionary = data.collapsed_reaction_dictionary;
@@ -533,23 +528,12 @@ function parse_kNN_pathway(data, entity_list, kNN) {
   // If too many nodes for first neighborhood, stop plotting
   var escape = [...nn_components].length;
   if (escape > max_nodes) {
-    try {
-      document.getElementById("warning_line_1").innerHTML =
-        '<i class="red-text">Too many entities to plot</i><br><i class="red-text">Will not plot</i>';
-      document.getElementById("warning_line_2").innerHTML = "<br>";
-      alert("Too many entities to plot. Try decreasing the hub threshold or the number of neighbors (if using more than 1).")
-    } catch (e) {}
-
+    alert("Too many entities to plot. Try decreasing the hub threshold or the number of neighbors (if using more than 1).")
     kNN = 0;
     nn_components = new Set();
   }
 
   if (kNN > 1) {
-    try {
-      document.getElementById("warning_line_1").innerHTML =
-        '<i class="red-text">Please wait<br><br></i>';
-      document.getElementById("warning_line_2").innerHTML = "";
-    } catch (e) {}
     // Filter out any components that are above hub threshold for kNN
     n = 1;
     nn_components = [...nn_components];
@@ -621,22 +605,10 @@ function parse_kNN_pathway(data, entity_list, kNN) {
       // Only combine the lists if they pass the threshold
       escape = escape + components.length;
       if (escape > max_nodes) {
-        console.log(escape);
-        try {
-          document.getElementById("warning_line_1").innerHTML =
-            '<i class="red-text">Too many entities to plot. Will only plot first ' +
-            n +
-            " neighborhood(s)</i>";
-          document.getElementById("warning_line_2").innerHTML = "";
-          alert("Too many entities to plot. Will only plot first " + n + " neighborhood(s)")
-        } catch (e) {}
+        alert("Too many entities to plot. Will only plot first " + n + " neighborhood(s)")
         n = kNN + 2;
       } else {
         nn_components = nn_components.concat(components);
-        try {
-          document.getElementById("warning_line_1").innerHTML = "<br>";
-          document.getElementById("warning_line_2").innerHTML = "<br><br>";
-        } catch (e) {}
       }
       n = n + 1;
     }
@@ -1696,8 +1668,6 @@ function change() {
   var mod_selection = determineWidth(selection);
   document.getElementById("type_selection_type").innerHTML = "Pathway";
   document.getElementById("type_selection").innerHTML = mod_selection;
-  document.getElementById("warning_line_1").innerHTML = "<br>";
-  document.getElementById("warning_line_2").innerHTML = "<br><br>";
   console.log(superSelection)
   console.log(selection)
 

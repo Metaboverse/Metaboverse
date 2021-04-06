@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self';">
 <title>Metaboverse</title>
 
 <html>
@@ -52,32 +52,31 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <body>
   <div class="sidebar">
+    <font id="styletitle" size="5">
+      <center>
+        <b>Perturbation Networks</b>
+      </center>
+    </font>
+    <br>
     <font id="styletitle" size="2">
+      Value Threshold:&nbsp;
+      <input type="number" name="conn_value_button" id="conn_value_button" class="option_botton" min="0" max="100.000" value="1" />
+      <button id="play_button_value" class="play_button" title="Change value and click to modify the perturbation threshold for a reaction to appear in the window.">
+        &#10148;
+      </button>
+      <br>
+      Stat Threshold:
+      <input type="number" name="conn_stat_button" id="conn_stat_button" min="0" max="1.0000000" value="0.00001" />
+      <button id="play_button_stat" class="play_button" title="Change value and click to modify the perturbation threshold for a reaction to appear in the window.">
+        &#10148;
+      </button>
+      <br>
+      <br>
       <b><u>Legend</u></b>
       <button id="legend_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
-      <b>&#10095;&#10095;&nbsp;&#10023;&nbsp;Connectivity Mapping&nbsp;&#10023;&nbsp;&#10094;&#10094;</b>
-      <br />
-      <br />
-      Value Threshold:&nbsp;
-      <input type="number" name="conn_value_button" id="conn_value_button" min="0" max="100.000" value="1" />
-      <button id="play_button_value" class="play_button" title="Change value and click to modify the perturbation threshold for a reaction to appear in the window.">
-        &#10148;
-      </button>
-      <br />
-      Stat Threshold:
-      <input type="number" name="conn_stat_button" id="conn_stat_button" min="0" max="1.0000000" value="0.00001" />
-
-      <button id="play_button_stat" class="play_button" title="Change value and click to modify the perturbation threshold for a reaction to appear in the window.">
-        &#10148;
-      </button>
-      <br />
-      <br />
-      <b>Entity Values</b>
-      <br />
+      <br>
       <div title="Value was found in user data.">
         <span class="dot white-dot"></span>
         Measured
@@ -86,38 +85,38 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <span class="dot dashed-dot white-dot"></span>
         Inferred
       </div>
-      <br />
+      <br>
       <canvas title="Colormap value for entity measurement." id="seismic_node" class="dot seismic_node" width="12" height="12"></canvas>
       <div id="entity_type"></div>
-      <br />
+      <br>
       <canvas id="seismic_canvas" width="220" height="15"></canvas>
-      <br />
-      <br />
+      <br>
+      <br>
       <b>Shape Legend</b>
       <button id="shape_legend" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
       <b><u>Options</u></b>
       <button id="options_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
+      <br>
+      <br>
       <div title="Click to turn feature labels on or off.">
-        <button id="toggleAnalytes">Features</button>
+        <button id="toggleAnalytes" class="option_botton">Features</button>
       </div>
       <div title="Click to turn reaction labels on or off.">
-        <button id="toggleReactions">Reactions</button>
+        <button id="toggleReactions" class="option_botton">Reactions</button>
       </div>
       <div title="Click to turn expression and statistical values on or off.">
-        <button id="toggleExpression">Expression</button>
+        <button id="toggleExpression" class="option_botton">Expression</button>
       </div>
-      <br />
+      <br>
       <div title="Click to toggle gene nodes (remove or display).">
-        <button id="toggleGenes">Toggle Genes</button>
+        <button id="toggleGenes" class="option_botton">Toggle Genes</button>
       </div>
       <!--
         <div
@@ -127,62 +126,58 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         -->
       <div title="Click to save the current graph view">
-        <button id="saveGraph">Export PNG</button>
+        <button id="saveGraph" class="option_botton">Export PNG</button>
       </div>
-      <br />
-      <br />
+      <br>
+      <br>
       # Nearest neighbors:
-      <input type="number" name="kNN_button" id="kNN_button" min="1" max="9" value="1" />
+      <input type="number" name="kNN_button" id="kNN_button" class="option_botton" min="1" max="9" value="1" />
       <button id="knn_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
+      <br>
       Hub threshold:
-      <input type="number" name="hub_button" id="hub_button" min="1" max="9999999" />
+      <input type="number" name="hub_button" id="hub_button" class="option_botton" min="1" max="9999999" />
       <button id="hub_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
+      <br>
       Statistic threshold:
-      <input type="number" name="stat_button" id="stat_button" min="000" max="1.0" value="0.05" />
+      <input type="number" name="stat_button" id="stat_button" class="option_botton" min="000" max="1.0" value="0.05" />
       <button id="stat_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
-      <b><u>Warnings:</u></b>
-      <br />
-      <div id="warning_line_1"><br /></div>
-      <div id="warning_line_2"><br /><br /></div>
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
       <b><u>Selection Type:</u></b>
-      <br />
-      <div id="type_selection_type"><br /></div>
-      <br />
-      <br />
-      <br />
+      <br>
+      <div id="type_selection_type"><br></div>
+      <br>
+      <br>
+      <br>
       <b><u>Current Selection:</u></b>
-      <br />
-      <div id="type_selection"><br /></div>
-      <br />
-      <br />
+      <br>
+      <div id="type_selection"><br></div>
+      <br>
+      <br>
       <b><u>Notes:</u></b>
       <button id="notes_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
+      <br>
       <div id="reaction_notes"></div>
-      <br />
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
     </font>
   </div>
-  <br />
-  <br />
-  <h1 class="view-global-title">Perturbation Network Exploration</h1>
+  <br>
+  <br>
+  <br>
+  <br>
   <select id="superPathwayMenu" class="topmargin-minus5"></select>
-  <br />
+  <br>
   <!--Colorbar pointer label-->
   <font id="styletitle" size="1">
     <div id="displayValue" class="displayValue"></div>
@@ -190,7 +185,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <!--Put timecourse placeholder here-->
   <div id="slider" align="center"></div>
-  <br />
+  <br>
 
   <!--Graph space-->
   <div id="graph" align="center"></div>

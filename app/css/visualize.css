@@ -33,6 +33,11 @@ Source:
 http://bl.ocks.org/mbostock/1153292
 https://bl.ocks.org/mbostock/1212215
 */
+
+.option_botton {
+  margin-bottom: 2px;
+}
+
 path.hull {
   fill: none;
   fill-opacity: 0.2;

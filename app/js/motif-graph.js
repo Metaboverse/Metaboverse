@@ -189,7 +189,10 @@ class MetaGraph {
       .on("change", () => {
         reset_objects();
         this.sort_type_dropdown = document.getElementById("sort_type");
-        let sample_idx = d3.select("circle#dot").attr("x");
+        let sample_idx = 0;
+        try {
+          let sample_idx = d3.select("circle#dot").attr("x");
+        } catch(err) {}
         this.exclude_type_dropdown = document.getElementById("exclude_type");
         exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
         this.drawMotifSearchResult(

@@ -75,7 +75,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <font size="3">
 
       <label for="force_new_curation">
-        <font size="3" id="force-curate-label"><i>Force new curation of all files: </i></font>
+        <font size="3" id="force-curate-label"><i>Force new curation of all intermediate files: </i></font>
       </label>
       <input type="checkbox" id="force_new_curation">
       <button class="info" title="Check to force a fresh curation of all intermediate references and templates.">
@@ -89,7 +89,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <b><i>AND</i></b>
       <br>
-      <p>Click on the folder to select output location:
+      <p>Select an output location:
         <button class="info"
           title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder."><i>i</i></button>
       </p>
@@ -114,7 +114,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       Load in <b><i>any</i></b> of the following pre-curated Metaboverse files:
       <br>
       <br>
-      &#8226; Load a pre-existing Metaboverse organism database (ends in .mvdb)
+      &#8226; Load a pre-existing Metaboverse organism database (<i>ends in <b>.mvdb</b></i>)
       <button class="info"
         title="Provide a pre-curated organism reference file. Providing this file will significantly speed up the processing time required to curate your data. This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvdb'"><i>i</i></button>
       <br>
@@ -130,7 +130,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <input id="curation-input" type="file" name="name" />
       <br>
       <br>
-      &#8226; Load a pre-existing Metaboverse organism graph template (ends in _template.mvrs)
+      &#8226; Load a pre-existing Metaboverse organism graph template (<i>ends in <b>_template.mvrs</b></i>)
       <button class="info"
         title="Provide a pre-processed graph template for your organism of interest. Providing this file will significantly speed up the processing time required to curate your data. Note: This step is optional, but if used, file must end in '.mvrs' and will usually have the '_template' filename suffix."><i>i</i></button>
       <br>
@@ -146,9 +146,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <input id="template-input" type="file" name="name" />
       <br>
       <br>
-      &#8226; Load a pre-existing Metaboverse organism reaction neighbors dictionary (ends in .nbdb)
+      &#8226; Load a pre-existing Metaboverse organism reaction neighbors dictionary (<i>ends in <b>.nbdb</b></i>)
       <button class="info"
-        title="Provide a pre-processed reaction neighbors dictionary file for your organism of interest. Providing this file will significantly speed up the processing time required to curate your data. Note: This step is optional, but if used, file must end in '.nbdb'"><i>i</i></button>
+        title="Provide a pre-processed reaction neighbors dictionary file for your organism of interest. Providing this file will significantly speed up the processing time required to curate your data. Note: This step is optional, but if used, file must end in '.nbdb' and an organism and output file location, or a Metaboverse organism database or organism graph template must also be provided."><i>i</i></button>
       <br>
       <br>
       <div id="dropNeighborDictionary">
@@ -169,12 +169,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <br>
       <br>
-      Load a pre-existing <b>BiGG</b> or <b>BioModels</b> database (ends in .xml or .sbml)
+      Load a pre-existing <b>BiGG</b> or <b>BioModels</b> database (<i>ends in <b>.xml</b> or <b>.sbml</b></i>)
       <button class="info"
         title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.xml' or '.sbml'"><i>i</i></button>
       <br>
       <br>
-      <font size="2"><i>Note: Undergoing continued development. Some features may not function properly yet. Please report any issues <span id="issues_link" class="highlight_link">here</span></i>.</font>
+      <font size="2"><i>Note: Undergoing continued development. Some features may not function properly yet.<br>Please report any issues <span id="issues_link" class="highlight_link">here</span></i>.</font>
       <br>
       <br>
       <div id="dropDatabaseSBML">
@@ -197,7 +197,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <div id="content"></div>
     </center>
   </p>
-
+  <br>
+  <br>
+  <br>
+  <br>
 </body>
-
 </html>

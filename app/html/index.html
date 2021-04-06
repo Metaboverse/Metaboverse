@@ -22,21 +22,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src https://api.github.com/repos/Metaboverse/Metaboverse/ https://reactome.org/ContentService/data/species/all 'self';">
-
 <title>Metaboverse</title>
-
 <html>
-
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/network.css">
-
 <script src="../js/index.js"></script>
 <script src="../js/cite.js"></script>
 <script src="../js/launch.js"></script>
 <script src="../js/utils.js"></script>
-
 <head>
-
   <!-- menu -->
   <menu>
     <font size=3.25px>
@@ -51,16 +45,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <menuItem id="menurefresh"><a>&#x21bb;</a></menuItem>
     </font>
   </menu>
-
 </head>
-
 <body>
   <div class="title">
-    <br />
-    <br />
+    <br>
     <div id="graph" align="center"></div>
     <script src="../js/network.js"></script>
-
     <font id="styletitle">
       <font size="40">
         <b>
@@ -69,7 +59,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           </center>
         </b>
       </font>
-
       <p>
         <font size="2">
           <center>
@@ -78,19 +67,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </font>
         <br>
       </p>
-
+      <br>
       <center>
         <font size="3">
-          Welcome to the Metaboverse. Let's get started...
-        </font>
-      </center>
-
-      <br>
-      <br>
-
-      <center>
-        <font size="3">
-          Load a pre-existing <b>pathway</b> database (ends in .mvrs)
+          Load a pre-existing Metaboverse network file if you would like to <br>re-examine a dataset (<i>ends in <b>.mvrs</b></i>), or skip to the next step.
           <button class="info"
             title="This location will also be used as the default output location for other files. If you would like these files output in a separate folder, the file creation prompt will allow for creation of a new folder. Note: This step is optional, but if used, file must end in '.mvrs'"><i>i</i></button>
           <br>
@@ -110,16 +90,11 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <br>
         </font>
       </center>
-
       <p>
         <center>
           <div id="content"></div>
-
         </center>
       </p>
-
   </div>
-
 </body>
-
 </html>

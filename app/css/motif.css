@@ -134,6 +134,12 @@ div.scrollable {
   height: 120px;
 }
 
+.relationships_styling {
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+
 .tooltip-panel {
   /* margin-top:10px; */
   margin-left: 10px;

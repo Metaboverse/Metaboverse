@@ -22,7 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self';">
 <title>Metaboverse</title>
 
 
@@ -182,22 +182,22 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 </p>
 
                 <p id="checkbox-padding">
-                  <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in motif analysis. You will need to re-run the motif to exclude collapsed reactions." checked>
+                  <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in reaction pattern analysis. You will need to re-run the reaction pattern analysis to exclude collapsed reactions." checked>
                 </p>
                 <div id="checkbox_spacer"></div>
                 <p id="checkbox-padding">
                   <input type="checkbox" id="use_modifiers_id" name="use_modifiers" value="true"
-                    title="Check to include modifiers in motif analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the motif to include modifiers.">
+                    title="Check to include modifiers in reaction pattern analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the reaction pattern analysis to include modifiers.">
                 </p>
                 <p id="checkbox-padding">
                   <input type="checkbox" id="exclude_hubs_id" name="exclude_hubs" value="true"
-                    title="Exclude high-hub components from consideration in the motif search. This will remove hubs with more than 100 connections. You will need to re-run the motif to include modifiers.">
+                    title="Exclude high-hub components from consideration in the reaction pattern search. This will remove hubs with more than 100 connections. You will need to re-run the reaction pattern search to include modifiers.">
                 </p>
               </div>
             </div>
           </div>
           <div class="content">
-            <div class="dropdown-container" title="Decide how motif results are sorted before being returned to you, the user.">
+            <div class="dropdown-container" title="Decide how reaction pattern results are sorted before being returned to you, the user.">
               <select name="sort_type" class="custom-select" id="sort_type">
                 <option>Sort Statistical Significance</option>
                 <option>Sort Magnitude Change</option>
@@ -207,7 +207,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           </div>
           <br />
           <div class="content">
-            <div class="dropdown-container" title="Selections only apply to non-pathway-level motifs (e.g., not PathMax or PathCov).">
+            <div class="dropdown-container" title="Selections only apply to non-pathway-level reaction patterns (e.g., not PathMax or PathCov). Excluding a time-point or condition will only return reaction patterns that are exclusive to the given time-point or condition.">
               <select name="exclude_type" class="custom-select" id="exclude_type">
               </select>
             </div>
@@ -216,13 +216,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
       <div id="col-md-4-motif" class="col-md-4">
         <div class="frame" id="frame-motif-2">
-          <div class="sub-frame" title="List of all motifs found in the global network for the selected motif type with information on how many pathways this motif is found in. Click on the motif to expand.">
+          <div class="sub-frame" title="List of all reaction patterns found in the global network for the selected reaction pattern type with information on how many pathways this reaction pattern is found in. Click on the reaction pattern to expand.">
             <h6><b>Identified Reactions</b></h6>
             <div id="stamp-view-container" class="scrollable">
               <svg id="stamp-view-svg" width="100%" height=100%></svg>
             </div>
           </div>
-          <div class="sub-frame" title="List of pathways in which the selected motif is found. Click on the pathway to open up the pathway's visualization.">
+          <div class="sub-frame" title="List of pathways in which the selected reaction pattern is found. Click on the pathway to open up the pathway's visualization.">
             <h6><b>Reaction-Pathway Membership</b></h6>
             <div id="motif-pathway-container" class="scrollable">
               <svg id="motif-pathway-svg" width="100%" height=100%></svg>
@@ -239,7 +239,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             </div>
           </div>
           <div id="network-panel-motif" class="network-panel">
-            <h6><b><i>All Motifs In This Pathway:</i></b>
+            <h6><b><i>All Reaction Patterns In This Pathway:</i></b>
               <a href="visualize.html" id="open_pathway_viewer"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a>
             </h6>
             <div class="scrollable" id="all-motif-list">
@@ -257,7 +257,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
   <div id="frame-shape-key">
     <div class='frame frame-motif-4'>
       <font size="2">
-        <div style='margin-left:15px;margin-top:10px;'>
+        <div class="relationships_styling">
           <font size='3'>
             <b><u>Relationships</u></b>
           </font>

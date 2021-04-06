@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src https://reactome.org 'self';">
 <title>Metaboverse</title>
 
 <html>
@@ -52,15 +52,18 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <body>
   <div class="sidebar">
+    <font id="styletitle" size="5">
+      <center>
+        <b>Explore Pathways</b>
+      </center>
+    </font>
+    <br>
     <font id="styletitle" size="2">
       <b><u>Legend</u></b>
       <button id="legend_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
-      <b>Values</b>
-      <br />
+      <br>
       <div title="Value was found in user data.">
         <span class="dot white-dot"></span>
         Measured
@@ -69,119 +72,114 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <span class="dot dashed-dot white-dot"></span>
         Inferred
       </div>
-      <br />
+      <br>
       <canvas title="Colormap value for entity measurement." id="seismic_node" class="dot seismic_node" width="12" height="12"></canvas>
       <div id="entity_type"></div>
-      <br />
+      <br>
       <canvas id="seismic_canvas" width="220" height="15"></canvas>
-      <br />
-      <br />
+      <br>
+      <br>
       <b>Shape Legend</b>
       <button id="shape_legend" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
+      <br>
+      <br>
       <b>Compartment Legend</b>
       <button id="compartment_legend" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
       <b><u>Options</u></b>
       <button id="options_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
+      <br>
+      <br>
       <div title="Click to turn feature labels on or off.">
-        <button id="toggleAnalytes">Features</button>
+        <button id="toggleAnalytes" class="option_botton">Features</button>
       </div>
       <div title="Click to turn reaction labels on or off.">
-        <button id="toggleReactions">Reactions</button>
+        <button id="toggleReactions" class="option_botton">Reactions</button>
       </div>
       <div title="Click to turn expression and statistical values on or off.">
-        <button id="toggleExpression">Expression</button>
+        <button id="toggleExpression" class="option_botton">Expression</button>
       </div>
-      <br />
+      <br>
       <div title="Click to toggle gene nodes (remove or display).">
-        <button id="toggleGenes">Toggle Genes</button>
+        <button id="toggleGenes" class="option_botton">Toggle Genes</button>
       </div>
       <div title="Click to toggle between showing or hiding compartment shading">
-        <button id="toggleCompartments">Toggle Compartments</button>
+        <button id="toggleCompartments" class="option_botton">Toggle Compartments</button>
       </div>
-      <br />
+      <br>
       <div title="Click to save the current graph view">
-        <button id="saveGraph">Export PNG</button>
+        <button id="saveGraph" class="option_botton">Export PNG</button>
       </div>
-      <div title="Click to save the current graph view as an SVG">
-        <button id="saveSVG">Export SVG</button>
+      <div title="Click to save the current graph view as an SVG. Not currently working.">
+        <button id="saveSVG" class="option_botton">Export SVG</button>
       </div>
-      <br />
-      <br />
+      <br>
+      <br>
       <div title="Click to toggle collapse of nodes with no data overlaid.">
-        <button id="collapseNodes">Toggle Collapsed Reactions</button>
+        <button id="collapseNodes" class="option_botton">Toggle Collapsed Reactions</button>
       </div>
       <div title="Click to open the Reactome representation of the current pathway.">
-        <button id="openPathway">View Curated Pathway Image</button>
+        <button id="openPathway" class="option_botton">View Curated Pathway Image</button>
       </div>
-      <br />
-      <br />
+      <br>
+      <br>
       # Nearest neighbors:
-      <input type="number" name="kNN_button" id="kNN_button" min="1" max="9" value="1" />
+      <input type="number" name="kNN_button" id="kNN_button" class="option_botton" min="1" max="9" value="1" />
       <button id="knn_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
+      <br>
       Hub threshold:
-      <input type="number" name="hub_button" id="hub_button" min="1" max="9999999" />
+      <input type="number" name="hub_button" id="hub_button" class="option_botton" min="1" max="9999999" />
       <button id="hub_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
+      <br>
       Statistic threshold:
-      <input type="number" name="stat_button" id="stat_button" min="000" max="1.0" value="0.05" />
+      <input type="number" name="stat_button" id="stat_button" class="option_botton" min="000" max="1.0" value="0.05" />
       <button id="stat_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
-      <br />
-      <br />
-      <b><u>Warnings:</u></b>
-      <br />
-      <div id="warning_line_1"><br /></div>
-      <div id="warning_line_2"><br /><br /></div>
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
+      <br>
       <b><u>Selection Type:</u></b>
-      <br />
-      <div id="type_selection_type"><br /></div>
-      <br />
-      <br />
-      <br />
+      <br>
+      <div id="type_selection_type"><br></div>
+      <br>
+      <br>
+      <br>
       <b><u>Current Selection:</u></b>
-      <br />
-      <div id="type_selection"><br /></div>
-      <br />
-      <br />
+      <br>
+      <div id="type_selection"><br></div>
+      <br>
+      <br>
       <b><u>Notes:</u></b>
       <button id="notes_info" class="info_enhanced">
         <i>i</i>
       </button>
-      <br />
+      <br>
       <div id="reaction_notes"></div>
-      <br />
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
     </font>
   </div>
-  <br />
+  <br>
   <select id="superPathwayMenu" class="topmargin-plus35"></select>
-  <br />
-  <br />
+  <br>
+  <br>
   <select id="pathwayMenu"></select>
-  <br />
+  <br>
 
   <!--Colorbar pointer label-->
   <font id="titlestyle" size="1">

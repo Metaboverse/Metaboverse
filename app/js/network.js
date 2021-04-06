@@ -138,8 +138,8 @@ const data = {
   ]
 };
 
-height = 500;
-width = 700;
+height = 600;
+width = 850;
 
 const links = data.links;
 const nodes = data.nodes;
