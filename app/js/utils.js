@@ -167,6 +167,17 @@ window.addEventListener("load", function(event) {
     )
   }
 
+  document.getElementById("citation_link").onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.open(
+      'https://metaboverse.readthedocs.io/en/latest/content/cite.html',
+      '_blank',
+      newBrowserSettings
+    )
+  }
+
   document.getElementById("docs_link").onclick = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -177,18 +188,6 @@ window.addEventListener("load", function(event) {
       newBrowserSettings
     )
   }
-
-  document.getElementById("faqs_link").onclick = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    window.open(
-      'https://metaboverse.readthedocs.io/en/latest/content/faqs.html',
-      '_blank',
-      newBrowserSettings
-    )
-  }
-
 
   if (page !== "motif.html" && page !== "visualize.html" && page !== "perturbations.html") {
     document.getElementById("usage_link").onclick = function(event) {

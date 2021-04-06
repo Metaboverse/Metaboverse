@@ -1024,19 +1024,20 @@ class MetaGraph {
       .style("opacity", 0.5);
 
     // get pathway names
+    console.log(pathway_list)
     let ptg = this.mp_pathway_group.selectAll("text")
       .data(pathway_list);
     ptg.exit().remove();
     ptg = ptg.enter().append("text").merge(ptg)
-      .attr("x", 15)
+      .attr("x", 20)
       .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical) + 17))
       .text(d => {
         if (d === "Collapsed") {
           return "Cross-pathway pattern";
         } else if (this.mod_collapsed_pathways[d] !== undefined) {
-          return this.mod_collapsed_pathways[d].name.substring(0, 48);
+          return this.mod_collapsed_pathways[d].name.substring(0, 62);
         } else {
-          return "N/A"
+          return "";
         }
       })
       .style("font-size", 12)

@@ -30,6 +30,7 @@ Table of contents
    content/general-usage
    content/other-features
    content/faqs
+   content/cite
    content/updates
 
 ============================
