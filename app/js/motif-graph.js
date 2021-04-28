@@ -25,9 +25,28 @@ var sample = 0;
 var exclude_idx = -1;
 var last_click = 0;
 var cov_threshold = 0.1;
+var opts = { // Spinner opts from http://spin.js.org/
+  lines: 10, // The number of lines to draw
+  length: 19, // The length of each line
+  width: 5, // The line thickness
+  radius: 14, // The radius of the inner circle
+  scale: 1, // Scales overall size of the spinner
+  corners: 1, // Corner roundness (0..1)
+  speed: 1, // Rounds per second
+  rotate: 0, // The rotation offset
+  animation: 'spinner-line-fade-quick', // The CSS animation name for the lines
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#454545', // CSS color or array of colors
+  fadeColor: 'transparent', // CSS color or array of colors
+  top: '50%', // Top position relative to parent
+  left: '50%', // Left position relative to parent
+  shadow: '0 0 1px transparent', // Box-shadow for the lines
+  zIndex: 2000000000, // The z-index (defaults to 2e9)
+  className: 'spinner', // The CSS class to assign to the spinner
+  position: 'relative', // Element positioning
+};
 
 database_url = get_session_info("database_url");
-console.log("Database path: " + database_url);
 
 class MetaGraph {
   constructor(graphdata) {
@@ -56,8 +75,13 @@ class MetaGraph {
     this.collapsed_pathway_dict = make_pathway_dictionary(
       graphdata,
       "collapsed_pathway_dictionary"
-    )
-    this.path_mapper = graphdata.motif_reaction_dictionary
+    );
+    this.path_mapper = graphdata.motif_reaction_dictionary;
+    let neighbors_output = make_neighbors_dictionary(
+      graphdata
+    );
+    this.neighbors_dictionary = neighbors_output[0];
+    this.collapsed_neighbors_dictionary = neighbors_output[1];
 
     if (this.data.metadata.blocklist === null) {
       this.data.metadata.blocklist = "";
@@ -214,7 +238,15 @@ class MetaGraph {
 
   motifSearch() {
 
+    var target = document.getElementById('stamp-view-container')
+    var spinner = new Spinner(opts);
+
+    console.log(this)
+
     d3.select("#motif1")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
       .on("click", () => {
         highlight_selection("#avg_num");
         reset_dot();
@@ -233,93 +265,13 @@ class MetaGraph {
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
       })
 
-    d3.select("#motif2_1")
-      .on("click", () => {
-        highlight_selection("#maxmax_num");
-        reset_dot();
-        reset_objects();
-        let threshold = d3.select("#maxmax_num").node().value;
-        this.sort_type_dropdown = document.getElementById("sort_type");
-        this.motif = motifSearch_MaxMax(
-          threshold,
-          this.collapsed_reaction_dict,
-          this.expression_dict,
-          this.stats_dict,
-          this.path_mapper,
-          this.degree_dict,
-          this.categories)
-        this.watchSlider();
-        this.watchType();
-        this.watchExclude();
-        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+    d3.select("#motif2")
+      .on("mousedown", function() {
+        spinner.spin(target);
       })
-
-    d3.select("#motif2_2")
-      .on("click", () => {
-        highlight_selection("#minmin_num");
-        reset_dot();
-        reset_objects();
-        let threshold = d3.select("#minmin_num").node().value;
-        this.sort_type_dropdown = document.getElementById("sort_type");
-        this.motif = motifSearch_MinMin(
-          threshold,
-          this.collapsed_reaction_dict,
-          this.expression_dict,
-          this.stats_dict,
-          this.path_mapper,
-          this.degree_dict,
-          this.categories)
-        this.watchSlider();
-        this.watchType();
-        this.watchExclude();
-        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
-      })
-
-    d3.select("#motif3_1")
-      .on("click", () => {
-        highlight_selection("#maxmin_num");
-        reset_dot();
-        reset_objects();
-        let threshold = d3.select("#maxmin_num").node().value;
-        this.sort_type_dropdown = document.getElementById("sort_type");
-        this.motif = motifSearch_MaxMin(
-          threshold,
-          this.collapsed_reaction_dict,
-          this.expression_dict,
-          this.stats_dict,
-          this.path_mapper,
-          this.degree_dict,
-          this.categories)
-        this.watchSlider();
-        this.watchType();
-        this.watchExclude();
-        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
-      })
-
-    d3.select("#motif3_2")
-      .on("click", () => {
-        highlight_selection("#minmax_num");
-        reset_dot();
-        reset_objects();
-        let threshold = d3.select("#minmax_num").node().value;
-        this.sort_type_dropdown = document.getElementById("sort_type");
-        this.motif = motifSearch_MinMax(
-          threshold,
-          this.collapsed_reaction_dict,
-          this.expression_dict,
-          this.stats_dict,
-          this.path_mapper,
-          this.degree_dict,
-          this.categories)
-        this.watchSlider();
-        this.watchType();
-        this.watchExclude();
-        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
-      })
-
-    d3.select("#motif4")
       .on("click", () => {
         highlight_selection("#sustained_num");
         reset_dot();
@@ -338,9 +290,13 @@ class MetaGraph {
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
       })
 
-    d3.select("#motif5")
+    d3.select("#motif3")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
       .on("click", () => {
         highlight_selection("#modreg_num");
         reset_dot();
@@ -359,9 +315,13 @@ class MetaGraph {
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
       })
 
-    d3.select("#motif6")
+    d3.select("#motif4")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
       .on("click", () => {
         highlight_selection("#transreg_num");
         reset_dot();
@@ -380,152 +340,205 @@ class MetaGraph {
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
       })
 
-    d3.select("#motif99")
+    d3.select("#motif5")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
       .on("click", () => {
-        highlight_selection("#pathmax_num");
+        highlight_selection("#enzyme_num");
         reset_dot();
         reset_objects();
-        let threshold = d3.select("#pathmax_num").node().value;
+        let threshold = d3.select("#enzyme_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
-        this.motif = motifSearch_PathMax(
+        let eval_neighbors_dictionary;
+        if (eval_collapsed === false) {
+          eval_neighbors_dictionary = this.neighbors_dictionary;
+        } else {
+          eval_neighbors_dictionary = this.collapsed_neighbors_dictionary;
+        }
+        this.motif = enzymeMotif(
           threshold,
-          this.mod_collapsed_pathways,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories,
+          this.nodes,
+          eval_neighbors_dictionary)
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawTwoReactionSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
+      })
+
+    d3.select("#motif6")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
+      .on("click", () => {
+        highlight_selection("#activity_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#activity_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = activityMotif(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories,
+          this.neighbors_dictionary,
+          this.collapsed_neighbors_dictionary)
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawTwoReactionSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
+      })
+
+    d3.select("#motif7_1")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
+      .on("click", () => {
+        highlight_selection("#maxmax_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#maxmax_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = motifSearch_MaxMax(
+          threshold,
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", () => {
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResultPathway(this.motif[sample_idx]);
-                  last_click = sample_idx;
-                }
-              })
-          }
-          this.drawMotifSearchResultPathway(this.motif[0]);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
       })
 
-    d3.select("#motif100")
+    d3.select("#motif7_2")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
       .on("click", () => {
-        highlight_selection("#pathcov_num");
+        highlight_selection("#minmin_num");
         reset_dot();
         reset_objects();
-        let threshold = d3.select("#pathcov_num").node().value;
+        let threshold = d3.select("#minmin_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
-        this.motif = motifSearch_PathCov(
+        this.motif = motifSearch_MinMin(
           threshold,
-          cov_threshold,
-          this.mod_collapsed_pathways,
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
           this.categories)
-        if (this.motif !== undefined) {
-          if (timecourse === true) {
-            d3.select("svg#slide")
-              .on("click", () => {
-                let sample_idx = d3.select("circle#dot").attr("x");
-                if (sample_idx !== last_click) {
-                  reset_objects();
-                  this.drawMotifSearchResultPathway(this.motif[sample_idx]);
-                  last_click = sample_idx;
-                }
-              })
-          }
-          this.drawMotifSearchResultPathway(this.motif[0]);
-        }
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
+      })
+
+    d3.select("#motif8_1")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
+      .on("click", () => {
+        highlight_selection("#maxmin_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#maxmin_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = motifSearch_MaxMin(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
+      })
+
+    d3.select("#motif8_2")
+      .on("mousedown", function() {
+        spinner.spin(target);
+      })
+      .on("click", () => {
+        highlight_selection("#minmax_num");
+        reset_dot();
+        reset_objects();
+        let threshold = d3.select("#minmax_num").node().value;
+        this.sort_type_dropdown = document.getElementById("sort_type");
+        this.motif = motifSearch_MinMax(
+          threshold,
+          this.collapsed_reaction_dict,
+          this.expression_dict,
+          this.stats_dict,
+          this.path_mapper,
+          this.degree_dict,
+          this.categories)
+        this.watchSlider();
+        this.watchType();
+        this.watchExclude();
+        this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        spinner.stop();
       })
   }
 
   drawMotifSearchResult(motifs, indexer, exclusion_indexer) {
 
     // Remove collapsed reactions if box unchecked
-    let current_motifs;
-    if (eval_collapsed === false) {
-      current_motifs = [];
-      for (let m in motifs[indexer]) {
-        if (motifs[indexer][m].collapsed === false || motifs[indexer][m].collapsed === "false") {
-          current_motifs.push(motifs[indexer][m]);
-        }
-      }
-    } else {
-      current_motifs = motifs[indexer];
-    }
+    let current_motifs = get_eval_motifs(
+      eval_collapsed,
+      motifs,
+      indexer);
 
-    let motif_list = [];
-    let subtracting_motifs = motifs[exclusion_indexer];
-    let subtracting_ids = [];
-    if (subtracting_motifs !== undefined) {
-      for (let s in subtracting_motifs) {
-        subtracting_ids.push(subtracting_motifs[s].id);
-      }
-      for (let m in current_motifs) {
-        if (!subtracting_ids.includes(current_motifs[m].id)) {
-          motif_list.push(current_motifs[m]);
-        }
-      }
-    } else {
-      motif_list = current_motifs;
-    }
+    // Exclude any motifs in multiple time-points/conditions
+    let motif_list = get_included_motifs(
+      current_motifs,
+      motifs,
+      exclusion_indexer);
 
+    // Sort motifs based on user input
     let sort_type = this.sort_type_dropdown.value;
-    if (sort_type === "Sort Number of Pathways") {
-      motif_list.sort(function(a, b) {
-        return d3.descending(a.pathways.length, b.pathways.length);
-      })
-    } else if (sort_type === "Sort Magnitude Change") {
-      motif_list.sort(function(a, b) {
-        return d3.descending(a.magnitude_change, b.magnitude_change);
-      })
-    } else if (sort_type === "Sort Statistical Significance") {
-      let motif_significance = {
-        'both': [],
-        'one': [],
-        'none': []
-      };
-      motif_list.forEach(m => {
-        if (m.p_values === undefined) {} else if (m.p_values.source <= 0.05 && m.p_values.target <= 0.05) {
-          m.significance_type = 'Both significant';
-          motif_significance.both.push(m);
-        } else if (m.p_values.source <= 0.05) {
-          m.significance_type = 'Source significant';
-          motif_significance.one.push(m);
-        } else if (m.p_values.target <= 0.05) {
-          m.significance_type = 'Target significant';
-          motif_significance.one.push(m);
-        } else { // both > 0.05
-          m.significance_type = 'Both not significant';
-          motif_significance.none.push(m);
-        }
-      })
-      motif_significance.both.sort(function(a, b) {
-        return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
-      })
-      motif_significance.one.sort(function(a, b) {
-        return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
-      })
-      motif_significance.none.sort(function(a, b) {
-        return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
-      })
-      motif_list = motif_significance.both.concat(
-        motif_significance.one,
-        motif_significance.none);
-    }
+    let motif_significance = {
+      'both': [],
+      'one': [],
+      'none': []
+    };
+    let sort_output = sort_motifs(
+      motif_list,
+      motif_significance,
+      sort_type
+    );
+    motif_list = sort_output[0];
+    motif_significance = sort_output[1];
+
+    // Remove any duplicated items
+    motif_list = remove_duplicate_motifs(motif_list);
 
     let stamp_height = 50;
     this.stamp_svg_height = Math.ceil(
-        motif_list.length / 3) *
+      motif_list.length / 3) *
       (stamp_height + this.stamp_svg_margin.vertical);
     this.stamp_svg.attr("height", this.stamp_svg_height);
 
@@ -614,6 +627,7 @@ class MetaGraph {
       let mlinks = [];
       let r_idx = 0;
       let p_idx = 0;
+
       // Add reaction node
       this.nodes[motif_list[i].id].current_type = "reaction";
       mnodes.push(this.nodes[motif_list[i].id]);
@@ -642,6 +656,236 @@ class MetaGraph {
           mnodes_id.push(l);
           mlinks.push({
             'source': motif_list[i].id,
+            'target': l
+          });
+          p_idx += 1;
+        }
+      })
+
+      let start_x = this.stamp_svg_margin.left + i % 3 * (stamp_width + this.stamp_svg_margin.horizontal);
+      let start_y = this.stamp_svg_margin.top + Math.floor(i / 3) * (stamp_height + this.stamp_svg_margin.vertical);
+      let x_interval = stamp_width / 3;
+      let y_interval_r = (stamp_height - 20) / r_idx;
+      let y_interval_p = (stamp_height - 20) / p_idx;
+
+      let mg = d3.select("#stamp-circle-" + i).selectAll("circle")
+        .data(mnodes);
+      mg.exit().remove();
+      mg = mg.enter().append("circle").merge(mg)
+        .attr("cx", (d) => {
+          if (d.current_type === "reactant") {
+            return start_x + 15;
+          } else if (d.current_type === "reaction") {
+            return start_x + x_interval + 15;
+          } else if (d.current_type === "product") {
+            return start_x + x_interval * 2 + 15;
+          }
+        })
+        .attr("cy", (d) => {
+          if (d.current_type === "reactant") {
+            return start_y + y_interval_r * (d.r_idx) + 10;
+          } else if (d.current_type === "reaction") {
+            return start_y + 20;
+          } else if (d.current_type === "product") {
+            return start_y + y_interval_p * (d.p_idx) + 10;
+          }
+        })
+        .attr("class", (d) => d.current_type)
+        .attr("fill", (d) => {
+          if (d.values_js[indexer] === undefined) {
+            return "rgba(191, 191, 191, 1)";
+          } else {
+            return "rgba(" + d.values_js[indexer].toString() + ")";
+          }
+        })
+        .attr("r", 4)
+        .attr("stroke", "black")
+        .attr("id", d => "stamp-" + i + "-" + d.id)
+
+      let mlg = d3.select("#stamp-link-" + i).selectAll("line")
+        .data(mlinks);
+      mlg.exit().remove();
+      mlg = mlg.enter().append("line").merge(mlg)
+        .attr("x1", (d) => d3.select("#stamp-" + i + "-" + d.source).attr("cx"))
+        .attr("y1", (d) => d3.select("#stamp-" + i + "-" + d.source).attr("cy"))
+        .attr("x2", (d) => d3.select("#stamp-" + i + "-" + d.target).attr("cx"))
+        .attr("y2", (d) => d3.select("#stamp-" + i + "-" + d.target).attr("cy"))
+        .attr("stroke", "gray")
+
+      let tg = d3.select("#stamp-circle-" + i).selectAll("text")
+        .data([motif_list[i]]);
+      tg.exit().remove();
+      tg = tg.enter().append("text").merge(tg)
+        .attr("x", start_x + 10)
+        .attr("y", start_y + 45)
+        .text(function(d) {
+          if (sort_type === "Sort Number of Pathways") {
+            return d.pathways.length + " pathways";
+          } else if (sort_type === "Sort Magnitude Change") {
+            return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
+          } else if (sort_type === "Sort Statistical Significance") {
+            return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
+          }
+        })
+        .style("font-size", "11px")
+        .style("font-weight", "normal")
+    }
+  }
+
+  drawTwoReactionSearchResult(motifs, indexer, exclusion_indexer) {
+
+    // Remove collapsed reactions if box unchecked
+    let current_motifs = get_eval_motifs(
+      eval_collapsed,
+      motifs,
+      indexer);
+
+    // Exclude any motifs in multiple time-points/conditions
+    let motif_list = get_included_motifs(
+      current_motifs,
+      motifs,
+      exclusion_indexer);
+
+    // Sort motifs based on user input
+    let sort_type = this.sort_type_dropdown.value;
+    let motif_significance = {
+      'both': [],
+      'one': [],
+      'none': []
+    };
+
+    let sort_output = sort_motifs(
+      motif_list,
+      motif_significance,
+      sort_type
+    );
+    motif_list = sort_output[0];
+    motif_significance = sort_output[1];
+
+    // Remove any duplicated items
+    motif_list = remove_duplicate_motifs_twoReactions(motif_list);
+
+
+    let stamp_height = 50;
+    this.stamp_svg_height = Math.ceil(
+      motif_list.length / 3) *
+      (stamp_height + this.stamp_svg_margin.vertical);
+    this.stamp_svg.attr("height", this.stamp_svg_height);
+
+    let stamp_width = this.stamp_svg_width / 3 -
+      this.stamp_svg_margin.horizontal;
+
+    let clicked_stamp_reaction;
+    let sg = this.stamp_svg_selection_group.selectAll("rect")
+      .data(motif_list);
+    sg.exit().remove();
+    sg = sg.enter().append("rect").merge(sg)
+      .attr("x", (d, i) => this.stamp_svg_margin.left + i % 3 * (stamp_width + this.stamp_svg_margin.horizontal))
+      .attr("y", (d, i) => this.stamp_svg_margin.top + Math.floor(i / 3) * (stamp_height + this.stamp_svg_margin.vertical))
+      .attr("width", stamp_width)
+      .attr("height", stamp_height)
+      .attr("fill", d => {
+        if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
+          return "green";
+        } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
+          return "orange";
+        } else {
+          return "lightgrey";
+        }
+      })
+      .attr("id", (d) => "stamp-cover-" + d.id)
+      .style("opacity", 0)
+      .on("click", (d) => {
+        if (timecourse === true) {
+          this.generateLines(d);
+        }
+        document.getElementById("pathway_name").innerHTML = "<h6><b></b></h6>";
+        d3.select("#pathway-view-svg").style("visibility", "hidden");
+        d3.select(".network-panel").style("visibility", "hidden");
+
+        for (let rxn in motif_list) {
+          if (motif_list[rxn].id !== d.id) {
+            d3.select("#stamp-cover-" + motif_list[rxn].id).style("opacity", 0);
+          }
+        }
+        clicked_stamp_reaction = d.id;
+        this.drawMotifPathwayTwoReaction(d, indexer, motif_list);
+        d3.select("#motif-pathway-svg").style("visibility", "visible");
+
+        document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
+        this.previewTwoReaction(d, indexer, "#pathway-view-svg");
+        d3.select("#pathway-view-svg").style("visibility", "visible");
+        d3.select(".network-panel").style("visibility", "visible");
+      })
+      .on("mouseover", (d) => {
+        d3.select("#stamp-cover-" + d.id).style("opacity", 0.5);
+      })
+      .on("mouseout", (d) => {
+        if (d.id !== clicked_stamp_reaction) {
+          d3.select("#stamp-cover-" + d.id).style("opacity", 0);
+        }
+      });
+
+    let fg = this.stamp_svg_frame_group.selectAll("rect")
+      .data(motif_list);
+    fg.exit().remove();
+    fg = fg.enter().append("rect").merge(fg)
+      .attr("x", (d, i) => this.stamp_svg_margin.left + i % 3 *
+        (stamp_width + this.stamp_svg_margin.horizontal))
+      .attr("y", (d, i) => this.stamp_svg_margin.top + Math.floor(i / 3) *
+        (stamp_height + this.stamp_svg_margin.vertical))
+      .attr("width", stamp_width)
+      .attr("height", stamp_height)
+      .attr("stroke", "lightgray")
+      .attr("fill", "white")
+
+    let cg = this.stamp_svg_circle_group.selectAll("g")
+      .data(motif_list);
+    cg.exit().remove();
+    cg = cg.enter().append("g").merge(cg)
+      .attr("id", (d, i) => "stamp-circle-" + i);
+
+    let lg = this.stamp_svg_link_group.selectAll("g")
+      .data(motif_list);
+    lg.exit().remove();
+    lg = lg.enter().append("g").merge(lg)
+      .attr("id", (d, i) => "stamp-link-" + i);
+
+    for (let i = 0; i < motif_list.length; i++) {
+      let mnodes = [];
+      let mnodes_id = [];
+      let mlinks = [];
+      let r_idx = 0;
+      let p_idx = 0;
+
+      // Add reaction node
+      this.nodes[motif_list[i]['rxn1'].id].current_type = "reaction";
+      mnodes.push(this.nodes[motif_list[i]['rxn1'].id]);
+
+      // Add reactant nodes
+      motif_list[i]['rxn1'].reactants.forEach(l => {
+        if (mnodes_id.indexOf(l) === -1) {
+          this.nodes[l].current_type = "reactant";
+          this.nodes[l].r_idx = r_idx;
+          mnodes.push(this.nodes[l]);
+          mnodes_id.push(l);
+          mlinks.push({
+            'source': l,
+            'target': motif_list[i]['rxn1'].id
+          });
+          r_idx += 1;
+        }
+      })
+
+      // Add product nodes
+      motif_list[i]['rxn1'].products.forEach(l => {
+        if (mnodes_id.indexOf(l) === -1) {
+          this.nodes[l].current_type = "product";
+          this.nodes[l].p_idx = p_idx;
+          mnodes.push(this.nodes[l]);
+          mnodes_id.push(l);
+          mlinks.push({
+            'source': motif_list[i]['rxn1'].id,
             'target': l
           });
           p_idx += 1;
@@ -1024,6 +1268,220 @@ class MetaGraph {
       .style("opacity", 0.5);
 
     // get pathway names
+    let ptg = this.mp_pathway_group.selectAll("text")
+      .data(pathway_list);
+    ptg.exit().remove();
+    ptg = ptg.enter().append("text").merge(ptg)
+      .attr("x", 20)
+      .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical) + 17))
+      .text(d => {
+        if (d === "Collapsed") {
+          return "Cross-pathway pattern";
+        } else if (this.mod_collapsed_pathways[d] !== undefined) {
+          return this.mod_collapsed_pathways[d].name.substring(0, 62);
+        } else {
+          return "";
+        }
+      })
+      .style("font-size", 12)
+  }
+
+  drawMotifPathwayTwoReaction(motif, indexer, motif_list) {
+
+    // recover graph
+    let mnodes = [motif['rxn1']];
+    let mlinks = [];
+    let mnodes_id = [];
+    let r_idx = 0;
+    let p_idx = 0;
+
+    console.log(motif)
+
+    motif['rxn1'].current_type = "reaction";
+    motif['rxn1'].reactants.forEach(l => {
+      if (mnodes_id.indexOf(l) === -1) {
+        this.nodes[l].current_type = "reactant";
+        this.nodes[l].r_idx = r_idx;
+        mnodes.push(this.nodes[l]);
+        mnodes_id.push(l);
+        mlinks.push({
+          'source': l,
+          'target': motif['rxn1'].id
+        });
+        r_idx += 1;
+      }
+    })
+    motif['rxn1'].products.forEach(l => {
+      if (mnodes_id.indexOf(l) === -1) {
+        this.nodes[l].current_type = "product";
+        this.nodes[l].p_idx = p_idx;
+        mnodes.push(this.nodes[l]);
+        mnodes_id.push(l);
+        mlinks.push({
+          'source': motif['rxn1'].id,
+          'target': l
+        });
+        p_idx += 1;
+      }
+    })
+
+    let motif_height = 120;
+
+    console.log(mnodes)
+
+    // ***** draw motif glyph *****
+    let x_interval = this.mp_svg_width / 3;
+    let y_interval_r = (motif_height - 20) / r_idx;
+    let y_interval_p = (motif_height - 20) / p_idx;
+    let ng = this.mp_motif_circle_group.selectAll("circle")
+      .data(mnodes)
+    ng.exit().remove();
+    ng = ng.enter().append("circle").merge(ng)
+      .attr("cx", (d) => {
+        if (d.current_type === "reactant") {
+          return 75;
+        } else if (d.current_type === "reaction") {
+          return x_interval + 75;
+        } else if (d.current_type === "product") {
+          return x_interval * 2 + 75;
+        }
+      })
+      .attr("cy", (d) => {
+        if (d.current_type === "reactant") {
+          return y_interval_r * (d.r_idx) + 20;
+        } else if (d.current_type === "reaction") {
+          return motif_height / 2;
+        } else if (d.current_type === "product") {
+          return y_interval_p * (d.p_idx) + 20;
+        }
+      })
+      .attr("class", (d) => d.current_type)
+      .attr("fill", (d) => {
+        if (d.current_type === "reaction") {
+          return "rgba(191, 191, 191, 1)";
+        } else {
+          return "rgba(" + d.values_js[indexer].toString() + ")";
+        }
+      })
+      .attr("r", 8)
+      .attr("stroke", "black")
+      .attr("id", d => "mp-circle-" + d.id)
+
+    let lg = this.mp_motif_link_group.selectAll("line")
+      .data(mlinks);
+    lg.exit().remove();
+    lg = lg.enter().append("line").merge(lg)
+      .attr("x1", (d) => d3.select("#mp-circle-" + d.source).attr("cx"))
+      .attr("y1", (d) => d3.select("#mp-circle-" + d.source).attr("cy"))
+      .attr("x2", (d) => d3.select("#mp-circle-" + d.target).attr("cx"))
+      .attr("y2", (d) => d3.select("#mp-circle-" + d.target).attr("cy"))
+      .attr("stroke", "gray")
+      .attr("marker-end", "url(#end)");
+
+    let tg = this.mp_motif_circle_group.selectAll("text")
+      .data([motif]);
+    tg.exit().remove();
+    tg = tg.enter().append("text").merge(tg)
+      .attr("x", this.mp_svg_width / 12 - 10)
+      .attr("y", (motif_height - 5))
+      .text(function(d) {
+        if (d.collapsed === "true") {
+          var string_length = 40;
+          var string_suffix = " (collapsed)";
+        } else {
+          var string_length = 52;
+          var string_suffix = "";
+        }
+        console.log(d)
+        let this_name = d['rxn1'].name + " // " + d['rxn2'].name;
+        console.log(this_name)
+        if (this_name.length < string_length) {
+          return this_name + string_suffix;
+        } else {
+          return this_name.substring(0, string_length) + " ..." + string_suffix;
+        }
+      })
+      .style("font-size", "12px")
+      .style("font-weight", "bold")
+
+    // **** draw pathway glyph ****
+    let pathway_list_pre = [...new Set(motif.pathways)];
+    let pathway_list = [];
+    for (let path in pathway_list_pre) {
+      if (!this.superPathwayDict.includes(pathway_list_pre[path])) {
+        pathway_list.push(pathway_list_pre[path]);
+      }
+    }
+
+    if (pathway_list.length === 0) {
+      pathway_list.push("Collapsed")
+    }
+
+    let pathway_height = 25;
+    let margin = {
+      "horizontal": 15,
+      "vertical": 10,
+      "top": 5,
+      "left": 5
+    };
+    this.mp_svg_height = Math.ceil(pathway_list.length) * (pathway_height + margin.vertical) + motif_height + margin.top;
+    this.mp_svg.attr("height", this.mp_svg_height);
+
+    let pathway_width = (this.mp_svg_width) - margin.horizontal;
+
+    let clicked_stamp_pathway;
+    let sg = this.mp_selection_group.selectAll("rect")
+      .data(pathway_list);
+    sg.exit().remove();
+    sg = sg.enter().append("rect").merge(sg)
+      .attr("x", 5)
+      .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical)))
+      .attr("width", pathway_width)
+      .attr("height", pathway_height)
+      .attr("fill", "lightblue")
+      .attr("id", (d) => "mp-cover-" + d)
+      .style("opacity", 0)
+      .on("click", (d) => {
+        for (let path in pathway_list) {
+          if (pathway_list[path] !== d) {
+            d3.select("#mp-cover-" + pathway_list[path]).style("opacity", 0);
+          }
+        }
+        clicked_stamp_pathway = d;
+        if (typeof(d) === "string" && d !== "Collapsed") {
+          if (d.length !== 0) {
+            this.drawPathwayView(d, "#pathway-view-svg", motif_list);
+            this.findAllMotif(d, this.motif[indexer]);
+          } else {
+            document.getElementById("pathway_name").innerHTML = "<h6><b>Collapsed Reaction</h6></b>";
+            this.drawPathwayView(motif, "#pathway-view-svg", motif_list);
+            this.findAllMotif(motif, this.motif[indexer]);
+          }
+          d3.select("#pathway-view-svg").style("visibility", "visible");
+          d3.select(".network-panel").style("visibility", "visible");
+        }
+      })
+      .on("mouseover", (d) => {
+        d3.select("#mp-cover-" + d).style("opacity", 0.4);
+      })
+      .on("mouseout", (d) => {
+        if (d !== clicked_stamp_pathway) {
+          d3.select("#mp-cover-" + d).style("opacity", 0);
+        }
+      })
+
+    let fg = this.mp_pathway_group.selectAll("rect")
+      .data(pathway_list);
+    fg.exit().remove();
+    fg = fg.enter().append("rect").merge(fg)
+      .attr("x", 5)
+      .attr("y", (d, i) => motif_height + margin.top + (i * (pathway_height + margin.vertical)))
+      .attr("width", pathway_width)
+      .attr("height", pathway_height)
+      .attr("fill", "lightgrey")
+      .style("opacity", 0.5);
+
+    // get pathway names
     console.log(pathway_list)
     let ptg = this.mp_pathway_group.selectAll("text")
       .data(pathway_list);
@@ -1093,8 +1551,73 @@ class MetaGraph {
       _height,
       [d]
     );
+  }
 
+  previewTwoReaction(d, indexer, selector) {
 
+    console.log(d)
+
+    let components = [];
+    var rxn = 0;
+    components.push(d['rxn1'].id);
+    for (let x in d['rxn1']["reactants"]) {
+      components.push(d['rxn1']["reactants"][x]);
+    }
+    for (let x in d['rxn1']["products"]) {
+      components.push(d['rxn1']["products"][x]);
+    }
+    for (let x in d['rxn1']["modifiers"]) {
+      components.push(d['rxn1']["modifiers"][x][0]);
+    }
+    for (let x in d['rxn1']["additional_components"]) {
+      components.push(d['rxn1']["additional_components"][x]);
+    }
+    components.push(d['rxn2'].id);
+    for (let x in d['rxn2']["reactants"]) {
+      components.push(d['rxn2']["reactants"][x]);
+    }
+    for (let x in d['rxn2']["products"]) {
+      components.push(d['rxn2']["products"][x]);
+    }
+    for (let x in d['rxn2']["modifiers"]) {
+      components.push(d['rxn2']["modifiers"][x][0]);
+    }
+    for (let x in d['rxn2']["additional_components"]) {
+      components.push(d['rxn2']["additional_components"][x]);
+    }
+
+    var elements = get_nodes_links(this.data, components);
+    var new_nodes = elements[0];
+    var new_links = elements[1];
+
+    // Initialize variables
+    var node_dict = {};
+    var type_dict = {};
+
+    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+    var node_dict = node_elements[0];
+    var type_dict = node_elements[1];
+    var display_analytes_dict = node_elements[2];
+    var display_reactions_dict = node_elements[3];
+    var entity_id_dict = node_elements[4];
+
+    var _width = (0.45 * window.innerWidth) + 50;
+    var _height = 570;
+
+    make_graph(
+      this.data,
+      new_nodes,
+      new_links,
+      type_dict,
+      node_dict,
+      entity_id_dict,
+      display_analytes_dict,
+      display_reactions_dict,
+      selector,
+      _width,
+      _height,
+      [d]
+    );
   }
 
   drawPathwayView(p, selector, motif_list) {
@@ -1889,10 +2412,10 @@ function highlight_selection(_selector) {
     "#minmax_num", //minmax_num
     "#minmin_num", //minmin_num
     "#sustained_num", //sustained_num
-    "#pathmax_num", //pathmax_num
-    "#pathcov_num", //pathcov_num
     "#modreg_num",
-    "#transreg_num"
+    "#transreg_num",
+    "#enzyme_num",
+    "#activity_num"
   ]
 
   for (s in _selectors) {
@@ -1904,4 +2427,112 @@ function highlight_selection(_selector) {
     .style("background-color", "#FF7F7F");
 
 
+}
+
+function get_eval_motifs(eval_collapsed, motifs, indexer) {
+  let eval_motifs;
+  if (eval_collapsed === false) {
+    eval_motifs = [];
+    for (let m in motifs[indexer]) {
+      if (motifs[indexer][m].collapsed === false || motifs[indexer][m].collapsed === "false") {
+        eval_motifs.push(motifs[indexer][m]);
+      }
+    }
+  } else {
+    eval_motifs = motifs[indexer];
+  }
+  return eval_motifs;
+}
+
+function get_included_motifs(current_motifs, motifs, exclusion_indexer) {
+  let motif_list = [];
+  let subtracting_motifs = motifs[exclusion_indexer];
+  let subtracting_ids = [];
+  if (subtracting_motifs !== undefined) {
+    for (let s in subtracting_motifs) {
+      subtracting_ids.push(subtracting_motifs[s].id);
+    }
+    for (let m in current_motifs) {
+      if (!subtracting_ids.includes(current_motifs[m].id)) {
+        motif_list.push(current_motifs[m]);
+      }
+    }
+  } else {
+    motif_list = current_motifs;
+  }
+  return motif_list;
+}
+
+function sort_motifs(motif_list, motif_significance, sort_type) {
+  if (sort_type === "Sort Number of Pathways") {
+    motif_list.sort(function(a, b) {
+      return d3.descending(a.pathways.length, b.pathways.length);
+    })
+  } else if (sort_type === "Sort Magnitude Change") {
+    motif_list.sort(function(a, b) {
+      return d3.descending(a.magnitude_change, b.magnitude_change);
+    })
+  } else if (sort_type === "Sort Statistical Significance") {
+
+    motif_list.forEach(m => {
+      if (m.p_values === undefined) {} else if (m.p_values.source <= 0.05 && m.p_values.target <= 0.05) {
+        m.significance_type = 'Both significant';
+        motif_significance.both.push(m);
+      } else if (m.p_values.source <= 0.05) {
+        m.significance_type = 'Source significant';
+        motif_significance.one.push(m);
+      } else if (m.p_values.target <= 0.05) {
+        m.significance_type = 'Target significant';
+        motif_significance.one.push(m);
+      } else { // both > 0.05
+        m.significance_type = 'Both not significant';
+        motif_significance.none.push(m);
+      }
+    })
+    motif_significance.both.sort(function(a, b) {
+      return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
+    })
+    motif_significance.one.sort(function(a, b) {
+      return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
+    })
+    motif_significance.none.sort(function(a, b) {
+      return d3.ascending(a.p_values.source * a.p_values.target, b.p_values.source * b.p_values.target);
+    })
+    motif_list = motif_significance.both.concat(
+      motif_significance.one,
+      motif_significance.none);
+  }
+  return [motif_list, motif_significance];
+}
+
+function remove_duplicate_motifs(motif_list) {
+  let checked_rxns = {};
+  let remove_idx = [];
+  for (let i = 0; i < motif_list.length - 1; i++) {
+    checked_rxns[motif_list[i].id] = motif_list[i].compartment;
+    let i2 = parseInt(i) + 1;
+    if (checked_rxns[motif_list[i2].id] === motif_list[i2].compartment) {
+      remove_idx.push(i2);
+    }
+  }
+  for (var i = remove_idx.length -1; i >= 0; i--) {
+    motif_list.splice(remove_idx[i], 1);
+  }
+  return motif_list;
+}
+
+function remove_duplicate_motifs_twoReactions(motif_list) {
+  let checked_rxns = new Set();
+  let remove_idx = [];
+  for (let i = 0; i < motif_list.length - 1; i++) {
+    checked_rxns.add(motif_list[i].id);
+    let i2 = parseInt(i) + 1;
+    if (motif_list[i2].id in checked_rxns) {
+      remove_idx.push(i2);
+    }
+  }
+  for (var i = remove_idx.length -1; i >= 0; i--) {
+    motif_list.splice(remove_idx[i], 1);
+  }
+  return motif_list;
 }

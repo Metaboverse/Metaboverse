@@ -22,7 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; script-src 'self'; connect-src 'self';">
 <title>Metaboverse</title>
 
 
@@ -37,6 +37,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <script src="../js/utils.js"></script>
 <script src="../js/menu.js"></script>
+<script src="../js/spinner.js"></script>
 <script src="../js/graph.js"></script>
 <script src="../js/motifs.js"></script>
 <script src="../js/motif-graph.js"></script>
@@ -78,48 +79,50 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 </p>
                 <p>
-                <div class="motif_button" id="motif2_1" title="Compare the absolute minimum values between reactants and products that pass the provided threshold.">
-                  <font size="3" color="white">MaxMax</font>
-                </div>
-                </p>
-                <p>
-                <div class="motif_button" id="motif2_2" title="Compare the absolute maximum values between reactants and products that pass the provided threshold.">
-                  <font size="3" color="white">MinMin</font>
-                </div>
-                </p>
-                <p>
-                <div class="motif_button" id="motif3_1" title="Compare the absolute maximum and minimum values between reactants and products, respectively, that pass the provided threshold..">
-                  <font size="3" color="white">MaxMin</font>
-                </div>
-                </p>
-                <p>
-                <div class="motif_button" id="motif3_2" title="Compare the absolute minimum and maximum values between reactants and products, respectively, that pass the provided threshold.">
-                  <font size="3" color="white">MinMax</font>
-                </div>
-                </p>
-                <p>
-                <div class="motif_button" id="motif4" title="Find instances of sustained perturbation along a reaction.">
+                <div class="motif_button" id="motif2" title="Find instances of sustained perturbation along a reaction.">
                   <font size="3" color="white">Sustained</font>
                 </div>
                 </p>
                 <p>
-                <div class="motif_button" id="motif5" title="Find instances with one regulated modifier and one core component in the reaction.">
+                <div class="motif_button" id="motif3" title="Find instances with one regulated modifier and one core component in the reaction.">
                   <font size="3" color="white">ModReg</font>
                 </div>
                 </p>
                 <p>
-                <div class="motif_button" id="motif6" title="Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.">
+                <div class="motif_button" id="motif4" title="Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.">
                   <font size="3" color="white">TransReg</font>
                 </div>
                 </p>
+                <!--
                 <p>
-                <div class="motif_button" id="motif99" title="Compare the absolute maximum and minimum values across a pathway.">
-                  <font size="3" color="white">PathMax</font>
+                <div class="motif_button" id="motif5" title="Identify two neighboring enzymes with activity.">
+                  <font size="3" color="white">Enzyme</font>
                 </div>
                 </p>
                 <p>
-                <div class="motif_button" id="motif100" title="Compare total coverage of reactions with at least one measured component in pathways.">
-                  <font size="3" color="white">PathCov</font>
+                <div class="motif_button" id="motif6" title="Find instances of several neighboring metabolites with continued activity.">
+                  <font size="3" color="white">Metabolite</font>
+                </div>
+                </p>
+                -->
+                <p>
+                <div class="motif_button" id="motif7_1" title="Compare the absolute minimum values between reactants and products that pass the provided threshold.">
+                  <font size="3" color="white">MaxMax</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif7_2" title="Compare the absolute maximum values between reactants and products that pass the provided threshold.">
+                  <font size="3" color="white">MinMin</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif8_1" title="Compare the absolute maximum and minimum values between reactants and products, respectively, that pass the provided threshold..">
+                  <font size="3" color="white">MaxMin</font>
+                </div>
+                </p>
+                <p>
+                <div class="motif_button" id="motif8_2" title="Compare the absolute minimum and maximum values between reactants and products, respectively, that pass the provided threshold.">
+                  <font size="3" color="white">MinMax</font>
                 </div>
                 </p>
                 <label for="use_collapsed">
@@ -146,6 +149,28 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 </p>
                 <br />
                 <p id="threshold-padding">
+                  <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <!--
+                <p id="threshold-padding">
+                  <input type="number" id="enzyme_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                <p id="threshold-padding">
+                  <input type="number" id="activity_num" min="0.2" max="10" step="0.2" value="1.0">
+                </p>
+                <br />
+                -->
+                <p id="threshold-padding">
                   <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
                 <p id="threshold-padding">
@@ -158,31 +183,12 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <p id="threshold-padding">
                   <input type="number" id="minmax_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
-                <p id="threshold-padding">
-                  <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
-                </p>
-                <br />
-                <p id="threshold-padding">
-                  <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
-                </p>
-                <br />
-                <p id="threshold-padding">
-                  <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
-                </p>
-                <br />
-                <p id="threshold-padding">
-                  <input type="number" id="pathmax_num" min="0.2" max="10" step="0.2" value="1.0">
-                </p>
-                <br />
-                <p id="threshold-padding">
-                  <input type="number" id="pathcov_num" min="0" max="1" step="0.01" value="0.05">
-                </p>
 
+                <div id="checkbox_spacer"></div>
                 <p id="checkbox-padding">
                   <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in reaction pattern analysis. You will need to re-run the reaction pattern analysis to exclude collapsed reactions." checked>
                 </p>
-                <div id="checkbox_spacer"></div>
+
                 <p id="checkbox-padding">
                   <input type="checkbox" id="use_modifiers_id" name="use_modifiers" value="true"
                     title="Check to include modifiers in reaction pattern analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the reaction pattern analysis to include modifiers.">
