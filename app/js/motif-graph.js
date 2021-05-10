@@ -77,8 +77,12 @@ class MetaGraph {
       "collapsed_pathway_dictionary"
     );
     this.path_mapper = graphdata.motif_reaction_dictionary;
+    this.degree_dict = graphdata.degree_dictionary;
+    this.categories = graphdata.categories;
+    this.labels = graphdata.labels;
     let neighbors_output = make_neighbors_dictionary(
-      graphdata
+      graphdata,
+      this.degree_dict
     );
     this.neighbors_dictionary = neighbors_output[0];
     this.collapsed_neighbors_dictionary = neighbors_output[1];
@@ -100,10 +104,6 @@ class MetaGraph {
     }
     this.expression_dict = expression_dict;
     this.stats_dict = stats_dict;
-
-    this.degree_dict = graphdata.degree_dictionary;
-    this.categories = graphdata.categories;
-    this.labels = graphdata.labels;
 
     if (this.labels === null) {
       this.names = ['0']
@@ -518,6 +518,10 @@ class MetaGraph {
       motifs,
       exclusion_indexer);
 
+    if (motif_list.length > 500) {
+      alert("> 500 reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
+    }
+
     // Sort motifs based on user input
     let sort_type = this.sort_type_dropdown.value;
     let motif_significance = {
@@ -746,6 +750,10 @@ class MetaGraph {
       motifs,
       exclusion_indexer);
 
+    if (motif_list.length > 500) {
+      alert("> 500 reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
+    }
+
     // Sort motifs based on user input
     let sort_type = this.sort_type_dropdown.value;
     let motif_significance = {
@@ -765,6 +773,8 @@ class MetaGraph {
     // Remove any duplicated items
     motif_list = remove_duplicate_motifs_twoReactions(motif_list);
 
+    // Remove if no shared components
+    motif_list = remove_noshare_twoReactions(motif_list);
 
     let stamp_height = 50;
     this.stamp_svg_height = Math.ceil(
@@ -812,7 +822,8 @@ class MetaGraph {
         this.drawMotifPathwayTwoReaction(d, indexer, motif_list);
         d3.select("#motif-pathway-svg").style("visibility", "visible");
 
-        document.getElementById("pathway_name").innerHTML = "<h6><b>" + d.name + "</b></h6>";
+        document.getElementById("pathway_name").innerHTML = "<h6><b>" + d['rxn1'].name + " // " + d['rxn2'].name + "</b></h6>";
+
         this.previewTwoReaction(d, indexer, "#pathway-view-svg");
         d3.select("#pathway-view-svg").style("visibility", "visible");
         d3.select(".network-panel").style("visibility", "visible");
@@ -1295,8 +1306,6 @@ class MetaGraph {
     let r_idx = 0;
     let p_idx = 0;
 
-    console.log(motif)
-
     motif['rxn1'].current_type = "reaction";
     motif['rxn1'].reactants.forEach(l => {
       if (mnodes_id.indexOf(l) === -1) {
@@ -1326,8 +1335,6 @@ class MetaGraph {
     })
 
     let motif_height = 120;
-
-    console.log(mnodes)
 
     // ***** draw motif glyph *****
     let x_interval = this.mp_svg_width / 3;
@@ -1392,9 +1399,7 @@ class MetaGraph {
           var string_length = 52;
           var string_suffix = "";
         }
-        console.log(d)
         let this_name = d['rxn1'].name + " // " + d['rxn2'].name;
-        console.log(this_name)
         if (this_name.length < string_length) {
           return this_name + string_suffix;
         } else {
@@ -1482,7 +1487,6 @@ class MetaGraph {
       .style("opacity", 0.5);
 
     // get pathway names
-    console.log(pathway_list)
     let ptg = this.mp_pathway_group.selectAll("text")
       .data(pathway_list);
     ptg.exit().remove();
@@ -1554,8 +1558,6 @@ class MetaGraph {
   }
 
   previewTwoReaction(d, indexer, selector) {
-
-    console.log(d)
 
     let components = [];
     var rxn = 0;
@@ -2522,13 +2524,38 @@ function remove_duplicate_motifs(motif_list) {
 }
 
 function remove_duplicate_motifs_twoReactions(motif_list) {
-  let checked_rxns = new Set();
+  let checked_rxns = {};
   let remove_idx = [];
   for (let i = 0; i < motif_list.length - 1; i++) {
-    checked_rxns.add(motif_list[i].id);
+    checked_rxns[motif_list[i].rxn1.id] = motif_list[i].rxn2.id;
     let i2 = parseInt(i) + 1;
-    if (motif_list[i2].id in checked_rxns) {
+    if (checked_rxns[motif_list[i2].rxn1.id] === motif_list[i2].rxn2.id
+    || checked_rxns[motif_list[i2].rxn2.id] === motif_list[i2].rxn1.id
+    || motif_list[i2].rxn1.id === motif_list[i2].rxn2.id) {
       remove_idx.push(i2);
+    }
+  }
+  for (var i = remove_idx.length -1; i >= 0; i--) {
+    motif_list.splice(remove_idx[i], 1);
+  }
+  return motif_list;
+}
+
+function remove_noshare_twoReactions(motif_list) {
+  let remove_idx = [];
+  for (let i = 0; i < motif_list.length - 1; i++) {
+    let components_rxn1 = motif_list[i].rxn1.reactants.concat(
+      motif_list[i].rxn1.products,
+      motif_list[i].rxn1.modifiers.map(x => x[0])
+    );
+    let components_rxn2 = motif_list[i].rxn2.reactants.concat(
+      motif_list[i].rxn2.products,
+      motif_list[i].rxn2.modifiers.map(x => x[0])
+    );
+    let shared_components = components_rxn1.filter(
+      value => components_rxn2.includes(value));
+    if (shared_components.length === 0) {
+      remove_idx.push(i);
     }
   }
   for (var i = remove_idx.length -1; i >= 0; i--) {

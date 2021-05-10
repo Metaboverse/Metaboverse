@@ -21,9 +21,9 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var path = require("path");
-var eval_collapsed = true;
+var eval_collapsed = false;
 var eval_modifiers = false;
-var excl_hubs = false;
+var excl_hubs = true;
 var hub_threshold = 50;
 
 window.addEventListener("load", function(event) {
@@ -78,7 +78,11 @@ function cleanHubs(
   degree_dict,
   hub_threshold) {
 
-  let filtered_hubs = components.filter(x => degree_dict[x] <= hub_threshold);
+  let filtered_hubs = components.filter(function(x) {
+    if (degree_dict[x] <= hub_threshold) {
+      return x
+    }
+  })
   return filtered_hubs;
 }
 
@@ -1307,6 +1311,85 @@ function activityMotif(
 }
 
 
+function make_neighbors_dictionary(data, degree_dict) {
+
+  let nodes = data.nodes;
+  let links = data.links;
+  let neighbors_dictionary = {};
+
+  for (let l in links) {
+    let one = links[l].source;
+    let two = links[l].target;
+
+    if (excl_hubs === true
+    && (degree_dict[one] > hub_threshold
+      || degree_dict[two] > hub_threshold
+    )) {
+      // Skip if one of the two connected components don't match hub threshold
+    } else {
+      if (one in neighbors_dictionary) {
+        neighbors_dictionary[one].add(two);
+      } else {
+        neighbors_dictionary[one] = new Set();
+        neighbors_dictionary[one].add(two);
+      }
+      if (two in neighbors_dictionary) {
+        neighbors_dictionary[two].add(one);
+      } else {
+        neighbors_dictionary[two] = new Set();
+        neighbors_dictionary[two].add(one);
+      }
+    }
+  }
+  let neighbors = Object.keys(neighbors_dictionary);
+
+  var reaction_neighbors_dictionary = {};
+  let reactions = data.reaction_dictionary;
+  for (let neighbor in neighbors) {
+    if (neighbors[neighbor] in reactions) {
+      let components = [...neighbors_dictionary[neighbors[neighbor]]];
+      let connected_reactions = new Set()
+      for (let _c in components) {
+        let sub_components = [...neighbors_dictionary[components[_c]]];
+        for (let _c_ in sub_components) {
+          if (sub_components[_c_] in reactions &&
+              neighbors[neighbor] !== sub_components[_c_]) {
+            connected_reactions.add(sub_components[_c_]);
+          }
+        }
+      }
+      reaction_neighbors_dictionary[neighbors[neighbor]] = [
+        ...connected_reactions
+      ];
+    }
+  }
+
+  var collapsed_reaction_neighbors_dictionary = {};
+  let collapsed_reactions = data.collapsed_reaction_dictionary
+  for (let neighbor in neighbors) {
+    if (neighbors[neighbor] in collapsed_reactions) {
+      let components = [...neighbors_dictionary[neighbors[neighbor]]];
+      let connected_collapsed_reactions = new Set()
+      for (let _c in components) {
+        let sub_components = [...neighbors_dictionary[components[_c]]];
+        for (let _c_ in sub_components) {
+          if (sub_components[_c_] in collapsed_reactions &&
+              neighbors[neighbor] !== sub_components[_c_]) {
+            connected_collapsed_reactions.add(sub_components[_c_]);
+          }
+        }
+      }
+      collapsed_reaction_neighbors_dictionary[neighbors[neighbor]] = [
+        ...connected_collapsed_reactions
+      ];
+    }
+  }
+
+  return [
+    reaction_neighbors_dictionary,
+    collapsed_reaction_neighbors_dictionary
+  ];
+}
 
 
 

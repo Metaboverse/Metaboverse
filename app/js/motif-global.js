@@ -23,8 +23,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 // find global motifs at beginning, save as list, check each graph for members
 function gatherMotifs(data, categories) {
 
-  var excl_hubs = false;
-  var hub_threshold = 100;
+  var excl_hubs = true;
+  var hub_threshold = 50;
 
   let expression_dict = {};
   let stats_dict = {};
