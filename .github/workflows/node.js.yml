@@ -26,6 +26,7 @@ jobs:
       run: |
         cd app
         npm ci
+        npm audit fix
         npm install electron mocha --save-dev
         npm install fs d3 jquery string-pixel-width d3-save-svg jsonpickle plotly.js-dist --save
     - name: Run test
