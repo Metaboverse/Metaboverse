@@ -4,14 +4,14 @@
   "description": "Visualizing and Analyzing Metabolic Networks",
   "main": "main.js",
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
+    "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions",
     "test": "mocha -r jsdom-global/register",
     "start": "electron ."
   },
   "resolutions": {
-    "minimist": ">=1.2.5",
-    "zeromq": ">=5.1.0",
-    "wine": "^0.9.13"
+    "minimist": "1.2.5",
+    "zeromq": "5.1.0",
+    "wine": "0.9.13"
   },
   "repository": "https://github.com/Metaboverse/Metaboverse",
   "keywords": [
@@ -26,15 +26,15 @@
   "author": "Jordan A. Berg; Youjia Zhou",
   "license": "GPL-3.0",
   "devDependencies": {
-    "electron": "^9.4.0",
+    "electron": "^9.4.4",
     "electron-packager": "^15.1.0",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
     "minimist": ">=1.2.5",
     "mocha": "^8.1.1",
     "serialize-javascript": "^3.1.0",
-    "wine": "^0.9.13",
     "uglify-js": ">=2.6.0",
+    "wine": "^0.9.13",
     "xmldom": ">=0.5.0",
     "y18n": ">=4.0.1",
     "zeromq": ">=5.1.0",
