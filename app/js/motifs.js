@@ -77,7 +77,6 @@ function cleanHubs(
   components,
   degree_dict,
   hub_threshold) {
-
   let filtered_hubs = components.filter(function(x) {
     if (degree_dict[x] <= hub_threshold) {
       return x
