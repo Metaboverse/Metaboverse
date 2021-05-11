@@ -52,7 +52,6 @@ class MetaGraph {
   constructor(graphdata) {
 
     // Get the data
-    console.log(graphdata)
     var update_nodes = {};
     let n;
     for (n in graphdata.nodes) {
@@ -386,6 +385,12 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#activity_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let eval_neighbors_dictionary;
+        if (eval_collapsed === false) {
+          eval_neighbors_dictionary = this.neighbors_dictionary;
+        } else {
+          eval_neighbors_dictionary = this.collapsed_neighbors_dictionary;
+        }
         this.motif = activityMotif(
           threshold,
           this.collapsed_reaction_dict,
@@ -394,8 +399,8 @@ class MetaGraph {
           this.path_mapper,
           this.degree_dict,
           this.categories,
-          this.neighbors_dictionary,
-          this.collapsed_neighbors_dictionary)
+          this.nodes,
+          eval_neighbors_dictionary)
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -519,7 +524,7 @@ class MetaGraph {
       exclusion_indexer);
 
     if (motif_list.length > 500) {
-      alert("> 500 reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
+      alert(String(motif_list.length) + " reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
     }
 
     // Sort motifs based on user input
@@ -751,7 +756,7 @@ class MetaGraph {
       exclusion_indexer);
 
     if (motif_list.length > 500) {
-      alert("> 500 reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
+      alert(String(motif_list.length) + " reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
     }
 
     // Sort motifs based on user input
