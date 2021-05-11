@@ -1636,11 +1636,11 @@ function test() {
     // hubsChecked()
     describe('hubsChecked()', function() {
       it('should return false if excl_hubs true, and vice versa', function() {
-        assert(excl_hubs === false);
-        hubsChecked();
         assert(excl_hubs === true);
         hubsChecked();
         assert(excl_hubs === false);
+        hubsChecked();
+        assert(excl_hubs === true);
       })
     })
     // cleanHubs()
