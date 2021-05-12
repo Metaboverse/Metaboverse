@@ -3,6 +3,22 @@ Updates
 ###############
 
 =================================
+v0.7.0 (in progress)
+=================================
+| **Major**
+| - :data:`Enzyme`/:data:`Metabolite` motifs: (#81)
+| - Updates to :data:`ModReg` and :data:`TransReg` motifs:
+| - (in progress) Improved metabolite synonym matching
+|
+| **Minor**
+| - Removed pathway-specific pattern detection
+| - (in progress) Option added for users to define percentage of matching nodes between two reaction to allow for a collapse (#82)
+| - (in progress) SVG export option
+| - (in progress) Improved session data
+| - (in progress) Migrated source files
+
+
+=================================
 v0.6.0
 =================================
 | **Major**
