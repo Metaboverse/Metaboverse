@@ -23,7 +23,13 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 var d3 = require("d3");
 var fs = require("fs");
 var savePNG = require("save-svg-as-png");
-var { dialog } = require("electron").remote;
+try {
+  var { dialog } = require("electron").remote;
+}
+catch(err) {
+  console.log("Unable to load dialog, a module required for export of PNGs and SVGs.")
+}
+
 
 const hullPadding = 60;
 const max_nodes = 1500;
