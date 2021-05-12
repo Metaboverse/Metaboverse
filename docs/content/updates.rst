@@ -13,9 +13,10 @@ v0.7.0 (in progress)
 | **Minor**
 | - Removed pathway-specific pattern detection
 | - (in progress) Option added for users to define percentage of matching nodes between two reaction to allow for a collapse (#82)
-| - (in progress) SVG export option
+| - SVG export option (Full support for Inkscape, partial for Illustrator)
 | - (in progress) Improved session data
 | - (in progress) Migrated source files
+| - Loading icon in reaction pattern page
 
 
 =================================

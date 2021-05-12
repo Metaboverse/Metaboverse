@@ -59,7 +59,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br>
     <font id="styletitle" size="2">
       Value Threshold:&nbsp;
-      <input type="number" name="conn_value_button" id="conn_value_button" class="option_botton" min="0" max="100.000" value="1" />
+      <input type="number" name="conn_value_button" id="conn_value_button" class="option_button" min="0" max="100.000" value="1" />
       <button id="play_button_value" class="play_button" title="Change value and click to modify the perturbation threshold for a reaction to appear in the window.">
         &#10148;
       </button>
@@ -105,17 +105,17 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <br>
       <div title="Click to turn feature labels on or off.">
-        <button id="toggleAnalytes" class="option_botton">Features</button>
+        <button id="toggleAnalytes" class="option_button">Features</button>
       </div>
       <div title="Click to turn reaction labels on or off.">
-        <button id="toggleReactions" class="option_botton">Reactions</button>
+        <button id="toggleReactions" class="option_button">Reactions</button>
       </div>
       <div title="Click to turn expression and statistical values on or off.">
-        <button id="toggleExpression" class="option_botton">Expression</button>
+        <button id="toggleExpression" class="option_button">Expression</button>
       </div>
       <br>
       <div title="Click to toggle gene nodes (remove or display).">
-        <button id="toggleGenes" class="option_botton">Toggle Genes</button>
+        <button id="toggleGenes" class="option_button">Toggle Genes</button>
       </div>
       <!--
         <div
@@ -125,24 +125,27 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         -->
       <div title="Click to save the current graph view">
-        <button id="saveGraph" class="option_botton">Export PNG</button>
+        <button id="saveGraph" class="option_button">Export PNG</button>
+      </div>
+      <div title="Click to save the current graph view as an SVG. Edges may only show up in Inkscape, not Adobe Illustrator.">
+        <button id="saveSVG" class="option_button">Export SVG</button>
       </div>
       <br>
       <br>
       # Nearest neighbors:
-      <input type="number" name="kNN_button" id="kNN_button" class="option_botton" min="1" max="9" value="1" />
+      <input type="number" name="kNN_button" id="kNN_button" class="option_button" min="1" max="9" value="1" />
       <button id="knn_info" class="info_enhanced">
         <i>i</i>
       </button>
       <br>
       Hub threshold:
-      <input type="number" name="hub_button" id="hub_button" class="option_botton" min="1" max="9999999" />
+      <input type="number" name="hub_button" id="hub_button" class="option_button" min="1" max="9999999" />
       <button id="hub_info" class="info_enhanced">
         <i>i</i>
       </button>
       <br>
       Statistic threshold:
-      <input type="number" name="stat_button" id="stat_button" class="option_botton" min="000" max="1.0" value="0.05" />
+      <input type="number" name="stat_button" id="stat_button" class="option_button" min="000" max="1.0" value="0.05" />
       <button id="stat_info" class="info_enhanced">
         <i>i</i>
       </button>

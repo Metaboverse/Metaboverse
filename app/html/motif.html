@@ -243,11 +243,43 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             </div>
           </div>
           <div id="network-panel-motif" class="network-panel">
-            <h6><b><i>All Reaction Patterns In This Pathway:</i></b>
-              <a href="visualize.html" id="open_pathway_viewer"><i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i></a>
-            </h6>
+
+            <div title="Click to turn feature labels on or off.">
+              <button id="toggleAnalytes" class="option_button">Features</button>
+            </div>
+            <div title="Click to turn reaction labels on or off.">
+              <button id="toggleReactions" class="option_button">Reactions</button>
+            </div>
+            <div title="Click to turn expression and statistical values on or off.">
+              <button id="toggleExpression" class="option_button">Expression</button>
+            </div>
+            <div title="Click to toggle gene nodes (remove or display).">
+              <button id="toggleGenes" class="option_button">Toggle Genes</button>
+            </div>
+            <div title="Click to toggle between showing or hiding compartment shading">
+              <button id="toggleCompartments" class="option_button">Toggle Compartments</button>
+            </div>
+            <br>
+            <div title="Click to save the current graph view">
+              <button id="saveGraph" class="option_button">Export PNG</button>
+            </div>
+            <div title="Click to save the current graph view as an SVG. Edges may only show up in Inkscape, not Adobe Illustrator.">
+              <button id="saveSVG" class="option_button">Export SVG</button>
+            </div>
+            <div title="Click to open this pathway in a full window.">
+              <a href="visualize.html" id="open_pathway_viewer">
+                <button id="openPathway" class="option_button">
+                  Expand Pathway&nbsp;
+                  <i class="fas fa-external-link-alt" title="Open pathway visualization in new window."></i>
+                </button>
+              </a>
+            </div>
+
+
+            <!--
             <div class="scrollable" id="all-motif-list">
-              <ul></ul>
+            <ul></ul>
+            -->
             </div>
           </div>
         </div>

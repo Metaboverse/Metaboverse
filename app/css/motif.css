@@ -122,7 +122,7 @@ div.scrollable {
   border: 1px solid lightgray;
   background-color: white;
   border-radius: 5px;
-  height: 500px;
+  height: 605px;
 }
 
 .network-panel {
@@ -131,7 +131,7 @@ div.scrollable {
   margin-right: 10px;
   padding-top: 5px;
   padding-left: 5px;
-  height: 120px;
+  height: 60px;
 }
 
 .relationships_styling {
@@ -272,7 +272,7 @@ circle:hover text {
   width: 1170px;
   height: 465px;
   margin-left: 240px;
-  margin-top: -490px;
+  margin-top: -595px;
 }
 
 .frame-motif-4 {
@@ -414,6 +414,11 @@ circle:hover text {
 
 #all-motif-list {
   height: 75%;
+}
+
+#pathway-view-svg {
+  width: 45vw;
+  height: 595px;
 }
 
 .line-description {

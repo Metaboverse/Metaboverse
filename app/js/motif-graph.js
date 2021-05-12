@@ -20,6 +20,8 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+var _width = (0.45 * window.innerWidth) + 50;
+var _height = 675;
 
 var sample = 0;
 var exclude_idx = -1;
@@ -163,11 +165,13 @@ class MetaGraph {
 
       // Generate pathway viewer
       // Just get pathway ID and let the viz script do the rest
-      this.pathway_svg = d3.select("#pathway-view-svg");
-      this.pathway_svg_width = parseFloat(
-        this.pathway_svg.style("width", "45vw"));
-      this.pathway_svg_height = parseFloat(
-        this.pathway_svg.style("height", "490px"));
+      //this.pathway_svg = d3.select("#pathway-view-svg");
+      //this.pathway_svg_width = parseFloat(
+      //  this.pathway_svg.style("width", "45vw"));
+      //this.pathway_svg_height = parseFloat(
+      //  this.pathway_svg.style("height", "595px"));
+      //this.pathway_svg.style("width", "45vw")
+      //this.pathway_svg.style("height", "595px")
     } catch (e) {}
     this.initLines();
     this.motifSearch();
@@ -1055,7 +1059,6 @@ class MetaGraph {
     d3.selectAll("circle:not(#dot)").remove();
     d3.selectAll("line:not(#track)").remove();
     d3.selectAll("text:not(#tick)").remove();
-    d3.selectAll("#all-motif-list").remove();
 
     let cg = this.stamp_svg_circle_group.selectAll("g")
       .data(motif_list);
@@ -1543,9 +1546,6 @@ class MetaGraph {
     var display_reactions_dict = node_elements[3];
     var entity_id_dict = node_elements[4];
 
-    var _width = (0.45 * window.innerWidth) + 50;
-    var _height = 570;
-
     make_graph(
       this.data,
       new_nodes,
@@ -1607,9 +1607,6 @@ class MetaGraph {
     var display_analytes_dict = node_elements[2];
     var display_reactions_dict = node_elements[3];
     var entity_id_dict = node_elements[4];
-
-    var _width = (0.45 * window.innerWidth) + 50;
-    var _height = 570;
 
     make_graph(
       this.data,
@@ -1675,9 +1672,6 @@ class MetaGraph {
     var display_reactions_dict = node_elements[3];
     var entity_id_dict = node_elements[4];
 
-    var _width = (0.45 * window.innerWidth) + 50;
-    var _height = 570;
-
     make_graph(
       this.data,
       new_nodes,
@@ -1721,35 +1715,7 @@ class MetaGraph {
           .style("stroke-width", "5px")
 
       })
-      this.showMotifNames(current_motif);
-    } else {
-      current_motif = pathway.name.split(" // ");
-      this.showCollapsedNames(current_motif);
     }
-  }
-
-  showMotifNames(current_motif) {
-
-    let tg = d3.select("#all-motif-list")
-      .select("ul")
-      .selectAll("li")
-      .data(current_motif);
-    tg.exit().remove();
-    tg = tg.enter()
-      .append("li")
-      .merge(tg)
-      .html(d => "&bull; " + this.collapsed_reaction_dict[d].name + "&emsp;&emsp;")
-  }
-
-  showCollapsedNames(current_motif) {
-
-    let tg = d3.select("#all-motif-list")
-      .select("ul")
-      .selectAll("li")
-      .data(current_motif);
-    tg.exit().remove();
-    tg = tg.enter().append("li").merge(tg)
-      .html(d => "- " + d)
   }
 
   createId(id) {
@@ -2402,7 +2368,6 @@ function reset_all() {
   d3.selectAll("circle:not(#dot)").remove();
   d3.selectAll("line:not(#track)").remove();
   d3.selectAll("text:not(#tick)").remove();
-  d3.selectAll("#all-motif-list").remove();
 }
 
 function highlight_selection(_selector) {

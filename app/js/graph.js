@@ -22,7 +22,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 var d3 = require("d3");
 var fs = require("fs");
-var saveSVG = require("save-svg-as-png");
+var savePNG = require("save-svg-as-png");
+var { dialog } = require("electron").remote;
 
 const hullPadding = 60;
 const max_nodes = 1500;
@@ -1144,7 +1145,7 @@ function make_graph(
   });
 
   d3.select("#saveGraph").on("click", function() {
-    saveSVG.saveSvgAsPng(
+    savePNG.saveSvgAsPng(
       d3.select("#svg_viewer_id")._groups[0][0],
       "plot.png", {
         encoderOptions: 1,
@@ -1155,20 +1156,99 @@ function make_graph(
   });
 
   d3.select("#saveSVG").on("click", function() {
-    var _this_svg = d3.select("#svg_viewer_id")._groups[0][0].cloneNode(true);
-    var xmlns = "https://www.w3.org/2000/xmlns/";
-    var xlinkns = "https://www.w3.org/1999/xlink";
-    var svgns = "https://www.w3.org/2000/svg";
-    _this_svg.setAttributeNS(xmlns, "xmlns", svgns);
-    _this_svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
 
-    var text = fs.readFileSync('./css/visualize.css', {encoding: 'utf-8'});
-    text = text.split('*/')[1];
+    var xmlns = "http://www.w3.org/2000/xmlns/";
+    var xlinkns = "http://www.w3.org/1999/xlink";
+    var svgns = "http://www.w3.org/2000/svg";
+    /*
+    var _this_svg = document.querySelector('#svg_viewer_id');
+    _this_svg = _this_svg.cloneNode(true);
+    */
+    var _this_svg = d3.select("#svg_viewer_id")._groups[0][0].cloneNode(true);
+    //_this_svg.setAttributeNS(xmlns, "xmlns", svgns);
+    //_this_svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
 
     var _Serializer = new XMLSerializer();
-    svg_output = _Serializer.serializeToString(_this_svg);
-    var svg_split = svg_output.split("<defs><marker");
-    svg_string = svg_split[0] + "<defs><style>" + text + "</style><marker" + svg_split[1];
+    svg_string = _Serializer.serializeToString(_this_svg);
+
+    // Fix formattings
+    svg_string = svg_string.replace(/dx="/g, 'x="');
+    svg_string = svg_string.replace(
+      /marker-end/g,
+      "style=\"fill: none;\" marker-end");
+    svg_string = svg_string.replace(
+      /marker id="gene_component"/g,
+      'marker id="gene_component" fill="#a537fd"');
+    svg_string = svg_string.replace(
+      /class="link gene_component" style="fill: none;"/g,
+      'style="stroke-width: 1.5px;fill: none;stroke:#a537fd;stroke-dasharray:0, 2 1;"');
+    svg_string = svg_string.replace(
+      /marker id="catalyst"/g,
+      'marker id="catalyst" fill="#008000"');
+    svg_string = svg_string.replace(
+      /class="link catalyst" style="fill: none;"/g,
+      'class="link catalyst" style="stroke-width: 1.5px;fill: none;stroke: #008000;"');
+    svg_string = svg_string.replace(
+      /marker id="inhibitor"/g,
+      'marker id="inhibitor" fill="#ff0000"');
+    svg_string = svg_string.replace(
+      /class="link inhibitor" style="fill: none;"/g,
+      'class="link inhibitor" style="stroke-width: 1.5px;fill: none;stroke: #ff0000;"');
+    svg_string = svg_string.replace(
+      /marker id="collapsed"/g,
+      'marker id="collapsed" fill="rgba(0, 0, 0, 1)"');
+    svg_string = svg_string.replace(
+      /class="link collapsed" style="fill: none;"/g,
+      'class="link collapsed" style="stroke-width: 1.5px;fill: none;stroke: rgba(0, 0, 0, 1);stroke-dasharray: 0, 5 5;"');
+    svg_string = svg_string.replace(
+      /marker id="collapsed_catalyst"/g,
+      'marker id="collapsed_catalyst" fill="#008000"');
+    svg_string = svg_string.replace(
+      /class="link collapsed_catalyst" style="fill: none;"/g,
+      'class="link collapsed_catalyst" style="stroke-width: 1.5px;fill: none;stroke: #008000; stroke-dasharray: 0, 5 5;"');
+    svg_string = svg_string.replace(
+      /marker id="collapsed_inhibitor"/g,
+      'marker id="collapsed_inhibitor" fill="#ff0000"');
+    svg_string = svg_string.replace(
+      /class="link collapsed_inhibitor" style="fill: none;"/g,
+      'class="link collapsed_inhibitor" style="stroke-width: 1.5px;fill: none;stroke: #ff0000; stroke-dasharray: 0, 5 5;"');
+    svg_string = svg_string.replace(
+      /marker id="protein_component"/g,
+      'marker id="protein_component" fill="#ff4500"');
+    svg_string = svg_string.replace(
+      /class="link protein_component" style="fill: none;"/g,
+      'class="link protein_component" style="stroke-width: 1.5px;fill: none;stroke: #ff4500;stroke-dasharray: 0, 2 1;"');
+    svg_string = svg_string.replace(
+      /marker id="complex_component"/g,
+      'marker id="complex_component" fill="rgba(166, 97, 26, 1)"');
+    svg_string = svg_string.replace(
+      /class="link complex_component" style="fill: none;"/g,
+      'class="link complex_component" style="stroke-width: 1.5px;fill: none;stroke: rgba(166, 97, 26, 1);stroke-dasharray: 0, 2 1;"');
+    svg_string = svg_string.replace(
+      /marker id="metabolite_component"/g,
+      'marker id="metabolite_component" fill="rgba(0, 55, 253, 1)"');
+    svg_string = svg_string.replace(
+      /class="link metabolite_component" style="fill: none;"/g,
+      'class="link metabolite_component" style="stroke-width: 1.5px;fill: none;stroke: rgba(0, 55, 253, 1);stroke-dasharray: 0, 2 1;"');
+    svg_string = svg_string.replace(
+      /marker id="reaction"/g,
+      'marker id="reaction" fill="#666"');
+    svg_string = svg_string.replace(
+      /class="link reaction" style="fill: none;"/g,
+      'class="link reaction" style="stroke-width: 1.5px;fill: none;stroke: #666;"');
+    svg_string = svg_string.replace(
+      /marker id="reactant"/g,
+      'marker id="reactant" fill="#666"');
+    svg_string = svg_string.replace(
+      /class="link reactant" style="fill: none;"/g,
+      'class="link reactant" style="stroke-width: 1.5px;fill: none;stroke: #666;"');
+    svg_string = svg_string.replace(
+      /marker id="product"/g,
+      'marker id="product" fill="#666"');
+    svg_string = svg_string.replace(
+      /class="link product" style="fill: none;"/g,
+      'class="link product" style="stroke-width: 1.5px;fill: none;stroke: #666;"');
+
     filename = dialog
       .showSaveDialog({
         title: "graph",
