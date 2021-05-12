@@ -73,12 +73,12 @@ function hubsChecked() {
 }
 
 function cleanHubs(
-  excl_hubs,
-  components,
-  degree_dict,
-  hub_threshold) {
+    excl_hubs,
+    components,
+    degree_dict,
+    hub_threshold) {
   let filtered_hubs = components.filter(function(x) {
-    if (degree_dict[x] <= hub_threshold) {
+    if (degree_dict[x] < hub_threshold) {
       return x
     }
   })
@@ -86,11 +86,11 @@ function cleanHubs(
 }
 
 function parseComponents(
-  reaction,
-  expression_dict,
-  stats_dict,
-  degree_dict,
-  sample_index) {
+    reaction,
+    expression_dict,
+    stats_dict,
+    degree_dict,
+    sample_index) {
 
   let reactants = reaction.reactants;
   let products = reaction.products;
@@ -163,11 +163,11 @@ function parseComponents(
 }
 
 function parseComponentsMod(
-  reaction,
-  expression_dict,
-  stats_dict,
-  degree_dict,
-  sample_index) {
+    reaction,
+    expression_dict,
+    stats_dict,
+    degree_dict,
+    sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
   let modifiers = reaction.modifiers;
@@ -225,12 +225,12 @@ function parseComponentsMod(
 
 
 function parseComponentsEnzymes(
-  reaction,
-  nodes,
-  expression_dict,
-  stats_dict,
-  degree_dict,
-  sample_index) {
+    reaction,
+    nodes,
+    expression_dict,
+    stats_dict,
+    degree_dict,
+    sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
   let modifiers = reaction.modifiers;
@@ -257,6 +257,7 @@ function parseComponentsEnzymes(
   clean_core.forEach(l => {
     if (nodes[l].sub_type !== "metabolite_component"
     && nodes[l].sub_type !== "") {
+
       let core_expr = expression_dict[l][sample_index];
       let core_stats = stats_dict[l][sample_index];
       if (core_expr !== null && core_stats !== null) {
@@ -286,12 +287,12 @@ function parseComponentsEnzymes(
 }
 
 function parseComponentsMetabolites(
-  reaction,
-  nodes,
-  expression_dict,
-  stats_dict,
-  degree_dict,
-  sample_index) {
+    reaction,
+    nodes,
+    expression_dict,
+    stats_dict,
+    degree_dict,
+    sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
   let modifiers = reaction.modifiers;
@@ -346,11 +347,11 @@ function parseComponentsMetabolites(
 
 
 function parseComponentsTrans(
-  reaction,
-  expression_dict,
-  stats_dict,
-  degree_dict,
-  sample_index) {
+    reaction,
+    expression_dict,
+    stats_dict,
+    degree_dict,
+    sample_index) {
 
   let reactants = reaction.reactants;
   let products = reaction.products;
@@ -445,13 +446,13 @@ function computeAvg(arr) {
 // search for motif 1
 //let threshold = d3.select("#avg_num").node().value;
 function motifSearch_Avg(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
 
   let discovered_motifs = [];
 
@@ -496,20 +497,19 @@ function motifSearch_Avg(
     }
     discovered_motifs.push(sample_motifs);
   }
-  //console.log(discovered_motifs);
   return discovered_motifs;
 }
 
 // MaxMax
 //let threshold = d3.select("#maxmax_num").node().value;
 function motifSearch_MaxMax(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -560,13 +560,13 @@ function motifSearch_MaxMax(
 // MinMin
 //let threshold = d3.select("#minmin_num").node().value;
 function motifSearch_MinMin(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -619,13 +619,13 @@ function motifSearch_MinMin(
 //MaxMin
 //let threshold = d3.select("#maxmin_num").node().value;
 function motifSearch_MaxMin(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -678,13 +678,13 @@ function motifSearch_MaxMin(
 //MinMax
 //let threshold = d3.select("#minmax_num").node().value;
 function motifSearch_MinMax(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -737,13 +737,13 @@ function motifSearch_MinMax(
 //let threshold = d3.select("#sustained_num").node().value;
 // Will not include sustained motif if the value on both sides exactly the same
 function motifSearch_Sustained(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -873,14 +873,14 @@ function motifSearch_Sustained(
 //Path max/min comparison
 //let threshold = d3.select("#pathmax_num").node().value;
 function motifSearch_PathMax(
-  threshold,
-  mod_collapsed_pathways,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    mod_collapsed_pathways,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -927,15 +927,15 @@ function motifSearch_PathMax(
 //Path coverage comparison
 //let threshold = d3.select("#pathcov_num").node().value;
 function motifSearch_PathCov(
-  threshold,
-  min_coverage,
-  mod_collapsed_pathways,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    min_coverage,
+    mod_collapsed_pathways,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   let discovered_motifs = [];
 
   for (_idx in sample_indices) {
@@ -991,13 +991,13 @@ function motifSearch_PathCov(
 }
 
 function modifierReg(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   // If the net change between at least one modifier and one core component of a
   // reaction is greater than or equal to the threshold, return the reaction
   // *** Checking the "include modifiers" button will have no effect here
@@ -1026,14 +1026,29 @@ function modifierReg(
         // Check each core/mod combination for a diff that meets threshold
         for (x in core_values) {
           for (y in modifier_values) {
-            if (Math.abs(core_values[x] - modifier_values[y]) >= threshold) {
+            if (Math.abs(core_values[x] - modifier_values[y]) >= threshold
+            || (Math.abs(core_values[x]) >= threshold
+                && Math.abs(modifier_values[y]) >= threshold)) {
               let p_source = core_stats[x];
               let p_target = modifier_stats[y];
               let p_vals = {
                 "source": p_source,
                 "target": p_target
               };
-              let magnitude_chg = Math.abs(core_values[x] - modifier_values[y]);
+              let place_value;
+              if (Math.abs(core_values[x]) >= threshold
+              && Math.abs(modifier_values[y]) >= threshold) {
+                place_value = Math.max(
+                  Math.abs(core_values[x]),
+                  Math.abs(modifier_values[y])
+                );
+              } else {
+                place_value = 0;
+              }
+              let magnitude_chg = Math.max(
+                Math.abs(core_values[x] - modifier_values[y]),
+                place_value
+              );
 
               let reaction_copy = $.extend(true, {}, reaction);
               if (reaction in sample_motifs) {
@@ -1062,13 +1077,13 @@ function modifierReg(
 }
 
 function modifierTransport(
-  threshold,
-  collapsed_reaction_dict,
-  expression_dict,
-  stats_dict,
-  path_mapper,
-  degree_dict,
-  sample_indices) {
+    threshold,
+    collapsed_reaction_dict,
+    expression_dict,
+    stats_dict,
+    path_mapper,
+    degree_dict,
+    sample_indices) {
   // Highlight if modifier changed where inputs and outputs are same (minus
   //    compartment) --> regulation of transport reaction
   // If a componenet on both sides meets threshold and a modifier seperately
@@ -1103,9 +1118,10 @@ function modifierTransport(
         let intersect = source_values.filter(x => target_values.includes(x));
         for (x in intersect) {
           for (y in modifier_values) {
-            if ((Math.abs(intersect[x] - modifier_values[y]) >= threshold) ||
-              (Math.abs(intersect[x]) >= threshold &&
-                Math.abs(modifier_values[y]) >= threshold)) {
+            if ((Math.abs(intersect[x] - modifier_values[y]) >= threshold)
+            || (Math.abs(intersect[x]) >= threshold
+                && Math.abs(modifier_values[y]) >= threshold)
+            ) {
               let source_index = source_values.indexOf(intersect[x]);
               let target_index = modifier_values.indexOf(modifier_values[y]);
               let p_source = source_stats[x];
@@ -1114,7 +1130,20 @@ function modifierTransport(
                 "source": p_source,
                 "target": p_target
               };
-              let magnitude_chg = Math.abs(intersect[x] - modifier_values[y]);
+              let place_value;
+              if (Math.abs(intersect[x]) >= threshold
+              && Math.abs(modifier_values[y]) >= threshold) {
+                place_value = Math.max(
+                  Math.abs(intersect[x]),
+                  Math.abs(modifier_values[y])
+                );
+              } else {
+                place_value = 0;
+              }
+              let magnitude_chg = Math.max(
+                Math.abs(intersect[x] - modifier_values[y]),
+                place_value
+              );
 
               let reaction_copy = $.extend(true, {}, reaction);
               if (reaction in sample_motifs) {
@@ -1143,7 +1172,10 @@ function modifierTransport(
 }
 
 // 1. Biggest difference b/t reactions passes threshold
-function get_same_diff(base_comp, neighbor_comp, threshold) {
+function get_same_diff(
+    base_comp,
+    neighbor_comp,
+    threshold) {
   let one_max = 0;
   let one_pair = [];
   let two_max = 0;
@@ -1160,18 +1192,21 @@ function get_same_diff(base_comp, neighbor_comp, threshold) {
       two_pair = neighbor_comp[i];
     }
   }
-  if (one_max > threshold
-  && two_max > threshold) {
-    let same_max = Math.max([one_max, two_max]);
+  if (one_max >= threshold
+  && two_max >= threshold) {
+    let same_max = Math.max(one_max, two_max);
     let same_diff = [one_pair, two_pair];
     return [same_max, same_diff];
   } else {
-    return false;
+    return [0, 0];
   }
 }
 
 // 2. One component from each reaction passes threshold
-function get_big_diff(base_comp, neighbor_comp, threshold) {
+function get_big_diff(
+    base_comp,
+    neighbor_comp,
+    threshold) {
   let diff_max = 0;
   let diff_pair = [];
   for (let i in base_comp) {
@@ -1182,10 +1217,10 @@ function get_big_diff(base_comp, neighbor_comp, threshold) {
       }
     }
   }
-  if (diff_max > threshold) {
+  if (diff_max >= threshold) {
     return [diff_max, diff_pair];
   } else {
-    return false;
+    return [0, 0];
   }
 
 }
@@ -1202,92 +1237,89 @@ function enzymeMotif(
     nodes,
     neighbors_dictionary) {
 
-    // If two neighboring reactions have significantly shifting enzyme conc.
-    // If both change above/below a threshold, or the difference between the
-    // two passes the threshold
-    //
-    // Consider all non-metabolites from each neighboring reaction
-    // If largest difference passes, consider as a motif
-    // Or if both change in the same direction and pass the threshold, return
-    // Considers modifiers by default
-    let discovered_motifs = [];
+  // If two neighboring reactions have significantly shifting enzyme conc.
+  // If both change above/below a threshold, or the difference between the
+  // two passes the threshold
+  //
+  // Consider all non-metabolites from each neighboring reaction
+  // If largest difference passes, consider as a motif
+  // Or if both change in the same direction and pass the threshold, return
+  // Considers modifiers by default
+  let discovered_motifs = [];
 
-    for (_idx in sample_indices) {
+  for (_idx in sample_indices) {
+    // neighbors_dictionary
+    let sample_motifs = new Set();
 
-      // neighbors_dictionary
-      let sample_motifs = new Set();
+    for (let neighbor in neighbors_dictionary) {
+      // check each neighbor pair for components (non-metabolite)
+      if (neighbor in collapsed_reaction_dict && neighbors_dictionary[neighbor].length > 0) {
+        // Get evaluated reaction info
+        let reaction = collapsed_reaction_dict[neighbor];
+        let comps = parseComponentsEnzymes(
+          reaction,
+          nodes,
+          expression_dict,
+          stats_dict,
+          degree_dict,
+          _idx)
+        comps = comps[0].concat(comps[1]);
 
-      for (let neighbor in neighbors_dictionary) {
+        // Get neighboring reaction(s) info
+        for (let n_reaction in neighbors_dictionary[neighbor]) {
+          let this_neighbor = neighbors_dictionary[neighbor][n_reaction];
+          if (this_neighbor in collapsed_reaction_dict) {
+            let neighbor_reaction = collapsed_reaction_dict[this_neighbor];
+            let neighbor_comps = parseComponentsEnzymes(
+              neighbor_reaction,
+              nodes,
+              expression_dict,
+              stats_dict,
+              degree_dict,
+              _idx)
+            neighbor_comps = neighbor_comps[0].concat(neighbor_comps[1]);
 
-        // check each neighbor pair for components (non-metabolite)
-        if (neighbor in collapsed_reaction_dict && neighbors_dictionary[neighbor].length > 0) {
-
-          // Get evaluated reaction info
-          let reaction = collapsed_reaction_dict[neighbor];
-          let comps = parseComponentsEnzymes(
-            reaction,
-            nodes,
-            expression_dict,
-            stats_dict,
-            degree_dict,
-            _idx)
-          comps = comps[0].concat(comps[1]);
-
-          // Get neighboring reaction(s) info
-          for (let n_reaction in neighbors_dictionary[neighbor]) {
-            let this_neighbor = neighbors_dictionary[neighbor][n_reaction];
-            if (this_neighbor in collapsed_reaction_dict) {
-              let neighbor_reaction = collapsed_reaction_dict[this_neighbor];
-              let neighbor_comps = parseComponentsEnzymes(
-                neighbor_reaction,
-                nodes,
-                expression_dict,
-                stats_dict,
-                degree_dict,
-                _idx)
-              neighbor_comps = neighbor_comps[0].concat(neighbor_comps[1]);
-
-              // Check for conditions
-              let same_diff = get_same_diff(comps, neighbor_comps, threshold);
-              let big_diff = get_big_diff(comps, neighbor_comps, threshold);
-              if (same_diff !== false || big_diff !== false) {
-                let collapsed = "false";
-                if (reaction.collapsed === "true"
-                || neighbor_reaction.collapsed === "true") {
-                  collapsed = "true";
-                }
-                let mag_change, p_source, p_target;
-                if (same_diff[0] > big_diff[0] && same_diff !== false) {
-                  mag_change = same_diff[0];
-                  p_source = same_diff[1][0][1];
-                  p_target = same_diff[1][1][1];
-                } else if (big_diff !== false) {
-                  mag_change = big_diff[0];
-                  p_source = big_diff[1][0][1];
-                  p_target = big_diff[1][1][1];
-                }
-                sample_motifs.add({
-                  'id': reaction.id + "_" + neighbor_reaction.id,
-                  'rxn1': $.extend(true, {}, reaction),
-                  'rxn2': $.extend(true, {}, neighbor_reaction),
-                  'collapsed': collapsed,
-                  'magnitude_change': mag_change,
-                  'p_values': {
-                    'source': p_source,
-                    'target': p_target
-                  }
-                })
+            // Check for conditions
+            let same_diff = get_same_diff(comps, neighbor_comps, threshold);
+            let big_diff = get_big_diff(comps, neighbor_comps, threshold);
+            if (same_diff[0] !== 0 || big_diff[0] !== 0) {
+              let collapsed = "false";
+              if (reaction.collapsed === "true"
+              || neighbor_reaction.collapsed === "true") {
+                collapsed = "true";
               }
+              let mag_change, p_source, p_target;
+              if (same_diff[0] > big_diff[0] && same_diff[0] !== 0) {
+                mag_change = same_diff[0];
+                p_source = same_diff[1][0][1];
+                p_target = same_diff[1][1][1];
+              } else if (big_diff[0] !== 0) {
+                mag_change = big_diff[0];
+                p_source = big_diff[1][0][1];
+                p_target = big_diff[1][1][1];
+              }
+            sample_motifs.add({
+              'id': reaction.id + "_" + neighbor_reaction.id,
+              'rxn1': $.extend(true, {}, reaction),
+              'rxn2': $.extend(true, {}, neighbor_reaction),
+              'collapsed': collapsed,
+              'magnitude_change': mag_change,
+              'p_values': {
+                'source': p_source,
+                'target': p_target
+                }
+              })
             }
           }
         }
       }
-      sample_motifs = [...sample_motifs];
-      for (let m in sample_motifs) {
-        sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['rxn1']['id']].concat(path_mapper[sample_motifs[m]['rxn2']['id']])
-      }
-      discovered_motifs.push(sample_motifs);
     }
+    sample_motifs = [...sample_motifs];
+    for (let m in sample_motifs) {
+      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['rxn1']['id']].concat(path_mapper[sample_motifs[m]['rxn2']['id']])
+    }
+    discovered_motifs.push(sample_motifs);
+  }
   return discovered_motifs;
 }
 
@@ -1351,18 +1383,18 @@ function activityMotif(
             // Check for conditions
             let same_diff = get_same_diff(comps, neighbor_comps, threshold);
             let big_diff = get_big_diff(comps, neighbor_comps, threshold);
-            if (same_diff !== false || big_diff !== false) {
+            if (same_diff[0] !== 0 || big_diff[0] !== 0) {
               let collapsed = "false";
               if (reaction.collapsed === "true"
               || neighbor_reaction.collapsed === "true") {
                 collapsed = "true";
               }
               let mag_change, p_source, p_target;
-              if (same_diff[0] > big_diff[0] && same_diff !== false) {
+              if (same_diff[0] > big_diff[0] && same_diff[0] !== 0) {
                 mag_change = same_diff[0];
                 p_source = same_diff[1][0][1];
                 p_target = same_diff[1][1][1];
-              } else if (big_diff !== false) {
+              } else if (big_diff[0] !== 0) {
                 mag_change = big_diff[0];
                 p_source = big_diff[1][0][1];
                 p_target = big_diff[1][1][1];
@@ -1389,11 +1421,13 @@ function activityMotif(
     }
     discovered_motifs.push(sample_motifs);
   }
-return discovered_motifs;
+  return discovered_motifs;
 }
 
 
-function make_neighbors_dictionary(data, degree_dict) {
+function make_neighbors_dictionary(
+    data,
+    degree_dict) {
 
   let nodes = data.nodes;
   let links = data.links;
@@ -1404,8 +1438,8 @@ function make_neighbors_dictionary(data, degree_dict) {
     let two = links[l].target;
 
     if (excl_hubs === true
-    && (degree_dict[one] > hub_threshold
-      || degree_dict[two] > hub_threshold
+    && (degree_dict[one] >= hub_threshold
+      || degree_dict[two] >= hub_threshold
     )) {
       // Skip if one of the two connected components don't match hub threshold
     } else {
@@ -1477,13 +1511,9 @@ function make_neighbors_dictionary(data, degree_dict) {
 
 function test() {
   var assert = require('assert');
-  var {
-    JSDOM
-  } = require('jsdom');
+  var { JSDOM } = require('jsdom');
   var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
-  var {
-    window
-  } = jsdom;
+  var { window } = jsdom;
   $ = global.jQuery = require('jquery')(window);
 
   let test_sample_indices = [0, 1];
@@ -1535,34 +1565,104 @@ function test() {
       ]
     },
   }
-  let test_expression_dict = {
-    'N1': [0.9, 1], //
-    'N2': [0.8, 2],
-    'N3': [0.7, 3], //mod
 
-    'N4': [5, 3],
-    'N5': [5, 3], //
-    'N6': [1, 1],
+  let test_data = {
+    'reaction_dictionary': test_reaction,
+    'collapsed_reaction_dictionary': test_reaction,
+    'nodes': {
+      'R1': {'id': 'R1', 'sub_type': 'reaction'},
+      'R2': {'id': 'R2', 'sub_type': 'reaction'},
+      'R3': {'id': 'R3', 'sub_type': 'reaction'},
+      'R4': {'id': 'R4', 'sub_type': 'reaction'},
+      'R5': {'id': 'R5', 'sub_type': 'reaction'},
+      'R6': {'id': 'R6', 'sub_type': 'reaction'},
+      'N1': {'id': 'N1', 'sub_type': 'metabolite_component'},
+      'N2': {'id': 'N2', 'sub_type': 'metabolite_component'},
+      'N3': {'id': 'N3', 'sub_type': 'protein_component'},
+      'N4': {'id': 'N4', 'sub_type': 'metabolite_component'},
+      'N5': {'id': 'N5', 'sub_type': 'metabolite_component'},
+      'N6': {'id': 'N6', 'sub_type': 'metabolite_component'},
+      'N7': {'id': 'N7', 'sub_type': 'protein_component'},
+      'N8': {'id': 'N8', 'sub_type': 'metabolite_component'},
+      'N9': {'id': 'N9', 'sub_type': 'metabolite_component'},
+      'N10': {'id': 'N10', 'sub_type': 'metabolite_component'},
+      'N11': {'id': 'N11', 'sub_type': 'protein_component'},
+      'N12': {'id': 'N12', 'sub_type': 'metabolite_component'},
+      'N13': {'id': 'N13', 'sub_type': 'metabolite_component'},
+      'N14': {'id': 'N14', 'sub_type': 'metabolite_component'},
+      'N15': {'id': 'N15', 'sub_type': 'metabolite_component'},
+      'N16': {'id': 'N16', 'sub_type': 'metabolite_component'},
+      'N17': {'id': 'N17', 'sub_type': 'metabolite_component'},
+      'N18': {'id': 'N18', 'sub_type': 'metabolite_component'},
+      'N19': {'id': 'N19', 'sub_type': 'metabolite_component'},
+      'N20': {'id': 'N20', 'sub_type': 'metabolite_component'},
+      'N21': {'id': 'N21', 'sub_type': 'metabolite_component'},
+      'N22': {'id': 'N22', 'sub_type': 'protein_component'},
+      'N99': {'id': 'N99', 'sub_type': 'metabolite_component'},
+    },
+    'links': [
+      {'source': 'N1', 'target': 'R1'},
+      {'source': 'R1', 'target': 'N2'},
+      {'source': 'N3', 'target': 'R1'},
+
+      {'source': 'N4', 'target': 'R2'},
+      {'source': 'N5', 'target': 'R2'},
+      {'source': 'R2', 'target': 'N6'},
+      {'source': 'N7', 'target': 'R2'},
+
+      {'source': 'N8', 'target': 'R3'},
+      {'source': 'R3', 'target': 'N9'},
+      {'source': 'R3', 'target': 'N10'},
+      {'source': 'N11', 'target': 'R3'},
+      {'source': 'N99', 'target': 'R3'},
+
+      {'source': 'N12', 'target': 'R4'},
+      {'source': 'N13', 'target': 'R4'},
+      {'source': 'R4', 'target': 'N14'},
+      {'source': 'R4', 'target': 'N15'},
+
+      {'source': 'N16', 'target': 'R5'},
+      {'source': 'R5', 'target': 'N17'},
+
+      {'source': 'N18', 'target': 'R6'},
+      {'source': 'N19', 'target': 'R6'},
+      {'source': 'R6', 'target': 'N20'},
+      {'source': 'N21', 'target': 'R6'},
+      {'source': 'N22', 'target': 'R6'},
+      {'source': 'R6', 'target': 'N99'},
+    ]
+  }
+
+  let test_expression_dict = {
+    'N1': [0.9, 1], //reactant
+    'N2': [0.8, 2], //product
+    'N3': [null, null], //mod
+
+    'N4': [5, 3], //reactant
+    'N5': [5, 3], //reactant
+    'N6': [1, 1], //product
     'N7': [0, 1], //mod
 
-    'N8': [0.7, 1], //
-    'N9': [0.7, 1],
-    'N10': [null, null],
+    'N8': [0.7, 1], //reactant
+    'N9': [0.7, 1], //product
+    'N10': [null, null], //product
     'N11': [3, 3], //mod
 
-    'N12': [0.7, 3],
-    'N13': [0.7, 0], //
-    'N14': [0, 0],
-    'N15': [1, 1],
+    'N12': [0.7, 3], //reactant
+    'N13': [0.7, 0], //reactant
+    'N14': [0, 0], //product
+    'N15': [1, 1], //product
 
-    'N16': [0.7, 0.7], //
-    'N17': [0.7, 0.7],
+    'N16': [0.7, 0.7], //reactant
+    'N17': [0.7, 0.7], //product
 
-    'N18': [0.9, 2],
-    'N19': [0.1, 0.03], //
-    'N20': [7, 3],
+    'N18': [0.9, 2], //reactant
+    'N19': [0.1, 0.03], //reactant
+    'N20': [7, 3], //product
     'N21': [7, 3], //mod
-    'N22': [1, 3] //mod
+    'N22': [1, 3], //mod
+
+    'N99': [1, 3],
   }
   let test_stats_dict = {
     'N1': [0.1, 0.05],
@@ -1586,7 +1686,9 @@ function test() {
     'N19': [0.1, 0.04],
     'N20': [0.11, 0.03],
     'N21': [0.2, 0.02],
-    'N22': [0.3, 0.01]
+    'N22': [0.3, 0.01],
+
+    'N99': [0.3, 0.01],
   }
   let test_degree_dict = {
     'N1': 1000,
@@ -1610,7 +1712,9 @@ function test() {
     'N19': 5,
     'N20': 2,
     'N21': 1,
-    'N22': 99
+    'N22': 99,
+
+    'N99': 5,
   }
   let test_path_mapper = {
     'R1': ['P1', 'P2', 'P3', 'P4'],
@@ -1906,10 +2010,241 @@ function test() {
         }
       })
     })
-    // motifSearch_PathMax()
-    // motifSearch_PathCov()
+
     // modifierReg()
+    describe('modifierReg()', function() {
+      it('should return 6 motifs for sample 0 and 4 motifs for sample 1', function() {
+        let test_threshold = 2.5;
+        let modreg_results = modifierReg(
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
+        assert(modreg_results[0].length === 6)
+        if (modreg_results[0][1].magnitude_change === 5
+            && modreg_results[0][1].magnitude_change === 5
+            && modreg_results[0][2].magnitude_change === 6.1
+            && modreg_results[0][3].magnitude_change === 6.9
+            && modreg_results[0][4].magnitude_change === 7
+            && modreg_results[0][5].magnitude_change === 6
+        ) {} else {
+          assert(false)
+        }
+        assert(modreg_results[1].length === 4)
+        if (modreg_results[1][1].magnitude_change === 2.97
+            && modreg_results[1][1].magnitude_change === 2.97
+            && modreg_results[1][2].magnitude_change === 3
+            && modreg_results[1][3].magnitude_change === 3
+        ) {} else {
+          assert(false)
+        }
+      })
+    })
+
     // modifierTransport()
+    describe('modifierTransport()', function() {
+      it('should return 1 motifs for sample 0 and 1 motifs for sample 1', function() {
+        let test_threshold = 2;
+        let transport_results = modifierTransport(
+          test_threshold,
+          test_reaction,
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices)
+        assert(transport_results[0].length === 1)
+        if (transport_results[0][0].magnitude_change === 2.3) {} else {
+          assert(false)
+        }
+        assert(transport_results[1].length === 1)
+        if (transport_results[1][0].magnitude_change === 2) {} else {
+          assert(false)
+        }
+      })
+    })
+
+    // make_neighbors_dictionary()
+    describe('make_neighbors_dictionary()', function() {
+      it('should return { R1: [], R2: [], R3: [ "R6" ], R4: [], R5: [], R6: [ "R3" ] }', function() {
+        let neighbors_dict = make_neighbors_dictionary(
+          test_data,
+          test_degree_dict)
+        if (neighbors_dict[0]['R3'][0] === 'R6') {} else {
+          assert(false)
+        }
+        if (neighbors_dict[0]['R6'][0] === 'R3') {} else {
+          assert(false)
+        }
+        if (neighbors_dict[1]['R3'][0] === 'R6') {} else {
+          assert(false)
+        }
+        if (neighbors_dict[1]['R6'][0] === 'R3') {} else {
+          assert(false)
+        }
+      })
+    })
+
+    // parseComponentsEnzymes()
+    describe('parseComponentsEnzymes()', function() {
+      it('should return [ [], [ [ 1, 0.3 ] ] ]', function() {
+        let components = parseComponentsEnzymes(
+          test_reaction['R6'],
+          test_data['nodes'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        assert(components[0].length === 0)
+        assert(components[1].length === 1)
+        if (components[1][0][0] === 1
+        && components[1][0][1] === 0.3) {} else {
+          assert(false)
+        }
+      })
+    })
+
+    // parseComponentsMetabolites()
+    describe('parseComponentsMetabolites()', function() {
+      it('should return [ [ [ 0.9, 0.2 ], [ 0.1, 0.1 ], [ 7, 0.11 ] ], [ [ 7, 0.2 ] ] ]', function() {
+        let components = parseComponentsMetabolites(
+          test_reaction['R6'],
+          test_data['nodes'],
+          test_expression_dict,
+          test_stats_dict,
+          test_degree_dict,
+          0)
+        assert(components[0].length === 3)
+        assert(components[1].length === 1)
+        if (components[0][0][0] === 0.9
+        && components[0][0][1] === 0.2
+        && components[0][2][1] === 0.11
+        && components[1][0][1] === 0.2) {} else {
+          assert(false)
+        }
+      })
+    })
+
+    // enzymeMotif()
+    describe('enzymeMotif()', function() {
+      it('should return ...', function() {
+        let test_threshold = 1;
+        let neighbors_dict = make_neighbors_dictionary(
+          test_data,
+          test_degree_dict)
+        let motifs = enzymeMotif(
+          test_threshold,
+          test_data['collapsed_reaction_dictionary'],
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices,
+          test_data['nodes'],
+          neighbors_dict[0]
+        )
+        assert(motifs[0].length === 2)
+        assert(motifs[1].length === 2)
+        if (motifs[0][0]['magnitude_change'] === 3
+        && motifs[0][1]['magnitude_change'] === 3
+        && motifs[1][0]['magnitude_change'] === 3
+        && motifs[1][1]['magnitude_change'] === 3) {} else {
+          assert(false)
+        }
+      })
+    })
+
+    describe('enzymeMotif()', function() {
+      it('should return ...', function() {
+        let test_threshold = 5;
+        let neighbors_dict = make_neighbors_dictionary(
+          test_data,
+          test_degree_dict)
+        let motifs = enzymeMotif(
+          test_threshold,
+          test_data['collapsed_reaction_dictionary'],
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices,
+          test_data['nodes'],
+          neighbors_dict[0]
+        )
+        assert(motifs[0].length === 0)
+        assert(motifs[1].length === 0)
+      })
+    })
+
+    // activityMotif()
+    describe('activityMotif()', function() {
+      it('should return 1', function() {
+        let test_threshold = 1;
+        let neighbors_dict = make_neighbors_dictionary(
+          test_data,
+          test_degree_dict)
+        let motifs = activityMotif(
+          test_threshold,
+          test_data['collapsed_reaction_dictionary'],
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices,
+          test_data['nodes'],
+          neighbors_dict[0]
+        )
+        assert(motifs[0].length === 2)
+        assert(motifs[1].length === 2)
+        if (motifs[0][0]["magnitude_change"] === 6.3
+        && motifs[0][1]["magnitude_change"] === 6.3) {} else {
+          assert(false)
+        }
+        if (motifs[1][0]["magnitude_change"] === 3
+        && motifs[1][1]["magnitude_change"] === 3) {} else {
+          assert(false)
+        }
+      })
+    })
+
+    describe('activityMotif()', function() {
+      it('should return 2', function() {
+        let test_threshold = 4;
+        let neighbors_dict = make_neighbors_dictionary(
+          test_data,
+          test_degree_dict)
+        let motifs = activityMotif(
+          test_threshold,
+          test_data['collapsed_reaction_dictionary'],
+          test_expression_dict,
+          test_stats_dict,
+          test_path_mapper,
+          test_degree_dict,
+          test_sample_indices,
+          test_data['nodes'],
+          neighbors_dict[0]
+        )
+        assert(motifs[0].length === 2)
+        assert(motifs[1].length === 0)
+        if (motifs[0][0]["magnitude_change"] === 6.3
+        && motifs[0][1]["magnitude_change"] === 6.3) {} else {
+          assert(false)
+        }
+      })
+    })
+
+
+
+
+
+
+
+
+
+
   })
 }
 module.exports = test
