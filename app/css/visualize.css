@@ -34,37 +34,6 @@ http://bl.ocks.org/mbostock/1153292
 https://bl.ocks.org/mbostock/1212215
 */
 
-.option_button {
-  -webkit-appearance: button;
-  -webkit-writing-mode: horizontal-tb !important;
-  text-rendering: auto;
-  color: -internal-light-dark-color(buttontext, rgb(170, 170, 170));
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: center;
-  align-items: flex-start;
-  cursor: default;
-  background-color: -internal-light-dark-color(rgb(239, 239, 239), rgb(74, 74, 74));
-  box-sizing: border-box;
-  margin: 0em;
-  padding: 2px 8px;
-  border-width: 1px;
-  border-radius: 3px;
-  border-style: outset;
-  border-color: -internal-light-dark-color(rgb(118, 118, 118), rgb(195, 195, 195));
-  border-image: initial;
-  font: 12px sans-serif;
-  margin-bottom: 2px;
-}
-
-.option_button:hover {
-  background-color: rgb(201, 199, 199);
-}
-
 path.hull {
   fill: none;
   fill-opacity: 0.2;
@@ -452,24 +421,4 @@ div {
 
 .topmargin-plus35 {
   margin-top: 35px;
-}
-
-div.tooltip {
-  position: absolute;
-  text-align: left;
-  padding: 5px;
-  font: 12px sans-serif;
-  background: white;
-  border: 1px solid black;
-  border-radius: 8px;
-  pointer-events: none;
-}
-
-div.tooltip-text {
-  position: absolute;
-  text-align: left;
-  padding: 5px;
-  font: 12px sans-serif;
-  background: transparent;
-  pointer-events: none;
 }

@@ -31,36 +31,59 @@ window.addEventListener("load", function(event) {
 
     "spacer1": "Database:",
 
-    "Database file name": "database_url",
-    "Curation database file name": "curation_url",
     "Output location": "output",
+
+    "small_gap0": "",
+
+    "Database file name": "database_url",
+    "Metaboverse version used": "database_version",
     "Date generated": "database_date",
+
 
     "spacer2": "Curation:",
 
-    "Organism": "organism",
-    "Organism Reactome ID": "organism_id",
-    "Date curated": "curation_date",
-    "Database version": "database_version",
+    "Organism name": "organism",
+    "Organism ID": "organism_id",
+    "Organism source": "database_source",
+    "Organism database": "curation_url",
+    "Organism database version": "curation_version",
+    "Organism database date generated": "curation_date",
 
-    "spacer3": "Experiment information:",
 
-    "Experiment": "experiment_name",
-    "Type": "experiment_type",
+    "spacer3": "Other curation sources:",
+
+    "Reaction neighbors database": "neighbors_url",
+    "Reaction neighbors database version": "neighbors_version",
+    "Reaction neighbors database date generated": "neighbors_date",
+
+    "small_gap2": "",
+
+    "Reaction network template": "template_url",
+    "Reaction network template version": "template_version",
+    "Reaction network template date generated": "template_date",
+
+
+    "spacer4": "Experiment metadata:",
+
+    "Experiment name": "experiment_name",
+    "Experiment type": "experiment_type",
     "Sample labels": "labels",
 
-    "spacer4": "User provided data information:",
+
+    "spacer5": "Input data:",
 
     "Transcriptomics file name": "transcriptomics",
     "Proteomics file name": "proteomics",
     "Metabolomics file name": "metabolomics",
 
-    "spacer5": "Other:",
+
+    "spacer6": "Other information:",
 
     "Reaction collapse used modifiers?": "collapseWithModifiers",
     "Gene expression broadcast to missing proteins?": "broadcastGeneExpression",
     "Metabolites broadcast to protein complexes?": "broadcastMetabolites",
-    "Blocklisted nodes": "blocklist"
+    "Blocklisted nodes": "blocklist",
+    "Reaction collapse threshold": "collapse_threshold"
   };
 
   let display = "";
@@ -68,10 +91,12 @@ window.addEventListener("load", function(event) {
     if (item.includes("spacer")) {
       display = display +
         "<h4>" + session_items[item] + "</h4>";
+    } else if (item.includes("small_gap")) {
+      display = display + "<br>";
     } else {
       let display_item = getArgument(session_items[item]);
       if (display_item === undefined) {
-        display_item = "Cannot find this information from the file. Sorry!";
+        display_item = "Unable to find this information.";
       } else if (typeof display_item === 'number') {
         display_item = display_item;
       } else if (typeof display_item === 'object') {

@@ -1,32 +1,47 @@
 {
-  "database_url": null,
-  "curation_url": null,
-  "template_url": null,
-  "neighbors_url": null,
   "output": null,
+
+  "database_url": null,
+  "database_version": "",
+  "database_date": "",
+
   "organism": null,
   "organism_id": null,
   "database_source": "reactome",
   "sbml_url": "",
+  "curation_url": null,
+  "curation_version": "",
+  "curation_date": "",
+
+  "neighbors_url": null,
+  "neighbors_version": "",
+  "neighbors_date": "",
+
+  "template_url": null,
+  "template_version": "",
+  "template_date": "",
+
+  "experiment_name": null,
+  "experiment_type": null,
+  "labels": "",
+
   "transcriptomics": null,
 	"proteomics": null,
 	"metabolomics": null,
+
+  "collapseWithModifiers": false,
+  "broadcastGeneExpression": true,
+  "broadcastMetabolites": true,
+
+  "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2, NAD+, NADH, NADPH, NAAD, ATP, ADP, Pi, PPi, Ca2+",
+  "collapse_threshold": 30,
+
   "additional_reactions": null,
-	"experiment_type": null,
-  "experiment_name": null,
   "max_value": 5,
   "max_stat": 1,
   "processed": false,
   "current_pathway": null,
   "provided_data": false,
   "forceNewCuration": false,
-  "collapseWithModifiers": false,
-  "broadcastGeneExpression": true,
-  "broadcastMetabolites": true,
-  "labels": "",
-  "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2, NAD+, NADH, NADPH, NAAD, ATP, ADP, Pi, PPi, Ca2+",
-  "database_date": "",
-  "curation_date": "",
-  "database_version": "",
   "launched": false
 }

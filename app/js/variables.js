@@ -21,6 +21,179 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var fs = require("fs");
 var $ = require("jquery");
+var d3 = require("d3");
+
+window.addEventListener("load", function(event) {
+
+  var data_div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  d3.select("button#data_info")
+    .on("mouseover", function(d) {
+      data_div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "185px")
+        .style("width", "250px");
+      data_div.html("<b><u>Example Data Format:</u></b><br><br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;log2(fc)&emsp;&emsp;stat<br>metabolite name 1&emsp;&emsp;2.43&emsp;&emsp;&emsp;0.003737<br>metabolite name 2&emsp;&emsp;1.72&emsp;&emsp;&emsp;0.009739<br>metabolite name 3&emsp;&emsp;0.49&emsp;&emsp;&emsp;0.080173<br>metabolite name 4&emsp;&emsp;-2.43&emsp;&ensp;&emsp;0.000173<br>...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;...<br><br>Table should be tab-delimited. This can be created by saving the table in Microsoft Excel using the option \"Save as type\": \"Text (Tab delimited)\"")
+    })
+    .on("mouseout", function(d) {
+      data_div.style("opacity", 0);
+      data_div.html("")
+    });
+
+  d3.select("button#transcript_info")
+    .on("mouseover", function(d) {
+      data_div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "115px")
+        .style("width", "250px");
+      data_div.html("This datatype will accept any tab-delimited dataset with mappings to gene identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Please see documentation for more information on correct formatting of this table.")
+    })
+    .on("mouseout", function(d) {
+      data_div.style("opacity", 0);
+      data_div.html("")
+    });
+
+  d3.select("button#protein_info")
+    .on("mouseover", function(d) {
+      data_div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "115px")
+        .style("width", "250px");
+      data_div.html("This datatype will accept any tab-delimited dataset with mappings to protein identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Please see documentation for more information on correct formatting of this table.")
+    })
+    .on("mouseout", function(d) {
+      data_div.style("opacity", 0);
+      data_div.html("")
+    });
+
+  d3.select("button#metabolite_info")
+    .on("mouseover", function(d) {
+      data_div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "115px")
+        .style("width", "250px");
+      data_div.html("This datatype will accept any tab-delimited dataset with mappings to metabolite identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Please see documentation for more information on correct formatting of this table.")
+    })
+    .on("mouseout", function(d) {
+      data_div.style("opacity", 0);
+      data_div.html("")
+    });
+
+  d3.select("button#experiment_info")
+    .on("mouseover", function(d) {
+      data_div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "60px")
+        .style("width", "250px");
+      data_div.html("Enter a name for your experiment. For best stability, we recommend using underscores (\"_\") instead of spaces in the experiment name.")
+    })
+    .on("mouseout", function(d) {
+      data_div.style("opacity", 0);
+      data_div.html("")
+    });
+
+  d3.select("button#experiment_type_info")
+    .on("mouseover", function(d) {
+      data_div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("height", "45px")
+        .style("width", "250px");
+      data_div.html("Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter.")
+    })
+    .on("mouseout", function(d) {
+      data_div.style("opacity", 0);
+      data_div.html("")
+    });
+
+    d3.select("button#broadcast_gene_info")
+      .on("mouseover", function(d) {
+        data_div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", "30px")
+          .style("width", "250px");
+        data_div.html("Check to broadcast gene expression values to proteins when protein values are not available.")
+      })
+      .on("mouseout", function(d) {
+        data_div.style("opacity", 0);
+        data_div.html("")
+      });
+
+    d3.select("button#broadcast_metabolite_info")
+      .on("mouseover", function(d) {
+        data_div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", "30px")
+          .style("width", "250px");
+        data_div.html("Check to broadcast metabolite values to proteins complexes.")
+      })
+      .on("mouseout", function(d) {
+        data_div.style("opacity", 0);
+        data_div.html("")
+      });
+
+    d3.select("button#modifier_collapse_info")
+      .on("mouseover", function(d) {
+        data_div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", "60px")
+          .style("width", "250px");
+        data_div.html("Check to include modifiers in reaction collapsing. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.")
+      })
+      .on("mouseout", function(d) {
+        data_div.style("opacity", 0);
+        data_div.html("")
+      });
+
+    d3.select("button#blocklist_info")
+      .on("mouseover", function(d) {
+        data_div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", "100px")
+          .style("width", "250px");
+        data_div.html("Enter the names for metabolites, etc., to ignore in the analysis and visualization. Names should be separated by a comma. If a spelling of the entity does not seem to be working, try searching for the correct formatting in the total entity list in the Visualization page or in the Reactome Knowledgebase.")
+      })
+      .on("mouseout", function(d) {
+        data_div.style("opacity", 0);
+        data_div.html("")
+      });
+
+    d3.select("button#collapse_threshold_info")
+      .on("mouseover", function(d) {
+        data_div
+          .style("opacity", 0.95)
+          .style("left", (d3.event.pageX + 20) + "px")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("height", "55px")
+          .style("width", "250px");
+        data_div.html("Change the percentage of matching entites between two reactions to be considered related enough to collapse into a single collapsed reaction.")
+      })
+      .on("mouseout", function(d) {
+        data_div.style("opacity", 0);
+        data_div.html("")
+      });
+})
 
 window.addEventListener("load", function(event) {
   event.preventDefault();
@@ -301,10 +474,6 @@ window.addEventListener("load", function(event) {
     }
   }
 
-
-
-
-
   document.getElementById("updateExperiment").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -394,6 +563,26 @@ window.addEventListener("load", function(event) {
       console.log(error);
       alert(
         "IDs are not valid."
+      );
+    }
+  }
+
+  $('#collapse_button').val(get_session_info("collapse_threshold"));
+
+  document.getElementById("collapse_button").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var collapseVal = document.getElementById("collapse_button").value;
+
+    try {
+      console.log("Collapse threshold: ", collapseVal);
+
+      update_session_info("collapse_threshold", collapseVal);
+    } catch (error) {
+      console.log(error);
+      alert(
+        "Collapse threshold is not valid."
       );
     }
   }

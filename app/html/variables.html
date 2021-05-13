@@ -41,7 +41,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <menuItem id="menuright"><span id="issues_link" class="highlight_menu">Contact Us</span></menuItem>
       <menuItem id="menuright"><span id="citation_link" class="highlight_menu">Cite</span></menuItem>
       <menuItem id="menuright"><span id="docs_link" class="highlight_menu">Documentation</span></menuItem>
-      <menuItem id="menuright"><span id="usage_link" class="highlight_menu">First Time</span></menuItem>
+      <menuItem id="menuright"><span id="usage_link" class="highlight_menu">Getting Started</span></menuItem>
       <menuItem id="menuright"><span id="overview_link" class="highlight_menu">About</span></menuItem>
       <menuItem id="menuleft"><a href="index.html">Metaboverse</a></menuItem>
       <menuItem id="menuleft"><a href="session.html">Session Data</a></menuItem>
@@ -73,22 +73,26 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <center>
     <font size="5">
-      <b><u>Data</u></b>
+      <b><u>Input Data</u></b>
     </font>
     <br>
     <br>
     <font size="2">
     <i>Input any of your omics data (optional)</i>
-    </font>
     <br>
+    <br>
+    See an example:
+    <button id="data_info" class="info_enhanced">
+      <i>i</i>
+    </button>
+    </font>
     <br>
     <br>
 
 
     <font size="3">
       Load transcriptomics data:
-      <button class="info"
-        title="This datatype will accept any tab-delimited dataset with mappings to gene identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+      <button id="transcript_info" class="info_enhanced"><i>i</i></button>
       <br>
       <br>
       <div id="transcriptomics-dropDatabase">
@@ -105,8 +109,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <br>
       Load proteomics data:
-      <button class="info"
-        title="This datatype will accept any tab-delimited dataset with mappings to protein identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+      <button id="protein_info" class="info_enhanced"><i>i</i></button>
       <br>
       <br>
       <div id="proteomics-dropDatabase">
@@ -123,8 +126,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <br>
       <br>
       Load metabolomics data:
-      <button class="info"
-        title="This datatype will accept any tab-delimited dataset with mappings to metabolite identifiers. Currently, there should only be an index column (no title) and a column named fold change with the calculated fold changes between experimental conditions. Future versions of Metaboverse will allow for input and processing of raw data and multiple conditions/time-points. Please see documentation for more information on correct formatting of this table."><i>i</i></button>
+      <button id="metabolite_info" class="info_enhanced"><i>i</i></button>
       <br>
       <br>
       <div id="metabolomics-dropDatabase">
@@ -168,21 +170,16 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <font size="3">
         <form>
           Experiment Name:
-          <button class="info" title="Enter a name for your experiment (no spaces preferred)">
-            <i>i</i>
-          </button>
+          <button id="experiment_info" class="info_enhanced"><i>i</i></button>
           <br>
           <br>
           <input type="text" class="experimentName" id="updateExperimentName">
           </input>
         </form>
         <br>
-        <br>
         <form>
           Experiment Type:
-          <button class="info" title="Select the experiment type you would like to analyze. Please see the documentation for more information on selecting this parameter.">
-            <i>i</i>
-          </button>
+          <button id="experiment_type_info" class="info_enhanced"><i>i</i></button>
           <br>
           <br>
           <select name="dropdown" id="updateExperiment">
@@ -192,7 +189,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           </select>
         </form>
         <br>
-        <br>
       </font>
       <div id="nameField"></div>
       <div id="updateExperimentLabels"></div>
@@ -200,36 +196,35 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
         <font size="3" id="broadcast-label"><i>Broadcast gene expression to proteins: </i></font>
       </label>
       <input type="checkbox" id="broadcast_gene_expression">
-      <button class="info" title="Check to broadcast gene expression values to proteins when protein values are not available.">
-        <i>i</i>
-      </button>
+      <button id="broadcast_gene_info" class="info_enhanced"><i>i</i></button>
       <br>
       <label for="broadcast_metabolite_expression">
         <font size="3" id="broadcast-label"><i>Broadcast metabolite values to protein complexes: </i></font>
       </label>
       <input type="checkbox" id="broadcast_metabolite_expression">
-      <button class="info" title="Check to broadcast metabolite values to proteins complexes.">
-        <i>i</i>
-      </button>
+      <button id="broadcast_metabolite_info" class="info_enhanced"><i>i</i></button>
       <br>
       <label for="use_modifiers_in_collapse">
         <font size="3" id="collapse-label"><i>Consider modifiers in reaction collapsing: </i></font>
       </label>
       <input type="checkbox" id="use_modifiers_in_collapse">
-      <button class="info" title="Check to include modifiers in reaction collapsing. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.">
-        <i>i</i>
-      </button>
+      <button id="modifier_collapse_info" class="info_enhanced"><i>i</i></button>
       <br>
       <br>
       <br>
       <form>
         Blocklist:
-        <button class='info'
-          title='Enter the names for metabolites, etc., to ignore in the analysis and visualization. Names should be separated by a comma. If a spelling of the entity does not seem to be working, try searching for the correct formatting in the total entity list in the Visualization page or in the Reactome Knowledgebase.'><i>i</i></button>
-        <br />
-        <br />
+        <button id="blocklist_info" class="info_enhanced"><i>i</i></button>
+        <br>
+        <br>
         <input type='text' class='blocklist' id='updateBlocklist'></input>
       </form>
+      <br>
+      Reaction collapse match threshold:
+      <input type="number" name="collapse_button" id="collapse_button" min="0" max="100" value="30" />&nbsp;%
+      <button id="collapse_threshold_info" class="info_enhanced"><i>i</i></button>
+      <br>
+      <br>
       <br>
       <br>
       <a href="build.html">

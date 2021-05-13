@@ -191,6 +191,7 @@ runBuild = function(_callback) {
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
         broadcast_metabolites: getArgument("broadcastMetabolites"),
+        collapse_threshold: parseFloat(getArgument("collapse_threshold")) / 100,
         progress_log: "\"" + progress_file + "\"",
         session_data: "\"" + session_file + "\""
       }
@@ -215,6 +216,7 @@ runBuild = function(_callback) {
         collapse_with_modifiers: getArgument("collapseWithModifiers"),
         broadcast_genes: getArgument("broadcastGeneExpression"),
         broadcast_metabolites: getArgument("broadcastMetabolites"),
+        collapse_threshold: parseFloat(getArgument("collapse_threshold")) / 100,
         progress_log: "\"" + progress_file + "\"",
         session_data: "\"" + session_file + "\""
       }
