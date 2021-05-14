@@ -235,12 +235,45 @@ function displayOptions() {
   database_url = get_session_info("database_url");
   try {
     var data = JSON.parse(fs.readFileSync(database_url).toString());
+    update_session_info("curation_url", data.metadata.organism_curation);
+    update_session_info("output", data.metadata.output);
+    update_session_info("output_file", data.metadata.output_file);
+    update_session_info("organism_id", data.metadata.organism_id);
+    update_session_info("transcriptomics", data.metadata.transcriptomics);
+    update_session_info("proteomics", data.metadata.proteomics);
+    update_session_info("metabolomics", data.metadata.metabolomics);
+    update_session_info("experiment_name", data.metadata.experiment_name);
+    update_session_info("experiment_type", data.metadata.experiment_type);
     update_session_info("max_value", data.metadata.max_value);
     update_session_info("max_stat", data.metadata.max_stat);
-    update_session_info("database_date", data.metadata.database_date);
-    update_session_info("curation_date", data.metadata.curation_date);
-    update_session_info("database_version", data.metadata.database_version);
+    update_session_info("processed", true);
+    update_session_info("collapseWithModifiers",
+      data.metadata.collapse_with_modifiers);
+    update_session_info("broadcastGeneExpression",
+      data.metadata.broadcast_genes);
+    update_session_info("broadcastMetabolites",
+      data.metadata.broadcast_metabolites);
+    update_session_info("labels", data.metadata.labels);
     update_session_info("blocklist", data.metadata.blocklist);
+    update_session_info("collapse_threshold", data.metadata.collapse_threshold);
+
+    update_session_info("curation_url", data.metadata.network);
+    update_session_info("curation_version", data.metadata.curation_version);
+    update_session_info("curation_date", data.metadata.curation_date);
+
+    update_session_info("database_version", data.metadata.database_version);
+
+    update_session_info("neighbors_url", data.metadata.neighbors_url);
+    update_session_info("neighbors_version", data.metadata.neighbors_version);
+    update_session_info("neighbors_date", data.metadata.neighbors_date);
+
+    update_session_info("template_url", data.metadata.template_url);
+    update_session_info("template_version", data.metadata.template_version);
+    update_session_info("template_date", data.metadata.template_date);
+
+    update_session_info("model_version", data.metadata.model_version);
+    update_session_info("model_date", data.metadata.models_date);
+
     if (
       (transcriptomics === true) |
       (proteomics === true) |

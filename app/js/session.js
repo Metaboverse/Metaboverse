@@ -35,19 +35,20 @@ window.addEventListener("load", function(event) {
 
     "small_gap0": "",
 
-    "Database file name": "database_url",
-    "Metaboverse version used": "database_version",
-    "Date generated": "database_date",
+    "Database file name": "output_file",
+    "Metaboverse version used": "model_version",
+    "Date generated": "model_date",
 
 
     "spacer2": "Curation:",
 
     "Organism name": "organism",
     "Organism ID": "organism_id",
-    "Organism source": "database_source",
-    "Organism database": "curation_url",
-    "Organism database version": "curation_version",
-    "Organism database date generated": "curation_date",
+    "Organism database source": "database_source",
+    "Organism database version": "database_version",
+    "Organism curation": "curation_url",
+    "Organism curation version": "curation_version",
+    "Organism curation date generated": "curation_date",
 
 
     "spacer3": "Other curation sources:",
