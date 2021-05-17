@@ -5,18 +5,20 @@ Updates
 =================================
 v0.7.0 (in progress)
 =================================
+| **Important Note**
+| Many of the changes introduced in :data:`v0.7.0` to session and intermediate file metadata will likely be incompatible with previous versions of Metaboverse.
+|
 | **Major**
-| - :data:`Enzyme`/:data:`Metabolite` motifs: (#81)
-| - Updates to :data:`ModReg` and :data:`TransReg` motifs:
-| - (in progress) Improved metabolite synonym matching
+| - :data:`Enzyme`/:data:`Metabolite` reaction patterns added: The :data:`Enzyme` reaction pattern evaluates for two neighboring reactions both with perturbed enzymes matching the given threshold. This will allow for better pattern identification, especially in RNA-seq/proteomics-only datasets. The :data:`Metabolite` reaction pattern looks for neighboring reactions both with perturbed metabolites matching the given threshold (see `issue #81 <https://github.com/Metaboverse/Metaboverse/issues/81>`_).
 |
 | **Minor**
-| - Removed pathway-specific pattern detection
-| - (in progress) Option added for users to define percentage of matching nodes between two reaction to allow for a collapse (#82)
-| - SVG export option (Full support for Inkscape, partial for Illustrator)
-| - (in progress) Improved session data
-| - (in progress) Migrated source files
-| - Loading icon in reaction pattern page
+| - Removed pathway-specific pattern detection: In our testing, these seemed to be minimally helpful.
+| - Option added for users to define percentage of matching nodes between two reaction to allow for a collapse (see `issue #82 <https://github.com/Metaboverse/Metaboverse/issues/82>`_).
+| - SVG export option (Full support for Inkscape, partial support for Illustrator)
+| - Improved and more explicit session data for all intermediate files
+| - Migrated source files to rutter.chpc.utah.edu/Metaboverse/source. This change should allow for faster downloads of pre-curated intermediate source files.
+| - Loading icon in reaction pattern page to let user know patterns are loading, especially in cases where many reaction patterns are discovered and the software may take some time to display them all.
+
 
 
 =================================

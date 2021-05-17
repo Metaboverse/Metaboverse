@@ -58,13 +58,15 @@ Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 |
 | Currently, these reaction pattern types are available:
 | 1. **Average**: A reaction whose absolute difference between the average measured values of reactants and the average measured values of products is greater than or equal to the threshold.
-| 2. **MaxMax**: A reaction whose absolute difference between the maximum measured value of reactants and the maximum measured value of products is greater than or equal to the threshold.
-| 3. **MaxMin**: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.
-| 4. **Sustained**: Find instances of sustained perturbation along a reaction where there are both an input and an output that are not the same molecule with changes above the selected threshold.
-| 5. **ModReg**: Find instances with one regulated modifier and one core component in the reaction.
-| 6. **TransReg**: Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.
-| 7. **PathMax**: A pathway whose absolute difference between the maximum value and the minimum value is greater than or equal to the threshold. Users can switch the type of values to be computed between the expression values and the statistical values (p-values).
-| 8. **PathCov**: Compare total coverage of reactions with at least one measured component in pathways.
+| 2. **Sustained**: Find instances of sustained perturbation along a reaction where there are both an input and an output that are not the same molecule with changes above the selected threshold.
+| 3. **ModReg**: Find instances with one regulated modifier and one core component in the reaction.
+| 4. **TransReg**: Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.
+| 5. **Enzyme**: Find instances of two neighboring reactions, both with at least one non-metabolite component that passes the specified threshold.
+| 6. **Metabolite**: Find instances of two neighboring reactions, both with at least one metabolite component that passes the specified threshold.
+| 7. **MaxMax**: A reaction whose absolute difference between the maximum measured value of reactants and the maximum measured value of products is greater than or equal to the threshold.
+| 8. **MaxMin**: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.
+
+
 |
 | Users can then select a given reaction pattern, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway. In the :data:`Reaction-Pathway Membership` box, a simplified glyph of the reaction is drawn, with inputs (substrates) on the left of the reaction node and outputs (products) on the right of the reaction node. Modifiers and input/output types are not shown in this simplified glyph.
 .. image:: images/pattern_page.gif

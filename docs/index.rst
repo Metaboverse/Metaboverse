@@ -1,7 +1,7 @@
 ##############
 Metaboverse
 ##############
-|build-status| |docs| |biorxiv| |downloads|
+|build-status| |docs| |downloads| |biorxiv| 
 
 .. image:: content/images/metaboverse_spiral.gif
    :width: 350

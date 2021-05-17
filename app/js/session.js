@@ -29,41 +29,6 @@ window.addEventListener("load", function(event) {
 
   let session_items = {
 
-    "spacer1": "Database:",
-
-    "Output location": "output",
-
-    "small_gap0": "",
-
-    "Database file name": "output_file",
-    "Metaboverse version used": "model_version",
-    "Date generated": "model_date",
-
-
-    "spacer2": "Curation:",
-
-    "Organism name": "organism",
-    "Organism ID": "organism_id",
-    "Organism database source": "database_source",
-    "Organism database version": "database_version",
-    "Organism curation": "curation_url",
-    "Organism curation version": "curation_version",
-    "Organism curation date generated": "curation_date",
-
-
-    "spacer3": "Other curation sources:",
-
-    "Reaction neighbors database": "neighbors_url",
-    "Reaction neighbors database version": "neighbors_version",
-    "Reaction neighbors database date generated": "neighbors_date",
-
-    "small_gap2": "",
-
-    "Reaction network template": "template_url",
-    "Reaction network template version": "template_version",
-    "Reaction network template date generated": "template_date",
-
-
     "spacer4": "Experiment metadata:",
 
     "Experiment name": "experiment_name",
@@ -76,6 +41,41 @@ window.addEventListener("load", function(event) {
     "Transcriptomics file name": "transcriptomics",
     "Proteomics file name": "proteomics",
     "Metabolomics file name": "metabolomics",
+
+
+    "spacer1": "Database:",
+
+    "Output location": "output",
+
+    "small_gap0": "",
+
+    "Database file name": "output_file",
+    "Metaboverse-cli version used": "model_version",
+    "Date generated": "model_date",
+
+
+    "spacer2": "Curation:",
+
+    "Organism name": "organism",
+    "Organism ID": "organism_id",
+    "Organism database source": "database_source",
+    "Organism database version": "database_version",
+    "Organism curation": "curation_url",
+    "Metaboverse-cli organism curation version": "curation_version",
+    "Organism curation date generated": "curation_date",
+
+
+    "spacer3": "Other curation sources:",
+
+    "Reaction neighbors database": "neighbors_url",
+    "Metaboverse-cli reaction neighbors database version": "neighbors_version",
+    "Reaction neighbors database date generated": "neighbors_date",
+
+    "small_gap2": "",
+
+    "Reaction network template": "template_url",
+    "Metaboverse-cli reaction network template version": "template_version",
+    "Reaction network template date generated": "template_date",
 
 
     "spacer6": "Other information:",
@@ -107,7 +107,7 @@ window.addEventListener("load", function(event) {
       } else if (display_item === false) {
         display_item = "False";
       } else if (display_item === "" || display_item === "None") {
-        display_item = "N/A";
+        display_item = "Not provided";
       } else {
         display_item = display_item[0].toUpperCase() + display_item.substring(1);
       }
