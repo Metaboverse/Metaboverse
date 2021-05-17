@@ -106,6 +106,8 @@ window.addEventListener("load", function(event) {
         display_item = "True";
       } else if (display_item === false) {
         display_item = "False";
+      } else if (item.includes("Experiment type") && display_item === "None") {
+        display_item = "Standard/Two-condition";
       } else if (display_item === "" || display_item === "None") {
         display_item = "Not provided";
       } else {

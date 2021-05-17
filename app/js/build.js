@@ -272,7 +272,7 @@ function displayOptions() {
     update_session_info("template_date", data.metadata.template_date);
 
     update_session_info("model_version", data.metadata.model_version);
-    update_session_info("model_date", data.metadata.models_date);
+    update_session_info("model_date", data.metadata.model_date);
 
     if (
       (transcriptomics === true) |
