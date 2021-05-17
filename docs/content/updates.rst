@@ -14,9 +14,9 @@ v0.7.0
 | **Minor**
 | - Removed pathway-specific pattern detection: In our testing, these seemed to be minimally helpful.
 | - Option added for users to define percentage of matching nodes between two reaction to allow for a collapse (see `issue #82 <https://github.com/Metaboverse/Metaboverse/issues/82>`_).
-| - SVG export option (Full support for Inkscape, partial support for Illustrator)
-| - Improved and more explicit session data for all intermediate files
-| - Migrated source files to rutter.chpc.utah.edu/Metaboverse/source. This change should allow for faster downloads of pre-curated intermediate source files.
+| - SVG export option (Full support for Inkscape, partial support for Illustrator) (see `issue #83 <https://github.com/Metaboverse/Metaboverse/issues/83>`_).
+| - Improved and more explicit session data for all intermediate files (see `issue #78 <https://github.com/Metaboverse/Metaboverse/issues/78>`_).
+| - Migrated source files to rutter.chpc.utah.edu/Metaboverse/source. This change should allow for faster downloads of pre-curated intermediate source files (see `issue #80 <https://github.com/Metaboverse/Metaboverse/issues/80>`_).
 | - Loading icon in reaction pattern page to let user know patterns are loading, especially in cases where many reaction patterns are discovered and the software may take some time to display them all.
 
 
