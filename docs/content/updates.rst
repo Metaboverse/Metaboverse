@@ -3,7 +3,7 @@ Updates
 ###############
 
 =================================
-v0.7.0 (in progress)
+v0.7.0
 =================================
 | **Important Note**
 | Many of the changes introduced in :data:`v0.7.0` to session and intermediate file metadata will likely be incompatible with previous versions of Metaboverse.
@@ -22,8 +22,12 @@ v0.7.0 (in progress)
 
 
 =================================
-v0.6.0
+Previous versions
 =================================
+
+---------------------------------
+v0.6.0
+---------------------------------
 | **Major**
 | - New database integration: First supported release with the ability to overlay data on BiGG and BioModels network models and enable reaction pattern searching across a wider array of organisms. Note: Network models from these sources can be less uniform as Reactome sources, so users should exercise some caution when using these capabilities and perform some sanity checks (see `issue #73 <https://github.com/Metaboverse/Metaboverse/issues/73>`_).
 | - kNN visualization improved to allow for more stable NN building without error (see `commit 2395cd6 <https://github.com/Metaboverse/Metaboverse/commit/2395cd6fe44167def52ae991b8db5f9559a9eba9>`_).
@@ -33,11 +37,6 @@ v0.6.0
 | **Minor**
 | - Progress bar during network build now update with more incremental steps for longer processes (see `issue #77 <https://github.com/Metaboverse/Metaboverse/issues/77>`_).
 | - New variables for more unified backend processing. Metaboverse v0.6.0 and later will not be compatible with files curated using Metaboverse v0.5.0b or earlier.
-
-
-=================================
-Previous versions
-=================================
 
 ---------------------------------
 v0.5.0-beta
