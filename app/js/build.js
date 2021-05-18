@@ -31,6 +31,8 @@ var userDataPath = app.getPath("userData");
 var session_file = userDataPath + path.sep + "session_data.json";
 var progress_file = userDataPath + path.sep + "progress_log.json"
 
+var timer = 5000;
+
 var scriptFilename;
 console.log("Operating System information:")
 console.log(navigator.appVersion)
@@ -67,7 +69,9 @@ fs.watch(progress_file, function(event, filename) {
   elem.innerHTML = sum_values + "%";
 
   if (sum_values >= 100) {
-    displayOptions();
+    setTimeout(function(){
+      displayOptions();
+    }, timer);
   }
 });
 
@@ -149,7 +153,9 @@ runBuild = function(_callback) {
     var elem = document.getElementById("progressBar");
     elem.style.width = "100%";
     elem.innerHTML = "100%";
-    displayOptions();
+    setTimeout(function(){
+      displayOptions();
+    }, timer);
   } else {
     curated = getArgument("curation_url")
     let labels = getArgument("labels");
@@ -231,6 +237,7 @@ runBuild = function(_callback) {
 };
 
 function displayOptions() {
+
   update_session_info("current_pathway", null);
   database_url = get_session_info("database_url");
   try {
