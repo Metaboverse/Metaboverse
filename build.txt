@@ -47,8 +47,8 @@ npm install
 
 zeromq install error:
 ---------------------
-brew install zeromq
-brew install pkg-config
+npm install --save zeromq
+
 
 electron-packager install error:
 ---------------------
