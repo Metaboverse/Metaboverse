@@ -2,6 +2,7 @@ Instructions for updating metabolite mapper:
 --------------------------------------------
 Downloading metabolite mapper
 
+
 Instructions for building OS-specific python distribution:
 ----------------------------------------------------------
 0) `conda config --add channels bioconda`
@@ -22,10 +23,12 @@ Instructions for building OS-specific python distribution:
   mv dist/metaboverse-linux .
   rm -r build dist
 
+
 To run demo app:
 ----------------
 1) Go to app directory
 2) Run 'npm start'
+
 
 Instructions for building app for distribution:
 -----------------------------------------------
@@ -34,10 +37,12 @@ Instructions for building app for distribution:
 - Run `bash build.sh`
 - Update package icon if necessary
 
+
 SHASUM256 methods by operating system:
 --------------------------------------
 - Windows: `certUtil -hashfile metaboverse-cli-win.exe SHA256`
 - Mac/Linux: `shasum -a 256 metaboverse-cli-[os]`
+
 
 If having issues setting up test env in Linux:
 ----------------------------------------------
@@ -45,14 +50,11 @@ npm config rm proxy
 npm config rm https-proxy
 npm install
 
-zeromq install error:
----------------------
-npm install --save zeromq
-
 
 electron-packager install error:
 ---------------------
 npm install electron-packager -g
+
 
 mac
 -------
