@@ -73,12 +73,14 @@ function hubsChecked() {
 }
 
 function cleanHubs(
-    excl_hubs,
     components,
     degree_dict,
+    blocklist,
     hub_threshold) {
   let filtered_hubs = components.filter(function(x) {
-    if (degree_dict[x] < hub_threshold) {
+    if (degree_dict[x] >= hub_threshold) {
+    } else if (blocklist.includes(x)) {
+    } else {
       return x
     }
   })
@@ -90,6 +92,7 @@ function parseComponents(
     expression_dict,
     stats_dict,
     degree_dict,
+    blocklist,
     sample_index) {
 
   let reactants = reaction.reactants;
@@ -116,14 +119,14 @@ function parseComponents(
   let clean_products = [];
   if (excl_hubs === true) {
     clean_reactants = cleanHubs(
-      excl_hubs,
       temp_reactants,
       degree_dict,
+      blocklist,
       hub_threshold)
     clean_products = cleanHubs(
-      excl_hubs,
       temp_products,
       degree_dict,
+      blocklist,
       hub_threshold)
   } else {
     clean_reactants = temp_reactants;
@@ -167,6 +170,7 @@ function parseComponentsMod(
     expression_dict,
     stats_dict,
     degree_dict,
+    blocklist,
     sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
@@ -182,15 +186,15 @@ function parseComponentsMod(
   let clean_modifiers = [];
   if (excl_hubs === true) {
     clean_core = cleanHubs(
-      excl_hubs,
       temp_core,
       degree_dict,
+      blocklist,
       hub_threshold)
     temp_mods = temp_mods.map(x => x[0]);
     clean_modifiers = cleanHubs(
-      excl_hubs,
       temp_mods,
       degree_dict,
+      blocklist,
       hub_threshold)
   } else {
     clean_core = temp_core;
@@ -230,6 +234,7 @@ function parseComponentsEnzymes(
     expression_dict,
     stats_dict,
     degree_dict,
+    blocklist,
     sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
@@ -245,10 +250,10 @@ function parseComponentsEnzymes(
   let clean_modifiers = [];
   if (excl_hubs === true) {
     clean_core = cleanHubs(
-      excl_hubs, temp_core, degree_dict, hub_threshold)
+      temp_core, degree_dict, blocklist, hub_threshold)
     temp_mods = temp_mods.map(x => x[0]);
     clean_modifiers = cleanHubs(
-      excl_hubs, temp_mods, degree_dict, hub_threshold)
+      temp_mods, degree_dict, blocklist, hub_threshold)
   } else {
     clean_core = temp_core;
     clean_modifiers = temp_mods.map(x => x[0]);
@@ -292,6 +297,7 @@ function parseComponentsMetabolites(
     expression_dict,
     stats_dict,
     degree_dict,
+    blocklist,
     sample_index) {
 
   let core = reaction.reactants.concat(reaction.products);
@@ -307,10 +313,10 @@ function parseComponentsMetabolites(
   let clean_modifiers = [];
   if (excl_hubs === true) {
     clean_core = cleanHubs(
-      excl_hubs, temp_core, degree_dict, hub_threshold)
+      temp_core, degree_dict, blocklist, hub_threshold)
     temp_mods = temp_mods.map(x => x[0]);
     clean_modifiers = cleanHubs(
-      excl_hubs, temp_mods, degree_dict, hub_threshold)
+      temp_mods, degree_dict, blocklist, hub_threshold)
   } else {
     clean_core = temp_core;
     clean_modifiers = temp_mods.map(x => x[0]);
@@ -351,6 +357,7 @@ function parseComponentsTrans(
     expression_dict,
     stats_dict,
     degree_dict,
+    blocklist,
     sample_index) {
 
   let reactants = reaction.reactants;
@@ -370,20 +377,20 @@ function parseComponentsTrans(
   let clean_modifiers = [];
   if (excl_hubs === true) {
     clean_reactants = cleanHubs(
-      excl_hubs,
       temp_reactants,
       degree_dict,
+      blocklist,
       hub_threshold)
     clean_products = cleanHubs(
-      excl_hubs,
       temp_products,
       degree_dict,
+      blocklist,
       hub_threshold)
     parse_modifiers = temp_modifiers.map(x => x[0]);
     clean_modifiers = cleanHubs(
-      excl_hubs,
       parse_modifiers,
       degree_dict,
+      blocklist,
       hub_threshold)
   } else {
     clean_reactants = temp_reactants;
@@ -452,6 +459,7 @@ function motifSearch_Avg(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
 
   let discovered_motifs = [];
@@ -466,6 +474,7 @@ function motifSearch_Avg(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -509,6 +518,7 @@ function motifSearch_MaxMax(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -522,6 +532,7 @@ function motifSearch_MaxMax(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -566,6 +577,7 @@ function motifSearch_MinMin(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -579,6 +591,7 @@ function motifSearch_MinMin(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -625,6 +638,7 @@ function motifSearch_MaxMin(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -638,6 +652,7 @@ function motifSearch_MaxMin(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -684,6 +699,7 @@ function motifSearch_MinMax(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -697,6 +713,7 @@ function motifSearch_MinMax(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -743,6 +760,7 @@ function motifSearch_Sustained(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -756,6 +774,7 @@ function motifSearch_Sustained(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -880,6 +899,7 @@ function motifSearch_PathMax(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -898,6 +918,7 @@ function motifSearch_PathMax(
           expression_dict,
           stats_dict,
           degree_dict,
+          blocklist,
           _idx)
         let updated_source = comps[0];
         let updated_target = comps[1];
@@ -935,6 +956,7 @@ function motifSearch_PathCov(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   let discovered_motifs = [];
 
@@ -955,6 +977,7 @@ function motifSearch_PathCov(
           expression_dict,
           stats_dict,
           degree_dict,
+          blocklist,
           _idx)
         let updated_source = comps[0];
         let updated_target = comps[1];
@@ -997,6 +1020,7 @@ function modifierReg(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   // If the net change between at least one modifier and one core component of a
   // reaction is greater than or equal to the threshold, return the reaction
@@ -1013,6 +1037,7 @@ function modifierReg(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_core = comps[0];
       let updated_modifiers = comps[1];
@@ -1083,6 +1108,7 @@ function modifierTransport(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices) {
   // Highlight if modifier changed where inputs and outputs are same (minus
   //    compartment) --> regulation of transport reaction
@@ -1100,6 +1126,7 @@ function modifierTransport(
         expression_dict,
         stats_dict,
         degree_dict,
+        blocklist,
         _idx)
       let updated_source = comps[0];
       let updated_target = comps[1];
@@ -1233,6 +1260,7 @@ function enzymeMotif(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices,
     nodes,
     neighbors_dictionary) {
@@ -1262,6 +1290,7 @@ function enzymeMotif(
           expression_dict,
           stats_dict,
           degree_dict,
+          blocklist,
           _idx)
         comps = comps[0].concat(comps[1]);
 
@@ -1276,6 +1305,7 @@ function enzymeMotif(
               expression_dict,
               stats_dict,
               degree_dict,
+              blocklist,
               _idx)
             neighbor_comps = neighbor_comps[0].concat(neighbor_comps[1]);
 
@@ -1331,6 +1361,7 @@ function activityMotif(
     stats_dict,
     path_mapper,
     degree_dict,
+    blocklist,
     sample_indices,
     nodes,
     neighbors_dictionary) {
@@ -1363,6 +1394,7 @@ function activityMotif(
           expression_dict,
           stats_dict,
           degree_dict,
+          blocklist,
           _idx)
         comps = comps[0].concat(comps[1]);
 
@@ -1377,6 +1409,7 @@ function activityMotif(
               expression_dict,
               stats_dict,
               degree_dict,
+              blocklist,
               _idx)
             neighbor_comps = neighbor_comps[0].concat(neighbor_comps[1]);
 
@@ -1751,9 +1784,9 @@ function test() {
       it('should filter out nodes with a degree higher than the threshold', function() {
         let test_excl_hubs = true
         let test_filter_hubs = cleanHubs(
-          test_excl_hubs,
           test_components,
           test_degree_dict,
+          [],
           50)
         assert(test_filter_hubs.length === 1)
         assert(test_filter_hubs[0] === 'N2')
@@ -1769,6 +1802,7 @@ function test() {
           test_expression_dict,
           test_stats_dict,
           test_degree_dict,
+          [],
           0)
         test_updated_source = test_items[0];
         test_updated_target = test_items[1];
@@ -1784,6 +1818,7 @@ function test() {
           test_expression_dict,
           test_stats_dict,
           test_degree_dict,
+          [],
           0)
         test_updated_source = test_items[0];
         test_updated_target = test_items[1];
@@ -1804,6 +1839,7 @@ function test() {
           test_expression_dict,
           test_stats_dict,
           test_degree_dict,
+          [],
           0)
         test_updated_source = test_items[0];
         test_updated_target = test_items[1];
@@ -1826,6 +1862,7 @@ function test() {
           test_expression_dict,
           test_stats_dict,
           test_degree_dict,
+          [],
           0)
         test_updated_source = test_items[0];
         test_updated_target = test_items[1];
@@ -1866,6 +1903,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(maxmax_results[0].length === 2)
         if (maxmax_results[0][0].magnitude_change === 4 &&
@@ -1892,6 +1930,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(avg_results[0].length === 2)
         if (avg_results[0][0].magnitude_change === 4 &&
@@ -1918,6 +1957,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(minmin_results[0].length === 2)
         if (minmin_results[0][0].magnitude_change === 4 &&
@@ -1943,6 +1983,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(maxmin_results[0].length === 2)
         if (maxmin_results[0][0].magnitude_change === 4 &&
@@ -1969,6 +2010,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(minmax_results[0].length === 2)
         if (minmax_results[0][0].magnitude_change === 4 &&
@@ -1995,6 +2037,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(sustained_results[0].length === 1)
         if (sustained_results[0][0].magnitude_change === 4) {} else {
@@ -2022,6 +2065,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(modreg_results[0].length === 6)
         if (modreg_results[0][1].magnitude_change === 5
@@ -2055,6 +2099,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices)
         assert(transport_results[0].length === 1)
         if (transport_results[0][0].magnitude_change === 2.3) {} else {
@@ -2097,6 +2142,7 @@ function test() {
           test_expression_dict,
           test_stats_dict,
           test_degree_dict,
+          [],
           0)
         assert(components[0].length === 0)
         assert(components[1].length === 1)
@@ -2116,6 +2162,7 @@ function test() {
           test_expression_dict,
           test_stats_dict,
           test_degree_dict,
+          [],
           0)
         assert(components[0].length === 3)
         assert(components[1].length === 1)
@@ -2142,6 +2189,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices,
           test_data['nodes'],
           neighbors_dict[0]
@@ -2170,6 +2218,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices,
           test_data['nodes'],
           neighbors_dict[0]
@@ -2193,6 +2242,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices,
           test_data['nodes'],
           neighbors_dict[0]
@@ -2223,6 +2273,7 @@ function test() {
           test_stats_dict,
           test_path_mapper,
           test_degree_dict,
+          [],
           test_sample_indices,
           test_data['nodes'],
           neighbors_dict[0]

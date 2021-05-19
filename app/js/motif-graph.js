@@ -91,6 +91,7 @@ class MetaGraph {
     if (this.data.metadata.blocklist === null) {
       this.data.metadata.blocklist = "";
     }
+    this.blocklist = this.data.species_blocklist;
 
     // Generate expression and stats dictionaries
     let expression_dict = {};
@@ -263,6 +264,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -288,6 +290,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -313,6 +316,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -338,6 +342,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -369,6 +374,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories,
           this.nodes,
           eval_neighbors_dictionary)
@@ -402,6 +408,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories,
           this.nodes,
           eval_neighbors_dictionary)
@@ -429,6 +436,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -454,6 +462,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -479,6 +488,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
@@ -504,6 +514,7 @@ class MetaGraph {
           this.stats_dict,
           this.path_mapper,
           this.degree_dict,
+          this.blocklist,
           this.categories)
         this.watchSlider();
         this.watchType();
