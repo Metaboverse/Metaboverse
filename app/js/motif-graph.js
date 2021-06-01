@@ -20,6 +20,15 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+var d3 = require("d3");
+var fs = require("fs");
+var savePNG = require("save-svg-as-png");
+try {
+  var { dialog } = require("electron").remote;
+} catch(err) {
+  console.log("Unable to load dialog, a module required for export of PNGs and SVGs.")
+}
+
 var _width = (0.45 * window.innerWidth) + 50;
 var _height = 675;
 
@@ -182,14 +191,81 @@ class MetaGraph {
   initLines() {
     if (timecourse === true) {
       $("#frame-line-plots").append(
-        "<div class='frame frame-motif-3'>" +
-        "<div class='line-sub-frame'>" +
-        "<h6><b>Selected Reaction Motif</b></h6>" +
-        "<div id='line-plot-container'></div>" +
-        "</div>" +
-        "<i><font size='2' class='line-description'>View how <b>measured</b> components of a given reaction change across the time-course or across conditions.</font><br /><font size='2' class='line-description'>Dashed lines indicate an entity with only one representative measurement (i.e., a single timepoint was provided for that datapoint).</font></i>" +
-        "</div><br /><br /><br /"
+        `
+          <div class='frame frame-motif-3'>
+            <div class='line-sub-frame'>
+              <h6><b>Selected Reaction Motif</b></h6>
+              <div id='line-plot-container'></div>
+            </div>
+            <i>
+              <font size='2' class='line-description'>
+                View how <b>measured</b> components of a given reaction change across the time-course or across conditions.
+                <br>
+                Dashed lines indicate an entity with only one representative measurement (i.e., a single timepoint was provided for that datapoint).
+              </font>
+            </i>
+            <div title="Click to save the current graph view">
+              <button id="saveLineGraph" class="option_button">Export PNG</button>
+            </div>
+            <div title="Click to save the current graph view as an SVG. Edges may only show up in Inkscape, not Adobe Illustrator.">
+              <button id="saveLineSVG" class="option_button">Export SVG</button>
+            </div>
+          </div>
+          <br>
+          <br>
+          <br>
+        `  
       );
+      d3.select("#saveLineGraph").on("click", function() {
+        savePNG.saveSvgAsPng(
+          d3.select("#line-graph")._groups[0][0],
+          "plot.png", {
+            encoderOptions: 1,
+            scale: 10,
+            encoderType: "image/png"
+          }
+        );
+      });
+      d3.select("#saveLineSVG").on("click", function() {
+
+        var xmlns = "http://www.w3.org/2000/xmlns/";
+        var xlinkns = "http://www.w3.org/1999/xlink";
+        var svgns = "http://www.w3.org/2000/svg";
+ 
+        var _this_svg = d3.select("#line-graph")._groups[0][0].cloneNode(true);
+        var _Serializer = new XMLSerializer();
+        var svg_string = _Serializer.serializeToString(_this_svg);
+  
+        var filename = dialog
+          .showSaveDialog({
+            title: "plot",
+            defaultPath: ".." + path.sep + ".." + path.sep,
+            properties: ["createDirectory"],
+            filters: [{
+              name: "svg",
+              extensions: ["svg"]
+            }]
+          })
+          .then(result => {
+            let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
+            if (hasExtension === false) {
+              result.filePath = `${ result.filePath }.${ "svg" }`;
+            }
+            console.log(result)
+
+
+            filename = result.filePath;
+            if (filename === undefined) {
+              alert("File selection unsuccessful");
+              return;
+            }
+            fs.writeFileSync(filename, svg_string, 'utf-8');
+            console.log(filename);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });    
     }
   }
 
@@ -1753,40 +1829,34 @@ class MetaGraph {
       .domain([0, n])
       .range([0, width - 170]);
 
+    function extract_values(nodes, items, all_values, modifier=false) {
+      // Extract measurements values from reaction
+      for (let i in items) {
+        if (modifier === false) {
+          for (let x in nodes[items[i]].values) {
+            let _x = nodes[items[i]].values[x];
+            if (_x !== null) {
+              all_values.push(_x);
+            }
+          }
+        } else {
+          for (let x in nodes[items[i][0]].values) {
+            let _x = nodes[items[i][0]].values[x];
+            if (_x !== null) {
+              all_values.push(_x);
+            }
+          }
+        }
+      }
+      return all_values;
+    } 
 
     let all_values = [];
-    for (let r in d.reactants) {
-      for (let x in this.nodes[d.reactants[r]].values) {
-        let _x = this.nodes[d.reactants[r]].values[x];
-        if (_x !== null) {
-          all_values.push(_x);
-        }
-      }
-    }
-    for (let p in d.products) {
-      for (let x in this.nodes[d.products[p]].values) {
-        let _x = this.nodes[d.products[p]].values[x];
-        if (_x !== null) {
-          all_values.push(_x);
-        }
-      }
-    }
-    for (let m in d.modifiers) {
-      for (let x in this.nodes[d.modifiers[m][0]].values) {
-        let _x = this.nodes[d.modifiers[m][0]].values[x];
-        if (_x !== null) {
-          all_values.push(_x);
-        }
-      }
-    }
-    for (let a in d.additional_components) {
-      for (let x in this.nodes[d.additional_components[a]].values) {
-        let _x = this.nodes[d.additional_components[a]].values[x];
-        if (_x !== null) {
-          all_values.push(_x);
-        }
-      }
-    }
+    all_values = extract_values(this.nodes, d.reactants, all_values);
+    all_values = extract_values(this.nodes, d.products, all_values);
+    all_values = extract_values(this.nodes, d.modifiers, all_values, true);
+    all_values = extract_values(this.nodes, d.additional_components, all_values);
+    
     let lower_bound = Math.min(...all_values) - 1;
     let upper_bound = Math.max(...all_values) + 1;
 
@@ -1815,16 +1885,18 @@ class MetaGraph {
       .append("g")
       .attr("class", "y axis")
       .call(d3.axisLeft(yScale));
+
     for (let a in d.additional_components) {
       let _i = this.nodes[d.additional_components[a]];
-      let _n = _i.name.replace(/,/g, '_');
+      let _n = _i.name.replace(/,/g, '_').replace(/:/g, '_');
       let _n_type = _i.name;
       let _t = _i.type;
       let _st = _i.sub_type;
       let _v = _i.values;
       let _s = _i.stats;
+      let _inf = _i.inferred;
       let _v_ = [_v, _s];
-      if (_v[0] !== null && _t !== "complex_component") {
+      if (_v[0] !== null && _t !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {
@@ -1957,14 +2029,15 @@ class MetaGraph {
     for (let m in d.modifiers) {
       let _m = d.modifiers[m][1];
       let _i = this.nodes[d.modifiers[m][0]];
-      let _n = _i.name.replace(/,/g, '_');
+      let _n = _i.name.replace(/,/g, '_').replace(/:/g, '_');
       let _n_type = _i.name;
       let _t = _i.type;
       let _st = _i.sub_type;
       let _v = _i.values;
       let _s = _i.stats;
+      let _inf = _i.inferred;
       let _v_ = [_v, _s];
-      if (_v[0] !== null && _st !== "complex_component") {
+      if (_v[0] !== null && _st !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {
@@ -2124,13 +2197,14 @@ class MetaGraph {
     }
     for (let r in d.reactants) {
       let _i = this.nodes[d.reactants[r]];
-      let _n = _i.name.replace(/,/g, '_');
+      let _n = _i.name.replace(/,/g, '_').replace(/:/g, '_');
       let _n_type = _i.name + " (React.)";
       let _t = _i.type;
       let _st = _i.sub_type;
       let _v = _i.values;
       let _s = _i.stats;
-      if (_v[0] !== null && _t !== "complex_component") {
+      let _inf = _i.inferred;
+      if (_v[0] !== null && _t !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {
@@ -2239,14 +2313,15 @@ class MetaGraph {
     }
     for (let p in d.products) {
       let _i = this.nodes[d.products[p]];
-      let _n = _i.name.replace(/,/g, '_');
+      let _n = _i.name.replace(/,/g, '_').replace(/:/g, '_');
       let _n_type = _i.name + " (Prod.)";
       let _t = _i.type;
       let _st = _i.sub_type;
       let _v = _i.values;
       let _s = _i.stats;
+      let _inf = _i.inferred;
       let _v_ = [_v, _s];
-      if (_v[0] !== null && _t !== "complex_component") {
+      if (_v[0] !== null && _t !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {

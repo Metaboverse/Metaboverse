@@ -533,6 +533,7 @@ img {
 .option_button {
   -webkit-appearance: button;
   -webkit-writing-mode: horizontal-tb !important;
+  writing-mode: horizontal-tb !important;
   text-rendering: auto;
   color: -internal-light-dark-color(buttontext, rgb(170, 170, 170));
   letter-spacing: normal;
@@ -559,6 +560,17 @@ img {
 
 .option_button:hover {
   background-color: rgb(201, 199, 199);
+}
+
+#saveLineGraph {
+  float: right;
+  margin-top: -20px;
+  margin-left: 223px;
+}
+
+#saveLineSVG {
+  float: right;
+  margin-top: -20px;
 }
 
 div.tooltip {

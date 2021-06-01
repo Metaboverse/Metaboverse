@@ -25,8 +25,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; script-src 'self'; connect-src 'self';">
 <title>Metaboverse</title>
 
-
-
 <html>
 <link rel="stylesheet" href="../css/bootstrap_v4.0.0.css">
 <link rel="stylesheet" href="../css/fontawesome_v5.0.7.css">
@@ -45,7 +43,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 <script src="../js/timecourse.js"></script>
 
 <head>
-
   <!-- menu -->
   <menu>
     <font size=3.25px>
@@ -59,7 +56,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       <menuItem id="menurefresh-motif" class="menu-motif"><a>&#x21bb;</a></menuItem>
     </font>
   </menu>
-
 </head>
 
 <body>
@@ -128,15 +124,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <label for="use_collapsed">
                   <font size="2"><i>Show&nbspcollapsed reactions</i></font>
                 </label>
-                <br />
+                <br>
                 <label for="use_modifiers">
                   <font size="2"><i>Use modifiers</i></font>
                 </label>
-                <br />
+                <br>
                 <label for="exclude_hubs">
                   <font size="2"><i>Exclude hubs</i></font>
                 </label>
-                <br />
+                <br>
               </div>
             </div>
             <div class="col-md-8">
@@ -147,28 +143,28 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <p id="threshold-padding">
                   <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
                 <p id="threshold-padding">
                   <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
                 <p id="threshold-padding">
                   <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
                 <p id="threshold-padding">
                   <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
 
                 <p id="threshold-padding">
                   <input type="number" id="enzyme_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
                 <p id="threshold-padding">
                   <input type="number" id="activity_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
 
                 <p id="threshold-padding">
                   <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
@@ -176,7 +172,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <p id="threshold-padding">
                   <input type="number" id="minmin_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br />
+                <br>
                 <p id="threshold-padding">
                   <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
@@ -209,7 +205,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
               </select>
             </div>
           </div>
-          <br />
+          <br>
           <div class="content">
             <div class="dropdown-container" title="Selections only apply to non-pathway-level reaction patterns (e.g., not PathMax or PathCov). Excluding a time-point or condition will only return reaction patterns that are exclusive to the given time-point or condition.">
               <select name="exclude_type" class="custom-select" id="exclude_type">
@@ -286,10 +282,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
     </div>
   </div>
-  <br />
-  <br />
+  <br>
+  <br>
   <div id="slider" class="slider-motif" align="center"></div>
-  <br />
+  <br>
   <div id="frame-shape-key">
     <div class='frame frame-motif-4'>
       <font size="2">
@@ -297,71 +293,71 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
           <font size='3'>
             <b><u>Relationships</u></b>
           </font>
-          <br />
+          <br>
           <div class='arrow'>
             <div class='line grey-arrow'></div>
             <div class='point grey-arrow'></div>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;Core interaction
-          <br />
+          <br>
           <div class='arrow'>
             <div class='line green-arrow'></div>
             <div class='point green-arrow'></div>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;Catalyst
-          <br />
+          <br>
           <div class='arrow'>
             <div class='line red-arrow'></div>
             <div class='point red-arrow'></div>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;Inhibitor
-          <br />
+          <br>
           <div class='arrow'>
             <div class='line2 blue-arrow'></div>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;Metabolite Component
-          <br />
+          <br>
           <div class='arrow'>
             <div class='line2 orange-arrow'></div>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;Protein Component
-          <br />
+          <br>
           <div class='arrow'>
             <div class='line2 purple-arrow'></div>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;Gene Component
-          <br />
-          <br />
+          <br>
+          <br>
 
           <font size='3'>
             <b><u>Entities</u></b>
           </font>
-          <br />
+          <br>
           <span class='fas fa-star fa-lg grey-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction
-          <br />
+          <br>
           <span class='fas fa-star fa-lg purple-shader add-buffer'></span>&nbsp;&nbsp;&nbsp;&nbsp;Reaction Pattern
-          <br />
+          <br>
           &nbsp;<span class='dot white-dot'></span>
           &nbsp;&nbsp;&nbsp;&nbsp;Metabolite
-          <br />
+          <br>
           &nbsp;<span class='square white-dot'></span>
           &nbsp;&nbsp;&nbsp;&nbsp;Complex
-          <br />
+          <br>
           &nbsp;<span class='diamond white-dot'></span>
           &nbsp;&nbsp;&nbsp;&nbsp;Protein
-          <br />
+          <br>
           <div class="add-buffer">
             &nbsp;<span class='black-triangle'><span class='white-triangle'></span></span>
             &nbsp;&nbsp;&nbsp;Gene
           </div>
-          <br />
+          <br>
           <span class="add-buffer">Bold = statistic < 0.05</span>
         </div>
       </font>
     </div>
   </div>
-  <br />
-  <br />
+  <br>
+  <br>
   <div id="frame-line-plots"></div>
 </body>
 

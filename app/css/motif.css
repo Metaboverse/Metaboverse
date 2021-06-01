@@ -422,11 +422,11 @@ circle:hover text {
 }
 
 .line-description {
-  padding-left: 15px;
-  padding-right: 5px;
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 14px;
+  line-height: 1.2em;
 }
-
-. .icon {}
 
 #span {
   padding-top: 15px;
