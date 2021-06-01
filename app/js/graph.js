@@ -25,11 +25,9 @@ var fs = require("fs");
 var savePNG = require("save-svg-as-png");
 try {
   var { dialog } = require("electron").remote;
-}
-catch(err) {
+} catch(err) {
   console.log("Unable to load dialog, a module required for export of PNGs and SVGs.")
 }
-
 
 const hullPadding = 60;
 const max_nodes = 1500;
@@ -681,7 +679,7 @@ function make_graph(
 
   node_keep = [];
   for (n in new_nodes) {
-    if (data.metadata.blocklist.split(",").includes(new_nodes[n].name)) {
+    if (data.blocklist.includes(new_nodes[n].name)) {
       id_blocklist.push(new_nodes[n].id);
     } else if (id_blocklist.includes(new_nodes[n].id)) {
 
@@ -938,15 +936,7 @@ function make_graph(
     }
   }
 
-
-
-  // if page == connections.html
-  // categories are isolated reaction based on current threshold
-
-
-
   // else categories are compartments
-
   function getCategories(nodes) {
 
     var categories = new Set();
@@ -1175,7 +1165,7 @@ function make_graph(
     //_this_svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
 
     var _Serializer = new XMLSerializer();
-    svg_string = _Serializer.serializeToString(_this_svg);
+    var svg_string = _Serializer.serializeToString(_this_svg);
 
     // Fix formattings
     svg_string = svg_string.replace(/dx="/g, 'x="');
@@ -1255,9 +1245,9 @@ function make_graph(
       /class="link product" style="fill: none;"/g,
       'class="link product" style="stroke-width: 1.5px;fill: none;stroke: #666;"');
 
-    filename = dialog
+    var filename = dialog
       .showSaveDialog({
-        title: "graph",
+        title: "plot",
         defaultPath: ".." + path.sep + ".." + path.sep,
         properties: ["createDirectory"],
         filters: [{
@@ -1276,7 +1266,7 @@ function make_graph(
           return;
         }
         fs.writeFileSync(filename, svg_string, 'utf-8');
-        console.log(filename);;
+        console.log(filename);
       })
       .catch(err => {
         console.log(err);

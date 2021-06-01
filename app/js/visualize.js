@@ -69,8 +69,6 @@ for (l in data.links) {
 }
 data.links = update_links;
 
-data.blocklist = data.blocklist.split(",")
-
 let current_pathway = get_session_info("current_pathway");
 if ((current_pathway !== null) & (current_pathway !== "null")) {
   change();

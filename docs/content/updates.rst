@@ -3,6 +3,14 @@ Updates
 ###############
 
 =================================
+In Progress
+=================================
+| - Blocklist (https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a)
+| - Sort by best p-value (https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a)
+| - e * gmean(p-array) (https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8)
+| - mean -> median (https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8)
+
+=================================
 v0.7.0
 =================================
 | **Important Note**

@@ -44,6 +44,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_MaxMax = motifSearch_MaxMax(
@@ -53,6 +54,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_MinMin = motifSearch_MinMin(
@@ -62,6 +64,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_MaxMin = motifSearch_MaxMin(
@@ -71,6 +74,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_MinMax = motifSearch_MinMax(
@@ -80,6 +84,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_Sustained = motifSearch_Sustained(
@@ -89,6 +94,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_ModReg = modifierReg(
@@ -98,6 +104,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let motifs_ModTrans = modifierTransport(
@@ -107,6 +114,7 @@ function gatherMotifs(data, categories) {
     stats_dict,
     data.motif_reaction_dictionary,
     data.degree_dictionary,
+    data.blocklist,
     categories)
 
   let all_motifs = [];
