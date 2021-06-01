@@ -6,7 +6,6 @@
 - Metaboverse building still tries to prematurely read `.mvrs` output file before it has been fully loaded. Need to address sync/async issues.
 
 #### Features
-- Export buttons for timecourse line plots (#89)
 - scRNA-seq implmentation (#90) -- likely just need a walkthrough demonstrating how to use this effectively
 - Interactive data prep and name mapping check (#74, #86)
     - see https://datatables.net/examples/data_sources/js_array.html 
