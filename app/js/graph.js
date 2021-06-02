@@ -1057,18 +1057,24 @@ function make_graph(
       return d.id
     })
     .html(function(d) {
+      let this_name;
+      if (d.user_label !== undefined) {
+        this_name = d.user_label;
+      } else {
+        this_name = d.name;
+      }
       if (type_dict[d.name] === "reaction" || type_dict[d.name] === "collapsed") {
         // Label other nodes with expression value in parentheses
         if (d.compartment === "") {
           return (
             "<tspan dx='16' y='.31em' class='bold-text'>" +
-            d.name +
+            this_name +
             "</tspan>"
           );
         } else {
           return (
             "<tspan dx='16' y='.31em' class='bold-text'>" +
-            d.name +
+            this_name +
             "</tspan>" +
             "<tspan x='16' y='1.7em'>Compartment: " +
             d.compartment_display +
@@ -1078,7 +1084,7 @@ function make_graph(
       } else if (type_dict[d.name] === "collapsed") {
         return (
           "<tspan dx='16' y='.31em' class='bold-text'>" +
-          d.name +
+          this_name +
           "</tspan>"
         );
       } else {
@@ -1086,7 +1092,7 @@ function make_graph(
           d.stats[sample] === null) {
           return (
             "<tspan dx='16' y='0em' class='bold-text'>" +
-            d.name +
+            this_name +
             "</tspan>"
           );
         } else {
@@ -1098,7 +1104,7 @@ function make_graph(
           }
           return (
             "<tspan dx='16' y='-.5em' class='bold-text'>" +
-            d.name +
+            this_name +
             "</tspan>" +
             "<tspan x='16' y='.7em'>Value: " +
             parseFloat(d.values[sample]).toFixed(2) +
@@ -1292,18 +1298,24 @@ function make_graph(
     if (toggle_e === false) {
       toggle_e = true;
       text.html(function(d) {
+        let this_name;
+        if (d.user_label !== undefined) {
+          this_name = d.user_label;
+        } else {
+          this_name = d.name;
+        }
         if (type_dict[d.name] === "reaction") {
           // If reaction node, do not display expression value
           if (d.compartment === "") {
             return (
               "<tspan dx='16' y='.31em' class='bold-text'>" +
-              d.name +
+              this_name +
               "</tspan>"
             );
           } else {
             return (
               "<tspan dx='16' y='.31em' class='bold-text'>" +
-              d.name +
+              this_name +
               "</tspan>" +
               "<tspan x='16' y='1.7em'>Compartment: " +
               d.compartment_display +
@@ -1316,7 +1328,7 @@ function make_graph(
             d.stats[sample] === null) {
             return (
               "<tspan dx='16' y='0em' class='bold-text'>" +
-              d.name +
+              this_name +
               "</tspan>"
             );
           } else {
@@ -1328,7 +1340,7 @@ function make_graph(
             }
             return (
               "<tspan dx='16' y='-.5em' class='bold-text'>" +
-              d.name +
+              this_name +
               "</tspan>" +
               "<tspan x='16' y='.7em'>Value: " +
               parseFloat(d.values[sample]).toFixed(2) +
@@ -1343,9 +1355,15 @@ function make_graph(
     } else {
       toggle_e = false;
       text.html(function(d) {
+        let this_name;
+        if (d.user_label !== undefined) {
+          this_name = d.user_label;
+        } else {
+          this_name = d.name;
+        }
         return (
           "<tspan dx='16' y='.31em' class='bold-text'>" +
-          d.name +
+          this_name +
           "</tspan>"
         );
       });

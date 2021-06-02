@@ -3,12 +3,15 @@ Updates
 ###############
 
 =================================
-In Progress
+v0.7.1 (In Progress)
 =================================
-| - Blocklist (https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a)
+| - More flexible blocklist (https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a)
 | - Sort by best p-value (https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a)
 | - e * gmean(p-array) (https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8)
+| - Set max aggregate p-value to 1 (https://github.com/Metaboverse/metaboverse-cli/commit/ce4ccad650f3e1bf51635e3415ca5759ab513f78)
 | - mean -> median (https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8)
+| - Allow exporting line plots for timecourse and multi-condition datasets (https://github.com/Metaboverse/Metaboverse/issues/89)
+| - Fix Session Data page to format variables, file paths better (https://github.com/Metaboverse/Metaboverse/commit/07962e2a5d70a47a8acd341860237c1fcc16cafa) 
 
 =================================
 v0.7.0
