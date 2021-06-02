@@ -12,6 +12,7 @@ v0.7.1 (In Progress)
 | - mean -> median (https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8)
 | - Allow exporting line plots for timecourse and multi-condition datasets (https://github.com/Metaboverse/Metaboverse/issues/89)
 | - Fix Session Data page to format variables, file paths better (https://github.com/Metaboverse/Metaboverse/commit/07962e2a5d70a47a8acd341860237c1fcc16cafa) 
+| - Use user-provided names in labeling (https://github.com/Metaboverse/Metaboverse/issues/87)
 
 =================================
 v0.7.0

@@ -1370,10 +1370,10 @@ function make_graph(
     }
   });
 
-  toggle_a = false;
+  toggle_a = true;
   toggle_r = false;
   text.style("--node_display", function(d) {
-    return "none";
+    return display_analytes_dict[d.name];
   });
 
   d3.select("#toggleAnalytes").on("click", function() {
