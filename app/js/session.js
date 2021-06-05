@@ -113,10 +113,7 @@ window.addEventListener("load", function(event) {
       } else {
         display_item = display_item[0].toUpperCase() + display_item.substring(1);
       }
-      console.log(display_item)
       display_item = display_item.toString().replace(/\\\\ /g, ' ').replace(/\\\\/g, '\\');
-      console.log(display_item)
-      console.log('---')
       display = display +
         "&#8226;&nbsp;&nbsp;&nbsp;&nbsp;" +
         item + ":&nbsp;" +
