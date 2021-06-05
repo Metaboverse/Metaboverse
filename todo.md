@@ -13,6 +13,7 @@
     - see https://datatables.net/examples/data_sources/js_array.html 
     - Cross-check labels with MetaboAnalyst API and Metaboverse naming dictionaries
     - Show which ones likely won't map (a way to modify output `.mvrs` directly?)
+- Add motif threshold selection level button to `visualize.js` and `perturbation.js`
 
 
 

@@ -135,6 +135,12 @@ Nearest Neighborhood Searches
 |
 | Users can also target an entity for exploration directly by selecting :data:`All entities` in the :data:`Explore` page from the :data:`Select a super-pathway...` drop-down menu.
 |
+-----------------------------------------------
+Analyzing complexes
+-----------------------------------------------
+|
+|
+
 -----------------------------------
 Analyzing Previous Models
 -----------------------------------

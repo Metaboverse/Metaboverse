@@ -429,3 +429,14 @@ label {
 #span {
   padding-top: 15px;
 }
+
+.motif-example {
+  width: 200px;
+  position: relative;
+  margin-top: -30px;
+  margin-left: -40px;
+}
+
+.bump-up {
+  margin-top: -50px;
+}

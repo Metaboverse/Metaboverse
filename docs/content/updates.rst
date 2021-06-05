@@ -16,7 +16,15 @@ v0.7.1 (In Progress)
 | - Toggle analyte labels on by default (https://github.com/Metaboverse/Metaboverse/commit/1f79661240c196cdffd0114f91dcae51ed4e4ee1)
 | - Allow flexibility for input data where commas are used in place of decimals (https://github.com/Metaboverse/Metaboverse/issues/92#issuecomment-854090294)
 | - Remove duplicate rows from input data (interactive input will warn about these) (https://github.com/Metaboverse/metaboverse-cli/commit/a2fc6642168adb3fc7bcc4e10e4b21aff4e272e3)
-| - 
+| - Fix `Sustained` reaction pattern to not identify is input and output value being compared are identical (https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774)
+| - Make blocklisting more thorough by searching all nodes for matching names of named blocklist (https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774)
+| - Move some shared utilities to the `motif-utils.js` file (https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774)
+| - Add button and capabilities to switch between inferred complex values or to compare each complex component individually within the reaction pattern (https://github.com/Metaboverse/Metaboverse/commit/31ece06c7476cc8d568bdd67f46dbceae2193d65; https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25)
+| - Find largest change possible for modifier regulation patterns (https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25)
+| - Fix issue with `parseComponents()` function where usage of modifiers in pattern determination was pushing all modifiers (catalysts and inhibitors) to reactants list (https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25)
+| - For upregulated sustained reactions, get max of inputs and outputs (previously was getting min) (https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25)
+| - Fixed global motif searching for pathway and perturbation visualization to search non-collapsed reaction dictionary too. (https://github.com/Metaboverse/Metaboverse/commit/54a2e44d4913e1d4f903271bdae8af3617f0f33c)
+| - Added reaction pattern tooltips on button to show a graphical example of each ()
 
 =================================
 v0.7.0
