@@ -438,7 +438,7 @@ function nearest_neighbors(data, entity_id) {
     selector,
     _width,
     _height,
-    global_motifs)
+    collapsed_global_motifs)
 }
 
 function parse_kNN_pathway(data, entity_list, kNN) {
@@ -663,7 +663,7 @@ function make_graph(
   selector,
   _width,
   _height,
-  global_motifs) {
+  these_motifs) {
 
   console.log(new_nodes)
 
@@ -895,10 +895,10 @@ function make_graph(
   var page_path = window.location.pathname;
   var page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
   if (page_name === "motif.html") {
-    if (global_motifs !== undefined) {
+    if (these_motifs !== undefined) {
       let motif_ids = [];
-      for (key in global_motifs) {
-        motif_ids.push(global_motifs[key].id)
+      for (key in these_motifs) {
+        motif_ids.push(these_motifs[key].id)
       }
       if (motif_ids.length > 0) {
         graph_nodes.forEach(node => {
@@ -917,11 +917,18 @@ function make_graph(
       }
     }
   } else {
-    if (global_motifs[sample] !== undefined) {
-      if (global_motifs[sample].length > 0) {
+    if (these_motifs[sample] !== undefined) {
+      if (these_motifs[sample].length > 0) {
+
+        console.log(these_motifs)
         graph_nodes.forEach(node => {
           let rxn_id = node.id;
-          if (global_motifs[sample].includes(rxn_id)) {
+
+          if (rxn_id === "reaction_10659414") {
+            console.log(these_motifs[sample].includes(rxn_id))
+          }
+
+          if (these_motifs[sample].includes(rxn_id)) {
             d3.selectAll("path#" + rxn_id)
               .style("stroke", "purple")
               .style("stroke-width", 3)
@@ -1459,7 +1466,7 @@ function make_graph(
       selector,
       _width,
       _height,
-      global_motifs)
+      collapsed_global_motifs)
   });
 
   d3.select("#collapseNodes").on("click", function() {
@@ -1477,6 +1484,9 @@ function make_graph(
         new_nodes = collapsed_nodes;
         new_links = collapsed_links;
 
+        console.log("1")
+        console.log(collapsed_global_motifs)
+
         make_graph(
           data,
           new_nodes,
@@ -1489,13 +1499,16 @@ function make_graph(
           selector,
           _width,
           _height,
-          global_motifs)
+          collapsed_global_motifs)
         collapse_reactions = true;
       } else {
         collapsed_nodes = new_nodes;
         collapsed_links = new_links;
 
         var selection = document.getElementById("pathwayMenu").value;
+
+        console.log("2")
+        console.log(global_motifs)
 
         for (x in data.pathway_dictionary) {
           if (data.pathway_dictionary[x]['name'] === selection) {
@@ -1771,7 +1784,7 @@ function change() {
       selector,
       _width,
       _height,
-      global_motifs);
+      collapsed_global_motifs);
   } else {
     // Get kNN of entity selected
     collapse_reactions = true;

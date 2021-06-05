@@ -43,7 +43,11 @@ try {
   alert('Failed to open: \n' + database_url)
 }
 var superPathwayDict = make_superPathway_dictionary(data);
-var global_motifs = gatherMotifs(data, data.categories);
+
+var motif_outputs = gatherMotifs(data, data.categories);
+var collapsed_global_motifs = motif_outputs[0];
+var global_motifs = motif_outputs[1];
+
 let names = data.labels.split(',');
 timecourse = checkCategories(data.categories, names); //, data.names);
 
