@@ -13,6 +13,10 @@ v0.7.1 (In Progress)
 | - Allow exporting line plots for timecourse and multi-condition datasets (https://github.com/Metaboverse/Metaboverse/issues/89)
 | - Fix Session Data page to format variables, file paths better (https://github.com/Metaboverse/Metaboverse/commit/07962e2a5d70a47a8acd341860237c1fcc16cafa) 
 | - Use user-provided names in labeling (https://github.com/Metaboverse/Metaboverse/issues/87)
+| - Toggle analyte labels on by default (https://github.com/Metaboverse/Metaboverse/commit/1f79661240c196cdffd0114f91dcae51ed4e4ee1)
+| - Allow flexibility for input data where commas are used in place of decimals (https://github.com/Metaboverse/Metaboverse/issues/92#issuecomment-854090294)
+| - Remove duplicate rows from input data (interactive input will warn about these) (https://github.com/Metaboverse/metaboverse-cli/commit/a2fc6642168adb3fc7bcc4e10e4b21aff4e272e3)
+| - 
 
 =================================
 v0.7.0

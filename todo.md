@@ -1,6 +1,7 @@
 # Currently planned feature implementations/fixes
 
 
+
 ## Metaboverse
 
 #### Bugs
@@ -12,13 +13,12 @@
     - see https://datatables.net/examples/data_sources/js_array.html 
     - Cross-check labels with MetaboAnalyst API and Metaboverse naming dictionaries
     - Show which ones likely won't map (a way to modify output `.mvrs` directly?)
-- Option for complex inference or not 
+
 
 
 ## metaboverse-cli
 #### Bugs
-- Build flexibility for input tables with commas instead of decimals
+
 
 #### Features
 - Flux metabolomics integration (#21)
-- Give user option to choose inferred complex values and stats or vanilla
