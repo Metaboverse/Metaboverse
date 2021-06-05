@@ -26,54 +26,30 @@ function gatherMotifs(data, categories) {
   var excl_hubs = true;
   var hub_threshold = 50;
 
-  var update_nodes = {};
-  let n;
-  for (n in data.nodes) {
-    update_nodes[data.nodes[n].id] = data.nodes[n];
-  }
-  data.nodes = update_nodes;
+  var update_output = update_nodes_links(
+    data.nodes,
+    data.links
+  );
+  data.nodes = update_output[0];
+  data.links = update_output[1];
 
-  var update_links = {};
-  let l;
-  for (l in data.links) {
-    let link_id = data.links[l].source + "," + data.links[l].target;
-    update_links[link_id] = data.links[l];
-  }
-  data.links = update_links;
+  var dict_output = create_dictionaries(data.nodes);
+  var expression_dict = dict_output[0];
+  var stats_dict = dict_output[1];
+  var inferred_dict = dict_output[2];
 
-  let expression_dict = {};
-  let stats_dict = {};
-  let inferred_dict = {};
-  for (let x in data.nodes) {
-    let id = data.nodes[x]['id'];
-    let expression = data.nodes[x]['values'];
-    let stats = data.nodes[x]['stats'];
-    expression_dict[id] = expression;
-    stats_dict[id] = stats;
-    inferred_dict[id] = data.nodes[x]['inferred']
-  }
+  var link_neighbors = create_link_neighbors(
+    data.nodes,
+    data.links
+  );
 
-  let link_neighbors = {};
-  for (let l in data.links) {
-    let _source = data.links[l].source;
-    let _target = data.links[l].target;
-    
-    if (data.nodes[_source].type === "reaction" 
-    || data.nodes[_target].type === "reaction"
-    || data.nodes[_source].type === "collapsed"
-    || data.nodes[_target].type === "collapsed") {
-    } else {
-      if (!(_source in link_neighbors)) {
-        link_neighbors[_source] = [];
-      }
-      link_neighbors[_source].push(_target);
+  data.blocklist = data.species_blocklist;
+  data.blocklist = complete_blocklist(
+    data.blocklist,
+    data.metadata.blocklist,
+    data.nodes
+  )
 
-      if (!(_target in link_neighbors)) {
-        link_neighbors[_target] = [];
-      }
-      link_neighbors[_target].push(_source);
-    }
-  }
 
   let threshold = 1;
 

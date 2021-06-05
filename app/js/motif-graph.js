@@ -63,24 +63,38 @@ class MetaGraph {
   constructor(graphdata) {
 
     // Get the data
-    var update_nodes = {};
-    let n;
-    for (n in graphdata.nodes) {
-      update_nodes[graphdata.nodes[n].id] = graphdata.nodes[n];
-    }
-    graphdata.nodes = update_nodes;
-
-    var update_links = {};
-    let l;
-    for (l in graphdata.links) {
-      let link_id = graphdata.links[l].source + "," + graphdata.links[l].target;
-      update_links[link_id] = graphdata.links[l];
-    }
-    graphdata.links = update_links;
+    var update_output = update_nodes_links(
+      graphdata.nodes,
+      graphdata.links
+    );
+    graphdata.nodes = update_output[0];
+    graphdata.links = update_output[1];
 
     this.data = graphdata;
     this.nodes = graphdata.nodes;
     this.links = graphdata.links;
+
+    // Generate expression and stats dictionaries
+    var dict_output = create_dictionaries(this.nodes);
+    this.expression_dict = dict_output[0];
+    this.stats_dict = dict_output[1];
+    this.inferred_dict = dict_output[2];
+
+    this.link_neighbors = create_link_neighbors(
+      this.nodes,
+      this.links
+    );
+
+    if (this.data.metadata.blocklist === null) {
+      this.data.metadata.blocklist = "";
+    }
+    this.blocklist = this.data.species_blocklist;
+    this.blocklist = complete_blocklist(
+      this.blocklist,
+      this.data.metadata.blocklist,
+      this.nodes
+    )
+
     this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
     this.mod_collapsed_pathways = graphdata.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
@@ -97,49 +111,6 @@ class MetaGraph {
     );
     this.neighbors_dictionary = neighbors_output[0];
     this.collapsed_neighbors_dictionary = neighbors_output[1];
-
-    if (this.data.metadata.blocklist === null) {
-      this.data.metadata.blocklist = "";
-    }
-    this.blocklist = this.data.species_blocklist;
-
-    // Generate expression and stats dictionaries
-    let expression_dict = {};
-    let stats_dict = {};
-    let inferred_dict = {};
-    for (let x in this.nodes) {
-      let id = this.nodes[x]['id'];
-      let expression = this.nodes[x]['values'];
-      let stats = this.nodes[x]['stats'];
-      expression_dict[id] = expression;
-      stats_dict[id] = stats;
-      inferred_dict[id] = this.nodes[x]['inferred']
-    }
-    this.expression_dict = expression_dict;
-    this.stats_dict = stats_dict;
-    this.inferred_dict = inferred_dict;
-
-    this.link_neighbors = {};
-    for (let l in this.links) {
-      let _source = this.links[l].source;
-      let _target = this.links[l].target;
-      
-      if (this.nodes[_source].type === "reaction" 
-      || this.nodes[_target].type === "reaction"
-      || this.nodes[_source].type === "collapsed"
-      || this.nodes[_target].type === "collapsed") {
-      } else {
-        if (!(_source in this.link_neighbors)) {
-          this.link_neighbors[_source] = [];
-        }
-        this.link_neighbors[_source].push(_target);
-  
-        if (!(_target in this.link_neighbors)) {
-          this.link_neighbors[_target] = [];
-        }
-        this.link_neighbors[_target].push(_source);
-      }
-    }
 
     if (this.labels === null) {
       this.names = ['0']
@@ -701,6 +672,7 @@ class MetaGraph {
       .attr("width", stamp_width)
       .attr("height", stamp_height)
       .attr("fill", d => {
+        console.log(d)
         if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
           return "green";
         } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {

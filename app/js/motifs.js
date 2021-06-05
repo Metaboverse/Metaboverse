@@ -1012,7 +1012,11 @@ function motifSearch_Sustained(
           let target_index = target_values.indexOf(target_up);
           p_source_up = source_stats[source_index];
           p_target_up = target_stats[target_index];
-          magnitude_change_up = Math.max([Math.abs(source_up), Math.abs(target_up)]);
+          if (source_up === target_up) {
+            magnitude_change_up = undefined;
+          } else {
+            magnitude_change_up = Math.max(Math.abs(source_up), Math.abs(target_up));
+          }
         }
 
         // Sustained down-regulation
@@ -1038,45 +1042,51 @@ function motifSearch_Sustained(
           let target_index = target_values.indexOf(target_down);
           p_source_down = source_stats[source_index];
           p_target_down = target_stats[target_index];
-          magnitude_change_down = Math.max([Math.abs(source_down), Math.abs(target_down)]);
+
+          if (source_down === target_down) {
+            magnitude_change_down = undefined;
+          } else {
+            magnitude_change_down = Math.max(Math.abs(source_down), Math.abs(target_down));
+          }
         }
-
+      
         if (((down_in.length > 0) && (down_out.length > 0)) ||
-          ((up_in.length > 0) && (up_out.length > 0))) {
-
-          let magnitude_change;
-          let p_vals;
+        ((up_in.length > 0) && (up_out.length > 0))) {
           if (magnitude_change_up && magnitude_change_down) {
             if (magnitude_change_up >= magnitude_change_down) {
-              magnitude_change = magnitude_change_up;
-              p_vals = {
+              let reaction_copy = $.extend(true, {}, reaction);
+              reaction_copy.p_values = {
                 "source": p_source_up,
                 "target": p_target_up
-              }
+              };
+              reaction_copy.magnitude_change = magnitude_change_up;
+              sample_motifs.add(reaction_copy);
             } else {
-              magnitude_change = magnitude_change_down;
-              p_vals = {
+              let reaction_copy = $.extend(true, {}, reaction);
+              reaction_copy.p_values = {
                 "source": p_source_down,
                 "target": p_target_down
-              }
+              };
+              reaction_copy.magnitude_change = magnitude_change_down;
+              sample_motifs.add(reaction_copy);
             }
-          } else if (magnitude_change_up != undefined) {
-            magnitude_change = magnitude_change_up;
-            p_vals = {
+          } else if (magnitude_change_up !== undefined) {
+            let reaction_copy = $.extend(true, {}, reaction);
+            reaction_copy.p_values = {
               "source": p_source_up,
               "target": p_target_up
-            }
-          } else if (magnitude_change_down != undefined) {
-            magnitude_change = magnitude_change_down;
-            p_vals = {
+            };
+            reaction_copy.magnitude_change = magnitude_change_up;
+            sample_motifs.add(reaction_copy);
+          } else if (magnitude_change_down !== undefined) {
+            let reaction_copy = $.extend(true, {}, reaction);
+            reaction_copy.p_values = {
               "source": p_source_down,
               "target": p_target_down
-            }
-          }
-          let reaction_copy = $.extend(true, {}, reaction);
-          reaction_copy.p_values = p_vals;
-          reaction_copy.magnitude_change = magnitude_change;
-          sample_motifs.add(reaction_copy);
+            };
+            reaction_copy.magnitude_change = magnitude_change_down;
+            sample_motifs.add(reaction_copy);
+          } 
         }
       }
     }
@@ -1293,8 +1303,10 @@ function get_big_diff(
     base_comp,
     neighbor_comp,
     threshold) {
+  
   let diff_max = 0;
   let diff_pair = [];
+
   for (let i in base_comp) {
     for (let j in neighbor_comp) {
       if (Math.abs(base_comp[i][0] - neighbor_comp[j][0]) > diff_max) {
@@ -1308,9 +1320,7 @@ function get_big_diff(
   } else {
     return [0, 0];
   }
-
 }
-
 
 function enzymeMotif(
     threshold,
@@ -2130,21 +2140,15 @@ function test() {
           test_degree_dict,
           [],
           test_sample_indices)
-        console.log("----------------")
-        console.log(sustained_results)
-        console.log(sustained_results[0].length)
-        console.log(sustained_results[1].length)
-        console.log("----------------")
         assert(sustained_results[0].length === 1)
-        if (sustained_results[0][0].magnitude_change === 4) {} else {
+        if (sustained_results[0][0].magnitude_change === 5) {} else {
           assert(false)
         }
-        assert(sustained_results[1].length === 5)
-        if (sustained_results[1][0].magnitude_change === 1 &&
-          sustained_results[1][1].magnitude_change === 2 &&
-          sustained_results[1][2].magnitude_change === 0 &&
-          sustained_results[1][3].magnitude_change === 2 &&
-          sustained_results[1][4].magnitude_change === 1) {} else {
+        assert(sustained_results[1].length === 4)
+        if (sustained_results[1][0].magnitude_change === 2 &&
+          sustained_results[1][1].magnitude_change === 3 &&
+          sustained_results[1][2].magnitude_change === 3 &&
+          sustained_results[1][3].magnitude_change === 3) {} else {
           assert(false)
         }
       })
@@ -2165,27 +2169,14 @@ function test() {
           test_degree_dict,
           [],
           test_sample_indices)
-        console.log("++++++++++++++")
-        console.log(modreg_results)
-        console.log(modreg_results[0].length)
-        console.log(modreg_results[1].length)
-        console.log("++++++++++++++")
-        assert(modreg_results[0].length === 6)
-        if (modreg_results[0][1].magnitude_change === 5
-            && modreg_results[0][1].magnitude_change === 5
-            && modreg_results[0][2].magnitude_change === 6.1
-            && modreg_results[0][3].magnitude_change === 6.9
-            && modreg_results[0][4].magnitude_change === 7
-            && modreg_results[0][5].magnitude_change === 6
+        assert(modreg_results[0].length === 2)
+        if (modreg_results[0][0].magnitude_change === 5
+            && modreg_results[0][1].magnitude_change === 7
         ) {} else {
           assert(false)
         }
-        assert(modreg_results[1].length === 4)
-        if (modreg_results[1][1].magnitude_change === 2.97
-            && modreg_results[1][1].magnitude_change === 2.97
-            && modreg_results[1][2].magnitude_change === 3
-            && modreg_results[1][3].magnitude_change === 3
-        ) {} else {
+        assert(modreg_results[1].length === 1)
+        if (modreg_results[1][0].magnitude_change === 3) {} else {
           assert(false)
         }
       })
