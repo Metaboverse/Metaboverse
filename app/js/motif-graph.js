@@ -80,6 +80,7 @@ class MetaGraph {
 
     this.data = graphdata;
     this.nodes = graphdata.nodes;
+    this.links = graphdata.links;
     this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
     this.mod_collapsed_pathways = graphdata.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
@@ -105,16 +106,40 @@ class MetaGraph {
     // Generate expression and stats dictionaries
     let expression_dict = {};
     let stats_dict = {};
+    let inferred_dict = {};
     for (let x in this.nodes) {
       let id = this.nodes[x]['id'];
       let expression = this.nodes[x]['values'];
       let stats = this.nodes[x]['stats'];
-
       expression_dict[id] = expression;
       stats_dict[id] = stats;
+      inferred_dict[id] = this.nodes[x]['inferred']
     }
     this.expression_dict = expression_dict;
     this.stats_dict = stats_dict;
+    this.inferred_dict = inferred_dict;
+
+    this.link_neighbors = {};
+    for (let l in this.links) {
+      let _source = this.links[l].source;
+      let _target = this.links[l].target;
+      
+      if (this.nodes[_source].type === "reaction" 
+      || this.nodes[_target].type === "reaction"
+      || this.nodes[_source].type === "collapsed"
+      || this.nodes[_target].type === "collapsed") {
+      } else {
+        if (!(_source in this.link_neighbors)) {
+          this.link_neighbors[_source] = [];
+        }
+        this.link_neighbors[_source].push(_target);
+  
+        if (!(_target in this.link_neighbors)) {
+          this.link_neighbors[_target] = [];
+        }
+        this.link_neighbors[_target].push(_source);
+      }
+    }
 
     if (this.labels === null) {
       this.names = ['0']
@@ -338,6 +363,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -364,6 +391,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -390,6 +419,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -416,6 +447,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -448,12 +481,14 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          eval_neighbors_dictionary,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
           this.categories,
           this.nodes,
-          eval_neighbors_dictionary)
+          this.link_neighbors)
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -482,12 +517,14 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          eval_neighbors_dictionary,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
           this.categories,
           this.nodes,
-          eval_neighbors_dictionary)
+          this.link_neighbors)
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -510,6 +547,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -536,6 +575,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -562,6 +603,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -588,6 +631,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.inferred_dict,
+          this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
@@ -614,7 +659,7 @@ class MetaGraph {
       motifs,
       exclusion_indexer);
 
-    if (motif_list.length > 500) {
+    if (motif_list.length > 1000) {
       alert(String(motif_list.length) + " reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
     }
 
@@ -635,7 +680,8 @@ class MetaGraph {
 
     // Remove any duplicated items
     motif_list = remove_duplicate_motifs(motif_list);
-
+    motif_significance = remove_duplicate_motifs(motif_significance);
+    
     let stamp_height = 50;
     this.stamp_svg_height = Math.ceil(
       motif_list.length / 3) *
@@ -846,7 +892,7 @@ class MetaGraph {
       motifs,
       exclusion_indexer);
 
-    if (motif_list.length > 500) {
+    if (motif_list.length > 1000) {
       alert(String(motif_list.length) + " reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
     }
 
@@ -868,9 +914,11 @@ class MetaGraph {
 
     // Remove any duplicated items
     motif_list = remove_duplicate_motifs_twoReactions(motif_list);
+    motif_significance = remove_duplicate_motifs_twoReactions(motif_significance);
 
     // Remove if no shared components
     motif_list = remove_noshare_twoReactions(motif_list);
+    motif_significance = remove_noshare_twoReactions(motif_significance);
 
     let stamp_height = 50;
     this.stamp_svg_height = Math.ceil(
