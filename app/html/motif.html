@@ -122,7 +122,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 </p>
                 <label for="use_collapsed">
-                  <font size="2"><i>Show&nbspcollapsed reactions</i></font>
+                  <font size="2"><i>Collapse reactions</i></font>
                 </label>
                 <br>
                 <label for="use_modifiers">
@@ -133,6 +133,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                   <font size="2"><i>Exclude hubs</i></font>
                 </label>
                 <br>
+                <label for="infer_complex">
+                  <font size="2"><i>Infer complexes</i></font>
+                </label>
               </div>
             </div>
             <div class="col-md-8">
@@ -179,19 +182,40 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <p id="threshold-padding">
                   <input type="number" id="minmax_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-
                 <div id="checkbox_spacer"></div>
                 <p id="checkbox-padding">
-                  <input type="checkbox" id="use_collapsed_id" name="use_collapsed" value="true" title="Check to include collapsed reactions in reaction pattern analysis. You will need to re-run the reaction pattern analysis to exclude collapsed reactions.">
+                  <input 
+                    type="checkbox" 
+                    id="use_collapsed_id" 
+                    name="use_collapsed" 
+                    value="true" 
+                    title="Check to include collapsed reactions in reaction pattern analysis. You will need to re-run the reaction pattern analysis to exclude collapsed reactions.">
                 </p>
-
                 <p id="checkbox-padding">
-                  <input type="checkbox" id="use_modifiers_id" name="use_modifiers" value="true"
+                  <input 
+                    type="checkbox" 
+                    id="use_modifiers_id" 
+                    name="use_modifiers" 
+                    value="true"
                     title="Check to include modifiers in reaction pattern analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the reaction pattern analysis to include modifiers.">
                 </p>
                 <p id="checkbox-padding">
-                  <input type="checkbox" id="exclude_hubs_id" name="exclude_hubs" value="true"
-                    title="Exclude high-hub components from consideration in the reaction pattern search. This will remove hubs with more than 100 connections. You will need to re-run the reaction pattern search to include modifiers." checked>
+                  <input 
+                    type="checkbox" 
+                    id="exclude_hubs_id" 
+                    name="exclude_hubs" 
+                    value="true"
+                    title="Exclude high-hub components from consideration in the reaction pattern search. This will remove hubs with more than 100 connections. You will need to re-run the reaction pattern search to include modifiers." 
+                    checked>
+                </p>
+                <p id="checkbox-padding">
+                  <input 
+                    type="checkbox" 
+                    id="infer_complex_values" 
+                    name="infer_complex" 
+                    value="true"
+                    title="If true, infer complex values and stats based on the aggregate of all components. If false, evaluate each complex component individually to see if one can be relevant for a reaction pattern." 
+                    checked>
                 </p>
               </div>
             </div>
