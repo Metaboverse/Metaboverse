@@ -13,7 +13,6 @@ Analysis Video Walkthrough
 .. raw:: html
 
     <iframe width="700" height="450" src="https://youtube.com/embed/U7m78Tbs5KE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-|
 
 -------------------------
 Getting Started
@@ -28,7 +27,7 @@ Getting Started
 .. image:: images/page_two.gif
   :width: 700
   :align: center
-|
+
 | 4. Provide the following variables for your model.
 | a) Provide the appropriate data files for your -omics data. Please see the :ref:`Data Inputs` sub-heading for more information.
 | b) Provide a name for your experiment/model.
@@ -41,16 +40,16 @@ Getting Started
 .. image:: images/step_four.png
   :width: 700
   :align: center
-|
+
 .. image:: images/page_three.gif
   :width: 700
   :align: center
-|
+
 | 5. Build your network model. After your network model has been built, you will have the option to perform regulatory hotspot identification, model perturbation networks, or perform general visualization of pathways and components by clicking on the appropriate buttons at the bottom of the screen that will appear once Metaboverse has finished processing your data.
 .. image:: images/build_page.gif
   :width: 700
   :align: center
-|
+
 --------------------------------------------------
 Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 --------------------------------------------------
@@ -67,36 +66,35 @@ Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 | 8. **MaxMin**: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.
 
 
-|
 | Users can then select a given reaction pattern, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway. In the :data:`Reaction-Pathway Membership` box, a simplified glyph of the reaction is drawn, with inputs (substrates) on the left of the reaction node and outputs (products) on the right of the reaction node. Modifiers and input/output types are not shown in this simplified glyph.
 .. image:: images/pattern_page.gif
   :width: 700
   :align: center
-|
+
 | If the model includes time-course or multi-condition data, the patterns present at each timepoint or condition can be viewed.
 .. image:: images/pattern_time.png
   :width: 700
   :align: center
-|
+
 | Users can also choose to include the following modifications in the reaction pattern search:
 | a) **Use Modifiers**: Check to include modifiers in reaction pattern analysis. Catalysts are included as outputs, inhibitors are included as inputs. You will need to re-run the reaction pattern analysis to include modifiers.
 | b) **Exclude Hubs**: Exclude high-hub components from consideration in the reaction pattern search. This will remove hubs with more than 100 connections. You will need to re-run the reaction pattern analysis to include modifiers.
 .. image:: images/motif_options.png
   :width: 250
   :align: center
-|
+
 | Additionally, users can choose how to sort identified reaction patterns, or choose to not return reaction patterns for the selected time-point or condition that were also found in another time-point or condition. For time-course or multi-condition experiments, a pane will appear that will display the behavior of all reaction components across all time-points or conditions.
 .. image:: images/motif_options2.png
   :width: 700
   :align: center
-|
+
 | For time-course and multi-condition data, a line plot is drawn for a selected reaction with the behavior of that reaction's components across all time-points or conditions.
-|
+
 -----------------------------------
 General Pathway Exploration
 -----------------------------------
 | Users can explore classical pathways and all components of the network interactively by navigating to the :data:`Explore` page.
-|
+
 | a) At the top of the legend, reference to the node types are displayed. Grey nodes are reactions, nodes with solid outlines are measured, and nodes with dashed outlines are inferred using the gene broadcasting feature. Components with significant statistical values based on the threshold (defined in section d) are bolded. Users can hover across the color scale to see what color corresponds to what value.
 | - **Identified reactions with a reaction pattern will have enlarged nodes and will be outlined in bold purple.**
 | b) Relationship types between nodes are shown by hovering over the :data:`Shape Legend` icon. Compartment shadings for the selected pathway are shown by hovering over the :data:`Compartment Legend` icon.
@@ -107,16 +105,16 @@ General Pathway Exploration
 | - *All entities*: A list of all components (metabolites, proteins, etc.). This will draw the nearest neighborhood graph for the selected component.
 | - *All pathways*: A list of all pathways across all super-pathways.
 | - *Other*: A list of selected super-pathways that will group pathways in the next drop-down menu. For example, if selecting :data:`Metabolism`, only pathways related to Metabolism will be shown in the next menu.
-|
+
 .. image:: images/vis_overview.png
   :width: 700
   :align: center
-|
+
 | Users can easily toggle between timepoints or conditions by moving the slider.
 .. image:: images/pathway_time.gif
   :width: 700
   :align: center
-|
+
 -----------------------------------
 Perturbation Network Modeling
 -----------------------------------
@@ -124,7 +122,7 @@ Perturbation Network Modeling
 .. image:: images/perturbations.gif
   :width: 700
   :align: center
-|
+
 -----------------------------------
 Nearest Neighborhood Searches
 -----------------------------------
@@ -132,14 +130,16 @@ Nearest Neighborhood Searches
 .. image:: images/nearest_neighbors.gif
   :width: 700
   :align: center
-|
+
 | Users can also target an entity for exploration directly by selecting :data:`All entities` in the :data:`Explore` page from the :data:`Select a super-pathway...` drop-down menu.
-|
+
 -----------------------------------------------
 Analyzing complexes
 -----------------------------------------------
-|
-|
+| During reaction pattern analysis, protein complexes consisting of multiple elements are aggregated to generate a pseudo fold change and statistical value by calculating the median of all magnitude changes and Euhler's constant (**e**) x the geometric mean of the component statistical values. If the resulting aggregated statistical value is greater than 1, 1 is substituted.
+| We aimed to take a flexible approach that biases the representative fold change and statistical value towards the most frequent, so if most complex components are statistically significant with high fold changes, the resulting values will be so as well.
+
+| By unchecking the :data:`Infer complexes` box on the Reaction Pattern page, you can alternatively analyze complex components individually within that reaction, where Metaboverse will find the optimal element that will give the best magnitude difference to compare against the selected threshold.
 
 -----------------------------------
 Analyzing Previous Models
@@ -148,17 +148,17 @@ Analyzing Previous Models
 .. image:: images/load_previous.gif
   :width: 700
   :align: center
-|
+
 | Users can load a previously modeled organism network by loading the :data:`.mvdb` file output by Metaboverse when originally generated. This is done on the Curation page.
 .. image:: images/load_curation.gif
   :width: 700
   :align: center
-|
+
 -----------------------------------------------
 Publishing Data Analyzed with Metaboverse
 -----------------------------------------------
 | When publishing analyses that used Metaboverse, we recommend attaching the appropriate :data:`.mvrs` file that contains the network with your data overlaid as a supplementary file. This will allow for others to easily reproduce and explore your data.
-|
+
 | Users can explore the metadata related to their Metaboverse model by clicking on the :data:`Session Data` tab in the menu once the :data:`.mvrs` file is loaded.
 .. image:: images/show_metadata.gif
    :width: 700
