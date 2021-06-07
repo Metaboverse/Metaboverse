@@ -5,27 +5,32 @@ Updates
 =================================
 v0.7.1 (In Progress)
 =================================
-| - More flexible blocklist (`commit <https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a>`_)
-| - Sort by best p-value (`commit <https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a>`_)
-| - e * gmean(p-array) (`commit <https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8>`_)
-| - Set max aggregate p-value to 1 (`commit <https://github.com/Metaboverse/metaboverse-cli/commit/ce4ccad650f3e1bf51635e3415ca5759ab513f78>`_)
-| - mean -> median (`commit <https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8>`_)
-| - Allow exporting line plots for timecourse and multi-condition datasets (`see issue #89 <https://github.com/Metaboverse/Metaboverse/issues/89>`_)
-| - Fix Session Data page to format variables, file paths better (`commit <https://github.com/Metaboverse/Metaboverse/commit/07962e2a5d70a47a8acd341860237c1fcc16cafa>`_)
-| - Use user-provided names in labeling (`see issue #87 <https://github.com/Metaboverse/Metaboverse/issues/87>`_)
-| - Toggle analyte labels on by default (`commit <https://github.com/Metaboverse/Metaboverse/commit/1f79661240c196cdffd0114f91dcae51ed4e4ee1>`_)
-| - Allow flexibility for input data where commas are used in place of decimals (`see issue #92 <https://github.com/Metaboverse/Metaboverse/issues/92#issuecomment-854090294>`_)
-| - Remove duplicate rows from input data (interactive input will warn about these) (`commit <https://github.com/Metaboverse/metaboverse-cli/commit/a2fc6642168adb3fc7bcc4e10e4b21aff4e272e3>`_)
-| - Fix `Sustained` reaction pattern to not identify is input and output value being compared are identical (`commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
-| - Make blocklisting more thorough by searching all nodes for matching names of named blocklist (`commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
-| - Move some shared utilities to the `motif-utils.js` file (`commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
-| - Add button and capabilities to switch between inferred complex values or to compare each complex component individually within the reaction pattern (`commit1 <https://github.com/Metaboverse/Metaboverse/commit/31ece06c7476cc8d568bdd67f46dbceae2193d65>`_); `commit2 <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
+| **Important Note**
+| Many of the changes introduced in :data:`v0.7.0` to session and intermediate file metadata will likely be incompatible with previous versions of Metaboverse.
+|
+| **Minor**
+| - Fix Session Data page to format variables, file paths better (`see commit <https://github.com/Metaboverse/Metaboverse/commit/07962e2a5d70a47a8acd341860237c1fcc16cafa>`_)
+| - More flexible blocklist to capture all components with the same name, even if they have different species IDs (see `commit1 <https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a>`_ ; `commit2 <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
+| - Find largest change possible for modifier regulation patterns (`see commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
+| - Sort by best p-value (previously had taken a more conservative approach by using the worst p-value on each side of the reaction) (`see commit <https://github.com/Metaboverse/Metaboverse/commit/8975d24a556d31b2aa6e8013659bb80f22ff6a2a>`_)
+| - Add button and capabilities to switch between inferred complex values or to compare each complex component individually within the reaction pattern (`commit1 <https://github.com/Metaboverse/Metaboverse/commit/31ece06c7476cc8d568bdd67f46dbceae2193d65>`_ ; `commit2 <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
 |   - Will still display the complex as inferred value, but evaluated as each individual component during reaction pattern search
-| - Find largest change possible for modifier regulation patterns (`commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
-| - Fix issue with `parseComponents()` function where usage of modifiers in pattern determination was pushing all modifiers (catalysts and inhibitors) to reactants list (`commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
-| - For upregulated sustained reactions, get max of inputs and outputs (previously was getting min) (`commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
-| - Fixed global motif searching for pathway and perturbation visualization to search non-collapsed reaction dictionary too. (`commit <https://github.com/Metaboverse/Metaboverse/commit/54a2e44d4913e1d4f903271bdae8af3617f0f33c>`_)
-| - Added reaction pattern tooltips on button to show a graphical example of each (`commit <https://github.com/Metaboverse/Metaboverse/commit/66d7ecc210c224451370772b4de3749af055aa69>`_)
+| - Protein complex inference/aggregation
+|   - mean -> median for generating aggregate magnitude value for protein complex from component parts (`see commit <https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8>`_)
+|   - Aggregate statistic calculated using :data:`e * gmean(p-array)` (`see commit <https://github.com/Metaboverse/metaboverse-cli/commit/e6755ca67322745dc40af89fdd67b894f5732fc8>`_)
+|   - Max aggregate p-value set to 1 (`see commit <https://github.com/Metaboverse/metaboverse-cli/commit/ce4ccad650f3e1bf51635e3415ca5759ab513f78>`_)
+| - Allow exporting line plots for timecourse and multi-condition datasets (`see issue #89 <https://github.com/Metaboverse/Metaboverse/issues/89>`_)
+| - Use user-provided names in labeling (`see issue #87 <https://github.com/Metaboverse/Metaboverse/issues/87>`_)
+| - Toggle analyte labels on by default (`see commit <https://github.com/Metaboverse/Metaboverse/commit/1f79661240c196cdffd0114f91dcae51ed4e4ee1>`_)
+| - Allow flexibility for input data where commas are used in place of decimals (`see issue #92 <https://github.com/Metaboverse/Metaboverse/issues/92#issuecomment-854090294>`_)
+| - Remove duplicate rows from input data (interactive input will warn about these) (`see commit <https://github.com/Metaboverse/metaboverse-cli/commit/a2fc6642168adb3fc7bcc4e10e4b21aff4e272e3>`_)
+| - Fix `Sustained` reaction pattern to not identify is input and output value being compared are identical (`see commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
+| - Fix issue with :data:`parseComponents()` function where usage of modifiers in pattern determination was pushing all modifiers (catalysts and inhibitors) to reactants list (`see commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
+| - For upregulated sustained reactions, get max of inputs and outputs (previously was getting min) (`see commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
+| - Fixed global motif searching for pathway and perturbation visualization to search non-collapsed reaction dictionary too. (`see commit <https://github.com/Metaboverse/Metaboverse/commit/54a2e44d4913e1d4f903271bdae8af3617f0f33c>`_)
+| - Added reaction pattern tooltips on button to show a graphical example of each (`see commit <https://github.com/Metaboverse/Metaboverse/commit/66d7ecc210c224451370772b4de3749af055aa69>`_)
+| - Move some shared utilities to the `motif-utils.js` file (`see commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
+
 
 =================================
 v0.7.0
