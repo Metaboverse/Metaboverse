@@ -180,12 +180,17 @@ function buildSlider(categories, names) {
               })
             d3.select("text#" + d.id)
               .html(function(d) {
-                console.log(slider_index)
+                let this_name;
+                if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
+                  this_name = d.user_label;
+                } else {
+                  this_name = d.name;
+                }
                 if (d.values[slider_index] === null &&
                   d.stats[slider_index] === null) {
                   return (
                     "<tspan dx='16' y='0em' class='bold-text'>" +
-                    d.name +
+                    this_name +
                     "</tspan>"
                   );
                 } else {
@@ -197,7 +202,7 @@ function buildSlider(categories, names) {
                   }
                   return (
                     "<tspan dx='16' y='-.5em' class='bold-text'>" +
-                    d.name +
+                    this_name +
                     "</tspan>" +
                     "<tspan x='16' y='.7em'>Value: " +
                     parseFloat(d.values[slider_index]).toFixed(2) +

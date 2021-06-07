@@ -20,6 +20,7 @@ v0.7.1 (In Progress)
 | - Make blocklisting more thorough by searching all nodes for matching names of named blocklist (`commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
 | - Move some shared utilities to the `motif-utils.js` file (`commit <https://github.com/Metaboverse/Metaboverse/commit/1273b94acf1c1ee8fd4f60b175e61cf1bd506774>`_)
 | - Add button and capabilities to switch between inferred complex values or to compare each complex component individually within the reaction pattern (`commit1 <https://github.com/Metaboverse/Metaboverse/commit/31ece06c7476cc8d568bdd67f46dbceae2193d65>`_); `commit2 <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
+|   - Will still display the complex as inferred value, but evaluated as each individual component during reaction pattern search
 | - Find largest change possible for modifier regulation patterns (`commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
 | - Fix issue with `parseComponents()` function where usage of modifiers in pattern determination was pushing all modifiers (catalysts and inhibitors) to reactants list (`commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)
 | - For upregulated sustained reactions, get max of inputs and outputs (previously was getting min) (`commit <https://github.com/Metaboverse/Metaboverse/commit/de1148b35d415cfa20ad3e68e47a3cbb3d729d25>`_)

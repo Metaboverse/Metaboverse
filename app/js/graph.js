@@ -1065,7 +1065,7 @@ function make_graph(
     })
     .html(function(d) {
       let this_name;
-      if (d.user_label !== undefined) {
+      if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
         this_name = d.user_label;
       } else {
         this_name = d.name;

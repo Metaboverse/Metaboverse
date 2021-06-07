@@ -72,6 +72,13 @@ for (l in data.links) {
 }
 data.links = update_links;
 
+data.blocklist = data.species_blocklist;
+data.blocklist = complete_blocklist(
+  data.blocklist,
+  data.metadata.blocklist,
+  data.nodes
+)
+
 let current_pathway = get_session_info("current_pathway");
 if ((current_pathway !== null) & (current_pathway !== "null")) {
   change();

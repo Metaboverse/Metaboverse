@@ -134,7 +134,7 @@ Nearest Neighborhood Searches
 | Users can also target an entity for exploration directly by selecting :data:`All entities` in the :data:`Explore` page from the :data:`Select a super-pathway...` drop-down menu.
 
 -----------------------------------------------
-Analyzing complexes
+Analyzing Complexes
 -----------------------------------------------
 | During reaction pattern analysis, protein complexes consisting of multiple elements are aggregated to generate a pseudo fold change and statistical value by calculating the median of all magnitude changes and Euhler's constant (**e**) x the geometric mean of the component statistical values. If the resulting aggregated statistical value is greater than 1, 1 is substituted.
 | We aimed to take a flexible approach that biases the representative fold change and statistical value towards the most frequent, so if most complex components are statistically significant with high fold changes, the resulting values will be so as well.

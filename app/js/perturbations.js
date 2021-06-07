@@ -117,7 +117,12 @@ for (l in data.links) {
 }
 data.links = update_links;
 
-data.blocklist = data.blocklist.split(",")
+data.blocklist = data.species_blocklist;
+data.blocklist = complete_blocklist(
+  data.blocklist,
+  data.metadata.blocklist,
+  data.nodes
+)
 
 // Initialize slider if timecourse
 if (timecourse === true) {

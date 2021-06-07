@@ -52,14 +52,14 @@ function set_tooltips() {
   .style("opacity", 0);
   
   d3.select("div#motif1.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "160px")
-        .style("transition-delay", "1s");
+        .style("height", "160px");
       div
         .html(
           'Compare the average values between reactants and products that pass the provided threshold.\n' +
@@ -72,14 +72,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif2.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "140px")
-        .style("transition-delay", "1s");
+        .style("height", "140px");
       div
         .html(
           'Find instances of sustained perturbation along a reaction.\n' + 
@@ -92,14 +92,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif3.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "160px")
-        .style("transition-delay", "1s");
+        .style("height", "160px");
       div
         .html(
           'Find instances with one regulated modifier and one core component in the reaction.' +
@@ -112,14 +112,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif4.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "200px")
-        .style("transition-delay", "1s");
+        .style("height", "200px");
       div
         .html(
           'Find instances where a component is the same for input and output, is regulated, along with a modifier being regulated.' +
@@ -132,14 +132,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif5.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "145px")
-        .style("transition-delay", "1s");
+        .style("height", "145px");
       div
         .html(
           'Identify two neighboring enzymes with activity.' +
@@ -152,14 +152,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif6.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "120px")
-        .style("transition-delay", "1s");
+        .style("height", "120px");
       div
         .html(
           'Find instances of several neighboring metabolites with continued activity.' +
@@ -172,14 +172,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif7_1.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "180px")
-        .style("transition-delay", "1s");
+        .style("height", "180px");
       div
         .html(
           'Compare the absolute minimum values between reactants and products that pass the provided threshold.' +
@@ -192,14 +192,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif7_2.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "180px")
-        .style("transition-delay", "1s");
+        .style("height", "180px");
       div
         .html(
           'Compare the absolute maximum values between reactants and products that pass the provided threshold.' +
@@ -212,14 +212,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif8_1.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "190px")
-        .style("transition-delay", "1s");
+        .style("height", "190px");
       div
         .html(
           'Compare the absolute maximum and minimum values between reactants and products, respectively, that pass the provided threshold.' +
@@ -232,14 +232,14 @@ function set_tooltips() {
     });
 
   d3.select("div#motif8_2.motif_button")
-    .on("mouseover", function(d) {
+    .on("contextmenu", function(d) {
+      d3.event.preventDefault();
       div
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
         .style("width", "220px")
-        .style("height", "160px")
-        .style("transition-delay", "1s");
+        .style("height", "160px");
       div
         .html(
           'Compare the absolute minimum and maximum values between reactants and products, respectively, that pass the provided threshold.' +

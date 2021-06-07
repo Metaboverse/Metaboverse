@@ -321,7 +321,7 @@ class MetaGraph {
 
     d3.select("#motif1")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#avg_num");
@@ -349,7 +349,7 @@ class MetaGraph {
 
     d3.select("#motif2")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#sustained_num");
@@ -377,7 +377,7 @@ class MetaGraph {
 
     d3.select("#motif3")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#modreg_num");
@@ -405,7 +405,7 @@ class MetaGraph {
 
     d3.select("#motif4")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#transreg_num");
@@ -433,7 +433,7 @@ class MetaGraph {
 
     d3.select("#motif5")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#enzyme_num");
@@ -469,7 +469,7 @@ class MetaGraph {
 
     d3.select("#motif6")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#activity_num");
@@ -505,7 +505,7 @@ class MetaGraph {
 
     d3.select("#motif7_1")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#maxmax_num");
@@ -533,7 +533,7 @@ class MetaGraph {
 
     d3.select("#motif7_2")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#minmin_num");
@@ -561,7 +561,7 @@ class MetaGraph {
 
     d3.select("#motif8_1")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#maxmin_num");
@@ -589,7 +589,7 @@ class MetaGraph {
 
     d3.select("#motif8_2")
       .on("mousedown", function() {
-        spinner.spin(target);
+        if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
         highlight_selection("#minmax_num");
@@ -672,7 +672,6 @@ class MetaGraph {
       .attr("width", stamp_width)
       .attr("height", stamp_height)
       .attr("fill", d => {
-        console.log(d)
         if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
           return "green";
         } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
