@@ -3,7 +3,7 @@ Updates
 ###############
 
 =================================
-v0.7.1 (In Progress)
+v0.7.1
 =================================
 | **Important Note**
 | Many of the changes introduced in :data:`v0.7.0` to session and intermediate file metadata will likely be incompatible with previous versions of Metaboverse.
