@@ -9,6 +9,7 @@ rm -rf app/node_modules/
 
 cd app
 pwd
+conda activate base
 npm install
 npm audit fix
 echo "========================================================================"

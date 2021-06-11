@@ -48,6 +48,7 @@ td.highlight {
     background-color: #7393B3 !important;
 }
 
+#button-group-export,
 #button-group-add,
 #button-group-control,
 #button-group-experiment,
@@ -75,6 +76,7 @@ td.highlight {
     text-shadow: none;
 }
 
+#button-group-export:hover,
 #button-group-add:hover {
     background: #7393B3;
     text-shadow: none;;
@@ -96,11 +98,20 @@ td.highlight {
     width: 110px;
 }
 
+#button-group-export {
+    background: #808080;
+    border: 1px solid black;
+    width: 120px;
+    margin-top: -20px;
+    margin-bottom: 70px;
+}
+
 #button-group-add {
     background: #808080;
     border: 1px solid black;
-    width: 60px;
-    margin-left: 200px;
+    width: 150px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 #button-timecourse,

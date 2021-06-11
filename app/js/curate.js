@@ -184,10 +184,9 @@ window.addEventListener("load", function(event) {
       .showSaveDialog({
         defaultPath: ".." + path.sep + ".." + path.sep,
         properties: ["createDirectory"],
-        filters: [{
-          name: "mvrs",
-          extensions: ["mvrs"]
-        }]
+        filters: [
+          { name: "Metaboverse-formatted database (*.mvrs)", extensions: ["mvrs"] }
+        ]
       })
       .then(result => {
         let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
