@@ -48,7 +48,12 @@ $.getJSON(reactome_api, function(data) {
     option.value = speciesList[i];
     menu.appendChild(option);
   }
+  if (get_session_info("organism") !== null) {
+    $('#speciesMenu').val(get_session_info("organism"));
+  }
 });
+
+
 
 // Change user selection based on input
 window.addEventListener("load", function(event) {
@@ -66,7 +71,19 @@ window.addEventListener("load", function(event) {
     check_changes();
   }
 
-  $('#content').append('<a href=""></a>')
+  // check if inputs already there
+  if (get_session_info("organism") !== null && get_session_info("database_url") !== null) {
+    $("#content").html(
+      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+  } else if (get_session_info("curation_url") !== null || get_session_info("template_url") !== null && get_session_info("database_source") !== "reactome") {
+    $("#content").html(
+      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+  } else if (get_session_info("curation_url") !== null && get_session_info("database_source") !== "biomodels/bigg") {
+    $("#content").html(
+      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+  } else {
+    $('#content').append('<a href=""></a>')
+  }
 
   // Get curation reference file from user
   var curURL = get_session_info("curation_url");
