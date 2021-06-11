@@ -392,6 +392,8 @@ img {
 #dropNeighborDictionary,
 #dropDatabaseSBML,
 #dropDatabaseOutput,
+#format-dropDatabase,
+#format-datatable-input,
 #transcriptomics-dropDatabase,
 #proteomics-dropDatabase,
 #metabolomics-dropDatabase {
@@ -412,6 +414,8 @@ img {
 #dropNeighborDictionary:active,
 #dropDatabaseSBML:active,
 #dropDatabaseOutput:active,
+#format-dropDatabase:active,
+#format-datatable-input:active,
 #transcriptomics-dropDatabase:active,
 #proteomics-dropDatabase:active,
 #metabolomics-dropDatabase:active {
@@ -424,6 +428,8 @@ img {
 #dropGraphTemplate,
 #dropNeighborDictionary,
 #dropDatabaseSBML,
+#format-dropDatabase,
+#format-datatable-input,
 #transcriptomics-dropDatabase,
 #proteomics-dropDatabase,
 #metabolomics-dropDatabase {
@@ -434,6 +440,17 @@ img {
   width: 140px;
 }
 
+#format-wrapper {
+  margin-left: -80px;
+}
+
+#format-dropDatabase {
+  margin-bottom: -10px;
+  margin-left: 5px;
+  position: absolute;
+}
+
+#format-input,
 #transcriptomics-input,
 #proteomics-input,
 #metabolomics-input {
@@ -592,3 +609,6 @@ div.tooltip-text {
   background: transparent;
   pointer-events: none;
 }
+
+
+

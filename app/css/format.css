@@ -1,0 +1,121 @@
+/*
+Metaboverse
+Visualizing and Analyzing Metabolic Networks
+https://github.com/Metaboverse/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019-2021 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+.top-margin-datatable {
+    padding-top: 20px;
+}
+
+.left-margin-input {
+    padding-left: 140px;
+}
+
+.left-margin-datatable {
+    padding-left: 60px;
+}
+
+.right-margin-datatable {
+    padding-right: 60px;
+}
+
+.dataTable thead th {
+    cursor: pointer;
+}
+
+.dataTable tbody td {
+    font-size: 12px;
+}
+
+td.highlight {
+    background-color: #7393B3 !important;
+}
+
+#button-group-add,
+#button-group-control,
+#button-group-experiment,
+#button-2condition,
+#button-timecourse,
+#button-multicondition {
+    font-size: 14px;
+    border-radius: 10px;
+    height: 20px;
+    text-align: center;
+    display: inline-block;
+    line-height: 14px;
+    text-shadow: none;
+    user-select: none;
+    padding-top: 5px;
+    margin-top: 15px;
+}
+
+#button-group-control:hover,
+#button-group-experiment:hover,
+#button-2condition:hover,
+#button-timecourse:hover,
+#button-multicondition:hover {
+    background: #0080ff;
+    text-shadow: none;
+}
+
+#button-group-add:hover {
+    background: #7393B3;
+    text-shadow: none;;
+    text-shadow: none;
+}
+
+#button-group-control,
+#button-group-experiment,
+#button-2condition,
+#button-timecourse {
+    background: #f1f1f1;
+    border: 1px solid grey;
+    width: 100px;
+}
+
+#button-multicondition {
+    background: #f1f1f1;
+    border: 1px solid grey;
+    width: 110px;
+}
+
+#button-group-add {
+    background: #808080;
+    border: 1px solid black;
+    width: 60px;
+    margin-left: 200px;
+}
+
+#button-timecourse,
+#button-multicondition {
+    margin-left: 10px;
+}
+
+#text-group-name,
+#text-group-control,
+#text-group-experiment {
+    display: inline-block;
+    overflow-wrap: break-word;
+
+}
+
+.bump-right-10 {
+    margin-left: 10px;
+}

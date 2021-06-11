@@ -1,0 +1,116 @@
+<!--
+Metaboverse
+Visualizing and Analyzing Metabolic Networks
+https://github.com/Metaboverse/Metaboverse/
+alias: metaboverse
+
+Copyright (C) 2019-2021 Jordan A. Berg
+Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self';">
+<title>Metaboverse</title>
+
+<html>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/format.css">
+    <link rel="stylesheet" href="../css/jquery.dataTables.1.10.25.min.css">
+    <script src="../js/datatable.js"></script>
+    <script src="../js/_external/dataTables.select.1.3.3.min.js"></script>
+    <script src="../js/utils.js"></script>
+
+<head>
+
+    <!-- menu -->
+    <menu>
+      <font size=3.25px>
+        <menuItem id="menuright"></menuItem>
+        <menuItem id="menuleft"><a>Metaboverse</a></menuItem>
+      </font>
+    </menu>
+  
+</head>
+
+<body>
+
+    <!--
+        - Maybe don't need the menu
+        - Add info button that shows guide?
+
+        At start:
+            User clicks format button on variables.js
+            User selects input starting data 
+            Metaboverse loads table and launches new window (datatable.html)
+
+        Processing:
+            User selects inputs group names selected by commas
+            User specifies comparisons
+            Run
+        
+        At end:
+            Save button that outputs the Metaboverse-formatted input table
+            Swaps it for the original input 
+            Closes the window
+    -->
+
+    <br>
+    <br>
+    <div id="format-wrapper" class="top-margin-datatable left-margin-input">
+        <button id="data_info_flat" class="info_enhanced">
+            <i>i</i>
+        </button>
+        &emsp; 
+        <div id="format-datatable-input" title="Click to open window and format a dataset for Metaboverse.">
+            <font size="1">
+            Select File
+            </font>
+        </div>
+        &nbsp;&nbsp;
+        <div id="selectedFormat" class="selectedData">
+        </div>
+    </div>
+    <input id="format-input" type="file" name="name" />
+    <br>
+    <br>
+    
+    <!--Select data type-->
+    <div id="select-datatype" class="top-margin-datatable left-margin-datatable"></div>
+    <br>
+    
+    <!--Display element for loaded datatable-->
+    <div id="loaded-table" class="top-margin-datatable left-margin-datatable right-margin-datatable"></div>
+
+    <!--Selection tool to define different groups-->
+    <div id="define-groups" class="top-margin-datatable left-margin-datatable"></div>
+
+    <!--Button to run name check against Metaboverse mvdb or metaboliteMapper file first. For those that can't be found, run query against MetaboAnalyst database for suitable synonyms-->
+    <div id="check-metabolites" class="top-margin-datatable left-margin-datatable"></div>
+
+    <!--Process table button-->
+    <div id="process-table" class="top-margin-datatable left-margin-datatable"></div>
+
+    <!--Display formatted table for output preview-->
+    <div id="loaded-table" class="top-margin-datatable left-margin-datatable"></div>
+    
+    <!--Button to save output where user selects new name and location-->
+    <!--Then close the window-->
+    <div id="save-table" class="top-margin-datatable left-margin-datatable"></div>
+
+
+</body>
+
+</html>

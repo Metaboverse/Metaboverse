@@ -35,7 +35,7 @@ window.addEventListener("load", function(event) {
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
-        .style("height", "185px")
+        .style("height", "190px")
         .style("width", "250px");
       data_div.html("<b><u>Example Data Format:</u></b><br><br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;log2(fc)&emsp;&emsp;stat<br>metabolite name 1&emsp;&emsp;2.43&emsp;&emsp;&emsp;0.003737<br>metabolite name 2&emsp;&emsp;1.72&emsp;&emsp;&emsp;0.009739<br>metabolite name 3&emsp;&emsp;0.49&emsp;&emsp;&emsp;0.080173<br>metabolite name 4&emsp;&emsp;-2.43&emsp;&ensp;&emsp;0.000173<br>...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;...<br><br>Table should be tab-delimited. This can be created by saving the table in Microsoft Excel using the option \"Save as type\": \"Text (Tab delimited)\"")
     })
@@ -43,6 +43,21 @@ window.addEventListener("load", function(event) {
       data_div.style("opacity", 0);
       data_div.html("")
     });
+
+  d3.select("button#format_info")
+  .on("mouseover", function(d) {
+    data_div
+      .style("opacity", 0.95)
+      .style("left", (d3.event.pageX + 20) + "px")
+      .style("top", (d3.event.pageY - 10) + "px")
+      .style("height", "40px")
+      .style("width", "250px");
+    data_div.html("Open a non-Metaboverse-formatted datatable and have it prepared for usage in Metaboverse.")
+  })
+  .on("mouseout", function(d) {
+    data_div.style("opacity", 0);
+    data_div.html("")
+  });
 
   d3.select("button#transcript_info")
     .on("mouseover", function(d) {
@@ -195,12 +210,42 @@ window.addEventListener("load", function(event) {
       });
 })
 
+// Hyperlinks listener
+const tableBrowserSettings = 'top=500,left=200,frame=false,nodeIntegration=yes,enableRemoteModule=yes,worldSafeExecuteJavaScript=yes,contextIsolation=no';
+
+window.addEventListener("load", function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var user_path = window.location.pathname;
+    var page = user_path.split('/').pop();
+  
+    document.getElementById("format-dropDatabase").onclick = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+  
+      window.open(
+        'datatable.html',
+        '_blank',
+        tableBrowserSettings
+      )
+    }
+})
+
 window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();
 
   // If user goes back to this page, force re-curation
   update_session_info("processed", false);
+
+  // Format page
+  var formatURL = "";
+  var defaultFormat = "No file selected";
+  if (formatURL !== null) {
+    defaultFormat = formatURL;
+  }
+  $('#selectedFormat').append('<font size="2">' + defaultFormat + '</font>');
 
   // Transcriptomics
   var transcriptomicsURL = get_session_info("transcriptomics");
