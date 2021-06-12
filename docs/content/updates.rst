@@ -3,6 +3,17 @@ Updates
 ###############
 
 =================================
+v0.8.0 (in progress)
+=================================
+| **Major**
+| - Added data formatting aid page (`see issue #86 <https://github.com/Metaboverse/Metaboverse/issues/86>`_).
+|
+| **Minor**
+| - Fixed issue where Metaboverse would not populate selected organism from drop-down if previously selected and the user returns to the page (`see commit <https://github.com/Metaboverse/Metaboverse/commit/80d6ba995a71a1306d490cda768b2ed16174cf2a>`_).
+| - Fixed issue where Metaboverse would not show the :data:`Continue` button on the :data:`Curation` page if necessary inputs were previously selected and the user returns to the page (`see commit <https://github.com/Metaboverse/Metaboverse/commit/80d6ba995a71a1306d490cda768b2ed16174cf2a>`_).
+
+
+=================================
 v0.7.1
 =================================
 | **Important Note**
