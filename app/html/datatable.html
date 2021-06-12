@@ -38,8 +38,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <!-- menu -->
     <menu>
       <font size=3.25px>
-        <menuItem id="menuright"></menuItem>
         <menuItem id="menuleft"><a>Metaboverse</a></menuItem>
+        <menuItem id="menurefresh-format" title="Click to reset the table formatter page."><a>&#x21bb;</a></menuItem>
       </font>
     </menu>
   
@@ -70,6 +70,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br>
     <br>
     <div id="format-wrapper" class="top-margin-datatable left-margin-input">
+        <b><u>1) Input unformatted data table:</u></b>
+        <br>    
+        <br>  
         <button id="data_info_flat" class="info_enhanced">
             <i>i</i>
         </button>
@@ -87,16 +90,22 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     <br>
     
     <!--Checkbox to select adjusted-p-values or not-->
-    <div class="top-margin-datatable left-margin-datatable use-inline">
-        Use adjusted p-values: 
-    </div>
-    <input 
-		type="checkbox" 
-		id="use-adj-p" 
-        class="use-inline"
-		value="true"
-		title="Output adjusted p-values." 
-		checked>
+    <div id="format-wrapper" class="top-margin-datatable left-margin-input-2 use-inline"></div>
+        <button id="padj_info_flat" class="info_enhanced">
+            <i>i</i>
+        </button>
+        &emsp;
+        <div class="use-inline">
+            Use adjusted p-values: 
+        </div>
+        <input 
+            type="checkbox" 
+            id="use-adj-p" 
+            class="use-inline"
+            value="true"
+            title="Output adjusted p-values." 
+            checked>
+    </div>  
 
     <!--Select data type-->
     <div id="select-datatype" class="top-margin-datatable left-margin-datatable"></div>

@@ -50,11 +50,42 @@ var info_string = `
 	metabolite name 4&emsp;&emsp;23&emsp;&ensp;&emsp;&emsp;&emsp;1423&emsp;&emsp;&emsp;&emsp;86&emsp;&emsp;&emsp;&emsp;&ensp;...
 	<br>
 	...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;...&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;&ensp;...&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;...
+	
 	<br><br>
-	The statistical procedures used below assume data are <b><i>normally distributed</i></b>. For sequencing data, which follows a negative binomial distribution, an appropriate tool, such as DESeq2 or Limma, should be used.
+	Note: Any normalization (between groups, etc.) that needs to be performed for you dataset should have already been completed. 
+	<br><br>
+	The statistical procedures used below assume data are <b><i>normally distributed</i></b>. For sequencing data, which follows a negative binomial distribution, an appropriate tool, such as DESeq2 or Limma, should be used. 
+	Once your data have been processed by one of these tools, or something comparible, you can export a version of the output table that is only the gene names, log<sub>2</sub>(Fold Change), and adjusted p-values.
 	<br><br>
 	Table should be tab-delimited (.txt; .tsv) or comma-delimited (.csv). <b><i>However, we recommend tab-delimited as some gene or metabolite names may contain commas which can complicate formatting.</i></b> 
 	This can be created by saving the table in Microsoft Excel using the option \"Save as type\": \"Text (Tab delimited)\"; \"CSV (Comma delimited)\")
+`
+
+var padj_string = `
+	<b><u>Adjusted p-value:</u></b>
+	<br><br>
+	<b>Checked</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, which assumes data are normally distributed, followed by a Benjamini-Hochberg (BH) p-value correction for multiple hypothesis 
+	correction. BH correction is applied here as it is not a conservative as a Bonferroni correction procedure and is thus generally better suited for exploratory data analysis.
+	<br><br>
+	<b>Unchecked</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards.
+	<br><br>
+	If you click this button after a sample comparison has already been performed, the change in p-value handling will only be applied to new comparisons. If you want to apply the selected procedure to other previous comparisons,
+	you will need to start the data processing over. You can do this by clicking the Refresh icon on the top left of this page (<b>&#x21bb;</b>), closing this window and re-opening the data formatter, or you can refresh the page by clicking "View" -> "Reload" or CTRL + R (on Windows/Linux) or CMD + R (on MacOS).
+`
+
+var group_names_string = `
+	Provide a name for the current comparison in the box to the right (optional).
+	<br><br>
+	<b>Control</b>: Select the samples belonging to the control group (wild-type, non-treated, etc.), and click the "Control" button to add these samples to this group. These samples are used as the denominator in 
+	the log<sub>2</sub>(Fold Change) calculation.
+	<br><br>
+	<b>Experiment</b>: Select the samples belonging to the experimental group (mutant strain, treated group, etc.), and click the "Experiment" button to add these samples to this group. These samples are used as the 
+	numerator in the log<sub>2</sub>(Fold Change) calculation.
+	<br><br>
+	Click the <b>Add Comparison</b> button once samples have been selected for the current comparison and log<sub>2</sub>(Fold Change) values and statistical values will be calculated and formatted for Metaboverse. 
+	The processed data will be shown in the table below.
+	<br><br>
+	For experiments where you have multiple comparisons you want to process (i.e., time-course, multi-condition data), you should continue to add additional comparison groups, which will be appended to the output table.
 `
 
 var table_string = `
@@ -62,11 +93,15 @@ var table_string = `
 `
 
 var processed_string = `
+	<b><u>Output table preview:</u></b>
+	<br>
+	<br>
 	<table id="processed-table-el" class="display" width="90%"></table>
 `
 
 var datatypes_string = `
-	Select data type:
+	<br>
+	<b><u>2) Select data type:</u></b>
 	<br>
 	<div id="button-2condition">
 		2-Condition
@@ -81,10 +116,16 @@ var datatypes_string = `
 `
 
 var groups_string = `
-	Select column headers and assign to the following groups:
+	<br>
+	<b><u>3) Select column headers from the table above and assign to the following groups:</u></b>
 	<br>
 	<br>
-	<u>Comparison Name</u>:
+
+	<button id="group_name_info_flat" class="info_enhanced">
+		<i>i</i>
+	</button>
+	&emsp;
+	Comparison Name:
 	<div id="text-group-name" class="bump-right-10">
 		<input type="text" id="fname" name="fname">
 	</div>
@@ -119,15 +160,36 @@ window.addEventListener("load", function(event) {
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+	document.getElementById("menurefresh-format").onclick = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		clear_elements()
+	  }
+
 	d3.select("button#data_info_flat")
 		.on("mouseover", function(d) {
 			data_div
 				.style("opacity", 0.95)
 				.style("left", (d3.event.pageX + 20) + "px")
 				.style("top", (d3.event.pageY - 10) + "px")
-				.style("height", "280px")
-				.style("width", "360px");
+				.style("height", "340px")
+				.style("width", "400px");
 			data_div.html(info_string)
+		})
+		.on("mouseout", function(d) {
+			data_div.style("opacity", 0);
+			data_div.html("")
+		});
+
+	d3.select("button#padj_info_flat")
+		.on("mouseover", function(d) {
+			data_div
+				.style("opacity", 0.95)
+				.style("left", (d3.event.pageX + 20) + "px")
+				.style("top", (d3.event.pageY - 10) + "px")
+				.style("height", "325px")
+				.style("width", "360px");
+			data_div.html(padj_string)
 		})
 		.on("mouseout", function(d) {
 			data_div.style("opacity", 0);
@@ -303,6 +365,24 @@ function select_groups(datatable, table) {
 	$('#define-groups').html(groups_string);
 	$('input#fname').val('group' + String(counter))
 
+	var groups_div = d3.select("body").append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0);
+	d3.select("button#group_name_info_flat")
+	.on("mouseover", function(d) {
+		groups_div
+			.style("opacity", 0.95)
+			.style("left", (d3.event.pageX + 20) + "px")
+			.style("top", (d3.event.pageY - 10) + "px")
+			.style("height", "330px")
+			.style("width", "360px");
+			groups_div.html(group_names_string)
+	})
+	.on("mouseout", function(d) {
+		groups_div.style("opacity", 0);
+		groups_div.html("")
+	});
+	
 	// initialize second table here with row names only 
 	var processed_columns = [{ title: " " }];
 	var processed_data = datatable.slice(1).map(function(x) {
@@ -522,4 +602,5 @@ function clear_elements() {
 		.style("background", "#f1f1f1")
 	d3.select("#button-multicondition")
 		.style("background", "#f1f1f1")
+	
 }

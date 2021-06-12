@@ -230,7 +230,7 @@ menuItem a:hover, .highlight_menu:hover {
   float: right;
 }
 
-#menuleft-motif, #menurefresh-motif {
+#menuleft-motif, #menurefresh-motif, #menurefresh-format {
   float: left;
 
 }
@@ -398,7 +398,7 @@ img {
 #proteomics-dropDatabase,
 #metabolomics-dropDatabase {
   border-radius: 5px;
-  background: #f1f1f1;
+  
   border: 1px solid grey;
   height: 15px;
   text-align: center;
@@ -406,6 +406,24 @@ img {
   line-height: 15px;
   text-shadow: none;
   user-select: none;
+}
+
+#format-dropDatabase {
+  background: #ADD8E6;
+}
+
+
+#dropDatabase,
+#dropDatabaseCuration,
+#dropGraphTemplate,
+#dropNeighborDictionary,
+#dropDatabaseSBML,
+#dropDatabaseOutput,
+#format-datatable-input,
+#transcriptomics-dropDatabase,
+#proteomics-dropDatabase,
+#metabolomics-dropDatabase {
+  background: #f1f1f1;
 }
 
 #dropDatabase:active,

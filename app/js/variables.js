@@ -278,12 +278,10 @@ window.addEventListener("load", function(event) {
     refresh_session()
   }
 
-  console.log(get_session_info("collapseWithModifiers"))
+  console.log("Collapse with modifiers:", get_session_info("collapseWithModifiers"))
   if (get_session_info("collapseWithModifiers") === true) {
-    console.log('mod')
     document.getElementById("use_modifiers_in_collapse").checked = true;
   } else {
-    console.log('mod_')
     document.getElementById("use_modifiers_in_collapse").checked = false;
   }
   document.getElementById("use_modifiers_in_collapse").onclick = function(event) {
@@ -296,12 +294,10 @@ window.addEventListener("load", function(event) {
     console.log("Reaction collapse evaluation with modifiers: ", get_session_info("collapseWithModifiers"))
   }
 
-  console.log(get_session_info("broadcastGeneExpression"))
+  console.log("Broadcast gene expression:", get_session_info("broadcastGeneExpression"))
   if (get_session_info("broadcastGeneExpression") === true) {
-    console.log('broad')
     document.getElementById("broadcast_gene_expression").checked = true;
   } else {
-    console.log('broad_')
     document.getElementById("broadcast_gene_expression").checked = false;
   }
   document.getElementById("broadcast_gene_expression").onclick = function(event) {
@@ -314,12 +310,10 @@ window.addEventListener("load", function(event) {
     console.log("Broadcast gene expression values: ", get_session_info("broadcastGeneExpression"))
   }
 
-  console.log(get_session_info("broadcastMetabolites"))
+  console.log("Broadcast metabolites:", get_session_info("broadcastMetabolites"))
   if (get_session_info("broadcastMetabolites") === true) {
-    console.log('broadM')
     document.getElementById("broadcast_metabolite_expression").checked = true;
   } else {
-    console.log('broadM_')
     document.getElementById("broadcast_metabolite_expression").checked = false;
   }
   document.getElementById("broadcast_metabolite_expression").onclick = function(event) {

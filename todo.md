@@ -9,13 +9,9 @@
 
 #### Features
 - scRNA-seq implmentation (#90) -- likely just need a walkthrough demonstrating how to use this effectively
-- Interactive data prep and name mapping check (#74, #86)
-    - see https://datatables.net/examples/data_sources/js_array.html 
-    - Cross-check labels with MetaboAnalyst API and Metaboverse naming dictionaries
-    - Show which ones likely won't map (a way to modify output `.mvrs` directly?)
 - Add motif threshold selection level button to `visualize.js` and `perturbation.js`
-
-
+- Metabolite name checker
+    - Export names to txt, upload to MetaboAnalyst API, get formatted names and replace in table
 
 ## metaboverse-cli
 #### Bugs

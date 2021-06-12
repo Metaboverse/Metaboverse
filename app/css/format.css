@@ -28,6 +28,10 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     padding-left: 140px;
 }
 
+.left-margin-input-2 {
+    padding-left: 135px;
+}
+
 .left-margin-datatable {
     padding-left: 60px;
 }
@@ -99,7 +103,7 @@ td.highlight {
 }
 
 #button-group-export {
-    background: #808080;
+    background: #ADD8E6;
     border: 1px solid black;
     width: 120px;
     margin-top: -20px;
@@ -107,7 +111,7 @@ td.highlight {
 }
 
 #button-group-add {
-    background: #808080;
+    background: #ADD8E6;
     border: 1px solid black;
     width: 150px;
     margin-top: 30px;
@@ -129,6 +133,10 @@ td.highlight {
 
 .bump-right-10 {
     margin-left: 10px;
+}
+
+.bump-left-5 {
+    padding-left: -15px;
 }
 
 .use-inline {
