@@ -34,6 +34,8 @@ var app = require("electron").remote.app;
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + path.sep + "session_data.json";
 
+var use_adj_p = true;
+
 var info_string = `
 	<b><u>Example Data Format:</u></b>
 	<br><br>
@@ -132,6 +134,17 @@ window.addEventListener("load", function(event) {
 			data_div.html("")
 		});
 
+	// Add adj_p checkbox 
+	document.getElementById("use-adj-p").onclick = function(event) {
+		if (use_adj_p === false) {
+			use_adj_p = true;
+		} else {
+			use_adj_p = false;
+		}
+		clear_elements();
+		console.log("Using adjusted p-values? ", use_adj_p)
+	}
+		
     // Format page
     document.getElementById("format-datatable-input").onclick = function(event) {
         event.preventDefault();
@@ -143,6 +156,9 @@ window.addEventListener("load", function(event) {
         event.preventDefault();
         event.stopPropagation();
     
+		// clear all previous elements in case new data is uploaded
+		clear_elements();
+
         var inputVal = document
           .getElementById("format-input")
           .value.split(".");
@@ -177,6 +193,7 @@ window.addEventListener("load", function(event) {
 			$(document).ready(function() {
 	
 				table = $('#loaded-table-el').DataTable( {
+					destroy: true,
 					data: datatable.slice(1),
 					columns: _columns,
 					select: {
@@ -294,6 +311,7 @@ function select_groups(datatable, table) {
 	
 	$('#process-table').html(processed_string);
 	processed_table = $('#processed-table-el').DataTable( {
+		destroy: true,
 		data: processed_data,
 		columns: processed_columns,
 		scrollX: true,
@@ -342,13 +360,23 @@ function select_groups(datatable, table) {
 				let bh_array = bh_corr(p_array);
 
 				// Add new column headers for new data 
+				let stat_type;
 				let this_id = document.getElementById('fname').value;
 				processed_columns.push({ title: this_id + "_fc" });
-				processed_columns.push({ title: this_id + "_bh" });
+				if (use_adj_p === true) {
+					stat_type = "bh"
+				} else {
+					stat_type = "p"
+				}
+				processed_columns.push({ title: this_id + "_" + stat_type });
 
 				for (let i = 0; i < datatable.slice(1).length; i++) {
 					processed_data[i].push(fc_array[i]);
-					processed_data[i].push(bh_array[i]);
+					if (use_adj_p === true) {
+						processed_data[i].push(bh_array[i]);
+					} else {
+						processed_data[i].push(p_array[i]);
+					}
 				}
 
 				$('#process-table').html(processed_string);
@@ -482,4 +510,16 @@ function bh_corr(arr) {
 	}
 
 	return bh_array;
+}
+
+function clear_elements() {
+	$('#define-groups').html("");
+	$('#process-table').html("");
+	$('#save-table').html("");
+	d3.select("#button-2condition")
+		.style("background", "#f1f1f1")
+	d3.select("#button-timecourse")
+		.style("background", "#f1f1f1")
+	d3.select("#button-multicondition")
+		.style("background", "#f1f1f1")
 }

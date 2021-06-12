@@ -130,3 +130,7 @@ td.highlight {
 .bump-right-10 {
     margin-left: 10px;
 }
+
+.use-inline {
+    display: inline-block;
+}
