@@ -52,6 +52,7 @@ td.highlight {
     background-color: #7393B3 !important;
 }
 
+#button-group-check,
 #button-group-export,
 #button-group-add,
 #button-group-control,
@@ -80,6 +81,7 @@ td.highlight {
     text-shadow: none;
 }
 
+#button-group-check:hover,
 #button-group-export:hover,
 #button-group-add:hover {
     background: #7393B3;
@@ -102,6 +104,7 @@ td.highlight {
     width: 110px;
 }
 
+#button-group-check,
 #button-group-export {
     background: #ADD8E6;
     border: 1px solid black;

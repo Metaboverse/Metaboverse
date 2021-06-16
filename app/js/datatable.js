@@ -36,6 +36,40 @@ var session_file = userDataPath + path.sep + "session_data.json";
 
 var use_adj_p = true;
 
+var opts = { // Spinner opts from http://spin.js.org/
+	lines: 10, // The number of lines to draw
+	length: 19, // The length of each line
+	width: 5, // The line thickness
+	radius: 14, // The radius of the inner circle
+	scale: 1, // Scales overall size of the spinner
+	corners: 1, // Corner roundness (0..1)
+	speed: 1, // Rounds per second
+	rotate: 0, // The rotation offset
+	animation: 'spinner-line-fade-quick', // The CSS animation name for the lines
+	direction: 1, // 1: clockwise, -1: counterclockwise
+	color: '#454545', // CSS color or array of colors
+	fadeColor: 'transparent', // CSS color or array of colors
+	top: '50%', // Top position relative to parent
+	left: '50%', // Left position relative to parent
+	shadow: '0 0 1px transparent', // Box-shadow for the lines
+	zIndex: 2000000000, // The z-index (defaults to 2e9)
+	className: 'spinner', // The CSS class to assign to the spinner
+	position: 'absolute', // Element positioning
+  };
+
+var settings = {
+	"async": true,
+	"crossDomain": true,
+	"url": "http://api.xialab.ca/mapcompounds",
+	"method": "POST",
+	"headers": {
+	  "Content-Type": "application/json",
+	  "cache-control": "no-cache"
+	},
+	"processData": false,
+	"data": ""
+  }
+
 var info_string = `
 	<b><u>Example Data Format:</u></b>
 	<br><br>
@@ -147,6 +181,10 @@ var groups_string = `
 `
 
 var export_string = `
+	<div id="button-group-check" title="Check provided entity names against the MetaboAnalyst database. Processing time depends on connection to MetaboAnalyst and the number of names to check.">
+		Check Names
+	</div>
+	&emsp;
 	<div id="button-group-export">
 		Export Table
 	</div>
@@ -251,9 +289,7 @@ window.addEventListener("load", function(event) {
 			var datatable = read_table(f.path);
 			$('#loaded-table').html(table_string);
 			let _columns = parse_columns(datatable);
-
 			$(document).ready(function() {
-	
 				table = $('#loaded-table-el').DataTable( {
 					destroy: true,
 					data: datatable.slice(1),
@@ -315,11 +351,6 @@ window.addEventListener("load", function(event) {
 							.style("background", "#0080ff")
 						select_groups(datatable, table);
 					})
-
-				
-
-
-
 			} );    
 		} 
 	};
@@ -388,19 +419,14 @@ function select_groups(datatable, table) {
 	var processed_data = datatable.slice(1).map(function(x) {
         return [ x[0] ];
     });
-	
-	$('#process-table').html(processed_string);
-	processed_table = $('#processed-table-el').DataTable( {
-		destroy: true,
-		data: processed_data,
-		columns: processed_columns,
-		scrollX: true,
-		autoWidth: false,
-		"aoColumnDefs": [
-			{ "bSortable": true, "aTargets": [ 0 ] },
-			{ "bSortable": false, "aTargets": Array.from(processed_columns.keys()).slice(1) }
-		]
-	} );
+	//update table
+	processed_table = update_table(
+		'#process-table', 
+		'#processed-table-el', 
+		processed_string, 
+		processed_data, 
+		processed_columns
+	);
 	$('#save-table').html(export_string);
 
 	var control_selection = null;
@@ -459,18 +485,14 @@ function select_groups(datatable, table) {
 					}
 				}
 
-				$('#process-table').html(processed_string);
-				processed_table = $('#processed-table-el').DataTable( {
-					destroy: true,
-					data: processed_data,
-					columns: processed_columns,
-					scrollX: true,
-					autoWidth: false,
-					"aoColumnDefs": [
-						{ "bSortable": true, "aTargets": [ 0 ] },
-						{ "bSortable": false, "aTargets": Array.from(processed_columns.keys()).slice(1) }
-					]
-				} );
+				//update table
+				processed_table = update_table(
+					'#process-table', 
+					'#processed-table-el', 
+					processed_string, 
+					processed_data, 
+					processed_columns
+				);
 
 				control_selection = null;
 				experiment_selection = null;
@@ -481,16 +503,70 @@ function select_groups(datatable, table) {
 			}
 		})
 
+	//check_metabolites();
+	d3.select('#button-group-check')
+		.on("click", function(d) {
+
+			//get current names
+			var entity_string = "";
+			var entity_names = datatable.slice(1).map(function(x) {
+				entity_string = entity_string + x[0] + ";"
+			});
+
+			// inject in data string
+			settings.data = "{\n\t\"queryList\": \"" + entity_string + "\",\n\t\"inputType\": \"name\"\n}"
+
+			// run ajax query and update table with names ("Match")
+			d3.select("#button-group-check")
+				.html("Checking...");
+			var target = document.getElementById('processed-table-el')
+			var spinner = new Spinner(opts);
+			if (d3.event.button === 0) { spinner.spin(target) };
+			$.ajax(settings).done(function (response) {
+				// for each Match, if not NA, use; else ignore and use Query
+				// update row names
+				for (let i in processed_data) {
+					if (response.Match[i] !== "NA") {
+						processed_data[i][0] = response.Match[i];
+					}
+				}
+
+				//update table
+				processed_table = update_table(
+					'#process-table', 
+					'#processed-table-el', 
+					processed_string, 
+					processed_data, 
+					processed_columns
+				);
+				spinner.stop();
+				d3.select("#button-group-check")
+					.html("Check Names");
+			});
+		})
+
 	d3.select('#button-group-export')
 		.on("click", function(d) {
 			write_table(processed_columns, processed_data)
 		})
-	//check_metabolites();
 }
 
-function check_metabolites() {
-	$('#check-metabolites').html(check_string);
+function update_table(_identifier, _element, _display, _data, _cols) {
+	$(_identifier).html(_display);
+	let _processed_table = $(_element).DataTable( {
+		destroy: true,
+		data: _data,
+		columns: _cols,
+		scrollX: true,
+		autoWidth: false,
+		"aoColumnDefs": [
+			{ "bSortable": true, "aTargets": [ 0 ] },
+			{ "bSortable": false, "aTargets": Array.from(_cols.keys()).slice(1) }
+		]
+	} );
+	return _processed_table;
 }
+
 
 function handle_selection(datatable, table, selector) {
 
