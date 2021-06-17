@@ -25,7 +25,7 @@ Data Inputs
 |
 | Along with single condition experiment set-ups, users can provide timecourse data by sequentially listing the fold change and statistical columns in temporal order in the input data table for that -omic type. Users can provide all paired -omics types for each time point, or provide one -omics table of timecourse data and a table for another -omics type with a single steady-state time point. In every situation, it is vital the user keeps in mind the caveats associated with comparing such mixed data types. Along with timecourse data, users can provide multiple conditions formatted as with the timecourse data.
 |
-| Users can also select the :data:`Format Data` option. Doing so will launch a new window where an unformatted datatable can be uploaded and the user can select the relevant samples to experimental or control groups for a single 2-condition comparison or multiple comparisons for time-course or multi-condition datasets.
+| Users can also select the :data:`Format Data` option. Doing so will launch a new window where an unformatted datatable can be uploaded and the user can select the relevant samples to experimental or control groups for a single 2-condition comparison or multiple comparisons for time-course or multi-condition datasets. A description of the usage of this module can be found in the :data:`format_link` section.
 .. image:: images/data_formatting_aid.png
    :width: 300
    :align: center

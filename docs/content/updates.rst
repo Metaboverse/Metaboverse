@@ -3,7 +3,7 @@ Updates
 ###############
 
 =================================
-v0.8.0 (in progress)
+v0.8.0
 =================================
 | **Major**
 | - Added data formatting aid page (`see issue #86 <https://github.com/Metaboverse/Metaboverse/issues/86>`_).
