@@ -3,10 +3,6 @@ Metaboverse
 ##############
 |build-status| |docs| |downloads| |biorxiv| 
 
-.. image:: content/images/metaboverse_spiral.gif
-   :width: 350
-   :align: center
-
 =================
 About
 =================
