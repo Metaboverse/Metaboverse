@@ -21,7 +21,7 @@ Data Formatting Help
 | 4. Select the experiment type used.
 | 5. Provide a label for the comparison, or use the default name, and select the contol and experimental samples from the columns and assign to their appropriate group by clicking the group  button (:data:`Control` or :data:`Experiment`).
 | 6. For multi-condition or time-course experiments, continue to add additional groups.
-| 7. For metabolomics data, click the :data:`Check Names` button to cross-reference the names you provided with `MetaboAnalyst <>`_ to improve the chances that the metabolite correctly maps  to the metabolic network.
+| 7. For metabolomics data, click the :data:`Check Names` button to cross-reference the names you provided with `MetaboAnalyst <https://www.metaboanalyst.ca/docs/APIs.xhtml>`_ to improve the chances that the metabolite correctly maps  to the metabolic network.
 | 8. Export your formatted datatable.
 
 .. image:: images/format-edit.gif
