@@ -7,6 +7,7 @@ v0.8.0 (in progress)
 =================================
 | **Major**
 | - Added data formatting aid page (`see issue #86 <https://github.com/Metaboverse/Metaboverse/issues/86>`_).
+| - Added ability to cross-reference metabolite names with MetaboAnalyst and find more compatible names (`see issue #74 <https://github.com/Metaboverse/Metaboverse/issues/74>`_).
 |
 | **Minor**
 | - Fixed issue where Metaboverse would not populate selected organism from drop-down if previously selected and the user returns to the page (`see commit <https://github.com/Metaboverse/Metaboverse/commit/80d6ba995a71a1306d490cda768b2ed16174cf2a>`_).
