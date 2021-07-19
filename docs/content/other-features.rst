@@ -29,6 +29,27 @@ Data Formatting Help
   :align: center
 
 
+===============================
+Flux Metabolomics Data 
+===============================
+| Currently, Metaboverse does not contain any integrated methods for handling flux metabolomics data. We chose to do so for a couple of reasons:
+| 1. Coupling flux balance analysis with reaction pattern searches, reaction collapses, and the other features of Metaboverse would add more dimensionality that would reduce the effectiveness of what Metaboverse has to offer.
+| 2. Flux balance analysis can be difficult to automate pattern searches across. For example, M+4 vs M+5 citrate could imply drastically different metabolic outcomes and is better suited for manual analysis.
+| 3. `Escher-Trace <https://escher-trace.github.io/>`_ is a publicly available visualization tool that already provides the capabilities to analyze flux data.
+
+| We strongly suggest users interested in analyzing flux data in conjunction with Metaboverse to check out `Escher-Trace <https://escher-trace.github.io/>`_. For such an analysis, users might consider analyzing the different 
+ionization products with `Escher-Trace <https://escher-trace.github.io/>`_ and analyzing derived steady-state metabolomics data (i.e. M+0) with Metaboverse's reaction pattern search engine. Cross-referencing the outputs of 
+these two tools may then provide biological clues for their system, such as to the downstream outcomes of differential metabolite flux.
+
+
+===============================
+Single Cell RNA-Sequencing 
+===============================
+| 
+
+
+
+
 
 ..
   ===============================
