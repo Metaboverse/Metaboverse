@@ -17,11 +17,11 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 
 </div> 
 
-<font size="1">
+<sub>
 
-<b>a.</b> The user provides thename of the organism of interest from a drop-down menu along with an output location. The user then has the option to provide transcriptomics,proteomics, and/or metabolomics datasets. These datasets can be single- or multi-condition or time-course experiments. Data is formatted as follows:row names are the measured entity names or IDs, the first column is a log2(fold change) or other measurement value, and the second column is astatistical measurement. For time-course and multi-condition datasets, this pattern is repeated for each subsequent sample. During this step, the usercan also provide sample labels and other modifiers to customize the curation and display of the data on the curated reaction network. Metaboverse willthen build the model. Once the model is complete, the user will be able to visualize the patterns identified within reactions, explore pathway-specificor general perturbation networks, and perform general pathway and nearest reaction neighborhood exploration of the data. <b>b.</b> Overview of back-endmetabolic network curation and data layering.
+<b>a.</b> The user provides the name of the organism of interest from a drop-down menu along with an output location. The user then has the option to provide transcriptomics, proteomics, and/or metabolomics datasets. These datasets can be single- or multi-condition or time-course experiments. Data is formatted as follows: row names are the measured entity names or IDs, the first column is a log2(fold change) or other measurement value, and the second column is a statistical measurement. For time-course and multi-condition datasets, this pattern is repeated for each subsequent sample. During this step, the user can also provide sample labels and other modifiers to customize the curation and display of the data on the curated reaction network. Metaboverse will then build the model. Once the model is complete, the user will be able to visualize the patterns identified within reactions, explore pathway-specific or general perturbation networks, and perform general pathway and nearest reaction neighborhood exploration of the data. <b>b.</b> Overview of back-end metabolic network curation and data layering.
 
-</font>
+</sub>
 
 
 #### Overview of reaction pattern construction and reaction collapsing. 
@@ -32,11 +32,11 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 
 </div>  
 
-<font size="1">
+<sub>
 
-<b>a.</b> Examples of a selection of reaction patterns available in Metaboverse.Reactions are depicted as stars, metabolites as circles, protein complexes as squares, and proteins as diamonds. Core interactions (inputs, outputs)are depicted as grey arrows, reaction catalysts as green arrows, and reaction inhibitors as red arrows. Component measurements are depicted in ablue-to-red color map, where lower values are more blue and higher values are more red. <b>b.</b> Example sub-networks where a reaction collapse wouldoccur. Measured components are depicted as red circles, unmeasured components as white circles, and reactions as stars. Core interactions (inputs,outputs) are depicted as grey lines and identical components that would form the bridge between two reactions are depicted as dashed black linesbetween circles. A collapsed reaction is depicted as a star with a dashed border and its new connections between measured components are dashedblack lines between a measured component and a reaction node. Collapsed reactions representing a particular reaction sequence are marked by anasterisk (∗) or a number sign (#).
+<b>a.</b> Examples of a selection of reaction patterns available in Metaboverse. Reactions are depicted as stars, metabolites as circles, protein complexes as squares, and proteins as diamonds. Core interactions (inputs, outputs) are depicted as grey arrows, reaction catalysts as green arrows, and reaction inhibitors as red arrows. Component measurements are depicted in a blue-to-red color map, where lower values are more blue and higher values are more red. <b>b.</b> Example sub-networks where a reaction collapse would occur. Measured components are depicted as red circles, unmeasured components as white circles, and reactions as stars. Core interactions (inputs, outputs) are depicted as grey lines and identical components that would form the bridge between two reactions are depicted as dashed black lines between circles. A collapsed reaction is depicted as a star with a dashed border and its new connections between measured components are dashed black lines between a measured component and a reaction node. Collapsed reactions representing a particular reaction sequence are marked by an asterisk (∗) or a number sign (#).
 
-</font>
+</sub>
 
 
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
