@@ -13,7 +13,7 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 
 <div align="center">
 
-<img src="app/data/examples/fig_1-metaboverse_overview.png" alt="Metaboverse overview figure" width="600"/>   
+<img src="docs/content/images/fig_1-metaboverse_overview.png" alt="Metaboverse overview figure" width="800"/>   
 
 </div> 
 
@@ -30,7 +30,7 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 
 <div align="center">
 
-<img src="app/data/examples/fig_2-pattern_collapse_overview.png" alt="Metaboverse regulatory pattern recognition figure" width="600"/>  
+<img src="docs/content/images/fig_2-pattern_collapse_overview.png" alt="Metaboverse regulatory pattern recognition figure" width="579"/>  
 
 </div>  
 
