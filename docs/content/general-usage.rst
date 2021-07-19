@@ -6,17 +6,17 @@ General Usage
 
 | The following walkthrough was created using Metaboverse :data:`v0.3.2b` and previous versions. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
 
-----------------------------
+===============================
 Analysis Video Walkthrough
-----------------------------
+===============================
 | You can watch the Metaboverse walkthrough video here, or continue below for a more detailed walkthrough.
 .. raw:: html
 
     <iframe width="700" height="450" src="https://youtube.com/embed/U7m78Tbs5KE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
--------------------------
+===============================
 Getting Started
--------------------------
+===============================
 | 1. If this is your first time analyzing a given dataset, you should press :data:`Skip` on the opening page.
 .. image:: images/page_one.gif
   :width: 700
@@ -50,9 +50,9 @@ Getting Started
   :width: 700
   :align: center
 
---------------------------------------------------
+==============================================================
 Regulatory Hotspot Identification (:data:`Pattern Analysis`)
---------------------------------------------------
+==============================================================
 | Regulatory patterns can be searched for in the global reaction network using this page. Users can select different reaction pattern types by clicking on the appropriate buttons and adjusting their thresholds as necessary.
 |
 | Currently, these reaction pattern types are available:
@@ -90,9 +90,9 @@ Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 
 | For time-course and multi-condition data, a line plot is drawn for a selected reaction with the behavior of that reaction's components across all time-points or conditions.
 
------------------------------------
+===============================
 General Pathway Exploration
------------------------------------
+===============================
 | Users can explore classical pathways and all components of the network interactively by navigating to the :data:`Explore` page.
 
 | a) At the top of the legend, reference to the node types are displayed. Grey nodes are reactions, nodes with solid outlines are measured, and nodes with dashed outlines are inferred using the gene broadcasting feature. Components with significant statistical values based on the threshold (defined in section d) are bolded. Users can hover across the color scale to see what color corresponds to what value.
@@ -115,17 +115,17 @@ General Pathway Exploration
   :width: 700
   :align: center
 
------------------------------------
+===============================
 Perturbation Network Modeling
------------------------------------
+===============================
 | Users can explore the role and extent of perturbation within the reaction network in their model by navigating to the appropriate page. Users can modify the perturbation threshold for the fold change or statistical value.
 .. image:: images/perturbations.gif
   :width: 700
   :align: center
 
------------------------------------
+===============================
 Nearest Neighborhood Searches
------------------------------------
+===============================
 | Users interested in exploring a components reaction neighborhood can double-click the component to expand this view. The number of reaction neighbors can be selected, and limits on the number of connections a connecting component can have to be displayed can be modified. This hub selection is particularly helpful for connected components that are involved in several reactions.
 .. image:: images/nearest_neighbors.gif
   :width: 700
@@ -133,17 +133,17 @@ Nearest Neighborhood Searches
 
 | Users can also target an entity for exploration directly by selecting :data:`All entities` in the :data:`Explore` page from the :data:`Select a super-pathway...` drop-down menu.
 
------------------------------------------------
+===============================
 Analyzing Complexes
------------------------------------------------
+===============================
 | During reaction pattern analysis, protein complexes consisting of multiple elements are aggregated to generate a pseudo fold change and statistical value by calculating the median of all magnitude changes and Euhler's constant (**e**) x the geometric mean of the component statistical values. If the resulting aggregated statistical value is greater than 1, 1 is substituted.
 | We aimed to take a flexible approach that biases the representative fold change and statistical value towards the most frequent, so if most complex components are statistically significant with high fold changes, the resulting values will be so as well.
 
 | By unchecking the :data:`Infer complexes` box on the Reaction Pattern page, you can alternatively analyze complex components individually within that reaction, where Metaboverse will find the optimal element that will give the best magnitude difference to compare against the selected threshold.
 
------------------------------------
+===============================
 Analyzing Previous Models
------------------------------------
+===============================
 | Users can load a previously modeled network with their data on it by loading the :data:`.mvrs` file output by Metaboverse when originally generated. This is done on the Home page.
 .. image:: images/load_previous.gif
   :width: 700
@@ -154,9 +154,9 @@ Analyzing Previous Models
   :width: 700
   :align: center
 
------------------------------------------------
+==============================================================
 Publishing Data Analyzed with Metaboverse
------------------------------------------------
+==============================================================
 | When publishing analyses that used Metaboverse, we recommend attaching the appropriate :data:`.mvrs` file that contains the network with your data overlaid as a supplementary file. This will allow for others to easily reproduce and explore your data.
 
 | Users can explore the metadata related to their Metaboverse model by clicking on the :data:`Session Data` tab in the menu once the :data:`.mvrs` file is loaded.

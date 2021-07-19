@@ -5,9 +5,9 @@ Other Features
 ##############
 
 .. _format_link:
--------------------------
+===============================
 Data Formatting Help
--------------------------
+===============================
 | 1. On the :data:`Variables` page of Metaboverse, launch the :data:`Format dataset` module.
 | 2. Upload your datatable. The datatable's first column should be a blank cell, followed by each of the measured entities' names. Each subsequent column should start with the sample name, followed by the corresponding measurements for each measured entity.
 | 3. By default, calculated p-values will use the `Benjamini-Hochberg p-value adjustment procedure <https://www.jstor.org/stable/2346101>`_ for multiple hypothesis testing. This is a less conservative adjustment procedure ideal for exploratory data analysis. If you do not wish to use a p-value correction procedure, uncheck the appropriate box. 
@@ -31,9 +31,9 @@ Data Formatting Help
 
 
 ..
-  -------------------------
+  ===============================
   Adding a custom reaction
-  -------------------------
+  ===============================
   | Metaboverse primarily relies on annotated reactions as contained in the `Reactome <https://reactome.org/>`_ for a given organism. As such, a reaction may exist or exist in another organism 
   that is not annotated in your organism of interest.
   | In order to add a reaction, provide a tab-delimited file in the Variables page for Metaboverse. Each line below the table headers should represent an independent reaction record. An example 

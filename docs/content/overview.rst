@@ -4,20 +4,20 @@
 Overview
 ############
 
---------------
+===============================
 Background
---------------
+===============================
 | Metaboverse is a cross-platform app built to aid users in contextualizing their data on their model's metabolic and global reaction network. Metaboverse is an interactive tool for exploratory data analysis that searches user data in the context of the metabolic network to identify interesting patterns and trends within the data. Metaboverse will aid users in interactively identifying interesting patterns and regulatory hotspots within their data for further experimental follow-up. You can find some of the interesting patterns we have discovered `here <https://www.overleaf.com/read/nyvmfmcxhsdp>`_.
 |
------------------
+===============================
 Important Note
------------------
+===============================
 | If you ever have any questions about using a particular feature, or what a particular button does, try hovering your mouse over the button or feature and often a short explainer will pop out. You can also search the Docs for more in-depth information or refer to the manuscript.
 | For information on symbols in Metaboverse, please refer to the :data:`Shape Legend` and :data:`Compartment Legend` references where applicable.
 |
------------------
+===============================
 Data Inputs
------------------
+===============================
 | Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
 .. image:: images/data_formatting.png
    :width: 700
@@ -38,24 +38,24 @@ Data Inputs
 | - Keep an eye out for measurements with weird characters in their names. This can often cause problems with the data mapping.
 | - Make sure the gene/protein/metabolite column name is blank, as shown in the examples.
 |
--------------------
+===============================
 Unmapped Data
--------------------
+===============================
 | During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`. Data points could be unmapped for two reasons:
 | - The data point is not curated in a reaction within the selected organism's reaction network
 | - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl gene ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
 | - Try searching :data:`Reactome + the name of the unmapped species` online to see if the species goes by another name in Reactome, or if it is missing from the organism curation.
 |
--------------------
+===============================
 Output File Types
--------------------
+===============================
 | There are two output file types associated with Metaboverse:
 | - :data:`.mvdb`: This is the organismal curation file, containing the underlying network structure for the selected organism, as well as important node mapping information for connecting user-provided gene, protein, and metabolite measurements to the appropriate locations in the network.
 | - :data:`.mvrs`: This is the completed organismal curation file, with your gene/protein/metabolite measurements mapped onto the network. You can load this file on the home page within the Metaboverse app to pick up where you left off in your analysis of the data.
 |
--------------------
+===============================
 Using Metaboverse
--------------------
+===============================
 | Metaboverse first asks users for the organism of interest and an output folder to store all output data and network representations. Afterwards, the user will be directed to provide any -omics data tables, along with some basic metadata, such as experimental setup, timecourse labels, etc. After this input is provided, the network will be modeled with the user's data overlaid. Two files will then be output to the location specified by the user. The first will be a file ending in :data:`.mvdb`, which contains the basic information needed to model the organism network without user data. This file can be saved for future usage if the user wishes to remodel data on that organism's network without have to wait for all the necessary source files to download. This file can be provided in leiu of the organism name and file output on the appropriate page.
 |
 | The second file ends in :data:`.mvrs` and contains the final network with the user data and user metadata stored. This file will allow for all downstream visualizations and analyses and can be reloaded on the main page of Metaboverse to quickly re-analyze a dataset. Clicking on the :data:`Session Data` tab in the menu on each page of Metaboverse will display the appropriate metadata for that particular model.
@@ -73,9 +73,9 @@ Using Metaboverse
 | * :data:`.mvdb` and :data:`.mvrs` files can be saved to quickly access the organism curation or data model. For :data:`v0.3.0b` or earlier, these files ended in :data:`.pickle` and :data:`.json`, respectively.
 | * Once data is modeled on the network, the user can begin interactive analysis of their data.
 |
-------------------------------------------
+==================================
 Important Features of Metaboverse
-------------------------------------------
+==================================
 | While many tools currently available provide capabilities to analyze data on metabolic networks, we introduce several new or improved features in metabolic network analysis that aid in more robust, unbiased network analysis of biological data. These features are outlined below:
 |
 | * **Collapsing data sparsity**: Due to the challenges in metabolomics revolving around missing values for metabolites in a reaction pathway, data sparsity can impede in the analytical process. We address this issue by introducing a reaction collapse scheme, that creates pseudo-reactions where up to 3 reactions have missing data points between the reactions, but the external ends of the reactions in this sub-path have measured values.
@@ -88,15 +88,17 @@ Important Features of Metaboverse
 |
 | * **Exploring global consequences of a change**: In the :data:`Exploration` page, you can double-click on any reaction component and explore all connected reactions to this component across the total reaction network, not just the selected pathway. Additionally, you can select :data:`All entities` from the :data:`Select a super-pathway...` drop-down menu to select any component from the total network for this type of exploration.
 |
--------------------
+===============================
 Performance
--------------------
-| Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster (5-10min) than data modeled on a human network (20-30min). You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working. Certain steps that are particular computationally intensive may pause the completion % for a couple minutes, but Metaboverse may still be working.
-| Currently, for a human network, it may take up to 20 minutes to curate the network with your data. We hope to improve this performance time in the near future, but a lot of this time is directly tied to internet connection, download speed, and the sheer size and annotation of the human metabolic network.
+===============================
+| Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster (5-10min) than data modeled on a human network (20-30min). 
+For pre-curated reference files (where you do not force a fresh curation), this total process should only take a few minutes, even for a human network, and depends more on your internet conneciton speed.
+| You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working. Certain steps that are particular computationally intensive may pause the 
+completion % for a couple minutes, but Metaboverse may still be working.
 |
-----------------------
+===============================
 Technical Description
-----------------------
+===============================
 | Metaboverse is currently segmented into two parts:
 | 1. :data:`Metaboverse` interactive app: The platform-independent app for visualizing and exploring data on the metabolic network. [`code <https://github.com/Metaboverse/Metaboverse>`_]
 | 2. :data:`metaboverse-cli`: The network curation and modeling utilities that form the back-end of the Metaboverse app. For each release of Metaboverse, OS-specific binaries are generated of the backend and incorporating into the GUI app. [`code <https://github.com/Metaboverse/metaboverse-cli>`_]
