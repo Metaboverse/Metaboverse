@@ -21,6 +21,8 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var path = require("path");
+var jStat = require("jStat");
+
 var eval_collapsed = false;
 var eval_modifiers = false;
 var excl_hubs = true;
@@ -678,7 +680,8 @@ function motifSearch_Avg(
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             "source": p_source,
-            "target": p_target
+            "target": p_target,
+            'agg': aggregate_p_values(flatten(source_stats.concat(target_stats)))
           };
           reaction_copy.magnitude_change = Math.abs(source_avg - target_avg);
           sample_motifs.add(reaction_copy);
@@ -741,7 +744,8 @@ function motifSearch_MaxMax(
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             "source": p_source,
-            "target": p_target
+            "target": p_target,
+            'agg': aggregate_p_values([p_source, p_target])
           };
           reaction_copy.magnitude_change = Math.abs(source_max - target_max);
           sample_motifs.add(reaction_copy);
@@ -805,7 +809,8 @@ function motifSearch_MinMin(
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             "source": p_source,
-            "target": p_target
+            "target": p_target,
+            'agg': aggregate_p_values([p_source, p_target])
           };
           reaction_copy.magnitude_change = Math.abs(source_min - target_min);
           sample_motifs.add(reaction_copy);
@@ -869,7 +874,8 @@ function motifSearch_MaxMin(
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             "source": p_source,
-            "target": p_target
+            "target": p_target,
+            'agg': aggregate_p_values([p_source, p_target])
           };
           reaction_copy.magnitude_change = Math.abs(source_max - target_min);
           sample_motifs.add(reaction_copy);
@@ -934,7 +940,8 @@ function motifSearch_MinMax(
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             "source": p_source,
-            "target": p_target
+            "target": p_target,
+            'agg': aggregate_p_values([p_source, p_target])
           };
           reaction_copy.magnitude_change = Math.abs(source_min - target_max);
           sample_motifs.add(reaction_copy);
@@ -1057,7 +1064,8 @@ function motifSearch_Sustained(
               let reaction_copy = $.extend(true, {}, reaction);
               reaction_copy.p_values = {
                 "source": p_source_up,
-                "target": p_target_up
+                "target": p_target_up,
+                'agg': aggregate_p_values([p_source_up, p_target_up])
               };
               reaction_copy.magnitude_change = magnitude_change_up;
               sample_motifs.add(reaction_copy);
@@ -1065,7 +1073,8 @@ function motifSearch_Sustained(
               let reaction_copy = $.extend(true, {}, reaction);
               reaction_copy.p_values = {
                 "source": p_source_down,
-                "target": p_target_down
+                "target": p_target_down,
+                'agg': aggregate_p_values([p_source_down, p_target_down])
               };
               reaction_copy.magnitude_change = magnitude_change_down;
               sample_motifs.add(reaction_copy);
@@ -1074,7 +1083,8 @@ function motifSearch_Sustained(
             let reaction_copy = $.extend(true, {}, reaction);
             reaction_copy.p_values = {
               "source": p_source_up,
-              "target": p_target_up
+              "target": p_target_up,
+              'agg': aggregate_p_values([p_source_up, p_target_up])
             };
             reaction_copy.magnitude_change = magnitude_change_up;
             sample_motifs.add(reaction_copy);
@@ -1082,7 +1092,8 @@ function motifSearch_Sustained(
             let reaction_copy = $.extend(true, {}, reaction);
             reaction_copy.p_values = {
               "source": p_source_down,
-              "target": p_target_down
+              "target": p_target_down,
+              'agg': aggregate_p_values([p_source_down, p_target_down])
             };
             reaction_copy.magnitude_change = magnitude_change_down;
             sample_motifs.add(reaction_copy);
@@ -1152,7 +1163,8 @@ function modifierReg(
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             'source': p_source,
-            'target': p_target
+            'target': p_target,
+            'agg': aggregate_p_values([p_source, p_target])
           };
           reaction_copy.magnitude_change = mag_change;
           sample_motifs.add(reaction_copy);
@@ -1224,7 +1236,8 @@ function modifierTransport(
               let p_target = modifier_stats[y];
               let p_vals = {
                 "source": p_source,
-                "target": p_target
+                "target": p_target,
+                'agg': aggregate_p_values(flatten(source_stats.concat(modifier_stats)))
               };
               let place_value;
               if (Math.abs(intersect[x]) >= threshold
@@ -1411,7 +1424,8 @@ function enzymeMotif(
               'magnitude_change': mag_change,
               'p_values': {
                 'source': p_source,
-                'target': p_target
+                'target': p_target,
+                'agg': aggregate_p_values([p_source, p_target])
                 }
               })
             }
@@ -1521,7 +1535,8 @@ function activityMotif(
                 'magnitude_change': mag_change,
                 'p_values': {
                   'source': p_source,
-                  'target': p_target
+                  'target': p_target,
+                  'agg': aggregate_p_values([p_source, p_target])
                 }
               })
             }
@@ -1619,6 +1634,28 @@ function make_neighbors_dictionary(
     reaction_neighbors_dictionary,
     collapsed_reaction_neighbors_dictionary
   ];
+}
+
+
+function aggregate_p_values(p_array) {
+
+  let agg_p = (Math.E * jStat.geomean(p_array));
+
+  if (agg_p > 1.0) {
+    agg_p = 1.0
+  }
+
+  return agg_p;
+}
+
+
+// Source: https://stackoverflow.com/a/39261045; CC BY-SA 3.0
+function flatten(arr) {
+
+  return arr.reduce(function(a, b) {
+    return a.concat(Array.isArray(b) ? flatten(b) : b);
+  }, []);
+
 }
 
 

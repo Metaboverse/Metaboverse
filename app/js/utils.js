@@ -146,5 +146,3 @@ function make_pathway_dictionary(data, database_key) {
 
   return pathway_dict;
 }
-
-

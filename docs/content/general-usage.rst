@@ -51,7 +51,7 @@ Getting Started
   :align: center
 
 ==============================================================
-Regulatory Hotspot Identification (:data:`Pattern Analysis`)
+Reaction Pattern Analysis
 ==============================================================
 | Regulatory patterns can be searched for in the global reaction network using this page. Users can select different reaction pattern types by clicking on the appropriate buttons and adjusting their thresholds as necessary.
 |
@@ -64,7 +64,12 @@ Regulatory Hotspot Identification (:data:`Pattern Analysis`)
 | 6. **Metabolite**: Find instances of two neighboring reactions, both with at least one metabolite component that passes the specified threshold.
 | 7. **MaxMax**: A reaction whose absolute difference between the maximum measured value of reactants and the maximum measured value of products is greater than or equal to the threshold.
 | 8. **MaxMin**: A reaction whose absolute difference between the maximum measured value of reactants and the minimum measured value of products is greater than or equal to the threshold.
-
+|
+| Identified reaction patterns can be sorted for the user using multiple methods:
+| 1. **Sort FDR**: *e* multiplied by the geometric mean of the relevant p-values to the reaction pattern components are calculated, which roughly leads to a generalized version of a false discovery rate procedure [`ref <https://academic.oup.com/biomet/article-abstract/107/4/791/5856302?redirectedFrom=fulltext>`_].
+| 2. **Sort Statistical Significance**: Either the relevant or maximum reactant, product, and/or modifier p-values are considered in sorting.
+| 3. **Sort Magnitude Change**: Either the relevant or maximum reactant, product, and/or modifier fold changes and the net change across the reaction are considered in sorting.
+| 4. **Sort Number of Pathways**: Reaction patterns annotated in more pathways are prioritized.
 
 | Users can then select a given reaction pattern, view the pathways that reaction is present in across the global reaction network, select a pathway to view, and see all other patterns of that type available in that pathway. In the :data:`Reaction-Pathway Membership` box, a simplified glyph of the reaction is drawn, with inputs (substrates) on the left of the reaction node and outputs (products) on the right of the reaction node. Modifiers and input/output types are not shown in this simplified glyph.
 .. image:: images/pattern_page.gif

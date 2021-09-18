@@ -636,6 +636,7 @@ class MetaGraph {
 
     // Sort motifs based on user input
     let sort_type = this.sort_type_dropdown.value;
+    console.log(sort_type)
     let motif_significance = {
       'both': [],
       'one': [],
@@ -672,12 +673,22 @@ class MetaGraph {
       .attr("width", stamp_width)
       .attr("height", stamp_height)
       .attr("fill", d => {
-        if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
-          return "green";
-        } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
-          return "orange";
+        if (sort_type === "Sort FDR") {
+          if (d.p_values.agg <= 0.05) {
+            return "green";
+          } else if (d.p_values.agg <= 0.1) {
+            return "orange";
+          } else {
+            return "lightgrey";
+          }
         } else {
-          return "lightgrey";
+          if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
+            return "green";
+          } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
+            return "orange";
+          } else {
+            return "lightgrey";
+          }
         }
       })
       .attr("id", (d) => "stamp-cover-" + d.id)
@@ -842,6 +853,8 @@ class MetaGraph {
             return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
           } else if (sort_type === "Sort Statistical Significance") {
             return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
+          } else if (sort_type === "Sort FDR") {
+            return "FDR: " + parseFloat(d.p_values.agg).toExponential(1);
           }
         })
         .style("font-size", "11px")
@@ -1081,6 +1094,8 @@ class MetaGraph {
             return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
           } else if (sort_type === "Sort Statistical Significance") {
             return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
+          } else if (sort_type === "Sort FDR") {
+            return "FDR: " + parseFloat(d.p_values.agg).toExponential(1);
           }
         })
         .style("font-size", "11px")
@@ -2578,8 +2593,11 @@ function sort_motifs(motif_list, motif_significance, sort_type) {
     motif_list = motif_significance.both.concat(
       motif_significance.one,
       motif_significance.none);
-  }
-  return [motif_list, motif_significance];
+  } else if (sort_type === "Sort FDR") {
+    motif_list.sort(function(a, b) {
+      return d3.ascending(a.p_values.agg, b.p_values.agg);
+    })
+  } return [motif_list, motif_significance];
 }
 
 function remove_duplicate_motifs(motif_list) {
