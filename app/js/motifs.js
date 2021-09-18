@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 var path = require("path");
-var jStat = require("jStat");
+var jStat = require("jstat");
 
 var eval_collapsed = false;
 var eval_modifiers = false;
