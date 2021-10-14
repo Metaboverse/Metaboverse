@@ -92,9 +92,8 @@ Important Features of Metaboverse
 Performance
 ===============================
 | Performance will vary network to network. For example, the curation and modeling of data on a yeast network will process several times faster (5-10min) than data modeled on a human network (20-30min). 
-For pre-curated reference files (where you do not force a fresh curation), this total process should only take a few minutes, even for a human network, and depends more on your internet conneciton speed.
-| You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working. Certain steps that are particular computationally intensive may pause the 
-completion % for a couple minutes, but Metaboverse may still be working.
+| For pre-curated reference files (where you do not force a fresh curation), this total process should only take a few minutes, even for a human network, and depends more on your internet conneciton speed.
+| You may experience a network taking longer to curate, but as long as no error messages appear, it is probably still working. Certain steps that are particular computationally intensive may pause the completion % for a couple minutes, but Metaboverse may still be working.
 |
 ===============================
 Technical Description
