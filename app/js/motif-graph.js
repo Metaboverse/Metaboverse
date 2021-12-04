@@ -673,7 +673,7 @@ class MetaGraph {
       .attr("width", stamp_width)
       .attr("height", stamp_height)
       .attr("fill", d => {
-        if (sort_type === "Sort FDR") {
+        if (sort_type === "Sort Reaction FDR") {
           if (d.p_values.agg <= 0.05) {
             return "green";
           } else if (d.p_values.agg <= 0.1) {
@@ -853,7 +853,7 @@ class MetaGraph {
             return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
           } else if (sort_type === "Sort Statistical Significance") {
             return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
-          } else if (sort_type === "Sort FDR") {
+          } else if (sort_type === "Sort Reaction FDR") {
             return "FDR: " + parseFloat(d.p_values.agg).toExponential(1);
           }
         })
@@ -1094,7 +1094,7 @@ class MetaGraph {
             return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
           } else if (sort_type === "Sort Statistical Significance") {
             return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
-          } else if (sort_type === "Sort FDR") {
+          } else if (sort_type === "Sort Reaction FDR") {
             return "FDR: " + parseFloat(d.p_values.agg).toExponential(1);
           }
         })
@@ -2593,7 +2593,7 @@ function sort_motifs(motif_list, motif_significance, sort_type) {
     motif_list = motif_significance.both.concat(
       motif_significance.one,
       motif_significance.none);
-  } else if (sort_type === "Sort FDR") {
+  } else if (sort_type === "Sort Reaction FDR") {
     motif_list.sort(function(a, b) {
       return d3.ascending(a.p_values.agg, b.p_values.agg);
     })

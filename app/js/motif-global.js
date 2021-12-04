@@ -295,6 +295,13 @@ function gatherMotifs(data, categories) {
     }
   }
 
+  console.log([global_collapsed_motifs, global_motifs])
+
+  console.log(data.collapsed_reaction_dictionary)
+  console.log(data.reaction_dictionary)
+  console.log(data.motif_reaction_dictionary)
+
+  console.log(motifs_ModTrans[4])
 
   return [global_collapsed_motifs, global_motifs];
 }

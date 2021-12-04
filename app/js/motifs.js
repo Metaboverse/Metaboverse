@@ -1457,10 +1457,6 @@ function activityMotif(
     nodes,
     link_neighbors) {
 
-  // If two neighboring reactions have significantly shifting enzyme conc.
-  // If both change above/below a threshold, or the difference between the
-  // two passes the threshold
-  //
   // Consider all metabolites from each neighboring reaction
   // If largest difference passes, consider as a motif
   // Or if both change in the same direction and pass the threshold, return
