@@ -4,7 +4,7 @@ Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019-2021 Jordan A. Berg
+Copyright (C) 2019-2022 Jordan A. Berg
 Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
 
 This program is free software: you can redistribute it and/or modify it under
@@ -36,7 +36,7 @@ var sample = 0;
 var entity = "values_js";
 var knn_value = 1;
 var hub_value = 1000000;
-var stat_value = 0.05;
+var stat_value = 0.1;
 var graph_genes = true;
 var collapse_reactions = true;
 var saved_nodes = [];

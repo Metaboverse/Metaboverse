@@ -4,7 +4,7 @@ Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019-2021 Jordan A. Berg
+Copyright (C) 2019-2022 Jordan A. Berg
 Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
 
 This program is free software: you can redistribute it and/or modify it under
@@ -34,7 +34,7 @@ var app = require("electron").remote.app;
 var userDataPath = app.getPath("userData");
 var session_file = userDataPath + path.sep + "session_data.json";
 
-var use_adj_p = true;
+var use_stat_type;
 
 var opts = { // Spinner opts from http://spin.js.org/
 	lines: 10, // The number of lines to draw
@@ -96,12 +96,14 @@ var info_string = `
 `
 
 var padj_string = `
-	<b><u>Adjusted p-value:</u></b>
+	<b><u>Statistical Values:</u></b>
 	<br><br>
-	<b>Checked</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, which assumes data are normally distributed, followed by a Benjamini-Hochberg (BH) p-value correction for multiple hypothesis 
+	<b>Adjusted P-value</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, which assumes data are normally distributed, followed by a Benjamini-Hochberg (BH) p-value correction for multiple hypothesis 
 	correction. BH correction is applied here as it is not a conservative as a Bonferroni correction procedure and is thus generally better suited for exploratory data analysis.
 	<br><br>
-	<b>Unchecked</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards.
+	<b>P-value</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards.
+	<br><br>
+	<b>Confidence Intervals</b>: Confidence intervals will be calculated for each experimental/control group. This method uses the jStat.normalci() method, assuming the input data array are normally distributed.
 	<br><br>
 	If you click this button after a sample comparison has already been performed, the change in p-value handling will only be applied to new comparisons. If you want to apply the selected procedure to other previous comparisons,
 	you will need to start the data processing over. You can do this by clicking the Refresh icon on the top left of this page (<b>&#x21bb;</b>), closing this window and re-opening the data formatter, or you can refresh the page by clicking "View" -> "Reload" or CTRL + R (on Windows/Linux) or CMD + R (on MacOS).
@@ -225,7 +227,7 @@ window.addEventListener("load", function(event) {
 				.style("opacity", 0.95)
 				.style("left", (d3.event.pageX + 20) + "px")
 				.style("top", (d3.event.pageY - 10) + "px")
-				.style("height", "325px")
+				.style("height", "375px")
 				.style("width", "360px");
 			data_div.html(padj_string)
 		})
@@ -235,14 +237,10 @@ window.addEventListener("load", function(event) {
 		});
 
 	// Add adj_p checkbox 
-	document.getElementById("use-adj-p").onclick = function(event) {
-		if (use_adj_p === false) {
-			use_adj_p = true;
-		} else {
-			use_adj_p = false;
-		}
+	document.getElementById("stat_type").onclick = function(event) {
+		use_stat_type = document.getElementById("stat_type").value;
 		clear_elements();
-		console.log("Using adjusted p-values? ", use_adj_p)
+		console.log("Using stat type: ", use_stat_type)
 	}
 		
     // Format page
@@ -451,6 +449,7 @@ function select_groups(datatable, table) {
 
 				let fc_array = [];
 				let p_array = [];
+				let ci_array = [];
 				for (let i = 0; i < datatable.slice(1).length; i++) {
 					let exp = experiment_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
 					let con = control_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
@@ -462,29 +461,42 @@ function select_groups(datatable, table) {
 					p_array.push(
 						ttest(exp, con)
 					);
+					ci_array.push(
+						ci_calc(exp, con)
+					);
 				}
 				let bh_array = bh_corr(p_array);
-
+				console.log(ci_array)
+				
 				// Add new column headers for new data 
 				let stat_type;
 				let this_id = document.getElementById('fname').value;
 				processed_columns.push({ title: this_id + "_fc" });
-				if (use_adj_p === true) {
-					stat_type = "bh"
-				} else {
+	
+				if (use_stat_type === "Adjusted P-value") {
+					stat_type = "adj-p"
+				} else if (use_stat_type === "P-value") {
 					stat_type = "p"
+				} else if (use_stat_type === "Confidence Intervals") {
+					stat_type = "ci"
+				} else {
+					stat_type = "stat"
 				}
 				processed_columns.push({ title: this_id + "_" + stat_type });
 
 				for (let i = 0; i < datatable.slice(1).length; i++) {
 					processed_data[i].push(fc_array[i]);
-					if (use_adj_p === true) {
+					if (use_stat_type === "Adjusted P-value") {
 						processed_data[i].push(bh_array[i]);
+					} else if (use_stat_type === "P-value") {
+						processed_data[i].push(p_array[i]);
+					} else if (use_stat_type === "Confidence Intervals") {
+						processed_data[i].push(ci_array[i]);
 					} else {
 						processed_data[i].push(p_array[i]);
 					}
 				}
-
+				console.log(processed_data)
 				//update table
 				processed_table = update_table(
 					'#process-table', 
@@ -552,6 +564,9 @@ function select_groups(datatable, table) {
 }
 
 function update_table(_identifier, _element, _display, _data, _cols) {
+
+	console.log(_cols)
+
 	$(_identifier).html(_display);
 	let _processed_table = $(_element).DataTable( {
 		destroy: true,
@@ -596,7 +611,7 @@ function handle_selection(datatable, table, selector) {
 }
 
 function write_table(columns, data) {
-
+	
 	let output_data = "";
 	for (let c in columns) {
 		output_data = output_data + columns[c].title + "\t"
@@ -604,7 +619,12 @@ function write_table(columns, data) {
 	for (let d in data) {
 		output_data = output_data + "\n" 
 		for (let _d in data[d]) {
-			output_data = output_data + data[d][_d] + "\t"
+			let write_data = data[d][_d];
+			if (Array.isArray(write_data)) {
+				output_data = output_data + JSON.stringify(write_data) + "\t";
+			} else {
+				output_data = output_data + write_data + "\t";
+			}
 		}
 	}
 
@@ -646,7 +666,23 @@ function ttest(arr1, arr2) {
 	return p;
 }
 
+function ci_calc(arr1, arr2) {
+	let intvl1_90 = jStat.normalci(jStat.mean(arr1), 0.9, arr1) //(arr1);
+	let intvl1_95 = jStat.normalci(jStat.mean(arr1), 0.95, arr1) //(arr1);
+	let intvl1_99 = jStat.normalci(jStat.mean(arr1), 0.99, arr1) //(arr1);
+	let intvl2_90 = jStat.normalci(jStat.mean(arr2), 0.9, arr2) //(arr1);
+	let intvl2_95 = jStat.normalci(jStat.mean(arr2), 0.95, arr2) //(arr1);
+	let intvl2_99 = jStat.normalci(jStat.mean(arr2), 0.99, arr2) //(arr1);
+
+	return [
+		[0.90, [intvl1_90, intvl2_90]],
+		[0.95, [intvl1_95, intvl2_95]],
+		[0.99, [intvl1_99, intvl2_99]]
+	];
+}
+
 function bh_corr(arr) {
+	// Implementation of BH method 
 
 	let sorted = arr.slice().sort( function(a, b) { return a - b } );
 	let ranks = arr.map( function(v) { return sorted.indexOf(v)+1 } );

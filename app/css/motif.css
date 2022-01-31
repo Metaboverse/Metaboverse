@@ -4,7 +4,7 @@ Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019-2021  Youjia Zhou, Jordan A. Berg
+Copyright (C) 2019-2022  Youjia Zhou, Jordan A. Berg
   zhou325 <at> sci <dot> utah <dot> edu
   jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
@@ -226,20 +226,6 @@ circle:hover text {
   font-size: 14px;
   width: 190px;
   margin-top: -15px;
-}
-
-/* Select Menu */
-/* The container must be positioned relative: */
-.custom-select {
-  position: relative;
-  width: 95%;
-  height: 35px;
-  /* font-family: Arial; */
-}
-
-.custom-select select {
-  display: none;
-  /*hide original SELECT element: */
 }
 
 .select-selected {

@@ -4,7 +4,7 @@ Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019-2021 Jordan A. Berg
+Copyright (C) 2019-2022 Jordan A. Berg
 Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
 
 This program is free software: you can redistribute it and/or modify it under
@@ -96,6 +96,17 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             <i>i</i>
         </button>
         &emsp;
+        <div class="content use-inline">
+            <div class="dropdown-container ">
+                <select name="stat_type" id="stat_type">
+                <option>Adjusted P-value</option>
+                <option>P-value</option>
+                <option>Confidence Intervals</option>
+                </select>
+            </div>
+        </div>
+
+        <!--
         <div class="use-inline">
             Use adjusted p-values: 
         </div>
@@ -106,6 +117,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
             value="true"
             title="Output adjusted p-values." 
             checked>
+        -->
     </div>  
 
     <!--Select data type-->

@@ -24,6 +24,19 @@ Data Inputs
    :align: center
 |
 | Along with single condition experiment set-ups, users can provide timecourse data by sequentially listing the fold change and statistical columns in temporal order in the input data table for that -omic type. Users can provide all paired -omics types for each time point, or provide one -omics table of timecourse data and a table for another -omics type with a single steady-state time point. In every situation, it is vital the user keeps in mind the caveats associated with comparing such mixed data types. Along with timecourse data, users can provide multiple conditions formatted as with the timecourse data.
+| The user may decide to select the desired statistical value based on numerous factors, including: 
+| - How stringent of a multiple testing correction procedure they would like to use 
+| - Whether or not multiple testing correction is necessary for an exploratory analysis
+| - Whether or not they would like to compare confidence intervals of comparison groups. Help with preparing confidence intervals can be found in the :data:`Format Data` option. Metaboverse expectes confidence intervals for each comparison to be formatted as:
+
+.. code-block:: python
+
+   [
+      [0.9,  [[21.5761801, 21.7571531], [24.3988067, 25.6011932]]],
+      [0.95, [[21.6215126, 21.7118207], [24.6999961, 25.3000038]]],
+      [0.99, [[21.6576415, 21.6756917], [24.9400369, 25.0599630]]]]
+
+| This correlates with a list of lists, for the 90%, 95%, and 99% confidence intervals for each control and experimental group.
 |
 | Users can also select the :data:`Format Data` option. Doing so will launch a new window where an unformatted datatable can be uploaded and the user can select the relevant samples to experimental or control groups for a single 2-condition comparison or multiple comparisons for time-course or multi-condition datasets. A description of the usage of this module can be found in the `Data Formatting Help <https://metaboverse.readthedocs.io/en/latest/content/other-features.html#data-formatting-help>`_ section.
 .. image:: images/data_formatting_aid.png
