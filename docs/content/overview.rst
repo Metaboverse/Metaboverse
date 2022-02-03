@@ -50,6 +50,12 @@ Data Inputs
 | - Data names should correspond to Ensembl, UniProt, or ChEBI/KEGG/HMDB IDs and acceptable synonyms.
 | - Keep an eye out for measurements with weird characters in their names. This can often cause problems with the data mapping.
 | - Make sure the gene/protein/metabolite column name is blank, as shown in the examples.
+
+.. warning::
+   For most consistent behavior, you should only use tab-delimited tables with the suffix :data:`.txt` or :data:`.tsv`.
+
+   For most consistent behavior, you should only symbolize a decimal with a period (:data:`.`), NOT a comma (:data:`,`).
+
 |
 ===============================
 Unmapped Data

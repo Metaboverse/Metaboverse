@@ -35,9 +35,9 @@ window.addEventListener("load", function(event) {
         .style("opacity", 0.95)
         .style("left", (d3.event.pageX + 20) + "px")
         .style("top", (d3.event.pageY - 10) + "px")
-        .style("height", "190px")
+        .style("height", "240px")
         .style("width", "250px");
-      data_div.html("<b><u>Example Data Format:</u></b><br><br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;log2(fc)&emsp;&emsp;stat<br>metabolite name 1&emsp;&emsp;2.43&emsp;&emsp;&emsp;0.003737<br>metabolite name 2&emsp;&emsp;1.72&emsp;&emsp;&emsp;0.009739<br>metabolite name 3&emsp;&emsp;0.49&emsp;&emsp;&emsp;0.080173<br>metabolite name 4&emsp;&emsp;-2.43&emsp;&ensp;&emsp;0.000173<br>...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;...<br><br>Table should be tab-delimited. This can be created by saving the table in Microsoft Excel using the option \"Save as type\": \"Text (Tab delimited)\"")
+      data_div.html("<b><u>Example Data Format:</u></b><br><br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;log2(fc)&emsp;&emsp;stat<br>metabolite name 1&emsp;&emsp;2.43&emsp;&emsp;&emsp;0.003737<br>metabolite name 2&emsp;&emsp;1.72&emsp;&emsp;&emsp;0.009739<br>metabolite name 3&emsp;&emsp;0.49&emsp;&emsp;&emsp;0.080173<br>metabolite name 4&emsp;&emsp;-2.43&emsp;&ensp;&emsp;0.000173<br>...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;...<br><br>Table should be tab-delimited. This can be created by saving the table in Microsoft Excel using the option \"Save as type\": \"Text (Tab delimited)\"<br><br>For most consistent behavior, you should only symbolize a decimal with a period (.), NOT a comma (,).")
     })
     .on("mouseout", function(d) {
       data_div.style("opacity", 0);
