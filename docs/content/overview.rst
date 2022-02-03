@@ -34,7 +34,8 @@ Data Inputs
    [
       [0.9,  [[21.5761801, 21.7571531], [24.3988067, 25.6011932]]],
       [0.95, [[21.6215126, 21.7118207], [24.6999961, 25.3000038]]],
-      [0.99, [[21.6576415, 21.6756917], [24.9400369, 25.0599630]]]]
+      [0.99, [[21.6576415, 21.6756917], [24.9400369, 25.0599630]]]
+   ]
 
 | This correlates with a list of lists, for the 90%, 95%, and 99% confidence intervals for each control and experimental group.
 |
@@ -52,15 +53,15 @@ Data Inputs
 | - Make sure the gene/protein/metabolite column name is blank, as shown in the examples.
 
 .. warning::
-   For most consistent behavior, you should only use tab-delimited tables with the suffix :data:`.txt` or :data:`.tsv`.
+   For most consistent behavior, you should only use tab-delimited tables with the suffix :data:`\.txt` or :data:`\.tsv`\.
 
-   For most consistent behavior, you should only symbolize a decimal with a period (:data:`.`), NOT a comma (:data:`,`).
+   For most consistent behavior, you should only symbolize a decimal with a period (:data:`\.`), NOT a comma (:data:`,`).
 
 |
 ===============================
 Unmapped Data
 ===============================
-| During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`. Data points could be unmapped for two reasons:
+| During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`\. Data points could be unmapped for two reasons:
 | - The data point is not curated in a reaction within the selected organism's reaction network
 | - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl gene ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
 | - Try searching :data:`Reactome + the name of the unmapped species` online to see if the species goes by another name in Reactome, or if it is missing from the organism curation.
@@ -69,15 +70,15 @@ Unmapped Data
 Output File Types
 ===============================
 | There are two output file types associated with Metaboverse:
-| - :data:`.mvdb`: This is the organismal curation file, containing the underlying network structure for the selected organism, as well as important node mapping information for connecting user-provided gene, protein, and metabolite measurements to the appropriate locations in the network.
-| - :data:`.mvrs`: This is the completed organismal curation file, with your gene/protein/metabolite measurements mapped onto the network. You can load this file on the home page within the Metaboverse app to pick up where you left off in your analysis of the data.
+| - :data:`\.mvdb`: This is the organismal curation file, containing the underlying network structure for the selected organism, as well as important node mapping information for connecting user-provided gene, protein, and metabolite measurements to the appropriate locations in the network.
+| - :data:`\.mvrs`: This is the completed organismal curation file, with your gene/protein/metabolite measurements mapped onto the network. You can load this file on the home page within the Metaboverse app to pick up where you left off in your analysis of the data.
 |
 ===============================
 Using Metaboverse
 ===============================
-| Metaboverse first asks users for the organism of interest and an output folder to store all output data and network representations. Afterwards, the user will be directed to provide any -omics data tables, along with some basic metadata, such as experimental setup, timecourse labels, etc. After this input is provided, the network will be modeled with the user's data overlaid. Two files will then be output to the location specified by the user. The first will be a file ending in :data:`.mvdb`, which contains the basic information needed to model the organism network without user data. This file can be saved for future usage if the user wishes to remodel data on that organism's network without have to wait for all the necessary source files to download. This file can be provided in leiu of the organism name and file output on the appropriate page.
+| Metaboverse first asks users for the organism of interest and an output folder to store all output data and network representations. Afterwards, the user will be directed to provide any -omics data tables, along with some basic metadata, such as experimental setup, timecourse labels, etc. After this input is provided, the network will be modeled with the user's data overlaid. Two files will then be output to the location specified by the user. The first will be a file ending in :data:`\.mvdb`, which contains the basic information needed to model the organism network without user data. This file can be saved for future usage if the user wishes to remodel data on that organism's network without have to wait for all the necessary source files to download. This file can be provided in leiu of the organism name and file output on the appropriate page.
 |
-| The second file ends in :data:`.mvrs` and contains the final network with the user data and user metadata stored. This file will allow for all downstream visualizations and analyses and can be reloaded on the main page of Metaboverse to quickly re-analyze a dataset. Clicking on the :data:`Session Data` tab in the menu on each page of Metaboverse will display the appropriate metadata for that particular model.
+| The second file ends in :data:`\.mvrs` and contains the final network with the user data and user metadata stored. This file will allow for all downstream visualizations and analyses and can be reloaded on the main page of Metaboverse to quickly re-analyze a dataset. Clicking on the :data:`Session Data` tab in the menu on each page of Metaboverse will display the appropriate metadata for that particular model.
 |
 | The figure below shows an example of this process.
 .. image:: images/package_overview.png
@@ -89,7 +90,7 @@ Using Metaboverse
 | **TL;DR**
 | * Users specify organism, output location, -omics files, and basic experimental metadata by following the prompts.
 | * User data is layered onto the reaction network.
-| * :data:`.mvdb` and :data:`.mvrs` files can be saved to quickly access the organism curation or data model. For :data:`v0.3.0b` or earlier, these files ended in :data:`.pickle` and :data:`.json`, respectively.
+| * :data:`\.mvdb` and :data:`\.mvrs` files can be saved to quickly access the organism curation or data model. For :data:`v0.3.0b` or earlier, these files ended in :data:`\.pickle` and :data:`\.json`, respectively.
 | * Once data is modeled on the network, the user can begin interactive analysis of their data.
 |
 ==================================
