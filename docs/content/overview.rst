@@ -55,8 +55,10 @@ Data Inputs
 .. warning::
    For most consistent behavior, you should only use tab-delimited tables with the suffix :data:`\.txt` or :data:`\.tsv`\.
 
-   For most consistent behavior, you should only symbolize a decimal with a period (:data:`\.`), NOT a comma (:data:`,`).
+   For most consistent behavior, you should only symbolize a decimal with a period (.), NOT a comma (,).
 
+.. warning::
+   If duplicate entity names are provided within a given transcriptomics, proteomics, or metabolomics data table, Metaboverse will error. If this occurs, please check the error output for a list of repeated entity names and remove duplicates as appropriate.
 |
 ===============================
 Unmapped Data
