@@ -118,6 +118,27 @@ function parseCommand(args_dict) {
   return commandString;
 }
 
+function write_log(command, stdout, stderr) {
+
+  let today = new Date().toISOString().slice(0, 10);
+
+  fs.writeFileSync(
+    getArgument("output").replace(/\"/g, '') + path.sep + "metaboverse_session.log",
+    "Operating System information:\n" +
+    navigator.appVersion + "\n" +
+    "Log date: " + today + "\n\n" +
+    command + "\n" +
+    stdout + "\n" +
+    "########\nSTDERR:\n########\n" +
+    stderr,
+    function(err) {
+      if (err) throw err;
+      console.log("Session log written to file");
+    });
+
+}
+
+
 function execute(command, callback) {
   exec(command, (error, stdout, stderr) => {
     callback(stdout);
@@ -126,23 +147,12 @@ function execute(command, callback) {
       stdout.toLowerCase().includes("error") |
       stderr.toLowerCase().includes("exception") |
       stderr.toLowerCase().includes("error")) {
-      let today = new Date().toISOString().slice(0, 10);
-
-      fs.writeFileSync(
-        getArgument("output").replace(/\"/g, '') + path.sep + "metaboverse_session.log",
-        "Operating System information:\n" +
-        navigator.appVersion + "\n" +
-        "Log date: " + today + "\n\n" +
-        command + "\n" +
-        stdout + "\n" +
-        "########\nSTDERR:\n########\n" +
-        stderr,
-        function(err) {
-          if (err) throw err;
-          console.log("Session log written to file");
-        });
+      
+      write_log(command, stdout, stderr);
       alert("Metaboverse Build encountered an error -- please check metaboverse_session.log in your output folder for detailed information.");
       callback(stderr);
+    } else {
+      write_log(command, stdout, stderr);
     }
   });
 }

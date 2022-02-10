@@ -29,6 +29,7 @@ var excl_hubs = true;
 var infer_complexes = true;
 var hub_threshold = 50;
 var showed_alert = false;
+var showed_alert_alt = false;
 
 window.addEventListener("load", function(event) {
   event.preventDefault();
@@ -53,6 +54,9 @@ window.addEventListener("load", function(event) {
       complexChecked();
       showAlert();
     }
+    document.getElementById("stat-button").onchange = function(event) {
+      showAlertAlt();
+    }
   }
 })
 
@@ -60,6 +64,13 @@ function showAlert() {
   if (showed_alert === false) {
     alert("Reminder:\n\nAny time you change one of the optional checkboxes, you will need to re-click the \"Pattern Type\" button to re-run the analysis.");
     showed_alert = true;
+  }
+}
+
+function showAlertAlt() {
+  if (showed_alert_alt === false) {
+    alert("Reminder:\n\nAny time you change one the statistical threshold, you will need to re-click the \"Pattern Type\" button to re-run the analysis.");
+    showed_alert_alt = true;
   }
 }
 
@@ -115,10 +126,33 @@ function cleanHubs(
   return filtered_hubs;
 }
 
+function eval_ci(
+    stat_array, 
+    stat_value) {
+  // For confidence interval array, take selected confidence interval, return 0 if no overlap, 1 if overlap 
+  if (stat_array === undefined || stat_array === null) {
+    return null;
+  } else {
+    let intervals_map = Object.assign({}, ...stat_array.map((x) => ({[x[0]]: x[1]})));
+    let x1 = intervals_map[stat_value][0][0];
+    let x2 = intervals_map[stat_value][0][1];
+    let y1 = intervals_map[stat_value][1][0];
+    let y2 = intervals_map[stat_value][1][1];
+    let overlap = Math.max(x1, y1) <= Math.min(x2, y2);
+    if (overlap === false) {
+      return 0.00;
+    } else {
+      return 1.00;
+    }
+  }
+}
+
 function parseComponents(
     reaction,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     degree_dict,
@@ -194,6 +228,9 @@ function parseComponents(
   clean_reactants.forEach(l => {
     let reactant_expr = expression_dict[l][sample_index];
     let reactant_stat = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      reactant_stat = eval_ci(reactant_stat, stat_value);
+    }
     if (reactant_expr !== null && reactant_stat !== null) {
       source_expression.push([
         parseFloat(reactant_expr),
@@ -205,6 +242,9 @@ function parseComponents(
   clean_products.forEach(l => {
     let product_expr = expression_dict[l][sample_index];
     let product_stat = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      product_stat = eval_ci(product_stat, stat_value);
+    }
     if (product_expr !== null && product_stat !== null) {
       target_expression.push([
         parseFloat(product_expr),
@@ -227,6 +267,8 @@ function parseComponentsMod(
     reaction,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     degree_dict,
@@ -288,6 +330,9 @@ function parseComponentsMod(
   clean_core.forEach(l => {
     let core_expr = expression_dict[l][sample_index];
     let core_stats = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      core_stats = eval_ci(core_stats, stat_value);
+    }
     if (core_expr !== null && core_stats !== null) {
       core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
     }
@@ -296,6 +341,9 @@ function parseComponentsMod(
   clean_modifiers.forEach(l => {
     let mod_expr = expression_dict[l][sample_index];
     let mod_stats = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      mod_stats = eval_ci(mod_stats, stat_value);
+    }
     if (mod_expr !== null && mod_stats !== null) {
       mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
     }
@@ -317,6 +365,8 @@ function parseComponentsEnzymes(
     nodes,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     degree_dict,
@@ -378,6 +428,9 @@ function parseComponentsEnzymes(
 
       let core_expr = expression_dict[l][sample_index];
       let core_stats = stats_dict[l][sample_index];
+      if (stat_type === "array") {
+        core_stats = eval_ci(core_stats, stat_value);
+      }
       if (core_expr !== null && core_stats !== null) {
         core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
       }
@@ -388,6 +441,9 @@ function parseComponentsEnzymes(
     && nodes[l].sub_type !== "") {
       let mod_expr = expression_dict[l][sample_index];
       let mod_stats = stats_dict[l][sample_index];
+      if (stat_type === "array") {
+        mod_stats = eval_ci(mod_stats, stat_value);
+      }
       if (mod_expr !== null && mod_stats !== null) {
         mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
       }
@@ -409,6 +465,8 @@ function parseComponentsMetabolites(
     nodes,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     degree_dict,
@@ -468,6 +526,9 @@ function parseComponentsMetabolites(
     if (nodes[l].sub_type === "metabolite_component") {
       let core_expr = expression_dict[l][sample_index];
       let core_stats = stats_dict[l][sample_index];
+      if (stat_type === "array") {
+        core_stats = eval_ci(core_stats, stat_value);
+      }
       if (core_expr !== null && core_stats !== null) {
         core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
       }
@@ -477,6 +538,9 @@ function parseComponentsMetabolites(
     if (nodes[l].sub_type === "metabolite_component") {
       let mod_expr = expression_dict[l][sample_index];
       let mod_stats = stats_dict[l][sample_index];
+      if (stat_type === "array") {
+        mod_stats = eval_ci(mod_stats, stat_value);
+      }
       if (mod_expr !== null && mod_stats !== null) {
         mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
       }
@@ -498,6 +562,8 @@ function parseComponentsTrans(
     reaction,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     degree_dict,
@@ -584,6 +650,9 @@ function parseComponentsTrans(
   clean_reactants.forEach(l => {
     let reactant_expr = expression_dict[l][sample_index];
     let reactant_stats = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      reactant_stats = eval_ci(reactant_stats, stat_value);
+    }
     if (reactant_expr !== null && reactant_stats !== null) {
       source_expression.push([parseFloat(reactant_expr), parseFloat(reactant_stats)]);
     }
@@ -592,6 +661,9 @@ function parseComponentsTrans(
   clean_products.forEach(l => {
     let product_expr = expression_dict[l][sample_index];
     let product_stats = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      product_stats = eval_ci(product_stats, stat_value);
+    }
     if (product_expr !== null && product_stats !== null) {
       target_expression.push([parseFloat(product_expr), parseFloat(product_stats)]);
     }
@@ -600,6 +672,9 @@ function parseComponentsTrans(
   clean_modifiers.forEach(l => {
     let modifier_expr = expression_dict[l][sample_index];
     let modifier_stats = stats_dict[l][sample_index];
+    if (stat_type === "array") {
+      modifier_stats = eval_ci(modifier_stats, stat_value);
+    }
     if (modifier_expr !== null && modifier_stats !== null) {
       modifier_expression.push([parseFloat(modifier_expr), parseFloat(modifier_stats)]);
     }
@@ -640,6 +715,8 @@ function motifSearch_Avg(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -658,6 +735,8 @@ function motifSearch_Avg(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -704,6 +783,8 @@ function motifSearch_MaxMax(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -721,6 +802,8 @@ function motifSearch_MaxMax(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -768,6 +851,8 @@ function motifSearch_MinMin(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -785,6 +870,8 @@ function motifSearch_MinMin(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -834,6 +921,8 @@ function motifSearch_MaxMin(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -851,6 +940,8 @@ function motifSearch_MaxMin(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -899,6 +990,8 @@ function motifSearch_MinMax(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -916,6 +1009,8 @@ function motifSearch_MinMax(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -965,6 +1060,8 @@ function motifSearch_Sustained(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -982,6 +1079,8 @@ function motifSearch_Sustained(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -1115,6 +1214,8 @@ function modifierReg(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -1135,6 +1236,8 @@ function modifierReg(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -1185,6 +1288,8 @@ function modifierTransport(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     path_mapper,
@@ -1206,6 +1311,8 @@ function modifierTransport(
         reaction,
         expression_dict,
         stats_dict,
+        stat_type,
+        stat_value,
         inferred_dict,
         link_neighbors,
         degree_dict,
@@ -1340,6 +1447,8 @@ function enzymeMotif(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     neighbors_dictionary,
     path_mapper,
@@ -1373,6 +1482,8 @@ function enzymeMotif(
           nodes,
           expression_dict,
           stats_dict,
+          stat_type,
+          stat_value,
           inferred_dict,
           link_neighbors,
           degree_dict,
@@ -1390,6 +1501,8 @@ function enzymeMotif(
               nodes,
               expression_dict,
               stats_dict,
+              stat_type,
+              stat_value,
               inferred_dict,
               link_neighbors,
               degree_dict,
@@ -1448,6 +1561,8 @@ function activityMotif(
     collapsed_reaction_dict,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     neighbors_dictionary,
     path_mapper,
@@ -1480,6 +1595,8 @@ function activityMotif(
           nodes,
           expression_dict,
           stats_dict,
+          stat_type,
+          stat_value,
           inferred_dict,
           link_neighbors,
           degree_dict,
@@ -1497,6 +1614,8 @@ function activityMotif(
               nodes,
               expression_dict,
               stats_dict,
+              stat_type,
+              stat_value,
               inferred_dict,
               link_neighbors,
               degree_dict,
@@ -1915,6 +2034,8 @@ function test() {
           test_reaction['R1'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_degree_dict,
@@ -1933,6 +2054,8 @@ function test() {
           test_reaction['R1'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_degree_dict,
@@ -1956,6 +2079,8 @@ function test() {
           test_reaction['R1'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_degree_dict,
@@ -1981,6 +2106,8 @@ function test() {
           test_reaction['R1'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_degree_dict,
@@ -2023,6 +2150,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2052,6 +2181,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2081,6 +2212,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2109,6 +2242,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2138,6 +2273,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2167,6 +2304,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2196,6 +2335,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2224,6 +2365,8 @@ function test() {
           test_reaction,
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_path_mapper,
@@ -2270,6 +2413,8 @@ function test() {
           test_data['nodes'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_degree_dict,
@@ -2292,6 +2437,8 @@ function test() {
           test_data['nodes'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           {},
           test_degree_dict,
@@ -2320,6 +2467,8 @@ function test() {
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           neighbors_dict[0],
           test_path_mapper,
@@ -2350,6 +2499,8 @@ function test() {
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           neighbors_dict[0],
           test_path_mapper,
@@ -2375,6 +2526,8 @@ function test() {
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           neighbors_dict[0],
           test_path_mapper,
@@ -2407,6 +2560,8 @@ function test() {
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
           test_stats_dict,
+          "float",
+          0.1,
           {},
           neighbors_dict[0],
           test_path_mapper,

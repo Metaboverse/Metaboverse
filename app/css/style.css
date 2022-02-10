@@ -365,12 +365,33 @@ img {
   border-radius: 10px;
 }
 
+.force-center {
+  padding: 0px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.motif-info-move {
+  margin-bottom: 0px;
+  margin-left: 85px;
+  transform: translateY(-22px);
+}
+
 .info {
   border-radius: 50%;
 }
 
 .info_enhanced {
   border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 10px;
 }
 
 .experimentName {

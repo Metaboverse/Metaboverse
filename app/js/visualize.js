@@ -35,6 +35,9 @@ try {
 } catch (e) {
   alert('Failed to open: \n' + database_url)
 }
+console.log(data.metadata)
+var stat_type = data.metadata.stat_type;
+set_stat_button(stat_type);
 
 var pathway_dict = make_pathway_dictionary(
   data,
@@ -88,6 +91,13 @@ if ((current_pathway !== null) & (current_pathway !== "null")) {
 
 d3.select("#superPathwayMenu").on("change", changeSuper);
 d3.select("#pathwayMenu").on("change", change);
-d3.select("#kNN_button").on("change", kNN_input);
-d3.select("#hub_button").on("change", hub_input);
-d3.select("#stat_button").on("change", stat_input);
+
+d3.select("#kNN_button").on("change", function() {
+  kNN_input(data)
+});
+d3.select("#hub_button").on("change", function() {
+  hub_input(data)
+});
+d3.select("#stat_button").on("change", function() {
+  stat_input(data)
+});

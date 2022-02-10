@@ -60,19 +60,24 @@ var opts = { // Spinner opts from http://spin.js.org/
 database_url = get_session_info("database_url");
 
 class MetaGraph {
-  constructor(graphdata) {
+  constructor(data) {
 
+    console.log(data.metadata)
+    var stat_type = data.metadata.stat_type;
+    set_stat_button(stat_type);
+    
     // Get the data
     var update_output = update_nodes_links(
-      graphdata.nodes,
-      graphdata.links
+      data.nodes,
+      data.links
     );
-    graphdata.nodes = update_output[0];
-    graphdata.links = update_output[1];
+    data.nodes = update_output[0];
+    data.links = update_output[1];
 
-    this.data = graphdata;
-    this.nodes = graphdata.nodes;
-    this.links = graphdata.links;
+    this.data = data;
+    this.nodes = data.nodes;
+    this.links = data.links;
+    this.stat_type = stat_type;
 
     // Generate expression and stats dictionaries
     var dict_output = create_dictionaries(this.nodes);
@@ -95,18 +100,18 @@ class MetaGraph {
       this.nodes
     )
 
-    this.collapsed_reaction_dict = graphdata.collapsed_reaction_dictionary;
-    this.mod_collapsed_pathways = graphdata.mod_collapsed_pathways;
+    this.collapsed_reaction_dict = data.collapsed_reaction_dictionary;
+    this.mod_collapsed_pathways = data.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
-      graphdata,
+      data,
       "collapsed_pathway_dictionary"
     );
-    this.path_mapper = graphdata.motif_reaction_dictionary;
-    this.degree_dict = graphdata.degree_dictionary;
-    this.categories = graphdata.categories;
-    this.labels = graphdata.labels;
+    this.path_mapper = data.motif_reaction_dictionary;
+    this.degree_dict = data.degree_dictionary;
+    this.categories = data.categories;
+    this.labels = data.labels;
     let neighbors_output = make_neighbors_dictionary(
-      graphdata,
+      data,
       this.degree_dict
     );
     this.neighbors_dictionary = neighbors_output[0];
@@ -128,7 +133,7 @@ class MetaGraph {
       select.add(option, 0);
     }
 
-    let superPaths = make_superPathway_dictionary(graphdata);
+    let superPaths = make_superPathway_dictionary(data);
     let superPathList = [];
     for (let k in superPaths) {
       superPathList.push(superPaths[k].pathway_id);
@@ -334,12 +339,15 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
           this.degree_dict,
           this.blocklist,
           this.categories)
+        console.log(this.motif)
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -362,6 +370,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -390,6 +400,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -418,6 +430,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -452,6 +466,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           eval_neighbors_dictionary,
           this.path_mapper,
@@ -488,6 +504,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           eval_neighbors_dictionary,
           this.path_mapper,
@@ -518,6 +536,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -546,6 +566,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -574,6 +596,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -602,6 +626,8 @@ class MetaGraph {
           this.collapsed_reaction_dict,
           this.expression_dict,
           this.stats_dict,
+          this.stat_type,
+          stat_value,
           this.inferred_dict,
           this.link_neighbors,
           this.path_mapper,
@@ -1677,6 +1703,7 @@ class MetaGraph {
       display_analytes_dict,
       display_reactions_dict,
       selector,
+      this.stat_type,
       _width,
       _height,
       [d]
@@ -1739,6 +1766,7 @@ class MetaGraph {
       display_analytes_dict,
       display_reactions_dict,
       selector,
+      this.stat_type,
       _width,
       _height,
       [d]
@@ -1803,6 +1831,7 @@ class MetaGraph {
       display_analytes_dict,
       display_reactions_dict,
       selector,
+      this.stat_type,
       _width,
       _height,
       motif_list

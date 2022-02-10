@@ -49,7 +49,9 @@ function gatherMotifs(data, categories) {
     data.metadata.blocklist,
     data.nodes
   )
-
+  data.blocklist = Object.values(data.blocklist);
+  console.log(data.blocklist)
+  var stat_type = data.metadata.stat_type;
 
   let threshold = 1;
 
@@ -58,6 +60,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -70,6 +74,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -82,6 +88,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -94,6 +102,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -106,6 +116,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -118,6 +130,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -130,6 +144,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -142,6 +158,8 @@ function gatherMotifs(data, categories) {
     data.collapsed_reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -155,6 +173,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -167,6 +187,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -179,6 +201,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -191,6 +215,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -203,6 +229,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -215,6 +243,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -227,6 +257,10 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -239,6 +273,8 @@ function gatherMotifs(data, categories) {
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
+    stat_type,
+    stat_value,
     inferred_dict,
     link_neighbors,
     data.motif_reaction_dictionary,
@@ -248,7 +284,7 @@ function gatherMotifs(data, categories) {
   
 
   let all_collapsed_motifs = [];
-  for (x in categories) {
+  for (x in categories) { 
     all_collapsed_motifs[x] = collapsed_motifs_Avg[x].concat(
       collapsed_motifs_MaxMax[x],
       collapsed_motifs_MinMin[x],
@@ -296,12 +332,6 @@ function gatherMotifs(data, categories) {
   }
 
   console.log([global_collapsed_motifs, global_motifs])
-
-  console.log(data.collapsed_reaction_dictionary)
-  console.log(data.reaction_dictionary)
-  console.log(data.motif_reaction_dictionary)
-
-  console.log(motifs_ModTrans[4])
 
   return [global_collapsed_motifs, global_motifs];
 }

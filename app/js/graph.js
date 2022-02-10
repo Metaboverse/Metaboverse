@@ -43,6 +43,65 @@ var saved_nodes = [];
 var saved_links = [];
 var collapsed_nodes = [];
 var collapsed_links = [];
+var significance_weight = 3;
+var nonsignificance_weight = 1;
+
+// Set stat button
+function set_stat_button(stat_type) {
+  console.log("Stat_format:", stat_type)
+  var stat_string = "";
+  if (stat_type === "array") {
+    stat_string = `
+      <font size="2">
+        Confidence interval:&nbsp;&nbsp;
+      </font>
+      <select name="stat_button" id="stat_button" class="option_button">
+        <option value="0.90">0.90</option>
+        <option value="0.95">0.95</option>
+        <option value="0.99">0.99</option>
+      </select>
+    `
+    stat_value = 0.90;
+  } else {
+    stat_string = `
+      <font size="2">
+        Statistic threshold:
+      </font>
+      <input type="number" name="stat_button" id="stat_button" class="option_button" min="000" max="1.00" value="0.10" /> 
+    `
+    stat_value = 0.1;
+  }
+  $('#stat-button').html(stat_string);
+}
+
+function set_significance_weight(data, sample, stat_type, stat_value) {
+  
+  if ((data['stats'][sample] === undefined) || (data['stats'][sample] === null)) {
+    return nonsignificance_weight;
+  } else if (stat_type === "float") {
+    if (data['stats'][sample] < stat_value) {
+      return significance_weight;
+    } else {
+      return nonsignificance_weight;
+    }
+  } else if (stat_type === "array") {
+    let intervals = data['stats'][sample];
+    let intervals_map = Object.assign({}, ...intervals.map((x) => ({[x[0]]: x[1]})));
+    let x1 = intervals_map[stat_value][0][0];
+    let x2 = intervals_map[stat_value][0][1];
+    let y1 = intervals_map[stat_value][1][0];
+    let y2 = intervals_map[stat_value][1][1];
+    let overlap = Math.max(x1, y1) <= Math.min(x2, y2);
+    if (overlap === false) {
+      return significance_weight;
+    } else {
+      return nonsignificance_weight;
+    }
+  } else {
+    return nonsignificance_weight;
+  }
+}
+
 
 // Define the div for the tooltips
 var div = d3.select("body").append("div")
@@ -100,14 +159,21 @@ d3.select("button#hub_info")
   });
 d3.select("button#stat_info")
   .on("mouseover", function(d) {
+    console.log("hle")
     div
       .style("opacity", 0.95)
       .style("left", (d3.event.pageX + 20) + "px")
       .style("top", (d3.event.pageY - 10) + "px")
       .style("width", "200px")
-      .style("height", "40px");
+      .style("height", "190px");
     div
-      .html("Provide a value to threshold statistical value where node borders are bolded.")
+      .html(`
+        Provide a value to threshold statistical value where node borders are bolded.
+        <br><br>
+        - <b>Statistical values</b>: Node borders will be bolded if node's statistical value is less than the specified threshold.
+        <br><br>
+        - <b>Confidence Intervals</b>: Node borders will be bolded if the selected confidence intervals ranges between samples do not overlap.
+        `)
   })
   .on("mouseout", function(d) {
     div.style("opacity", 0);
@@ -436,6 +502,7 @@ function nearest_neighbors(data, entity_id) {
     display_analytes_dict,
     display_reactions_dict,
     selector,
+    stat_type,
     _width,
     _height,
     collapsed_global_motifs)
@@ -615,7 +682,7 @@ function parse_kNN_pathway(data, entity_list, kNN) {
 function kNN_input(d) {
   knn_value = document.getElementById("kNN_button").value;
   console.log("k-NN parameter now set to: " + knn_value);
-  change();
+  change(d);
 }
 
 function stat_input(d) {
@@ -624,7 +691,7 @@ function stat_input(d) {
     stat_value = 1;
   }
   console.log("Stat threshold now set to: " + stat_value);
-  change();
+  change(d);
 }
 
 function hub_input(d) {
@@ -633,7 +700,7 @@ function hub_input(d) {
     hub_value = 1000000;
   }
   console.log("Hub threshold now set to: " + hub_value);
-  change();
+  change(d);
 }
 
 function get_link(d) {
@@ -661,6 +728,7 @@ function make_graph(
   display_analytes_dict,
   display_reactions_dict,
   selector,
+  stat_type,
   _width,
   _height,
   these_motifs) {
@@ -853,13 +921,7 @@ function make_graph(
     })
     .style("stroke", "black")
     .style("stroke-width", function(d) {
-      if ((d['stats'][sample] === undefined) || (d['stats'][sample] === null)) {
-        return 1;
-      } else if (d['stats'][sample] < stat_value) {
-        return 2;
-      } else {
-        return 1;
-      }
+      return set_significance_weight(d, sample, stat_type, stat_value);
     })
     .style("stroke-dasharray", function(d) {
       if (d.inferred === "true" || d.type === "collapsed") {
@@ -1109,17 +1171,20 @@ function make_graph(
           } else {
             display_stat = parseFloat(d.stats[sample]).toFixed(2)
           }
-          return (
-            "<tspan dx='16' y='-.5em' class='bold-text'>" +
+          let output_stat_string = ("<tspan dx='16' y='-.5em' class='bold-text'>" +
             this_name +
             "</tspan>" +
             "<tspan x='16' y='.7em'>Value: " +
             parseFloat(d.values[sample]).toFixed(2) +
-            "</tspan>" +
-            "<tspan x='16' y='1.7em'>Statistic: " +
-            display_stat +
-            "</tspan>"
-          );
+            "</tspan>");
+          if (stat_type !== "array") {
+            output_stat_string = (output_stat_string + 
+              "<tspan x='16' y='1.7em'>Statistic: " +
+              display_stat +
+              "</tspan>"
+              );
+          }
+          return output_stat_string;
         }
       }
     });
@@ -1345,17 +1410,20 @@ function make_graph(
             } else {
               display_stat = parseFloat(d.stats[sample]).toFixed(2)
             }
-            return (
-              "<tspan dx='16' y='-.5em' class='bold-text'>" +
+            let output_stat_string = ("<tspan dx='16' y='-.5em' class='bold-text'>" +
               this_name +
               "</tspan>" +
               "<tspan x='16' y='.7em'>Value: " +
               parseFloat(d.values[sample]).toFixed(2) +
-              "</tspan>" +
-              "<tspan x='16' y='1.7em'>Statistic: " +
-              display_stat +
-              "</tspan>"
-            );
+              "</tspan>");
+            if (stat_type !== "array") {
+              output_stat_string = (output_stat_string + 
+                "<tspan x='16' y='1.7em'>Statistic: " +
+                display_stat +
+                "</tspan>"
+                );
+            }
+            return output_stat_string;
           }
         }
       });
@@ -1464,6 +1532,7 @@ function make_graph(
       display_analytes_dict,
       display_reactions_dict,
       selector,
+      stat_type,
       _width,
       _height,
       collapsed_global_motifs)
@@ -1497,6 +1566,7 @@ function make_graph(
           display_analytes_dict,
           display_reactions_dict,
           selector,
+          stat_type,
           _width,
           _height,
           collapsed_global_motifs)
@@ -1547,6 +1617,7 @@ function make_graph(
               new_display_analytes_dict,
               new_display_reactions_dict,
               selector,
+              stat_type,
               _width,
               _height,
               global_motifs)
@@ -1710,7 +1781,7 @@ function parseEntities(nodes) {
 }
 
 // Graphing
-function change() {
+function change(data) {
 
   if (data.metadata.transcriptomics !== "None") {
     graph_genes = true;
@@ -1740,7 +1811,6 @@ function change() {
     // Run normal first plot
     var reactions;
     var elements;
-    console.log(selection)
     if (collapsed_pathway_dict[selection]["reactions"].length === 0) {
       // If cannot find collapsed reactions, only plot normal
       reactions = pathway_dict[selection]["reactions"];
@@ -1782,6 +1852,7 @@ function change() {
       display_analytes_dict,
       display_reactions_dict,
       selector,
+      stat_type,
       _width,
       _height,
       collapsed_global_motifs);

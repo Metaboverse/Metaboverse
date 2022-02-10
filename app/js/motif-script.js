@@ -33,12 +33,41 @@ showMotifs = function(_callback) {
 
   d3.json(database_url).then(data => {
     let metaGraph = new MetaGraph(data);
+    
+    // BEGIN: Initialize stat threshold button and functions
+    d3.select("#stat_button").on("change", function() {
+      stat_input(data)
+    });
+    var div = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+    d3.select("button#stat_info")
+    .on("mouseover", function(d) {
+      div
+        .style("opacity", 0.95)
+        .style("left", (d3.event.pageX + 20) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("width", "200px")
+        .style("height", "210px");
+      div
+        .html(`
+          Provide a value to threshold statistical value where node borders are bolded.
+          <br><br>
+          - <b>Statistical values</b>: Node borders will be bolded if node's statistical value is less than the specified threshold.
+          <br><br>
+          - <b>Confidence Intervals</b>: Node borders will be bolded if the selected confidence intervals ranges between samples do not overlap.
+          `)
+    })
+    .on("mouseout", function(d) {
+      div.style("opacity", 0);
+      div.html("")
+    });
+    // END: Initialize stat threshold button and functions
   });
   return _callback;
 }
 
 window.addEventListener("load", function(event) {
-
   set_tooltips();
   showMotifs()
 })

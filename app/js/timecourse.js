@@ -170,13 +170,7 @@ function buildSlider(categories, names) {
               })
               .style("stroke", "black")
               .style("stroke-width", function(d) {
-                if ((d['stats'][slider_index] === undefined) || (d['stats'][slider_index] === null)) {
-                  return 1;
-                } else if (d['stats'][slider_index] < stat_value) {
-                  return 2;
-                } else {
-                  return 1;
-                }
+                return set_significance_weight(d, slider_index, stat_type, stat_value);
               })
             d3.select("text#" + d.id)
               .html(function(d) {
@@ -200,17 +194,20 @@ function buildSlider(categories, names) {
                   } else {
                     display_stat = parseFloat(d.stats[slider_index]).toFixed(2)
                   }
-                  return (
-                    "<tspan dx='16' y='-.5em' class='bold-text'>" +
+                  let output_stat_string = ("<tspan dx='16' y='-.5em' class='bold-text'>" +
                     this_name +
                     "</tspan>" +
                     "<tspan x='16' y='.7em'>Value: " +
                     parseFloat(d.values[slider_index]).toFixed(2) +
-                    "</tspan>" +
-                    "<tspan x='16' y='1.7em'>Statistic: " +
-                    display_stat +
-                    "</tspan>"
-                  );
+                    "</tspan>");
+                  if (stat_type !== "array") {
+                    output_stat_string = (output_stat_string + 
+                      "<tspan x='16' y='1.7em'>Statistic: " +
+                      display_stat +
+                      "</tspan>"
+                      );
+                  }
+                  return output_stat_string;
                 }
               })
           }

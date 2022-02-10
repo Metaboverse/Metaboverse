@@ -58,7 +58,7 @@ Data Inputs
    For most consistent behavior, you should only symbolize a decimal with a period (.), NOT a comma (,).
 
 .. warning::
-   If duplicate entity names are provided within a given transcriptomics, proteomics, or metabolomics data table, Metaboverse will error. If this occurs, please check the error output for a list of repeated entity names and remove duplicates as appropriate.
+   If duplicate entity names are provided within a given transcriptomics, proteomics, or metabolomics data table, Metaboverse will ignore these elements.
 |
 ===============================
 Unmapped Data

@@ -85,7 +85,7 @@ div.scrollable {
 .content {
   padding-top: 20px;
   padding-left: 15px;
-  padding-right: -15px;
+  padding-right: 0px;
 }
 
 .sub-frame {
@@ -277,37 +277,37 @@ circle:hover text {
 #motif2 {
   --motif_color: #d95f02;
   --highlight_color: #fdbd4f;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif3 {
   --motif_color: #7570b3;
   --highlight_color: #b19cd9;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif4 {
   --motif_color: #e7298a;
   --highlight_color: #e78ac3;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif5 {
   --motif_color: #66a61e;
   --highlight_color: #a6d854;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif6 {
   --motif_color: #ffa500;
   --highlight_color: #ffd000;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif7_1 {
   --motif_color: #a384ff;
   --highlight_color: #c9b7ff;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif7_2 {
@@ -319,7 +319,7 @@ circle:hover text {
 #motif8_1 {
   --motif_color: #ffc0cb;
   --highlight_color: #ffd9df;
-  margin-top: 13px;
+  margin-top: 5px;
 }
 
 #motif8_2 {
@@ -332,8 +332,16 @@ circle:hover text {
   padding-left: 25px;
 }
 
-#threshold-padding {
+.threshold-padding-left {
   padding-left: 25px;
+}
+
+.threshold-padding-bottom {
+  padding-bottom: 15px;
+}
+
+.threshold-padding-bottom-alt {
+  padding-bottom: 5px;
 }
 
 label {
@@ -341,12 +349,12 @@ label {
 }
 
 #checkbox_spacer {
-  margin-top: 15px;
+  padding-top: 0px;
 }
 
 #checkbox-padding {
   margin-left: 60px;
-  margin-top: -4px;
+  margin-top: -5px;
   
 }
 

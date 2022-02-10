@@ -42,6 +42,10 @@ try {
 } catch (e) {
   alert('Failed to open: \n' + database_url)
 }
+console.log(data.metadata)
+var stat_type = data.metadata.stat_type;
+set_stat_button(stat_type);
+
 var superPathwayDict = make_superPathway_dictionary(data);
 
 var motif_outputs = gatherMotifs(data, data.categories);
@@ -136,6 +140,10 @@ d3.select("#play_button_value").on("click", run_value_perturbations);
 d3.select("#play_button_stat").on("click", run_stat_perturbations);
 d3.select("#kNN_button").on("change", run_value_perturbations);
 d3.select("#hub_button").on("change", run_value_perturbations);
+d3.select("#stat_button").on("change", function() {
+  stat_input(data)
+});
+
 
 function changeSuperConnect() {
   var superSelection = document.getElementById("superPathwayMenu").value;
@@ -294,6 +302,7 @@ function show_graph(data, perturbed_rxns, sample_id) {
     display_analytes_dict,
     display_reactions_dict,
     selector,
+    stat_type,
     _width,
     _height,
     global_motifs

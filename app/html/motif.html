@@ -124,20 +124,27 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 </p>
                 <label for="use_collapsed">
-                  <font size="2"><i>Collapse reactions</i></font>
+                  <font size="2">Collapse reactions</font>
                 </label>
                 <br>
                 <label for="use_modifiers">
-                  <font size="2"><i>Use modifiers</i></font>
+                  <font size="2">Use modifiers</font>
                 </label>
                 <br>
                 <label for="exclude_hubs">
-                  <font size="2"><i>Exclude hubs</i></font>
+                  <font size="2">Exclude hubs</font>
                 </label>
                 <br>
                 <label for="infer_complex">
-                  <font size="2"><i>Infer complexes</i></font>
+                  <font size="2">Infer complexes</font>
                 </label>
+                <br>
+                <div id="stat-button" class="float-left"></div>
+                <button id="stat_info" class="info_enhanced motif-info-move">
+                  <div class="force-center">
+                    <font size="2"><i>i</i></font>
+                  </div>
+                </button>
               </div>
             </div>
             <div class="col-md-8">
@@ -145,43 +152,34 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
                 <div id="threshold-title" title="Change threshold number to change the minimum magnitude change between components of a reaction to be identified in the search.">
                   <p> <u>Threshold</u> </p>
                 </div>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="avg_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="sustained_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="modreg_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="transreg_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="enzyme_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="activity_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom-alt">
                   <input type="number" id="maxmax_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="minmin_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <br>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom-alt">
                   <input type="number" id="maxmin_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
-                <p id="threshold-padding">
+                <p id="threshold-padding" class="threshold-padding-left threshold-padding-bottom">
                   <input type="number" id="minmax_num" min="0.2" max="10" step="0.2" value="1.0">
                 </p>
                 <div id="checkbox_spacer"></div>
