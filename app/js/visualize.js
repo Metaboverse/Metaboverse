@@ -84,20 +84,22 @@ data.blocklist = complete_blocklist(
 
 let current_pathway = get_session_info("current_pathway");
 if ((current_pathway !== null) & (current_pathway !== "null")) {
-  change();
   // set back after opening
   update_session_info("current_pathway", null);
 } else {}
 
-d3.select("#superPathwayMenu").on("change", changeSuper);
-d3.select("#pathwayMenu").on("change", change);
-
+d3.select("#superPathwayMenu").on("change", function() {
+  changeSuper(data, pathway_dict, superPathwayDict);
+});
+d3.select("#pathwayMenu").on("change", function() {
+  change(data, collapsed_pathway_dict, pathway_dict);
+});
 d3.select("#kNN_button").on("change", function() {
-  kNN_input(data)
+  kNN_input(data, collapsed_pathway_dict, pathway_dict)
 });
 d3.select("#hub_button").on("change", function() {
-  hub_input(data)
+  hub_input(data, collapsed_pathway_dict, pathway_dict)
 });
 d3.select("#stat_button").on("change", function() {
-  stat_input(data)
+  stat_input(data, collapsed_pathway_dict, pathway_dict)
 });

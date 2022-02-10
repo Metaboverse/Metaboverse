@@ -35,8 +35,14 @@ showMotifs = function(_callback) {
     let metaGraph = new MetaGraph(data);
     
     // BEGIN: Initialize stat threshold button and functions
+    var pathway_dict = make_pathway_dictionary(
+      data,
+      'pathway_dictionary');
+    var collapsed_pathway_dict = make_pathway_dictionary(
+      data,
+      'collapsed_pathway_dictionary');
     d3.select("#stat_button").on("change", function() {
-      stat_input(data)
+      stat_input(data, collapsed_pathway_dict, pathway_dict)
     });
     var div = d3.select("body").append("div")
       .attr("class", "tooltip")

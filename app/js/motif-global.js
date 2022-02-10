@@ -49,8 +49,7 @@ function gatherMotifs(data, categories) {
     data.metadata.blocklist,
     data.nodes
   )
-  data.blocklist = Object.values(data.blocklist);
-  console.log(data.blocklist)
+
   var stat_type = data.metadata.stat_type;
 
   let threshold = 1;
@@ -251,14 +250,12 @@ function gatherMotifs(data, categories) {
     data.degree_dictionary,
     data.blocklist,
     categories)
-
+  
   let motifs_ModReg = modifierReg(
     threshold,
     data.reaction_dictionary,
     expression_dict,
     stats_dict,
-    stat_type,
-    stat_value,
     stat_type,
     stat_value,
     inferred_dict,

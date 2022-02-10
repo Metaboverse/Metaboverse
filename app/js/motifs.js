@@ -1226,10 +1226,8 @@ function modifierReg(
   // reaction is greater than or equal to the threshold, return the reaction
   // *** Checking the "include modifiers" button will have no effect here
   let discovered_motifs = [];
-
   for (_idx in sample_indices) {
     let sample_motifs = new Set();
-
     for (let rxn in collapsed_reaction_dict) {
       let reaction = collapsed_reaction_dict[rxn];
       let comps = parseComponentsMod(

@@ -45,6 +45,7 @@ try {
 console.log(data.metadata)
 var stat_type = data.metadata.stat_type;
 set_stat_button(stat_type);
+add_stat_threshold(stat_type);
 
 var superPathwayDict = make_superPathway_dictionary(data);
 
@@ -145,8 +146,26 @@ d3.select("#stat_button").on("change", function() {
 });
 
 
+function add_stat_threshold(stat_type) {
+  var perturbation_stat_string = "";
+  if (stat_type === "array") {
+    perturbation_stat_string = "<br>"
+  } else {
+    perturbation_stat_string = `
+    Stat Threshold:
+    <input type="number" name="conn_stat_button" id="conn_stat_button" min="0" max="1.0000000" value="0.00001" />
+    <button id="play_button_stat" class="play_button" title="Change value and click to modify the perturbation threshold for a reaction to appear in the window.">
+      &#10148;
+    </button>
+    `
+  }
+  $('#stat_threshold_space').html(perturbation_stat_string);
+}
+
 function changeSuperConnect() {
   var superSelection = document.getElementById("superPathwayMenu").value;
+  document.getElementById("type_selection_type").innerHTML = "Perturbations";
+  document.getElementById("type_selection").innerHTML = superSelection;
 
   if (superSelection === "All entities" | superSelection === "All pathways") {
     selected_reactions = [];

@@ -679,28 +679,28 @@ function parse_kNN_pathway(data, entity_list, kNN) {
   return new_elements;
 }
 
-function kNN_input(d) {
+function kNN_input(d, collapsed_pathway_dict, pathway_dict) {
   knn_value = document.getElementById("kNN_button").value;
   console.log("k-NN parameter now set to: " + knn_value);
-  change(d);
+  change(d, collapsed_pathway_dict, pathway_dict);
 }
 
-function stat_input(d) {
+function stat_input(d, collapsed_pathway_dict, pathway_dict) {
   stat_value = document.getElementById("stat_button").value;
   if ((stat_value === null) || (stat_value === "")) {
     stat_value = 1;
   }
   console.log("Stat threshold now set to: " + stat_value);
-  change(d);
+  change(d, collapsed_pathway_dict, pathway_dict);
 }
 
-function hub_input(d) {
+function hub_input(d, collapsed_pathway_dict, pathway_dict) {
   hub_value = document.getElementById("hub_button").value;
   if ((hub_value === null) || (hub_value === "")) {
     hub_value = 1000000;
   }
   console.log("Hub threshold now set to: " + hub_value);
-  change(d);
+  change(d, collapsed_pathway_dict, pathway_dict);
 }
 
 function get_link(d) {
@@ -1727,7 +1727,7 @@ function make_graph(
   }
 }
 
-function changeSuper() {
+function changeSuper(data, pathway_dict, superPathwayDict) {
   var superSelection = document.getElementById("superPathwayMenu").value;
   emptyMenu(document.getElementById("pathwayMenu"));
 
@@ -1781,7 +1781,9 @@ function parseEntities(nodes) {
 }
 
 // Graphing
-function change(data) {
+function change(data, collapsed_pathway_dict, pathway_dict) {
+  let page_path = window.location.pathname;
+  let page_name = page_path.substring(page_path.lastIndexOf('/') + 1);
 
   if (data.metadata.transcriptomics !== "None") {
     graph_genes = true;
@@ -1795,75 +1797,79 @@ function change(data) {
     var selection = data.mod_collapsed_pathways[current_pathway].name;
     var superSelection = "All pathways";
   } else {
-    var selection = document.getElementById("pathwayMenu").value;
-    var superSelection = document.getElementById("superPathwayMenu").value;
+    if (page_name !== "motif.html") {
+      var selection = document.getElementById("pathwayMenu").value;
+      var superSelection = document.getElementById("superPathwayMenu").value;
+    }
   }
 
-  document.getElementById("reaction_notes").innerHTML = "";
+  if (page_name !== "motif.html") {
+    document.getElementById("reaction_notes").innerHTML = "";
 
-  var mod_selection = determineWidth(selection);
-  document.getElementById("type_selection_type").innerHTML = "Pathway";
-  document.getElementById("type_selection").innerHTML = mod_selection;
-  console.log(superSelection)
-  console.log(selection)
-
-  if (superSelection !== "All entities") {
-    // Run normal first plot
-    var reactions;
-    var elements;
-    if (collapsed_pathway_dict[selection]["reactions"].length === 0) {
-      // If cannot find collapsed reactions, only plot normal
-      reactions = pathway_dict[selection]["reactions"];
-      elements = parse_pathway(
-        data,
-        reactions,
-        data.reaction_dictionary,
-        data.degree_dictionary);
-    } else {
-      reactions = collapsed_pathway_dict[selection]["reactions"];
-      elements = parse_pathway(
-        data,
-        reactions,
-        data.collapsed_reaction_dictionary,
-        data.degree_dictionary);
-    }
-
-    var new_nodes = elements[0];
-    var new_links = elements[1];
-
-    // Initialize variables
-    var node_dict = {};
-    var type_dict = {};
-
-    var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
-    var node_dict = node_elements[0];
-    var type_dict = node_elements[1];
-    var display_analytes_dict = node_elements[2];
-    var display_reactions_dict = node_elements[3];
-    var entity_id_dict = node_elements[4];
-
-    make_graph(
-      data,
-      new_nodes,
-      new_links,
-      type_dict,
-      node_dict,
-      entity_id_dict,
-      display_analytes_dict,
-      display_reactions_dict,
-      selector,
-      stat_type,
-      _width,
-      _height,
-      collapsed_global_motifs);
-  } else {
-    // Get kNN of entity selected
-    collapse_reactions = true;
     var mod_selection = determineWidth(selection);
+    document.getElementById("type_selection_type").innerHTML = "Pathway";
     document.getElementById("type_selection").innerHTML = mod_selection;
-    document.getElementById("type_selection_type").innerHTML =
-      "Nearest Neighbor";
-    nearest_neighbors(data, selection);
+    console.log(superSelection)
+    console.log(selection)
+
+    if (superSelection !== "All entities") {
+      // Run normal first plot
+      var reactions;
+      var elements;
+      if (collapsed_pathway_dict[selection]["reactions"].length === 0) {
+        // If cannot find collapsed reactions, only plot normal
+        reactions = pathway_dict[selection]["reactions"];
+        elements = parse_pathway(
+          data,
+          reactions,
+          data.reaction_dictionary,
+          data.degree_dictionary);
+      } else {
+        reactions = collapsed_pathway_dict[selection]["reactions"];
+        elements = parse_pathway(
+          data,
+          reactions,
+          data.collapsed_reaction_dictionary,
+          data.degree_dictionary);
+      }
+
+      var new_nodes = elements[0];
+      var new_links = elements[1];
+
+      // Initialize variables
+      var node_dict = {};
+      var type_dict = {};
+
+      var node_elements = initialize_nodes(new_nodes, node_dict, type_dict);
+      var node_dict = node_elements[0];
+      var type_dict = node_elements[1];
+      var display_analytes_dict = node_elements[2];
+      var display_reactions_dict = node_elements[3];
+      var entity_id_dict = node_elements[4];
+
+      make_graph(
+        data,
+        new_nodes,
+        new_links,
+        type_dict,
+        node_dict,
+        entity_id_dict,
+        display_analytes_dict,
+        display_reactions_dict,
+        selector,
+        stat_type,
+        _width,
+        _height,
+        collapsed_global_motifs);
+    } else {
+      // Get kNN of entity selected
+      collapse_reactions = true;
+      var mod_selection = determineWidth(selection);
+      document.getElementById("type_selection").innerHTML = mod_selection;
+      document.getElementById("type_selection_type").innerHTML =
+        "Nearest Neighbor";
+      nearest_neighbors(data, selection);
+    }
   }
 }
 
