@@ -36,6 +36,9 @@ var sample = 0;
 var exclude_idx = -1;
 var last_click = 0;
 var cov_threshold = 0.1;
+var significance_weight = 3;
+var nonsignificance_weight = 1;
+
 var opts = { // Spinner opts from http://spin.js.org/
   lines: 10, // The number of lines to draw
   length: 19, // The length of each line
@@ -661,7 +664,13 @@ class MetaGraph {
     }
 
     // Sort motifs based on user input
-    let sort_type = this.sort_type_dropdown.value;
+    let this_stat_type = this.stat_type;
+    let sort_type = "";
+    if (this_stat_type === "array") {
+      sort_type = "Sort Magnitude Change";
+    } else {
+      sort_type = this.sort_type_dropdown.value;
+    }
     console.log(sort_type)
     let motif_significance = {
       'both': [],
@@ -875,7 +884,7 @@ class MetaGraph {
         .text(function(d) {
           if (sort_type === "Sort Number of Pathways") {
             return d.pathways.length + " pathways";
-          } else if (sort_type === "Sort Magnitude Change") {
+          } else if (sort_type === "Sort Magnitude Change" || this_stat_type === "array") {
             return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
           } else if (sort_type === "Sort Statistical Significance") {
             return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
@@ -908,6 +917,7 @@ class MetaGraph {
 
     // Sort motifs based on user input
     let sort_type = this.sort_type_dropdown.value;
+    let this_stat_type = this.stat_type;
     let motif_significance = {
       'both': [],
       'one': [],
@@ -1114,9 +1124,10 @@ class MetaGraph {
         .attr("x", start_x + 10)
         .attr("y", start_y + 45)
         .text(function(d) {
+          console.log(this_stat_type)
           if (sort_type === "Sort Number of Pathways") {
             return d.pathways.length + " pathways";
-          } else if (sort_type === "Sort Magnitude Change") {
+          } else if (sort_type === "Sort Magnitude Change" || this_stat_type === "array") {
             return "Change: " + parseFloat(d.magnitude_change).toFixed(4);
           } else if (sort_type === "Sort Statistical Significance") {
             return "Stats: " + parseFloat(d.p_values.source).toExponential(1) + " / " + parseFloat(d.p_values.target).toExponential(1);
@@ -1872,7 +1883,7 @@ class MetaGraph {
     return id.replace(/[^a-zA-Z0-9]/g, "")
   }
 
-  generateLines(d) {
+  generateLines(d, stat_threshold) {
 
     d3.select("svg#line-graph").remove();
     let margin = {
@@ -2061,11 +2072,11 @@ class MetaGraph {
             .style("stroke", "black")
             .style("stroke-width", function() {
               if ((_s_ === undefined) || (_s_ === null)) {
-                return 1;
-              } else if (_s_ < 0.5) {
-                return 3;
+                return nonsignificance_weight;
+              } else if (_s_ < stat_value) {
+                return significance_weight;
               } else {
-                return 1;
+                return nonsignificance_weight;
               }
             })
             .attr("d", d3.symbol()
@@ -2230,11 +2241,11 @@ class MetaGraph {
             .style("stroke", "black")
             .style("stroke-width", function() {
               if ((_s_ === undefined) || (_s_ === null)) {
-                return 1;
-              } else if (_s_ < 0.5) {
-                return 3;
+                return nonsignificance_weight;
+              } else if (_s_ < stat_value) {
+                return significance_weight;
               } else {
-                return 1;
+                return nonsignificance_weight;
               }
             })
             .attr("d", d3.symbol()
@@ -2346,11 +2357,11 @@ class MetaGraph {
             .style("stroke", "black")
             .style("stroke-width", function() {
               if ((_s_ === undefined) || (_s_ === null)) {
-                return 1;
-              } else if (_s_ < 0.5) {
-                return 3;
+                return nonsignificance_weight;
+              } else if (_s_ < stat_value) {
+                return significance_weight;
               } else {
-                return 1;
+                return nonsignificance_weight;
               }
             })
             .attr("d", d3.symbol()
@@ -2462,11 +2473,11 @@ class MetaGraph {
             .style("stroke", "black")
             .style("stroke-width", function() {
               if ((_s_ === undefined) || (_s_ === null)) {
-                return 1;
-              } else if (_s_ < 0.5) {
-                return 3;
+                return nonsignificance_weight;
+              } else if (_s_ < stat_value) {
+                return significance_weight;
               } else {
-                return 1;
+                return nonsignificance_weight;
               }
             })
             .attr("d", d3.symbol()
@@ -2492,7 +2503,6 @@ class MetaGraph {
     }
   }
 }
-
 
 function reset_dot() {
   if (timecourse === true) {
