@@ -45,6 +45,7 @@ var collapsed_nodes = [];
 var collapsed_links = [];
 var significance_weight = 3;
 var nonsignificance_weight = 1;
+var offset = 30;
 
 // Set stat button
 function set_stat_button(stat_type) {
@@ -845,14 +846,12 @@ function make_graph(
     })
     .attr("viewBox", "0 -5 10 10")
     .attr("refX", 15.7)
-    .attr("refY", -0.18)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 10)
+    .attr("refY",  -0.29)
+    .attr("markerWidth", 8)
+    .attr("markerHeight", 14)
     .attr("orient", "auto")
     .append("path")
     .attr("d", "M0, -5L10, 0L0, 5");
-
-  var offset = 30;
 
   function getGroup(d, links) {
 
@@ -971,7 +970,7 @@ function make_graph(
               .style("stroke-width", 3)
               .attr("d", d3.symbol()
                 .size(function(d) {
-                  return 400;
+                  return 300;
                 })
                 .type(d3.symbolStar))
           }
@@ -1353,7 +1352,6 @@ function make_graph(
 
   d3.select("#openPathway").on("click", function() {
     pathway = selectPathway();
-
     if (pathway !== "") {
       pathway_id = pathway_dict[pathway].reactome;
       reactome_string = "https://reactome.org/PathwayBrowser/#/" + pathway_id;
@@ -1553,9 +1551,6 @@ function make_graph(
         new_nodes = collapsed_nodes;
         new_links = collapsed_links;
 
-        console.log("1")
-        console.log(collapsed_global_motifs)
-
         make_graph(
           data,
           new_nodes,
@@ -1576,9 +1571,6 @@ function make_graph(
         collapsed_links = new_links;
 
         var selection = document.getElementById("pathwayMenu").value;
-
-        console.log("2")
-        console.log(global_motifs)
 
         for (x in data.pathway_dictionary) {
           if (data.pathway_dictionary[x]['name'] === selection) {
@@ -1697,6 +1689,7 @@ function make_graph(
 
   function dragstarted() {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    //simulation.alpha(1).restart();
     d3.event.subject.fx = d3.event.subject.x;
     d3.event.subject.fy = d3.event.subject.y;
   }
@@ -1707,6 +1700,7 @@ function make_graph(
   }
 
   function dragended() {
+    /*
     if (!d3.event.active)
       simulation
       .alphaTarget(0.05)
@@ -1714,6 +1708,10 @@ function make_graph(
       .velocityDecay(0.7);
     d3.event.subject.fx = null;
     d3.event.subject.fy = null;
+    */
+    //d3.event.subject.fx = d3.event.subject.x, 0, width;
+    //d3.event.subject.fy = d3.event.subject.y, 0, height;
+    //simulation.alpha(1).restart();
   }
 
   function drawLink(d) {
