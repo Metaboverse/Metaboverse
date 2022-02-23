@@ -5,9 +5,17 @@ Updates
 =================================
 v0.9.0 (coming soon)
 =================================
+.. note::
+    Files curated and analyzed using Metaboverse v0.9.0 will not be backwards compatible with files generated using earlier versions of Metaboverse.
+
 | **Major**
+| - Integration of confidence values during data formatting, curation, and analysis.
+| - Fixed issues during curation arising from updates to the formatting of Reactome source files.
 |
 | **Minor**
+| - Streamlined option buttons available during :data:`Pattern Analysis`.
+| - Force directed networks now have sticky nodes once a user a dragged them to a new position.
+| - Added statistical thresholding visualization to :data:`Pattern Analysis` module.
 
 =================================
 v0.8.0

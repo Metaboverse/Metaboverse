@@ -39,7 +39,7 @@ Getting Started
 |     - *Broadcast metabolite values to protein complexes*: Include metabolite measurements in inferring protein complex level.
 |     - *Consider modifiers in reaction collapsing*: Check to include modifiers in reaction collapsing. Catalysts are included as outputs, inhibitors are included as inputs. Please refer to documentation for more information.
 | e) Add or remove any items you wish to not be displayed in the network visualizations.
-.. image:: images/png/screenshot_1.png
+.. image:: images/png/screenshot_1.bmp
   :width: 700
   :align: center
 
@@ -79,7 +79,7 @@ Reaction Pattern Analysis
   :align: center
 
 | If the model includes time-course or multi-condition data, the patterns present at each timepoint or condition can be viewed.
-.. image:: images/png/screenshot_2.png
+.. image:: images/png/screenshot_2.bmp
   :width: 700
   :align: center
 
@@ -92,12 +92,12 @@ Reaction Pattern Analysis
 | - **Dropdown 1 - Sorting type**: Select how to sort reaction patterns. 
 | - **Dropdown 2 - Exclusion**: Select a time-point or condition to exclude. In other words, if we were analyzing time-point 1, we could exclude any of the patterns that were also present in time-point 0.
 
-.. image:: images/png/screenshot_3.png
+.. image:: images/png/screenshot_3.bmp
   :width: 250
   :align: center
 
 | Additionally, users can choose how to sort identified reaction patterns, or choose to not return reaction patterns for the selected time-point or condition that were also found in another time-point or condition. For time-course or multi-condition experiments, a pane will appear that will display the behavior of all reaction components across all time-points or conditions.
-.. image:: images/png/screenshot_4.png
+.. image:: images/png/screenshot_4.bmp
   :width: 700
   :align: center
 
@@ -119,7 +119,7 @@ General Pathway Exploration
 | - *All pathways*: A list of all pathways across all super-pathways.
 | - *Other*: A list of selected super-pathways that will group pathways in the next drop-down menu. For example, if selecting :data:`Metabolism`, only pathways related to Metabolism will be shown in the next menu.
 
-.. image:: images/png/screenshot_5.png
+.. image:: images/png/screenshot_5.bmp
   :width: 700
   :align: center
 
