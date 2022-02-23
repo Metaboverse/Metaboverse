@@ -19,7 +19,7 @@ Important Note
 Data Inputs
 ===============================
 | Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
-.. image:: images/data_formatting.png
+.. image:: images/png/data_formatting.png
    :width: 700
    :align: center
 |
@@ -40,7 +40,7 @@ Data Inputs
 | This correlates with a list of lists, for the 90%, 95%, and 99% confidence intervals for each control and experimental group.
 |
 | Users can also select the :data:`Format Data` option. Doing so will launch a new window where an unformatted datatable can be uploaded and the user can select the relevant samples to experimental or control groups for a single 2-condition comparison or multiple comparisons for time-course or multi-condition datasets. A description of the usage of this module can be found in the `Data Formatting Help <https://metaboverse.readthedocs.io/en/latest/content/other-features.html#data-formatting-help>`_ section.
-.. image:: images/data_formatting_aid.png
+.. image:: images/png/data_formatting_aid.png
    :width: 300
    :align: center
 |
@@ -83,7 +83,7 @@ Using Metaboverse
 | The second file ends in :data:`\.mvrs` and contains the final network with the user data and user metadata stored. This file will allow for all downstream visualizations and analyses and can be reloaded on the main page of Metaboverse to quickly re-analyze a dataset. Clicking on the :data:`Session Data` tab in the menu on each page of Metaboverse will display the appropriate metadata for that particular model.
 |
 | The figure below shows an example of this process.
-.. image:: images/package_overview.png
+.. image:: images/png/package_overview.png
    :width: 700
    :align: center
 

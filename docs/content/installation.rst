@@ -27,14 +27,14 @@ Permissions Notices
 -------------------------------
 Windows
 -------------------------------
-.. image:: images/permissions_windows.png
+.. image:: images/png/permissions_windows.png
   :width: 700
   :align: center
 
 -------------------------------
 macOS
 -------------------------------
-.. image:: images/permissions_macos.png
+.. image:: images/png/permissions_macos.png
   :width: 700
   :align: center
 
@@ -42,7 +42,7 @@ macOS
 Linux
 -------------------------------
 | If you click on the Metaboverse app for Linux and you see the following error:
-.. image:: images/linux_launch_error.png
+.. image:: images/png/linux_launch_error.png
   :width: 700
   :align: center
 | you should perform the following steps in the Terminal.

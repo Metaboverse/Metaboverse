@@ -24,7 +24,7 @@ Data Formatting Help
 | 7. For metabolomics data, click the :data:`Check Names` button to cross-reference the names you provided with `MetaboAnalyst <https://www.metaboanalyst.ca/docs/APIs.xhtml>`_ to improve the chances that the metabolite correctly maps  to the metabolic network.
 | 8. Export your formatted datatable.
 
-.. image:: images/format-edit.gif
+.. image:: images/gif/capture_12.gif
   :width: 700
   :align: center
 
@@ -42,16 +42,17 @@ ionization products with `Escher-Trace <https://escher-trace.github.io/>`_ and a
 these two tools may then provide biological clues for their system, such as to the downstream outcomes of differential metabolite flux.
 
 
-===============================
-Single Cell RNA-Sequencing 
-===============================
-| 
+
 
 
 
 
 
 ..
+  ===============================
+  Single Cell RNA-Sequencing 
+  ===============================
+  | 
   ===============================
   Adding a custom reaction
   ===============================
