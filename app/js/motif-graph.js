@@ -257,7 +257,6 @@ class MetaGraph {
             }
             console.log(result)
 
-
             filename = result.filePath;
             if (filename === undefined) {
               alert("File selection unsuccessful");
@@ -320,6 +319,35 @@ class MetaGraph {
       })
   }
 
+  processIdenticals(exclude=true) {
+
+    for (let i in this.motif) {
+      for (let m = 0; m < this.motif[i].length; m++) {
+        let r = this.motif[i][m].reactants;
+        let p = this.motif[i][m].products;
+
+        let r_names = [];
+        let p_names = [];
+
+        for (let rr in r) {
+          r_names.push(this.nodes[r[rr]].map_id);
+
+        }
+        for (let pp in p) {
+          p_names.push(this.nodes[p[pp]].map_id);
+        }
+
+        if (
+            (JSON.stringify(r_names.sort()) === JSON.stringify(p_names.sort()))
+            &&
+            (exclude === true)) {
+          this.motif[i].splice(m, 1);
+          m--;
+        }
+      }
+    }
+  }
+
   motifSearch() {
 
     var target = document.getElementById('stamp-view-container')
@@ -350,7 +378,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
-        console.log(this.motif)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -381,6 +409,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -411,6 +440,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -441,6 +471,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals(false);
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -479,6 +510,7 @@ class MetaGraph {
           this.categories,
           this.nodes,
           this.link_neighbors)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -517,6 +549,7 @@ class MetaGraph {
           this.categories,
           this.nodes,
           this.link_neighbors)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -547,6 +580,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -577,6 +611,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -607,6 +642,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -637,6 +673,7 @@ class MetaGraph {
           this.degree_dict,
           this.blocklist,
           this.categories)
+        this.processIdenticals();
         this.watchSlider();
         this.watchType();
         this.watchExclude();
@@ -709,20 +746,16 @@ class MetaGraph {
       .attr("height", stamp_height)
       .attr("fill", d => {
         if (sort_type === "Sort Reaction FDR") {
-          if (d.p_values.agg <= 0.05) {
+          if (d.p_values.agg <= stat_value) {
             return "green";
-          } else if (d.p_values.agg <= 0.1) {
-            return "orange";
           } else {
-            return "lightgrey";
+            return "orange";
           }
         } else {
-          if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
+          if (d.p_values.source <= stat_value && d.p_values.target <= stat_value) {
             return "green";
-          } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
-            return "orange";
           } else {
-            return "lightgrey";
+            return "orange";
           }
         }
       })
@@ -959,12 +992,10 @@ class MetaGraph {
       .attr("width", stamp_width)
       .attr("height", stamp_height)
       .attr("fill", d => {
-        if (d.p_values.source <= 0.05 && d.p_values.target <= 0.05) {
+        if (d.p_values.source <= stat_value && d.p_values.target <= stat_value) {
           return "green";
-        } else if (d.p_values.source <= 0.05 || d.p_values.target <= 0.05) {
-          return "orange";
         } else {
-          return "lightgrey";
+          return "orange";
         }
       })
       .attr("id", (d) => "stamp-cover-" + d.id)

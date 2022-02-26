@@ -121,9 +121,10 @@ function parseCommand(args_dict) {
 function write_log(command, stdout, stderr) {
 
   let today = new Date().toISOString().slice(0, 10);
+  let experiment_name = getArgument("experiment_name").replace(/\s+/g, '-');
 
   fs.writeFileSync(
-    getArgument("output").replace(/\"/g, '') + path.sep + "metaboverse_session.log",
+    getArgument("output").replace(/\"/g, '') + path.sep + "metaboverse_session_" + experiment_name + ".log",
     "Operating System information:\n" +
     navigator.appVersion + "\n" +
     "Log date: " + today + "\n\n" +

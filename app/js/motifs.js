@@ -708,6 +708,7 @@ function computeAvg(arr) {
   return arr_avg;
 }
 
+
 // search for motif 1
 //let threshold = d3.select("#avg_num").node().value;
 function motifSearch_Avg(
@@ -742,20 +743,21 @@ function motifSearch_Avg(
         degree_dict,
         blocklist,
         _idx)
+
       let updated_source = comps[0];
       let updated_target = comps[1];
       let source_values = updated_source.map((i) => i[0]);
       let target_values = updated_target.map((i) => i[0]);
       let source_stats = updated_source.map((i) => i[1]);
       let target_stats = updated_target.map((i) => i[1]);
-
+        
       if (source_values.length > 0 && target_values.length > 0) {
         let source_avg = computeAvg(source_values);
         let target_avg = computeAvg(target_values);
 
         if (Math.abs(source_avg - target_avg) >= threshold) {
-          let p_source = Math.max(...source_stats);
-          let p_target = Math.max(...target_stats);
+          let p_source = Math.min(...source_stats);
+          let p_target = Math.min(...target_stats);
           let reaction_copy = $.extend(true, {}, reaction);
           reaction_copy.p_values = {
             "source": p_source,
