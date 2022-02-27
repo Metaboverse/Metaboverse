@@ -3,7 +3,7 @@ Updates
 ###############
 
 =================================
-v0.9.0 (coming soon)
+v0.9.0
 =================================
 .. note::
     Files curated and analyzed using Metaboverse v0.9.0 will not be backwards compatible with files generated using earlier versions of Metaboverse.
