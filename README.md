@@ -1,4 +1,4 @@
-# ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/content/images/metaboverse_banner.png)
+# ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/content/images/png/metaboverse_banner.png)
 
 ![Build Status](https://github.com/Metaboverse/Metaboverse/workflows/build/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/metaboverse/badge/?version=latest)](https://metaboverse.readthedocs.io/en/latest/?badge=latest)
