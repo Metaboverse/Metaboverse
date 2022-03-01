@@ -19,6 +19,7 @@ v0.9.0
 | - Output session file with each successful build - will have experiment name appended to file.
 | - Sort :data:`Average` reaction pattern by best statistic on each side of reaction
 | - Fix reaction filtering to more strictly and flexibly remove transport reactions from reaction pattern categories, and to only display transport reactions in the :data:`TransReg` reaction pattern category.
+| - Node labels will default to the user-provided names if not the same as the curated default name.
 
 =================================
 v0.8.0
