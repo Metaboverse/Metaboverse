@@ -41,14 +41,14 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 
 
 
-### Walkthroughs
+### Walkthrough
 
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
 
 <div align="center">
    
-[![Metaboverse walkthrough video](https://yt-embed.herokuapp.com/embed?v=G1PWjQJ7J0I)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse walkthrough video")
-
+[![Metaboverse video walkthrough](https://yt-embed.herokuapp.com/embed?v=G1PWjQJ7J0I)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
+   
 </div>
 
 ## Getting started
