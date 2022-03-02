@@ -49,7 +49,7 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 
 <div align="center">
 
-[![METABOVERSE](https://yt-embed.herokuapp.com/embed?v=G1PWjQJ7J0I)](https://youtu.be/G1PWjQJ7J0I "Metaboverse Video Walkthrough")
+[![Metaboverse walkthrough video](https://img.youtube.com/vi/G1PWjQJ7J0I/0.jpg)](https://www.youtube.com/watch?v=G1PWjQJ7J0I)
 
 </div>
 
