@@ -41,7 +41,7 @@ Integrating multi- or single-omic metabolic data upon the metabolic network can 
 
 
 
-### Walkthrough
+### Walkthroughs
 
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
 
