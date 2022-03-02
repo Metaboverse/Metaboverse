@@ -21,7 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 // Hyperlinks listener
-const newBrowserSettings = 'top=500,left=200,frame=false,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes';
+const newBrowserSettings = 'top=500,left=200,frame=true,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes';
 window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();

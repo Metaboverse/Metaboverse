@@ -211,7 +211,7 @@ window.addEventListener("load", function(event) {
 })
 
 // Hyperlinks listener
-const tableBrowserSettings = 'top=500,left=200,frame=false,nodeIntegration=yes,enableRemoteModule=yes,worldSafeExecuteJavaScript=yes,contextIsolation=no';
+const tableBrowserSettings = 'top=500,left=200,frame=true,nodeIntegration=yes,enableRemoteModule=yes,worldSafeExecuteJavaScript=yes,contextIsolation=no';
 
 window.addEventListener("load", function(event) {
     event.preventDefault();

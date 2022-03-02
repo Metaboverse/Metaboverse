@@ -1358,7 +1358,7 @@ function make_graph(
       window.open(
         reactome_string,
         "_blank",
-        "top=500,left=200,frame=false,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes"
+        "top=500,left=200,frame=true,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes"
       );
     }
   });

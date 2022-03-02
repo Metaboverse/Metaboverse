@@ -50,7 +50,7 @@ window.addEventListener("load", function(event) {
             window.open(
               "https://github.com/Metaboverse/Metaboverse/releases/tag/" + version_dict[_c],
               "_blank",
-              "top=500,left=200,frame=false,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes");
+              "top=500,left=200,frame=true,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes");
           }
         })
       }
