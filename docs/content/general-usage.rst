@@ -12,7 +12,7 @@ Analysis Video Walkthrough
 | You can watch the Metaboverse walkthrough video here, or continue below for a more detailed walkthrough.
 .. raw:: html
 
-    <iframe width="700" height="450" src="https://youtube.com/embed/U7m78Tbs5KE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe width="700" height="450" src="https://youtube.com/embed/G1PWjQJ7J0I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 |
 
