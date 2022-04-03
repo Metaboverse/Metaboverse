@@ -9,6 +9,15 @@
 ## What does Metaboverse do?
 Integrating multi- or single-omic metabolic data upon the metabolic network can be challenging for a variety of reasons. Metaboverse seeks to simplify this task for users by providing a simple, user-friendly interface for layering their data on a dynamic representation of the metabolic network and automatically searching the network for interesting regulatory or other patterns. Additionally, Metaboverse provides several tools to enable the contextualization of metabolic data.
 
+## Citing Metaboverse
+If you use Metaboverse in your data analysis, please cite as:
+```
+Berg JA, Zhou Y, Ouyang Y, Waller TC, Cluntun AA, Conway ME, Nowinski SM, Van Ry T, George I,
+Cox JE, Wang B, Rutter J.
+Metaboverse: Automated discovery and visualization of diverse metabolic regulatory patterns.
+bioRxiv. (2020) doi: https://www.biorxiv.org/content/10.1101/2020.06.25.171850
+```
+
 ### Metaboverse provides a simple, dynamic user interface for processing and exploring multi-omics datasets
 <details><summary>Show figure legend</summary>
 <div style="font-size: .5rem;">
