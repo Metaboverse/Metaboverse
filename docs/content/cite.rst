@@ -7,7 +7,9 @@ Metaboverse
 =======================
 | When reporting results obtained using Metaboverse, please include the following language or similar in your text:
 | "Network regulatory analysis was performed using Metaboverse v#.#.# [ref]."
-| [ref] Berg, et. al. 2020. Metaboverse. `https://github.com/Metaboverse <https://github.com/Metaboverse>`_.
+| [ref] Berg JA, Zhou Y, Ouyang Y, Waller TC, Cluntun AA, Conway ME, Nowinski SM, Van Ry T, George I, Cox JE, Wang B, Rutter J.
+|       Metaboverse: Automated discovery and visualization of diverse metabolic regulatory patterns.
+|       bioRxiv. (2020) doi: `https://www.biorxiv.org/content/10.1101/2020.06.25.171850 <https://www.biorxiv.org/content/10.1101/2020.06.25.171850>`_.
 
 =======================
 Reactome
