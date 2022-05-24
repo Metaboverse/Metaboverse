@@ -18,7 +18,7 @@ Important Note
 ===============================
 Data Inputs
 ===============================
-| Metaboverse is capable of handling several data types and structures. Users can input a combination of paired transcriptomics, proteomics, and metabolomics data for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
+| Metaboverse is capable of handling several data types and structures. Users can input **any combination of paired transcriptomics and/or proteomics and/or metabolomics data** for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
 .. image:: images/png/data_formatting.png
    :width: 700
    :align: center
@@ -46,6 +46,7 @@ Data Inputs
 |
 | **Summary**
 | - Each omic input should include fold change and statistal values.
+| - You may include **any combination** of corresponding transcriptomics AND/OR proteomics AND/OR metabolomics measurements.
 | - Timecourse data should be **repeated fold change and statistical values for each timepoint in order** (see example above).
 | - Multi-condition experiments can be provided as with timecourse data.
 | - Data names should correspond to Ensembl, UniProt, or ChEBI/KEGG/HMDB IDs and acceptable synonyms.
