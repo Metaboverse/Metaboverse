@@ -42,9 +42,9 @@ Analysis Video Walkthrough
 ==========
 Questions and Feedback?
 ==========
-| Check out the :ref:`faq_link` page.
-| Learn how to :ref:`contact_link`.
-| You can also find a general purpose discussion forum `here <https://github.com/Metaboverse/Metaboverse/discussions>`_.
+| - Check out the :ref:`faq_link` page.
+| - Learn how to :ref:`contact_link`.
+| - You can also find a general purpose discussion forum `here <https://github.com/Metaboverse/Metaboverse/discussions>`_.
 |
 =======
 License

@@ -10,7 +10,7 @@ Contact Us
 Submit and issue or feature request on GitHub
 ===============================
 | The best method to contact us to through submitting an `issue on the Metaboverse GitHub page <https://github.com/Metaboverse/Metaboverse/issues>`_.
-| - You will need to log-in to your GitHub account, or create a GitHub account `here <https://github.com/join>`.
+| - You will need to log-in to your GitHub account, or create a GitHub account `here <https://github.com/join>`_.
 | - On the `issues page <https://github.com/Metaboverse/Metaboverse/issues>`_, click the :data:`New issue` icon.  
 | - You can choose whether to submit a **bug** or **question** using the :data:`Bug report` template, or submit a **feature request** using the :data:`Feature request` template.
 | - Please clearly describe the problem, what you have tried, as well as screenshots of any error information.
