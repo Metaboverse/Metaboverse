@@ -21,3 +21,6 @@ Submit and issue or feature request on GitHub
 Email
 ===============================
 | If you would like to reach us directly via email, please contact Jordan Berg at :data:`jordan<dot>berg<at>biochem<dot>utah<dot>edu` (replace the symbols within :data:`<>` with their respective symbol).
+
+.. note::
+    After July 31, 2022, please email jordanberg17<at>gmail<dot>com. Please also include an informative email subject line, such as "Metaboverse issue".
