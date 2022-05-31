@@ -19,15 +19,17 @@ Table of contents
    self
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    content/overview
    content/installation
    content/general-usage
    content/other-features
+   content/backend-development
    content/faqs
    content/cite
    content/updates
+   content/contact
 
 ============================
 Analysis Video Walkthrough
@@ -37,7 +39,13 @@ Analysis Video Walkthrough
 
    <iframe width="700" height="450" src="https://youtube.com/embed/G1PWjQJ7J0I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 |
-
+==========
+Questions and Feedback?
+==========
+| Check out the :ref:`faq_link` page.
+| Learn how to :ref:`contact_link`.
+| You can also find a general purpose discussion forum `here <https://github.com/Metaboverse/Metaboverse/discussions>`_.
+|
 =======
 License
 =======
@@ -45,20 +53,7 @@ License
 |
 | `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ is perpetually open-source under a GNU General Public License (v3.0).
 |
-==========
-Feedback?
-==========
-| Have any feedback? Let us know `here <https://forms.gle/4z51DMnagWRvKhc38>`_.
-| You can also find a general purpose discussion forum `here <https://github.com/Metaboverse/Metaboverse/discussions>`_.
-|
-==========
-Questions?
-==========
-| - If you have questions, requests, or bugs to report, please use the `Metaboverse issues forum <https://github.com/Metaboverse/Metaboverse/issues>`_.
-| - Please clearly describe the problem, what you have tried, as well as screenshots of any error information.
-| - Generally, for any errors occurring during network building, a file named :data:`metaboverse_session.log` will be output to your specified Output folder. If you receive this file, please upload it to your GitHub Issue. This will output a lot of information, but you can try self-diagnosing by seeing if there is anything in the last ~10-15 lines of this file that might hint at the issue. Otherwise, we are happy to help diagnose the problem!
-| - It is also often helpful for us to click on the `View` menu tab, click :data:`Toggle Developer Tools`, click the :data:`Console` tab of the window that opens, and take a screenshot of the output in this panel.
-|
+
 .. |build-status| image:: https://travis-ci.com/Metaboverse/Metaboverse.svg?branch=master
     :target: https://travis-ci.com/Metaboverse/Metaboverse
     :alt: Build Status
