@@ -4,8 +4,7 @@ Visualizing and Analyzing Metabolic Networks
 https://github.com/Metaboverse/Metaboverse/
 alias: metaboverse
 
-Copyright (C) 2019-2022 Jordan A. Berg
-Email: jordan<dot>berg<at>biochem<dot>utah<dot>edu
+Copyright (C) Jordan A. Berg
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
@@ -52,7 +51,14 @@ var motif_outputs = gatherMotifs(data, data.categories);
 var collapsed_global_motifs = motif_outputs[0];
 var global_motifs = motif_outputs[1];
 
-let names = data.labels.split(',');
+let names;
+if (data.labels === null) {
+  names = [];
+} else {
+  names = data.labels.split(',');
+}
+
+
 timecourse = checkCategories(data.categories, names); //, data.names);
 
 make_menu(
