@@ -36,6 +36,7 @@ var last_click = 0;
 var cov_threshold = 0.1;
 var significance_weight = 3;
 var nonsignificance_weight = 1;
+var cofactor = "";
 
 var opts = { // Spinner opts from http://spin.js.org/
   lines: 10, // The number of lines to draw
@@ -289,6 +290,26 @@ class MetaGraph {
     }
   }
 
+  watchMenu() {
+    if (this.motif !== undefined) {
+      d3.select("#pathwayMenu-motif").on("change", function() {
+        console.log("motic")
+        this.exclude_type_dropdown = document.getElementById("exclude_type");
+        exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+
+        // get filtering cofactor
+        console.log(document.getElementById("#pathwayMenu-motif").value)
+        
+        // filter this.motif
+        
+      
+        reset_objects();
+        this.drawMotifSearchResult(
+          this.motif, sample_idx, exclude_idx);
+      });
+    }
+  }
+
   watchType() {
     d3.select("#sort_type")
       .on("change", () => {
@@ -314,6 +335,68 @@ class MetaGraph {
         let sample_idx = d3.select("circle#dot").attr("x");
         this.drawMotifSearchResult(
           this.motif, sample_idx, exclude_idx);
+      })
+  }
+
+  watchExport() {
+    d3.select("#saveTable")
+      .on("click", () => {
+        // this.motif, sample_idx, exclude_idx
+        console.log(this.motif)
+
+
+
+        
+        const rows = [
+          ["name1", "city1", "some other info"],
+          ["name2", "city2", "more info"]
+        ];
+        
+
+
+
+
+        // Source: https://stackoverflow.com/a/14966131/9571488
+        let csvContent = "data:text/tab-separated-values;charset=utf-8,";
+        rows.forEach(function(rowArray) {
+          let row = rowArray.join("\t");
+          csvContent += row + "\r\n";
+        });
+
+        var encodedUri = encodeURI(csvContent);
+        // End code snippet
+
+        let filename = dialog
+          .showSaveDialog({
+            filters: [
+              { name: ".tsv (tab-delimited file)", extensions: ["tsv"] }
+            ]
+          })
+          .then(result => {
+            let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
+            if (hasExtension === false) {
+              result.filePath = `${ result.filePath }.${ "tsv" }`;
+            }
+            filename = result.filePath;
+            if (filename === undefined) {
+              alert("File selection unsuccessful");
+              return;
+            }
+            console.log(filename);
+
+            // Source: https://stackoverflow.com/a/14966131/9571488
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", filename);
+            document.body.appendChild(link); // Required for FF
+
+            link.click(); // This will download the data file named "my_data.csv".
+            // End code snippet
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
       })
   }
 
@@ -378,9 +461,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -409,9 +494,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -440,9 +527,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -471,9 +560,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals(false);
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -510,9 +601,11 @@ class MetaGraph {
           this.link_neighbors)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawTwoReactionSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -549,9 +642,11 @@ class MetaGraph {
           this.link_neighbors)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawTwoReactionSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -580,9 +675,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -611,9 +708,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -642,9 +741,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
 
@@ -673,9 +774,11 @@ class MetaGraph {
           this.categories)
         this.processIdenticals();
         this.watchSlider();
+        this.watchMenu();
         this.watchType();
         this.watchExclude();
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
+        this.watchExport();
         spinner.stop();
       })
   }

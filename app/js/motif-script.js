@@ -66,6 +66,14 @@ showMotifs = function(_callback) {
       div.style("opacity", 0);
       div.html("")
     });
+
+    var non_reaction_nodes = new Set();
+    for (let n in data.nodes) {
+      if (data.nodes[n].type !== "reaction" && data.nodes[n].type !== "collapsed") {
+        non_reaction_nodes.add(data.nodes[n].name);
+      }
+    }
+    make_menu(Object.assign(...Array.from(non_reaction_nodes, v => ({[v]:''}))), "pathwayMenu-motif", "Filter pattern results by an entity...");
     // END: Initialize stat threshold button and functions
   });
   return _callback;
@@ -73,7 +81,7 @@ showMotifs = function(_callback) {
 
 window.addEventListener("load", function(event) {
   set_tooltips();
-  showMotifs()
+  showMotifs();
 })
 
 function set_tooltips() {

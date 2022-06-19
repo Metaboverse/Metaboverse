@@ -236,12 +236,22 @@ path.hull {
 #superPathwayMenu {
   font: 16px sans-serif;
   margin-left: 315;
+  width: 700px;
 }
 
 #pathwayMenu {
   font: 16px sans-serif;
   margin-left: 315;
   margin-top: 0px;
+  width: 700px;
+}
+
+#pathwayMenu-motif {
+  font: 16px sans-serif;
+  margin-left: -5px;
+  margin-top: -5px;
+  width: 900px;
+  height: 28px;
 }
 
 .arrow {

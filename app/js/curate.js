@@ -74,12 +74,19 @@ window.addEventListener("load", function(event) {
   if (get_session_info("organism") !== null && get_session_info("database_url") !== null) {
     $("#content").html(
       '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+      window.scrollTo(0,document.body.scrollHeight);
   } else if (get_session_info("curation_url") !== null || get_session_info("template_url") !== null && get_session_info("database_source") !== "reactome") {
     $("#content").html(
       '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+      window.scrollTo(0,document.body.scrollHeight);
   } else if (get_session_info("curation_url") !== null && get_session_info("database_source") !== "biomodels/bigg") {
     $("#content").html(
       '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+      window.scrollTo(0,document.body.scrollHeight);
+  } else if (get_session_info("template_url") !== null) {
+    $("#content").html(
+      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+      window.scrollTo(0,document.body.scrollHeight);
   } else {
     $('#content').append('<a href=""></a>')
   }

@@ -62,7 +62,13 @@ function make_menu(
     return k;
   });
 
-  pathways_list.sort();
+  // Case-insensitive sort (Source: https://stackoverflow.com/a/26145462/9571488)
+  pathways_list.sort( function(s1, s2) {
+    var l=s1.toLowerCase(), m=s2.toLowerCase();
+    return l===m?0:l>m?1:-1;
+  });
+
+
   if (provide_all === true) {
     pathways_list.unshift("All pathways");
     pathways_list.unshift("All entities");
