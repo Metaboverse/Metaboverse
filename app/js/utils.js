@@ -145,3 +145,18 @@ function make_pathway_dictionary(data, database_key) {
 
   return pathway_dict;
 }
+
+// Source: https://stackoverflow.com/a/48729396/9571488
+function dateComponentPad(value) {
+  var format = String(value);
+
+  return format.length < 2 ? '0' + format : format;
+}
+
+// Source: https://stackoverflow.com/a/48729396/9571488
+function formatDate(date) {
+  var datePart = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ].map(dateComponentPad);
+  var timePart = [ date.getHours(), date.getMinutes(), date.getSeconds() ].map(dateComponentPad);
+
+  return datePart.join('-') + '-' + timePart.join('-');
+}

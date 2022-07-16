@@ -37,6 +37,7 @@ var cov_threshold = 0.1;
 var significance_weight = 3;
 var nonsignificance_weight = 1;
 var cofactor = "";
+var selected_pattern = "";
 
 var opts = { // Spinner opts from http://spin.js.org/
   lines: 10, // The number of lines to draw
@@ -342,19 +343,59 @@ class MetaGraph {
     d3.select("#saveTable")
       .on("click", () => {
         // this.motif, sample_idx, exclude_idx
-        console.log(this.motif)
 
-
-
-        
-        const rows = [
-          ["name1", "city1", "some other info"],
-          ["name2", "city2", "more info"]
+        // for each item (condition) in this.motif, output with column describing the condition
+        var i = 0;
+        var rows = [];
+        let column_names = [
+          "index", 
+          "condition", 
+          "id", 
+          "name", 
+          "collapsed", 
+          "collapsed_reactions", 
+          "compartment", 
+          "reactants", 
+          "products", 
+          "modifiers", 
+          "additional_components",
+          "reversible",
+          "pathways",
+          "notes",
+          "magnitude_change",
+          "source_p_value",
+          "target_p_value",
+          "averaged_p_value"
         ];
-        
+        rows.push(column_names);
 
-
-
+        for (let condition in this.motif) {
+          for (let motif in this.motif[condition]) {
+            let this_entry = this.motif[condition][motif];
+            let entry = [
+              String(i), 
+              String(condition), 
+              String(this_entry["id"]), 
+              String(this_entry["name"]), 
+              String(this_entry["collapsed"]), 
+              String(this_entry["collapsed_reactions"]), 
+              String(this_entry["compartment"]),
+              String(this_entry["reactants"]),
+              String(this_entry["products"]),
+              String(this_entry["modifiers"]), 
+              String(this_entry["additional_components"]), 
+              String(this_entry["reversible"]),
+              String(this_entry["pathways"]),
+              String(this_entry["notes"]),
+              String(this_entry["magnitude_change"]), 
+              String(this_entry["p_values"]["source"]),
+              String(this_entry["p_values"]["target"]),
+              String(this_entry["p_values"]["agg"])
+            ];
+            rows.push(entry);
+            i += 1;
+          }
+        }
 
         // Source: https://stackoverflow.com/a/14966131/9571488
         let csvContent = "data:text/tab-separated-values;charset=utf-8,";
@@ -366,37 +407,15 @@ class MetaGraph {
         var encodedUri = encodeURI(csvContent);
         // End code snippet
 
-        let filename = dialog
-          .showSaveDialog({
-            filters: [
-              { name: ".tsv (tab-delimited file)", extensions: ["tsv"] }
-            ]
-          })
-          .then(result => {
-            let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
-            if (hasExtension === false) {
-              result.filePath = `${ result.filePath }.${ "tsv" }`;
-            }
-            filename = result.filePath;
-            if (filename === undefined) {
-              alert("File selection unsuccessful");
-              return;
-            }
-            console.log(filename);
-
-            // Source: https://stackoverflow.com/a/14966131/9571488
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", filename);
-            document.body.appendChild(link); // Required for FF
-
-            link.click(); // This will download the data file named "my_data.csv".
-            // End code snippet
-          })
-          .catch(err => {
-            console.log(err);
-          });
-
+        // Source: https://stackoverflow.com/a/14966131/9571488
+        let timestamp = formatDate(new Date());
+        let filename = this.data.metadata.experiment_name + "_" + selected_pattern + "_patterns_" + timestamp + ".tsv";
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", filename);
+        document.body.appendChild(link); // Required for FF
+        link.click(); // This will download the data file named "my_data.csv".
+        // End code snippet
       })
   }
 
@@ -441,6 +460,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "average";
         highlight_selection("#avg_num");
         reset_dot();
         reset_objects();
@@ -474,6 +494,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "sustained";
         highlight_selection("#sustained_num");
         reset_dot();
         reset_objects();
@@ -507,6 +528,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "modreg";
         highlight_selection("#modreg_num");
         reset_dot();
         reset_objects();
@@ -540,6 +562,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "transreg";
         highlight_selection("#transreg_num");
         reset_dot();
         reset_objects();
@@ -573,6 +596,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "enzyme";
         highlight_selection("#enzyme_num");
         reset_dot();
         reset_objects();
@@ -614,6 +638,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "activity";
         highlight_selection("#activity_num");
         reset_dot();
         reset_objects();
@@ -655,6 +680,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "maxmax";
         highlight_selection("#maxmax_num");
         reset_dot();
         reset_objects();
@@ -688,6 +714,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "minmin";
         highlight_selection("#minmin_num");
         reset_dot();
         reset_objects();
@@ -721,6 +748,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "maxmin";
         highlight_selection("#maxmin_num");
         reset_dot();
         reset_objects();
@@ -754,6 +782,7 @@ class MetaGraph {
         if (d3.event.button === 0) { spinner.spin(target) };
       })
       .on("click", () => {
+        selected_pattern = "minmax";
         highlight_selection("#minmax_num");
         reset_dot();
         reset_objects();
