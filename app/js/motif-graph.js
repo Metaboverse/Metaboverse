@@ -120,6 +120,10 @@ class MetaGraph {
     this.neighbors_dictionary = neighbors_output[0];
     this.collapsed_neighbors_dictionary = neighbors_output[1];
 
+    this.metabolite_species_dictionary = make_metabolite_species_dictionary(
+      data
+    );
+
     if (this.labels === null) {
       this.names = ['0']
     } else {
@@ -293,20 +297,51 @@ class MetaGraph {
 
   watchMenu() {
     if (this.motif !== undefined) {
+      let that = this;
       d3.select("#pathwayMenu-motif").on("change", function() {
-        console.log("motic")
-        this.exclude_type_dropdown = document.getElementById("exclude_type");
-        exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
+        let exclude_type_dropdown = document.getElementById("exclude_type");
+        let exclude_idx = that.names.indexOf(exclude_type_dropdown);
+        let sample_idx = 0;
 
         // get filtering cofactor
-        console.log(document.getElementById("#pathwayMenu-motif").value)
+        var filter_cofactor = document.getElementById("pathwayMenu-motif").value;
         
-        // filter this.motif
+        let filtered_motifs;
+        if (filter_cofactor === "No metabolite co-factor selection...") {
+          filtered_motifs = that.motif;
+        } else {
+          // get species ID for cofactor
+          let cofactor_id = that.metabolite_species_dictionary[filter_cofactor];
+
+          // If "No metabolite co-factor selection...", no selection
+          filtered_motifs = [];
+          for (let condition in that.motif) {
+            filtered_motifs.push([]);
+            for (let motif in that.motif[condition]) {
+              let entities = new Set();
+              for (let r in that.motif[condition][motif].reactants) {
+                entities.add(that.motif[condition][motif].reactants[r])
+              }
+              for (let p in that.motif[condition][motif].products) {
+                entities.add(that.motif[condition][motif].products[p])
+              }
+              for (let m in that.motif[condition][motif].modifiers) {
+                entities.add(that.motif[condition][motif].modifiers[m][0])
+              }
+              //console.log(entities)
+              for (let c in cofactor_id) {
+                if (entities.has(cofactor_id[c])) {
+                  filtered_motifs[condition].push(that.motif[condition][motif])
+                  break;
+                }
+              }
+            }
+          }
+        }
         
-      
         reset_objects();
-        this.drawMotifSearchResult(
-          this.motif, sample_idx, exclude_idx);
+        that.drawMotifSearchResult(
+          filtered_motifs, sample_idx, exclude_idx);
       });
     }
   }
@@ -463,6 +498,7 @@ class MetaGraph {
         selected_pattern = "average";
         highlight_selection("#avg_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#avg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -497,6 +533,7 @@ class MetaGraph {
         selected_pattern = "sustained";
         highlight_selection("#sustained_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#sustained_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -531,6 +568,7 @@ class MetaGraph {
         selected_pattern = "modreg";
         highlight_selection("#modreg_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#modreg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -565,6 +603,7 @@ class MetaGraph {
         selected_pattern = "transreg";
         highlight_selection("#transreg_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#transreg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -599,6 +638,7 @@ class MetaGraph {
         selected_pattern = "enzyme";
         highlight_selection("#enzyme_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#enzyme_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -641,6 +681,7 @@ class MetaGraph {
         selected_pattern = "activity";
         highlight_selection("#activity_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#activity_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -683,6 +724,7 @@ class MetaGraph {
         selected_pattern = "maxmax";
         highlight_selection("#maxmax_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#maxmax_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -717,6 +759,7 @@ class MetaGraph {
         selected_pattern = "minmin";
         highlight_selection("#minmin_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#minmin_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -751,6 +794,7 @@ class MetaGraph {
         selected_pattern = "maxmin";
         highlight_selection("#maxmin_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#maxmin_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -785,6 +829,7 @@ class MetaGraph {
         selected_pattern = "minmax";
         highlight_selection("#minmax_num");
         reset_dot();
+        reset_filter();
         reset_objects();
         let threshold = d3.select("#minmax_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
@@ -2670,6 +2715,10 @@ function reset_dot() {
     d3.select("circle#dot")
       .attr("cx", 90)
   }
+}
+
+function reset_filter() {
+  document.getElementById("pathwayMenu-motif").value = "No metabolite co-factor selection...";
 }
 
 function reset_objects() {

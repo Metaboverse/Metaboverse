@@ -67,13 +67,18 @@ showMotifs = function(_callback) {
       div.html("")
     });
 
-    var non_reaction_nodes = new Set();
+    // Filter out everything but metabolites for co-factor selection
+    var filtered_nodes = new Set();
     for (let n in data.nodes) {
-      if (data.nodes[n].type !== "reaction" && data.nodes[n].type !== "collapsed") {
-        non_reaction_nodes.add(data.nodes[n].name);
+      if (data.nodes[n].type === "metabolite_component" || data.nodes[n].sub_type === "metabolite_component") {
+        if (data.nodes[n].user_label !== undefined) {
+          filtered_nodes.add(data.nodes[n].user_label);
+        } else {
+          filtered_nodes.add(data.nodes[n].name);
+        }
       }
     }
-    make_menu(Object.assign(...Array.from(non_reaction_nodes, v => ({[v]:''}))), "pathwayMenu-motif", "Filter pattern results by an entity...");
+    make_menu(Object.assign(...Array.from(filtered_nodes, v => ({[v]:''}))), "pathwayMenu-motif", "No metabolite co-factor selection...");
     // END: Initialize stat threshold button and functions
   });
   return _callback;
