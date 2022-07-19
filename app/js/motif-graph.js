@@ -102,6 +102,16 @@ class MetaGraph {
       this.data.metadata.blocklist,
       this.nodes
     )
+    
+    this.reaction_dict = data.reaction_dict;
+    this.mod_pathway_dictionary = {};
+    for (let p in data.pathway_dictionary) {
+      this.mod_pathway_dictionary[data.pathway_dictionary[p].id] = data.pathway_dictionary[p];
+    }
+    this.pathway_dictionary = make_pathway_dictionary(
+      data,
+      "pathway_dictionary"
+    );
 
     this.collapsed_reaction_dict = data.collapsed_reaction_dictionary;
     this.mod_collapsed_pathways = data.mod_collapsed_pathways;
@@ -121,6 +131,9 @@ class MetaGraph {
     this.collapsed_neighbors_dictionary = neighbors_output[1];
 
     this.metabolite_species_dictionary = make_metabolite_species_dictionary(
+      data
+    );
+    this.entity_species_reverse_dictionary = make_entity_species_r_dictionary(
       data
     );
 
@@ -181,15 +194,6 @@ class MetaGraph {
       this.mp_selection_group = this.mp_svg.append("g")
         .attr("id", "mp-selection-group");
 
-      // Generate pathway viewer
-      // Just get pathway ID and let the viz script do the rest
-      //this.pathway_svg = d3.select("#pathway-view-svg");
-      //this.pathway_svg_width = parseFloat(
-      //  this.pathway_svg.style("width", "45vw"));
-      //this.pathway_svg_height = parseFloat(
-      //  this.pathway_svg.style("height", "595px"));
-      //this.pathway_svg.style("width", "45vw")
-      //this.pathway_svg.style("height", "595px")
     } catch (e) {}
     this.initLines();
     this.motifSearch();
@@ -281,6 +285,7 @@ class MetaGraph {
       if (timecourse === true) {
         d3.select("svg#slide")
           .on("click", () => {
+            console.log(this)
             let sample_idx = d3.select("circle#dot").attr("x");
             this.exclude_type_dropdown = document.getElementById("exclude_type");
             exclude_idx = this.names.indexOf(this.exclude_type_dropdown.value);
@@ -297,52 +302,53 @@ class MetaGraph {
 
   watchMenu() {
     if (this.motif !== undefined) {
-      let that = this;
-      d3.select("#pathwayMenu-motif").on("change", function() {
-        let exclude_type_dropdown = document.getElementById("exclude_type");
-        let exclude_idx = that.names.indexOf(exclude_type_dropdown);
-        let sample_idx = 0;
+      let filtered_motifs = [];
+      d3.select("#pathwayMenu-motif")
+        .on("change", () => {
+          let exclude_type_dropdown = document.getElementById("exclude_type");
+          let exclude_idx = this.names.indexOf(exclude_type_dropdown);
+          let sample_idx = 0;
 
-        // get filtering cofactor
-        var filter_cofactor = document.getElementById("pathwayMenu-motif").value;
-        
-        let filtered_motifs;
-        if (filter_cofactor === "No metabolite co-factor selection...") {
-          filtered_motifs = that.motif;
-        } else {
-          // get species ID for cofactor
-          let cofactor_id = that.metabolite_species_dictionary[filter_cofactor];
+          // get filtering cofactor
+          var filter_cofactor = document.getElementById("pathwayMenu-motif").value;
+          if (filter_cofactor === "No metabolite co-factor selection...") {
+            filtered_motifs = this.motif;
+          } else {
+            // get species ID for cofactor
+            let cofactor_id = this.metabolite_species_dictionary[filter_cofactor];
 
-          // If "No metabolite co-factor selection...", no selection
-          filtered_motifs = [];
-          for (let condition in that.motif) {
-            filtered_motifs.push([]);
-            for (let motif in that.motif[condition]) {
-              let entities = new Set();
-              for (let r in that.motif[condition][motif].reactants) {
-                entities.add(that.motif[condition][motif].reactants[r])
-              }
-              for (let p in that.motif[condition][motif].products) {
-                entities.add(that.motif[condition][motif].products[p])
-              }
-              for (let m in that.motif[condition][motif].modifiers) {
-                entities.add(that.motif[condition][motif].modifiers[m][0])
-              }
-              //console.log(entities)
-              for (let c in cofactor_id) {
-                if (entities.has(cofactor_id[c])) {
-                  filtered_motifs[condition].push(that.motif[condition][motif])
-                  break;
+            // If "No metabolite co-factor selection...", no selection
+            filtered_motifs = [];
+            for (let condition in this.motif) {
+              filtered_motifs.push([]);
+              for (let motif in this.motif[condition]) {
+                let entities = new Set();
+                for (let r in this.motif[condition][motif].reactants) {
+                  entities.add(this.motif[condition][motif].reactants[r])
+                }
+                for (let p in this.motif[condition][motif].products) {
+                  entities.add(this.motif[condition][motif].products[p])
+                }
+                for (let m in this.motif[condition][motif].modifiers) {
+                  entities.add(this.motif[condition][motif].modifiers[m][0])
+                }
+                //console.log(entities)
+                for (let c in cofactor_id) {
+                  if (entities.has(cofactor_id[c])) {
+                    filtered_motifs[condition].push(this.motif[condition][motif])
+                    break;
+                  }
                 }
               }
             }
           }
+
+          reset_objects();
+          this.drawMotifSearchResult(
+            filtered_motifs, sample_idx, exclude_idx);
+          this.motif = filtered_motifs;
         }
-        
-        reset_objects();
-        that.drawMotifSearchResult(
-          filtered_motifs, sample_idx, exclude_idx);
-      });
+      );
     }
   }
 
@@ -388,15 +394,10 @@ class MetaGraph {
           "id", 
           "name", 
           "collapsed", 
-          "collapsed_reactions", 
-          "compartment", 
           "reactants", 
           "products", 
           "modifiers", 
           "additional_components",
-          "reversible",
-          "pathways",
-          "notes",
           "magnitude_change",
           "source_p_value",
           "target_p_value",
@@ -407,21 +408,45 @@ class MetaGraph {
         for (let condition in this.motif) {
           for (let motif in this.motif[condition]) {
             let this_entry = this.motif[condition][motif];
+
+            let these_reactants = [];
+            for (let r in this_entry["reactants"]) {
+              if (this_entry["reactants"][r] in this.entity_species_reverse_dictionary) {
+                these_reactants.push(this.entity_species_reverse_dictionary[this_entry["reactants"][r]][0]);
+              } else {
+                these_reactants.push(this_entry["reactants"][r]);
+              }
+            }
+            let these_products = [];
+            for (let p in this_entry["products"]) {
+              if (this_entry["products"][p] in this.entity_species_reverse_dictionary) {
+                these_products.push(this.entity_species_reverse_dictionary[this_entry["products"][p]][0]);
+              } else {
+                these_products.push(this_entry["products"][p]);
+              }
+            }
+            let these_modifiers = [];
+            for (let m in this_entry["modifiers"]) {
+              if (this_entry["modifiers"][m][0] in this.entity_species_reverse_dictionary) {
+                these_modifiers.push([
+                  this.entity_species_reverse_dictionary[this_entry["modifiers"][m][0]][0],
+                  this_entry["modifiers"][m][1]
+                ]);
+              } else {
+                these_modifiers.push(this_entry["modifiers"][m]);
+              }
+            }
+
             let entry = [
               String(i), 
               String(condition), 
               String(this_entry["id"]), 
               String(this_entry["name"]), 
               String(this_entry["collapsed"]), 
-              String(this_entry["collapsed_reactions"]), 
-              String(this_entry["compartment"]),
-              String(this_entry["reactants"]),
-              String(this_entry["products"]),
-              String(this_entry["modifiers"]), 
+              String(these_reactants),
+              String(these_products),
+              String(these_modifiers), 
               String(this_entry["additional_components"]), 
-              String(this_entry["reversible"]),
-              String(this_entry["pathways"]),
-              String(this_entry["notes"]),
               String(this_entry["magnitude_change"]), 
               String(this_entry["p_values"]["source"]),
               String(this_entry["p_values"]["target"]),
@@ -572,6 +597,12 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#modreg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        
+        console.log(this)
+        // check if collapsed or not, re-run when box checked
+        // how does option work in viz page? why is it different here?
+
+        
         this.motif = modifierReg(
           threshold,
           this.collapsed_reaction_dict,

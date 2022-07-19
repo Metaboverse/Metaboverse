@@ -278,7 +278,6 @@ function gatherMotifs(data, categories) {
     data.blocklist,
     categories)
   
-
   let all_collapsed_motifs = [];
   for (x in categories) { 
     all_collapsed_motifs[x] = collapsed_motifs_Avg[x].concat(

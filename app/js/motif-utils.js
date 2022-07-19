@@ -99,7 +99,7 @@ function make_metabolite_species_dictionary(data) {
   let species_dictionary = {};
 
   for (let n in data.nodes) {
-    if (data.nodes[n].type === "metabolite_component" || data.nodes[n].type.sub_type === "metabolite_component") {
+    if (data.nodes[n].type === "metabolite_component" || data.nodes[n].sub_type === "metabolite_component") {
       let this_name;
       if (data.nodes[n].user_label !== undefined) {
         this_name = data.nodes[n].user_label;
@@ -111,6 +111,27 @@ function make_metabolite_species_dictionary(data) {
       } else {
         species_dictionary[this_name] = [data.nodes[n].id];
       }
+    }
+  }
+
+  return species_dictionary;
+}
+
+function make_entity_species_r_dictionary(data) {
+
+  let species_dictionary = {};
+
+  for (let n in data.nodes) {
+    let this_name;
+    if (data.nodes[n].user_label !== undefined) {
+      this_name = data.nodes[n].user_label;
+    } else {
+      this_name = data.nodes[n].name;
+    }
+    if (data.nodes[n].id in species_dictionary) {
+      species_dictionary[data.nodes[n].id].push(this_name);
+    } else {
+      species_dictionary[data.nodes[n].id] = [this_name];
     }
   }
 
