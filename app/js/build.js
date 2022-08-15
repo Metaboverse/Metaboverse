@@ -309,10 +309,10 @@ function displayOptions() {
       );
     }
   } catch (e) {
-    alert('Failed to open database URL: \n' + database_url)
-    var elem = document.getElementById("progressBar");
-    elem.style.width = "0%";
-    elem.innerHTML = "0%";
+    //alert('Failed to open database: \n' + database_url)
+    //var elem = document.getElementById("progressBar");
+    //elem.style.width = "0%";
+    //elem.innerHTML = "0%";
   }
 }
 
