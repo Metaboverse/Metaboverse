@@ -2845,18 +2845,19 @@ function sort_motifs(motif_list, motif_significance, sort_type) {
       return d3.descending(a.magnitude_change, b.magnitude_change);
     })
   } else if (sort_type === "Sort Statistical Significance") {
-
     motif_list.forEach(m => {
-      if (m.p_values === undefined) {} else if (m.p_values.source <= 0.05 && m.p_values.target <= 0.05) {
+      if (m.p_values === undefined) {
+        //pass
+      } else if (m.p_values.source <= stat_value && m.p_values.target <= stat_value) {
         m.significance_type = 'Both significant';
         motif_significance.both.push(m);
-      } else if (m.p_values.source <= 0.05) {
+      } else if (m.p_values.source <= stat_value) {
         m.significance_type = 'Source significant';
         motif_significance.one.push(m);
-      } else if (m.p_values.target <= 0.05) {
+      } else if (m.p_values.target <= stat_value) {
         m.significance_type = 'Target significant';
         motif_significance.one.push(m);
-      } else { // both > 0.05
+      } else { // both > stat_value
         m.significance_type = 'Both not significant';
         motif_significance.none.push(m);
       }

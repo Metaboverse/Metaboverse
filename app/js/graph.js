@@ -67,7 +67,7 @@ function set_stat_button(stat_type) {
       <font size="2">
         Statistic threshold:
       </font>
-      <input type="number" name="stat_button" id="stat_button" class="option_button" min="000" max="1.00" value="0.10" /> 
+      <input type="number" name="stat_button" id="stat_button" class="option_button" min="000" max="1.00" value="0.10" step="0.05" /> 
     `
     stat_value = 0.1;
   }
