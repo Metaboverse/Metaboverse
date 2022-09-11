@@ -103,7 +103,8 @@ class MetaGraph {
       this.nodes
     )
     
-    this.reaction_dict = data.reaction_dict;
+    this.reaction_dict = data.reaction_dictionary;
+    console.log(this.reaction_dict)
     this.mod_pathway_dictionary = {};
     for (let p in data.pathway_dictionary) {
       this.mod_pathway_dictionary[data.pathway_dictionary[p].id] = data.pathway_dictionary[p];
@@ -114,6 +115,7 @@ class MetaGraph {
     );
 
     this.collapsed_reaction_dict = data.collapsed_reaction_dictionary;
+    console.log(this.collapsed_reaction_dict)
     this.mod_collapsed_pathways = data.mod_collapsed_pathways;
     this.collapsed_pathway_dict = make_pathway_dictionary(
       data,
@@ -527,9 +529,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#avg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = motifSearch_Avg(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -562,9 +565,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#sustained_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = motifSearch_Sustained(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -597,15 +601,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#modreg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
-        
-        console.log(this)
-        // check if collapsed or not, re-run when box checked
-        // how does option work in viz page? why is it different here?
-
-        
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = modifierReg(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -638,9 +637,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#transreg_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = modifierTransport(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -679,9 +679,10 @@ class MetaGraph {
         } else {
           eval_neighbors_dictionary = this.collapsed_neighbors_dictionary;
         }
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = enzymeMotif(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -722,9 +723,10 @@ class MetaGraph {
         } else {
           eval_neighbors_dictionary = this.collapsed_neighbors_dictionary;
         }
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = activityMotif(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -759,9 +761,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#maxmax_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = motifSearch_MaxMax(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -794,9 +797,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#minmin_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = motifSearch_MinMin(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -829,9 +833,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#maxmin_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = motifSearch_MaxMin(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -864,9 +869,10 @@ class MetaGraph {
         reset_objects();
         let threshold = d3.select("#minmax_num").node().value;
         this.sort_type_dropdown = document.getElementById("sort_type");
+        let this_reaction_dict = get_reaction_dict(this);
         this.motif = motifSearch_MinMax(
           threshold,
-          this.collapsed_reaction_dict,
+          this_reaction_dict,
           this.expression_dict,
           this.stats_dict,
           this.stat_type,
@@ -885,16 +891,13 @@ class MetaGraph {
         this.drawMotifSearchResult(this.motif, 0, exclude_idx);
         this.watchExport();
         spinner.stop();
+        console.log(this.motif)
       })
   }
 
   drawMotifSearchResult(motifs, indexer, exclusion_indexer) {
 
-    // Remove collapsed reactions if box unchecked
-    let current_motifs = get_eval_motifs(
-      eval_collapsed,
-      motifs,
-      indexer);
+    let current_motifs = motifs[indexer];
 
     // Exclude any motifs in multiple time-points/conditions
     let motif_list = get_included_motifs(
@@ -920,6 +923,7 @@ class MetaGraph {
       'one': [],
       'none': []
     };
+
     let sort_output = sort_motifs(
       motif_list,
       motif_significance,
@@ -1138,11 +1142,7 @@ class MetaGraph {
 
   drawTwoReactionSearchResult(motifs, indexer, exclusion_indexer) {
 
-    // Remove collapsed reactions if box unchecked
-    let current_motifs = get_eval_motifs(
-      eval_collapsed,
-      motifs,
-      indexer);
+    let current_motifs = motifs[indexer];
 
     // Exclude any motifs in multiple time-points/conditions
     let motif_list = get_included_motifs(
@@ -2935,4 +2935,12 @@ function remove_noshare_twoReactions(motif_list) {
     motif_list.splice(remove_idx[i], 1);
   }
   return motif_list;
+}
+
+function get_reaction_dict(data) {
+  if (eval_collapsed === false) {
+    return data.reaction_dict;
+  } else {
+    return data.collapsed_reaction_dict;
+  }
 }
