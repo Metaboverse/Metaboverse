@@ -5,20 +5,22 @@ Downloading metabolite mapper
 
 Instructions for building OS-specific python distribution:
 ----------------------------------------------------------
-1) `conda config --add channels conda-forge`
-2) `conda update python=3.8; conda update conda; conda install pyinstaller`
-3) `conda update pandas numpy scipy scikit-learn matplotlib networkx requests`
-4) Go to `metaboverse_cli` directory in `metaboverse-cli`
-5) On each operating system:
-  pyinstaller metaboverse-mac.spec
+1) `conda create --name pyinstaller` or `conda activate pyinstaller`
+2) `conda config --add channels conda-forge`
+3) `conda install python=3.8`
+4) `pip install pyinstaller` on Linux/Mac; `conda install pyinstaller` on Windows
+5) `pip install -r requirements.txt` on Linux/Mac; `conda install --file requirements.txt` on Windows
+6) Navigate to the directory: `metaboverse-cli`
+7) On each operating system:
+  pyinstaller metaboverse-cli.spec
   mv dist/metaboverse-mac .
   rm -r build dist
   --------------------------------
-  pyinstaller metaboverse-windows.spec
+  pyinstaller metaboverse-cli.spec
   mv dist/metaboverse-windows .
   rm -r build dist
   --------------------------------
-  pyinstaller metaboverse-linux.spec
+  pyinstaller metaboverse-cli.spec
   mv dist/metaboverse-linux .
   rm -r build dist
 
