@@ -7,6 +7,7 @@ v0.10.0
 =================================
 | - Introduces **Co-factor Selection**, a drop-down menu available in Pattern Analysis. Selected a specific factor will limit the Pattern Analysis results to only the reactions containing the selected entity.
 | - Implements a Pattern Analysis **Table Export** utility, whereby the user can export the Reaction Patterns of a given type.
+| - Fixes an issue where some non-collapsed reactions were not showing up in Pattern results.
 
 =================================
 v0.9.0
