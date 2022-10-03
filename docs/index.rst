@@ -25,6 +25,7 @@ Table of contents
    content/installation
    content/general-usage
    content/other-features
+   content/vignettes
    content/backend-development
    content/faqs
    content/cite

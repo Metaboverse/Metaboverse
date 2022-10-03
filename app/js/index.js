@@ -35,6 +35,7 @@ window.addEventListener("load", function(event) {
       success: function(version) {
         $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
           let _v = String(version.trim().replace(/[^0-9.]/g,''))
+
           let avail_versions = [];
           let version_dict = {};
           for (_k in d) {
@@ -42,8 +43,12 @@ window.addEventListener("load", function(event) {
             avail_versions.push(_this_version);
             version_dict[_this_version] = d[_k].name;
           }
-          avail_versions = avail_versions.sort();
-          let _c = avail_versions[avail_versions.length - 1]
+          
+          // Source: https://stackoverflow.com/a/40201629
+          avail_versions = avail_versions.map( a => a.split('.').map( n => +n+100000 ).join('.') ).sort()
+                  .map( a => a.split('.').map( n => +n-100000 ).join('.') );
+          let _c = avail_versions[avail_versions.length - 1];
+
           if (_c !== _v) {
             alert("A more current version of Metaboverse is available:\n\n" + version_dict[_c] + "\n\n\nPlease download this version then close this window and launch the new version.")
             window.open(
