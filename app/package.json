@@ -23,7 +23,7 @@
     "proteins"
   ],
   "author": "Jordan A. Berg; Youjia Zhou",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^13.6.6",
     "electron-packager": "^15.1.0",
