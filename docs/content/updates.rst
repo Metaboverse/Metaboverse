@@ -3,6 +3,12 @@ Updates
 ###############
 
 =================================
+Upcoming changes (not yet released)
+=================================
+| - Updated license to MIT
+| - Fixed version check when launching GUI to make sure it sorts version numbers correctly
+
+=================================
 v0.10.0
 =================================
 | - Introduces **Co-factor Selection**, a drop-down menu available in Pattern Analysis. Selected a specific factor will limit the Pattern Analysis results to only the reactions containing the selected entity.
