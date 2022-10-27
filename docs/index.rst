@@ -52,7 +52,7 @@ License
 =======
 | `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ is developed and maintained by `Jordan Berg <https://j-berg.github.io/>`_ in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.
 |
-| `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ is perpetually open-source under a GNU General Public License (v3.0).
+| `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ is perpetually open-source under an MIT license.
 |
 
 .. |build-status| image:: https://travis-ci.com/Metaboverse/Metaboverse.svg?branch=master
