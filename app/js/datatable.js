@@ -35,7 +35,6 @@ var dt = require("datatables.net")();
 var fs = require("fs");
 var path = require("path");
 var d3 = require("d3");
-
 var { jStat } = require("jstat");
 
 var app = require("electron").remote.app;
@@ -106,15 +105,19 @@ var info_string = `
 var padj_string = `
 	<b><u>Statistical Values:</u></b>
 	<br><br>
-	<b>Adjusted P-value</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, which assumes data are normally distributed, followed by a Benjamini-Hochberg (BH) p-value correction for multiple hypothesis 
+	<b>Adjusted P-value (normal)</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, which assumes data are normally distributed, followed by a Benjamini-Hochberg (BH) p-value correction for multiple hypothesis 
 	correction. BH correction is applied here as it is not a conservative as a Bonferroni correction procedure and is thus generally better suited for exploratory data analysis.
 	<br><br>
-	<b>P-value</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards.
+	<b>P-value (normal)</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards. Assumes data are normally distributed.
 	<br><br>
 	<b>Confidence Intervals</b>: Confidence intervals will be calculated for each experimental/control group. This method uses the jStat.normalci() method, assuming the input data array are normally distributed.
 	<br><br>
 	If you click this button after a sample comparison has already been performed, the change in p-value handling will only be applied to new comparisons. If you want to apply the selected procedure to other previous comparisons,
 	you will need to start the data processing over. You can do this by clicking the Refresh icon on the top left of this page (<b>&#x21bb;</b>), closing this window and re-opening the data formatter, or you can refresh the page by clicking "View" -> "Reload" or CTRL + R (on Windows/Linux) or CMD + R (on MacOS).
+`
+
+var dist_info_string = `
+  	This view provides a summary of the measurement distributions of the various samples in your dataset. This tool is intended to guide you in understanding the statistical tests you should consider for your dataset. If the samples appear normally distributed, you can use the Adjust P-value or P-value methods provided within this tool. If the samples do not appear normally distributed, you may want to consider an alternative tool for formatting your dataset for use within Metaboverse.
 `
 
 var group_names_string = `
@@ -156,7 +159,14 @@ var datatypes_string = `
 	<div id="button-multicondition">
 		Multi-condition
 	</div>
+`
 
+var dist_string = `
+	<button id="dist_info_flat" class="info_enhanced">
+		<i>i</i>
+	</button>
+	&emsp;
+	<b>Data distributions:</b>
 `
 
 var groups_string = `
@@ -235,7 +245,7 @@ window.addEventListener("load", function(event) {
 				.style("opacity", 0.95)
 				.style("left", (d3.event.pageX + 20) + "px")
 				.style("top", (d3.event.pageY - 10) + "px")
-				.style("height", "375px")
+				.style("height", "395px")
 				.style("width", "360px");
 			data_div.html(padj_string)
 		})
@@ -325,7 +335,7 @@ window.addEventListener("load", function(event) {
 				$('#loaded-table-el').on( 'click', 'tbody td', function () {
 					table.cell( this ) //.edit();
 				} );
-				
+
 				$('#select-datatype').html(datatypes_string);
 				d3.select("#button-2condition")
 					.on("click", function(d) {
@@ -357,6 +367,24 @@ window.addEventListener("load", function(event) {
 							.style("background", "#0080ff")
 						select_groups(datatable, table);
 					})
+				
+				// Add distribution plots here
+				$('#loaded-distributions-title').html(dist_string);
+				d3.select("button#dist_info_flat")
+					.on("mouseover", function(d) {
+						data_div
+							.style("opacity", 0.95)
+							.style("left", (d3.event.pageX + 20) + "px")
+							.style("top", (d3.event.pageY - 10) + "px")
+							.style("height", "110px")
+							.style("width", "360px");
+						data_div.html(dist_info_string)
+					})
+					.on("mouseout", function(d) {
+						data_div.style("opacity", 0);
+						data_div.html("")
+					});
+				makeDistributions(datatable);
 			} );    
 		} 
 	};
@@ -381,7 +409,6 @@ function read_table(file_path) {
     }
 
 	return datatable
-
 };
 
 function parse_columns(datatable) {
@@ -406,19 +433,19 @@ function select_groups(datatable, table) {
 		.attr("class", "tooltip")
 		.style("opacity", 0);
 	d3.select("button#group_name_info_flat")
-	.on("mouseover", function(d) {
-		groups_div
-			.style("opacity", 0.95)
-			.style("left", (d3.event.pageX + 20) + "px")
-			.style("top", (d3.event.pageY - 10) + "px")
-			.style("height", "330px")
-			.style("width", "360px");
-			groups_div.html(group_names_string)
-	})
-	.on("mouseout", function(d) {
-		groups_div.style("opacity", 0);
-		groups_div.html("")
-	});
+		.on("mouseover", function(d) {
+			groups_div
+				.style("opacity", 0.95)
+				.style("left", (d3.event.pageX + 20) + "px")
+				.style("top", (d3.event.pageY - 10) + "px")
+				.style("height", "330px")
+				.style("width", "360px");
+				groups_div.html(group_names_string)
+		})
+		.on("mouseout", function(d) {
+			groups_div.style("opacity", 0);
+			groups_div.html("")
+		});
 	
 	// initialize second table here with row names only 
 	var processed_columns = [{ title: " " }];
@@ -481,9 +508,9 @@ function select_groups(datatable, table) {
 				let this_id = document.getElementById('fname').value;
 				processed_columns.push({ title: this_id + "_fc" });
 	
-				if (use_stat_type === "Adjusted P-value") {
+				if (use_stat_type === "Adjusted P-value (normal)") {
 					stat_type = "adj-p"
-				} else if (use_stat_type === "P-value") {
+				} else if (use_stat_type === "P-value (normal)") {
 					stat_type = "p"
 				} else if (use_stat_type === "Confidence Intervals") {
 					stat_type = "ci"
@@ -494,9 +521,9 @@ function select_groups(datatable, table) {
 
 				for (let i = 0; i < datatable.slice(1).length; i++) {
 					processed_data[i].push(fc_array[i]);
-					if (use_stat_type === "Adjusted P-value") {
+					if (use_stat_type === "Adjusted P-value (normal)") {
 						processed_data[i].push(bh_array[i]);
-					} else if (use_stat_type === "P-value") {
+					} else if (use_stat_type === "P-value (normal)") {
 						processed_data[i].push(p_array[i]);
 					} else if (use_stat_type === "Confidence Intervals") {
 						processed_data[i].push(ci_array[i]);
@@ -724,3 +751,91 @@ function clear_elements() {
 		.style("background", "#f1f1f1")
 	
 }
+
+function makeDistributions(datatable) {
+	// See https://d3-graph-gallery.com/graph/density_basic.html
+	let _d_table = datatable.slice(1);
+	let sample_n = _d_table[0].length;
+	let _d_arrays = [];
+	
+	for (let i = 1; i < sample_n; i++) {
+		_this_sample = [];
+		for (let j = 0; j < _d_table.length; j++) {
+			_this_sample.push(parseFloat(_d_table[j][i]));
+		}
+		_d_arrays.push(_this_sample);
+	}
+
+	var margin = {top: 30, right: 200, bottom: 30, left: 50},
+		width = window.innerWidth - margin.left - margin.right,
+		height = 250;
+
+	d3.select("svg").remove();
+	var svg = d3.select("#loaded-distributions")
+		.append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+			.attr("transform",
+				"translate(" + margin.left + "," + margin.top + ")");
+	// add the x Axis
+	// See https://stackoverflow.com/a/39343864
+	function getMin(a){
+		return Math.min(...a.map(e => Array.isArray(e) ? getMin(e) : e));
+	}
+	function getMax(a){
+		return Math.max(...a.map(e => Array.isArray(e) ? getMax(e) : e));
+	}
+
+	var x = d3.scaleLinear()
+		.domain([getMin(_d_arrays), getMax(_d_arrays)])
+		.range([0, width]);
+	svg.append("g")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x));
+
+	// add the y Axis
+	var y = d3.scaleLinear()
+		.range([height, 0])
+		.domain([0, 0.12]);
+	svg.append("g")
+		.call(d3.axisLeft(y));
+
+	// Compute kernel density estimation
+	var kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40))
+
+	for (let z in _d_arrays) {
+		_this_array = _d_arrays[z];
+
+		// Plot the area
+		svg.append("path")
+			.attr("class", "mypath")
+			.datum(kde(_this_array))
+			.attr("fill", "none")
+			.attr("opacity", ".8")
+			.attr("stroke", "#000")
+			.attr("stroke-width", 1)
+			.attr("stroke-linejoin", "round")
+			.attr("d",  d3.line()
+			.curve(d3.curveBasis)
+			.x(function(d) { return x(d[0]); })
+			.y(function(d) { return y(d[1]); })
+		);
+	}
+}
+
+// Function to compute density
+function kernelDensityEstimator(kernel, X) {
+	// See https://d3-graph-gallery.com/graph/density_basic.html
+	return function(V) {
+	  return X.map(function(x) {
+		return [x, d3.mean(V, function(v) { return kernel(x - v); })];
+	  });
+	};
+  }
+  function kernelEpanechnikov(k) {
+	// See https://d3-graph-gallery.com/graph/density_basic.html
+	return function(v) {
+	  return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
+	};
+  }
