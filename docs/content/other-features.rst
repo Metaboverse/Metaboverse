@@ -18,6 +18,9 @@ Data Formatting Help
   `limma <https://bioconductor.org/packages/release/bioc/html/limma.html>`_ should be used. The resulting fold change and adjusted p-values should then be isolated from the results, exported 
   into a tab-delimited file, and uploaded for use in Metaboverse. This formatting tool will display the distributions of each of the samples in the uploaded dataset to assist in verifying the distributions of the underlying data.
   
+.. warning::
+  This Format Dataset tool from Metaboverse v0.10.1 onward will display the sample distributions within the uploaded datasets. Users should examine the samples to ensure their values follow normal distributions. If the data are not normally distributed, the user will need to utilize other statistical testing in preparing their dataset for Metaboverse.
+
 | 4. Select the experiment type used.
 | 5. Provide a label for the comparison, or use the default name, and select the contol and experimental samples from the columns and assign to their appropriate group by clicking the group  button (:data:`Control` or :data:`Experiment`).
 | 6. For multi-condition or time-course experiments, continue to add additional groups.
