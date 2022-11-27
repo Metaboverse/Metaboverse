@@ -17,8 +17,13 @@ cat package.json
 echo "========================================================================"
 
 npm test
-cd ..
 
+cd $DIR
+cd app/data/
+rm test_data.zip
+zip -r test_data.zip test_data
+
+cd $DIR
 mv app/python/metaboverse-cli-linux .
 mv app/python/metaboverse-cli-darwin .
 cd app
