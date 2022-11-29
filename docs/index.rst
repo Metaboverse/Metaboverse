@@ -23,10 +23,9 @@ Table of contents
 
    content/overview
    content/installation
-   content/general-usage
+   content/walkthrough
    content/other-features
    content/vignettes
-   content/analysis
    content/backend-development
    content/faqs
    content/cite
