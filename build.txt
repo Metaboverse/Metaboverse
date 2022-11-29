@@ -33,7 +33,7 @@ To run demo app:
 
 Instructions for building app for distribution:
 -----------------------------------------------
-- Update version number in `docs/conf.py`, `build.sh`, `app/__version__.txt`, and `app/package.json
+- Update version number in `docs/conf.py`, `build.sh`, `app/__version__.txt`, `app/package.json`, and `CITATION.cff`
 - Manually run `metaboverse-cli/metaboverse_cli/analyze/test/__test_main__.py` and `metaboverse-cli/metaboverse_cli/analyze/test/__test_chebi__.py`
 - Run `bash build.sh`
 - Update package icon if necessary
