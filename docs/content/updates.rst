@@ -7,6 +7,10 @@ v0.10.1
 =================================
 | - Updated license to MIT
 | - Fixed version check when launching GUI to make sure it sorts version numbers correctly
+| - Updated documentation (expanded walkthrough, added dev notes)
+| - Added more test datasets distributed with each release 
+| - Added sample distribution display for Data Formatting tool 
+| - Fixes issue where collapsed reactions in other timepoints were not being highlighted
 
 
 =================================
