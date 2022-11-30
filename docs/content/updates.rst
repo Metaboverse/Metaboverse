@@ -3,10 +3,11 @@ Updates
 ###############
 
 =================================
-Upcoming changes (not yet released)
+v0.10.1
 =================================
 | - Updated license to MIT
 | - Fixed version check when launching GUI to make sure it sorts version numbers correctly
+
 
 =================================
 v0.10.0
