@@ -76,7 +76,7 @@ window.addEventListener("load", function(event) {
       event.stopPropagation();
 
       window.open(
-        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html',
+        'https://metaboverse.readthedocs.io/en/latest/content/walkthrough.html',
         '_blank',
         newBrowserSettings
       )
@@ -89,19 +89,19 @@ window.addEventListener("load", function(event) {
 
     if (page === "motif.html") {
       window.open(
-        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html#regulatory-hotspot-identification-pattern-analysis',
+        'https://metaboverse.readthedocs.io/en/latest/content/walkthrough.html#reaction-pattern-analysis',
         '_blank',
         newBrowserSettings
       )
     } else if (page === "visualize.html") {
       window.open(
-        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html#general-pathway-exploration',
+        'https://metaboverse.readthedocs.io/en/latest/content/walkthrough.html#general-pathway-exploration',
         '_blank',
         newBrowserSettings
       )
     } else if (page === "perturbations.html") {
       window.open(
-        'https://metaboverse.readthedocs.io/en/latest/content/general-usage.html#perturbation-network-modeling',
+        'https://metaboverse.readthedocs.io/en/latest/content/walkthrough.html#perturbation-network-modeling',
         '_blank',
         newBrowserSettings
       )
