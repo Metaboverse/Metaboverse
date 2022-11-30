@@ -142,14 +142,20 @@ function buildSlider(categories, names) {
       // if rectangle, ellipse, circle
       // change fill and text
       try {
+        var these_motifs;
+        if (collapse_reactions === true) {
+          these_motifs = collapsed_global_motifs;
+        } else {
+          these_motifs = global_motifs;
+        }
         if (d !== undefined) {
           if (d.type === "reaction" || d.type === "collapsed") {
             // if reaction and in current motif set, enlarge, if not, reset
-            if (global_motifs !== undefined) {
-              if (global_motifs[slider_index] !== undefined) {
-                if (global_motifs[slider_index].length > 0) {
+            if (these_motifs !== undefined) {
+              if (these_motifs[slider_index] !== undefined) {
+                if (these_motifs[slider_index].length > 0) {
                   let rxn_id = d.id;
-                  if (global_motifs[slider_index].includes(rxn_id)) {
+                  if (these_motifs[slider_index].includes(rxn_id)) {
                     d3.select("path#" + rxn_id)
                       .style("stroke", "purple")
                       .style("stroke-width", 3)
