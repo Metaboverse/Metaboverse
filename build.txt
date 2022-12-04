@@ -60,3 +60,13 @@ npm install electron-packager -g
 mac
 -------
 Need to compile metaboverse-cli and electron package on a mac
+
+
+Versions
+--------
+nvm install v14.17.5
+nvm use v14.17.5
+# node v14.17.5
+# npm v6.14.14
+npm install -g electron@13.6.9
+npm install -g electron-packager@17.1.1
