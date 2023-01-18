@@ -50,7 +50,7 @@ With each release archive or Metaboverse, a `test_data.zip` file is included. Un
 - It is also often helpful for us to click on the `View` menu tab, click `Toggle Developer Tools`, click the `Console` tab of the window that opens, and take a screenshot of the output in this panel.
 
 ## Feedback
-- Have any feedback? Let us know [here](https://forms.gle/4z51DMnagWRvKhc38).
+- Have any feedback? Let us know [here](https://github.com/Metaboverse/Metaboverse/issues).
 - We also have a discussion forum [here](https://github.com/Metaboverse/Metaboverse/discussions).
 
    
