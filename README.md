@@ -38,7 +38,7 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 - Download the appropriate Metaboverse app `.zip` file for your operating system from [this location](https://github.com/Metaboverse/Metaboverse/releases/latest).
 - Unzip the downloaded folder
 - Open the `Metaboverse` app
-- Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/general-usage.html) for more information in using the app.
+- Please refer to the [documentation](https://metaboverse.readthedocs.io/en/latest/content/walkthrough.html) for more information in using the app.
 - If you would like to use an example dataset, this is labeled `test_data.zip` and can be found within the `Metaboverse` app folder.
 
 ### Testing out Metaboverse
