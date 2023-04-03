@@ -1,7 +1,7 @@
 # ![Metaboverse](https://raw.githubusercontent.com/Metaboverse/Metaboverse/master/docs/content/images/png/metaboverse_banner.png)
 
 [![Github All Releases](https://img.shields.io/github/downloads/Metaboverse/Metaboverse/total.svg)](https://github.com/Metaboverse/Metaboverse/releases/)
-[![bioRxiv preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2020.06.25.171850-BF2636)](https://www.biorxiv.org/content/10.1101/2020.06.25.171850)
+[![manuscript](https://img.shields.io/badge/Manuscript-10.1038%2Fs41556--023--01117--9-red)](https://doi.org/10.1038/s41556-023-01117-9)
 [![DOI](https://zenodo.org/badge/203264184.svg)](https://zenodo.org/badge/latestdoi/203264184)
 
 ## What does Metaboverse do?
