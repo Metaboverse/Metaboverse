@@ -12,8 +12,8 @@ If you use Metaboverse in your data analysis, please cite as:
 ```
 Berg JA, Zhou Y, Ouyang Y, Cluntun AA, Waller TC, Conway ME, Nowinski SM, Van Ry T, George I,
 Cox JE, Wang B, Rutter J.
-Metaboverse: Automated discovery and visualization of diverse metabolic regulatory patterns.
-bioRxiv. (2020) doi: https://www.biorxiv.org/content/10.1101/2020.06.25.171850
+Metaboverse enables automated discovery and visualization of diverse metabolic regulatory patterns.
+Nature Cell Biology. (2023) doi: https://doi.org/10.1038/s41556-023-01117-9
 ```
 
 ### Walkthroughs
