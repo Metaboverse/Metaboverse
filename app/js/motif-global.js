@@ -288,7 +288,7 @@ function gatherMotifs(data, categories) {
     categories)
   
   let all_collapsed_motifs = [];
-  for (x in categories) { 
+  for (let x in categories) { 
     all_collapsed_motifs[x] = collapsed_motifs_Avg[x].concat(
       collapsed_motifs_MaxMax[x],
       collapsed_motifs_MinMin[x],
@@ -308,7 +308,7 @@ function gatherMotifs(data, categories) {
   }
 
   let global_collapsed_motifs = [];
-  for (x in categories) {
+  for (let x in categories) {
     global_collapsed_motifs[x] = [];
     for (let m in all_collapsed_motifs[x]) {
       global_collapsed_motifs[x].push(all_collapsed_motifs[x][m].id);
@@ -316,7 +316,7 @@ function gatherMotifs(data, categories) {
   }
 
   let all_motifs = [];
-  for (x in categories) {
+  for (let x in categories) {
     all_motifs[x] = motifs_Avg[x].concat(
       motifs_MaxMax[x],
       motifs_MinMin[x],
@@ -328,7 +328,7 @@ function gatherMotifs(data, categories) {
   }
 
   let global_motifs = [];
-  for (x in categories) {
+  for (let x in categories) {
     global_motifs[x] = [];
     for (let m in all_motifs[x]) {
       global_motifs[x].push(all_motifs[x][m].id);

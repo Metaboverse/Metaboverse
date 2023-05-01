@@ -2,9 +2,9 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = metaboverse
+SOURCEDIR     = .
 BUILDDIR      = build
 
 # Internal variables.
@@ -27,6 +27,6 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	$(SPHINXBUILD) -b html $(SOURCEDIR) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

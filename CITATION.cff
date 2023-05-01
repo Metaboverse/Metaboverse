@@ -4,7 +4,40 @@ authors:
   - family-names: Berg
     given-names: Jordan A.
     orcid: https://orcid.org/0000-0002-5096-0558
+  - family-names: Zhou
+    given-names: Youjia
+    orcid: 
+  - family-names: Ouyang
+    given-names: Yeyun
+    orcid: 
+  - family-names: Cluntun
+    given-names: Ahmad A.
+    orcid: 
+  - family-names: Waller
+    given-names: T. Cameron
+    orcid: 
+  - family-names: Conway
+    given-names: Megan E.
+    orcid: 
+  - family-names: Nowinski
+    given-names: Sara M.
+    orcid: 
+  - family-names: Van Ry
+    given-names: Tyler
+    orcid: 
+  - family-names: George
+    given-names: Ian
+    orcid: 
+  - family-names: Cox
+    given-names: James E.
+    orcid: 
+  - family-names: Wang
+    given-names: Bei
+    orcid: 
+  - family-names: Rutter
+    given-names: Jared
+    orcid: 
 title: "Metaboverse"
-version: 0.8.0
+version: 0.10.1
 doi: 10.1101/2020.06.25.171850
-date-released: 2021-06-17
+date-released: 2021-11-29

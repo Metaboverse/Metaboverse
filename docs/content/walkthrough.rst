@@ -1,24 +1,46 @@
 .. _general_link:
 
 #############
-General Usage
+Walkthrough
 #############
 
-| The following walkthrough was created using Metaboverse :data:`v0.9.0` and previous versions. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
+| The majority of the following walkthrough was created using Metaboverse :data:`v0.9.0` and previous versions. If using a later version, some aspects may look/behave slightly different. We will do our best to keep these walkthroughs updated as any relevant components change. If you have any questions, please let us know `here <https://github.com/Metaboverse/Metaboverse/issues>`_.
 
 ===============================
 Analysis Video Walkthrough
 ===============================
 | You can watch the Metaboverse walkthrough video here, or continue below for a more detailed walkthrough.
+
 .. raw:: html
 
     <iframe width="700" height="450" src="https://youtube.com/embed/G1PWjQJ7J0I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 |
 
 ===============================
-Getting Started
+Downloading Metaboverse
 ===============================
+| You can access the most recent version of Metaboverse for your operating system at: `https://github.com/Metaboverse/Metaboverse/releases <https://github.com/Metaboverse/Metaboverse/releases>`_.
+
+.. image:: images/gif/download_metaboverse.gif
+  :width: 700
+  :align: center
+
+===============================
+Using a Test Dataset in Metaboverse
+===============================
+| If you would like to practice using Metaboverse with a test dataset, several are included with each distribution of Metaboverse. You will need to unzip the :data:`test_data` file within the Metaboverse folder you just downloaded and unzipped.
+
+.. image:: images/gif/open_test_data.gif
+  :width: 700
+  :align: center
+
+| This vignette using the *mct1* Δ timecourse dataset published with the `original Metaboverse manuscript <https://www.biorxiv.org/content/10.1101/2020.06.25.171850>`_. This dataset is included with each distribution of Metaboverse in the :data:`test_data/yeast-multiomics-timecourse` directory.
+
+
+===============================
+Getting Started in Metaboverse
+===============================
+| To launch the Metaboverse desktop app, open the Metaboverse app within the unzipped folder you downloaded.
 | 1. If this is your first time analyzing a given dataset, you should press :data:`Skip` on the opening page.
 .. image:: images/gif/capture_1.gif
   :width: 700
@@ -106,10 +128,13 @@ Reaction Pattern Analysis
 ===============================
 General Pathway Exploration
 ===============================
-| Users can explore classical pathways and all components of the network interactively by navigating to the :data:`Explore` page.
+| While the emphasis of Metaboverse is at the reaction level, where we do not want to bias our analysis towards a specific, familiar pathway, there may be cases where we are interested in a particular pathway and the patterns that emerge. We can access pathway-level visualization by clicking the :data:`Explore` button.
 
 | a) At the top of the legend, reference to the node types are displayed. Grey nodes are reactions, nodes with solid outlines are measured, and nodes with dashed outlines are inferred using the gene broadcasting feature. Components with significant statistical values based on the threshold (defined in section d) are bolded. Users can hover across the color scale to see what color corresponds to what value.
-| - **Identified reactions with a reaction pattern will have enlarged nodes and will be outlined in bold purple.**
+
+.. note::
+  Identified reactions with a reaction pattern will have enlarged nodes and will be outlined in bold purple.
+
 | b) Relationship types between nodes are shown by hovering over the :data:`Shape Legend` icon. Compartment shadings for the selected pathway are shown by hovering over the :data:`Compartment Legend` icon.
 | c) Users can toggle component, reaction, and expression labels on and off using the appropriate buttons. Users can also toggle gene nodes and compartment shading on and off with the appropriate buttons. Users can also press the :data:`Export PNG` to select the viewed network to a :data:`.png` file. Users can decide whether to show collapsed reactions, or to show the full, non-collapsed pathway of reactions that would have been collapsed. Collapsed reactions are displayed by default. Users can also open the selected pathway in Reactome to view a more classical representation of the pathway.
 | d) Users can modify the number of neighbors to plot when double-clicking on a node to expand its nearest reaction neighbors. Users can also select a threshold to not display any node with more than the defined number of connections. By modifying the statistic threshold, users can change the minimum statistical value needed to bold the component node for easy discrimination of significant measurements in the network.
@@ -137,7 +162,7 @@ Perturbation Network Modeling
   :align: center
 
 ===============================
-Nearest Neighborhood Searches
+Investigating Upstream and Downstream Effects
 ===============================
 | Users interested in exploring a components reaction neighborhood can double-click the component to expand this view. The number of reaction neighbors can be selected, and limits on the number of connections a connecting component can have to be displayed can be modified. This hub selection is particularly helpful for connected components that are involved in several reactions.
 .. image:: images/gif/capture_8.gif
@@ -145,6 +170,21 @@ Nearest Neighborhood Searches
   :align: center
 
 | Users can also target an entity for exploration directly by selecting :data:`All entities` in the :data:`Explore` page from the :data:`Select a super-pathway...` drop-down menu.
+
+===============================
+Reaction Collapsing
+===============================
+| Missing quantifications along the metabolic network are frequent with metabolomics data (`Do, 2018 <https://doi.org/10.1007/s11306-018-1420-2>`_; `Chen, 2021 <https://doi.org/10.1038/s41592-021-01303-3>`_). As Metaboverse is designed to identify patterns across reactions, missing data can greatly inhibit the ability to identify these patterns. Within Metaboverse, we implemented a reaction collapsing algorithm that can bridge multiple (up to 3) subsequent reactions with missing data at intermediate steps. 
+
+.. image:: images/png/pattern_collapse_overview.png
+  :width: 500
+  :align: center
+
+| Within Metaboverse, you can toggle back and forth between networks with or without collapsed reaction representations.
+
+.. image:: images/gif/collapsed_reactions.gif
+  :width: 700
+  :align: center
 
 ===============================
 Analyzing Complexes
@@ -176,4 +216,5 @@ Publishing Data Analyzed with Metaboverse
 .. image:: images/gif/capture_11.gif
    :width: 700
    :align: center
-|
+
+| You can find more information on citing this software on the :ref:`Citing Metaboverse` page.

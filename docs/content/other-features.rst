@@ -10,14 +10,17 @@ Data Formatting Help
 ===============================
 | 1. On the :data:`Variables` page of Metaboverse, launch the :data:`Format dataset` module.
 | 2. Upload your datatable. The datatable's first column should be a blank cell, followed by each of the measured entities' names. Each subsequent column should start with the sample name, followed by the corresponding measurements for each measured entity.
-| 3. By default, calculated p-values will use the `Benjamini-Hochberg p-value adjustment procedure <https://www.jstor.org/stable/2346101>`_ for multiple hypothesis testing. This is a less conservative adjustment procedure ideal for exploratory data analysis. If you do not wish to use a p-value correction procedure, uncheck the appropriate box. 
+| 3. By default, calculated p-values will use the `Benjamini-Hochberg <https://www.jstor.org/stable/2346101>`_ p-value adjustment procedure for multiple hypothesis testing. This is a less conservative adjustment procedure ideal for exploratory data analysis. If you do not wish to use a p-value correction procedure, uncheck the appropriate box. 
 
 .. note::
-  The statistical procedures used by this module assume data are normally distributed, such as is the case with proteomics and metabolomics data. However, for transcriptomics data, which 
+  The statistical procedures used by this module assume data are normally distributed, such as is often the case with proteomics and metabolomics data. However, for transcriptomics data, which 
   follow a negative binomial distribution, a package, such as `DESeq2 <https://bioconductor.org/packages/release/bioc/html/DESeq2.html>`_ or 
   `limma <https://bioconductor.org/packages/release/bioc/html/limma.html>`_ should be used. The resulting fold change and adjusted p-values should then be isolated from the results, exported 
-  into a tab-delimited file, and uploaded for use in Metaboverse.
+  into a tab-delimited file, and uploaded for use in Metaboverse. This formatting tool will display the distributions of each of the samples in the uploaded dataset to assist in verifying the distributions of the underlying data.
   
+.. warning::
+  This Format Dataset tool from Metaboverse v0.10.1 onward will display the sample distributions within the uploaded datasets. Users should examine the samples to ensure their values follow normal distributions. If the data are not normally distributed, the user will need to utilize other statistical testing in preparing their dataset for Metaboverse.
+
 | 4. Select the experiment type used.
 | 5. Provide a label for the comparison, or use the default name, and select the contol and experimental samples from the columns and assign to their appropriate group by clicking the group  button (:data:`Control` or :data:`Experiment`).
 | 6. For multi-condition or time-course experiments, continue to add additional groups.

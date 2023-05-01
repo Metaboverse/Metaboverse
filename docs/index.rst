@@ -6,7 +6,7 @@ Metaboverse
 =================
 About
 =================
-| `Metaboverse <https://https://github.com/Metaboverse/Metaboverse>`_ allows for the interactive and automated exploration of metabolic pathways and interesting patterns that emerge in the network, integrating transcriptomics, proteomics, metabolomics data and more.
+| `Metaboverse <https://github.com/Metaboverse/Metaboverse>`_ allows for the interactive and automated exploration of metabolic pathways and interesting patterns that emerge in the network, integrating transcriptomics, proteomics, metabolomics data and more.
 |
 | To access the most recent version of our manuscript describing Metaboverse, please click `here <https://www.overleaf.com/read/nyvmfmcxhsdp>`_.
 |
@@ -23,14 +23,13 @@ Table of contents
 
    content/overview
    content/installation
-   content/general-usage
+   content/walkthrough
    content/other-features
    content/vignettes
-   content/analysis
-   content/backend-development
    content/faqs
    content/cite
    content/updates
+   content/backend-development
    content/contact
 
 ============================

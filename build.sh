@@ -1,15 +1,15 @@
 #!/bin/bash
 
-VERSION=0.10.0
+VERSION=0.10.1
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
+conda activate
 rm -rf app/node_modules/
 
 cd app
 pwd
-conda activate base
 npm install
 npm audit fix
 echo "========================================================================"
@@ -17,27 +17,32 @@ cat package.json
 echo "========================================================================"
 
 npm test
-cd ..
 
+cd $DIR
+cd app/data/
+rm test_data.zip
+zip -r test_data.zip test_data
+
+cd $DIR
 mv app/python/metaboverse-cli-linux .
 mv app/python/metaboverse-cli-darwin .
 cd app
 pwd
-electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/win/metaboverse_logo.ico --overwrite
+electron-packager ./ Metaboverse --platform=win32 --icon=data/icon/win/metaboverse_logo.ico --electronVersion=13.6.9 --overwrite
 cd ..
 
 mv app/python/metaboverse-cli-windows.exe .
 mv metaboverse-cli-darwin app/python/
 cd app
 pwd
-electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/mac/metaboverse_logo.icns --overwrite
+electron-packager ./ Metaboverse --platform=darwin --icon=data/icon/mac/metaboverse_logo.icns --electronVersion=13.6.9 --overwrite
 cd ..
 
 mv app/python/metaboverse-cli-darwin .
 mv metaboverse-cli-linux app/python/
 cd app
 pwd
-electron-packager ./ Metaboverse --platform=linux --icon=data/icon/png/icon_1024x1024.png --overwrite
+electron-packager ./ Metaboverse --platform=linux --icon=data/icon/png/icon_1024x1024.png --electronVersion=13.6.9 --overwrite
 cd ..
 
 pwd

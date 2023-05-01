@@ -1,6 +1,6 @@
 {
   "name": "metaboverse",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Visualizing and Analyzing Metabolic Networks",
   "main": "main.js",
   "scripts": {
@@ -25,8 +25,8 @@
   "author": "Jordan A. Berg; Youjia Zhou",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^13.6.6",
-    "electron-packager": "^15.1.0",
+    "@xmldom/xmldom": "^0.8.6",
+    "electron-packager": "^17.1.1",
     "got": ">=11.8.5",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
@@ -36,7 +36,6 @@
     "serialize-javascript": "^3.1.0",
     "uglify-js": ">=2.6.0",
     "wine": "^0.9.13",
-    "@xmldom/xmldom": ">=0.7.0",
     "y18n": ">=4.0.1"
   },
   "dependencies": {
@@ -57,6 +56,7 @@
     "path": "^0.12.7",
     "pickle": "^0.2.0",
     "save-svg-as-png": "^1.4.17",
+    "semver": "^7.3.8",
     "string-pixel-width": "^1.10.0",
     "svg-crowbar": "^0.6.0",
     "ttest": "^3.0.0",

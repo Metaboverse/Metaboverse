@@ -168,7 +168,6 @@ d3.select("button#hub_info")
   });
 d3.select("button#stat_info")
   .on("mouseover", function(d) {
-    console.log("hle")
     div
       .style("opacity", 0.95)
       .style("left", (d3.event.pageX + 20) + "px")
@@ -992,11 +991,6 @@ function make_graph(
         console.log(these_motifs)
         graph_nodes.forEach(node => {
           let rxn_id = node.id;
-
-          if (rxn_id === "reaction_10659414") {
-            console.log(these_motifs[sample].includes(rxn_id))
-          }
-
           if (these_motifs[sample].includes(rxn_id)) {
             d3.selectAll("path#" + rxn_id)
               .style("stroke", "purple")
