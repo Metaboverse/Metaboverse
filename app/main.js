@@ -32,12 +32,11 @@ SOFTWARE.
 const {
   app,
   BrowserWindow,
-  ipcRenderer,
+  ipcMain,
   dialog
 } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const ipcMain = require("electron").ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -58,13 +57,20 @@ function createWindow() {
       nodeIntegration: true
     },
     dependencies: {
-      zerorpc: "fyears" + path.sep + "zerorpc-node"
+      zerorpc: path.join("fyears", "zerorpc-node")
     },
     icon: path.join(__dirname, "data", "icon", "png", "icon_64x64.png")
   });
 
+
+  // Show devtools
+  mainWindow.webContents.openDevTools();
+
+
+
   // and load the index.html of the app.
-  mainWindow.loadFile("html" + path.sep + "index.html");
+  mainWindow.loadFile(path.join(__dirname, "html", "index.html"));
+  
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {

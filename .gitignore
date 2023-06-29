@@ -13,9 +13,8 @@ app/Log.out
 app/python/metaboverse-mac
 app/python/metaboverse-linux
 app/python/metaboverse-win*
-app/python
-app/python/metaboverse*
 Metaboverse-*
 winehq.key
 build.log
 docs/build
+app/venv/

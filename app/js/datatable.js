@@ -28,8 +28,6 @@ SOFTWARE.
 
 */
 
-var { ipcRenderer, ipcMain, remote } = require("electron");
-var { dialog } = require("electron").remote;
 var $ = require("jquery");
 var dt = require("datatables.net")();
 var fs = require("fs");
@@ -37,9 +35,7 @@ var path = require("path");
 var d3 = require("d3");
 var { jStat } = require("jstat");
 
-var app = require("electron").remote.app;
-var userDataPath = app.getPath("userData");
-var session_file = userDataPath + path.sep + "session_data.json";
+var session_file = path.join(__dirname, "..", "data", "session_data.json");
 
 var use_stat_type;
 

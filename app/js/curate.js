@@ -28,11 +28,14 @@ SOFTWARE.
 
 */
 
-var { ipcRenderer, ipcMain, remote } = require("electron");
-var { dialog } = require("electron").remote;
+var { ipcRenderer, ipcMain } = require("electron");
 var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
+
+// Replace dialog function with electron's dialog
+
+
 
 var abbreviation_dict = {};
 $.getJSON(reactome_api, function(data) {
@@ -126,7 +129,7 @@ window.addEventListener("load", function(event) {
   // Get reaction neighbors dictionary from user
   var neighborsURL = get_session_info("neighbors_url");
   var defaultNeighbors = "No file selected";
-  if (neighborsURL !== null) {
+  if (neighborsURL !== null && neighborsURL !== undefined) {
     if (neighborsURL.split('.').pop().toLowerCase() === 'mvrs') {
       defaultNeighbors = neighborsURL;
     }
@@ -197,7 +200,7 @@ window.addEventListener("load", function(event) {
   document.getElementById("output-input").onclick = function(event) {
     filename = dialog
       .showSaveDialog({
-        defaultPath: ".." + path.sep + ".." + path.sep,
+        defaultPath: path.join("..", ".."),
         properties: ["createDirectory"],
         filters: [
           { name: "Metaboverse-formatted database (*.mvrs)", extensions: ["mvrs"] }

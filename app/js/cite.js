@@ -27,13 +27,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-var $ = require("jquery");
 var path = require("path");
+var fs = require("fs");
 
 // Get Metaboverse version
-$.ajax({
-  url: ".." + path.sep + "__version__.txt",
-  success: function(version) {
-    document.getElementById("getVersion").innerHTML = version;
-  }
+var filePath = path.join(__dirname, '..', '__version__.txt');
+var version = fs.readFileSync(filePath, 'utf-8').trim();
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("getVersion").innerHTML = version;
 });
+
