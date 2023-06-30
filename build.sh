@@ -23,7 +23,11 @@ cd python
 cp ../../LICENSE .
 cp ../../README.md .
 cp ../__version__.txt . 
-docker build -t metaboverse-cli .
+docker build --no-cache -t metaboverse-cli .
+docker save -o ./metaboverse-cli.tar metaboverse-cli
+rm LICENSE
+rm README.md
+rm __version__.txt
 
 # Prep supplemental files
 cd $DIR
