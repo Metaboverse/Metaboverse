@@ -28,6 +28,11 @@ SOFTWARE.
 
 */
 
+var { ipcRenderer } = require("electron");
+var spawn = require("child_process").spawn;
+var path = require("path");
+
+
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 window.addEventListener("DOMContentLoaded", () => {
@@ -41,8 +46,25 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-var spawn = require("child_process").spawn;
-var path = require("path");
+
+async function showWarningPython() {
+  const options = {
+    title: 'Warning',
+    message: 'Metaboverse cannot find a Python installation. Python is necessary for curating new data. \nhttps://www.python.org/downloads/',
+  };
+  const result = await ipcRenderer.invoke('show-warning-dialog', options);
+  console.log(result); // This will print the index of the clicked button
+}
+
+
+async function showWarningDependencies() {
+  const options = {
+    title: 'Warning',
+    message: "There was an error installing the required Python dependencies. Please check your internet connection and Python installation and try again.",  };
+  const result = await ipcRenderer.invoke('show-warning-dialog', options);
+  console.log(result); // This will print the index of the clicked button
+}
+
 
 function check_packages() {
   // Using the user's local Python, install the required packages from requirements.txt to a virtual environment 
@@ -52,16 +74,7 @@ function check_packages() {
     console.log(data.toString());
     if (data.toString().toLowerCase().includes("error")) {
       console.log("Error installing packages");
-      dialog.showMessageBox(
-        {
-          type: "warning",
-          buttons: ["Okay"],
-          title: "Error installing packages",
-          message: "There was an error installing the required packages. Please check your internet connection and try again.",
-          defaultId: 0,
-          cancelId: 1
-        }
-      );
+      showWarningDependencies();
     } else {
       console.log("Packages installed");
     }
@@ -73,24 +86,16 @@ function check_python() {
   var process = spawn("python", ["--version"]);
   process.stdout.on("data", function (data) {
     console.log(data.toString());
-    if (data.toString().toLowerCase().includes("python")) {
-      console.log("Python is installed");
-      check_packages();
-    } else{
+    //if (data.toString().toLowerCase().includes("python")) {
+    //  console.log("Python is installed");
+    //  check_packages();
+    //} else{
       console.log("Python is not installed");
-      dialog.showMessageBox(
-        {
-          type: "warning",
-          buttons: ["Okay"],
-          title: "Python not found",
-          message: "Python was not found on your system. You must install Python onto your system to use Metaboverse.",
-          defaultId: 0,
-          cancelId: 1
-        }
-      );
-    }
-  });
-};
+
+      showWarningPython();
+    }  )
+  }//);
+//};
 
 // Run check_python() and let the user continue if Python is installed
 check_python()

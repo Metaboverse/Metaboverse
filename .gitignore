@@ -18,3 +18,7 @@ winehq.key
 build.log
 docs/build
 app/venv/
+doc/
+app/python/LICENSE
+app/python/README.md
+app/python/__version__.txt

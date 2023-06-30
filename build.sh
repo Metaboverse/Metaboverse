@@ -5,7 +5,7 @@ VERSION=0.10.1
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
-conda activate
+# Install node dependencies
 rm -rf app/node_modules/
 
 cd app
@@ -18,11 +18,20 @@ echo "========================================================================"
 
 npm test
 
+# Build python backend docker image 
+cd python
+cp ../../LICENSE .
+cp ../../README.md .
+cp ../__version__.txt . 
+docker build -t metaboverse-cli .
+
+# Prep supplemental files
 cd $DIR
 cd app/data/
 rm test_data.zip
 zip -r test_data.zip test_data
 
+# Build electron app
 cd $DIR
 mv app/python/metaboverse-cli-linux .
 mv app/python/metaboverse-cli-darwin .
@@ -49,6 +58,7 @@ pwd
 mv metaboverse-cli-darwin app/python/
 mv metaboverse-cli-windows.exe app/python/
 
+# Build release packages
 mv app/Metaboverse-darwin-x64 ./Metaboverse-darwin-x64-${VERSION}
 mv app/Metaboverse-linux-x64 ./Metaboverse-linux-x64-${VERSION}
 mv app/Metaboverse-win32-x64 ./Metaboverse-win32-x64-${VERSION}

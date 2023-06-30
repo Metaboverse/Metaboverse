@@ -28,7 +28,7 @@ SOFTWARE.
 
 */
 
-var { ipcRenderer, ipcMain } = require("electron");
+var { ipcRenderer } = require("electron");
 var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
@@ -196,34 +196,21 @@ window.addEventListener("load", function(event) {
     document.getElementById('sbml-input').click();
   }
 
+  async function setOutput() {
+    const result = await ipcRenderer.invoke('save-file-dialog-mvrs');
+    if (result) {
+      console.log(result); // This will print the output location path
+    }
+    return result;
+  }
+
+
   // Select output directory from pop-out menu
   document.getElementById("output-input").onclick = function(event) {
-    filename = dialog
-      .showSaveDialog({
-        defaultPath: path.join("..", ".."),
-        properties: ["createDirectory"],
-        filters: [
-          { name: "Metaboverse-formatted database (*.mvrs)", extensions: ["mvrs"] }
-        ]
-      })
-      .then(result => {
-        let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
-        if (hasExtension === false) {
-          result.filePath = `${ result.filePath }.${ "mvrs" }`;
-        }
-        filename = result.filePath;
-        if (filename === undefined) {
-          alert("File selection unsuccessful");
-          return;
-        }
-        console.log(filename);
-        update_session_info("database_url", filename);
-        $('#selectedOutput').html('<font size="2">' + filename + '</font>');
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
+    filename = setOutput();
+    update_session_info("database_url", filename);
+    $('#selectedOutput').html('<font size="2">' + filename + '</font>');
+  
     output_change = true;
     check_changes();
   };

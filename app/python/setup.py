@@ -28,16 +28,30 @@ SOFTWARE.
 
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
+from pathlib import Path
 import re
 import os
 
-__path__ = os.path.dirname(os.path.realpath(__file__))
+__path__ = Path(__file__).resolve().parent
 
-"""Get version"""
-with open(os.path.join(__path__, 'metaboverse_cli', '__init__.py'), 'r') as fd:
-    __version__ = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                            fd.read(), re.MULTILINE).group(1)
+# Get version from Metaboverse/app/__version__.txt 
+
+with open(os.path.join(__path__, '__version__.txt'), 'r') as f:
+    __version__ = f.read().strip()
+
+# Get long description from README.md
+with open(os.path.join(__path__, 'README.md'), 'r') as f:
+    long_description = f.read()
+
+# Get requirements from requirements.txt
+with open(os.path.join(__path__, 'requirements.txt'), 'r') as f:
+    requirements = f.read().splitlines()
+
+# Get license from LICENSE
+with open(os.path.join(__path__, 'LICENSE'), 'r') as f:
+    license = f.read()
+
 
 """Setup arguments"""
 setup(
@@ -45,9 +59,11 @@ setup(
     version=__version__,
     description='A toolkit for navigating and analyzing biological networks',
     author='Jordan A. Berg',
-    author_email='jordan.berg@biochem.utah.edu',
-    url='https://github.com/Metaboverse/metaboverse-cli',
-    packages=['metaboverse_cli'],
+    author_email='jordanberg.contact@gmail.com',
+    url='https://github.com/Metaboverse',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    packages=find_packages(),
     exclude=[
         os.path.join('metaboverse_cli', 'test'),
         os.path.join('metaboverse_cli', 'mapper', 'test'),
@@ -55,24 +71,19 @@ setup(
         os.path.join('metaboverse_cli', 'analyze', 'test'),
         'docs'
     ],
-    package_dir={'metaboverse_cli': '.'},
-    license='GPL-3.0',
+    license='MIT',
     zip_safe=False,
-    install_requires=[
-        'pandas',
-        'numpy',
-        'scipy',
-        'scikit-learn',
-        'networkx'
-    ],
+    install_requires=requirements,
     entry_points={
         "console_scripts": [
             "metaboverse = metaboverse_cli.__main__:main"
         ]
     },
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
-        'Topic :: Scientific/Engineering :: Bio-Informatics'
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
+        'Topic :: Scientific/Engineering :: Visualization',
+
     ]
 )
