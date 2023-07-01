@@ -43,7 +43,6 @@ var scriptFilename;
 console.log("Operating System information:")
 console.log(navigator.appVersion)
 
-/*
 if (navigator.appVersion.indexOf("Win") != -1) {
   scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
@@ -53,9 +52,6 @@ if (navigator.appVersion.indexOf("Win") != -1) {
 } else {
   console.log("Unable to locate metaboverse-cli binary")
 }
-*/
-// set scriptFilename variable as the path to metaboverse-cli using the installed local virtual environment
-scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli");
 
 fs.copyFile(
   progress_template_file,
