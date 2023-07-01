@@ -22,7 +22,7 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 
 <div align="center">
 
-[![Metaboverse video walkthrough](docs/content/images/motif_view.png)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
+[![Metaboverse video walkthrough](docs/content/images/png/motif_view.png)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
 
 [Metaboverse video walkthrough](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
    
