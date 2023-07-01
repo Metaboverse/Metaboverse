@@ -1,0 +1,74 @@
+#!/bin/bash
+
+cd ${APP_PATH}
+pwd
+
+
+# Update app version number 
+echo "v${VERSION}" > ${APP_PATH}/__version__.txt
+
+
+# Install node dependencies
+rm -rf ${NODE_MODULES}
+npm install
+npm audit fix
+echo "========================================================================"
+cat package.json
+echo "========================================================================"
+npm test
+
+
+# Prep supplemental files
+cd ${APP_PATH}/data/
+rm test_data.zip
+zip -r test_data.zip test_data
+
+
+# Build electron app
+cd ${APP_PATH}
+pwd
+
+
+# Get OS name for darwin, win32, or linux
+OS=$(uname -s)
+if [[ $OS == *"Darwin"* ]]; then
+    OS="darwin"
+    LOGO="data/icon/nix/metaboverse_logo.icns"
+elif [[ $OS == *"Linux"* ]]; then
+    OS="linux"
+    LOGO="data/icon/png/icon_1024x1024.png"
+elif [[ $OS == *"MINGW"* ]]; then
+    OS="win32"
+    LOGO="data/icon/win32/metaboverse_logo.ico"
+else
+    echo "Unsupported OS: $OS"
+    exit 1
+fi
+
+
+# Build electron package
+electron-packager ./ Metaboverse --platform=${OS} --icon=${LOGO} --overwrite
+cd ..
+
+
+# Build release packages
+mv ${APP_PATH}/Metaboverse-${OS}-x64 ./Metaboverse-${OS}-x64-${VERSION}
+cp ${APP_PATH}/data/test_data.zip ./Metaboverse-${OS}-x64-${VERSION}
+
+
+# Make OS-specific modifications to package
+if [[ ${OS} == "linux" ]]; then
+    chmod +x ./Metaboverse-${OS}-x64-${VERSION}/Metaboverse
+    chmod +x ./Metaboverse-${OS}-x64-${VERSION}/resources/app/python/metaboverse-cli-linux
+fi
+if [[ ${OS} == "darwin" ]]; then
+    chmod +x ./Metaboverse-${OS}-x64-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
+fi
+
+
+# Zip for distribution 
+zip -r ./Metaboverse-${OS}-x64-${VERSION}.zip ./Metaboverse-${OS}-x64-${VERSION}
+shasum -a 256 ./Metaboverse-${OS}-x64-${VERSION}.zip
+
+
+# Upload to Github

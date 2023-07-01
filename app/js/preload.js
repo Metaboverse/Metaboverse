@@ -28,10 +28,6 @@ SOFTWARE.
 
 */
 
-var { ipcRenderer } = require("electron");
-var spawn = require("child_process").spawn;
-var path = require("path");
-
 
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
@@ -45,64 +41,3 @@ window.addEventListener("DOMContentLoaded", () => {
     replaceText(`${type}-version`, process.versions[type]);
   }
 });
-
-
-async function showWarningPython() {
-  const options = {
-    title: 'Warning',
-    message: 'Metaboverse cannot find a Python installation. Python is necessary for curating new data. \nhttps://www.python.org/downloads/',
-  };
-  const result = await ipcRenderer.invoke('show-warning-dialog', options);
-  console.log(result); // This will print the index of the clicked button
-}
-
-
-async function showWarningDependencies() {
-  const options = {
-    title: 'Warning',
-    message: "There was an error installing the required Python dependencies. Please check your internet connection and Python installation and try again.",  };
-  const result = await ipcRenderer.invoke('show-warning-dialog', options);
-  console.log(result); // This will print the index of the clicked button
-}
-
-
-function check_packages() {
-  // Using the user's local Python, install the required packages from requirements.txt to a virtual environment 
-  // Install packages from __dirname/../python/requirements.txt
-  var process = spawn("python", ["-m", "pip", "install", "-r", path.join(__dirname, "..", "python", "requirements.txt")]);
-  process.stdout.on("data", function (data) {
-    console.log(data.toString());
-    if (data.toString().toLowerCase().includes("error")) {
-      console.log("Error installing packages");
-      showWarningDependencies();
-    } else {
-      console.log("Packages installed");
-    }
-  })
-}
-
-
-function check_python() {
-  var process = spawn("python", ["--version"]);
-  process.stdout.on("data", function (data) {
-    console.log(data.toString());
-    //if (data.toString().toLowerCase().includes("python")) {
-    //  console.log("Python is installed");
-    //  check_packages();
-    //} else{
-      console.log("Python is not installed");
-
-      showWarningPython();
-    }  )
-  }//);
-//};
-
-// Run check_python() and let the user continue if Python is installed
-check_python()
-
-
-
-
-
-
-

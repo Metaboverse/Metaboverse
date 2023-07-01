@@ -1,0 +1,5 @@
+	fc	p
+Q16GW1	1	0.125
+AAEL014632-PA	2	0.25
+AaeL_AAEL004282_i	3	0.5
+protein_nonmapper	4	1
