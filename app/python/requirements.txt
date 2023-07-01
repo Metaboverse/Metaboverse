@@ -1,7 +1,0 @@
-pandas
-numpy>=1.16.5
-scipy
-scikit-learn
-networkx
-requests
-certifi
