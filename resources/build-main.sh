@@ -104,7 +104,7 @@ ${DIR}/resources/build-electron.sh
 if [ ${BUILD_DB} -eq 1 ]; then
     echo -e "\nBuilding the database(s)..."
     mkdir -p ${BUILD_PATH}
-    if [[ ${OS} ==*"MINGW"* ]]; then
+    if [[ ${OS} == *"MINGW"* ]]; then
         cp ${CLI_PATH}/dist/metaboverse-cli*.exe ${BUILD_PATH}/metaboverse-cli.exe
         export BUILD_EXE=${BUILD_PATH}/metaboverse-cli.exe
     else 
