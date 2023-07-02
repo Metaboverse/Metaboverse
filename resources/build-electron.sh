@@ -4,10 +4,6 @@ cd ${APP_PATH}
 pwd
 
 
-# Update app version number 
-echo "v${VERSION}" > ${APP_PATH}/__version__.txt
-
-
 # Install node dependencies
 rm -rf ${NODE_MODULES}
 npm install
@@ -21,7 +17,8 @@ npm test
 # Prep supplemental files
 cd ${APP_PATH}/data/
 rm test_data.zip
-zip -r test_data.zip test_data
+zip -q -r test_data.zip test_data
+chmod +wrx test_data.zip
 
 
 # Build electron app
@@ -33,6 +30,7 @@ pwd
 OS=$(uname -s)
 if [[ $OS == *"Darwin"* ]]; then
     OS="darwin"
+    ARCH="x64"
     LOGO="data/icon/nix/metaboverse_logo.icns"
 elif [[ $OS == *"Linux"* ]]; then
     OS="linux"
@@ -47,28 +45,32 @@ fi
 
 
 # Build electron package
-electron-packager ./ Metaboverse --platform=${OS} --icon=${LOGO} --overwrite
+electron-packager ./ Metaboverse --platform=${OS} --arch=${ARCH} --icon=${LOGO} --overwrite
 cd ..
 
 
 # Build release packages
-mv ${APP_PATH}/Metaboverse-${OS}-x64 ./Metaboverse-${OS}-x64-${VERSION}
-cp ${APP_PATH}/data/test_data.zip ./Metaboverse-${OS}-x64-${VERSION}
+
+#####
+chmod +WRX ${APP_PATH}/Metaboverse-${OS}-${ARCH}
+mv ${APP_PATH}/Metaboverse-${OS}-${ARCH} ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
+cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 
 
 # Make OS-specific modifications to package
 if [[ ${OS} == "linux" ]]; then
-    chmod +x ./Metaboverse-${OS}-x64-${VERSION}/Metaboverse
-    chmod +x ./Metaboverse-${OS}-x64-${VERSION}/resources/app/python/metaboverse-cli-linux
+    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse
+    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/resources/app/python/metaboverse-cli-linux
 fi
 if [[ ${OS} == "darwin" ]]; then
-    chmod +x ./Metaboverse-${OS}-x64-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
+    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
 fi
 
 
 # Zip for distribution 
-zip -r ./Metaboverse-${OS}-x64-${VERSION}.zip ./Metaboverse-${OS}-x64-${VERSION}
-shasum -a 256 ./Metaboverse-${OS}-x64-${VERSION}.zip
+zip -q -r ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
+chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
+shasum -a 256 ./Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 
 
 # Upload to Github

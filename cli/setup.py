@@ -34,9 +34,12 @@ import os
 __path__ = os.path.dirname(os.path.realpath(__file__))
 
 
-"""Get version number from metaboverse_cli/__version__.txt"""
-with open(os.path.join(__path__, 'metaboverse_cli', '__version__.txt'), 'r') as f:
-    __version__ = f.read().strip()
+"""Get version number from metaboverse_cli/__init__.py"""
+with open(os.path.join(__path__, 'metaboverse_cli', '__init__.py'), 'r') as f:
+    for line in f:
+        if line.startswith('__version__'):
+            __version__ = line.split('=')[1].strip().replace("'", '')
+            break
 
 
 """Get requirements"""

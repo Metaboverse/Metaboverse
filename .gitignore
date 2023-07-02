@@ -13,12 +13,11 @@ app/Log.out
 app/python/metaboverse-mac
 app/python/metaboverse-linux
 app/python/metaboverse-win*
-Metaboverse-*
+Metaboverse-*/
+Metaboverse-*.zip
 winehq.key
 build.log
 docs/build
 app/venv/
 doc/
-app/python/LICENSE
-app/python/README.md
-app/python/__version__.txt
+test_data.zip

@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Replace version number in $CLI_PATH/__version__.txt with the value in $VERSION 
 cd ${CLI_PATH}
-echo ${VERSION} > ${CLI_PATH}/__version__.txt
 
+rm -rf ${CONDA}/envs/pyinstaller
 
 # Check if building on an M1 Mac 
 if [[ $(uname -m) == "arm64" ]]; then
@@ -16,6 +15,6 @@ source "${CONDA_PATH}"
 conda activate pyinstaller 
 
 pip install pyinstaller
-pip install -r requirements.txt
+pip install -r ${CLI_PATH}/requirements.txt
 
-pyinstaller metaboverse-cli.spec
+pyinstaller ${CLI_PATH}/metaboverse-cli.spec

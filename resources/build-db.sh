@@ -47,10 +47,5 @@ conda list > ${BUILD_PATH}/build_env.txt
 
 # Afterwards, upload to host
 cd ${BUILD_PATH}
+chmod -R -wrx ${BUILD_PATH}
 rsync -avz -e ssh ${BUILD_PATH}/* ${BD_DEST}/v$VERSION
-
-#scp -r */*.mvdb ${BD_DEST}/v$VERSION/mvdb
-#scp -r */*_template.mvrs ${BD_DEST}/v$VERSION/mvrs
-#scp -r */*.nbdb ${BD_DEST}/v$VERSION/nbdb
-#scp ${BUILD_PATH}/README.txt ${BD_DEST}/v${VERSION}
-#scp ${BUILD_PATH}/build_versions.txt ${BD_DEST}/v${VERSION}
