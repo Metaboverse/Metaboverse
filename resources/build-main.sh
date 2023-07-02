@@ -16,21 +16,29 @@ export VERSION=0.10.1b1
 
 # Check that these paths are correct 
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# If the last subfolder of DIR is "resources", then we need to go up one more level
+if [[ ${DIR} == *"resources"* ]]; then
+    export DIR="$(dirname ${DIR})"
+fi
+echo -e "\nDIR: ${DIR}\n"
+
 export CONDA=~/miniconda3
 export CONDA_PATH=~/miniconda3/etc/profile.d/conda.sh
-export APP_PATH=${DIR}/../app
-export NODE_MODULES=${DIR}/../app/node_modules
-export MAIN_PATH=${DIR}/../app/main.js
-export CLI_PATH=${DIR}/../cli
-export CLI_DEST=${DIR}/../app/python
-export BUILD_PATH=${DIR}/../build
+export APP_PATH=${DIR}/app
+export NODE_MODULES=${DIR}/app/node_modules
+export MAIN_PATH=${DIR}/app/main.js
+export CLI_PATH=${DIR}/cli
+export CLI_DEST=${DIR}/app/python
+export BUILD_PATH=${DIR}/build
 # scp file.zip jsmith@frs.sourceforge.net:/home/frs/project/fooproject/release1
 #https://sourceforge.net/projects/metaboverse/files/v0.10.1/mvrs/
 export BD_DEST=j-berg@frs.sourceforge.net:/home/frs/project/metaboverse/v${VERSION}
 
 
 # Update version in app/package.json, cli/metaboverse_cli/__init__.py, CITATION.cff, and docs/conf.py
-echo "v${VERSION}" > ${DIR}/../app/__version__.txt
+echo "v${VERSION}" > ${DIR}/app/__version__.txt
+
 
 
 
@@ -56,22 +64,22 @@ done
 
 
 # Build cli 
-echo "Building the CLI..."
-chmod +x ${DIR}/build-python.sh
-${DIR}/build-python.sh
+echo -e "\nBuilding the CLI..."
+chmod +x ${DIR}/resources/build-python.sh
+${DIR}/resources/build-python.sh
 chmod +wrx ${CLI_PATH}/metaboverse-cli*
 cp ${CLI_PATH}/dist/metaboverse-cli* ${CLI_DEST}
 
 
 # Build electron app 
-echo "Building the electron app..."
-chmod +x ${DIR}/build-electron.sh
-${DIR}/build-electron.sh
+echo -e "\nBuilding the electron app..."
+chmod +x ${DIR}/resources/build-electron.sh
+${DIR}/resources/build-electron.sh
 
 
 # Code execution based on BUILD_DB flag
 if [ ${BUILD_DB} -eq 1 ]; then
-    echo "Building the database(s)..."
+    echo -e "\nBuilding the database(s)..."
     mkdir -p ${BUILD_PATH}
     if [[ ${OS} ==*"MINGW"* ]]; then
         cp ${CLI_PATH}/dist/metaboverse-cli*.exe ${BUILD_PATH}/metaboverse-cli.exe
@@ -80,14 +88,16 @@ if [ ${BUILD_DB} -eq 1 ]; then
         cp ${CLI_PATH}/dist/metaboverse-cli* ${BUILD_PATH}/metaboverse-cli-nix
         export BUILD_EXE=${BUILD_PATH}/metaboverse-cli-nix
     fi
-    chmod +x ${DIR}/build-db.sh
-    ${DIR}/build-db.sh
+    chmod +x ${DIR}/resources/build-db.sh
+    ${DIR}/resources/build-db.sh
 else
-    echo "Not building database..."
+    echo -e "\nNot building database..."
 fi
 
 
 # Clean up 
+echo -e "\nCleaning up..."
 rm -rf ${BUILD_PATH}
 
 
+echo -e "\nDone.\n"
