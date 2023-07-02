@@ -6,7 +6,7 @@ pwd
 
 # Install node dependencies
 rm -rf ${NODE_MODULES}
-npm install electron 
+npm install electron --save-dev
 npm install electron-packager -g
 npm install
 npm audit fix
@@ -47,7 +47,7 @@ fi
 
 
 # Build electron package
-electron-packager ./ Metaboverse --platform=${OS} --arch=${ARCH} --icon=${LOGO} --overwrite
+electron-packager ./ Metaboverse --platform=${OS} --arch=${ARCH} --icon=${LOGO} --build-version=${VERSION} --overwrite
 cd ..
 
 
@@ -72,7 +72,10 @@ fi
 # Zip for distribution 
 zip -q -r ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
+echo -e "\nSHA256 checksum:"
 shasum -a 256 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
-
+echo -e "\nMD5 checksum:"
+md5sum ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
+echo -e "\n"
 
 # Upload to Github

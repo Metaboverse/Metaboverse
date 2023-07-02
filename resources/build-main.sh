@@ -39,6 +39,29 @@ export BD_DEST=j-berg@frs.sourceforge.net:/home/frs/project/metaboverse/v${VERSI
 # Update version in app/package.json, cli/metaboverse_cli/__init__.py, CITATION.cff, and docs/conf.py
 echo "v${VERSION}" > ${DIR}/app/__version__.txt
 
+# Extract major and minor version (e.g. if VERSION is "0.10.1", this gets "0.10")
+MAJOR_MINOR_VERSION=$(echo "$VERSION" | cut -d'.' -f1,2)
+
+# Get current date in YYYY-MM-DD format
+CURRENT_DATE=$(date +'%Y-%m-%d')
+
+# Modify the Python script
+sed -i '' "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" ${DIR}/docs/conf.py
+sed -i '' "s/^release = .*/release = '$VERSION'/" ${DIR}/docs/conf.py
+
+# Modify the .cff file
+sed -i '' "s/^version: .*/version: $VERSION/" ${DIR}/CITATION.cff
+sed -i '' "s/^date-released: .*/date-released: $CURRENT_DATE/" ${DIR}/CITATION.cff
+
+# Check if jq is installed
+if ! command -v jq &> /dev/null
+then
+    echo "jq is not installed. Install it using 'brew install jq' and rerun the script."
+    exit
+fi
+
+# Modify the main.js file
+jq --argjson VERSION "$VERSION" '.version = $VERSION' ${APP_PATH}/package.json > ${APP_PATH}/temp.json && mv ${APP_PATH}/temp.json ${APP_PATH}/package.json
 
 
 
