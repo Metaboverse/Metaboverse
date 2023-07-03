@@ -16,19 +16,23 @@ Metaboverse enables automated discovery and visualization of diverse metabolic r
 Nature Cell Biology. (2023) doi: https://doi.org/10.1038/s41556-023-01117-9
 ```
 
-### Walkthroughs
+## Upcoming features
+- To check progress on upcoming releases, please refer to our [Project Roadmap](https://github.com/orgs/Metaboverse/projects/3).   
+- Have a feature request? Submit one [here](https://github.com/Metaboverse/Metaboverse/issues)!
+
+## Getting started
 
 Detailed walkthroughs and additional usage information can be found in the [documentation](https://metaboverse.readthedocs.io/en/latest).
 
+### Video walkthrough
 <div align="center">
 
 [![Metaboverse video walkthrough](docs/content/images/png/motif_view.png)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
 
 [Metaboverse video walkthrough](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
-   
+
 </div>
 
-## Getting started
 
 ### Requirements
 - An internet connection for network curation
