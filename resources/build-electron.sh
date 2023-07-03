@@ -55,6 +55,10 @@ cd ..
 
 #####
 chmod +wrx ${APP_PATH}/Metaboverse-${OS}-${ARCH}
+# If ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION} already exists, delete it
+if [ -d "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}" ]; then
+    rm -rf ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
+fi
 mv ${APP_PATH}/Metaboverse-${OS}-${ARCH} ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 

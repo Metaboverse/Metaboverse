@@ -120,7 +120,9 @@ fi
 
 # Clean up 
 echo -e "\nCleaning up..."
-rm -rf ${BUILD_PATH}
-
+if [ ${BUILD_DB} -eq 1 ]; then
+  rm -rf ${BUILD_PATH}
+fi 
+rm ${APP_PATH}/python/metaboverse-cli-darwin
 
 echo -e "\nDone.\n"

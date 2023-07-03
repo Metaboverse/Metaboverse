@@ -18,3 +18,5 @@ pip install pyinstaller
 pip install -r ${CLI_PATH}/requirements.txt
 
 pyinstaller ${CLI_PATH}/metaboverse-cli.spec
+
+conda deactivate
