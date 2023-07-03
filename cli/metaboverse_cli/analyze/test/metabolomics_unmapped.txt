@@ -1,0 +1,4 @@
+	fc	p
+ Inositol phosphate	-2.543306051	0.09
+ 2-Steroylglycerol	-0.8226188170000001	0.06
+ 1-Steroylglycerol	-1.365289115	0.95

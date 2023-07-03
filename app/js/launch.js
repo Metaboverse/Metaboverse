@@ -27,17 +27,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+var os = require("os");
 var fs = require("fs");
 var path = require("path");
-var app = require("electron").remote.app;
-var basePath = app.getAppPath();
+var spawn = require("child_process").spawn;
+var download = require("download");
 
-var userDataPath = app.getPath("userData");
-var session_file = userDataPath + path.sep + "session_data.json";
+var template_file = path.join(__dirname, "..", "data", "session_data_template.json")
+var session_file = path.join(__dirname, "..", "data", "session_data.json");
+
 
 function refresh_session() {
   fs.copyFile(
-    basePath + path.sep + "data" + path.sep + "session_data_template.json",
+    template_file,
     session_file,
     err => {
       if (err) throw err;
@@ -46,3 +48,4 @@ function refresh_session() {
   );
   window.location.reload(false);
 }
+

@@ -32,9 +32,7 @@ var fs = require("fs");
 var path = require("path");
 var pixelWidth = require("string-pixel-width");
 
-var app = require("electron").remote.app;
-var userDataPath = app.getPath("userData");
-var session_file = userDataPath + path.sep + "session_data.json";
+var session_file = path.join(__dirname, "..", "data", "session_data.json");
 
 function write_json(session_data) {
   fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {

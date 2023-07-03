@@ -27,10 +27,10 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 ### Video walkthrough
 <div align="center">
 
-[![Metaboverse video walkthrough](http://img.youtube.com/vi/G1PWjQJ7J0I/0.jpg)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
+[![Metaboverse video walkthrough](docs/content/images/png/motif_view.png)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
 
-[Metaboverse walkthrough](http://www.youtube.com/watch?v=G1PWjQJ7J0I)
-   
+[Metaboverse video walkthrough](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
+
 </div>
 
 
@@ -54,6 +54,9 @@ With each release archive or Metaboverse, a `test_data.zip` file is included. Un
 - If you have questions, requests, or bugs to report, please use the [Metaboverse issues forum](https://github.com/Metaboverse/Metaboverse/issues). - Please clearly describe the problem, what you have tried, as well as screenshots of any error information.     
 - Generally, for any errors occurring during network building, a file named `metaboverse_session.log` will be output to your specified Output folder. If you receive this file, please upload it to your GitHub Issue. This will output a lot of information, but you can try self-diagnosing by seeing if there is anything in the last ~10-15 lines of this file that might hint at the issue. Otherwise, we are happy to help diagnose the problem!    
 - It is also often helpful for us to click on the `View` menu tab, click `Toggle Developer Tools`, click the `Console` tab of the window that opens, and take a screenshot of the output in this panel.
+
+## Devs
+To compile and distribute a new version of Metaboverse, use the script at `resources/build-main.sh`.
 
 ## Feedback
 - Have any feedback? Let us know [here](https://github.com/Metaboverse/Metaboverse/issues).

@@ -32,12 +32,11 @@ SOFTWARE.
 const {
   app,
   BrowserWindow,
-  ipcRenderer,
-  dialog
+  ipcMain,
+  dialog, 
 } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const ipcMain = require("electron").ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -58,13 +57,20 @@ function createWindow() {
       nodeIntegration: true
     },
     dependencies: {
-      zerorpc: "fyears" + path.sep + "zerorpc-node"
+      zerorpc: path.join("fyears", "zerorpc-node")
     },
     icon: path.join(__dirname, "data", "icon", "png", "icon_64x64.png")
   });
 
+
+  // Show devtools
+  mainWindow.webContents.openDevTools();
+
+
+
   // and load the index.html of the app.
-  mainWindow.loadFile("html" + path.sep + "index.html");
+  mainWindow.loadFile(path.join(__dirname, "html", "index.html"));
+  
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
@@ -137,3 +143,78 @@ fs.copyFile(
     console.log("Session data file was copied for this session");
   }
 );
+
+
+ipcMain.handle('open-file-dialog-mvrs', async (event) => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      { name: 'Documents', extensions: ['mvrs', 'json'] },
+      // You can add more types if you want
+    ],
+  });
+
+  if (result.canceled) {
+    return;
+  } else {
+    return result.filePaths;
+  }
+});
+
+ipcMain.handle('open-file-dialog-mvdb', async (event) => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      { name: 'Documents', extensions: ['mvdb', 'json'] },
+      // You can add more types if you want
+    ],
+  });
+
+  if (result.canceled) {
+    return;
+  } else {
+    return result.filePaths;
+  }
+});
+
+ipcMain.handle('open-file-dialog-tsv', async (event) => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      { name: 'Documents', extensions: ['txt', 'tsv'] },
+      // You can add more types if you want
+    ],
+  });
+
+  if (result.canceled) {
+    return;
+  } else {
+    return result.filePaths;
+  }
+});
+
+ipcMain.handle('save-file-dialog-mvrs', async (event) => {
+  const result = await dialog.showSaveDialog({
+    defaultPath: 'output.mvrs'
+  });
+
+  if (result.canceled) {
+    return;
+  } else {
+    return result.filePath;
+  }
+});
+
+ipcMain.handle('show-warning-dialog', async (event, options) => {
+  const result = await dialog.showMessageBox({
+    type: 'warning',
+    title: options.title,
+    message: options.message,
+    buttons: ['OK'],
+    defaultId: 0, // The index of the button to be selected by default
+    cancelId: 0, // The index of the button to be triggered when the dialog is canceled
+    noLink: true // This prevents Electron from automatically adding a link to the dialog's message
+  });
+
+  return result.response; // This will be the index of the clicked button
+});

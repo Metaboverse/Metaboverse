@@ -28,11 +28,14 @@ SOFTWARE.
 
 */
 
-var { ipcRenderer, ipcMain, remote } = require("electron");
-var { dialog } = require("electron").remote;
+var { ipcRenderer } = require("electron");
 var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
+
+// Replace dialog function with electron's dialog
+
+
 
 var abbreviation_dict = {};
 $.getJSON(reactome_api, function(data) {
@@ -126,7 +129,7 @@ window.addEventListener("load", function(event) {
   // Get reaction neighbors dictionary from user
   var neighborsURL = get_session_info("neighbors_url");
   var defaultNeighbors = "No file selected";
-  if (neighborsURL !== null) {
+  if (neighborsURL !== null && neighborsURL !== undefined) {
     if (neighborsURL.split('.').pop().toLowerCase() === 'mvrs') {
       defaultNeighbors = neighborsURL;
     }
@@ -193,34 +196,21 @@ window.addEventListener("load", function(event) {
     document.getElementById('sbml-input').click();
   }
 
+  async function setOutput() {
+    const result = await ipcRenderer.invoke('save-file-dialog-mvrs');
+    if (result) {
+      console.log(result); // This will print the output location path
+    }
+    return result;
+  }
+
+
   // Select output directory from pop-out menu
   document.getElementById("output-input").onclick = function(event) {
-    filename = dialog
-      .showSaveDialog({
-        defaultPath: ".." + path.sep + ".." + path.sep,
-        properties: ["createDirectory"],
-        filters: [
-          { name: "Metaboverse-formatted database (*.mvrs)", extensions: ["mvrs"] }
-        ]
-      })
-      .then(result => {
-        let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
-        if (hasExtension === false) {
-          result.filePath = `${ result.filePath }.${ "mvrs" }`;
-        }
-        filename = result.filePath;
-        if (filename === undefined) {
-          alert("File selection unsuccessful");
-          return;
-        }
-        console.log(filename);
-        update_session_info("database_url", filename);
-        $('#selectedOutput').html('<font size="2">' + filename + '</font>');
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
+    filename = setOutput();
+    update_session_info("database_url", filename);
+    $('#selectedOutput').html('<font size="2">' + filename + '</font>');
+  
     output_change = true;
     check_changes();
   };

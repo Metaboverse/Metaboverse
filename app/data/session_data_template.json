@@ -33,7 +33,7 @@
   "broadcastGeneExpression": true,
   "broadcastMetabolites": true,
 
-  "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2, NAD+, NADH, NADPH, NAAD, ATP, ADP, Pi, PPi, Ca2+",
+  "blocklist": "H+, H2O, CO2, e-, Mn2+, K+, Na+, Mg2+, O2, H2O2, Pi, PPi, Ca2+",
   "collapse_threshold": 30,
 
   "additional_reactions": null,

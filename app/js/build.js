@@ -32,18 +32,17 @@ var path = require("path");
 var fs = require("fs");
 var $ = require("jquery");
 
-var app = require("electron").remote.app;
-var basePath = app.getAppPath();
-
-var userDataPath = app.getPath("userData");
-var session_file = userDataPath + path.sep + "session_data.json";
-var progress_file = userDataPath + path.sep + "progress_log.json"
+var session_file = path.join(__dirname, "..", "data", "session_data.json");
+var progress_template_file = path.join(__dirname, "..", "data", "progress_log_template.json");
+var progress_file = path.join(__dirname, "..", "data", "progress_log.json");
 
 var timer = 5000;
 
 var scriptFilename;
+
 console.log("Operating System information:")
 console.log(navigator.appVersion)
+
 if (navigator.appVersion.indexOf("Win") != -1) {
   scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
 } else if (navigator.appVersion.indexOf("Mac") != -1) {
@@ -55,7 +54,7 @@ if (navigator.appVersion.indexOf("Win") != -1) {
 }
 
 fs.copyFile(
-  basePath + path.sep + "data" + path.sep + "progress_log_template.json",
+  progress_template_file,
   progress_file,
   err => {
     if (err) throw err;
@@ -132,7 +131,7 @@ function write_log(command, stdout, stderr) {
   let experiment_name = getArgument("experiment_name").replace(/\s+/g, '-');
 
   fs.writeFileSync(
-    getArgument("output").replace(/\"/g, '') + path.sep + "metaboverse_session_" + experiment_name + ".log",
+    path.join(getArgument("output").replace(/\"/g, ''), "metaboverse_session_" + experiment_name + ".log"),
     "Operating System information:\n" +
     navigator.appVersion + "\n" +
     "Log date: " + today + "\n\n" +

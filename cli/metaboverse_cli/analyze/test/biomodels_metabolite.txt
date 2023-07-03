@@ -1,0 +1,8 @@
+	fc	p
+CHEBI:70959	-3	1
+bigg_34dhmald_i	-2	0.5
+R-adrenaline	-1	0.25
+dopamine	0	0.125
+CHEBI:27978	1	0.0625
+3-methoxytyramine	2	1
+metabolite_nonmapper	3	0.5
