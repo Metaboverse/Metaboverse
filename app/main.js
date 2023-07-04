@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Metaboverse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,27 @@ const {
 const path = require("path");
 const fs = require("fs");
 
+
+// Get app and user paths
+const appPath = app.getAppPath();
+const userDataPath = app.getPath('userData');
+
+const sessionFileTemplatePath = path.join(appPath, "data", "session_data_template.json");
+const sessionFilePath = path.join(userDataPath, "session_data.json");
+
+const progressFileTemplatePath = path.join(appPath, "data", "progress_log_template.json");
+const progressFilePath = path.join(userDataPath, "progress_log.json");
+
+ipcMain.handle('get-paths', () => {
+  return {
+    sessionFileTemplatePath,
+    sessionFilePath,
+    progressFileTemplatePath,
+    progressFilePath
+  };
+});
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -66,12 +87,9 @@ function createWindow() {
   // Show devtools
   mainWindow.webContents.openDevTools();
 
-
-
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "html", "index.html"));
   
-
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
     fs.unlinkSync(session_file);
@@ -80,6 +98,7 @@ function createWindow() {
 
   mainWindow.webContents.setFrameRate(60)
 }
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -127,17 +146,11 @@ const exitPyProc = () => {
 app.on("ready", createPyProc);
 app.on("will-quit", exitPyProc);
 
-//var app = require("electron").remote.app;
-var basePath = app.getAppPath();
-
-var userDataPath = app.getPath("userData");
-var session_file = userDataPath + path.sep + "session_data.json";
 
 // Copy session info template each time the app is launched
-
 fs.copyFile(
-  basePath + path.sep + "data" + path.sep + "session_data_template.json",
-  session_file,
+  sessionFileTemplatePath,
+  sessionFilePath,
   err => {
     if (err) throw err;
     console.log("Session data file was copied for this session");
@@ -205,6 +218,22 @@ ipcMain.handle('save-file-dialog-mvrs', async (event) => {
   }
 });
 
+ipcMain.handle('save-file-dialog-svg', async (event) => {
+  const result = await dialog.showSaveDialog({
+    defaultPath: 'image.svg',
+    filters: [
+      { name: 'Documents', extensions: ['svg'] },
+      // You can add more types if you want
+    ],
+  });
+
+  if (result.canceled) {
+    return;
+  } else {
+    return result.filePath;
+  }
+});
+
 ipcMain.handle('show-warning-dialog', async (event, options) => {
   const result = await dialog.showMessageBox({
     type: 'warning',
@@ -218,3 +247,4 @@ ipcMain.handle('show-warning-dialog', async (event, options) => {
 
   return result.response; // This will be the index of the clicked button
 });
+

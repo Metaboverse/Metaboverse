@@ -476,7 +476,7 @@ function select_groups(datatable, table) {
 
 	d3.select('#button-group-add')
 		.on("click", function(d) {
-			if (control_selection !== null && experiment_selection !== null) {
+			if (control_selection != null && experiment_selection != null) {
 
 				let fc_array = [];
 				let p_array = [];

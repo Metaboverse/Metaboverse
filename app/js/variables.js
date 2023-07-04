@@ -250,34 +250,51 @@ window.addEventListener("load", function(event) {
   // Format page
   var formatURL = "";
   var defaultFormat = "No file selected";
-  if (formatURL !== null) {
+  if (formatURL != null) {
     defaultFormat = formatURL;
   }
   $('#selectedFormat').append('<font size="2">' + defaultFormat + '</font>');
 
+
   // Transcriptomics
-  var transcriptomicsURL = get_session_info("transcriptomics");
-  var defaultTranscriptomics = "No file selected";
-  if (transcriptomicsURL !== null) {
-    defaultTranscriptomics = transcriptomicsURL;
-  }
-  $('#selectedTranscriptomics').append('<font size="2">' + defaultTranscriptomics + '</font>');
+  get_session_info("transcriptomics", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      var defaultTranscriptomics = "No file selected";
+      if (value != null) {
+        defaultTranscriptomics = value;
+      }
+      $('#selectedTranscriptomics').append('<font size="2">' + defaultTranscriptomics + '</font>');
+    }
+  });
 
   // Proteomics
-  var proteomicsURL = get_session_info("proteomics");
-  var defaultProteomics = "No file selected";
-  if (proteomicsURL !== null) {
-    defaultProteomics = proteomicsURL;
-  }
-  $('#selectedProteomics').append('<font size="2">' + defaultProteomics + '</font>');
+  get_session_info("proteomics", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      var defaultProteomics = "No file selected";
+      if (value != null) {
+        defaultProteomics = value;
+      }
+      $('#selectedProteomics').append('<font size="2">' + defaultProteomics + '</font>');
+    }
+  });
 
   // Metabolomics
-  var metabolomicsURL = get_session_info("metabolomics");
-  var defaultMetabolomics = "No file selected";
-  if (metabolomicsURL !== null) {
-    defaultMetabolomics = metabolomicsURL;
-  }
-  $('#selectedMetabolomics').append('<font size="2">' + defaultMetabolomics + '</font>');
+  get_session_info("metabolomics", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      var defaultMetabolomics = "No file selected";
+      if (value != null) {
+        defaultMetabolomics = value;
+      }
+      $('#selectedMetabolomics').append('<font size="2">' + defaultMetabolomics + '</font>');
+    }
+  })
+
 
   document.getElementById("menurefresh").onclick = function(event) {
     event.preventDefault();
@@ -286,53 +303,101 @@ window.addEventListener("load", function(event) {
     refresh_session()
   }
 
-  console.log("Collapse with modifiers:", get_session_info("collapseWithModifiers"))
-  if (get_session_info("collapseWithModifiers") === true) {
-    document.getElementById("use_modifiers_in_collapse").checked = true;
-  } else {
-    document.getElementById("use_modifiers_in_collapse").checked = false;
-  }
+  get_session_info("collapseWithModifiers", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log("Collapse with modifiers:", value);
+      if (value === true) {
+        document.getElementById("use_modifiers_in_collapse").checked = true;
+      } else {
+        document.getElementById("use_modifiers_in_collapse").checked = false;
+      }
+    }
+  });
+
   document.getElementById("use_modifiers_in_collapse").onclick = function(event) {
     event.stopPropagation();
-    if (get_session_info("collapseWithModifiers") === false) {
-      update_session_info("collapseWithModifiers", true);
-    } else {
-      update_session_info("collapseWithModifiers", false);
-    }
-    console.log("Reaction collapse evaluation with modifiers: ", get_session_info("collapseWithModifiers"))
+    
+    get_session_info("collapseWithModifiers", (err, value) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log("Collapse with modifiers:", value);
+        if (value === true) {
+          document.getElementById("use_modifiers_in_collapse").checked = true;
+        } else {
+          document.getElementById("use_modifiers_in_collapse").checked = false;
+        }
+        console.log("Reaction collapse evaluation with modifiers: ", value)
+      }
+    });
   }
 
-  console.log("Broadcast gene expression:", get_session_info("broadcastGeneExpression"))
-  if (get_session_info("broadcastGeneExpression") === true) {
-    document.getElementById("broadcast_gene_expression").checked = true;
-  } else {
-    document.getElementById("broadcast_gene_expression").checked = false;
-  }
+
+  get_session_info("broadcastGeneExpression", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log("Broadcast gene expression:", value);
+      if (value === true) {
+        document.getElementById("broadcast_gene_expression").checked = true;
+      } else {
+        document.getElementById("broadcast_gene_expression").checked = false;
+      }
+    }
+  });
+
   document.getElementById("broadcast_gene_expression").onclick = function(event) {
     event.stopPropagation();
-    if (get_session_info("broadcastGeneExpression") === false) {
-      update_session_info("broadcastGeneExpression", true);
-    } else {
-      update_session_info("broadcastGeneExpression", false);
-    }
-    console.log("Broadcast gene expression values: ", get_session_info("broadcastGeneExpression"))
+    
+    get_session_info("broadcastGeneExpression", (err, value) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log("Broadcast gene expression:", value);
+        if (value === true) {
+          document.getElementById("broadcast_gene_expression").checked = true;
+        } else {
+          document.getElementById("broadcast_gene_expression").checked = false;
+        }
+        console.log("Reaction collapse evaluation with gene expression broadcast: ", value)
+      }
+    });
   }
 
-  console.log("Broadcast metabolites:", get_session_info("broadcastMetabolites"))
-  if (get_session_info("broadcastMetabolites") === true) {
-    document.getElementById("broadcast_metabolite_expression").checked = true;
-  } else {
-    document.getElementById("broadcast_metabolite_expression").checked = false;
-  }
+
+  get_session_info("broadcastMetabolites", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log("Broadcast metabolites:", value);
+      if (value === true) {
+        document.getElementById("broadcast_metabolite_expression").checked = true;
+      } else {
+        document.getElementById("broadcast_metabolite_expression").checked = false;
+      }
+    }
+  });
+
   document.getElementById("broadcast_metabolite_expression").onclick = function(event) {
     event.stopPropagation();
-    if (get_session_info("broadcastMetabolites") === false) {
-      update_session_info("broadcastMetabolites", true);
-    } else {
-      update_session_info("broadcastMetabolites", false);
-    }
-    console.log("Broadcast metabolite values: ", get_session_info("broadcastMetabolites"))
+    
+    get_session_info("broadcastMetabolites", (err, value) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log("Broadcast metabolites:", value);
+        if (value === true) {
+          document.getElementById("broadcast_metabolite_expression").checked = true;
+        } else {
+          document.getElementById("broadcast_metabolite_expression").checked = false;
+        }
+        console.log("Reaction collapse evaluation with metabolites broadcast: ", value)
+      }
+    });
   }
+
 
   document.getElementById("transcriptomics-dropDatabase").onclick = function(event) {
     event.preventDefault();
@@ -477,47 +542,63 @@ window.addEventListener("load", function(event) {
   }
   */
 
-  if (get_session_info("experiment_name") !== null) {
-    $('#updateExperimentName').val(get_session_info("experiment_name"));
-  }
+  get_session_info("experiment_name", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value != null) {
+        $('#updateExperimentName').val(value);
+      }
+    }
+  });
 
-  if (get_session_info("experiment_type") !== null) {
-    $('#updateExperiment').val(get_session_info("experiment_type"));
-
-    if ((get_session_info("experiment_type") === "timecourse") | (get_session_info("experiment_type") === "multiple_conditions")) {
-      $("#nameField").html(
-        "<form>" +
-        "Sample labels: " +
-        "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>" +
-        "<br />" +
-        "<br />" +
-        "<input type='text' class='experimentName' id='updateExperimentLabels'></input>" +
-        "</form>" +
-        "<br />"
-      );
-      $('#updateExperimentLabels').val(get_session_info("labels"));
-
-      document.getElementById("updateExperimentLabels").onchange = function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var inputVal = document.getElementById("updateExperimentLabels").value;
-
-        try {
-          console.log("Your provided labels: ", inputVal);
-
-          update_session_info("labels", inputVal);
-        } catch (error) {
-          console.log(error);
-          alert(
-            "Labels are not valid."
+  
+  get_session_info("experiment_type", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value != null) {
+        $('#updateExperiment').val(value);
+        if (value == "timecourse" | value == "multiple_conditions") {
+          $("#nameField").html(
+            "<form>" +
+            "Sample labels: " +
+            "<button class='info' title='Enter the names for each condition or timepoint for you dataset in the order that they appear in the data table. Labels should be separated by a comma.'><i>i</i></button>" +
+            "<br />" +
+            "<br />" +
+            "<input type='text' class='experimentName' id='updateExperimentLabels'></input>" +
+            "</form>" +
+            "<br />"
           );
+          get_session_info("labels", (err, value) => {
+            if (err) {
+              console.log(err)
+            } else {
+              $('#updateExperimentLabels').val(value);
+            }
+          });
+
+
+        } else {
+          $("#nameField").html('');
+          update_session_info("labels", "0");
         }
       }
+    }
+  });
+  document.getElementById("updateExperimentLabels").onchange = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-    } else {
-      $("#nameField").html('');
-      update_session_info("labels", "0");
+    var inputVal = document.getElementById("updateExperimentLabels").value;
+    try {
+      console.log("Your provided labels: ", inputVal);
+      update_session_info("labels", inputVal);
+    } catch (error) {
+      console.log(error);
+      alert(
+        "Labels are not valid."
+      );
     }
   }
 
@@ -594,17 +675,23 @@ window.addEventListener("load", function(event) {
     }
   }
 
-  $('#updateBlocklist').val(get_session_info("blocklist"));
 
+  get_session_info("blocklist", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value != null) {
+        $('#updateBlocklist').val(value);
+      }
+    }
+  });
   document.getElementById("updateBlocklist").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
     var inputVal = document.getElementById("updateBlocklist").value;
-
     try {
       console.log("Your provided blocklisted entities: ", inputVal);
-
       update_session_info("blocklist", inputVal);
     } catch (error) {
       console.log(error);
@@ -614,17 +701,21 @@ window.addEventListener("load", function(event) {
     }
   }
 
-  $('#collapse_button').val(get_session_info("collapse_threshold"));
-
+  get_session_info("collapse_threshold", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value != null) {
+        $('#collapse_button').val(value);
+      }  
+    }
+  });
   document.getElementById("collapse_button").onchange = function(event) {
     event.preventDefault();
     event.stopPropagation();
-
     var collapseVal = document.getElementById("collapse_button").value;
-
     try {
       console.log("Collapse threshold: ", collapseVal);
-
       update_session_info("collapse_threshold", collapseVal);
     } catch (error) {
       console.log(error);

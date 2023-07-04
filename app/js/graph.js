@@ -31,11 +31,7 @@ SOFTWARE.
 var d3 = require("d3");
 var fs = require("fs");
 var savePNG = require("save-svg-as-png");
-try {
-  var { dialog } = require("electron").remote;
-} catch(err) {
-  console.log("Unable to load dialog, a module required for export of PNGs and SVGs.")
-}
+
 
 const hullPadding = 60;
 const max_nodes = 1500;
@@ -54,6 +50,16 @@ var collapsed_links = [];
 var significance_weight = 3;
 var nonsignificance_weight = 1;
 var offset = 30;
+
+
+async function setSvgOutput() {
+  const result = await ipcRenderer.invoke('save-file-dialog-svg');
+  if (result) {
+    console.log(result); // This will print the output location path
+  }
+  return result;
+}
+
 
 // Set stat button
 function set_stat_button(stat_type) {
@@ -82,6 +88,7 @@ function set_stat_button(stat_type) {
   }
   $('#stat-button').html(stat_string);
 }
+
 
 function set_significance_weight(data, sample, stat_type, stat_value) {
   
@@ -472,10 +479,10 @@ function nearest_neighbors(data, entity_id) {
   var kNN = document.getElementById("kNN_button").value;
 
   if (document.getElementById("superPathwayMenu").value !== "All entities") {
-    if (document.getElementById("pathwayMenu") !== null) {
+    if (document.getElementById("pathwayMenu") != null) {
       document.getElementById("pathwayMenu").value = "Select a pathway";
     }
-    if (document.getElementById("superPathwayMenu") !== null) {
+    if (document.getElementById("superPathwayMenu") != null) {
       document.getElementById("superPathwayMenu").value = "Select a super pathway...";
     }
   }
@@ -1056,7 +1063,7 @@ function make_graph(
     for (let _n in graph_nodes) {
       if ((graph_nodes[_n]['compartment'] !== undefined) &&
         (graph_nodes[_n]['compartment'] !== "none") &&
-        (graph_nodes[_n]['compartment'] !== null)) {
+        (graph_nodes[_n]['compartment'] != null)) {
         compartment_dictionary[graph_nodes[_n]['compartment']] = graph_nodes[_n]['compartment_display']
       }
     }
@@ -1111,7 +1118,7 @@ function make_graph(
         document.getElementById("type_selection").innerHTML = mod_selection;
         current_node = d["name"] + "_" + d["type"]
 
-        if (data.metadata.transcriptomics !== null) {
+        if (data.metadata.transcriptomics != null) {
           graph_genes = true;
         } else {
           graph_genes = false;
@@ -1324,32 +1331,8 @@ function make_graph(
       /class="link product" style="fill: none;"/g,
       'class="link product" style="stroke-width: 1.5px;fill: none;stroke: #666;"');
 
-    var filename = dialog
-      .showSaveDialog({
-        title: "plot",
-        defaultPath: ".." + path.sep + ".." + path.sep,
-        properties: ["createDirectory"],
-        filters: [{
-          name: "svg",
-          extensions: ["svg"]
-        }]
-      })
-      .then(result => {
-        let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
-        if (hasExtension === false) {
-          result.filePath = `${ result.filePath }.${ "svg" }`;
-        }
-        filename = result.filePath;
-        if (filename === undefined) {
-          alert("File selection unsuccessful");
-          return;
-        }
-        fs.writeFileSync(filename, svg_string, 'utf-8');
-        console.log(filename);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    filename = setSvgOutput();
+
   });
 
   d3.select("#openPathway").on("click", function() {
@@ -1747,7 +1730,7 @@ function changeSuper(data, pathway_dict, superPathwayDict) {
     // Only show measured entities for "All Entities" drop-down
     let measured_nodes = {};
     for (let n in data.nodes) {
-      if (data.nodes[n]['values'][0] !== null) {
+      if (data.nodes[n]['values'][0] != null) {
         measured_nodes[data.nodes[n]['name']] = data.nodes[n]['values'];
       }
     }
@@ -1792,17 +1775,22 @@ function change(data, collapsed_pathway_dict, pathway_dict) {
   }
   collapse_reactions = true;
 
-  let current_pathway = get_session_info("current_pathway");
-  if ((current_pathway !== null) && (current_pathway !== "null")) {
-    var selection = data.mod_collapsed_pathways[current_pathway].name;
-    var superSelection = "All pathways";
-  } else {
-    if (page_name !== "motif.html") {
-      var selection = document.getElementById("pathwayMenu").value;
-      var superSelection = document.getElementById("superPathwayMenu").value;
+  get_session_info("current_pathway", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if ((value != null) && (value != "null")) {
+        var selection = data.mod_collapsed_pathways[current_pathway].name;
+        var superSelection = "All pathways";
+      } else {
+        if (page_name !== "motif.html") {
+          var selection = document.getElementById("pathwayMenu").value;
+          var superSelection = document.getElementById("superPathwayMenu").value;
+        }
+      }
     }
-  }
-
+  });
+  
   if (page_name !== "motif.html") {
     document.getElementById("reaction_notes").innerHTML = "";
 

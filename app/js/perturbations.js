@@ -42,7 +42,13 @@ graph_genes = true;
 collapse_reactions = true;
 
 // MAIN
-database_url = get_session_info("database_url");
+get_session_info("database_url", (err, value) => {
+  if (err) {
+    console.log(err)
+  } else {
+    var database_url = value;
+  }
+});
 console.log("Database path: " + database_url);
 
 try {

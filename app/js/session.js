@@ -28,9 +28,7 @@ SOFTWARE.
 
 */
 
-const {
-  ipcRenderer
-} = require("electron");
+var { ipcRenderer } = require("electron");
 var $ = require("jquery");
 
 window.addEventListener("load", function(event) {

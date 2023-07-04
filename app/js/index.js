@@ -28,67 +28,80 @@ SOFTWARE.
 
 */
 
-const { ipcRenderer } = require("electron");
+var { ipcRenderer } = require("electron");
 var path = require("path");
 var semver = require('semver');
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
+let defaultValue; 
+
+
 window.addEventListener("load", function(event) {
   event.preventDefault();
   event.stopPropagation();
 
-  let opened = get_session_info("launched");
-  if (opened === false) {
-    update_session_info("launched", true);
-    $.ajax({
-      url: ".." + path.sep + "__version__.txt",
-      success: function(version) {
-        $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
-          let _v = String(version.trim().replace(/[^0-9.]/g,''))
-
-          let avail_versions = [];
-          let version_dict = {};
-          for (_k in d) {
-            let _this_version = String(d[_k].name.trim().replace(/[^0-9.]/g,''))
-            avail_versions.push(_this_version);
-            version_dict[_this_version] = d[_k].name;
+  get_session_info("launched", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value === false) {
+        update_session_info("launched", true);
+        $.ajax({
+          url: path.join("..", "__version__.txt"),
+          success: function(version) {
+            $.getJSON("https://api.github.com/repos/Metaboverse/Metaboverse/tags", function(d) {
+              let _v = String(version.trim().replace(/[^0-9.]/g,''))
+    
+              let avail_versions = [];
+              let version_dict = {};
+              for (_k in d) {
+                let _this_version = String(d[_k].name.trim().replace(/[^0-9.]/g,''))
+                avail_versions.push(_this_version);
+                version_dict[_this_version] = d[_k].name;
+              }
+    
+              // Source: https://stackoverflow.com/a/40201629
+              avail_versions = avail_versions.map( a => a.split('.').map( n => +n+100000 ).join('.') ).sort()
+                      .map( a => a.split('.').map( n => +n-100000 ).join('.') );
+              let _c = avail_versions[avail_versions.length - 1];
+    
+              if (semver.gt(_c, _v)) {
+                alert("A more current version of Metaboverse is available:\n\n" + version_dict[_c] + "\n\n\nPlease download this version then close this window and launch the new version.")
+                window.open(
+                  "https://github.com/Metaboverse/Metaboverse/releases/tag/" + version_dict[_c],
+                  "_blank",
+                  "top=500,left=200,frame=true,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes");
+              }
+            })
           }
-
-          // Source: https://stackoverflow.com/a/40201629
-          avail_versions = avail_versions.map( a => a.split('.').map( n => +n+100000 ).join('.') ).sort()
-                  .map( a => a.split('.').map( n => +n-100000 ).join('.') );
-          let _c = avail_versions[avail_versions.length - 1];
-
-          if (semver.gt(_c, _v)) {
-            alert("A more current version of Metaboverse is available:\n\n" + version_dict[_c] + "\n\n\nPlease download this version then close this window and launch the new version.")
-            window.open(
-              "https://github.com/Metaboverse/Metaboverse/releases/tag/" + version_dict[_c],
-              "_blank",
-              "top=500,left=200,frame=true,nodeIntegration=no,enableRemoteModule=no,worldSafeExecuteJavaScript=yes,contextIsolation=yes");
-          }
-        })
+        });
       }
-    });
-  }
-
+    }
+  });
   $('#content').append('<a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>');
 
-  var dbURL = get_session_info("database_url");
-  var defaultValue = "No file selected";
-  if (dbURL !== null) {
-    defaultValue = dbURL;
-    $("#content").html(
-      '<a href="motif.html"><div id="continue"><font size="3">Pattern Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
-    );
-  }
-  $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+  get_session_info("database_url", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      defaultValue = "No file selected";
+      if (value != "" && value != null) {
+        defaultValue = value;
+        $("#content").html(
+          '<a href="motif.html"><div id="continue"><font size="3">Pattern Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
+        );
+      }
+      $('#selectedFile').append('<font size="2">' + defaultValue + '</font>');
+    }
+  });
+  
 
   document.getElementById("menurefresh").onclick = function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    refresh_session()
+    refresh_session();
   }
 
   document.getElementById("dropDatabase").onclick = function(event) {

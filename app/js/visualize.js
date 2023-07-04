@@ -28,6 +28,8 @@ SOFTWARE.
 
 */
 
+let current_path;
+let database_url;
 var selection = null;
 var superSelection = null;
 var selector = "#graph";
@@ -35,86 +37,99 @@ var _width = window.innerWidth;
 var _height = window.innerHeight - 75;
 
 // MAIN
-database_url = get_session_info("database_url");
-console.log("Database path: " + database_url);
+function set_visualization(database_url) {
+  try {
+    var data = JSON.parse(fs.readFileSync(database_url).toString());
+  } catch (e) {
+    alert('Failed to open: \n' + database_url)
+  }
+  console.log(data)
+  var stat_type = data.metadata.stat_type;
+  set_stat_button(stat_type);
 
-try {
-  var data = JSON.parse(fs.readFileSync(database_url).toString());
-} catch (e) {
-  alert('Failed to open: \n' + database_url)
+  var pathway_dict = make_pathway_dictionary(
+    data,
+    'pathway_dictionary');
+  var collapsed_pathway_dict = make_pathway_dictionary(
+    data,
+    'collapsed_pathway_dictionary');
+  var superPathwayDict = make_superPathway_dictionary(data);
+  var entity_dictionary = parseEntities(data.nodes);
+
+  var motif_outputs = gatherMotifs(data, data.categories);
+  var collapsed_global_motifs = motif_outputs[0];
+  var global_motifs = motif_outputs[1];
+
+  let names;
+  if (data.labels === null) {
+    names = [];
+  } else {
+    names = data.labels.split(',');
+  }
+
+
+  timecourse = checkCategories(data.categories, names); //, data.names);
+
+  make_menu(
+    superPathwayDict,
+    "superPathwayMenu",
+    "Select a super pathway...",
+    (provide_all = true)
+  );
+
+  var update_nodes = {};
+  for (n in data.nodes) {
+    update_nodes[data.nodes[n].id] = data.nodes[n];
+  }
+  data.nodes = update_nodes;
+
+  var update_links = {};
+  for (l in data.links) {
+    let link_id = data.links[l].source + "," + data.links[l].target;
+    update_links[link_id] = data.links[l];
+  }
+  data.links = update_links;
+
+  data.blocklist = data.species_blocklist;
+  data.blocklist = complete_blocklist(
+    data.blocklist,
+    data.metadata.blocklist,
+    data.nodes
+  )
+
+  d3.select("#superPathwayMenu").on("change", function() {
+    changeSuper(data, pathway_dict, superPathwayDict);
+  });
+  d3.select("#pathwayMenu").on("change", function() {
+    change(data, collapsed_pathway_dict, pathway_dict);
+  });
+  d3.select("#kNN_button").on("change", function() {
+    kNN_input(data, collapsed_pathway_dict, pathway_dict)
+  });
+  d3.select("#hub_button").on("change", function() {
+    hub_input(data, collapsed_pathway_dict, pathway_dict)
+  });
+  d3.select("#stat_button").on("change", function() {
+    stat_input(data, collapsed_pathway_dict, pathway_dict)
+  });
 }
-console.log(data.metadata)
-var stat_type = data.metadata.stat_type;
-set_stat_button(stat_type);
 
-var pathway_dict = make_pathway_dictionary(
-  data,
-  'pathway_dictionary');
-var collapsed_pathway_dict = make_pathway_dictionary(
-  data,
-  'collapsed_pathway_dictionary');
-var superPathwayDict = make_superPathway_dictionary(data);
-var entity_dictionary = parseEntities(data.nodes);
 
-var motif_outputs = gatherMotifs(data, data.categories);
-var collapsed_global_motifs = motif_outputs[0];
-var global_motifs = motif_outputs[1];
+async function main() {
+  try {
+    current_path = await get_session_info_async("current_pathway")
+    if ((current_path != null) & (current_path != "null")) {
+      // set back after opening
+      update_session_info("current_pathway", null);
+    } else {}
 
-let names;
-if (data.labels === null) {
-  names = [];
-} else {
-  names = data.labels.split(',');
+    database_url = await get_session_info_async("database_url");
+    console.log("Database path: " + database_url);
+    set_visualization(database_url);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 
-timecourse = checkCategories(data.categories, names); //, data.names);
-
-make_menu(
-  superPathwayDict,
-  "superPathwayMenu",
-  "Select a super pathway...",
-  (provide_all = true)
-);
-
-var update_nodes = {};
-for (n in data.nodes) {
-  update_nodes[data.nodes[n].id] = data.nodes[n];
-}
-data.nodes = update_nodes;
-
-var update_links = {};
-for (l in data.links) {
-  let link_id = data.links[l].source + "," + data.links[l].target;
-  update_links[link_id] = data.links[l];
-}
-data.links = update_links;
-
-data.blocklist = data.species_blocklist;
-data.blocklist = complete_blocklist(
-  data.blocklist,
-  data.metadata.blocklist,
-  data.nodes
-)
-
-let current_pathway = get_session_info("current_pathway");
-if ((current_pathway !== null) & (current_pathway !== "null")) {
-  // set back after opening
-  update_session_info("current_pathway", null);
-} else {}
-
-d3.select("#superPathwayMenu").on("change", function() {
-  changeSuper(data, pathway_dict, superPathwayDict);
-});
-d3.select("#pathwayMenu").on("change", function() {
-  change(data, collapsed_pathway_dict, pathway_dict);
-});
-d3.select("#kNN_button").on("change", function() {
-  kNN_input(data, collapsed_pathway_dict, pathway_dict)
-});
-d3.select("#hub_button").on("change", function() {
-  hub_input(data, collapsed_pathway_dict, pathway_dict)
-});
-d3.select("#stat_button").on("change", function() {
-  stat_input(data, collapsed_pathway_dict, pathway_dict)
-});
+main();

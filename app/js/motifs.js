@@ -238,7 +238,7 @@ function parseComponents(
     if (stat_type === "array") {
       reactant_stat = eval_ci(reactant_stat, stat_value);
     }
-    if (reactant_expr !== null && reactant_stat !== null) {
+    if (reactant_expr != null && reactant_stat != null) {
       source_expression.push([
         parseFloat(reactant_expr),
         parseFloat(reactant_stat)
@@ -252,7 +252,7 @@ function parseComponents(
     if (stat_type === "array") {
       product_stat = eval_ci(product_stat, stat_value);
     }
-    if (product_expr !== null && product_stat !== null) {
+    if (product_expr != null && product_stat != null) {
       target_expression.push([
         parseFloat(product_expr),
         parseFloat(product_stat),
@@ -340,7 +340,7 @@ function parseComponentsMod(
     if (stat_type === "array") {
       core_stats = eval_ci(core_stats, stat_value);
     }
-    if (core_expr !== null && core_stats !== null) {
+    if (core_expr != null && core_stats != null) {
       core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
     }
   })
@@ -351,7 +351,7 @@ function parseComponentsMod(
     if (stat_type === "array") {
       mod_stats = eval_ci(mod_stats, stat_value);
     }
-    if (mod_expr !== null && mod_stats !== null) {
+    if (mod_expr != null && mod_stats != null) {
       mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
     }
   })
@@ -438,7 +438,7 @@ function parseComponentsEnzymes(
       if (stat_type === "array") {
         core_stats = eval_ci(core_stats, stat_value);
       }
-      if (core_expr !== null && core_stats !== null) {
+      if (core_expr != null && core_stats != null) {
         core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
       }
     }
@@ -451,7 +451,7 @@ function parseComponentsEnzymes(
       if (stat_type === "array") {
         mod_stats = eval_ci(mod_stats, stat_value);
       }
-      if (mod_expr !== null && mod_stats !== null) {
+      if (mod_expr != null && mod_stats != null) {
         mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
       }
     }
@@ -536,7 +536,7 @@ function parseComponentsMetabolites(
       if (stat_type === "array") {
         core_stats = eval_ci(core_stats, stat_value);
       }
-      if (core_expr !== null && core_stats !== null) {
+      if (core_expr != null && core_stats != null) {
         core_expression.push([parseFloat(core_expr), parseFloat(core_stats)]);
       }
     }
@@ -548,7 +548,7 @@ function parseComponentsMetabolites(
       if (stat_type === "array") {
         mod_stats = eval_ci(mod_stats, stat_value);
       }
-      if (mod_expr !== null && mod_stats !== null) {
+      if (mod_expr != null && mod_stats != null) {
         mods_expression.push([parseFloat(mod_expr), parseFloat(mod_stats)]);
       }
     }
@@ -660,7 +660,7 @@ function parseComponentsTrans(
     if (stat_type === "array") {
       reactant_stats = eval_ci(reactant_stats, stat_value);
     }
-    if (reactant_expr !== null && reactant_stats !== null) {
+    if (reactant_expr != null && reactant_stats != null) {
       source_expression.push([parseFloat(reactant_expr), parseFloat(reactant_stats)]);
     }
   })
@@ -671,7 +671,7 @@ function parseComponentsTrans(
     if (stat_type === "array") {
       product_stats = eval_ci(product_stats, stat_value);
     }
-    if (product_expr !== null && product_stats !== null) {
+    if (product_expr != null && product_stats != null) {
       target_expression.push([parseFloat(product_expr), parseFloat(product_stats)]);
     }
   })
@@ -682,7 +682,7 @@ function parseComponentsTrans(
     if (stat_type === "array") {
       modifier_stats = eval_ci(modifier_stats, stat_value);
     }
-    if (modifier_expr !== null && modifier_stats !== null) {
+    if (modifier_expr != null && modifier_stats != null) {
       modifier_expression.push([parseFloat(modifier_expr), parseFloat(modifier_stats)]);
     }
   })
@@ -705,7 +705,7 @@ function computeAvg(arr) {
   let arr_sum = arr[0];
   let arr_len = arr.length;
   for (let i = 1; i < arr.length; i++) {
-    if (arr[i] !== null) {
+    if (arr[i] != null) {
       arr_sum += arr[i];
     } else {
       arr_len -= 1;
