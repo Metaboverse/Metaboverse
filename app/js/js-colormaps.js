@@ -1147,7 +1147,12 @@ function handleMouseMove(e, points, theme) {
 };
 
 document.getElementById('entity_type').innerHTML = "Value colormap"
-var max_value = data.max_value;
+try {
+  var max_value = data.max_value;
+} catch (err) {
+  var max_value = 5;
+}
+
 var ignore = drawColormap('seismic_node', 12, max_value, 'seismic');
 var points = drawColormap('seismic_canvas', 220, max_value, 'seismic');
 

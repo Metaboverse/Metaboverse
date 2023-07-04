@@ -31,77 +31,87 @@ SOFTWARE.
 var { ipcRenderer } = require("electron");
 var $ = require("jquery");
 
-window.addEventListener("load", function(event) {
 
-  let session_items = {
+let session_items = {
 
-    "spacer4": "Experiment metadata:",
+  "Displaying session data for file": "database_url",
 
-    "Experiment name": "experiment_name",
-    "Experiment type": "experiment_type",
-    "Sample labels": "labels",
+  "spacer4": "Experiment metadata:",
 
-
-    "spacer5": "Input data:",
-
-    "Transcriptomics file name": "transcriptomics",
-    "Proteomics file name": "proteomics",
-    "Metabolomics file name": "metabolomics",
+  "Experiment name": "experiment_name",
+  "Experiment type": "experiment_type",
+  "Sample labels": "labels",
 
 
-    "spacer1": "Database:",
+  "spacer5": "Input data:",
 
-    "Output location": "output",
-
-    "small_gap0": "",
-
-    "Database file name": "output_file",
-    "Metaboverse-cli version used": "model_version",
-    "Date generated": "model_date",
+  "Transcriptomics file name": "transcriptomics",
+  "Proteomics file name": "proteomics",
+  "Metabolomics file name": "metabolomics",
 
 
-    "spacer2": "Curation:",
+  "spacer1": "Database:",
 
-    "Organism name": "organism",
-    "Organism ID": "organism_id",
-    "Organism database source": "database_source",
-    "Organism database version": "database_version",
-    "Organism curation": "curation_url",
-    "Metaboverse-cli organism curation version": "curation_version",
-    "Organism curation date generated": "curation_date",
+  "Output location": "output",
 
+  "small_gap0": "",
 
-    "spacer3": "Other curation sources:",
-
-    "Reaction neighbors database": "neighbors_url",
-    "Metaboverse-cli reaction neighbors database version": "neighbors_version",
-    "Reaction neighbors database date generated": "neighbors_date",
-
-    "small_gap2": "",
-
-    "Reaction network template": "template_url",
-    "Metaboverse-cli reaction network template version": "template_version",
-    "Reaction network template date generated": "template_date",
+  "Database file name": "output_file",
+  "Metaboverse-cli version used": "model_version",
+  "Date generated": "model_date",
 
 
-    "spacer6": "Other information:",
+  "spacer2": "Curation:",
 
-    "Reaction collapse used modifiers?": "collapseWithModifiers",
-    "Gene expression broadcast to missing proteins?": "broadcastGeneExpression",
-    "Metabolites broadcast to protein complexes?": "broadcastMetabolites",
-    "Blocklisted nodes": "blocklist",
-    "Reaction collapse threshold": "collapse_threshold"
-  };
+  "Organism name": "organism",
+  "Organism ID": "organism_id",
+  "Organism database source": "database_source",
+  "Organism database version": "database_version",
+  "Organism curation": "curation_url",
+  "Metaboverse-cli organism curation version": "curation_version",
+  "Organism curation date generated": "curation_date",
 
+
+  "spacer3": "Other curation sources:",
+
+  "Reaction neighbors database": "neighbors_url",
+  "Metaboverse-cli reaction neighbors database version": "neighbors_version",
+  "Reaction neighbors database date generated": "neighbors_date",
+
+  "small_gap2": "",
+
+  "Reaction network template": "template_url",
+  "Metaboverse-cli reaction network template version": "template_version",
+  "Reaction network template date generated": "template_date",
+
+
+  "spacer6": "Other information:",
+
+  "Reaction collapse used modifiers?": "collapseWithModifiers",
+  "Gene expression broadcast to missing proteins?": "broadcastGeneExpression",
+  "Metabolites broadcast to protein complexes?": "broadcastMetabolites",
+  "Blocklisted nodes": "blocklist",
+  "Reaction collapse threshold": "collapse_threshold"
+};
+
+
+async function load_session_data() {  
   let display = "";
   for (item in session_items) {
-    if (item.includes("spacer")) {
-      display = display +
+    if (item === "Displaying session data for file") {
+      let display_item = await get_argument_async(session_items[item]);
+      display += "<center>" + 
+          "<b>" + item + "</b>: " + 
+          "<font color='#00008b'>" + display_item + "</font>" +
+        "</center>" + 
+        "<br />";
+    } else if (item.includes("spacer")) {
+      display +=
         "<h4>" + session_items[item] + "</h4>";
     } else if (item.includes("small_gap")) {
-      display = display + "<br>";
+      display += "<br>";
     } else {
-      let display_item = getArgument(session_items[item]);
+      let display_item = await get_argument_async(session_items[item]);
       if (display_item === undefined) {
         display_item = "Unable to find this information.";
       } else if (typeof display_item === 'number') {
@@ -120,7 +130,7 @@ window.addEventListener("load", function(event) {
         display_item = display_item[0].toUpperCase() + display_item.substring(1);
       }
       display_item = display_item.toString().replace(/\\\\ /g, ' ').replace(/\\\\/g, '\\');
-      display = display +
+      display +=
         "&#8226;&nbsp;&nbsp;&nbsp;&nbsp;" +
         item + ":&nbsp;" +
         "<font color='#00008b'>" + display_item + "</font>" +
@@ -128,4 +138,9 @@ window.addEventListener("load", function(event) {
     }
   }
   document.getElementById("display-session").innerHTML = display;
+}
+
+
+window.addEventListener("load", function(event) {
+  load_session_data();
 })

@@ -91,6 +91,33 @@ async function get_session_info_async(key_update) {
   }
 }
 
+async function get_default_async(key) {
+  let paths = await ipcRenderer.invoke('get-paths');
+  try {
+    let session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString());
+    let value = session[key];
+    return value;
+  } catch (e) {
+    console.log("Could not parse session variable: ", key);
+    throw e;  
+  }
+}
+
+async function get_argument_async(key, callback) {
+  let paths = await ipcRenderer.invoke('get-paths');
+  try {
+    let session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString());
+    let value = session[key];
+    if (value == null) {
+      value = "None";
+    }
+    return value;
+  } catch (e) {
+    console.log("Could not parse session variable: ", key);
+    throw e;  
+  }
+}
+
 
 // http://www.alessioatzeni.com/blog/simple-tooltip-with-jquery-only-text/
 $(document).ready(function() {
