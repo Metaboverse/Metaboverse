@@ -11,7 +11,7 @@
 
 
 # Change this for each release 
-export VERSION=0.10.1b1
+export VERSION=0.10.1
 
 
 # Check that these paths are correct 

@@ -54,7 +54,7 @@ cd ..
 # Build release packages
 
 #####
-chmod +wrx ${APP_PATH}/Metaboverse-${OS}-${ARCH}
+chmod -R +wrx ${APP_PATH}/Metaboverse-${OS}-${ARCH}
 # If ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION} already exists, delete it
 if [ -d "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}" ]; then
     rm -rf ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
@@ -65,8 +65,8 @@ cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 
 # Make OS-specific modifications to package
 if [[ ${OS} == "linux" ]]; then
-    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse
-    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/resources/app/python/metaboverse-cli-linux
+    chmod -R +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse
+    chmod -R +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/resources/app/python/metaboverse-cli-linux
 fi
 if [[ ${OS} == "darwin" ]]; then
     chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
