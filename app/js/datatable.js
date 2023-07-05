@@ -692,7 +692,10 @@ function ttest(arr1, arr2) {
 	// function for calculating the f-statistic for two independent sample sets
 
 	// calculate the p-value
-	let p = jStat.anovaftest(arr1, arr2);
+	
+	
+
+	
 
 	return p;
 }

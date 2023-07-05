@@ -62,6 +62,7 @@ try:
     from analyze.__main__ import __main__ as analyze
     from mapper.__main__ import __main__ as mapper
     from target.__main__ import __main__ as curate_target
+    from statistics.__main__ import __main__ as stats
     from utils import progress_feed, update_session, \
         safestr, get_metaboverse_cli_version, init_mvrs_file, \
         update_network_vars, update_session_vars
@@ -102,6 +103,12 @@ except:
     target = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(target)
     curate_target = target.__main__
+
+    spec = importlib.util.spec_from_file_location(
+        "__main__", os.path.abspath(os.path.join(".", "metaboverse_cli", "statistics/__main__.py")))
+    target = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(target)
+    stats = stats.__main__
 
     spec = importlib.util.spec_from_file_location(
         "", os.path.abspath(os.path.join(".", "metaboverse_cli", "utils.py")))
@@ -166,6 +173,9 @@ def main(
     if args_dict['cmd'] == 'metaboliteMapper':
         print('Generating metabolite mapper...')
         mapper(args_dict)
+
+    elif args_dict['cmd'] == 'stats':
+        stats(args_dict)
 
     # Run metaboverse-curate
     elif args_dict['cmd'] == 'curate' or args_dict['cmd'] == 'electrum':
