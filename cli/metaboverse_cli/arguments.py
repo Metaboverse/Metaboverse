@@ -385,15 +385,7 @@ def parse_arguments(
         'stats',
         description='Backend utility for FDR correction',
         add_help=False)
-    
-    # stats required arguments
-    stats_reqs = stats_parser.add_argument_group('required arguments')
-    stats_reqs.add_argument(
-        '--type',
-        help='Type of statistical test to perform',
-        metavar='<ttest/bh>',
-        type=str,
-        required=True)
+
 
     # Get arguments are print help if no arguments provided
     if len(sys.argv[1:]) == 0:

@@ -31,6 +31,7 @@ SOFTWARE.
 var $ = require("jquery");
 var dt = require("datatables.net")();
 var fs = require("fs");
+var { spawn } = require('child_process');
 var path = require("path");
 var d3 = require("d3");
 var { jStat } = require("jstat");
@@ -480,6 +481,7 @@ function select_groups(datatable, table) {
 
 				let fc_array = [];
 				let p_array = [];
+				let bh_array = [];
 				let ci_array = [];
 				for (let i = 0; i < datatable.slice(1).length; i++) {
 					let exp = experiment_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
@@ -489,60 +491,73 @@ function select_groups(datatable, table) {
 							exp.reduce((a, b) => a + b, 0) / con.reduce((a, b) => a + b, 0)
 						)
 					);
-					p_array.push(
-						ttest(exp, con)
-					);
-					ci_array.push(
-						ci_calc(exp, con)
-					);
 				}
-				let bh_array = bh_corr(p_array);
-				console.log(ci_array)
 				
-				// Add new column headers for new data 
-				let stat_type;
-				let this_id = document.getElementById('fname').value;
-				processed_columns.push({ title: this_id + "_fc" });
-	
-				if (use_stat_type === "Adjusted P-value (normal)") {
-					stat_type = "adj-p"
-				} else if (use_stat_type === "P-value (normal)") {
-					stat_type = "p"
-				} else if (use_stat_type === "Confidence Intervals") {
-					stat_type = "ci"
-				} else {
-					stat_type = "stat"
-				}
-				processed_columns.push({ title: this_id + "_" + stat_type });
-
+				// Parse out two groups and their 2D arrays of their values
+				let array1 = [];
+				let array2 = [];
 				for (let i = 0; i < datatable.slice(1).length; i++) {
-					processed_data[i].push(fc_array[i]);
-					if (use_stat_type === "Adjusted P-value (normal)") {
-						processed_data[i].push(bh_array[i]);
-					} else if (use_stat_type === "P-value (normal)") {
-						processed_data[i].push(p_array[i]);
-					} else if (use_stat_type === "Confidence Intervals") {
-						processed_data[i].push(ci_array[i]);
-					} else {
-						processed_data[i].push(p_array[i]);
-					}
+					let exp = experiment_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
+					let con = control_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
+					array1.push(exp)
+					array2.push(con)
 				}
-				console.log(processed_data)
-				//update table
-				processed_table = update_table(
-					'#process-table', 
-					'#processed-table-el', 
-					processed_string, 
-					processed_data, 
-					processed_columns
-				);
+				calculatePValues(array1, array2).then(result => {
+					p_array = result.unadjusted;
+					bh_array = result.adjusted;
+					ci_array = [
+						[0.90, result.conf_intervals_90],
+						[0.95, result.conf_intervals_95],
+						[0.99, result.conf_intervals_99]
+					]
 
-				control_selection = null;
-				experiment_selection = null;
-				d3.select("#text-group-control").html("")
-				d3.select("#text-group-experiment").html("")
-				counter = counter + 1;
-				$('input#fname').val('group' + String(counter))
+					// Add new column headers for new data 
+					let stat_type;
+					let this_id = document.getElementById('fname').value;
+					processed_columns.push({ title: this_id + "_fc" });
+		
+					if (use_stat_type === "Adjusted P-value (normal)") {
+						stat_type = "adj-p"
+					} else if (use_stat_type === "P-value (normal)") {
+						stat_type = "p"
+					} else if (use_stat_type === "Confidence Intervals") {
+						stat_type = "ci"
+					} else {
+						stat_type = "stat"
+					}
+					processed_columns.push({ title: this_id + "_" + stat_type });
+
+					for (let i = 0; i < datatable.slice(1).length; i++) {
+						processed_data[i].push(fc_array[i]);
+						if (use_stat_type === "Adjusted P-value (normal)") {
+							processed_data[i].push(bh_array[i]);
+						} else if (use_stat_type === "P-value (normal)") {
+							processed_data[i].push(p_array[i]);
+						} else if (use_stat_type === "Confidence Intervals") {
+							processed_data[i].push(ci_array[i]);
+						} else {
+							processed_data[i].push(p_array[i]);
+						}
+					}
+					console.log(processed_data)
+					//update table
+					processed_table = update_table(
+						'#process-table', 
+						'#processed-table-el', 
+						processed_string, 
+						processed_data, 
+						processed_columns
+					);
+
+					control_selection = null;
+					experiment_selection = null;
+					d3.select("#text-group-control").html("")
+					d3.select("#text-group-experiment").html("")
+					counter = counter + 1;
+					$('input#fname').val('group' + String(counter))
+				}).catch(err => {
+					console.error(err);
+				});
 			}
 		})
 
@@ -688,55 +703,34 @@ function write_table(columns, data) {
 		});
 };
 
-function ttest(arr1, arr2) {
-	// function for calculating the f-statistic for two independent sample sets
 
-	// calculate the p-value
-	
-	
+function calculatePValues(array1, array2) {
+  return new Promise((resolve, reject) => {
+    // Define python executable
+    var scriptFilename = get_script_name();
 
-	
+    // Spawn new process
+    let process = spawn(scriptFilename + " stats");
 
-	return p;
+    // Write arrays to script's stdin
+    process.stdin.write(JSON.stringify({ array1, array2 }));
+    process.stdin.end();
+
+    // Handle output
+    let output = '';
+    process.stdout.on('data', data => output += data);
+    process.stderr.on('data', data => console.error(`Python error: ${data}`));
+
+    // Resolve promise when script is done
+    process.on('close', code => {
+      if (code !== 0) {
+        return reject(new Error(`Python script exited with code ${code}`));
+      }
+      resolve(JSON.parse(output));
+    });
+  });
 }
 
-function ci_calc(arr1, arr2) {
-	let intvl1_90 = jStat.normalci(jStat.mean(arr1), 0.9, arr1) //(arr1);
-	let intvl1_95 = jStat.normalci(jStat.mean(arr1), 0.95, arr1) //(arr1);
-	let intvl1_99 = jStat.normalci(jStat.mean(arr1), 0.99, arr1) //(arr1);
-	let intvl2_90 = jStat.normalci(jStat.mean(arr2), 0.9, arr2) //(arr1);
-	let intvl2_95 = jStat.normalci(jStat.mean(arr2), 0.95, arr2) //(arr1);
-	let intvl2_99 = jStat.normalci(jStat.mean(arr2), 0.99, arr2) //(arr1);
-
-	return [
-		[0.90, [intvl1_90, intvl2_90]],
-		[0.95, [intvl1_95, intvl2_95]],
-		[0.99, [intvl1_99, intvl2_99]]
-	];
-}
-
-function bh_corr(arr) {
-	// Implementation of BH method 
-
-	let sorted = arr.slice().sort( function(a, b) { return a - b } );
-	let ranks = arr.map( function(v) { return sorted.indexOf(v)+1 } );
-
-	let bh_array = [];
-	for (let i = 0; i < arr.length; i++) {
-
-		let _p = arr[i];
-		let _r = ranks[i];
-		let adj_p = (_r / arr.length) * _p;
-
-		if (adj_p > 1) {
-			bh_array.push(1.0);
-		} else {
-			bh_array.push(adj_p);
-		}
-	}
-
-	return bh_array;
-}
 
 function clear_elements() {
 	$('#define-groups').html("");

@@ -33,7 +33,6 @@ var path = require("path");
 var fs = require("fs");
 var $ = require("jquery");
 var timer = 5000;
-var scriptFilename;
 
 let database_url; 
 let processed_bool; 
@@ -47,15 +46,7 @@ let blocklist;
 console.log("Operating System information:")
 console.log(navigator.appVersion)
 
-if (navigator.appVersion.indexOf("Win") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
-} else if (navigator.appVersion.indexOf("Mac") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-darwin");
-} else if (navigator.appVersion.indexOf("Linux") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
-} else {
-  console.log("Unable to locate metaboverse-cli binary")
-}
+var scriptFilename = get_script_name();
 
 
 async function set_watch_files() {

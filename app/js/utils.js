@@ -192,3 +192,19 @@ function formatDate(date) {
 
   return datePart.join('-') + '-' + timePart.join('-');
 }
+
+
+function get_script_name() {
+
+  if (navigator.appVersion.indexOf("Win") != -1) {
+    scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
+  } else if (navigator.appVersion.indexOf("Mac") != -1) {
+    scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-darwin");
+  } else if (navigator.appVersion.indexOf("Linux") != -1) {
+    scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
+  } else {
+    console.log("Unable to locate metaboverse-cli binary")
+  }
+
+  return scriptFilename;
+}
