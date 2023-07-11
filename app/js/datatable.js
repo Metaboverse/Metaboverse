@@ -733,10 +733,11 @@ function calculatePValues(array1, array2) {
   return new Promise((resolve, reject) => {
     // Define python executable
     var scriptFilename = get_script_name();
+	console.log(scriptFilename)
 
     // Spawn new process
-    let process = spawn(scriptFilename + " stats");
-
+    let process = spawn(scriptFilename, ['stats']);
+	console.log(process)
     // Write arrays to script's stdin
     process.stdin.write(JSON.stringify({ array1, array2 }));
     process.stdin.end();

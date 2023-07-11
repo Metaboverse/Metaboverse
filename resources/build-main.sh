@@ -23,6 +23,9 @@ if [[ ${DIR} == *"resources"* ]]; then
 fi
 echo -e "\nDIR: ${DIR}\n"
 
+# Make sure user permissions are set for ease of downstream building 
+sudo chown -R $USER ${DIR}
+
 export CONDA=~/miniconda3
 export CONDA_PATH=~/miniconda3/etc/profile.d/conda.sh
 export APP_PATH=${DIR}/app
@@ -88,15 +91,15 @@ done
 
 # Build cli 
 echo -e "\nBuilding the CLI..."
-chmod +x ${DIR}/resources/build-python.sh
+chmod 755 ${DIR}/resources/build-python.sh
 ${DIR}/resources/build-python.sh
-chmod +wrx ${CLI_PATH}/metaboverse-cli*
+chmod 755 ${CLI_PATH}/metaboverse-cli*
 cp ${CLI_PATH}/dist/metaboverse-cli* ${CLI_DEST}
 
 
 # Build electron app 
 echo -e "\nBuilding the electron app..."
-chmod +x ${DIR}/resources/build-electron.sh
+chmod 755 ${DIR}/resources/build-electron.sh
 ${DIR}/resources/build-electron.sh
 
 
@@ -111,7 +114,7 @@ if [ ${BUILD_DB} -eq 1 ]; then
         cp ${CLI_PATH}/dist/metaboverse-cli* ${BUILD_PATH}/metaboverse-cli-nix
         export BUILD_EXE=${BUILD_PATH}/metaboverse-cli-nix
     fi
-    chmod +x ${DIR}/resources/build-db.sh
+    chmod 755 ${DIR}/resources/build-db.sh
     ${DIR}/resources/build-db.sh
 else
     echo -e "\nNot building database..."
