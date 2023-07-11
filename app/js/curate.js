@@ -33,9 +33,6 @@ var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
-// Replace dialog function with electron's dialog
-
-
 
 var abbreviation_dict = {};
 $.getJSON(reactome_api, function(data) {

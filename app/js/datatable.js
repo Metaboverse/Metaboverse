@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Metaboverse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +29,14 @@ SOFTWARE.
 */
 
 var $ = require("jquery");
-var dt = require("datatables.net")();
+var dt = require("datatables.net")(window, $);
 var fs = require("fs");
 var { spawn } = require('child_process');
 var path = require("path");
 var d3 = require("d3");
-var { jStat } = require("jstat");
-
-var session_file = path.join(__dirname, "..", "data", "session_data.json");
 
 var use_stat_type;
+var selected_columns = [];
 
 var opts = { // Spinner opts from http://spin.js.org/
 	lines: 10, // The number of lines to draw
@@ -107,7 +105,7 @@ var padj_string = `
 	<br><br>
 	<b>P-value (normal)</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards. Assumes data are normally distributed.
 	<br><br>
-	<b>Confidence Intervals</b>: Confidence intervals will be calculated for each experimental/control group. This method uses the jStat.normalci() method, assuming the input data array are normally distributed.
+	<b>Confidence Intervals</b>: Confidence intervals will be calculated for each experimental/control group. This method assumes the input data array are normally distributed.
 	<br><br>
 	If you click this button after a sample comparison has already been performed, the change in p-value handling will only be applied to new comparisons. If you want to apply the selected procedure to other previous comparisons,
 	you will need to start the data processing over. You can do this by clicking the Refresh icon on the top left of this page (<b>&#x21bb;</b>), closing this window and re-opening the data formatter, or you can refresh the page by clicking "View" -> "Reload" or CTRL + R (on Windows/Linux) or CMD + R (on MacOS).
@@ -308,8 +306,9 @@ window.addEventListener("load", function(event) {
 					data: datatable.slice(1),
 					columns: _columns,
 					select: {
-						style:    'api',
-            			selector: 'td:first-child'
+						style:    'os',
+            			selector: 'td:first-child',
+						items: 'column'
 					},
 					scrollX: true,
 					autoWidth: false,
@@ -320,7 +319,7 @@ window.addEventListener("load", function(event) {
 				} );
 
 				// from https://www.gyrocode.com/articles/jquery-datatables-how-to-select-columns/
-				$('#loaded-table').on('click', 'thead th:not(:first-child)', function(e) {
+				/*$('#loaded-table').on('click', 'thead th:not(:first-child)', function(e) {
 					if (table.column(this, { selected: true }).length) {
 						table.column(this).deselect();
 						$( table.column( this ).nodes() ).removeClass( 'highlight' );
@@ -329,9 +328,7 @@ window.addEventListener("load", function(event) {
 						$( table.column( this ).nodes() ).addClass( 'highlight' );  
 					}
 				} );
-				$('#loaded-table-el').on( 'click', 'tbody td', function () {
-					table.cell( this ) //.edit();
-				} );
+				*/
 
 				$('#select-datatype').html(datatypes_string);
 				d3.select("#button-2condition")
@@ -421,6 +418,33 @@ function parse_columns(datatable) {
 
 function select_groups(datatable, table) {
 
+	$('#loaded-table').on('click', 'thead th:not(:first-child)', function(e) {
+		var column = table.column(this);
+		var index = column.index();
+	
+		if ($(column.nodes()).hasClass('selected')) {
+			$(column.nodes()).removeClass('selected highlight');
+			
+			// remove the column's index from selected_columns
+			var columnIndex = selected_columns.indexOf(index);
+			if (columnIndex > -1) {
+				selected_columns.splice(columnIndex, 1);
+			}
+		} else {
+			$(column.nodes()).addClass('selected highlight');
+	
+			// add the column's index to selected_columns
+			if (selected_columns.indexOf(index) === -1) {
+				selected_columns.push(index);
+			}
+		}
+	});
+
+	$('#loaded-table-el').on( 'click', 'tbody td', function () {
+		table.cell( this ) //.edit();
+	} );
+
+
 	var counter = 1;
 	var processed_table;
 	$('#define-groups').html(groups_string);
@@ -461,22 +485,26 @@ function select_groups(datatable, table) {
 
 	var control_selection = null;
 	var experiment_selection = null;
+
 	d3.select("#button-group-control")
 		.on("click", function(d) {
-			let output = handle_selection(datatable, table, "#text-group-control");
+			let output = handle_selection(datatable, table, selected_columns, "#text-group-control");
 			control_selection = output[0];
 			table = output[1];
+			selected_columns = output[2];
 		})
 	
 	d3.select("#button-group-experiment")
 		.on("click", function(d) {
-			let output = handle_selection(datatable, table, "#text-group-experiment");
+			let output = handle_selection(datatable, table, selected_columns, "#text-group-experiment");
 			experiment_selection = output[0];
 			table = output[1];
+			selected_columns = output[2];
 		})
 
 	d3.select('#button-group-add')
 		.on("click", function(d) {
+			console.log(selected_columns)
 			if (control_selection != null && experiment_selection != null) {
 
 				let fc_array = [];
@@ -629,20 +657,17 @@ function update_table(_identifier, _element, _display, _data, _cols) {
 }
 
 
-function handle_selection(datatable, table, selector) {
+function handle_selection(datatable, table, selected_columns, selector) {
 
-	//parse selection
-	let selected_columns = [];
-	table.columns( { selected: true } ).every(function(d) {
-		selected_columns.push(d)
-	} )
-	selected_columns = selected_columns.filter(i => i !== 0); // prevent index selection
+	console.log(selector)
+	console.log(selected_columns)
+	this_selection = selected_columns.filter(i => i !== 0); // prevent index selection
 
 	//display selection
 	let formatted_names = "";
-	for (let x in selected_columns) {
-		formatted_names = formatted_names + datatable[0][selected_columns[x]];
-		if (x != selected_columns.length - 1) {
+	for (let x in this_selection) {
+		formatted_names = formatted_names + datatable[0][this_selection[x]];
+		if (x != this_selection.length - 1) {
 			formatted_names = formatted_names + ", "
 		}
 	}
@@ -650,10 +675,10 @@ function handle_selection(datatable, table, selector) {
 		.html("<b>" + formatted_names + "</b>")
 
 	//clear selections
-	$( table.cells().nodes() ).removeClass( 'highlight' );
-	table.columns( { selected: true } ).deselect();
-	
-	return [selected_columns, table];
+	$(table.cells().nodes()).removeClass('selected highlight');
+	selected_columns = [];
+
+	return [this_selection, table, selected_columns];
 }
 
 function write_table(columns, data) {
