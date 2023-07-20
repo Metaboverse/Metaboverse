@@ -72,8 +72,6 @@ description_table = """\
         +-----------------------+--------------------------------------------+
         |   curate              |   Curate network with optional user data   |
         +-----------------------+--------------------------------------------+
-        |   stats               |   Backend utility for FDR correction       |
-        +-----------------------+--------------------------------------------+
 """
 
 def check_arguments(
@@ -378,13 +376,6 @@ def parse_arguments(
         metavar='<path/filename>',
         type=str,
         required=False)
-
-
-    # Make submodule parser for "stats"
-    stats_parser = subparser.add_parser(
-        'stats',
-        description='Backend utility for FDR correction',
-        add_help=False)
 
 
     # Get arguments are print help if no arguments provided
