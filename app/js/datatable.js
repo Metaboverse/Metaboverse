@@ -34,6 +34,81 @@ var fs = require("fs");
 var { spawn } = require('child_process');
 var path = require("path");
 var d3 = require("d3");
+var { ipcRenderer } = require('electron');
+
+
+
+// -------------- //
+// Stat functions //
+// -------------- //
+var jStat = require('jstat');
+
+function mean(arr) {
+    let sum = arr.reduce((a, b) => a + b, 0);
+    return sum / arr.length;
+}
+
+function variance(arr, mean) {
+    return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (arr.length - 1);
+}
+
+function pValue(arr1, arr2) {
+    let mean1 = mean(arr1);
+    let mean2 = mean(arr2);
+    let var1 = variance(arr1, mean1);
+    let var2 = variance(arr2, mean2);
+    let t = (mean1 - mean2) / Math.sqrt(var1 / arr1.length + var2 / arr2.length);
+	let df = arr1.length + arr2.length - 2;
+	// We will use the fact that the t-distribution is symmetrical around 0.
+    // If t is positive, we need to calculate the right tail, so we do 1 - cdf(t).
+    // If t is negative, cdf(t) gives us the left tail, which is what we want.
+    if (t > 0) {
+        return 2 * (1 - jStat.studentt.cdf(t, df));
+    } else {
+        return 2 * jStat.studentt.cdf(t, df);
+    }
+}
+
+function benjaminiHochberg(pValues) {
+    // Sort the p-values in ascending order and keep track of their original indices
+    let sortedIndices = Array.from(pValues.keys()).sort((a, b) => pValues[a] - pValues[b]);
+    let sortedPValues = sortedIndices.map(i => pValues[i]);
+
+    // Apply the Benjamini-Hochberg procedure
+    let bhValues = sortedPValues.map((p, i, arr) => Math.min(1, p * arr.length / (i + 1)));
+
+    // Put the corrected p-values back in their original order
+    let correctedPValues = Array(pValues.length);
+    sortedIndices.forEach((originalIndex, i) => {
+        correctedPValues[originalIndex] = bhValues[i];
+    });
+
+    return correctedPValues;
+}
+
+function standardError(arr) {
+    return jStat.stdev(arr, true) / Math.sqrt(arr.length);  // use the unbiased standard deviation
+}
+
+function confidenceInterval(arr, confidence) {
+    const meanValue = mean(arr);
+    const margin = jStat.studentt.inv((1 + confidence) / 2, arr.length - 1) * standardError(arr);
+    return [meanValue - margin, meanValue + margin];
+}
+
+function confidenceInterval_twoArray(arr1, arr2){
+
+	let confidenceLevels = [0.9, 0.95, 0.99];
+	let confidenceIntervals = confidenceLevels.map(level => {
+		return [level, [confidenceInterval(arr1, level), confidenceInterval(arr2, level)]];
+	});
+
+	return confidenceIntervals;
+}
+// ------------------ //
+// End stat functions //
+// ------------------ //
+
 
 var use_stat_type;
 var selected_columns = [];
@@ -250,7 +325,7 @@ window.addEventListener("load", function(event) {
 		});
 
 	// Add adj_p checkbox 
-	document.getElementById("stat_type").onclick = function(event) {
+	document.getElementById("stat_type").onchange = function(event) {
 		use_stat_type = document.getElementById("stat_type").value;
 		clear_elements();
 		console.log("Using stat type: ", use_stat_type)
@@ -509,7 +584,6 @@ function select_groups(datatable, table) {
 
 				let fc_array = [];
 				let p_array = [];
-				let bh_array = [];
 				let ci_array = [];
 				for (let i = 0; i < datatable.slice(1).length; i++) {
 					let exp = experiment_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
@@ -519,79 +593,67 @@ function select_groups(datatable, table) {
 							exp.reduce((a, b) => a + b, 0) / con.reduce((a, b) => a + b, 0)
 						)
 					);
+					p_array.push(pValue(exp, con));
+
+					ci_array.push(confidenceInterval_twoArray(exp, con));
 				}
-				
-				// Parse out two groups and their 2D arrays of their values
-				let array1 = [];
-				let array2 = [];
+				let bh_array = benjaminiHochberg(p_array);
+
+				// Add new column headers for new data 
+				let stat_type;
+				let this_id = document.getElementById('fname').value;
+				processed_columns.push({ title: this_id + "_fc" });
+	
+				if (use_stat_type === "Adjusted P-value (normal)") {
+					stat_type = "adj-p"
+				} else if (use_stat_type === "P-value (normal)") {
+					stat_type = "p"
+				} else if (use_stat_type === "Confidence Intervals") {
+					stat_type = "ci"
+				} else {
+					stat_type = "stat"
+				}
+				processed_columns.push({ title: this_id + "_" + stat_type });
+
 				for (let i = 0; i < datatable.slice(1).length; i++) {
-					let exp = experiment_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
-					let con = control_selection.map(j => parseFloat(datatable.slice(1)[i][j]));
-					array1.push(exp)
-					array2.push(con)
-				}
-				calculatePValues(array1, array2).then(result => {
-					p_array = result.unadjusted;
-					bh_array = result.adjusted;
-					ci_array = [
-						[0.90, result.conf_intervals_90],
-						[0.95, result.conf_intervals_95],
-						[0.99, result.conf_intervals_99]
-					]
-
-					// Add new column headers for new data 
-					let stat_type;
-					let this_id = document.getElementById('fname').value;
-					processed_columns.push({ title: this_id + "_fc" });
-		
+					processed_data[i].push(fc_array[i]);
 					if (use_stat_type === "Adjusted P-value (normal)") {
-						stat_type = "adj-p"
+						processed_data[i].push(bh_array[i]);
 					} else if (use_stat_type === "P-value (normal)") {
-						stat_type = "p"
+						processed_data[i].push(p_array[i]);
 					} else if (use_stat_type === "Confidence Intervals") {
-						stat_type = "ci"
+						processed_data[i].push(ci_array[i]);
 					} else {
-						stat_type = "stat"
+						processed_data[i].push(p_array[i]);
 					}
-					processed_columns.push({ title: this_id + "_" + stat_type });
+				}
+				console.log(processed_data)
+				//update table
+				processed_table = update_table(
+					'#process-table', 
+					'#processed-table-el', 
+					processed_string, 
+					processed_data, 
+					processed_columns
+				);
 
-					for (let i = 0; i < datatable.slice(1).length; i++) {
-						processed_data[i].push(fc_array[i]);
-						if (use_stat_type === "Adjusted P-value (normal)") {
-							processed_data[i].push(bh_array[i]);
-						} else if (use_stat_type === "P-value (normal)") {
-							processed_data[i].push(p_array[i]);
-						} else if (use_stat_type === "Confidence Intervals") {
-							processed_data[i].push(ci_array[i]);
-						} else {
-							processed_data[i].push(p_array[i]);
-						}
-					}
-					console.log(processed_data)
-					//update table
-					processed_table = update_table(
-						'#process-table', 
-						'#processed-table-el', 
-						processed_string, 
-						processed_data, 
-						processed_columns
-					);
-
-					control_selection = null;
-					experiment_selection = null;
-					d3.select("#text-group-control").html("")
-					d3.select("#text-group-experiment").html("")
-					counter = counter + 1;
-					$('input#fname').val('group' + String(counter))
-				}).catch(err => {
-					console.error(err);
-				});
+				control_selection = null;
+				experiment_selection = null;
+				d3.select("#text-group-control").html("")
+				d3.select("#text-group-experiment").html("")
+				counter = counter + 1;
+				$('input#fname').val('group' + String(counter))
 			}
 		})
 
 	//check_metabolites();
 	d3.select('#button-group-check')
 		.on("click", function(d) {
+
+			// Print error message that this feature is disabled for the time being 
+			alert("This feature is currently disabled as the MetaboAnalyst API is no longer available. We are actively working on a solution. Please check back in a later version.")
+			// Skip the rest of the function 
+			return
 
 			//get current names
 			var entity_string = "";
@@ -633,7 +695,7 @@ function select_groups(datatable, table) {
 
 	d3.select('#button-group-export')
 		.on("click", function(d) {
-			write_table(processed_columns, processed_data)
+			saveTableData(processed_columns, processed_data)
 		})
 }
 
@@ -681,16 +743,16 @@ function handle_selection(datatable, table, selected_columns, selector) {
 	return [this_selection, table, selected_columns];
 }
 
-function write_table(columns, data) {
-	
+async function saveTableData(processed_columns, processed_data) {
+
 	let output_data = "";
-	for (let c in columns) {
-		output_data = output_data + columns[c].title + "\t"
+	for (let c in processed_columns) {
+		output_data = output_data + processed_columns[c].title + "\t"
 	}
-	for (let d in data) {
+	for (let d in processed_data) {
 		output_data = output_data + "\n" 
-		for (let _d in data[d]) {
-			let write_data = data[d][_d];
+		for (let _d in processed_data[d]) {
+			let write_data = processed_data[d][_d];
 			if (Array.isArray(write_data)) {
 				output_data = output_data + JSON.stringify(write_data) + "\t";
 			} else {
@@ -699,64 +761,15 @@ function write_table(columns, data) {
 		}
 	}
 
-    filename = dialog
-      	.showSaveDialog({
-			defaultPath: ".." + path.sep + ".." + path.sep,
-			properties: ["createDirectory"],
-			filters: [
-				{ name: "tab-delimited (*.tsv; *.txt)", extensions: ["txt", "tsv"] }
-			]
-      	})
-      	.then(result => {
-			let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
-			if (hasExtension === false) {
-				result.filePath = `${ result.filePath }.${ "txt" }`;
-			}
-			filename = result.filePath;
-			if (filename === undefined) {
-				alert("File selection unsuccessful");
-				return;
-			}
-
-			fs.writeFileSync(filename, output_data, function(err) {
-				if (err) throw err;
-				console.log("Table exported");
-			});
-		})
-		.catch(err => {
-			console.log(err);
-		});
-};
-
-
-function calculatePValues(array1, array2) {
-  return new Promise((resolve, reject) => {
-    // Define python executable
-    var scriptFilename = get_script_name();
-	console.log(scriptFilename)
-
-    // Spawn new process
-    let process = spawn(scriptFilename, ['stats']);
-	console.log(process)
-    // Write arrays to script's stdin
-    process.stdin.write(JSON.stringify({ array1, array2 }));
-    process.stdin.end();
-
-    // Handle output
-    let output = '';
-    process.stdout.on('data', data => output += data);
-    process.stderr.on('data', data => console.error(`Python error: ${data}`));
-
-    // Resolve promise when script is done
-    process.on('close', code => {
-      if (code !== 0) {
-        return reject(new Error(`Python script exited with code ${code}`));
-      }
-      resolve(JSON.parse(output));
-    });
-  });
-}
-
+	try {
+	  const filename = await ipcRenderer.invoke('save-file-dialog-table', output_data);
+	  if (filename === undefined) {
+		alert("File selection unsuccessful");
+	  }
+	} catch (err) {
+	  console.log(err);
+	}
+  }
 
 function clear_elements() {
 	$('#define-groups').html("");

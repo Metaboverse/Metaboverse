@@ -234,6 +234,32 @@ ipcMain.handle('save-file-dialog-svg', async (event) => {
   }
 });
 
+ipcMain.handle('save-file-dialog-table', async (event, output_data) => {
+  const result = await dialog.showSaveDialog({
+    defaultPath: '..' + path.sep + '..' + path.sep,
+    properties: ['createDirectory'],
+    filters: [
+      { name: 'tab-delimited (*.tsv; *.txt)', extensions: ['txt', 'tsv'] },
+    ],
+  });
+
+  if (result.canceled) {
+    return;
+  } else {
+    // write to file
+    let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
+    if (hasExtension === false) {
+      result.filePath = `${result.filePath}.${"txt"}`;
+    }
+
+    fs.writeFileSync(result.filePath, output_data, function(err) {
+      if (err) throw err;
+      console.log("Table exported");
+    });
+    return result.filePath;
+  }
+});
+
 ipcMain.handle('show-warning-dialog', async (event, options) => {
   const result = await dialog.showMessageBox({
     type: 'warning',
