@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

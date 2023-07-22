@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -860,14 +860,74 @@ function makeDistributions(datatable) {
 function kernelDensityEstimator(kernel, X) {
 	// See https://d3-graph-gallery.com/graph/density_basic.html
 	return function(V) {
-	  return X.map(function(x) {
+		return X.map(function(x) {
 		return [x, d3.mean(V, function(v) { return kernel(x - v); })];
-	  });
+		});
 	};
-  }
-  function kernelEpanechnikov(k) {
+}
+function kernelEpanechnikov(k) {
 	// See https://d3-graph-gallery.com/graph/density_basic.html
 	return function(v) {
-	  return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
+		return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
 	};
-  }
+}
+
+// Unit tests 
+function test_pValue() {
+	let exp = [1, 2, 3, 4, 5];
+	let con = [5, 6, 7, 8, 9];
+	let p = pValue(exp, con);
+	return p.toFixed(5);
+}
+
+function test_benjaminiHochberg() {
+	let p = [0.5, 0.1, 0.2, 0.3, 0.4, 0.001, 0.04];
+	let bh = benjaminiHochberg(p);
+	// round bh values in array to 2 decimals 
+	for (let i in bh) {
+		bh[i] = bh[i].toFixed(2);
+	}
+	return bh;
+}
+
+function test_confidenceInterval_twoArray() {
+	let exp = [1, 2, 3, 4, 5];
+	let con = [5, 6, 7, 8, 9];
+	let ci = confidenceInterval_twoArray(exp, con);
+	
+	// Convert all values in arrays to 2 decimals
+	for (let i in ci) {
+		ci[i][1] = ci[i][1].map(arr => arr.map(x => parseFloat(x.toFixed(2))));
+	}  
+	return ci;
+}
+
+function arraysEqual(a, b) {
+    return a.length === b.length && a.every((val, i) => val === b[i]);
+}
+
+function multiDimensionalArrayEqual(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function test() {
+	var assert = require('assert');
+	var { JSDOM } = require('jsdom');
+	var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+	var { window } = jsdom;
+	$ = global.jQuery = require('jquery')(window);
+
+	let valid_p = 0.00395;
+	let valid_bh = ["0.50","0.23","0.35","0.42","0.47","0.01","0.14"];
+	let valid_ci = [
+		[0.9, [[1.49, 4.51], [5.49, 8.51]]],
+		[0.95, [[1.04, 4.96], [5.04, 8.96]]],
+		[0.99, [[-0.26, 6.26], [3.74, 10.26]]]
+	];
+	
+	assert(test_pValue() == valid_p)
+	assert(arraysEqual(test_benjaminiHochberg(), valid_bh))
+	assert(multiDimensionalArrayEqual(test_confidenceInterval_twoArray(), valid_ci))
+	
+}
+module.exports = test
