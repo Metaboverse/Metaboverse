@@ -34,6 +34,40 @@ do
 done
 echo "Compiling version: $VERSION"
 
+# Install depedencies 
+# If on macOS, install GNU parallel, jq using brew 
+# If on Linux, install parallel, jq using apt-get
+# If on Windows, install parallel, jq using choco
+OS=$(uname -s)
+if [[ $OS == *"Darwin"* ]]; then
+    echo "Installing dependencies using brew..."
+    brew install parallel jq -y
+elif [[ $OS == *"Linux"* ]]; then
+    echo "Installing dependencies using apt-get..."
+    sudo apt-get install parallel jq -y
+elif [[ $OS == *"MINGW"* ]]; then
+    echo "Installing dependencies using choco..."
+    choco install parallel jq -y
+else
+    echo "Unsupported OS: $OS"
+    exit 1
+fi
+
+# Check if conda is installed
+if ! command -v conda &> /dev/null
+then
+    echo "conda is not installed. Install it and rerun the script."
+    exit
+fi
+
+# Check if NPM is installed 
+if ! command -v npm &> /dev/null
+then
+    echo "npm is not installed. Install it and rerun the script."
+    exit
+fi
+
+
 # Check that these paths are correct 
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -68,13 +102,26 @@ MAJOR_MINOR_VERSION=$(echo "$VERSION" | cut -d'.' -f1,2)
 # Get current date in YYYY-MM-DD format
 CURRENT_DATE=$(date +'%Y-%m-%d')
 
-# Modify the Python script
-sed -i '' "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" ${DIR}/docs/conf.py
-sed -i '' "s/^release = .*/release = '$VERSION'/" ${DIR}/docs/conf.py
+OS=$(uname -s)
+FILE1="${DIR}/docs/conf.py"
+FILE2="${DIR}/CITATION.cff"
 
-# Modify the .cff file
-sed -i '' "s/^version: .*/version: $VERSION/" ${DIR}/CITATION.cff
-sed -i '' "s/^date-released: .*/date-released: $CURRENT_DATE/" ${DIR}/CITATION.cff
+if [[ $OS == *"Darwin"* ]]; then
+    sed -i '' "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" $FILE1
+    sed -i '' "s/^release = .*/release = '$VERSION'/" $FILE1
+    sed -i '' "s/^version: .*/version: $VERSION/" $FILE2
+    sed -i '' "s/^date-released: .*/date-released: $CURRENT_DATE/" $FILE2
+elif [[ $OS == *"Linux"* ]]; then
+    sed -i "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" $FILE1
+    sed -i "s/^release = .*/release = '$VERSION'/" $FILE1
+    sed -i "s/^version: .*/version: $VERSION/" $FILE2
+    sed -i "s/^date-released: .*/date-released: $CURRENT_DATE/" $FILE2
+elif [[ $OS == *"MINGW"* ]]; then # Windows
+    echo "Please, consider using a Linux subsystem or Cygwin to use sed on Windows (or run this script using WSL first)."
+    # Windows has a more complex environment for bash-like operations and may require a third-party software like Cygwin, WSL, or Git BASH.
+else
+    echo "Unsupported OS: $OS"
+fi
 
 # Check if jq is installed
 if ! command -v jq &> /dev/null
