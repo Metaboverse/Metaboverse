@@ -6,7 +6,7 @@ alias: metaboverse-cli
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -376,6 +376,7 @@ def parse_arguments(
         metavar='<path/filename>',
         type=str,
         required=False)
+
 
     # Get arguments are print help if no arguments provided
     if len(sys.argv[1:]) == 0:

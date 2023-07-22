@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,14 +29,13 @@ SOFTWARE.
 */
 var fs = require('fs');
 var path = require("path");
-var app = require('electron').remote.app;
 
-var userDataPath = app.getPath('userData');
-var session_file = userDataPath + path.sep + "session_data.json";
-let database_url = JSON.parse(
-  fs.readFileSync(session_file).toString())["database_url"];
 
-showMotifs = function(_callback) {
+showMotifs = async function(_callback) {
+
+  let paths = await ipcRenderer.invoke('get-paths');
+  let database_url = JSON.parse(
+    fs.readFileSync(paths.sessionFilePath).toString())["database_url"];
 
   d3.json(database_url).then(data => {
     let metaGraph = new MetaGraph(data);

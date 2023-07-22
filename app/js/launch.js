@@ -1,51 +1,18 @@
-/*
-Metaboverse
-Visualizing and Analyzing Metabolic Networks
-https://github.com/Metaboverse/Metaboverse/
-alias: metaboverse
 
-MIT License
+var fs = require('fs');
+var { ipcRenderer } = require('electron');
 
-Copyright (c) 2022 Metaboverse
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-*/
-var os = require("os");
-var fs = require("fs");
-var path = require("path");
-var spawn = require("child_process").spawn;
-var download = require("download");
-
-var template_file = path.join(__dirname, "..", "data", "session_data_template.json")
-var session_file = path.join(__dirname, "..", "data", "session_data.json");
-
-
+// Get app and user paths
 function refresh_session() {
-  fs.copyFile(
-    template_file,
-    session_file,
-    err => {
-      if (err) throw err;
-      console.log("Session data file was copied for this session");
-    }
-  );
-  window.location.reload(false);
+    ipcRenderer.invoke('get-paths').then((paths) => {
+        console.log("Refreshing session data...")
+        fs.copyFile(
+            paths.sessionFileTemplatePath,
+            paths.sessionFilePath,
+            err => {
+                if (err) throw err;
+                console.log("Session data file was copied for this session");
+            }
+        );
+    })
 }
-

@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,3 +37,7 @@ motif_test()
 let graph_loc = path.join(__dirname, '../js/graph.js')
 var graph_test = require(graph_loc);
 graph_test()
+
+let data_loc = path.join(__dirname, '../js/datatable.js')
+var data_test = require(data_loc);
+data_test()

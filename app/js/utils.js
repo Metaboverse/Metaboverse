@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,51 +31,93 @@ var $ = require("jquery");
 var fs = require("fs");
 var path = require("path");
 var pixelWidth = require("string-pixel-width");
+var { ipcRenderer } = require('electron');
 
-var session_file = path.join(__dirname, "..", "data", "session_data.json");
 
 function write_json(session_data) {
-  fs.writeFileSync(session_file, JSON.stringify(session_data), function(err) {
-    if (err) throw err;
-    console.log("Session data updated");
+  ipcRenderer.invoke('get-paths').then((paths) => {
+    fs.writeFileSync(paths.sessionFilePath, JSON.stringify(session_data), function(err) {
+      if (err) throw err;
+      console.log("Session data updated");
+    });
   });
 }
 
 function update_session_info(key_update, value_update, abbrev_dict = null) {
 
-  try {
-    var session = JSON.parse(fs.readFileSync(session_file).toString(), "utf8");
+  ipcRenderer.invoke('get-paths').then((paths) => {
+    var session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString(), "utf8");
     session[key_update] = value_update;
-
+    
     // Where database output location is, make this the output location
     if (key_update === "database_url") {
       file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
       session["output"] = file_path;
     } else if (key_update === "curation_url") {
+      console.log(key_update + ":", value_update)
       file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
       session["output"] = file_path;
     } else {}
 
-    if ((abbrev_dict !== null) & (key_update === "organism")) {
+    if ((abbrev_dict != null) & (key_update === "organism")) {
       session["organism_id"] = abbrev_dict[value_update];
     }
     write_json(session);
-  } catch (e) {
-    console.log("Could not update session variable: ", key_update)
-  }
-
+    console.log("Updated session variable:", "\"" + key_update + "\"", "to ", "\"" + value_update + "\"")
+  });
 }
 
-function get_session_info(key_update) {
+function get_session_info(key_update, callback) {
+  ipcRenderer.invoke('get-paths').then((paths) => {
+    var session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString());
+    try {
+      value = session[key_update];
+      callback(null, value);
+    } catch (e) {
+      console.log("Could not update session variable: ", key_update)
+      callback(e);
+    }
+  });
+}
 
+async function get_session_info_async(key_update) {
+  let paths = await ipcRenderer.invoke('get-paths');
   try {
-    var session = JSON.parse(fs.readFileSync(session_file).toString());
-    value = session[key_update];
+    let session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString());
+    return session[key_update];
+  } catch (e) {
+    console.log("Could not update session variable: ", key_update);
+    throw e; 
+  }
+}
+
+async function get_default_async(key) {
+  let paths = await ipcRenderer.invoke('get-paths');
+  try {
+    let session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString());
+    let value = session[key];
     return value;
   } catch (e) {
-    console.log("Could not update session variable: ", key_update)
+    console.log("Could not parse session variable: ", key);
+    throw e;  
   }
 }
+
+async function get_argument_async(key, callback) {
+  let paths = await ipcRenderer.invoke('get-paths');
+  try {
+    let session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString());
+    let value = session[key];
+    if (value == null) {
+      value = "None";
+    }
+    return value;
+  } catch (e) {
+    console.log("Could not parse session variable: ", key);
+    throw e;  
+  }
+}
+
 
 // http://www.alessioatzeni.com/blog/simple-tooltip-with-jquery-only-text/
 $(document).ready(function() {
@@ -109,23 +151,6 @@ $(document).ready(function() {
     });
 });
 
-function getDefault(key) {
-  var session = JSON.parse(fs.readFileSync(session_file).toString());
-  value = session[key];
-
-  return value;
-}
-
-function getArgument(key) {
-  var session = JSON.parse(fs.readFileSync(session_file).toString());
-  value = session[key];
-
-  if (value === null) {
-    value = "None";
-  }
-
-  return value;
-}
 
 function determineWidth(input) {
   if (pixelWidth(input) < 1662) {
@@ -166,4 +191,20 @@ function formatDate(date) {
   var timePart = [ date.getHours(), date.getMinutes(), date.getSeconds() ].map(dateComponentPad);
 
   return datePart.join('-') + '-' + timePart.join('-');
+}
+
+
+function get_script_name() {
+
+  if (navigator.appVersion.indexOf("Win") != -1) {
+    scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
+  } else if (navigator.appVersion.indexOf("Mac") != -1) {
+    scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-darwin");
+  } else if (navigator.appVersion.indexOf("Linux") != -1) {
+    scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
+  } else {
+    console.log("Unable to locate metaboverse-cli binary")
+  }
+
+  return scriptFilename;
 }

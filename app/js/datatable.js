@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,89 @@ SOFTWARE.
 */
 
 var $ = require("jquery");
-var dt = require("datatables.net")();
+var dt = require("datatables.net")(window, $);
 var fs = require("fs");
+var { spawn } = require('child_process');
 var path = require("path");
 var d3 = require("d3");
-var { jStat } = require("jstat");
+var { ipcRenderer } = require('electron');
 
-var session_file = path.join(__dirname, "..", "data", "session_data.json");
+
+
+// -------------- //
+// Stat functions //
+// -------------- //
+var jStat = require('jstat');
+
+function mean(arr) {
+    let sum = arr.reduce((a, b) => a + b, 0);
+    return sum / arr.length;
+}
+
+function variance(arr, mean) {
+    return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (arr.length - 1);
+}
+
+function pValue(arr1, arr2) {
+    let mean1 = mean(arr1);
+    let mean2 = mean(arr2);
+    let var1 = variance(arr1, mean1);
+    let var2 = variance(arr2, mean2);
+    let t = (mean1 - mean2) / Math.sqrt(var1 / arr1.length + var2 / arr2.length);
+	let df = arr1.length + arr2.length - 2;
+	// We will use the fact that the t-distribution is symmetrical around 0.
+    // If t is positive, we need to calculate the right tail, so we do 1 - cdf(t).
+    // If t is negative, cdf(t) gives us the left tail, which is what we want.
+    if (t > 0) {
+        return 2 * (1 - jStat.studentt.cdf(t, df));
+    } else {
+        return 2 * jStat.studentt.cdf(t, df);
+    }
+}
+
+function benjaminiHochberg(pValues) {
+    // Sort the p-values in ascending order and keep track of their original indices
+    let sortedIndices = Array.from(pValues.keys()).sort((a, b) => pValues[a] - pValues[b]);
+    let sortedPValues = sortedIndices.map(i => pValues[i]);
+
+    // Apply the Benjamini-Hochberg procedure
+    let bhValues = sortedPValues.map((p, i, arr) => Math.min(1, p * arr.length / (i + 1)));
+
+    // Put the corrected p-values back in their original order
+    let correctedPValues = Array(pValues.length);
+    sortedIndices.forEach((originalIndex, i) => {
+        correctedPValues[originalIndex] = bhValues[i];
+    });
+
+    return correctedPValues;
+}
+
+function standardError(arr) {
+    return jStat.stdev(arr, true) / Math.sqrt(arr.length);  // use the unbiased standard deviation
+}
+
+function confidenceInterval(arr, confidence) {
+    const meanValue = mean(arr);
+    const margin = jStat.studentt.inv((1 + confidence) / 2, arr.length - 1) * standardError(arr);
+    return [meanValue - margin, meanValue + margin];
+}
+
+function confidenceInterval_twoArray(arr1, arr2){
+
+	let confidenceLevels = [0.9, 0.95, 0.99];
+	let confidenceIntervals = confidenceLevels.map(level => {
+		return [level, [confidenceInterval(arr1, level), confidenceInterval(arr2, level)]];
+	});
+
+	return confidenceIntervals;
+}
+// ------------------ //
+// End stat functions //
+// ------------------ //
+
 
 var use_stat_type;
+var selected_columns = [];
 
 var opts = { // Spinner opts from http://spin.js.org/
 	lines: 10, // The number of lines to draw
@@ -106,7 +180,7 @@ var padj_string = `
 	<br><br>
 	<b>P-value (normal)</b>: Sample comparisons will use a 2-group ANOVA comparison to calculate a base p-value, with no addition p-value correction afterwards. Assumes data are normally distributed.
 	<br><br>
-	<b>Confidence Intervals</b>: Confidence intervals will be calculated for each experimental/control group. This method uses the jStat.normalci() method, assuming the input data array are normally distributed.
+	<b>Confidence Intervals</b>: Confidence intervals will be calculated for each experimental/control group. This method assumes the input data array are normally distributed.
 	<br><br>
 	If you click this button after a sample comparison has already been performed, the change in p-value handling will only be applied to new comparisons. If you want to apply the selected procedure to other previous comparisons,
 	you will need to start the data processing over. You can do this by clicking the Refresh icon on the top left of this page (<b>&#x21bb;</b>), closing this window and re-opening the data formatter, or you can refresh the page by clicking "View" -> "Reload" or CTRL + R (on Windows/Linux) or CMD + R (on MacOS).
@@ -251,7 +325,7 @@ window.addEventListener("load", function(event) {
 		});
 
 	// Add adj_p checkbox 
-	document.getElementById("stat_type").onclick = function(event) {
+	document.getElementById("stat_type").onchange = function(event) {
 		use_stat_type = document.getElementById("stat_type").value;
 		clear_elements();
 		console.log("Using stat type: ", use_stat_type)
@@ -307,8 +381,9 @@ window.addEventListener("load", function(event) {
 					data: datatable.slice(1),
 					columns: _columns,
 					select: {
-						style:    'api',
-            			selector: 'td:first-child'
+						style:    'os',
+            			selector: 'td:first-child',
+						items: 'column'
 					},
 					scrollX: true,
 					autoWidth: false,
@@ -319,7 +394,7 @@ window.addEventListener("load", function(event) {
 				} );
 
 				// from https://www.gyrocode.com/articles/jquery-datatables-how-to-select-columns/
-				$('#loaded-table').on('click', 'thead th:not(:first-child)', function(e) {
+				/*$('#loaded-table').on('click', 'thead th:not(:first-child)', function(e) {
 					if (table.column(this, { selected: true }).length) {
 						table.column(this).deselect();
 						$( table.column( this ).nodes() ).removeClass( 'highlight' );
@@ -328,9 +403,7 @@ window.addEventListener("load", function(event) {
 						$( table.column( this ).nodes() ).addClass( 'highlight' );  
 					}
 				} );
-				$('#loaded-table-el').on( 'click', 'tbody td', function () {
-					table.cell( this ) //.edit();
-				} );
+				*/
 
 				$('#select-datatype').html(datatypes_string);
 				d3.select("#button-2condition")
@@ -420,6 +493,33 @@ function parse_columns(datatable) {
 
 function select_groups(datatable, table) {
 
+	$('#loaded-table').on('click', 'thead th:not(:first-child)', function(e) {
+		var column = table.column(this);
+		var index = column.index();
+	
+		if ($(column.nodes()).hasClass('selected')) {
+			$(column.nodes()).removeClass('selected highlight');
+			
+			// remove the column's index from selected_columns
+			var columnIndex = selected_columns.indexOf(index);
+			if (columnIndex > -1) {
+				selected_columns.splice(columnIndex, 1);
+			}
+		} else {
+			$(column.nodes()).addClass('selected highlight');
+	
+			// add the column's index to selected_columns
+			if (selected_columns.indexOf(index) === -1) {
+				selected_columns.push(index);
+			}
+		}
+	});
+
+	$('#loaded-table-el').on( 'click', 'tbody td', function () {
+		table.cell( this ) //.edit();
+	} );
+
+
 	var counter = 1;
 	var processed_table;
 	$('#define-groups').html(groups_string);
@@ -460,23 +560,27 @@ function select_groups(datatable, table) {
 
 	var control_selection = null;
 	var experiment_selection = null;
+
 	d3.select("#button-group-control")
 		.on("click", function(d) {
-			let output = handle_selection(datatable, table, "#text-group-control");
+			let output = handle_selection(datatable, table, selected_columns, "#text-group-control");
 			control_selection = output[0];
 			table = output[1];
+			selected_columns = output[2];
 		})
 	
 	d3.select("#button-group-experiment")
 		.on("click", function(d) {
-			let output = handle_selection(datatable, table, "#text-group-experiment");
+			let output = handle_selection(datatable, table, selected_columns, "#text-group-experiment");
 			experiment_selection = output[0];
 			table = output[1];
+			selected_columns = output[2];
 		})
 
 	d3.select('#button-group-add')
 		.on("click", function(d) {
-			if (control_selection !== null && experiment_selection !== null) {
+			console.log(selected_columns)
+			if (control_selection != null && experiment_selection != null) {
 
 				let fc_array = [];
 				let p_array = [];
@@ -489,16 +593,12 @@ function select_groups(datatable, table) {
 							exp.reduce((a, b) => a + b, 0) / con.reduce((a, b) => a + b, 0)
 						)
 					);
-					p_array.push(
-						ttest(exp, con)
-					);
-					ci_array.push(
-						ci_calc(exp, con)
-					);
+					p_array.push(pValue(exp, con));
+
+					ci_array.push(confidenceInterval_twoArray(exp, con));
 				}
-				let bh_array = bh_corr(p_array);
-				console.log(ci_array)
-				
+				let bh_array = benjaminiHochberg(p_array);
+
 				// Add new column headers for new data 
 				let stat_type;
 				let this_id = document.getElementById('fname').value;
@@ -550,6 +650,11 @@ function select_groups(datatable, table) {
 	d3.select('#button-group-check')
 		.on("click", function(d) {
 
+			// Print error message that this feature is disabled for the time being 
+			alert("This feature is currently disabled as the MetaboAnalyst API is no longer available. We are actively working on a solution. Please check back in a later version.")
+			// Skip the rest of the function 
+			return
+
 			//get current names
 			var entity_string = "";
 			var entity_names = datatable.slice(1).map(function(x) {
@@ -590,7 +695,7 @@ function select_groups(datatable, table) {
 
 	d3.select('#button-group-export')
 		.on("click", function(d) {
-			write_table(processed_columns, processed_data)
+			saveTableData(processed_columns, processed_data)
 		})
 }
 
@@ -614,20 +719,17 @@ function update_table(_identifier, _element, _display, _data, _cols) {
 }
 
 
-function handle_selection(datatable, table, selector) {
+function handle_selection(datatable, table, selected_columns, selector) {
 
-	//parse selection
-	let selected_columns = [];
-	table.columns( { selected: true } ).every(function(d) {
-		selected_columns.push(d)
-	} )
-	selected_columns = selected_columns.filter(i => i !== 0); // prevent index selection
+	console.log(selector)
+	console.log(selected_columns)
+	this_selection = selected_columns.filter(i => i !== 0); // prevent index selection
 
 	//display selection
 	let formatted_names = "";
-	for (let x in selected_columns) {
-		formatted_names = formatted_names + datatable[0][selected_columns[x]];
-		if (x != selected_columns.length - 1) {
+	for (let x in this_selection) {
+		formatted_names = formatted_names + datatable[0][this_selection[x]];
+		if (x != this_selection.length - 1) {
 			formatted_names = formatted_names + ", "
 		}
 	}
@@ -635,22 +737,22 @@ function handle_selection(datatable, table, selector) {
 		.html("<b>" + formatted_names + "</b>")
 
 	//clear selections
-	$( table.cells().nodes() ).removeClass( 'highlight' );
-	table.columns( { selected: true } ).deselect();
-	
-	return [selected_columns, table];
+	$(table.cells().nodes()).removeClass('selected highlight');
+	selected_columns = [];
+
+	return [this_selection, table, selected_columns];
 }
 
-function write_table(columns, data) {
-	
+async function saveTableData(processed_columns, processed_data) {
+
 	let output_data = "";
-	for (let c in columns) {
-		output_data = output_data + columns[c].title + "\t"
+	for (let c in processed_columns) {
+		output_data = output_data + processed_columns[c].title + "\t"
 	}
-	for (let d in data) {
+	for (let d in processed_data) {
 		output_data = output_data + "\n" 
-		for (let _d in data[d]) {
-			let write_data = data[d][_d];
+		for (let _d in processed_data[d]) {
+			let write_data = processed_data[d][_d];
 			if (Array.isArray(write_data)) {
 				output_data = output_data + JSON.stringify(write_data) + "\t";
 			} else {
@@ -659,81 +761,15 @@ function write_table(columns, data) {
 		}
 	}
 
-    filename = dialog
-      	.showSaveDialog({
-			defaultPath: ".." + path.sep + ".." + path.sep,
-			properties: ["createDirectory"],
-			filters: [
-				{ name: "tab-delimited (*.tsv; *.txt)", extensions: ["txt", "tsv"] }
-			]
-      	})
-      	.then(result => {
-			let hasExtension = /\.[^\/\\]+$/.test(result.filePath);
-			if (hasExtension === false) {
-				result.filePath = `${ result.filePath }.${ "txt" }`;
-			}
-			filename = result.filePath;
-			if (filename === undefined) {
-				alert("File selection unsuccessful");
-				return;
-			}
-
-			fs.writeFileSync(filename, output_data, function(err) {
-				if (err) throw err;
-				console.log("Table exported");
-			});
-		})
-		.catch(err => {
-			console.log(err);
-		});
-};
-
-function ttest(arr1, arr2) {
-	// function for calculating the f-statistic for two independent sample sets
-
-	// calculate the p-value
-	let p = jStat.anovaftest(arr1, arr2);
-
-	return p;
-}
-
-function ci_calc(arr1, arr2) {
-	let intvl1_90 = jStat.normalci(jStat.mean(arr1), 0.9, arr1) //(arr1);
-	let intvl1_95 = jStat.normalci(jStat.mean(arr1), 0.95, arr1) //(arr1);
-	let intvl1_99 = jStat.normalci(jStat.mean(arr1), 0.99, arr1) //(arr1);
-	let intvl2_90 = jStat.normalci(jStat.mean(arr2), 0.9, arr2) //(arr1);
-	let intvl2_95 = jStat.normalci(jStat.mean(arr2), 0.95, arr2) //(arr1);
-	let intvl2_99 = jStat.normalci(jStat.mean(arr2), 0.99, arr2) //(arr1);
-
-	return [
-		[0.90, [intvl1_90, intvl2_90]],
-		[0.95, [intvl1_95, intvl2_95]],
-		[0.99, [intvl1_99, intvl2_99]]
-	];
-}
-
-function bh_corr(arr) {
-	// Implementation of BH method 
-
-	let sorted = arr.slice().sort( function(a, b) { return a - b } );
-	let ranks = arr.map( function(v) { return sorted.indexOf(v)+1 } );
-
-	let bh_array = [];
-	for (let i = 0; i < arr.length; i++) {
-
-		let _p = arr[i];
-		let _r = ranks[i];
-		let adj_p = (_r / arr.length) * _p;
-
-		if (adj_p > 1) {
-			bh_array.push(1.0);
-		} else {
-			bh_array.push(adj_p);
-		}
+	try {
+	  const filename = await ipcRenderer.invoke('save-file-dialog-table', output_data);
+	  if (filename === undefined) {
+		alert("File selection unsuccessful");
+	  }
+	} catch (err) {
+	  console.log(err);
 	}
-
-	return bh_array;
-}
+  }
 
 function clear_elements() {
 	$('#define-groups').html("");
@@ -824,14 +860,74 @@ function makeDistributions(datatable) {
 function kernelDensityEstimator(kernel, X) {
 	// See https://d3-graph-gallery.com/graph/density_basic.html
 	return function(V) {
-	  return X.map(function(x) {
+		return X.map(function(x) {
 		return [x, d3.mean(V, function(v) { return kernel(x - v); })];
-	  });
+		});
 	};
-  }
-  function kernelEpanechnikov(k) {
+}
+function kernelEpanechnikov(k) {
 	// See https://d3-graph-gallery.com/graph/density_basic.html
 	return function(v) {
-	  return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
+		return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
 	};
-  }
+}
+
+// Unit tests 
+function test_pValue() {
+	let exp = [1, 2, 3, 4, 5];
+	let con = [5, 6, 7, 8, 9];
+	let p = pValue(exp, con);
+	return p.toFixed(5);
+}
+
+function test_benjaminiHochberg() {
+	let p = [0.5, 0.1, 0.2, 0.3, 0.4, 0.001, 0.04];
+	let bh = benjaminiHochberg(p);
+	// round bh values in array to 2 decimals 
+	for (let i in bh) {
+		bh[i] = bh[i].toFixed(2);
+	}
+	return bh;
+}
+
+function test_confidenceInterval_twoArray() {
+	let exp = [1, 2, 3, 4, 5];
+	let con = [5, 6, 7, 8, 9];
+	let ci = confidenceInterval_twoArray(exp, con);
+	
+	// Convert all values in arrays to 2 decimals
+	for (let i in ci) {
+		ci[i][1] = ci[i][1].map(arr => arr.map(x => parseFloat(x.toFixed(2))));
+	}  
+	return ci;
+}
+
+function arraysEqual(a, b) {
+    return a.length === b.length && a.every((val, i) => val === b[i]);
+}
+
+function multiDimensionalArrayEqual(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function test() {
+	var assert = require('assert');
+	var { JSDOM } = require('jsdom');
+	var jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+	var { window } = jsdom;
+	$ = global.jQuery = require('jquery')(window);
+
+	let valid_p = 0.00395;
+	let valid_bh = ["0.50","0.23","0.35","0.42","0.47","0.01","0.14"];
+	let valid_ci = [
+		[0.9, [[1.49, 4.51], [5.49, 8.51]]],
+		[0.95, [[1.04, 4.96], [5.04, 8.96]]],
+		[0.99, [[-0.26, 6.26], [3.74, 10.26]]]
+	];
+	
+	assert(test_pValue() == valid_p)
+	assert(arraysEqual(test_benjaminiHochberg(), valid_bh))
+	assert(multiDimensionalArrayEqual(test_confidenceInterval_twoArray(), valid_ci))
+	
+}
+module.exports = test

@@ -5,13 +5,14 @@
 ### - `parallel` command line tool needs to be installed on your system 
 ###       (`brew install parallel` or `sudo apt-get install parallel`)
 ### 
-### Execute as sudo: `$ sudo bash build.sh`
+### Execute as sudo: `$ bash build.sh`
 ### You may be prompted to login to Sourceforge for DB uploads
+### If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ###
 
 
 # Change this for each release 
-export VERSION=0.10.1b1
+export VERSION=0.10.1
 
 
 # Check that these paths are correct 
@@ -22,6 +23,9 @@ if [[ ${DIR} == *"resources"* ]]; then
     export DIR="$(dirname ${DIR})"
 fi
 echo -e "\nDIR: ${DIR}\n"
+
+# Make sure user permissions are set for ease of downstream building 
+#sudo chown -R $USER ${DIR}
 
 export CONDA=~/miniconda3
 export CONDA_PATH=~/miniconda3/etc/profile.d/conda.sh
@@ -88,15 +92,15 @@ done
 
 # Build cli 
 echo -e "\nBuilding the CLI..."
-chmod +x ${DIR}/resources/build-python.sh
+#chmod 755 ${DIR}/resources/build-python.sh
 ${DIR}/resources/build-python.sh
-chmod +wrx ${CLI_PATH}/metaboverse-cli*
+#chmod 755 ${CLI_PATH}/metaboverse-cli*
 cp ${CLI_PATH}/dist/metaboverse-cli* ${CLI_DEST}
 
 
 # Build electron app 
 echo -e "\nBuilding the electron app..."
-chmod +x ${DIR}/resources/build-electron.sh
+#chmod 755 ${DIR}/resources/build-electron.sh
 ${DIR}/resources/build-electron.sh
 
 
@@ -111,7 +115,7 @@ if [ ${BUILD_DB} -eq 1 ]; then
         cp ${CLI_PATH}/dist/metaboverse-cli* ${BUILD_PATH}/metaboverse-cli-nix
         export BUILD_EXE=${BUILD_PATH}/metaboverse-cli-nix
     fi
-    chmod +x ${DIR}/resources/build-db.sh
+    #chmod 755 ${DIR}/resources/build-db.sh
     ${DIR}/resources/build-db.sh
 else
     echo -e "\nNot building database..."

@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +69,13 @@ var opts = { // Spinner opts from http://spin.js.org/
   position: 'relative', // Element positioning
 };
 
-database_url = get_session_info("database_url");
+get_session_info("database_url", (err, value) => {
+  if (err) {
+    console.log(err)
+  } else {
+    var database_url = value;
+  }
+});
 
 class MetaGraph {
   constructor(data) {
@@ -2155,14 +2161,14 @@ class MetaGraph {
         if (modifier === false) {
           for (let x in nodes[items[i]].values) {
             let _x = nodes[items[i]].values[x];
-            if (_x !== null) {
+            if (_x != null) {
               all_values.push(_x);
             }
           }
         } else {
           for (let x in nodes[items[i][0]].values) {
             let _x = nodes[items[i][0]].values[x];
-            if (_x !== null) {
+            if (_x != null) {
               all_values.push(_x);
             }
           }
@@ -2216,7 +2222,7 @@ class MetaGraph {
       let _s = _i.stats;
       let _inf = _i.inferred;
       let _v_ = [_v, _s];
-      if (_v[0] !== null && _t !== "complex_component" && _inf !== "true") {
+      if (_v[0] != null && _t !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {
@@ -2357,7 +2363,7 @@ class MetaGraph {
       let _s = _i.stats;
       let _inf = _i.inferred;
       let _v_ = [_v, _s];
-      if (_v[0] !== null && _st !== "complex_component" && _inf !== "true") {
+      if (_v[0] != null && _st !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {
@@ -2524,7 +2530,7 @@ class MetaGraph {
       let _v = _i.values;
       let _s = _i.stats;
       let _inf = _i.inferred;
-      if (_v[0] !== null && _t !== "complex_component" && _inf !== "true") {
+      if (_v[0] != null && _t !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {
@@ -2641,7 +2647,7 @@ class MetaGraph {
       let _s = _i.stats;
       let _inf = _i.inferred;
       let _v_ = [_v, _s];
-      if (_v[0] !== null && _t !== "complex_component" && _inf !== "true") {
+      if (_v[0] != null && _t !== "complex_component" && _inf !== "true") {
         let dash_instruction;
         let _set = new Set(_v)
         if (_set.size === 1) {

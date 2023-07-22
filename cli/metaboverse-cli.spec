@@ -39,6 +39,7 @@ a = Analysis(
   hiddenimports=[
     'scipy.special.cython_special',
     'scipy.spatial.transform._rotation_groups',
+    'sklearn',
     'cmath'],
   hookspath=[],
   runtime_hooks=[],

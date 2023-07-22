@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,80 +27,84 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-const exec = require("child_process").exec;
+var exec = require("child_process").exec;
+var { ipcRenderer } = require("electron");
 var path = require("path");
 var fs = require("fs");
 var $ = require("jquery");
-
-var session_file = path.join(__dirname, "..", "data", "session_data.json");
-var progress_template_file = path.join(__dirname, "..", "data", "progress_log_template.json");
-var progress_file = path.join(__dirname, "..", "data", "progress_log.json");
-
 var timer = 5000;
 
-var scriptFilename;
+let database_url; 
+let processed_bool; 
+let provided_data_bool; 
+let experiment_name;
+let output;
+let labels;
+let blocklist;
+
 
 console.log("Operating System information:")
 console.log(navigator.appVersion)
 
-if (navigator.appVersion.indexOf("Win") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-windows.exe");
-} else if (navigator.appVersion.indexOf("Mac") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-darwin");
-} else if (navigator.appVersion.indexOf("Linux") != -1) {
-  scriptFilename = path.join(__dirname, "..", "python", "metaboverse-cli-linux");
-} else {
-  console.log("Unable to locate metaboverse-cli binary")
+var scriptFilename = get_script_name();
+
+
+async function set_watch_files() {
+
+  let paths = await ipcRenderer.invoke('get-paths');
+  fs.copyFile(
+    paths.progressFileTemplatePath,
+    paths.progressFilePath,
+    (err) => {
+      if (err) throw err;
+      console.log("Progress log file created");
+    }
+  );
+  fs.watch(paths.progressFilePath, function(event, filename) {
+    var elem = document.getElementById("progressBar");
+    var sum_values = 0;
+    var session = JSON.parse(fs.readFileSync(paths.progressFilePath).toString());
+    for (j in session) {
+      sum_values += session[j];
+    }
+    if (sum_values >= 100) {
+      elem.style.width = "107%";
+      elem.innerHTML = "Curation complete. Loading file...";
+    } else {
+      elem.style.width = sum_values + 7 + "%";
+      elem.innerHTML = sum_values + "%";
+    }
+    
+    if (sum_values >= 100) {
+      setTimeout(function(){
+        displayOptions();
+      }, timer);
+    }
+  });
+}
+set_watch_files();
+
+async function get_omics_bool_async() {
+  var transcriptomics = false;
+  var proteomics = false;
+  var metabolomics = false;
+  var transcriptomics_bool = await get_default_async("transcriptomics");
+  var proteomics_bool = await get_default_async("proteomics");
+  var metabolomics_bool = await get_default_async("metabolomics");
+
+  if (transcriptomics_bool != null) {
+    transcriptomics = true;
+  }
+  if (proteomics_bool != null) {
+    proteomics = true;
+  }
+  if (metabolomics_bool != null) {
+    metabolomics = true;
+  }
+
+  return {transcriptomics, proteomics, metabolomics};
 }
 
-fs.copyFile(
-  progress_template_file,
-  progress_file,
-  err => {
-    if (err) throw err;
-    console.log("Progress log file was copied for this session");
-  }
-);
-
-fs.watch(progress_file, function(event, filename) {
-  var elem = document.getElementById("progressBar");
-  var sum_values = 0;
-  var session = JSON.parse(fs.readFileSync(progress_file).toString());
-  for (j in session) {
-    sum_values += session[j];
-  }
-  if (sum_values >= 100) {
-    sum_values = 100;
-  }
-  elem.style.width = sum_values + 5 + "%";
-  elem.innerHTML = sum_values + "%";
-
-  if (sum_values >= 100) {
-    setTimeout(function(){
-      displayOptions();
-    }, timer);
-  }
-});
-
-var transcriptomics = false;
-var proteomics = false;
-var metabolomics = false;
-
-var t_val = getDefault("transcriptomics");
-var p_val = getDefault("proteomics");
-var m_val = getDefault("metabolomics");
-
-if (t_val !== null) {
-  transcriptomics = true;
-}
-
-if (p_val !== null) {
-  proteomics = true;
-}
-
-if (m_val !== null) {
-  metabolomics = true;
-}
 
 // Run Python CLI
 // Assemble parameters based on available session data
@@ -125,13 +129,15 @@ function parseCommand(args_dict) {
   return commandString;
 }
 
-function write_log(command, stdout, stderr) {
+async function write_log(command, stdout, stderr) {
 
+  experiment_name = await get_argument_async("experiment_name");
+  experiment_name = experiment_name.replace(/\s+/g, '-');
   let today = new Date().toISOString().slice(0, 10);
-  let experiment_name = getArgument("experiment_name").replace(/\s+/g, '-');
 
+  output = await get_argument_async("output");
   fs.writeFileSync(
-    path.join(getArgument("output").replace(/\"/g, ''), "metaboverse_session_" + experiment_name + ".log"),
+    path.join(output.replace(/\"/g, ''), "metaboverse_session_" + experiment_name + ".log"),
     "Operating System information:\n" +
     navigator.appVersion + "\n" +
     "Log date: " + today + "\n\n" +
@@ -165,88 +171,98 @@ function execute(command, callback) {
   });
 }
 
-runBuild = function(_callback) {
+runBuild = async function(_callback) {
 
-  if (get_session_info("processed") === true) {
-    var elem = document.getElementById("progressBar");
+  console.log("Parsing build arguments...")
+  var elem = document.getElementById("progressBar");
+  elem.style.width = "7%";
+  elem.innerHTML = "0%";
+
+  let paths = await ipcRenderer.invoke('get-paths');
+  processed_bool = await get_session_info_async("processed");
+  if (processed_bool == true) {
     elem.style.width = "100%";
     elem.innerHTML = "100%";
     setTimeout(function(){
       displayOptions();
     }, timer);
   } else {
-    curated = getArgument("curation_url")
-    let labels = getArgument("labels");
-    if (labels === "") {
+    curated = await get_argument_async("curation_url");
+    labels = await get_argument_async("labels");
+    blocklist = await get_argument_async("blocklist");
+    database_url = await get_argument_async("database_url");
+
+    if (labels == "" | labels == undefined) {
       labels = "0"
     } else {
       labels = labels.replace(/\s/g, '');
     }
-    let blocklist = getArgument("blocklist");
-    if (blocklist === "") {
+
+    if (blocklist == "" | blocklist == undefined) {
       blocklist = "no_blocklist"
     } else {
       blocklist = blocklist.replace(/\s/g, '');
     }
-    if (String(curated) !== "None") {
+
+    if (String(curated) != "None") {
       let db_url;
-      if (String(getArgument("database_url")) === "None") {
+      if (String(database_url) == "None" | String(database_url) == "null") {
         db_url = "\"find\"";
       } else {
-        db_url = String(decodeURIComponent(getArgument("database_url")));
+        db_url = String(decodeURIComponent(database_url));
       }
       graphDictionary = {
-        output: getArgument("output"),
+        output: await get_argument_async("output"),
         organism_id: "\"find\"",
         output_file: db_url,
         organism_curation_file: curated,
-        neighbor_dictionary_file: getArgument("neighbors_url"),
-        graph_template_file: getArgument("template_url"),
-        transcriptomics: getArgument("transcriptomics"),
-        proteomics: getArgument("proteomics"),
-        metabolomics: getArgument("metabolomics"),
-        database_source: getArgument("database_source"),
-        //additional_reactions: getArgument("additional_reactions"),
-        experiment_type: getArgument("experiment_type"),
-        experiment_name: getArgument("experiment_name"),
+        neighbor_dictionary_file: await get_argument_async("neighbors_url"),
+        graph_template_file: await get_argument_async("template_url"),
+        transcriptomics: await get_argument_async("transcriptomics"),
+        proteomics: await get_argument_async("proteomics"),
+        metabolomics: await get_argument_async("metabolomics"),
+        database_source: await get_argument_async("database_source"),
+        //additional_reactions: await get_argument("additional_reactions"),
+        experiment_type: await get_argument_async("experiment_type"),
+        experiment_name: await get_argument_async("experiment_name"),
         labels: labels,
         blocklist: blocklist,
-        force_new_curation: getArgument("forceNewCuration"),
-        collapse_with_modifiers: getArgument("collapseWithModifiers"),
-        broadcast_genes: getArgument("broadcastGeneExpression"),
-        broadcast_metabolites: getArgument("broadcastMetabolites"),
-        collapse_threshold: parseFloat(getArgument("collapse_threshold")) / 100,
-        progress_log: "\"" + progress_file + "\"",
-        session_data: "\"" + session_file + "\""
+        force_new_curation: await get_argument_async("forceNewCuration"),
+        collapse_with_modifiers: await get_argument_async("collapseWithModifiers"),
+        broadcast_genes: await get_argument_async("broadcastGeneExpression"),
+        broadcast_metabolites: await get_argument_async("broadcastMetabolites"),
+        collapse_threshold: parseFloat(await get_argument_async("collapse_threshold")) / 100,
+        progress_log: "\"" + paths.progressFilePath + "\"",
+        session_data: "\"" + paths.sessionFilePath + "\""
       }
     } else {
       graphDictionary = {
-        output: getArgument("output"),
-        organism_id: getArgument("organism_id"),
-        output_file: getArgument("database_url"),
-        organism_curation_file: getArgument("curation_url"),
-        neighbor_dictionary_file: getArgument("neighbors_url"),
-        graph_template_file: getArgument("template_url"),
-        transcriptomics: getArgument("transcriptomics"),
-        proteomics: getArgument("proteomics"),
-        metabolomics: getArgument("metabolomics"),
-        database_source: getArgument("database_source"),
-        //additional_reactions: getArgument("additional_reactions"),
-        experiment_type: getArgument("experiment_type"),
-        experiment_name: getArgument("experiment_name"),
+        output: await get_argument_async("output"),
+        organism_id: await get_argument_async("organism_id"),
+        output_file: await get_argument_async("database_url"),
+        organism_curation_file: await get_argument_async("curation_url"),
+        neighbor_dictionary_file: await get_argument_async("neighbors_url"),
+        graph_template_file: await get_argument_async("template_url"),
+        transcriptomics: await get_argument_async("transcriptomics"),
+        proteomics: await get_argument_async("proteomics"),
+        metabolomics: await get_argument_async("metabolomics"),
+        database_source: await get_argument_async("database_source"),
+        //additional_reactions: await get_argument_async("additional_reactions"),
+        experiment_type: await get_argument_async("experiment_type"),
+        experiment_name: await get_argument_async("experiment_name"),
         labels: labels,
         blocklist: blocklist,
-        force_new_curation: getArgument("forceNewCuration"),
-        collapse_with_modifiers: getArgument("collapseWithModifiers"),
-        broadcast_genes: getArgument("broadcastGeneExpression"),
-        broadcast_metabolites: getArgument("broadcastMetabolites"),
-        collapse_threshold: parseFloat(getArgument("collapse_threshold")) / 100,
-        progress_log: "\"" + progress_file + "\"",
-        session_data: "\"" + session_file + "\""
+        force_new_curation: await get_argument_async("forceNewCuration"),
+        collapse_with_modifiers: await get_argument_async("collapseWithModifiers"),
+        broadcast_genes: await get_argument_async("broadcastGeneExpression"),
+        broadcast_metabolites: await get_argument_async("broadcastMetabolites"),
+        collapse_threshold: parseFloat(await get_argument_async("collapse_threshold")) / 100,
+        progress_log: "\"" + paths.progressFilePath + "\"",
+        session_data: "\"" + paths.sessionFilePath + "\""
       }
     }
     var cmd = parseCommand(graphDictionary);
-    console.log("Running: " + scriptFilename + " curate" + cmd);
+    console.log("Running command:\n" + scriptFilename + " curate" + cmd);
     execute(scriptFilename + " curate" + cmd, output => {
       update_session_info("processed", true);
     });
@@ -254,13 +270,13 @@ runBuild = function(_callback) {
   }
 };
 
-function displayOptions() {
+async function displayOptions() {
 
   update_session_info("current_pathway", null);
-  database_url = get_session_info("database_url");
+  database_url = await get_session_info_async("database_url");
   try {
     var data = JSON.parse(fs.readFileSync(database_url).toString());
-    update_session_info("curation_url", data.metadata.organism_curation);
+    update_session_info("curation_url", data.metadata.organism_curation_file);
     update_session_info("output", data.metadata.output);
     update_session_info("output_file", data.metadata.output_file);
     update_session_info("organism_id", data.metadata.organism_id);
@@ -282,7 +298,6 @@ function displayOptions() {
     update_session_info("blocklist", data.metadata.blocklist);
     update_session_info("collapse_threshold", data.metadata.collapse_threshold);
 
-    update_session_info("curation_url", data.metadata.network);
     update_session_info("curation_version", data.metadata.curation_version);
     update_session_info("curation_date", data.metadata.curation_date);
 
@@ -299,12 +314,18 @@ function displayOptions() {
     update_session_info("model_version", data.metadata.model_version);
     update_session_info("model_date", data.metadata.model_date);
 
+    provided_data_bool = await get_session_info_async("provided_data");
+    var omics = await get_omics_bool_async();
+    var transcriptomics = omics[0];
+    var proteomics = omics[1];
+    var metabolomics = omics[2];
+
     if (
       (transcriptomics === true) |
       (proteomics === true) |
       (metabolomics === true) |
-      (get_session_info("provided_data") === true) |
-      (get_session_info("provided_data") === "true") |
+      (provided_data_bool == true) |
+      (provided_data_bool == "true") |
       (data.categories.length > 0)
     ) {
       $("#content").html(
@@ -316,6 +337,9 @@ function displayOptions() {
         '<a href="visualize.html"><div id="continue"><font size="3">Visualize</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a>'
       );
     }
+    var elem = document.getElementById("progressBar");
+    elem.style.width = "0%";
+    elem.innerHTML = "";
   } catch (e) {
     //alert('Failed to open database: \n' + database_url)
     //var elem = document.getElementById("progressBar");
@@ -326,6 +350,7 @@ function displayOptions() {
 
 window.addEventListener("load", function(event) {
   $('#content').append('')
+  console.log("Loading build script...")
   runBuild()
 
   document.getElementById("menurefresh").onclick = function(event) {

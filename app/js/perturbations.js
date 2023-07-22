@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,123 +35,11 @@ var superSelection = null;
 var selector = "#graph";
 var _width = window.innerWidth;
 var _height = window.innerHeight - 75;
-
+var database
 // Allow absolute threshold or p-value
 // Allow omics selection
 graph_genes = true;
 collapse_reactions = true;
-
-// MAIN
-database_url = get_session_info("database_url");
-console.log("Database path: " + database_url);
-
-try {
-  var data = JSON.parse(fs.readFileSync(database_url).toString());
-} catch (e) {
-  alert('Failed to open: \n' + database_url)
-}
-console.log(data.metadata)
-var stat_type = data.metadata.stat_type;
-set_stat_button(stat_type);
-add_stat_threshold(stat_type);
-
-var superPathwayDict = make_superPathway_dictionary(data);
-
-var motif_outputs = gatherMotifs(data, data.categories);
-var collapsed_global_motifs = motif_outputs[0];
-var global_motifs = motif_outputs[1];
-
-let names = data.labels.split(',');
-timecourse = checkCategories(data.categories, names); //, data.names);
-
-make_menu(
-  superPathwayDict,
-  "superPathwayMenu",
-  "Select a super pathway...",
-  (provide_all = true)
-);
-
-var path_mapper = data.motif_reaction_dictionary
-
-node_dict = {};
-for (let node in data.nodes) {
-  node_dict[data.nodes[node]['id']] = data.nodes[node];
-}
-
-// Generate expression and stats dictionaries
-let expression_dict = {};
-let stats_dict = {};
-for (let x in data.nodes) {
-  let id = data.nodes[x]['id'];
-  let expression = data.nodes[x]['values'];
-  let stats = data.nodes[x]['stats'];
-
-  if (!expression.includes(null)) {
-    expression_dict[id] = expression;
-  }
-  if (!stats.includes(null)) {
-    stats_dict[id] = stats;
-  }
-
-}
-
-// For quicker searching with new motifs
-let reaction_entity_dictionary = {};
-for (rxn in data.collapsed_reaction_dictionary) {
-
-  let r = data.collapsed_reaction_dictionary[rxn];
-  let entities = [];
-  for (x in r["reactants"]) {
-    entities.push(r["reactants"][x]);
-  }
-  for (x in r["products"]) {
-    entities.push(r["products"][x]);
-  }
-  for (x in r["modifiers"]) {
-    entities.push(r["modifiers"][x][0]);
-  }
-  for (x in r["additional_components"]) {
-    entities.push(r["additional_components"][x]);
-  }
-
-  reaction_entity_dictionary[r.id] = entities;
-}
-
-var update_nodes = {};
-for (n in data.nodes) {
-  update_nodes[data.nodes[n].id] = data.nodes[n];
-}
-data.nodes = update_nodes;
-
-var update_links = {};
-for (l in data.links) {
-  let link_id = data.links[l].source + "," + data.links[l].target;
-  update_links[link_id] = data.links[l];
-}
-data.links = update_links;
-
-data.blocklist = data.species_blocklist;
-data.blocklist = complete_blocklist(
-  data.blocklist,
-  data.metadata.blocklist,
-  data.nodes
-)
-
-// Initialize slider if timecourse
-if (timecourse === true) {
-  d3.select("circle#dot")
-    .attr("x", 0)
-}
-
-var selected_reactions = [];
-d3.select("#superPathwayMenu").on("change", changeSuperConnect);
-d3.select("#play_button_value").on("click", run_value_perturbations);
-d3.select("#play_button_stat").on("click", run_stat_perturbations);
-d3.select("#kNN_button").on("change", run_value_perturbations);
-d3.select("#hub_button").on("change", run_value_perturbations);
-d3.select("#stat_button").on("change", function() {
-  stat_input(data)
-});
 
 
 function add_stat_threshold(stat_type) {
@@ -395,3 +283,121 @@ function highlight_mapping(_selector) {
   d3.select(_selector)
     .style("background-color", "#FF7F7F");
 }
+
+
+async function main() {
+  
+  let database_url = await get_session_info_async("database_url");
+  console.log("Database path: " + database_url);
+
+  try {
+    var data = JSON.parse(fs.readFileSync(database_url).toString());
+  } catch (e) {
+    alert('Failed to open: \n' + database_url)
+  }
+  console.log(data.metadata)
+  var stat_type = data.metadata.stat_type;
+  set_stat_button(stat_type);
+  add_stat_threshold(stat_type);
+  
+  var superPathwayDict = make_superPathway_dictionary(data);
+  
+  var motif_outputs = gatherMotifs(data, data.categories);
+  var collapsed_global_motifs = motif_outputs[0];
+  var global_motifs = motif_outputs[1];
+  
+  let names = data.labels.split(',');
+  timecourse = checkCategories(data.categories, names); //, data.names);
+  
+  make_menu(
+    superPathwayDict,
+    "superPathwayMenu",
+    "Select a super pathway...",
+    (provide_all = true)
+  );
+  
+  var path_mapper = data.motif_reaction_dictionary
+  
+  node_dict = {};
+  for (let node in data.nodes) {
+    node_dict[data.nodes[node]['id']] = data.nodes[node];
+  }
+  
+  // Generate expression and stats dictionaries
+  let expression_dict = {};
+  let stats_dict = {};
+  for (let x in data.nodes) {
+    let id = data.nodes[x]['id'];
+    let expression = data.nodes[x]['values'];
+    let stats = data.nodes[x]['stats'];
+  
+    if (!expression.includes(null)) {
+      expression_dict[id] = expression;
+    }
+    if (!stats.includes(null)) {
+      stats_dict[id] = stats;
+    }
+  
+  }
+  
+  // For quicker searching with new motifs
+  let reaction_entity_dictionary = {};
+  for (rxn in data.collapsed_reaction_dictionary) {
+  
+    let r = data.collapsed_reaction_dictionary[rxn];
+    let entities = [];
+    for (x in r["reactants"]) {
+      entities.push(r["reactants"][x]);
+    }
+    for (x in r["products"]) {
+      entities.push(r["products"][x]);
+    }
+    for (x in r["modifiers"]) {
+      entities.push(r["modifiers"][x][0]);
+    }
+    for (x in r["additional_components"]) {
+      entities.push(r["additional_components"][x]);
+    }
+  
+    reaction_entity_dictionary[r.id] = entities;
+  }
+  
+  var update_nodes = {};
+  for (n in data.nodes) {
+    update_nodes[data.nodes[n].id] = data.nodes[n];
+  }
+  data.nodes = update_nodes;
+  
+  var update_links = {};
+  for (l in data.links) {
+    let link_id = data.links[l].source + "," + data.links[l].target;
+    update_links[link_id] = data.links[l];
+  }
+  data.links = update_links;
+  
+  data.blocklist = data.species_blocklist;
+  data.blocklist = complete_blocklist(
+    data.blocklist,
+    data.metadata.blocklist,
+    data.nodes
+  )
+  
+  // Initialize slider if timecourse
+  if (timecourse === true) {
+    d3.select("circle#dot")
+      .attr("x", 0)
+  }
+  
+  var selected_reactions = [];
+  d3.select("#superPathwayMenu").on("change", changeSuperConnect);
+  d3.select("#play_button_value").on("click", run_value_perturbations);
+  d3.select("#play_button_stat").on("click", run_stat_perturbations);
+  d3.select("#kNN_button").on("change", run_value_perturbations);
+  d3.select("#hub_button").on("change", run_value_perturbations);
+  d3.select("#stat_button").on("change", function() {
+    stat_input(data)
+  });
+}
+
+// MAIN
+main();

@@ -6,7 +6,7 @@ alias: metaboverse
 
 MIT License
 
-Copyright (c) 2022 Metaboverse
+Copyright (c) Jordan A. Berg, The University of Utah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,9 +33,6 @@ var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
-// Replace dialog function with electron's dialog
-
-
 
 var abbreviation_dict = {};
 $.getJSON(reactome_api, function(data) {
@@ -59,9 +56,16 @@ $.getJSON(reactome_api, function(data) {
     option.value = speciesList[i];
     menu.appendChild(option);
   }
-  if (get_session_info("organism") !== null) {
-    $('#speciesMenu').val(get_session_info("organism"));
-  }
+
+  get_session_info("organism", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value != null) {
+        $('#speciesMenu').val(value);
+      }
+    }
+  });
 });
 
 
@@ -83,76 +87,139 @@ window.addEventListener("load", function(event) {
   }
 
   // check if inputs already there
-  if (get_session_info("organism") !== null && get_session_info("database_url") !== null) {
-    $("#content").html(
-      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
-      window.scrollTo(0,document.body.scrollHeight);
-  } else if (get_session_info("curation_url") !== null || get_session_info("template_url") !== null && get_session_info("database_source") !== "reactome") {
-    $("#content").html(
-      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
-      window.scrollTo(0,document.body.scrollHeight);
-  } else if (get_session_info("curation_url") !== null && get_session_info("database_source") !== "biomodels/bigg") {
-    $("#content").html(
-      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
-      window.scrollTo(0,document.body.scrollHeight);
-  } else if (get_session_info("template_url") !== null) {
-    $("#content").html(
-      '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
-      window.scrollTo(0,document.body.scrollHeight);
-  } else {
-    $('#content').append('<a href=""></a>')
-  }
+  get_session_info("organism", (err, value) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (value != null) {
+        $('#speciesMenu').val(value);
+      }
+    }
+  });
 
-  // Get curation reference file from user
-  var curURL = get_session_info("curation_url");
-  var defaultCuration = "No file selected";
-  if (curURL !== null) {
-    if (curURL.split('.').pop().toLowerCase() === 'mvdb') {
-      defaultCuration = curURL;
-      $("#content").html(
-        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
-      window.scrollTo(0,document.body.scrollHeight);
+  async function checkSessionInfo() {
+    try {
+      // Request all session info at once.
+      const [organism, database_url, curation_url, template_url, database_source] = await Promise.all([
+        get_session_info_async("organism"),
+        get_session_info_async("database_url"),
+        get_session_info_async("curation_url"),
+        get_session_info_async("template_url"),
+        get_session_info_async("database_source"),
+      ]);
+  
+      if (organism != null && database_url != null) {
+        $("#content").html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+        window.scrollTo(0,document.body.scrollHeight);
+      } else if (curation_url != null || template_url != null && database_source !== "reactome") {
+        $("#content").html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+        window.scrollTo(0,document.body.scrollHeight);
+      } else if (curation_url != null && database_source !== "biomodels/bigg") {
+        $("#content").html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+        window.scrollTo(0,document.body.scrollHeight);
+      } else if (template_url != null) {
+        $("#content").html('<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+        window.scrollTo(0,document.body.scrollHeight);
+      } else {
+        $('#content').append('<a href=""></a>');
+      }
+    } catch (error) {
+      console.error("Error getting session info:", error);
     }
   }
-  $('#selectedFile').append('<font size="2">' + defaultCuration + '</font>');
-
-  // Get network template file from user
-  var templateURL = get_session_info("template_url");
-  var defaultTemplate = "No file selected";
-  if (templateURL !== null) {
-    if (templateURL.split('.').pop().toLowerCase() === 'mvrs') {
-      defaultTemplate = templateURL;
+  checkSessionInfo();
+  
+  async function checkCurationReferenceFile() {
+    try {
+      // Get curation reference file from user
+      var curURL = await get_session_info_async("curation_url");
+      var defaultCuration = "No file selected";
+      if (curURL != null) {
+        if (curURL.split('.').pop().toLowerCase() === 'mvdb') {
+          defaultCuration = curURL;
+          $("#content").html(
+            '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+          window.scrollTo(0,document.body.scrollHeight);
+        }
+      }
+      $('#selectedFile').append('<font size="2">' + defaultCuration + '</font>');
+    } catch (error) {
+      console.error("Error getting curation URL:", error);
     }
   }
-  $('#selectedTemplate').append('<font size="2">' + defaultTemplate + '</font>');
+  checkCurationReferenceFile();
 
-  // Get reaction neighbors dictionary from user
-  var neighborsURL = get_session_info("neighbors_url");
-  var defaultNeighbors = "No file selected";
-  if (neighborsURL !== null && neighborsURL !== undefined) {
-    if (neighborsURL.split('.').pop().toLowerCase() === 'mvrs') {
-      defaultNeighbors = neighborsURL;
+  async function checkNetworkTemplateFile() {
+    try {
+      // Get network template file from user
+      var templateURL = await get_session_info_async("template_url");
+      var defaultTemplate = "No file selected";
+      if (templateURL != null) {
+        if (templateURL.split('.').pop().toLowerCase() === 'mvrs') {
+          defaultTemplate = templateURL;
+        }
+      }
+      $('#selectedTemplate').append('<font size="2">' + defaultTemplate + '</font>');
+    } catch (error) {
+      console.error("Error getting template URL:", error);
     }
   }
-  $('#selectedNeighbors').append('<font size="2">' + defaultNeighbors + '</font>');
-
-  var defaultSBML = "No file selected";
-  if (curURL !== null) {
-    if (curURL.split('.').pop().toLowerCase() === 'sbml' || curURL.split('.').pop().toLowerCase() === 'xml') {
-      defaultSBML = curURL;
-      $("#content").html(
-        '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
-      window.scrollTo(0,document.body.scrollHeight);
+  checkNetworkTemplateFile();
+  
+  async function checkReactionNeighborsDictionary() {
+    try {
+      // Get reaction neighbors dictionary from user
+      var neighborsURL = await get_session_info_async("neighbors_url");
+      var defaultNeighbors = "No file selected";
+      if (neighborsURL != null && neighborsURL !== undefined) {
+        if (neighborsURL.split('.').pop().toLowerCase() === 'mvrs') {
+          defaultNeighbors = neighborsURL;
+        }
+      }
+      $('#selectedNeighbors').append('<font size="2">' + defaultNeighbors + '</font>');
+    } catch (error) {
+      console.error("Error getting neighbors URL:", error);
     }
   }
-  $('#selectedSBML').append('<font size="2">' + defaultSBML + '</font>');
-
-  var outputURL = get_session_info("database_url");
-  var defaultOutput = "No output selected";
-  if (outputURL !== null) {
-    defaultOutput = outputURL;
+  checkReactionNeighborsDictionary();
+  
+  async function checkSBMLFile() {
+    try {
+      // Get the file URL
+      var curURL = await get_session_info_async("curation_url");
+      var defaultSBML = "No file selected";
+  
+      if (curURL != null) {
+        let fileExtension = curURL.split('.').pop().toLowerCase();
+        if (fileExtension === 'sbml' || fileExtension === 'xml') {
+          defaultSBML = curURL;
+          $("#content").html(
+            '<a href="variables.html"><div id="continue"><font size="3">Continue</font></div></a><br><br>');
+          window.scrollTo(0,document.body.scrollHeight);
+        }
+      }
+      $('#selectedSBML').append('<font size="2">' + defaultSBML + '</font>');
+    } catch (error) {
+      console.error("Error getting curation URL:", error);
+    }
   }
-  $('#selectedOutput').append('<font size="2">' + defaultOutput + '</font>');
+  checkSBMLFile();
+  
+  async function checkOutputURL() {
+    try {
+      // Get the output URL
+      var outputURL = await get_session_info_async("database_url");
+      var defaultOutput = "No output selected";
+      if (outputURL != null && outputURL !== undefined) {
+        defaultOutput = outputURL;
+      }
+      $('#selectedOutput').append('<font size="2">' + defaultOutput + '</font>');
+    } catch (error) {
+      console.error("Error getting output URL:", error);
+    }
+  }
+  checkOutputURL();
+  
 
   document.getElementById("menurefresh").onclick = function(event) {
     event.preventDefault();
@@ -200,6 +267,10 @@ window.addEventListener("load", function(event) {
     const result = await ipcRenderer.invoke('save-file-dialog-mvrs');
     if (result) {
       console.log(result); // This will print the output location path
+      update_session_info("database_url", result);
+      $('#selectedOutput').html('<font size="2">' + result + '</font>');
+      output_change = true;
+      check_changes();
     }
     return result;
   }
@@ -208,11 +279,6 @@ window.addEventListener("load", function(event) {
   // Select output directory from pop-out menu
   document.getElementById("output-input").onclick = function(event) {
     filename = setOutput();
-    update_session_info("database_url", filename);
-    $('#selectedOutput').html('<font size="2">' + filename + '</font>');
-  
-    output_change = true;
-    check_changes();
   };
 
   // Drop pre-existing metabolic network curation for further analysis
@@ -334,24 +400,30 @@ window.addEventListener("load", function(event) {
     }
   };
 
-  if (get_session_info("forceNewCuration") === true) {
-    document.getElementById("force_new_curation").checked = true;
-  } else {
-    document.getElementById("force_new_curation").checked = false;
-  }
-  document.getElementById("force_new_curation").onclick = function(event) {
-    event.stopPropagation();
-    if (get_session_info("forceNewCuration") === false) {
-      update_session_info("forceNewCuration", true);
-    } else {
-      update_session_info("forceNewCuration", false);
+  async function checkForceNewCuration() {
+    try {
+      const forceNewCuration = await get_session_info_async("forceNewCuration");
+      if (forceNewCuration === true) {
+        document.getElementById("force_new_curation").checked = true;
+      } else {
+        document.getElementById("force_new_curation").checked = false;
+      }
+      document.getElementById("force_new_curation").onclick = async function(event) {
+        event.stopPropagation();
+        let currentCurationStatus = await get_session_info_async("forceNewCuration");
+        if (currentCurationStatus === false) {
+          update_session_info("forceNewCuration", true);
+        } else {
+          update_session_info("forceNewCuration", false);
+        }
+        console.log("Force fresh curation: ", await get_session_info_async("forceNewCuration"));
+      }
+    } catch (error) {
+      console.error("Error getting forceNewCuration:", error);
     }
-    console.log("Force fresh curation: ", get_session_info("forceNewCuration"))
   }
-
-
-
-
+  checkForceNewCuration();
+  
 });
 
 var output_change = false;

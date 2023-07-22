@@ -55,7 +55,7 @@ fi
 
 # Afterwards, upload to host
 cd ${BUILD_PATH}
-chmod -R -wrx ${BUILD_PATH}
+#chmod -R 755 ${BUILD_PATH}
 
 # Include the specific directories and their content
 for X in "${SPECIES[@]}"; do

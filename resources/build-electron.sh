@@ -20,7 +20,7 @@ npm test
 cd ${APP_PATH}/data/
 rm test_data.zip
 zip -q -r test_data.zip test_data
-chmod +wrx test_data.zip
+#chmod 755 test_data.zip
 
 
 # Build electron app
@@ -54,7 +54,7 @@ cd ..
 # Build release packages
 
 #####
-chmod +wrx ${APP_PATH}/Metaboverse-${OS}-${ARCH}
+#chmod -R 755 ${APP_PATH}/Metaboverse-${OS}-${ARCH}
 # If ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION} already exists, delete it
 if [ -d "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}" ]; then
     rm -rf ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
@@ -65,17 +65,17 @@ cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 
 # Make OS-specific modifications to package
 if [[ ${OS} == "linux" ]]; then
-    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse
-    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/resources/app/python/metaboverse-cli-linux
+    #chmod -R 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse
+    #chmod -R 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/resources/app/python/metaboverse-cli-linux
 fi
 if [[ ${OS} == "darwin" ]]; then
-    chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
+    #chmod 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
 fi
 
 
 # Zip for distribution 
 zip -q -r ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
-chmod +wrx ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
+#chmod 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 echo -e "\nSHA256 checksum:"
 shasum -a 256 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 echo -e "\nMD5 checksum:"
