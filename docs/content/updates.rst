@@ -3,6 +3,14 @@ Updates
 ###############
 
 =================================
+v0.11.0
+=================================
+| - `#132 <>`_`: Fixes issue with p-value/FDR calculation in interactive datatable formatting module
+| - `#134 <>`_`, `#136 <>`_`: Moves curated files to Sourceforge, adds automated scripts for release building
+| - `#128 <>`_`, `#129 <>`_`, `#130 <>`_`, `#131 <>`_`: Returns more information for values not being mapped to networks
+| We are trying to get a better sense of how we can best continue to develop Metaboverse for the community. If you are using Metaboverse, we would appreciate it if you took a few moments to fill out this survey: `https://forms.gle/YdM1caZ7NhLAjxCGA <https://forms.gle/YdM1caZ7NhLAjxCGA>`_. Thank you!
+
+=================================
 v0.10.1
 =================================
 | - Updated license to MIT
@@ -11,7 +19,6 @@ v0.10.1
 | - Added more test datasets distributed with each release 
 | - Added sample distribution display for Data Formatting tool 
 | - Fixes issue where collapsed reactions in other timepoints were not being highlighted
-
 
 =================================
 v0.10.0
