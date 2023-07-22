@@ -10,10 +10,29 @@
 ### If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ###
 
+# Check if version argument is supplied
+if [ $# -eq 0 ]; then
+    echo "No version argument supplied"
+    exit 1
+fi
 
-# Change this for each release 
-export VERSION=0.10.1
+# Initialize build flag
+BUILD_DB=false
 
+# Process arguments
+for arg in "$@"
+do
+    case $arg in
+        --build)
+        BUILD_DB=true
+        shift # Remove --build_db from processing
+        ;;
+        *)
+        export VERSION=${arg#v}
+        ;;
+    esac
+done
+echo "Compiling version: $VERSION"
 
 # Check that these paths are correct 
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -68,28 +87,6 @@ fi
 jq --arg VERSION "$VERSION" '.version = $VERSION' ${APP_PATH}/package.json > ${APP_PATH}/temp.json && mv ${APP_PATH}/temp.json ${APP_PATH}/package.json
 
 
-
-
-# Parse optional argument "--build-db"
-BUILD_DB=0
-while (( "$#" )); do
-  case "$1" in
-    --build-db)
-      BUILD_DB=1
-      shift
-      ;;
-    --) # end argument parsing
-      shift
-      break
-      ;;
-    -*|--*=) # unsupported flags
-      echo "Error: Unsupported flag $1" >&2
-      exit 1
-      ;;
-  esac
-done
-
-
 # Build cli 
 echo -e "\nBuilding the CLI..."
 #chmod 755 ${DIR}/resources/build-python.sh
@@ -105,7 +102,7 @@ ${DIR}/resources/build-electron.sh
 
 
 # Code execution based on BUILD_DB flag
-if [ ${BUILD_DB} -eq 1 ]; then
+if [ "$BUILD_DB" = true ]; then
     echo -e "\nBuilding the database(s)..."
     mkdir -p ${BUILD_PATH}
     if [[ ${OS} == *"MINGW"* ]]; then
@@ -124,7 +121,7 @@ fi
 
 # Clean up 
 echo -e "\nCleaning up..."
-if [ ${BUILD_DB} -eq 1 ]; then
+if [ "$BUILD_DB" = true ]; then
   rm -rf ${BUILD_PATH}
 fi 
 rm ${APP_PATH}/python/metaboverse-cli-darwin

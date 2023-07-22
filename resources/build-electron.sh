@@ -64,13 +64,13 @@ cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 
 
 # Make OS-specific modifications to package
-if [[ ${OS} == "linux" ]]; then
+#if [[ ${OS} == "linux" ]]; then
     #chmod -R 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse
     #chmod -R 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/resources/app/python/metaboverse-cli-linux
-fi
-if [[ ${OS} == "darwin" ]]; then
+#fi
+#if [[ ${OS} == "darwin" ]]; then
     #chmod 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}/Metaboverse.app/Contents/Resources/app/python/metaboverse-cli-darwin
-fi
+#fi
 
 
 # Zip for distribution 
