@@ -111,92 +111,63 @@ window.addEventListener("load", function(event) {
     document.getElementById('database-input').click();
   }
 
-  document.getElementById("database-input").onchange = function(event) {
+  document.getElementById("database-input").onchange = async function(event) {
     event.preventDefault();
     event.stopPropagation();
-
-    var inputVal = document.getElementById("database-input").value.split(".");
-    if (inputVal[inputVal.length - 1] !== "mvrs") {
-      alert(
-        "Input is not a .mvrs file. You must upload the correct file type for the analyses to work."
-      );
-
-    } else {
-      try {
-        f = event.srcElement.files[0];
-        console.log("The file you dragged: ", f.path);
-        update_session_info("database_url", f.path);
-        update_session_info("processed", true);
-        $('#selectedFile').html('<font size="2">' + f.path + '</font>');
-        var data = JSON.parse(fs.readFileSync(f.path).toString());
-        if (data.categories.length > 0) {
-          $("#content").html(
-            '<a href="motif.html"><div id="continue"><font size="3">Pattern Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
-          );
-        } else {
-          $("#content").html(
-            '<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>'
-          );
-        }
-        // Load session data values into current session
-        var abbreviation_dict = {};
-        $.getJSON(reactome_api, function(d) {
-          d.forEach(function(datum) {
-            abbreviation_dict[datum["abbreviation"]] = datum["displayName"];
-          });
-          update_session_info("organism",
-            abbreviation_dict[data.metadata.organism_id]);
-        });
-        console.log(data.metadata)
-
-        update_session_info("curation_url", data.metadata.organism_curation);
-        update_session_info("output", data.metadata.output);
-        update_session_info("output_file", data.metadata.output_file);
-        update_session_info("organism_id", data.metadata.organism_id);
-        update_session_info("transcriptomics", data.metadata.transcriptomics);
-        update_session_info("proteomics", data.metadata.proteomics);
-        update_session_info("metabolomics", data.metadata.metabolomics);
-        update_session_info("experiment_name", data.metadata.experiment_name);
-        update_session_info("experiment_type", data.metadata.experiment_type);
-        update_session_info("max_value", data.metadata.max_value);
-        update_session_info("max_stat", data.metadata.max_stat);
-        update_session_info("processed", true);
-        update_session_info("collapseWithModifiers",
-          data.metadata.collapse_with_modifiers);
-        update_session_info("broadcastGeneExpression",
-          data.metadata.broadcast_genes);
-        update_session_info("broadcastMetabolites",
-          data.metadata.broadcast_metabolites);
-        update_session_info("labels", data.metadata.labels);
-        update_session_info("blocklist", data.metadata.blocklist);
-        update_session_info("collapse_threshold", data.metadata.collapse_threshold);
-
-        update_session_info("curation_url", data.metadata.network);
-        update_session_info("curation_version", data.metadata.curation_version);
-        update_session_info("curation_date", data.metadata.curation_date);
-
-        update_session_info("database_version", data.metadata.database_version);
-
-        update_session_info("neighbors_url", data.metadata.neighbors_url);
-        update_session_info("neighbors_version", data.metadata.neighbors_version);
-        update_session_info("neighbors_date", data.metadata.neighbors_date);
-
-        update_session_info("template_url", data.metadata.template_url);
-        update_session_info("template_version", data.metadata.template_version);
-        update_session_info("template_date", data.metadata.template_date);
-
-        update_session_info("model_version", data.metadata.model_version);
-        update_session_info("model_date", data.metadata.model_date);
-
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Unable to load provided file into session info."
-        );
-        window.location.reload(false);
-      }
+  
+    let inputVal = document.getElementById("database-input").value.split(".");
+  
+    if (isInvalidFileType(inputVal)) {
+      alert("Input is not a .mvrs file. You must upload the correct file type for the analyses to work.");
+      return;
+    }
+    
+    try {
+      let file = event.srcElement.files[0];
+      await processFile(file);
+    } catch (error) {
+      console.error(error);
+      alert("Unable to load provided file into session info.");
+      window.location.reload(false);
     }
   };
+  
+  function isInvalidFileType(inputVal) {
+    return inputVal[inputVal.length - 1] !== "mvrs";
+  }
+  
+  async function processFile(file) {
+    console.log("The file you dragged: ", file.path);
+    await update_session_info("database_url", file.path);
+    $('#selectedFile').html('<font size="2">' + file.path + '</font>');
+    
+    let data = JSON.parse(fs.readFileSync(file.path).toString());
+  
+    $("#content").html(generateContentHTML(data.categories.length > 0));
+  
+    let abbreviation_dict = {};
+    await $.getJSON(reactome_api, function(d) {
+      d.forEach((datum) => abbreviation_dict[datum["abbreviation"]] = datum["displayName"]);
+      update_session_info("organism", abbreviation_dict[data.metadata.organism_id]);
+    });
+    console.log(data.metadata);
+  
+    let metadataKeys = Object.keys(data.metadata);
+    for (let key of metadataKeys) {
+      await update_session_info(key, data.metadata[key]);
+      console.log(key, data.metadata[key]);
+    }
+    // Read session_data and print 
+    print_session_info();
+  }
+  
+  function generateContentHTML(hasCategories) {
+    if (hasCategories) {
+      return '<a href="motif.html"><div id="continue"><font size="3">Pattern Analysis</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>';
+    } else {
+      return '<a href="visualize.html"><div id="continue"><font size="3">Explore</font></div></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="perturbations.html"><div id="continue"><font size="3">Perturbation Networks</font></div></a></br></br><a href="curate.html"><div id="continue"><font size="3">Skip</font></div></a>';
+    }
+  }
 });
 
 ipcRenderer.on("file-input", (event, data) => {

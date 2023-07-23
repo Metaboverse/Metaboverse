@@ -14,5 +14,6 @@ function refresh_session() {
                 console.log("Session data file was copied for this session");
             }
         );
+        ipcRenderer.send('reload-window');
     })
 }

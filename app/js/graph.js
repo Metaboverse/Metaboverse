@@ -51,10 +51,15 @@ var significance_weight = 3;
 var nonsignificance_weight = 1;
 var offset = 30;
 
-async function setSvgOutput() {
+async function setSvgOutput(svg_string) {
   const result = await ipcRenderer.invoke('save-file-dialog-svg');
   if (result) {
-    console.log(result); // This will print the output location path
+    fs.writeFile(result, svg_string, function(err) {
+      if(err) {
+        console.log(err);
+      }
+      console.log("SVG was saved!");
+    });
   }
   return result;
 }
@@ -1335,7 +1340,7 @@ function make_graph(
       /class="link product" style="fill: none;"/g,
       'class="link product" style="stroke-width: 1.5px;fill: none;stroke: #666;"');
 
-    filename = setSvgOutput();
+    setSvgOutput(svg_string);
 
   });
 

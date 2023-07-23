@@ -274,3 +274,6 @@ ipcMain.handle('show-warning-dialog', async (event, options) => {
   return result.response; // This will be the index of the clicked button
 });
 
+ipcMain.on('reload-window', (event, arg) => {
+  mainWindow.webContents.reload();
+});
