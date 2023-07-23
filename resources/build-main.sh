@@ -117,7 +117,7 @@ elif [[ $OS == *"Linux"* ]]; then
     sed -i "s/^version: .*/version: $VERSION/" $FILE2
     sed -i "s/^date-released: .*/date-released: $CURRENT_DATE/" $FILE2
 elif [[ $OS == *"MINGW"* ]]; then # Windows
-    echo "Please, consider using a Linux subsystem or Cygwin to use sed on Windows (or run this script using WSL first)."
+    echo "Please consider using a Linux subsystem or Cygwin to use sed on Windows (or run this script using WSL first)."
     # Windows has a more complex environment for bash-like operations and may require a third-party software like Cygwin, WSL, or Git BASH.
 else
     echo "Unsupported OS: $OS"
