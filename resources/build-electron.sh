@@ -6,10 +6,10 @@ pwd
 
 # Install node dependencies
 rm -rf ${NODE_MODULES}
-npm install electron --save-dev
-npm install electron-packager -g
-npm install
-npm audit fix
+npm install electron --save-dev -y
+npm install electron-packager -g -y
+npm install -y
+npm audit fix -y
 echo "========================================================================"
 cat package.json
 echo "========================================================================"
@@ -18,7 +18,9 @@ npm test
 
 # Prep supplemental files
 cd ${APP_PATH}/data/
-rm test_data.zip
+if [ -f test_data.zip ]; then
+    rm test_data.zip
+fi
 zip -q -r test_data.zip test_data
 #chmod 755 test_data.zip
 
@@ -36,9 +38,11 @@ if [[ $OS == *"Darwin"* ]]; then
     LOGO="data/icon/nix/metaboverse_logo.icns"
 elif [[ $OS == *"Linux"* ]]; then
     OS="linux"
+    ARCH="x64"
     LOGO="data/icon/png/icon_1024x1024.png"
 elif [[ $OS == *"MINGW"* ]]; then
     OS="win32"
+    ARCH="x64"
     LOGO="data/icon/win32/metaboverse_logo.ico"
 else
     echo "Unsupported OS: $OS"
@@ -80,7 +84,7 @@ echo -e "\nSHA256 checksum:"
 shasum -a 256 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 echo -e "\nMD5 checksum:"
 # If on linux, use md5sum, if on mac, use md5
-if [[ ${OS} == "linux" ]]; then
+if [[ $OS == *"Linux"* ]]; then
     md5sum ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 else
     md5 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip

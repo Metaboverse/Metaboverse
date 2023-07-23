@@ -66,6 +66,12 @@ then
     echo "npm is not installed. Install it and rerun the script."
     exit
 fi
+# Check if node installed 
+if ! command -v node &> /dev/null
+then
+    echo "node is not installed. Install it and rerun the script."
+    exit
+fi
 
 
 # Check that these paths are correct 
@@ -171,6 +177,6 @@ echo -e "\nCleaning up..."
 if [ "$BUILD_DB" = true ]; then
   rm -rf ${BUILD_PATH}
 fi 
-rm ${APP_PATH}/python/metaboverse-cli-darwin
+rm ${APP_PATH}/python/metaboverse-cli-*
 
 echo -e "\nDone.\n"
