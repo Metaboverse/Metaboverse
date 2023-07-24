@@ -78,7 +78,9 @@ cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 
 
 # Zip for distribution 
-zip -q -r ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
+cd ${DIR}
+zip -q -r Metaboverse-${OS}-${ARCH}-${VERSION}.zip Metaboverse-${OS}-${ARCH}-${VERSION}
+
 #chmod 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 echo -e "\nSHA256 checksum:"
 shasum -a 256 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
