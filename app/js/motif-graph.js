@@ -30,11 +30,6 @@ SOFTWARE.
 var d3 = require("d3");
 var fs = require("fs");
 var savePNG = require("save-svg-as-png");
-try {
-  var { dialog } = require("electron").remote;
-} catch(err) {
-  console.log("Unable to load dialog, a module required for export of PNGs and SVGs.")
-}
 
 var _width = (0.45 * window.innerWidth) + 50;
 var _height = 675;
