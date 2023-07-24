@@ -38,7 +38,6 @@ const {
 const path = require("path");
 const fs = require("fs");
 
-
 // Get app and user paths
 const appPath = app.getAppPath();
 const userDataPath = app.getPath('userData');
@@ -109,7 +108,7 @@ app.on("ready", createWindow);
 app.on("window-all-closed", function() {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") app.quit();
+  app.quit();
 });
 
 app.on("activate", function() {
