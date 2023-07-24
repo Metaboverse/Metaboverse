@@ -95,7 +95,7 @@ def read_data(
 
 def check_data(data, data_type="unknown"):
 
-    print("{} data conversion errors:".format(data_type))
+    print("Checking {} data conversion:".format(data_type))
     should_exit = False 
     _count = 0
 

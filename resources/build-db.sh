@@ -1,4 +1,5 @@
 #!/bin/bash
+set +o nomatch
 
 cd ${BUILD_PATH}
 
@@ -33,9 +34,13 @@ printf "\n\nOrganisms curated:" >> ${BUILD_PATH}/README.txt
 
 # Print species list successfully
 printf "\nSTART" >> ${BUILD_PATH}/README.txt
+INCLUDE_PATTERN=""
+EXCLUDE_PATTERN=""
 for X in ${SPECIES[@]}; do
   if [ -f "${BUILD_PATH}/${X}/${X}.mvrs" ]; then
     printf "\n ${X}" >> ${BUILD_PATH}/README.txt
+    INCLUDE_PATTERN+=("${X}/")
+    INCLUDE_PATTERN+=("${X}/***")
   fi
 done
 printf "\nEND" >> ${BUILD_PATH}/README.txt
@@ -59,16 +64,22 @@ cd ${BUILD_PATH}
 
 # Include the specific directories and their content
 for X in "${SPECIES[@]}"; do
-    INCLUDE_PATTERN+=" --include=/${X} --include=/${X}/**"
+    
 done
 
 # Exclude other directories
-EXCLUDE_PATTERN+=" --exclude=/*/"
+INCLUDE_PATTERN+=("build_env.txt")
+INCLUDE_PATTERN+=("README.txt")
+INCLUDE_PATTERN+=("metaboverse-cli-nix")
 
-# Construct the rsync command
-RSYNC_COMMAND="rsync -avz -e ssh ${INCLUDE_PATTERN} ${EXCLUDE_PATTERN} ${BUILD_PATH}/ ${BD_DEST}"
+RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh")
 
-# Execute the rsync command
-eval $RSYNC_COMMAND
+for pattern in "${INCLUDE_PATTERN[@]}"; do
+    RSYNC_COMMAND+=("--include=${pattern}")
+done
+
+RSYNC_COMMAND+=("--exclude=*" "${BUILD_PATH}/" "${BD_DEST}")
+
+eval "${RSYNC_COMMAND[@]}"
 
 conda deactivate

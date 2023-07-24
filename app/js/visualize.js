@@ -28,13 +28,22 @@ SOFTWARE.
 
 */
 
-let current_path;
-let database_url;
+var current_path;
+var database_url;
 var selection = null;
 var superSelection = null;
 var selector = "#graph";
 var _width = window.innerWidth;
 var _height = window.innerHeight - 75;
+var stat_type = "float";
+var collapsed_global_motifs;
+var global_motifs;
+var timecourse;
+var pathway_dict;
+var collapsed_pathway_dict;
+var superPathwayDict;
+var entity_dictionary;
+var motif_outputs;
 
 // MAIN
 function set_visualization(database_url) {
@@ -44,21 +53,21 @@ function set_visualization(database_url) {
     alert('Failed to open: \n' + database_url)
   }
   console.log(data)
-  var stat_type = data.metadata.stat_type;
+  stat_type = data.metadata.stat_type;
   set_stat_button(stat_type);
 
-  var pathway_dict = make_pathway_dictionary(
+  pathway_dict = make_pathway_dictionary(
     data,
     'pathway_dictionary');
-  var collapsed_pathway_dict = make_pathway_dictionary(
+  collapsed_pathway_dict = make_pathway_dictionary(
     data,
     'collapsed_pathway_dictionary');
-  var superPathwayDict = make_superPathway_dictionary(data);
-  var entity_dictionary = parseEntities(data.nodes);
+  superPathwayDict = make_superPathway_dictionary(data);
+  entity_dictionary = parseEntities(data.nodes);
 
-  var motif_outputs = gatherMotifs(data, data.categories);
-  var collapsed_global_motifs = motif_outputs[0];
-  var global_motifs = motif_outputs[1];
+  motif_outputs = gatherMotifs(data, data.categories);
+  collapsed_global_motifs = motif_outputs[0];
+  global_motifs = motif_outputs[1];
 
   let names;
   if (data.labels === null) {

@@ -38,7 +38,6 @@ const {
 const path = require("path");
 const fs = require("fs");
 
-
 // Get app and user paths
 const appPath = app.getAppPath();
 const userDataPath = app.getPath('userData');
@@ -85,7 +84,7 @@ function createWindow() {
 
 
   // Show devtools
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "html", "index.html"));
@@ -109,7 +108,7 @@ app.on("ready", createWindow);
 app.on("window-all-closed", function() {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") app.quit();
+  app.quit();
 });
 
 app.on("activate", function() {
@@ -274,3 +273,6 @@ ipcMain.handle('show-warning-dialog', async (event, options) => {
   return result.response; // This will be the index of the clicked button
 });
 
+ipcMain.on('reload-window', (event, arg) => {
+  mainWindow.webContents.reload();
+});

@@ -27,7 +27,7 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 ### Video walkthrough
 <div align="center">
 
-[![Metaboverse video walkthrough](docs/content/images/png/motif_view.png)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
+[![Metaboverse video walkthrough](docs/content/images/png/motif_view_video.png)](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
 
 [Metaboverse video walkthrough](http://www.youtube.com/watch?v=G1PWjQJ7J0I "Metaboverse video walkthrough")
 
@@ -37,7 +37,7 @@ Detailed walkthroughs and additional usage information can be found in the [docu
 ### Requirements
 - An internet connection for network curation
 - The most current version of the [Metaboverse app](https://github.com/Metaboverse/Metaboverse/releases) for your operating system
-- A Linux/macOS/Windows 64-bit operating system
+- A Linux/macOS/Windows 64-bit operating system. Should work with an M1/2 mac with Rosetta.
 - At least 4 GB RAM and 5 GB of free storage space
 
 ### Installation

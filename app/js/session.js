@@ -129,7 +129,7 @@ async function load_session_data() {
       } else {
         display_item = display_item[0].toUpperCase() + display_item.substring(1);
       }
-      display_item = display_item.toString().replace(/\\\\ /g, ' ').replace(/\\\\/g, '\\');
+      display_item = display_item.toString().replace(/\\ /g, ' ').replace(/\\\\ /g, ' ');
       display +=
         "&#8226;&nbsp;&nbsp;&nbsp;&nbsp;" +
         item + ":&nbsp;" +

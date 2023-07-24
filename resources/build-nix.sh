@@ -10,9 +10,68 @@
 ### If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ###
 
+# Check if version argument is supplied
+if [ $# -eq 0 ]; then
+    echo "No version argument supplied"
+    exit 1
+fi
 
-# Change this for each release 
-export VERSION=0.10.1
+# Initialize build flag
+BUILD_DB=false
+
+# Process arguments
+for arg in "$@"
+do
+    case $arg in
+        --build)
+        BUILD_DB=true
+        shift # Remove --build_db from processing
+        ;;
+        *)
+        export VERSION=${arg#v}
+        ;;
+    esac
+done
+echo "Compiling version: $VERSION"
+
+# Install depedencies 
+# If on macOS, install GNU parallel, jq using brew 
+# If on Linux, install parallel, jq using apt-get
+# If on Windows, install parallel, jq using choco
+OS=$(uname -s)
+if [[ $OS == *"Darwin"* ]]; then
+    echo "Installing dependencies using brew..."
+    brew install parallel jq -y
+elif [[ $OS == *"Linux"* ]]; then
+    echo "Installing dependencies using apt-get..."
+    sudo apt-get install parallel jq -y
+elif [[ $OS == *"MINGW"* ]]; then
+    echo "Installing dependencies using choco..."
+    choco install parallel jq -y
+else
+    echo "Unsupported OS: $OS"
+    exit 1
+fi
+
+# Check if conda is installed
+if ! command -v conda &> /dev/null
+then
+    echo "conda is not installed. Install it and rerun the script."
+    exit
+fi
+
+# Check if NPM is installed 
+if ! command -v npm &> /dev/null
+then
+    echo "npm is not installed. Install it and rerun the script."
+    exit
+fi
+# Check if node installed 
+if ! command -v node &> /dev/null
+then
+    echo "node is not installed. Install it and rerun the script."
+    exit
+fi
 
 
 # Check that these paths are correct 
@@ -49,13 +108,26 @@ MAJOR_MINOR_VERSION=$(echo "$VERSION" | cut -d'.' -f1,2)
 # Get current date in YYYY-MM-DD format
 CURRENT_DATE=$(date +'%Y-%m-%d')
 
-# Modify the Python script
-sed -i '' "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" ${DIR}/docs/conf.py
-sed -i '' "s/^release = .*/release = '$VERSION'/" ${DIR}/docs/conf.py
+OS=$(uname -s)
+FILE1="${DIR}/docs/conf.py"
+FILE2="${DIR}/CITATION.cff"
 
-# Modify the .cff file
-sed -i '' "s/^version: .*/version: $VERSION/" ${DIR}/CITATION.cff
-sed -i '' "s/^date-released: .*/date-released: $CURRENT_DATE/" ${DIR}/CITATION.cff
+if [[ $OS == *"Darwin"* ]]; then
+    sed -i '' "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" $FILE1
+    sed -i '' "s/^release = .*/release = '$VERSION'/" $FILE1
+    sed -i '' "s/^version: .*/version: $VERSION/" $FILE2
+    sed -i '' "s/^date-released: .*/date-released: $CURRENT_DATE/" $FILE2
+elif [[ $OS == *"Linux"* ]]; then
+    sed -i "s/^version = .*/version = '$MAJOR_MINOR_VERSION'/" $FILE1
+    sed -i "s/^release = .*/release = '$VERSION'/" $FILE1
+    sed -i "s/^version: .*/version: $VERSION/" $FILE2
+    sed -i "s/^date-released: .*/date-released: $CURRENT_DATE/" $FILE2
+elif [[ $OS == *"MINGW"* ]]; then # Windows
+    echo "Please consider using a Linux subsystem or Cygwin to use sed on Windows (or run this script using WSL first)."
+    # Windows has a more complex environment for bash-like operations and may require a third-party software like Cygwin, WSL, or Git BASH.
+else
+    echo "Unsupported OS: $OS"
+fi
 
 # Check if jq is installed
 if ! command -v jq &> /dev/null
@@ -66,28 +138,6 @@ fi
 
 # Modify the main.js file
 jq --arg VERSION "$VERSION" '.version = $VERSION' ${APP_PATH}/package.json > ${APP_PATH}/temp.json && mv ${APP_PATH}/temp.json ${APP_PATH}/package.json
-
-
-
-
-# Parse optional argument "--build-db"
-BUILD_DB=0
-while (( "$#" )); do
-  case "$1" in
-    --build-db)
-      BUILD_DB=1
-      shift
-      ;;
-    --) # end argument parsing
-      shift
-      break
-      ;;
-    -*|--*=) # unsupported flags
-      echo "Error: Unsupported flag $1" >&2
-      exit 1
-      ;;
-  esac
-done
 
 
 # Build cli 
@@ -105,7 +155,7 @@ ${DIR}/resources/build-electron.sh
 
 
 # Code execution based on BUILD_DB flag
-if [ ${BUILD_DB} -eq 1 ]; then
+if [ "$BUILD_DB" = true ]; then
     echo -e "\nBuilding the database(s)..."
     mkdir -p ${BUILD_PATH}
     if [[ ${OS} == *"MINGW"* ]]; then
@@ -124,9 +174,9 @@ fi
 
 # Clean up 
 echo -e "\nCleaning up..."
-if [ ${BUILD_DB} -eq 1 ]; then
+if [ "$BUILD_DB" = true ]; then
   rm -rf ${BUILD_PATH}
 fi 
-rm ${APP_PATH}/python/metaboverse-cli-darwin
+rm ${APP_PATH}/python/metaboverse-cli-*
 
 echo -e "\nDone.\n"

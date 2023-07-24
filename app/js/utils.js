@@ -33,15 +33,13 @@ var path = require("path");
 var pixelWidth = require("string-pixel-width");
 var { ipcRenderer } = require('electron');
 
-
-function write_json(session_data) {
+function print_session_info() {
   ipcRenderer.invoke('get-paths').then((paths) => {
-    fs.writeFileSync(paths.sessionFilePath, JSON.stringify(session_data), function(err) {
-      if (err) throw err;
-      console.log("Session data updated");
-    });
+    var session = JSON.parse(fs.readFileSync(paths.sessionFilePath).toString(), "utf8");
+    console.log(session)
   });
 }
+
 
 function update_session_info(key_update, value_update, abbrev_dict = null) {
 
@@ -50,10 +48,10 @@ function update_session_info(key_update, value_update, abbrev_dict = null) {
     session[key_update] = value_update;
     
     // Where database output location is, make this the output location
-    if (key_update === "database_url") {
+    if (key_update === "database_url" && value_update != null) {
       file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
       session["output"] = file_path;
-    } else if (key_update === "curation_url") {
+    } else if (key_update === "curation_url" && value_update != null) {
       console.log(key_update + ":", value_update)
       file_path = value_update.substring(0, value_update.lastIndexOf(path.sep));
       session["output"] = file_path;
@@ -62,7 +60,7 @@ function update_session_info(key_update, value_update, abbrev_dict = null) {
     if ((abbrev_dict != null) & (key_update === "organism")) {
       session["organism_id"] = abbrev_dict[value_update];
     }
-    write_json(session);
+    fs.writeFileSync(paths.sessionFilePath, JSON.stringify(session));
     console.log("Updated session variable:", "\"" + key_update + "\"", "to ", "\"" + value_update + "\"")
   });
 }

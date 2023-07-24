@@ -26,3 +26,5 @@ app/python/metaboverse-cli-darwin
 app/data/test_data.zip
 todo.txt
 cli/metaboverse_cli.egg-info/
+app/data/test_data.zip
+app/data/test_data/**/*_unmapped.txt
