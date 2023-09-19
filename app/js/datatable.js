@@ -280,6 +280,27 @@ var export_string = `
 	</div>
 `
 
+function test_metaboanalyst_connection() {
+	var settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": "https://www.xialab.ca/api/mapcompounds",
+		"method": "POST",
+		"headers": {
+		  "Content-Type": "application/json",
+		  "cache-control": "no-cache"
+		},
+		"processData": false,
+		"data": "{\n\t\"queryList\": \"1,3-Diaminopropane;2-Ketobutyric acid;2-Hydroxybutyric acid;\",\n\t\"inputType\": \"name\"\n}"
+	  }
+	  
+	  $.ajax(settings).done(function (response) {
+		console.log(response);
+	  });
+}
+
+test_metaboanalyst_connection()
+
 window.addEventListener("load", function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -651,9 +672,9 @@ function select_groups(datatable, table) {
 		.on("click", function(d) {
 
 			// Print error message that this feature is disabled for the time being 
-			alert("This feature is currently disabled as the MetaboAnalyst API is no longer available. We are actively working on a solution. Please check back in a later version.")
+			//alert("This feature is currently disabled as the MetaboAnalyst API is no longer available. We are actively working on a solution. Please check back in a later version.")
 			// Skip the rest of the function 
-			return
+			//return
 
 			//get current names
 			var entity_string = "";
@@ -663,7 +684,7 @@ function select_groups(datatable, table) {
 
 			// inject in data string
 			settings.data = "{\n\t\"queryList\": \"" + entity_string + "\",\n\t\"inputType\": \"name\"\n}"
-
+			
 			// run ajax query and update table with names ("Match")
 			d3.select("#button-group-check")
 				.html("Checking...");
