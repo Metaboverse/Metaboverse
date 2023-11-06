@@ -51,29 +51,35 @@ except:
     write_database_json = utils.write_database_json
 
 
-def parse_hmdb_synonyms(
+def download_hmbd_reference(
         output_dir,
         url='https://hmdb.ca/system/downloads/current/hmdb_metabolites.zip',
-        file_name='hmdb_metabolites',
-        xml_tag='{http://www.hmdb.ca}'):
-    """Retrieve HMDB chemical entity synonyms
-    """
-
+        file_name='hmdb_metabolites'):
+    
     output_file = output_dir + file_name
-    print('Downloading HMDB metabolite reference...', '\n\t', url)
+    print('HMDB metabolite reference:', '\n\t', url)
+    print('\tDownloading...')
     hmdb_url = requests.get(url)
     if hmdb_url.ok:
-        print("Unzipping HMDB metabolite reference...")
+        print('\tUnzipping...')
         hmdb_zip = zipfile.ZipFile(io.BytesIO(hmdb_url.content))
         hmdb_zip.extractall(output_dir)
         hmdb_zip = None
     else:
         raise Exception("Unable to download file at: " + url)
+    print('\tDownload complete.')
+
+    return os.path.join(output_dir, file_name + '.xml')
+
+def parse_hmdb_synonyms(
+        output_file,
+        xml_tag='{http://www.hmdb.ca}'):
+    """Retrieve HMDB chemical entity synonyms
+    """
 
     print("Parsing HMDB metabolite records...")
-    hmdb_contents = et.parse(output_file + '.xml')
+    hmdb_contents = et.parse(output_file)
     contents = hmdb_contents.getroot()
-    os.remove(output_file + '.xml')
 
     hmdb_dictionary = {}
     display_dictionary = {}
@@ -120,6 +126,12 @@ def parse_hmdb_synonyms(
                     synonyms.add(simple_string)
                     synonyms.add(str(y.text).lower())
                     display_synonyms.add(str(y.text))
+                
+                if y.tag == xml_tag + 'accession':
+                    synonyms.add(simple_string)
+                    synonyms.add(str(y.text).lower())
+                    synonyms.add(str(y.text))
+                    display_synonyms.add(str(y.text))
 
             if name != '':
                 hmdb_dictionary[name] = sorted(list(synonyms))
@@ -135,8 +147,12 @@ def __main__(
     """Build metabolite name mapping dictionary
     """
 
-    hmdb_dictionary, display_dictionary, mapping_dictionary = parse_hmdb_synonyms(
+    output_file = download_hmbd_reference(
         output_dir=args_dict['output']
+    )
+
+    hmdb_dictionary, display_dictionary, mapping_dictionary = parse_hmdb_synonyms(
+        output_file=output_file
     )
 
     mapping_db = {
@@ -150,6 +166,8 @@ def __main__(
         output=args_dict['output'],
         file='metabolite_mapping.pickle',
         database=mapping_db)
+    
+    os.remove(output_file)
 
 
 def test():

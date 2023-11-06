@@ -1004,7 +1004,7 @@ function make_graph(
     if (these_motifs[sample] != null) {
       if (these_motifs[sample].length > 0) {
 
-        console.log(these_motifs)
+        //console.log(these_motifs)
         graph_nodes.forEach(node => {
           let rxn_id = node.id;
           if (these_motifs[sample].includes(rxn_id)) {
@@ -1145,7 +1145,7 @@ function make_graph(
     .html(function(d) {
       let this_name;
       if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
-        this_name = d.user_label;
+        this_name = d.name;  //d.user_label;
       } else {
         this_name = d.name;
       }
@@ -1365,7 +1365,7 @@ function make_graph(
       text.html(function(d) {
         let this_name;
         if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
-          this_name = d.user_label;
+          this_name = d.name;  //d.user_label;
         } else {
           this_name = d.name;
         }
@@ -1425,7 +1425,7 @@ function make_graph(
       text.html(function(d) {
         let this_name;
         if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
-          this_name = d.user_label;
+          this_name = d.name;  //d.user_label;
         } else {
           this_name = d.name;
         }

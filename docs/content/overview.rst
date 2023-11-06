@@ -18,7 +18,7 @@ Important Note
 ===============================
 Data Inputs
 ===============================
-| Metaboverse is capable of handling several data types and structures. Users can input **any combination of paired transcriptomics and/or proteomics and/or metabolomics data** for their model. Metaboverse relies on Ensemble IDs, UniProt IDs, and ChEBI IDs for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl gene IDs can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
+| Metaboverse is capable of handling several data types and structures. Users can input **any combination of paired transcriptomics and/or proteomics and/or metabolomics data** for their model. Metaboverse relies on Ensemble transcript IDs or names, UniProt IDs or names, and ChEBI IDs or names for data mapping, so any data type that is able to map back to one of these data types can be used. For example, ribosome profiling translation efficiency data mapped to Ensembl transcript IDs or names can be overlaid on the network. Data format consists of row names with the entities of interest, a column of log\ :sub:`2`\  Fold Change data, and a column of a statistical value. An example for each datatype can be seen below, where (A) shows single-condition data table examples, and (B) shows a single-timepoint proteomics dataset paired with a timecourse metabolomics dataset.
 .. image:: images/png/data_formatting.png
    :width: 700
    :align: center
@@ -49,7 +49,7 @@ Data Inputs
 | - You may include **any combination** of corresponding transcriptomics AND/OR proteomics AND/OR metabolomics measurements.
 | - Timecourse data should be **repeated fold change and statistical values for each timepoint in order** (see example above).
 | - Multi-condition experiments can be provided as with timecourse data.
-| - Data names should correspond to Ensembl, UniProt, or ChEBI/KEGG/HMDB IDs and acceptable synonyms.
+| - Data names should correspond to Ensembl transcript, UniProt, or ChEBI/KEGG/HMDB IDs or names and acceptable synonyms.
 | - Keep an eye out for measurements with weird characters in their names. This can often cause problems with the data mapping.
 | - Make sure the gene/protein/metabolite column name is blank, as shown in the examples.
 
@@ -66,7 +66,7 @@ Unmapped Data
 ===============================
 | During network modeling of user data, any user-provided datapoints that are unable to be mapped with be output as a tab-delimited table in the same location as the original input files with the suffix :data:`_unmapped.txt`\. Data points could be unmapped for two reasons:
 | - The data point is not curated in a reaction within the selected organism's reaction network
-| - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl gene ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
+| - The provided data point name or ID is incompatible with the available synonyms for that entity within the network. Available synonyms are compatible: Ensembl transcript ID or name; UniProt ID or name; ChEBI, KEGG, HMDB, JCBN, IUPAC, or MetaCyc IDs or names
 | - Try searching :data:`Reactome + the name of the unmapped species` online to see if the species goes by another name in Reactome, or if it is missing from the organism curation.
 |
 ===============================
