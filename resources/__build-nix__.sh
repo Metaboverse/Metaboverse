@@ -9,6 +9,16 @@
 ### You may be prompted to login to Sourceforge for DB uploads
 ### If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ###
+# Run as: $ sudo bash ./__build-nix__.sh 0.11.1 .. ../app ../cli/
+# Assuming you are the in /Metaboverse/resources/ folder
+###
+###
+### IMPORTANT:
+# One of your runs needs to set `BUILD_DB=true` to generate and upload network templates.
+# Ideally, you will do this from the Linux build session
+### 
+###
+
 
 # Check if version argument is supplied
 if [ $# -eq 0 ]; then

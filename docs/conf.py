@@ -25,9 +25,9 @@ copyright = 'Jordan A. Berg, et. al.'
 author = 'Jordan A. Berg, et. al.'
 
 # The short X.Y version
-version = '0.11'
+version = '.'
 # The full version, including alpha/beta/rc tags
-release = '0.11.0'
+release = '0.11.1'
 
 
 # -- General configuration ---------------------------------------------------
