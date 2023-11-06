@@ -67,8 +67,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1450,
     height: 1000,
-    minWidth: 1450,
-    minHeight: 1000,
+    minWidth: 900,
+    minHeight: 600,
     webPreferences: {
       preload: path.join(__dirname, "js", "preload.js"),
       enableRemoteModule: true,

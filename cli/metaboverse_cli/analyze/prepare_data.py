@@ -385,11 +385,11 @@ def __main__(
     or should_proteomics_exit \
     or should_metabolomics_exit:
         print("""
-        ----------------------------------------------------------------
-           Formatting/conversion error(s) in data. Please check logs, 
-                   remedy problematic data points, and rerun.            
-        ----------------------------------------------------------------
-        """)
+----------------------------------------------------------------
+    Formatting/conversion error(s) in data. Please check logs, 
+            remedy problematic data points, and rerun.            
+----------------------------------------------------------------
+""")
         sys.exit(1)
 
     # Check for broadcasting

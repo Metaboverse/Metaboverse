@@ -28,3 +28,6 @@ todo.txt
 cli/metaboverse_cli.egg-info/
 app/data/test_data.zip
 app/data/test_data/**/*_unmapped.txt
+cli/metaboverse_cli/metabolite_mapping.pickle
+.gitignore
+cli/metaboverse_cli/hmdb_metabolites.xml

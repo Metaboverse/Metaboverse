@@ -109,6 +109,36 @@ function confidenceInterval_twoArray(arr1, arr2){
 // End stat functions //
 // ------------------ //
 
+// Function to show the modal
+function showModalWithHMDBError() {
+	// Create the modal if it doesn't exist
+	if ($('#hmdbErrorModal').length === 0) {
+		var $modal = $('<div id="hmdbErrorModal" class="modal"></div>');
+		var $modalContent = $('<div class="modal-content"></div>');
+		var $closeModal = $('<span class="closeModal">&times;</span>');
+		var $message = $('<p>HMDB IDs detected. The MetaboAnalyst API has historically not worked with mapping HMDB IDs. Please use the web tool instead at: <a href="https://www.metaboanalyst.ca/MetaboAnalyst/upload/ConvertView.xhtml" target="_blank" class="hmdbErrorLink">https://www.metaboanalyst.ca/MetaboAnalyst/upload/ConvertView.xhtml</a>.</p>');
+
+		$modalContent.append($closeModal);
+		$modalContent.append($message);
+		$modal.append($modalContent);
+		$('body').append($modal);
+
+		// Close modal event
+		$('.closeModal').click(function() {
+			$('#hmdbErrorModal').fadeOut();
+		});
+
+		// Click outside modal to close it
+		$(window).click(function(event) {
+			if ($(event.target).is('.modal')) {
+				$('#hmdbErrorModal').fadeOut();
+			}
+		});
+	}
+
+	// Show the modal
+	$('#hmdbErrorModal').fadeIn();
+}
 
 var use_stat_type;
 var selected_columns = [];
@@ -134,10 +164,10 @@ var opts = { // Spinner opts from http://spin.js.org/
 	position: 'absolute', // Element positioning
   };
 
-var settings = {
+var mapping_api_settings = {
 	"async": true,
 	"crossDomain": true,
-	"url": "http://api.xialab.ca/mapcompounds",
+	"url": "https://www.xialab.ca/api/mapcompounds",
 	"method": "POST",
 	"headers": {
 	  "Content-Type": "application/json",
@@ -281,25 +311,27 @@ var export_string = `
 `
 
 function test_metaboanalyst_connection() {
-	var settings = {
-		"async": true,
-		"crossDomain": true,
-		"url": "https://www.xialab.ca/api/mapcompounds",
-		"method": "POST",
-		"headers": {
-		  "Content-Type": "application/json",
-		  "cache-control": "no-cache"
-		},
-		"processData": false,
-		"data": "{\n\t\"queryList\": \"1,3-Diaminopropane;2-Ketobutyric acid;2-Hydroxybutyric acid;\",\n\t\"inputType\": \"name\"\n}"
-	  }
+	var settings = mapping_api_settings;
+	settings.data = "{\n\t\"queryList\": \"1,3-Diaminopropane;2-Ketobutyric acid;2-Hydroxybutyric acid;\",\n\t\"inputType\": \"name\"\n}"
 	  
-	  $.ajax(settings).done(function (response) {
-		console.log(response);
-	  });
+	$.ajax(settings).done(function (response) {
+	console.log(response);
+	});
 }
 
 test_metaboanalyst_connection()
+
+function test_metaboanalyst_connection_hmdb() {
+	var settings = mapping_api_settings;
+	settings.data = "{\n\t\"queryList\": \"HMDB0001294;HMDB0245405;HMDB0302754;\",\n\t\"inputType\": \"hmdb\"\n}"
+	  
+	$.ajax(settings).done(function (response) {
+	console.log(response);
+	});
+}
+
+test_metaboanalyst_connection_hmdb()
+
 
 window.addEventListener("load", function(event) {
     event.preventDefault();
@@ -683,35 +715,48 @@ function select_groups(datatable, table) {
 			});
 
 			// inject in data string
-			settings.data = "{\n\t\"queryList\": \"" + entity_string + "\",\n\t\"inputType\": \"name\"\n}"
-			
-			// run ajax query and update table with names ("Match")
-			d3.select("#button-group-check")
-				.html("Checking...");
-			var target = document.getElementById('processed-table-el')
-			var spinner = new Spinner(opts);
-			if (d3.event.button === 0) { spinner.spin(target) };
-			$.ajax(settings).done(function (response) {
-				// for each Match, if not NA, use; else ignore and use Query
-				// update row names
-				for (let i in processed_data) {
-					if (response.Match[i] !== "NA") {
-						processed_data[i][0] = response.Match[i];
-					}
-				}
+			var settings = mapping_api_settings;
+			var dataObject = {
+				queryList: entity_string,
+			  };
 
-				//update table
-				processed_table = update_table(
-					'#process-table', 
-					'#processed-table-el', 
-					processed_string, 
-					processed_data, 
-					processed_columns
-				);
-				spinner.stop();
+			if (entity_string && entity_string.toLowerCase().includes('hmdb')) {
+				showModalWithHMDBError();
+				dataObject.inputType = "hmdb";  // Add the inputType property
+			} else {
+				dataObject.inputType = "name";
+				settings.data = JSON.stringify(dataObject, null, '\t');
+				console.log(settings);
+
+				// run ajax query and update table with names ("Match")
 				d3.select("#button-group-check")
-					.html("Check Names");
-			});
+					.html("Checking...");
+				var target = document.getElementById('processed-table-el')
+				var spinner = new Spinner(opts);
+				if (d3.event.button === 0) { spinner.spin(target) };
+				$.ajax(settings).done(function (response) {
+					// for each Match, if not NA, use; else ignore and use Query
+					// update row names
+					for (let i in processed_data) {
+						if (response.Match[i] !== "NA") {
+							processed_data[i][0] = response.Match[i];
+						}
+					}
+					console.log('NameMapperResponse: ', response)
+
+					//update table
+					processed_table = update_table(
+						'#process-table', 
+						'#processed-table-el', 
+						processed_string, 
+						processed_data, 
+						processed_columns
+					);
+					spinner.stop();
+					d3.select("#button-group-check")
+						.html("Check Names");
+				});
+			}
 		})
 
 	d3.select('#button-group-export')
