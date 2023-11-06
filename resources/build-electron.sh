@@ -86,7 +86,7 @@ echo -e "\nSHA256 checksum:"
 shasum -a 256 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 echo -e "\nMD5 checksum:"
 # If on linux, use md5sum, if on mac, use md5
-if [[ $OS == *"Linux"* ]]; then
+if [[ $OS == "linux" ]]; then
     md5sum ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 else
     md5 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip

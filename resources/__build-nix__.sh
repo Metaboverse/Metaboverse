@@ -152,10 +152,22 @@ jq --arg VERSION "$VERSION" '.version = $VERSION' ${APP_PATH}/package.json > ${A
 
 # Build cli 
 echo -e "\nBuilding the CLI..."
-#chmod 755 ${DIR}/resources/build-python.sh
 ${DIR}/resources/build-python.sh
-#chmod 755 ${CLI_PATH}/metaboverse-cli*
-cp ${CLI_PATH}/dist/metaboverse-cli* ${CLI_DEST}
+
+# Copy only the OS-specific executable to CLI_DEST
+if [[ ${OS} == *"Darwin"* ]]; then
+    # Assuming the macOS executable ends with '-macos'
+    cp ${CLI_PATH}/dist/metaboverse-cli-darwin ${CLI_DEST}/metaboverse-cli-darwin
+elif [[ ${OS} == *"MINGW"* || ${OS} == *"MSYS"* ]]; then
+    # Windows executable ends with '.exe'
+    cp ${CLI_PATH}/dist/metaboverse-cli-windows.exe ${CLI_DEST}/metaboverse-cli.exe
+elif [[ ${OS} == *"Linux"* ]]; then
+    # Linux executable has no special extension
+    cp ${CLI_PATH}/dist/metaboverse-cli-linux ${CLI_DEST}/metaboverse-cli-linux
+else
+    echo "Unsupported OS for CLI build: $OS"
+    exit 1
+fi
 
 
 # Build electron app 
@@ -168,11 +180,17 @@ ${DIR}/resources/build-electron.sh
 if [ "$BUILD_DB" = true ]; then
     echo -e "\nBuilding the database(s)..."
     mkdir -p ${BUILD_PATH}
-    if [[ ${OS} == *"MINGW"* ]]; then
-        cp ${CLI_PATH}/dist/metaboverse-cli*.exe ${BUILD_PATH}/metaboverse-cli.exe
+    if [[ ${OS} == *"Darwin"* ]]; then
+        # Copy only the macOS executable if on a macOS environment
+        cp ${CLI_PATH}/dist/metaboverse-cli-darwin ${BUILD_PATH}/metaboverse-cli-nix
+        export BUILD_EXE=${BUILD_PATH}/metaboverse-cli-nix
+    elif [[ ${OS} == *"MINGW"* ]]; then
+        # Copy only the Windows executable if on MINGW environment
+        cp ${CLI_PATH}/dist/metaboverse-cli-windows.exe ${BUILD_PATH}/metaboverse-cli.exe
         export BUILD_EXE=${BUILD_PATH}/metaboverse-cli.exe
-    else 
-        cp ${CLI_PATH}/dist/metaboverse-cli* ${BUILD_PATH}/metaboverse-cli-nix
+    elif [[ ${OS} == *"Linux"* ]]; then
+        # Copy only the Linux executable if on a Linux environment
+        cp ${CLI_PATH}/dist/metaboverse-cli-linux ${BUILD_PATH}/metaboverse-cli-nix
         export BUILD_EXE=${BUILD_PATH}/metaboverse-cli-nix
     fi
     #chmod 755 ${DIR}/resources/build-db.sh

@@ -1,5 +1,9 @@
 #!/bin/bash
-set +o nomatch
+
+OS=$(uname -s)
+if [[ $OS == "Darwin" ]]; then
+  set +o nomatch
+fi
 
 cd ${BUILD_PATH}
 
@@ -63,23 +67,26 @@ cd ${BUILD_PATH}
 #chmod -R 755 ${BUILD_PATH}
 
 # Include the specific directories and their content
+INCLUDE_PATTERN=()
 for X in "${SPECIES[@]}"; do
-    
+    if [ -f "${BUILD_PATH}/${X}/${X}.mvrs" ]; then
+        INCLUDE_PATTERN+=("--include=${X}/")
+        INCLUDE_PATTERN+=("--include=${X}/***")
+    fi
 done
 
-# Exclude other directories
-INCLUDE_PATTERN+=("build_env.txt")
-INCLUDE_PATTERN+=("README.txt")
-INCLUDE_PATTERN+=("metaboverse-cli-nix")
+# Include other necessary files
+INCLUDE_PATTERN+=("--include=build_env.txt")
+INCLUDE_PATTERN+=("--include=README.txt")
+INCLUDE_PATTERN+=("--include=metaboverse-cli-nix")
 
+# Complete rsync command
 RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh")
+RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
+RSYNC_COMMAND+=("--exclude=*") # Exclude other directories and files
+RSYNC_COMMAND+=("${BUILD_PATH}/" "${BD_DEST}")
 
-for pattern in "${INCLUDE_PATTERN[@]}"; do
-    RSYNC_COMMAND+=("--include=${pattern}")
-done
-
-RSYNC_COMMAND+=("--exclude=*" "${BUILD_PATH}/" "${BD_DEST}")
-
+# Execute rsync command
 eval "${RSYNC_COMMAND[@]}"
 
 conda deactivate
