@@ -1,4 +1,4 @@
-# Run as: .\build-windows.ps1 0.11.0 .. ..\app\ ..\cli\
+# Run as: .\__build-windows__.ps1 0.11.0 .. ..\app\ ..\cli\
 # Assuming you are the in /Metaboverse/resources/ folder
 param (
     [string]$VERSION,

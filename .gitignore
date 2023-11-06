@@ -31,3 +31,4 @@ app/data/test_data/**/*_unmapped.txt
 cli/metaboverse_cli/metabolite_mapping.pickle
 .gitignore
 cli/metaboverse_cli/hmdb_metabolites.xml
+app/python/metaboverse-cli-*
