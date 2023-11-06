@@ -5,16 +5,16 @@
 ### - `parallel` command line tool needs to be installed on your system 
 ###       (`brew install parallel` or `sudo apt-get install parallel`)
 ### 
-### Execute as sudo: `$ bash build.sh`
+### Execute as: `$ bash build.sh 0.11.1 --build`
 ### You may be prompted to login to Sourceforge for DB uploads
 ### If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ###
-# Run as: $ sudo bash ./__build-nix__.sh 0.11.1 .. ../app ../cli/
+# Run as: $ bash ./__build-nix__.sh 0.11.1
 # Assuming you are the in /Metaboverse/resources/ folder
 ###
 ###
 ### IMPORTANT:
-# One of your runs needs to set `BUILD_DB=true` to generate and upload network templates.
+# One of your runs needs to be called as `bash ./__build-nix__.sh 0.11.1 --build` to generate and upload network templates.
 # Ideally, you will do this from the Linux build session
 ### 
 ###
@@ -51,7 +51,7 @@ echo "Compiling version: $VERSION"
 OS=$(uname -s)
 if [[ $OS == *"Darwin"* ]]; then
     echo "Installing dependencies using brew..."
-    brew install parallel jq -y
+    brew install parallel jq
 elif [[ $OS == *"Linux"* ]]; then
     echo "Installing dependencies using apt-get..."
     sudo apt-get install parallel jq -y
