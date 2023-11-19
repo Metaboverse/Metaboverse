@@ -1358,85 +1358,60 @@ function make_graph(
     }
   });
 
-  toggle_e = true;
+  let toggle_e = true; // Existing toggle for expression
+  let toggleName = false;
+  
+  // Event listener for toggleExpression
   d3.select("#toggleExpression").on("click", function() {
-    if (toggle_e === false) {
-      toggle_e = true;
-      text.html(function(d) {
-        let this_name;
-        if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
-          this_name = d.name;  //d.user_label;
-        } else {
-          this_name = d.name;
-        }
-        if (type_dict[d.name] === "reaction") {
-          // If reaction node, do not display expression value
-          if (d.compartment === "") {
-            return (
-              "<tspan dx='16' y='.31em' class='bold-text'>" +
-              this_name +
-              "</tspan>"
-            );
-          } else {
-            return (
-              "<tspan dx='16' y='.31em' class='bold-text'>" +
-              this_name +
-              "</tspan>" +
-              "<tspan x='16' y='1.7em'>Compartment: " +
-              d.compartment_display +
-              "</tspan>"
-            );
-          }
-        } else {
-          // Label other nodes with expression value in parentheses
-          if (d.values[sample] === null &&
-            d.stats[sample] === null) {
-            return (
-              "<tspan dx='16' y='0em' class='bold-text'>" +
-              this_name +
-              "</tspan>"
-            );
-          } else {
-            let display_stat;
-            if (parseFloat(d.stats[sample]) < 0.01) {
-              display_stat = "< 0.01"
-            } else {
-              display_stat = parseFloat(d.stats[sample]).toFixed(2)
-            }
-            let output_stat_string = ("<tspan dx='16' y='-.5em' class='bold-text'>" +
-              this_name +
-              "</tspan>" +
-              "<tspan x='16' y='.7em'>Value: " +
-              parseFloat(d.values[sample]).toFixed(2) +
-              "</tspan>");
-            if (stat_type !== "array") {
-              output_stat_string = (output_stat_string + 
-                "<tspan x='16' y='1.7em'>Statistic: " +
-                display_stat +
-                "</tspan>"
-                );
-            }
-            return output_stat_string;
-          }
-        }
-      });
-    } else {
-      toggle_e = false;
-      text.html(function(d) {
-        let this_name;
-        if (d.user_label !== undefined && d.sub_type === "metabolite_component") {
-          this_name = d.name;  //d.user_label;
-        } else {
-          this_name = d.name;
-        }
-        return (
-          "<tspan dx='16' y='.31em' class='bold-text'>" +
-          this_name +
-          "</tspan>"
-        );
-      });
-    }
+    toggle_e = !toggle_e;
+    updateText();
   });
+
+  // Event listener for toggleName
+  d3.select("#toggleName").on("click", function() {
+    toggleName = !toggleName;
+    updateText();
+  });
+
+  function updateText() {
+    text.html(function(d) {
+      // Determine the name to display based on toggleName
+      let this_name = toggleName && d.user_label ? d.user_label : d.name;
+  
+      // Integration of this_name into your existing logic
+      if (type_dict[this_name] === "reaction") {
+        // If reaction node, do not display expression value
+        if (d.compartment === "") {
+          return "<tspan dx='16' y='.31em' class='bold-text'>" + this_name + "</tspan>";
+        } else {
+          return "<tspan dx='16' y='.31em' class='bold-text'>" + this_name + "</tspan>" +
+                 "<tspan x='16' y='1.7em'>Compartment: " + d.compartment_display + "</tspan>";
+        }
+      } else {
+        // Label other nodes with expression value in parentheses
+        if (d.values[sample] === null && d.stats[sample] === null) {
+          return "<tspan dx='16' y='0em' class='bold-text'>" + this_name + "</tspan>";
+        } else {
+          let display_stat;
+          if (parseFloat(d.stats[sample]) < 0.01) {
+            display_stat = "< 0.01";
+          } else {
+            display_stat = parseFloat(d.stats[sample]).toFixed(2);
+          }
+          let output_stat_string = "<tspan dx='16' y='-.5em' class='bold-text'>" + this_name +
+                                   "</tspan><tspan x='16' y='.7em'>Value: " +
+                                   parseFloat(d.values[sample]).toFixed(2) + "</tspan>";
+          if (stat_type !== "array") {
+            output_stat_string += "<tspan x='16' y='1.7em'>Statistic: " + display_stat + "</tspan>";
+          }
+          return output_stat_string;
+        }
+      }
+    });
+  }
+  
+  // Make sure the initial display is set up correctly
+  updateText();
 
   toggle_a = true;
   toggle_r = false;
