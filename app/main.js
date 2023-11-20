@@ -91,7 +91,7 @@ function createWindow() {
   
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
-    fs.unlinkSync(session_file);
+    fs.unlinkSync(sessionFilePath);
     mainWindow = null;
   });
 
