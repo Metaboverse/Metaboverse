@@ -5,6 +5,7 @@ pwd
 
 
 # Install node dependencies
+echo -e "\nInstalling node dependencies..."
 rm -rf ${NODE_MODULES}
 npm install electron --save-dev -y
 npm install electron-packager -g -y
@@ -17,10 +18,13 @@ npm test
 
 
 # Prep supplemental files
+echo -e "\nPrepping supplemental files..."
 cd ${APP_PATH}/data/
 if [ -f test_data.zip ]; then
+    echo "test_data.zip already exists. Removing the existing zip file."
     rm test_data.zip
 fi
+echo "Creating test_data.zip..."
 zip -q -r test_data.zip test_data
 #chmod 755 test_data.zip
 
@@ -51,6 +55,7 @@ fi
 
 
 # Build electron package
+echo -e "\nBuilding the electron app..."
 electron-packager ./ Metaboverse --platform=${OS} --arch=${ARCH} --icon=${LOGO} --build-version=${VERSION} --overwrite
 cd ..
 
@@ -58,6 +63,7 @@ cd ..
 # Build release packages
 
 #####
+echo -e "\nBuilding the database(s)..."
 #chmod -R 755 ${APP_PATH}/Metaboverse-${OS}-${ARCH}
 # If ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION} already exists, delete it
 if [ -d "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}" ]; then
@@ -78,9 +84,11 @@ cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 
 
 # Zip for distribution 
+echo -e "\nZipping the release package..."
 cd ${DIR}
 zip -q -r Metaboverse-${OS}-${ARCH}-${VERSION}.zip Metaboverse-${OS}-${ARCH}-${VERSION}
 
+echo -e "\nZipped release package:"
 #chmod 755 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip
 echo -e "\nSHA256 checksum:"
 shasum -a 256 ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip

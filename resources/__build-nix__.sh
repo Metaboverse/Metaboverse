@@ -54,7 +54,7 @@ if [[ $OS == *"Darwin"* ]]; then
     brew install parallel jq
 elif [[ $OS == *"Linux"* ]]; then
     echo "Installing dependencies using apt-get..."
-    sudo apt-get install parallel jq -y
+    sudo apt-get install parallel jq zip -y
 elif [[ $OS == *"MINGW"* ]]; then
     echo "Installing dependencies using choco..."
     choco install parallel jq -y

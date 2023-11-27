@@ -3,6 +3,12 @@ Updates
 ###############
 
 =================================
+v0.11.2
+=================================
+- Entity mapping improvements so user can select between standard display names and user-provided names for metabolites (by @j-berg in `#153 <https://github.com/Metaboverse/Metaboverse/issues/153>`_)
+- Fixes to error on window close (by @j-berg in `c3f153a <https://github.com/Metaboverse/Metaboverse/commit/c3f153aec78d354ace178cf4b8bf6403a6bc9c60>`_)
+
+=================================
 v0.11.1
 =================================
 - Fixes issues with HMDB ID mapping in back-end (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_, `#146 <https://github.com/Metaboverse/Metaboverse/issues/146>`_)

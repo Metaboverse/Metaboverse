@@ -2,6 +2,7 @@
 
 cd ${CLI_PATH}
 
+echo -e "\nInstalling pyinstaller environment..."
 rm -rf ${CONDA}/envs/pyinstaller
 
 # Check if building on an M1 Mac 
@@ -14,9 +15,11 @@ fi
 source "${CONDA_PATH}"
 conda activate pyinstaller 
 
+echo -e "\nInstalling pyinstaller dependencies..."
 pip install pyinstaller
 pip install -r ${CLI_PATH}/requirements.txt
 
+echo -e "\nBuilding the CLI..."
 pyinstaller ${CLI_PATH}/metaboverse-cli.spec
 
 conda deactivate

@@ -23,6 +23,7 @@ for X in ${SPECIES[@]};
 done
 
 # Run
+printf "+ Processing database curation...\n"
 parallel ${BUILD_EXE} curate --force_new_curation --output ${BUILD_PATH}/{} --organism_id {} ::: "${SPECIES[@]}"
 
 # Print metadata from run 
@@ -67,6 +68,7 @@ cd ${BUILD_PATH}
 #chmod -R 755 ${BUILD_PATH}
 
 # Include the specific directories and their content
+echo -e "\nUploading to host..."
 INCLUDE_PATTERN=()
 for X in "${SPECIES[@]}"; do
     if [ -f "${BUILD_PATH}/${X}/${X}.mvrs" ]; then
