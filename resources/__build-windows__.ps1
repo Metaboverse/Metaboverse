@@ -36,6 +36,13 @@ conda activate pyinstaller
 pip install pyinstaller
 pip install -r "requirements.txt"
 
+# Remove old build and dist files 
+if (Test-Path "build") {
+    Remove-Item -Path "build" -Force -Recurse
+}
+if (Test-Path "dist") {
+    Remove-Item -Path "dist" -Force -Recurse
+}
 pyinstaller "metaboverse-cli.spec"
 
 conda deactivate
@@ -89,7 +96,7 @@ Set-Location -Path "${APP_PATH}/data/"
 if (Test-Path "test_data.zip") {
     Remove-Item -Path "test_data.zip" -Force
 }
-Compress-Archive -Path "test_data" -DestinationPath "test_data.zip"
+Compress-Archive -Force -Path "test_data" -DestinationPath "test_data.zip"
 
 # Build electron app
 Set-Location -Path $APP_PATH
@@ -112,7 +119,7 @@ Move-Item -Path "${APP_PATH}/Metaboverse-${OS}-${ARCH}" -Destination "${DIR}/Met
 Copy-Item -Path "${APP_PATH}/data/test_data.zip" -Destination "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}"
 
 # Zip for distribution 
-Compress-Archive -Path "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}" -DestinationPath "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip"
+Compress-Archive -Force -Path "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}" -DestinationPath "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip"
 
 Write-Host "`nSHA256 checksum:"
 Get-FileHash -Path "${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}.zip" -Algorithm SHA256

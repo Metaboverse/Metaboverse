@@ -1,6 +1,8 @@
 #!/bin/bash
 
 cd ${CLI_PATH}
+rm -r dist/ build/
+
 
 echo -e "\nInstalling pyinstaller environment..."
 rm -rf ${CONDA}/envs/pyinstaller
