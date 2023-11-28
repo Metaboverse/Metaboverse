@@ -40,7 +40,9 @@ a = Analysis(
     'scipy.special.cython_special',
     'scipy.spatial.transform._rotation_groups',
     'sklearn',
-    'cmath'],
+    'cmath',
+    'chardet',
+    'chardet.charset_normalizer'],
   hookspath=[],
   runtime_hooks=[],
   excludes=[
