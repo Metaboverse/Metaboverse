@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#VERSION=0.11.2
+#BUILD_PATH="../build"
+#BUILD_EXE="${BUILD_PATH}/metaboverse-cli-nix"
+#BD_DEST=j-berg@frs.sourceforge.net:/home/frs/project/metaboverse/v${VERSION}
+
 OS=$(uname -s)
 if [[ $OS == "Darwin" ]]; then
   set +o nomatch
@@ -15,16 +20,53 @@ ${BUILD_EXE} -v
 
 # Get species IDs from Reactome
 REACTOME_API="https://reactome.org/ContentService/data/species/all"
-SPECIES=( $( curl -k ${REACTOME_API} | jq -r '.[].abbreviation' ) )
+SBML_URL="https://reactome.org/download/current/all_species.3.1.sbml.tgz"
+SBML_FILE="all_species.sbml.tgz"
+SBML_DIR="sbml"
+
+# Get species list from Reactome
+SPECIES=($(curl -s $REACTOME_API | jq -r '.[].abbreviation'))
+
+# Download SBML archive 
+curl -L $SBML_URL -o $SBML_FILE
+
+# Extract SBML files
+if [ -d "$SBML_DIR" ]; then
+  rm -rf $SBML_DIR
+fi
+mkdir $SBML_DIR
+tar xzf $SBML_FILE -C $SBML_DIR
+
+# Build list of organisms with SBML files
+declare -A species_seen=()
+# Loop through SBML files
+for sbml_file in $SBML_DIR/*.sbml; do
+
+  # Get abbreviation from file name 
+  IFS='-' read -ra ADDR <<< "$(basename $sbml_file .sbml)"
+  abbv=${ADDR[1]}
+  
+  # Check if in species list
+  if [[ " ${SPECIES[@]} " =~ " $abbv " ]]; then
+    species_seen[$abbv]=1
+  fi
+done
+PROCESSED_SPECIES=("${!species_seen[@]}")
+
 
 printf "Processing database curation for:\n"
-for X in ${SPECIES[@]};
-  do mkdir -p ${BUILD_PATH}/${X} ;
+for X in ${PROCESSED_SPECIES[@]}; do
+  echo -e "${BUILD_PATH}/${X}";
+  mkdir -p ${BUILD_PATH}/${X} ;
 done
+rm -rf $SBML_DIR
+rm -rf $SBML_FILE
+
 
 # Run
 printf "+ Processing database curation...\n"
-parallel ${BUILD_EXE} curate --force_new_curation --output ${BUILD_PATH}/{} --organism_id {} ::: "${SPECIES[@]}"
+parallel ${BUILD_EXE} curate --force_new_curation --output ${BUILD_PATH}/{} --organism_id {} ::: ${PROCESSED_SPECIES[@]}
+
 
 # Print metadata from run 
 printf "+ Processing complete...\n"

@@ -1,4 +1,4 @@
-VERSION=0.11.1
+VERSION=""
 
 # Install ubuntu programs
 apt-get install wget jq
