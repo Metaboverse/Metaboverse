@@ -38,6 +38,9 @@ macOS
   :width: 700
   :align: center
 
+.. note::
+  In more recent MacOS releases, you may need to right-click on the app, close the initial warning, right-click again, and then you can "Open" the app when it displays the "Unsigned developer" warning.
+
 -------------------------------
 Linux
 -------------------------------
