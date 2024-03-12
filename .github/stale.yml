@@ -15,8 +15,8 @@ jobs:
           close-pr-message: 'This PR was closed because it has been stalled for 30 days with no activity.'
           days-before-issue-stale: 30
           days-before-pr-stale: 45
-          days-before-issue-close: 15
-          days-before-pr-close: 30
+          days-before-issue-close: 99999
+          days-before-pr-close: 99999
           stale-issue-label: 'no-issue-activity'
           exempt-issue-labels: 'awaiting-approval,in-progress,planned,low-priority'
           stale-pr-label: 'no-pr-activity'
