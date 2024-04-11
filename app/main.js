@@ -130,7 +130,7 @@ const selectPort = () => {
 const createPyProc = () => {
   let port = "" + selectPort();
   let script = path.join(__dirname, "pycalc", "api.py");
-  pyProc = require("child_process").spawn("python", [script, port]);
+  pyProc = require("child_process").spawn("python", [script, port], {shell: true});
   if (pyProc != null) {
     console.log("child process success");
   }
