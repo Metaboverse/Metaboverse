@@ -28,6 +28,8 @@ SOFTWARE.
 
 """
 from __future__ import print_function
+from ftplib import FTP
+from contextlib import closing
 import pickle
 import json
 import math
@@ -43,6 +45,20 @@ except:
     init = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(init)
     __version__ = init.__version__
+
+
+def download_file_ftp(url, output_path):
+    """Download a file from an FTP URL to a given output path."""
+    # Parse the URL to extract the FTP server address and file path
+    if url.startswith('ftp://'):
+        url = url[6:]
+    server_address, file_path = url.split('/', 1)
+
+    # Use ftplib to connect to the FTP server and download the file
+    with closing(FTP(server_address)) as ftp:
+        ftp.login()  # Log in as anonymous user
+        with open(output_path, 'wb') as file:
+            ftp.retrbinary(f'RETR {file_path}', file.write)
 
 
 def init_mvrs_file(args_dict):

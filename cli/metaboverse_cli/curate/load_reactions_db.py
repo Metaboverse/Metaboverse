@@ -244,20 +244,20 @@ def add_reaction_components(
 
             type = None
             if 'catalyst' in child.attrib['id'] \
-                    or 'positive' in child.attrib['id']:
+            or 'positive' in child.attrib['id']:
                 type = 'catalyst'
 
             elif 'inhibitor' in child.attrib['id'] \
-                    or 'negative' in child.attrib['id']:
+            or 'negative' in child.attrib['id']:
                 type = 'inhibitor'
 
             else:
                 type = 'other'
 
-            items.append([child.attrib['species'], type])
+            items.append([child.attrib.get('species', ''), type])
 
         else:
-            items.append(child.attrib['species'])
+            items.append(child.attrib.get('species', ''))
 
     return items
 
@@ -284,10 +284,10 @@ def add_reaction_components_manual(
 
         if type == 'listOfModifiers':
             _type = 'modifier'
-            items.append([child.attrib['species'], _type])
+            items.append([child.attrib.get('species', ''), _type])
 
         else:
-            items.append(child.attrib['species'])
+            items.append(child.attrib.get('species', ''))
 
     return items
 
@@ -444,9 +444,9 @@ def add_species(
     for child in species:
 
         # Initialize specie record and add common name
-        specie = child.attrib['id']
-        name = child.attrib['name']
-        compartment = child.attrib['compartment']
+        specie = child.attrib.get('id', '')
+        name = child.attrib.get('name', '')
+        compartment = child.attrib.get('compartment', '')
 
         if '[' in name:
             name = name.split(' [')[0]
@@ -751,8 +751,8 @@ def process_manual(
         if x.tag == str(sbml_namespace + 'listOfCompartments'):
             for child in x:
                 if child.tag == str(sbml_namespace + 'compartment'):
-                    id = child.attrib['id']
-                    name = child.attrib['name']
+                    id = child.attrib.get('id', '')
+                    name = child.attrib.get('name', '')
                     compartment_dictionary[id] = name
 
     # Generate species database
@@ -760,16 +760,10 @@ def process_manual(
         if x.tag == str(sbml_namespace + 'listOfSpecies'):
             for child in x:
                 if child.tag == str(sbml_namespace + 'species'):
-                    specie = child.attrib['id']
-                    if 'name' in child.attrib:
-                        name = child.attrib['name']
-                    else:
-                        name = specie
-                    if 'sboTerm' in child.attrib:
-                        sboTerm = child.attrib['sboTerm']
-                    else:
-                        sboTerm = ''
-                    compartment = child.attrib['compartment']
+                    specie = child.attrib.get('id', '')
+                    name = child.attrib.get('name', specie)
+                    sboTerm = child.attrib.get('sboTerm', '')
+                    compartment = child.attrib.get('compartment', '')
 
                     species_database[specie] = name
                     compartment_database[specie] = compartment
@@ -863,15 +857,9 @@ def process_manual(
             for child in x:
                 if child.tag == str(sbml_namespace + 'reaction'):
                     # Get metadata
-                    _id = child.attrib['id']
-                    if 'name' in child.attrib:
-                        _name = child.attrib['name']
-                    else:
-                        _name = _id
-                    if 'reversible' in child.attrib:
-                        _reversible = child.attrib['reversible']
-                    else:
-                        _reversible = 'false'
+                    _id = child.attrib.get('id', '')
+                    _name = child.attrib.get('name', _id)
+                    _reversible = child.attrib.get('reversible', 'false')
 
                     name_database[_name] = _id
                     pathway_database['All']['reactions'].add(_id)

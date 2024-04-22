@@ -122,131 +122,107 @@ def get_reference(
     """Download curation reference
     """
 
-    file = os.path.join(
+    file_path = os.path.join(
         args_dict['output'],
         args_dict['organism_id'] + '.mvdb')
     
-    print('Downloading pre-curated .MVDB database...', '\n\t', reference_url)
-    os.system('curl -kL ' + reference_url + ' -o \"' + file + '\"')
-
-    return file
-
-
-def main(
-        args=None):
-    """Run metaboverse-cli
-    """
-
-    # Read in arguments
-    args, args_dict = parse_arguments(
-        args,
-        __version__)
-    progress_feed(args_dict, "graph", 2)
-
-    # Get info on archived database versions available for direct download
-    this_version = get_metaboverse_cli_version()
-    reference_url = (
-        SOURCE_URL
-        + 'v' + this_version + '/'
-        + CURATION_DIR + '/'
-        + args_dict['organism_id'] + '.mvdb')
-    
-    # If unable to access pre-curated network, force new curation
-    if args_dict['force_new_curation'] != True:
-        try:
-            url_response = requests.head(reference_url)
-        except:
-            print("Unable to access source files from: " + str(reference_url))
-            print("Will force a new curation of source files instead...")
-            args_dict['force_new_curation'] = True
-            url_response = ''
+    print(f'Downloading pre-curated .MVDB database from:\n\t{reference_url}')
+    response = requests.get(reference_url, allow_redirects=True)
+    if response.status_code == 200:
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
     else:
-        url_response = ''
-        
+        raise Exception(f'Failed to download the file. Status code: {response.status_code}')
+
+    return file_path
+
+
+def construct_reference_url(args_dict):
+    """Construct the reference URL based on arguments."""
+    this_version = get_metaboverse_cli_version()
+    return f"{SOURCE_URL}v{this_version}/{args_dict['organism_id']}/{args_dict['organism_id']}.mvdb"
+
+
+def check_url_availability(reference_url):
+    """Check if the URL is accessible."""
+    try:
+        print(f'Checking for pre-curated reference file at: {reference_url}')
+        response = requests.head(reference_url)
+        if response.status_code == 404:
+            print("The reference file does not exist at the provided URL.")
+            return False
+        return True
+    except requests.ConnectionError:
+        print("Unable to access source files from:", reference_url)
+        return False
+
+
+def decide_curation_path(args_dict, reference_url):
+    """Decide the curation path based on command and file availability.
+    """
+    
     if args_dict['cmd'] == 'metaboliteMapper':
         print('Generating metabolite mapper...')
         mapper(args_dict)
+    
+    elif args_dict['cmd'] in ['curate', 'electrum']:
+        
+        force_new_curation = args_dict.get('force_new_curation', False)
 
-    # Run metaboverse-curate
-    elif args_dict['cmd'] == 'curate' or args_dict['cmd'] == 'electrum':
+        if force_new_curation:
+            print('Forcing new curation of the network model...')
+            args_dict = curate(args_dict)
 
-        if args_dict['cmd'] == 'curate':
-            print('Generating Metaboverse-compatible database...')
-        elif args_dict['cmd'] == 'electrum':
-            print('Generating Electrum-compatible database...')
+        else:
+            if check_url_availability(reference_url):
+                # Logic for using pre-curated MVDB file
+                try:
+                    file = get_reference(args_dict, reference_url)
+                    args_dict['organism_curation_file'] = file
+                    args_dict['curation'] = file
+                    print('Skipping organism network modeling as one was available...')
+                    progress_feed(args_dict, "graph", 50)
+        
+                except Exception as e:
+                    print(e)
+                    print('Cannot access pre-curated network model. Falling back to generating new model...')
+                    args_dict = curate(args_dict)
+            
+            elif 'organism_curation_file' in args_dict \
+            and args_dict['organism_curation_file'] not in (None, 'None'):
+                # Logic for provided MVDB file
+                args_dict['curation'] = args_dict['organism_curation_file']
+                print('Skipping organism network modeling as one was provided by the user...')
+                progress_feed(args_dict, "graph", 48)
 
-        # MVDB file provided by user
-        if 'organism_curation_file' in args_dict \
-        and safestr(args_dict['organism_curation_file']) != 'None' \
-        and safestr(args_dict['organism_curation_file']) != None \
-        and safestr(
-                args_dict['organism_curation_file']).split('.')[-1] != 'xml' \
-        and safestr(
-                args_dict['organism_curation_file']).split('.')[-1] != 'sbml' \
-        and safestr(
-                args_dict['organism_curation_file']).split('.')[-1] != 'json':
-            # Update args_dict with path for network model
-            args_dict = update_network_vars(args_dict)
-            args_dict = update_session_vars(args_dict)
-            print('Skipping organism network modeling as one was provided by the user...')
-            progress_feed(
-                args_dict=args_dict,
-                process="graph",
-                amount=48)
-
-        # MVDB file exists in repo
-        elif (args_dict['force_new_curation'] == False \
-        or args_dict['force_new_curation'] == "False") \
-        and url_response.status_code != 404 and url_response.status_code != 10054:
-            try:
-                file = get_reference(
-                    args_dict=args_dict,
-                    reference_url=reference_url)
-                args_dict['organism_curation_file'] = file
-                args_dict = update_network_vars(args_dict)
-                args_dict = update_session_vars(args_dict)
-                print('Skipping organism network modeling as one was found...')
-                progress_feed(
-                    args_dict=args_dict,
-                    process="graph",
-                    amount=50)
-
-            except:
+            else:
+                # Curate MVDB file from scratch
                 print('Curating network model...')
                 args_dict = curate(args_dict)
 
-        # Curate MVDB file from scratch
-        else:
-            if safestr(
-                    args_dict['organism_curation_file']).split('.')[-1] == 'json' \
-            and safestr(
-                    args_dict['database_source']) == 'custom':
-                args_dict['curation'] = args_dict['organism_curation_file']
-            
-            print('Curating network model...')
-            args_dict = curate(args_dict)
-
-        args_dict = init_mvrs_file(args_dict)
-
-        # Curate data overlaid on organism network
-        print('Curating data onto the network model...')
+        
         if args_dict['cmd'] == 'curate':
+            print('Starting network data integration and analysis...')
             args_dict['output_file'] = analyze(args_dict)
+    
         elif args_dict['cmd'] == 'electrum':
             curate_target(args_dict)
-
-    # Print some error messaging
+    
     else:
         raise Exception('Invalid sub-module selected')
 
-    args_dict = update_session_vars(args_dict)
-    progress_feed(
-        args_dict=args_dict,
-        process="graph",
-        amount=50)
 
+def main(args=None):
+    """Run metaboverse-cli."""
+    args, args_dict = parse_arguments(args, __version__)
+    progress_feed(args_dict, "graph", 2)
+
+    reference_url = construct_reference_url(args_dict)
+    decide_curation_path(args_dict, reference_url)
+
+    # Finalize session
+    args_dict = update_session_vars(args_dict)
+    progress_feed(args_dict, "graph", 50)
 
 if __name__ == '__main__':
-    """Run main
-    """
     sys.exit(main() or 0)

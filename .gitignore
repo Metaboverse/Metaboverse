@@ -32,3 +32,8 @@ cli/metaboverse_cli/metabolite_mapping.pickle
 .gitignore
 cli/metaboverse_cli/hmdb_metabolites.xml
 app/python/metaboverse-cli-*
+app/HSA_template.mvrs
+app/HSA.mvdb
+app/HSA.nbdb
+app/metaboverse_session_test.log
+app/output.mvrs

@@ -40,7 +40,7 @@ try:
     from curate.load_reactions_db import __main__ as load_reactions
     from curate.load_complexes_db import __main__ as load_complexes
     from utils import progress_feed, write_database, write_database_json, \
-    safestr, get_metaboverse_cli_version
+    safestr, get_metaboverse_cli_version, download_file_ftp
 except:
     import importlib.util
     spec = importlib.util.spec_from_file_location(
@@ -64,6 +64,7 @@ except:
     write_database_json = utils.write_database_json
     safestr = utils.safestr
     get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+    download_file_ftp = utils.download_file_ftp
 
 
 def parse_table(
@@ -120,77 +121,74 @@ def parse_table(
     return reference_dictionary
 
 
-def parse_complexes(
-        reference):
+def parse_complexes(reference):
 
-    pathway_dictionary = {}
-    for index, row in reference['complex_pathway'].iterrows():
+    def create_pathway_dictionary(
+            complex_pathway_df,
+            complex_key='complex',
+            pathway_key='pathway',
+            top_level_pathway_key='top_level_pathway'):
+        """Creates a dictionary with pathway information."""
+        pathway_dictionary = {}
+        for _, row in complex_pathway_df.iterrows():
+            complex_id = row[complex_key]
+            pathway_dictionary[complex_id] = {
+                'complex': complex_id,
+                'pathway': row[pathway_key],
+                'top_level_pathway': row[top_level_pathway_key]
+            }
+        return pathway_dictionary
 
-        pathway_dictionary[row[0]] = {}
-        pathway_dictionary[row[0]]['complex'] = row[0]
-        pathway_dictionary[row[0]]['pathway'] = row[1]
-        pathway_dictionary[row[0]]['top_level_pathway'] = row[2]
+    def prepare_complexes_information(
+            complex_participants_df,
+            identifier_key='identifier',
+            name_key='name',
+            participants_key='participants',
+            participating_complex_key='participatingComplex',
+            complex_key='complex',
+            compartment_key='compartment'):
+        """Prepares the complexes information dataframe."""
+        complexes_information = complex_participants_df[[identifier_key, name_key, participants_key, participating_complex_key]].copy()
+        complexes_information[complex_key] = complexes_information[name_key].str.split(' \[', n=1, expand=True)[0]
+        complexes_information[compartment_key] = complexes_information[name_key].str.extract(r'\[(.*?)\]')
+        return complexes_information
 
-    column_names = [
-        'identifier',
-        'name',
-        'participants',
-        'participatingComplex']
-    complexes_information = reference['complex_participants'][column_names].copy(
-    )
-    complexes_information['complex'] = complexes_information['name'].str.split(
-        ' \[').str[0]
-    complexes_information['compartment'] = complexes_information['name'].str.split(
-        ' \[').str[1].str.split('\]').str[0]
+    def parse_participants(participants_str):
+        """Parses participants from a string into a dictionary."""
+        participants = {
+            'chebi': [],
+            'uniprot': [],
+            'ensembl': [],
+            'mirbase': [],
+            'ncbi': []
+        }
+        for part in participants_str.split('|'):
+            for key in participants:
+                if key in part:
+                    participants[key].append(part.split(':')[1])
+        return participants
 
-    complex_dictionary = {}
+    def create_complex_dictionary(complexes_information, pathway_dictionary):
+        """Creates a dictionary with complex information including participants."""
+        complex_dictionary = {}
+        for _, row in complexes_information.iterrows():
+            complex_id = row['identifier']
+            complex_dictionary[complex_id] = {
+                'complex_id': complex_id,
+                'complex_name': row['complex'],
+                'compartment': row['compartment'] if pd.notna(row['compartment']) else None,
+                'participating_complex': None if row['participatingComplex'] == '-' else row['participatingComplex'],
+                'pathway': pathway_dictionary.get(complex_id, {}).get('pathway', None),
+                'top_level_pathway': pathway_dictionary.get(complex_id, {}).get('top_level_pathway', None),
+                'participants': parse_participants(row['participants'])
+            }
+        return complex_dictionary
 
-    for index, row in complexes_information.iterrows():
-
-        complex_dictionary[row[0]] = {}
-        complex_dictionary[row[0]]['complex_id'] = row[0]
-        complex_dictionary[row[0]]['complex_name'] = row[4]
-        complex_dictionary[row[0]]['compartment'] = row[5]
-
-        if row[3] == '-':
-            complex_dictionary[row[0]]['participating_complex'] = None
-        else:
-            complex_dictionary[row[0]]['participating_complex'] = row[3]
-
-        if row[0] in pathway_dictionary.keys():
-            complex_dictionary[row[0]
-                               ]['pathway'] = pathway_dictionary[row[0]]['pathway']
-            complex_dictionary[row[0]
-                               ]['top_level_pathway'] = pathway_dictionary[row[0]]['top_level_pathway']
-
-        complex_dictionary[row[0]]['participants'] = {}
-        complex_dictionary[row[0]]['participants']['chebi'] = []
-        complex_dictionary[row[0]]['participants']['uniprot'] = []
-        complex_dictionary[row[0]]['participants']['ensembl'] = []
-        complex_dictionary[row[0]]['participants']['mirbase'] = []
-        complex_dictionary[row[0]]['participants']['ncbi'] = []
-
-        participants = row[2].split('|')
-
-        for x in participants:
-            if 'chebi' in x:
-                complex_dictionary[row[0]]['participants']['chebi'].append(
-                    x.split(':')[1])
-            if 'uniprot' in x:
-                complex_dictionary[row[0]]['participants']['uniprot'].append(
-                    x.split(':')[1])
-            if 'ensembl' in x:
-                complex_dictionary[row[0]]['participants']['ensembl'].append(
-                    x.split(':')[1])
-            if 'mirbase' in x:
-                complex_dictionary[row[0]]['participants']['mirbase'].append(
-                    x.split(':')[1])
-            if 'ncbi' in x:
-                complex_dictionary[row[0]]['participants']['ncbi'].append(
-                    x.split(':')[1])
-            else:
-                pass
-
+    # Main function execution starts here
+    pathway_dictionary = create_pathway_dictionary(reference['complex_pathway'])
+    complexes_information = prepare_complexes_information(reference['complex_participants'])
+    complex_dictionary = create_complex_dictionary(complexes_information, pathway_dictionary)
+    
     return complex_dictionary
 
 
@@ -258,64 +256,38 @@ def parse_chebi_synonyms(
         name_string='NAME',
         id_string='COMPOUND_ID',
         source_string='SOURCE'):
-    """Retrieve CHEBI chemical entity synonyms
-    """
+    """Retrieve CHEBI chemical entity synonyms."""
 
+    # Download the file
     print('Downloading ChEBI synonym database...', '\n\t', url)
-    os.system('curl -kL ' + url + ' -o "' + output_dir + file_name + '.gz"')
-    chebi = pd.read_csv(
-        output_dir + file_name + '.gz',
-        sep='\t',
-        compression='gzip')
-    os.remove(output_dir + file_name + '.gz')
+    if not output_dir.endswith('/'):
+        output_dir += '/'
+    output_path = f"{output_dir}{file_name}.gz"
+    download_file_ftp(url, output_path)
+    
+    # Read the gzipped TSV file into a pandas DataFrame
+    chebi = pd.read_csv(f"{output_dir}{file_name}.gz", sep='\t', compression='gzip')
+    # Remove the gzipped file after reading
+    os.remove(f"{output_dir}{file_name}.gz")
 
-    name_index = None
-    id_index = None
-    source_index = None
-    col_names = chebi.columns.tolist()
-
-    for x in range(len(col_names)):
-        if col_names[x].upper() == name_string:
-            name_index = x
-
-        if col_names[x].upper() == id_string:
-            id_index = x
-
-        if col_names[x].upper() == source_string:
-            source_index = x
-
+    # Initialize dictionaries to store the parsed data
     chebi_dictionary = {}
     chebi_synonyms = {}
     uniprot_metabolites = {}
-    if name_index != None and id_index != None:
 
-        for index, row in chebi.iterrows():
-
-            if 'KEGG' in row[source_index].upper() \
-                    or 'CHEM' in row[source_index].upper() \
-                    or 'JCBN' in row[source_index].upper() \
-                    or 'CHEBI' in row[source_index].upper() \
-                    or 'HMDB' in row[source_index].upper() \
-                    or 'DRUG' in row[source_index].upper() \
-                    or 'IUPAC' in row[source_index].upper() \
-                    or 'LIPID' in row[source_index].upper() \
-                    or 'METACYC' in row[source_index].upper() \
-                    or 'SUBMITTER' in row[source_index].upper():
-                chebi_dictionary[row[name_index]
-                                 ] = 'CHEBI:' + str(row[id_index])
-                if 'CHEBI:' + str(row[id_index]) in chebi_synonyms.keys():
-                    chebi_synonyms['CHEBI:' +
-                                   str(row[id_index])].append(row[name_index])
-                else:
-                    chebi_synonyms['CHEBI:' +
-                                   str(row[id_index])] = [row[name_index]]
-
+    # Iterate over each row of the DataFrame
+    for index, row in chebi.iterrows():
+        # Check if the source column contains one of the specified keywords
+        if any(keyword in row[source_string].upper() for keyword in ['KEGG', 'CHEM', 'JCBN', 'CHEBI', 'HMDB', 'DRUG', 'IUPAC', 'LIPID', 'METACYC', 'SUBMITTER']):
+            chebi_id = f'CHEBI:{row[id_string]}'
+            chebi_dictionary[row[name_string]] = chebi_id
+            
+            if chebi_id in chebi_synonyms:
+                chebi_synonyms[chebi_id].append(row[name_string])
             else:
-                uniprot_metabolites[row[name_index]
-                                    ] = 'CHEBI:' + str(row[id_index])
-
-    else:
-        print('Unable to parse CHEBI file as expected...')
+                chebi_synonyms[chebi_id] = [row[name_string]]
+        else:
+            uniprot_metabolites[row[name_string]] = f'CHEBI:{row[id_string]}'
 
     return chebi_dictionary, chebi_synonyms, uniprot_metabolites
 

@@ -1611,7 +1611,7 @@ def __model__(
         uniprot_mapper=uniprot_mapper,
         metabolite_mapper=metabolite_mapper)
     
-    print('Outputting unmapped metabolomics values (if any exist)...')
+    print('Searching for unmapped metabolomics values...')
     if args_dict['metabolomics'].lower() != 'none':
         m_data = pd.read_csv(
             args_dict['metabolomics'],
@@ -1619,10 +1619,11 @@ def __model__(
             index_col=0)
 
         m_non_mapper = m_data[m_data.index.isin(non_mappers)]
-        print("\t- Outputting " + str(len(m_non_mapper.index.tolist())) + " unmapped metabolites for reference.")
+        unmapped_file = args_dict['metabolomics'][:-4] + '_unmapped.txt'
+        print(f"\tOutputting {str(len(m_non_mapper.index.tolist()))} unmapped metabolites to:\n\t{unmapped_file}.")
         if len(m_non_mapper.index.tolist()) > 0:
             m_non_mapper.to_csv(
-                args_dict['metabolomics'][:-4] + '_unmapped.txt',
+                unmapped_file,
                 sep='\t')
 
     print('Broadcasting values where available...')

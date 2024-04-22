@@ -36,8 +36,10 @@ import re
 
 
 def eval_table(table):
-    
-    return table.applymap(lambda x: ast.literal_eval(str(x)))
+    # Iterate over each column and apply the operation to each element
+    for col in table.columns:
+        table[col] = table[col].apply(lambda x: ast.literal_eval(str(x)))
+    return table
     
     
 # Source: https://www.geeksforgeeks.org/python-program-to-flatten-a-nested-list-using-recursion/

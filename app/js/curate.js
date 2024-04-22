@@ -33,6 +33,7 @@ var path = require("path");
 var $ = require("jquery");
 var reactome_api = "https://reactome.org/ContentService/data/species/all";
 
+let template_url = null;  // Deprecating this option
 
 var abbreviation_dict = {};
 $.getJSON(reactome_api, function(data) {
@@ -242,12 +243,12 @@ window.addEventListener("load", function(event) {
     document.getElementById('curation-input').click();
   }
 
-  document.getElementById("dropGraphTemplate").onclick = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    document.getElementById('template-input').click();
-  }
+  //document.getElementById("dropGraphTemplate").onclick = function(event) {
+  //  event.preventDefault();
+  //  event.stopPropagation();
+  //
+  //  document.getElementById('template-input').click();
+  //}
 
   document.getElementById("dropNeighborDictionary").onclick = function(event) {
     event.preventDefault();
@@ -312,6 +313,7 @@ window.addEventListener("load", function(event) {
   };
 
   // Drop pre-existing organism reaction network template for further analysis
+  /*
   document.getElementById("template-input").onchange = function(event) {
     console.log(document.getElementById("template-input"))
     event.preventDefault();
@@ -340,6 +342,7 @@ window.addEventListener("load", function(event) {
       }
     }
   };
+  */
 
   // Drop pre-existing reaction neighbors dictionary for further analysis
   document.getElementById("neighbors-input").onchange = function(event) {

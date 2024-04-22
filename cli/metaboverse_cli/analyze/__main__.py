@@ -135,22 +135,31 @@ def process_data(
     return data, stats, unmapped, flag_data
 
 
-def read_template(
-        args_dict,
-        network,
-        url,
-        user_provided=False):
-    """
-    """
+def download_template(args_dict, url, user_provided=False):
+
     def get_template_file(url, args_dict):
-        file = os.path.join(
+        # Construct the file path where the template will be saved
+        file_path = os.path.join(
             args_dict['output'],
             args_dict['organism_id'] + '_template.mvrs')
-        print('Downloading graph template database...', '\n\t', url)
-        os.system('curl -kL ' + url + ' -o \"' + file + '\"')
-        return file
-
-    print('Downloading Metaboverse graph template for organism...')
+        
+        print(f'Downloading Metaboverse graph template for organism from:\n\t{url}')
+        
+        # Make the request to download the file
+        try:
+            response = requests.get(url, stream=True)
+            response.raise_for_status()  # This will raise an HTTPError if an error occurs
+            
+            # Open the file path for writing in binary mode
+            with open(file_path, 'wb') as file:
+                for chunk in response.iter_content(chunk_size=8192): 
+                    file.write(chunk)
+                    
+            print('\tDownload completed successfully.')
+            return file_path
+        except requests.exceptions.RequestException as e:
+            print(f"\tAn error occurred while downloading the file: {e}")
+            return None
 
     if user_provided == False:
         file = get_template_file(url, args_dict)
@@ -158,8 +167,21 @@ def read_template(
         file = url
 
     with open(file) as graph_template:
-        graph_data = json.load(graph_template)
+        try:
+            return json.load(graph_template), file
+        except:
+            return None, None
 
+
+def read_template(
+        args_dict,
+        graph_data,
+        network,
+        file):
+    """
+    """
+
+    print('Parsing Metaboverse graph template for organism...')
     graph = nx.readwrite.json_graph.node_link_graph(
         {
             'nodes': graph_data['nodes'],
@@ -292,7 +314,7 @@ def __main__(
     # Get network curation info
     network = read_network(
         file_path=args_dict['output'],
-        network_url=args_dict['curation'])
+        network_url=args_dict['organism_curation_file'])
     progress_feed(args_dict, "graph", 1)
 
     if args_dict['organism_curation_file'] != 'None':
@@ -303,59 +325,46 @@ def __main__(
         network=network,
         args_dict=args_dict)
     progress_feed(args_dict, "graph", 2)
-    print("Data processed of dimensions: " + str(data.shape))
+    print("Processed data entries: " + str(data.shape[0]))
     
     # Generate graph template
     this_version = get_metaboverse_cli_version()
-    test_url = (
-        SOURCE_URL
-        + 'v' + this_version + '/'
-        + TEMPLATE_DIR + '/'
-        + args_dict['organism_id'] + '_template.mvrs')
+    test_url = f"{SOURCE_URL}v{this_version}/{args_dict['organism_id']}/{args_dict['organism_id']}_template.mvrs"    
+    force_new_curation = args_dict.get('force_new_curation', False) in [True, "true", "True", "TRUE"]
     
     # If unable to access pre-curated network, force new curation
-    if args_dict['force_new_curation'] != True:
+    url_response = None  # Default to None
+    if not force_new_curation:
+        print(f'Checking for pre-curated network template at:\n\t{test_url}')
         try:
             url_response = requests.head(test_url)
+            if url_response.status_code == 404:
+                url_response = None
+            else:
+                print("\tFound pre-curated network template.")
         except:
-            print("Unable to access source files from: " + str(test_url))
-            print("Will force a new curation of source files instead...")
-            args_dict['force_new_curation'] == True
-            url_response = ''
-    else:
-        url_response = ''
+            print("\tUnable to access source files from: " + str(test_url))
+            print("\tWill force a new curation of source files instead...")
+            force_new_curation = True
 
-    if (args_dict['force_new_curation'] == False \
-    or args_dict['force_new_curation'] == "False") \
-    and 'graph_template_file' in args_dict \
-    and safestr(args_dict['graph_template_file']) != None \
-    and safestr(args_dict['graph_template_file']) != 'None':
-        try:
-            graph, args_dict, network, name_reference, \
-            degree_dictionary, super_pathways, chebi_dictionary, \
-            uniprot_mapper, metabolite_mapper = read_template(
-                args_dict=args_dict,
-                network=network,
-                url=args_dict['graph_template_file'],
-                user_provided=True)
-        except:
-            graph, args_dict, network, name_reference, \
-            degree_dictionary, super_pathways, chebi_dictionary, \
-            uniprot_mapper, metabolite_mapper = __template__(
-                args_dict=args_dict,
-                network=network,
-                species_id=args_dict['organism_id'],
-                output_file=args_dict['output_file'])
-    elif (args_dict['force_new_curation'] == False \
-    or args_dict['force_new_curation'] == "False") \
-    and url_response.status_code != 404:
+    graph_data, file = None, None
+    if not force_new_curation and 'graph_template_file' in args_dict:
+        if args_dict['graph_template_file'] not in (None, 'None'):
+            graph_data, file = download_template(args_dict, args_dict['graph_template_file'], user_provided=True)
+        elif url_response is not None:
+            graph_data, file = download_template(args_dict, test_url)
+
+    if graph_data is not None:
+        print(f'Download of graph template successful. Parsing...')
         graph, args_dict, network, name_reference, \
         degree_dictionary, super_pathways, chebi_dictionary, \
         uniprot_mapper, metabolite_mapper = read_template(
             args_dict=args_dict,
+            graph_data=graph_data,
             network=network,
-            url=test_url)
+            file=file)
     else:
+        print(f'Curating new network model...')
         graph, args_dict, network, name_reference, \
         degree_dictionary, super_pathways, chebi_dictionary, \
         uniprot_mapper, metabolite_mapper = __template__(
@@ -364,65 +373,50 @@ def __main__(
             species_id=args_dict['organism_id'],
             output_file=args_dict['output_file'])
 
+
     if len(graph.nodes) == 0 or len(graph.edges) == 0:
         raise Exception("Unable to generate a reaction-based network based on the input organism template.")
     else:
         print("Successfully loaded network with " + str(len(graph.nodes)) + " nodes and " + str(len(graph.edges)) + " edges")
     
     # Generate graph template
-    neighbors_url = (
-        SOURCE_URL
-        + 'v' + this_version + '/'
-        + NEIGHBOR_DIR + '/'
-        + args_dict['organism_id'] + '.nbdb')
+    neighbors_url = f"{SOURCE_URL}v{this_version}/{args_dict['organism_id']}/{args_dict['organism_id']}.nbdb"
     
-    # If unable to access pre-curated network, force new curation
-    if args_dict['force_new_curation'] != True:
+    # Initial check for pre-curated network, forcing new curation if necessary
+    neighbor_response = None
+    force_neighbors = False
+    if not force_new_curation:
+        print(f'Checking for pre-curated neighbors dictionary at:\n\t{neighbors_url}')
         try:
             neighbor_response = requests.head(neighbors_url)
-        except:
-            print("Unable to access source files from: " + str(test_url))
-            print("Will force a new curation of source files instead...")
-            args_dict['force_new_curation'] == True
-            neighbor_response = ''
-    else:
-        neighbor_response = ''
-
-    force_neighbors = False
-    if (args_dict['force_new_curation'] == False \
-    or args_dict['force_new_curation'] == "False") \
-    and 'neighbor_dictionary_file' in args_dict \
-    and safestr(args_dict['neighbor_dictionary_file']) != None \
-    and safestr(args_dict['neighbor_dictionary_file']) != 'None':
-        try:
-            neighbors_dictionary = download_neighbors_dictionary(
-                args_dict=args_dict,
-                url=args_dict['neighbor_dictionary_file'],
-                user_provided=True)
-        except:
+        except Exception as e:
+            print(f"\tUnable to access source files from: {neighbors_url}\n\tError: {e}")
+            print("\tWill force a new curation of source files instead...")
             force_neighbors = True
 
-    elif (args_dict['force_new_curation'] == False \
-    or args_dict['force_new_curation'] == "False") \
-    and neighbor_response.status_code != 404:
-        try:
-            neighbors_dictionary = download_neighbors_dictionary(
-                args_dict=args_dict,
-                url=neighbors_url)
-        except:
-            force_neighbors = True
-    else:
-        force_neighbors = True
+    if not force_neighbors:
+        if 'neighbor_dictionary_file' in args_dict and safestr(args_dict['neighbor_dictionary_file']) not in (None, 'None'):
+            try:
+                neighbors_dictionary = download_neighbors_dictionary(args_dict=args_dict, url=args_dict['neighbor_dictionary_file'], user_provided=True)
+            except Exception as e:
+                print(f"Error downloading user-provided neighbors dictionary: {e}")
+                force_neighbors = True
 
-    if force_neighbors == True:
-        no_defective_reactions = remove_defective_reactions(
-            network=network)
-        neighbors_dictionary = make_neighbors_dictionary(
-            args_dict=args_dict,
-            graph=graph,
-            reaction_dictionary=no_defective_reactions)
+        elif neighbor_response is not None and neighbor_response.status_code != 404:
+            try:
+                neighbors_dictionary = download_neighbors_dictionary(args_dict=args_dict, url=neighbors_url)
+            except Exception as e:
+                print(f"Error downloading neighbors dictionary from {neighbors_url}: {e}")
+                force_neighbors = True
+        else:
+            force_neighbors = True
+
+    if force_neighbors:
+        no_defective_reactions = remove_defective_reactions(network=network)
+        neighbors_dictionary = make_neighbors_dictionary(args_dict=args_dict, graph=graph, reaction_dictionary=no_defective_reactions)
     else:
         progress_feed(args_dict, "graph", 6)
+                
 
     # Overlay data on graph and collapse as able
     print("Modeling data onto network...")
