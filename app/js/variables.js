@@ -706,6 +706,9 @@ window.addEventListener("load", function(event) {
       console.log(err)
     } else {
       if (value != null) {
+        if (value <= 1.0) {
+          value = value * 100;
+        }
         $('#collapse_button').val(value);
       }  
     }
