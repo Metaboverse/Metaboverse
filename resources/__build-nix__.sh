@@ -202,7 +202,8 @@ fi
 # Clean up 
 echo -e "\nCleaning up..."
 if [ "$BUILD_DB" = true ]; then
-  rm -rf ${BUILD_PATH}
+  #rm -rf ${BUILD_PATH}
+  echo "Not removing build files... Manually delete if required."
 fi 
 rm ${APP_PATH}/python/metaboverse-cli-*
 
