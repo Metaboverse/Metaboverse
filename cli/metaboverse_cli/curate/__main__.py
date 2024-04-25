@@ -380,7 +380,9 @@ def get_reactome_version():
     """
     reactome_url = "https://reactome.org/tag/release"
     f = requests.get(reactome_url)
-    matches = re.findall("Version (.*) Released", f.text)
+    matches_old = re.findall("version (.*) released", f.text, re.IGNORECASE)
+    matches_new = re.findall("v(.*) released", f.text, re.IGNORECASE)
+    matches = matches_old + matches_new
     current_version = max(matches)
     return current_version
 
