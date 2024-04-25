@@ -3,6 +3,12 @@ Updates
 ###############
 
 =================================
+v0.11.3
+=================================
+- Fixes issues accessing pre-built files on Sourceforge and changing to Reactome database file keys (by @j-berg in `#159 <https://github.com/Metaboverse/Metaboverse/issues/159>`_)
+- Removes unnecessary warning on app load/exit (by @j-berg in `#160 <https://github.com/Metaboverse/Metaboverse/issues/160>`_)
+
+=================================
 v0.11.2
 =================================
 - Entity mapping improvements so user can select between standard display names and user-provided names for metabolites (by @j-berg in `#153 <https://github.com/Metaboverse/Metaboverse/issues/153>`_)
