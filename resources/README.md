@@ -14,6 +14,7 @@ bash ./__build-nix__.sh 0.11.1
 ```
 bash ./__build-nix__.sh 0.11.1 --build
 ```
+This will compile the Linux release, as well as the curated databases for each model organism to be uploaded to SourceForge.    
 
 If running on Windows via WSL, you may encounter the following:
 ```
@@ -23,7 +24,8 @@ If running on Windows via WSL, you may encounter the following:
 '/__build-nix__.sh: line 33: `do
 ```
 
-If so, this indicates that the build file has been edited or saved in a Windows environment, which uses carriage return and line feed ("\r\n") as line endings. To fix:
+If so, this indicates that the build file has been edited or saved in a Windows environment, which uses carriage return and line feed ("\r\n") as line endings.     
+To fix:
 ```
 sudo apt update
 sudo apt install dos2unix
