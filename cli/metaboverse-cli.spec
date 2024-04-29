@@ -38,6 +38,7 @@ a = Analysis(
   ],
   hiddenimports=[
     'scipy.special.cython_special',
+    'scipy.special._cdflib',
     'scipy.spatial.transform._rotation_groups',
     'sklearn',
     'cmath',

@@ -5,9 +5,6 @@
 ### - `parallel` command line tool needs to be installed on your system 
 ###       (`brew install parallel` or `sudo apt-get install parallel`)
 ### 
-### Execute as: `$ bash build.sh 0.11.1 --build`
-### You may be prompted to login to Sourceforge for DB uploads
-### If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ###
 # Run as: $ bash ./__build-nix__.sh 0.11.1
 # Assuming you are the in /Metaboverse/resources/ folder
@@ -16,6 +13,8 @@
 ### IMPORTANT:
 # One of your runs needs to be called as `bash ./__build-nix__.sh 0.11.1 --build` to generate and upload network templates.
 # Ideally, you will do this from the Linux build session
+# You may be prompted to login to Sourceforge for DB uploads
+# If you have permissions issues, try removing NPM cache: `$ sudo npm cache clean --force`
 ### 
 ###
 
@@ -203,7 +202,8 @@ fi
 # Clean up 
 echo -e "\nCleaning up..."
 if [ "$BUILD_DB" = true ]; then
-  rm -rf ${BUILD_PATH}
+  #rm -rf ${BUILD_PATH}
+  echo "Not removing build files... Manually delete if required."
 fi 
 rm ${APP_PATH}/python/metaboverse-cli-*
 
