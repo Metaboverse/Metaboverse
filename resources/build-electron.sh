@@ -86,6 +86,13 @@ cp ${APP_PATH}/data/test_data.zip ${DIR}/Metaboverse-${OS}-${ARCH}-${VERSION}
 # Zip for distribution 
 echo -e "\nZipping the release package..."
 cd ${DIR}
+
+# Currently, the x64 Electron packager works fine for x64 and arm64, while arm64 does not seem to work at all. This is a temporary workaround
+ARCH=$(uname -m)
+if [[ $ARCH == *"arm64"]]; then 
+    ARCH="arm64"
+fi
+
 zip -q -r Metaboverse-${OS}-${ARCH}-${VERSION}.zip Metaboverse-${OS}-${ARCH}-${VERSION}
 
 echo -e "\nZipped release package:"
