@@ -9,7 +9,7 @@ rm -rf ${CONDA}/envs/pyinstaller
 
 # Check if building on an M1 Mac 
 if [[ $(uname -m) == "arm64" ]]; then
-    CONDA_SUBDIR=osx-64 conda create -n pyinstaller python=3.9 -y
+    conda create -n pyinstaller python=3.9 -y
 else
     conda create -n pyinstaller python=3.9 -y
 fi
