@@ -475,7 +475,7 @@ def __main__(
             species_id=args_dict['organism_id'])
         progress_feed(args_dict, "graph", 3)
 
-        database_version = str(get_reactome_version() + ' (Reactome)')
+        database_version = str(get_reactome_version()) + ' (Reactome)'
         _species_id = args_dict['organism_id']
 
     else:

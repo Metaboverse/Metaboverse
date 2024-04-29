@@ -65,7 +65,7 @@ rm -rf $SBML_FILE
 
 # Run
 printf "+ Processing database curation...\n"
-parallel ${BUILD_EXE} curate --force_new_curation --output ${BUILD_PATH}/{} --organism_id {} ::: ${PROCESSED_SPECIES[@]}
+parallel -j 4 ${BUILD_EXE} curate --force_new_curation --output ${BUILD_PATH}/{} --organism_id {} ::: ${PROCESSED_SPECIES[@]}
 
 
 # Print metadata from run 
@@ -81,13 +81,12 @@ printf "\n\nOrganisms curated:" >> ${BUILD_PATH}/README.txt
 
 # Print species list successfully
 printf "\nSTART" >> ${BUILD_PATH}/README.txt
-INCLUDE_PATTERN=""
-EXCLUDE_PATTERN=""
+INCLUDE_PATTERN=()
 for X in ${SPECIES[@]}; do
-  if [ -f "${BUILD_PATH}/${X}/${X}.mvrs" ]; then
+  if [ -f "${BUILD_PATH}/${X}/${X}_template.mvrs" ]; then
     printf "\n ${X}" >> ${BUILD_PATH}/README.txt
-    INCLUDE_PATTERN+=("${X}/")
-    INCLUDE_PATTERN+=("${X}/***")
+    INCLUDE_PATTERN+=("--include=${BUILD_PATH}/${X}/")
+    INCLUDE_PATTERN+=("--include=${BUILD_PATH}/${X}/***")
   fi
 done
 printf "\nEND" >> ${BUILD_PATH}/README.txt
@@ -104,20 +103,12 @@ if [ $? -ne 0 ]; then
   printf "\n\nUnable to view conda environment." >> ${BUILD_PATH}/build_env.txt
 fi
 
-
 # Afterwards, upload to host
 cd ${BUILD_PATH}
 #chmod -R 755 ${BUILD_PATH}
 
 # Include the specific directories and their content
 echo -e "\nUploading to host..."
-INCLUDE_PATTERN=()
-for X in "${SPECIES[@]}"; do
-    if [ -f "${BUILD_PATH}/${X}/${X}.mvrs" ]; then
-        INCLUDE_PATTERN+=("--include=${X}/")
-        INCLUDE_PATTERN+=("--include=${X}/***")
-    fi
-done
 
 # Include other necessary files
 INCLUDE_PATTERN+=("--include=build_env.txt")
@@ -127,7 +118,7 @@ INCLUDE_PATTERN+=("--include=metaboverse-cli-nix")
 # Complete rsync command
 RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh")
 RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
-RSYNC_COMMAND+=("--exclude=*") # Exclude other directories and files
+#RSYNC_COMMAND+=("--exclude=*") # Exclude other directories and files
 RSYNC_COMMAND+=("${BUILD_PATH}/" "${BD_DEST}")
 
 # Execute rsync command
