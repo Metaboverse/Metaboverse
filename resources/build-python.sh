@@ -23,5 +23,5 @@ pip install -r ${CLI_PATH}/requirements.txt
 
 echo -e "\nBuilding the CLI..."
 pyinstaller ${CLI_PATH}/metaboverse-cli.spec
-
+sd
 conda deactivate

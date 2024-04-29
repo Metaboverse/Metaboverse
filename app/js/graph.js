@@ -1208,11 +1208,13 @@ function make_graph(
 
   simulation.on("tick", tick);
 
+
+
   // Toggle compartment view
-  toggle_comp = true;
-  d3.select("#toggleCompartments").on("click", function() {
-    if (toggle_comp === false) {
-      toggle_comp = true;
+  var toggle_comp = d3.select("#toggleCompartmentsCheckbox").property("checked");
+  d3.select("#toggleCompartmentsCheckbox").on("change", function() {
+    toggle_comp = this.checked;
+    if (toggle_comp) {
       hull = hullg
         .selectAll("path.hull")
         .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
@@ -1227,13 +1229,13 @@ function make_graph(
               return fill[categories[d.group]];
             }
           }
-        })
-
+        });
     } else {
-      toggle_comp = false;
       hullg.selectAll("path.hull").remove();
     }
   });
+  // Initialize the switch state based on the initial toggle_comp value
+  d3.select("#toggleCompartmentsCheckbox").property("checked", toggle_comp);
 
   d3.select("#saveGraph").on("click", function() {
     savePNG.saveSvgAsPng(
@@ -1362,15 +1364,15 @@ function make_graph(
   let toggleName = false;
   
   // Event listener for toggleExpression
-  d3.select("#toggleExpression").on("click", function() {
-    toggle_e = !toggle_e;
-    updateText();
+  d3.select("#toggleExpressionSwitch").on("change", function() {
+    toggle_e = this.checked;
+    updateText(); 
   });
 
   // Event listener for toggleName
-  d3.select("#toggleName").on("click", function() {
-    toggleName = !toggleName;
-    updateText();
+  d3.select("#toggleNameSwitch").on("change", function() {
+    toggleName = this.checked;
+    updateText(); 
   });
 
   function updateText() {
@@ -1419,24 +1421,14 @@ function make_graph(
     return display_analytes_dict[d.name];
   });
 
-  d3.select("#toggleAnalytes").on("click", function() {
-    if (toggle_a === false) {
-      toggle_a = true;
-      determine_displays(toggle_a, toggle_r);
-    } else {
-      toggle_a = false;
-      determine_displays(toggle_a, toggle_r);
-    }
+  d3.select("#toggleAnalytesSwitch").on("change", function() {
+    toggle_a = this.checked;
+    determine_displays(toggle_a, toggle_r);
   });
 
-  d3.select("#toggleReactions").on("click", function() {
-    if (toggle_r === false) {
-      toggle_r = true;
-      determine_displays(toggle_a, toggle_r);
-    } else {
-      toggle_r = false;
-      determine_displays(toggle_a, toggle_r);
-    }
+  d3.select("#toggleReactionsSwitch").on("change", function() {
+    toggle_r = this.checked;
+    determine_displays(toggle_a, toggle_r);
   });
 
   function determine_displays(toggle_a, toggle_r) {
@@ -1484,12 +1476,8 @@ function make_graph(
     }
   }
 
-  d3.select("#toggleGenes").on("click", function() {
-    if (graph_genes === false) {
-      graph_genes = true;
-    } else {
-      graph_genes = false;
-    }
+  d3.select("#toggleGenesSwitch").on("change", function() {
+    graph_genes = this.checked;
     make_graph(
       data,
       new_nodes,
@@ -1504,24 +1492,21 @@ function make_graph(
       _width,
       _height,
       collapsed_global_motifs,
-      pathway_dict)
+      pathway_dict
+    );
   });
 
-  d3.select("#collapseNodes").on("click", function() {
-
+  d3.select("#collapseNodesSwitch").on("change", function() {
+    collapse_reactions = this.checked;
+  
     if (document.getElementById("type_selection_type").innerHTML === "Nearest Neighbor") {
       let _target = current_node;
-      if (collapse_reactions === false) {
-        collapse_reactions = true;
-      } else {
-        collapse_reactions = false;
-      }
       nearest_neighbors(data, _target);
     } else {
-      if (collapse_reactions === false) {
+      if (collapse_reactions) {
         new_nodes = collapsed_nodes;
         new_links = collapsed_links;
-
+  
         make_graph(
           data,
           new_nodes,
@@ -1536,14 +1521,13 @@ function make_graph(
           _width,
           _height,
           collapsed_global_motifs,
-          pathway_dict)
-        collapse_reactions = true;
+          pathway_dict);
       } else {
         collapsed_nodes = new_nodes;
         collapsed_links = new_links;
-
+  
         var selection = document.getElementById("pathwayMenu").value;
-
+  
         for (x in data.pathway_dictionary) {
           if (data.pathway_dictionary[x]['name'] === selection) {
             let reactions = data.pathway_dictionary[x]["reactions"];
@@ -1552,14 +1536,14 @@ function make_graph(
               reactions,
               data.reaction_dictionary,
               data.degree_dictionary);
-
+  
             var newer_nodes = newer_elements[0];
             var newer_links = newer_elements[1];
-
+  
             // Initialize variables
             var new_node_dict = {};
             var new_type_dict = {};
-
+  
             var new_node_elements = initialize_nodes(
               newer_nodes,
               new_node_dict,
@@ -1570,7 +1554,7 @@ function make_graph(
             var new_display_analytes_dict = new_node_elements[2];
             var new_display_reactions_dict = new_node_elements[3];
             var new_entity_id_dict = new_node_elements[4];
-
+  
             make_graph(
               data,
               newer_nodes,
@@ -1585,13 +1569,13 @@ function make_graph(
               _width,
               _height,
               global_motifs,
-              pathway_dict)
-            collapse_reactions = false;
-          } else {}
+              pathway_dict);
+          }
         }
       }
     }
   });
+  
 
   var cell = node.append("path").attr("class", "cell");
 
