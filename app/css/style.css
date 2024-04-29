@@ -729,3 +729,11 @@ div.tooltip-text {
   display: none;
   /*hide original SELECT element: */
 }
+
+.spaced-out {
+  margin-right: 10px; /* Adjust the spacing as needed */
+}
+
+.spacer-top {
+  margin-top: 10px; /* Adjust the spacing as needed */
+}
