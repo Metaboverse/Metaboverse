@@ -51,7 +51,7 @@ jobs:
         npm audit fix
 
     - name: Build Executable
-      run: ppyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
+      run: pyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
 
     - name: Move CLI Executable to Electron App
       run: |
@@ -68,11 +68,10 @@ jobs:
         fi
         cp ${GITHUB_WORKSPACE}/cli/dist/$CLI_EXECUTABLE $CLI_DEST_PATH
 
-
     - name: Package with Electron
       run: |
         npm install electron-packager -g
-        electron-packager . Metaboverse --platform=${{ runner.os }} --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite
+        electron-packager . Metaboverse --platform=${{ matrix.os }} --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite
 
     - name: Prepare Test Data
       run: |
