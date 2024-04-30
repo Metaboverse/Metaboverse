@@ -1,0 +1,108 @@
+name: Build and Package Application
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            architecture: x64
+          - os: ubuntu-latest
+            architecture: x64
+          - os: macos-latest
+            architecture: x64
+          - os: macos-latest
+            architecture: arm64
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.9
+        architecture: ${{ matrix.architecture }}
+
+    - name: Set Icon Path
+      id: set-icon
+      run: |
+        if [ "${{ runner.os }}" == "Windows-latest" ]; then
+          echo "::set-output name=ICON_PATH::./assets/icons/appIcon.ico"
+        elif [ "${{ runner.os }}" == "macOS-latest" ]; then
+          echo "::set-output name=ICON_PATH::./assets/icons/appIcon.icns"
+        else
+          echo "::set-output name=ICON_PATH::./assets/icons/appIcon.png"
+        fi
+
+    - name: Install Python and Node Dependencies
+      run: |
+        conda create -n pyinstaller python=3.9 -y
+        conda activate pyinstaller
+        pip install pyinstaller
+        pip install -r ${GITHUB_WORKSPACE}/cli/requirements.txt
+        npm install
+        npm audit fix
+
+    - name: Build Executable
+      run: ppyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
+
+    - name: Move CLI Executable to Electron App
+      run: |
+        OS_NAME="${{ runner.os }}"
+        if [[ $OS_NAME == "Windows-latest" ]]; then
+          CLI_EXECUTABLE="metaboverse-cli.exe"
+          CLI_DEST_PATH="./app/python/metaboverse-cli.exe"
+        elif [[ $OS_NAME == "macOS-latest" ]]; then
+          CLI_EXECUTABLE="metaboverse-cli-darwin"
+          CLI_DEST_PATH="./app/python/metaboverse-cli-darwin"
+        else
+          CLI_EXECUTABLE="metaboverse-cli-linux"
+          CLI_DEST_PATH="./app/python/metaboverse-cli-linux"
+        fi
+        cp ${GITHUB_WORKSPACE}/cli/dist/$CLI_EXECUTABLE $CLI_DEST_PATH
+
+
+    - name: Package with Electron
+      run: |
+        npm install electron-packager -g
+        electron-packager . Metaboverse --platform=${{ runner.os }} --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite
+
+    - name: Prepare Test Data
+      run: |
+        cd app/data
+        if [ -f test_data.zip ]; then
+          rm test_data.zip
+        fi
+        zip -r test_data.zip test_data
+
+    - name: Move and Zip Application Package
+      run: |
+        if [ -d "Metaboverse-${{ runner.os }}-${{ matrix.architecture }}" ]; then
+          rm -rf Metaboverse-${{ runner.os }}-${{ matrix.architecture }}
+        fi
+        mv Metaboverse-${{ runner.os }}-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+        cp app/data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+        zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+        echo "SHA256 checksum:"
+        shasum -a 256 Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+        echo "MD5 checksum:"
+        md5sum Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ runner.os }}-${{ matrix.architecture }}-app
+        path: Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: Metaboverse-${{ matrix.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
