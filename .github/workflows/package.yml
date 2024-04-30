@@ -64,10 +64,10 @@ jobs:
     - name: Move CLI Executable to Electron App
       run: |
         OS_NAME="${{ runner.os }}"
-        if [[ $OS_NAME == "Windows-latest" ]]; then
-          CLI_EXECUTABLE="metaboverse-cli.exe"
-          CLI_DEST_PATH="./app/python/metaboverse-cli.exe"
-        elif [[ $OS_NAME == "macOS-latest" ]]; then
+        if [[ $OS_NAME == "Windows" ]]; then
+          CLI_EXECUTABLE="metaboverse-cli-windows.exe"
+          CLI_DEST_PATH="./app/python/metaboverse-cli-windows.exe"
+        elif [[ $OS_NAME == "macOS" ]]; then
           CLI_EXECUTABLE="metaboverse-cli-darwin"
           CLI_DEST_PATH="./app/python/metaboverse-cli-darwin"
         else
