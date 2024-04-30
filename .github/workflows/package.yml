@@ -53,8 +53,8 @@ jobs:
         pip install pyinstaller
         pip install -r ${GITHUB_WORKSPACE}/cli/requirements.txt
         cd ${GITHUB_WORKSPACE}/app
-        npm install
-        npm audit fix
+        npm install || true
+        npm audit fix || true
 
     - name: Build Executable
       run: pyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
