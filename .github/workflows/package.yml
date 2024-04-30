@@ -57,7 +57,9 @@ jobs:
         npm audit fix || true
 
     - name: Build Executable
-      run: pyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
+      run: |
+        conda activate pyinstaller
+        pyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
 
     - name: Move CLI Executable to Electron App
       run: |
