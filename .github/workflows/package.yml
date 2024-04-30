@@ -38,9 +38,9 @@ jobs:
     - name: Set Icon Path
       id: set-icon
       run: |
-        if [[ "${{ runner.os }}" == "Windows-latest" ]]; then
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
           echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/win32/metaboverse_logo.ico"
-        elif [[ "${{ runner.os }}" == "macOS-latest" ]]; then
+        elif [[ "${{ runner.os }}" == "macOS" ]]; then
           echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/nix/metaboverse_logo.icns"
         else
           echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/png/icon_1024x1024.png"
@@ -82,7 +82,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/app
         npm install electron-packager -g
         OS_NAME="${{ runner.os }}"
-        if [[ $OS_NAME == "Windows"]]; then 
+        if [[ $OS_NAME == "Windows" ]]; then
           APP_PLATFORM="win32"
         elif [[ $OS_NAME == "macOS" ]]; then
           APP_PLATFORM="darwin"
