@@ -734,6 +734,14 @@ div.tooltip-text {
   margin-right: 10px; /* Adjust the spacing as needed */
 }
 
+.spaced-out-2x {
+  margin-right: 20px;
+}
+
+.spaced-out-custom {
+  margin-right: 28px;
+}
+
 .spacer-top {
   margin-top: 10px; /* Adjust the spacing as needed */
 }

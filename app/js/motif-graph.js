@@ -986,8 +986,8 @@ class MetaGraph {
           this.generateLines(d);
         }
         document.getElementById("pathway_name").innerHTML = "<h6><b></b></h6>";
-        d3.select("#pathway-view-svg").style("visibility", "hidden");
-        d3.select(".network-panel").style("visibility", "hidden");
+        d3.select("#pathway-view-svg").style("visibility", "visible");
+        d3.select(".network-panel").style("visibility", "visible");
 
         for (let rxn in motif_list) {
           if (motif_list[rxn].id !== d.id) {
@@ -1221,8 +1221,8 @@ class MetaGraph {
           this.generateLines(d);
         }
         document.getElementById("pathway_name").innerHTML = "<h6><b></b></h6>";
-        d3.select("#pathway-view-svg").style("visibility", "hidden");
-        d3.select(".network-panel").style("visibility", "hidden");
+        d3.select("#pathway-view-svg").style("visibility", "visible");
+        d3.select(".network-panel").style("visibility", "visible");
 
         for (let rxn in motif_list) {
           if (motif_list[rxn].id !== d.id) {
