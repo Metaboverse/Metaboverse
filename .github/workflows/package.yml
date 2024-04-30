@@ -75,6 +75,7 @@ jobs:
           CLI_EXECUTABLE="metaboverse-cli-linux"
           CLI_DEST_PATH="./app/python/metaboverse-cli-linux"
         fi
+        ${GITHUB_WORKSPACE}/cli/dist/$CLI_EXECUTABLE -v
         cp ${GITHUB_WORKSPACE}/cli/dist/$CLI_EXECUTABLE $CLI_DEST_PATH
 
     - name: Package with Electron
@@ -90,14 +91,19 @@ jobs:
           APP_PLATFORM="linux"
         fi
         electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
-
+        
     - name: Prepare Test Data
       run: |
         cd ${GITHUB_WORKSPACE}/app/data
         if [ -f test_data.zip ]; then
           rm test_data.zip
         fi
-        zip -r test_data.zip test_data
+        OS_NAME="${{ runner.os }}"
+        if [[ $OS_NAME == "Windows" ]]; then
+          Compress-Archive -Force -Path "test_data" -DestinationPath "test_data.zip"
+        else
+          zip -r test_data.zip test_data
+        fi
 
     - name: Move and Zip Application Package
       run: |
@@ -110,10 +116,17 @@ jobs:
         else
           APP_PLATFORM="linux"
         fi
-        mv Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-        cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-        zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-   
+        OS_NAME="${{ runner.os }}"
+        if [[ $OS_NAME == "Windows" ]]; then
+          Move-Item Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-$APP_PLATFORM-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+          Copy-Item -Path data/test_data.zip -Destination Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+          Compress-Archive -Force -Path Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME} -DestinationPath Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+        else
+          mv Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+          cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+          zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+        fi 
+
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
