@@ -38,12 +38,12 @@ jobs:
     - name: Set Icon Path
       id: set-icon
       run: |
-        if [ "${{ runner.os }}" == "Windows-latest" ]; then
-          echo "::set-output name=ICON_PATH::./assets/icons/appIcon.ico"
-        elif [ "${{ runner.os }}" == "macOS-latest" ]; then
-          echo "::set-output name=ICON_PATH::./assets/icons/appIcon.icns"
+        if [[ "${{ runner.os }}" == "Windows-latest" ]]; then
+          echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/win32/metaboverse_logo.ico"
+        elif [[ "${{ runner.os }}" == "macOS-latest" ]]; then
+          echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/nix/metaboverse_logo.icns"
         else
-          echo "::set-output name=ICON_PATH::./assets/icons/appIcon.png"
+          echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/png/icon_1024x1024.png"
         fi
 
     - name: Install Python and Node Dependencies
@@ -102,9 +102,6 @@ jobs:
     - name: Move and Zip Application Package
       run: |
         cd ${GITHUB_WORKSPACE}/app
-        if [ -d "Metaboverse-${{ runner.os }}-${{ matrix.architecture }}" ]; then
-          rm -rf Metaboverse-${{ runner.os }}-${{ matrix.architecture }}
-        fi
         mv Metaboverse-${{ runner.os }}-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
