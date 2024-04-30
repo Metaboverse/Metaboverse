@@ -102,12 +102,18 @@ jobs:
     - name: Move and Zip Application Package
       run: |
         cd ${GITHUB_WORKSPACE}/app
-        mv Metaboverse-${{ runner.os }}-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+        OS_NAME="${{ runner.os }}"
+        if [[ $OS_NAME == "Windows" ]]; then
+          APP_PLATFORM="win32"
+        elif [[ $OS_NAME == "macOS" ]]; then
+          APP_PLATFORM="darwin"
+        else
+          APP_PLATFORM="linux"
+        fi
+        mv Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-        echo "SHA256 checksum:"
         shasum -a 256 Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
-        echo "MD5 checksum:"
         md5sum Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
 
     - name: Upload Artifacts
