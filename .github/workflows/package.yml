@@ -19,7 +19,10 @@ jobs:
             architecture: x64
           - os: macos-latest
             architecture: arm64
-
+    defaults:
+      run:
+        shell: bash -l {0}  # This line sets the shell to bash in login mode for all run commands
+      
     steps:
     - uses: actions/checkout@v2
 
@@ -30,6 +33,7 @@ jobs:
         python-version: 3.9
         architecture: ${{ matrix.architecture }}
         miniconda-version: "latest"
+        auto-activate-base: false
       
     - name: Set Icon Path
       id: set-icon
