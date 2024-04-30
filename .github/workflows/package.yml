@@ -113,9 +113,7 @@ jobs:
         mv Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-        shasum -a 256 Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
-        md5sum Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
-
+   
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
