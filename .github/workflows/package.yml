@@ -58,8 +58,9 @@ jobs:
 
     - name: Build Executable
       run: |
+        cd ${GITHUB_WORKSPACE}/cli
         conda activate pyinstaller
-        pyinstaller ${GITHUB_WORKSPACE}/cli/metaboverse-cli.spec --clean
+        pyinstaller metaboverse-cli.spec --clean
 
     - name: Move CLI Executable to Electron App
       run: |
@@ -78,12 +79,13 @@ jobs:
 
     - name: Package with Electron
       run: |
+        cd ${GITHUB_WORKSPACE}/app
         npm install electron-packager -g
         electron-packager . Metaboverse --platform=${{ matrix.os }} --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite
 
     - name: Prepare Test Data
       run: |
-        cd app/data
+        cd ${GITHUB_WORKSPACE}/app/data
         if [ -f test_data.zip ]; then
           rm test_data.zip
         fi
@@ -91,11 +93,12 @@ jobs:
 
     - name: Move and Zip Application Package
       run: |
+        cd ${GITHUB_WORKSPACE}/app
         if [ -d "Metaboverse-${{ runner.os }}-${{ matrix.architecture }}" ]; then
           rm -rf Metaboverse-${{ runner.os }}-${{ matrix.architecture }}
         fi
         mv Metaboverse-${{ runner.os }}-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-        cp app/data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
+        cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         echo "SHA256 checksum:"
         shasum -a 256 Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
@@ -106,10 +109,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-${{ matrix.architecture }}-app
-        path: Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+        path: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Metaboverse-${{ matrix.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+        files: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ matrix.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
