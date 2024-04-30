@@ -29,7 +29,8 @@ jobs:
         auto-update-conda: true
         python-version: 3.9
         architecture: ${{ matrix.architecture }}
-
+        miniconda-version: "latest"
+      
     - name: Set Icon Path
       id: set-icon
       run: |
