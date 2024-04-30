@@ -1208,6 +1208,33 @@ function make_graph(
 
   simulation.on("tick", tick);
 
+  // Toggle compartment view
+  var toggle_comp = d3.select("#toggleCompartmentsCheckbox").property("checked");
+  d3.select("#toggleCompartmentsCheckbox").on("change", function() {
+    toggle_comp = this.checked;
+    if (toggle_comp) {
+      hull = hullg
+        .selectAll("path.hull")
+        .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
+        .enter().append("path")
+        .attr("class", "hull")
+        .attr("d", drawCluster)
+        .style("fill", function(d) {
+          if (d.group !== "undefined" && d.group !== "none") {
+            if (categories[d.group] > 9) {
+              return fill2[categories[d.group]];
+            } else {
+              return fill[categories[d.group]];
+            }
+          }
+        });
+    } else {
+      hullg.selectAll("path.hull").remove();
+    }
+  });
+  // Initialize the switch state based on the initial toggle_comp value
+  d3.select("#toggleCompartmentsCheckbox").property("checked", toggle_comp);
+
   d3.select("#saveGraph").on("click", function() {
     savePNG.saveSvgAsPng(
       d3.select("#svg_viewer_id")._groups[0][0],
@@ -1333,168 +1360,41 @@ function make_graph(
 
   let toggle_e = true; // Existing toggle for expression
   let toggleName = false;
+  
+  // Event listener for toggleExpression
+  d3.select("#toggleExpressionSwitch").on("change", function() {
+    console.log('Toggled expression')
+    toggle_e = this.checked;
+    updateText(); 
+  });
 
-  document.addEventListener('DOMContentLoaded', function() {
-
-    toggle_a = true;
-    toggle_r = false;
-    d3.select("#toggleAnalytesSwitch").on("change", function() {
-      toggle_a = this.checked;
-      determine_displays(toggle_a, toggle_r);
-    });
-
-    d3.select("#toggleReactionsSwitch").on("change", function() {
-      toggle_r = this.checked;
-      determine_displays(toggle_a, toggle_r);
-    });
-
-    d3.select("#toggleGenesSwitch").on("change", function() {
-      graph_genes = this.checked;
-      make_graph(
-        data,
-        new_nodes,
-        new_links,
-        type_dict,
-        node_dict,
-        entity_id_dict,
-        display_analytes_dict,
-        display_reactions_dict,
-        selector,
-        stat_type,
-        _width,
-        _height,
-        collapsed_global_motifs,
-        pathway_dict
-      );
-    });
-
-    d3.select("#collapseNodesSwitch").on("change", function() {
-      collapse_reactions = this.checked;
-    
-      if (document.getElementById("type_selection_type").innerHTML === "Nearest Neighbor") {
-        let _target = current_node;
-        nearest_neighbors(data, _target);
-      } else {
-        if (collapse_reactions) {
-          new_nodes = collapsed_nodes;
-          new_links = collapsed_links;
-    
-          make_graph(
-            data,
-            new_nodes,
-            new_links,
-            type_dict,
-            node_dict,
-            entity_id_dict,
-            display_analytes_dict,
-            display_reactions_dict,
-            selector,
-            stat_type,
-            _width,
-            _height,
-            collapsed_global_motifs,
-            pathway_dict);
-        } else {
-          collapsed_nodes = new_nodes;
-          collapsed_links = new_links;
-    
-          var selection = document.getElementById("pathwayMenu").value;
-    
-          for (x in data.pathway_dictionary) {
-            if (data.pathway_dictionary[x]['name'] === selection) {
-              let reactions = data.pathway_dictionary[x]["reactions"];
-              var newer_elements = parse_pathway(
-                data,
-                reactions,
-                data.reaction_dictionary,
-                data.degree_dictionary);
-    
-              var newer_nodes = newer_elements[0];
-              var newer_links = newer_elements[1];
-    
-              // Initialize variables
-              var new_node_dict = {};
-              var new_type_dict = {};
-    
-              var new_node_elements = initialize_nodes(
-                newer_nodes,
-                new_node_dict,
-                new_type_dict
-              );
-              var new_node_dict = new_node_elements[0];
-              var new_type_dict = new_node_elements[1];
-              var new_display_analytes_dict = new_node_elements[2];
-              var new_display_reactions_dict = new_node_elements[3];
-              var new_entity_id_dict = new_node_elements[4];
-    
-              make_graph(
-                data,
-                newer_nodes,
-                newer_links,
-                new_type_dict,
-                new_node_dict,
-                new_entity_id_dict,
-                new_display_analytes_dict,
-                new_display_reactions_dict,
-                selector,
-                stat_type,
-                _width,
-                _height,
-                global_motifs,
-                pathway_dict);
-            }
-          }
-        }
-      }
-    });
-
-
-    // Toggle compartment view
-    var toggle_comp = d3.select("#toggleCompartmentsCheckbox").property("checked");
-    d3.select("#toggleCompartmentsCheckbox").on("change", function() {
-      toggle_comp = this.checked;
-      if (toggle_comp) {
-        hull = hullg
-          .selectAll("path.hull")
-          .data(convexHulls(graph_nodes, graph_links, getGroup, offset))
-          .enter().append("path")
-          .attr("class", "hull")
-          .attr("d", drawCluster)
-          .style("fill", function(d) {
-            if (d.group !== "undefined" && d.group !== "none") {
-              if (categories[d.group] > 9) {
-                return fill2[categories[d.group]];
-              } else {
-                return fill[categories[d.group]];
-              }
-            }
-          });
-      } else {
-        hullg.selectAll("path.hull").remove();
-      }
-    });
-    // Initialize the switch state based on the initial toggle_comp value
-    d3.select("#toggleCompartmentsCheckbox").property("checked", toggle_comp);
-
-    // Event listener for toggleExpression
-    d3.select("#toggleExpressionSwitch").on("change", function() {
-      toggle_e = this.checked;
-      updateText(); 
-    });
-
-    // Event listener for toggleName
-    d3.select("#toggleNameSwitch").on("change", function() {
-      toggleName = this.checked;
-      updateText(); 
-    });
-
-  })
+  // Event listener for toggleName
+  d3.select("#toggleNameSwitch").on("change", function() {
+    toggleName = this.checked;
+    updateText(); 
+  });
 
   function updateText() {
     text.html(function(d) {
       // Determine the name to display based on toggleName
       let this_name = toggleName && d.user_label ? d.user_label : d.name;
-  
+      
+      let display_stat;
+      if (parseFloat(d.stats[sample]) < 0.01) {
+        display_stat = "< 0.01";
+      } else {
+        display_stat = parseFloat(d.stats[sample]).toFixed(2);
+      }
+
+      let values = "";
+      let stats = "";
+      if (toggle_e === true) {
+        values = "<tspan x='16' y='.7em'>Value: " + parseFloat(d.values[sample]).toFixed(2) + "</tspan>";
+        if (stat_type !== "array") {
+          stats = "<tspan x='16' y='1.7em'>Statistic: " + display_stat + "</tspan>";
+        }
+      } 
+
       // Integration of this_name into your existing logic
       if (type_dict[this_name] === "reaction") {
         // If reaction node, do not display expression value
@@ -1509,18 +1409,8 @@ function make_graph(
         if (d.values[sample] === null && d.stats[sample] === null) {
           return "<tspan dx='16' y='0em' class='bold-text'>" + this_name + "</tspan>";
         } else {
-          let display_stat;
-          if (parseFloat(d.stats[sample]) < 0.01) {
-            display_stat = "< 0.01";
-          } else {
-            display_stat = parseFloat(d.stats[sample]).toFixed(2);
-          }
           let output_stat_string = "<tspan dx='16' y='-.5em' class='bold-text'>" + this_name +
-                                   "</tspan><tspan x='16' y='.7em'>Value: " +
-                                   parseFloat(d.values[sample]).toFixed(2) + "</tspan>";
-          if (stat_type !== "array") {
-            output_stat_string += "<tspan x='16' y='1.7em'>Statistic: " + display_stat + "</tspan>";
-          }
+                                   "</tspan>" + values + stats;
           return output_stat_string;
         }
       }
@@ -1530,9 +1420,20 @@ function make_graph(
   // Make sure the initial display is set up correctly
   updateText();
 
-  
+  toggle_a = true;
+  toggle_r = false;
   text.style("--node_display", function(d) {
     return display_analytes_dict[d.name];
+  });
+
+  d3.select("#toggleAnalytesSwitch").on("change", function() {
+    toggle_a = this.checked;
+    determine_displays(toggle_a, toggle_r);
+  });
+
+  d3.select("#toggleReactionsSwitch").on("change", function() {
+    toggle_r = this.checked;
+    determine_displays(toggle_a, toggle_r);
   });
 
   function determine_displays(toggle_a, toggle_r) {
@@ -1579,6 +1480,106 @@ function make_graph(
       });
     }
   }
+
+  d3.select("#toggleGenesSwitch").on("change", function() {
+    graph_genes = this.checked;
+    make_graph(
+      data,
+      new_nodes,
+      new_links,
+      type_dict,
+      node_dict,
+      entity_id_dict,
+      display_analytes_dict,
+      display_reactions_dict,
+      selector,
+      stat_type,
+      _width,
+      _height,
+      collapsed_global_motifs,
+      pathway_dict
+    );
+  });
+
+  d3.select("#collapseNodesSwitch").on("change", function() {
+    collapse_reactions = this.checked;
+  
+    if (document.getElementById("type_selection_type").innerHTML === "Nearest Neighbor") {
+      let _target = current_node;
+      nearest_neighbors(data, _target);
+    } else {
+      if (collapse_reactions) {
+        new_nodes = collapsed_nodes;
+        new_links = collapsed_links;
+  
+        make_graph(
+          data,
+          new_nodes,
+          new_links,
+          type_dict,
+          node_dict,
+          entity_id_dict,
+          display_analytes_dict,
+          display_reactions_dict,
+          selector,
+          stat_type,
+          _width,
+          _height,
+          collapsed_global_motifs,
+          pathway_dict);
+      } else {
+        collapsed_nodes = new_nodes;
+        collapsed_links = new_links;
+  
+        var selection = document.getElementById("pathwayMenu").value;
+  
+        for (x in data.pathway_dictionary) {
+          if (data.pathway_dictionary[x]['name'] === selection) {
+            let reactions = data.pathway_dictionary[x]["reactions"];
+            var newer_elements = parse_pathway(
+              data,
+              reactions,
+              data.reaction_dictionary,
+              data.degree_dictionary);
+  
+            var newer_nodes = newer_elements[0];
+            var newer_links = newer_elements[1];
+  
+            // Initialize variables
+            var new_node_dict = {};
+            var new_type_dict = {};
+  
+            var new_node_elements = initialize_nodes(
+              newer_nodes,
+              new_node_dict,
+              new_type_dict
+            );
+            var new_node_dict = new_node_elements[0];
+            var new_type_dict = new_node_elements[1];
+            var new_display_analytes_dict = new_node_elements[2];
+            var new_display_reactions_dict = new_node_elements[3];
+            var new_entity_id_dict = new_node_elements[4];
+  
+            make_graph(
+              data,
+              newer_nodes,
+              newer_links,
+              new_type_dict,
+              new_node_dict,
+              new_entity_id_dict,
+              new_display_analytes_dict,
+              new_display_reactions_dict,
+              selector,
+              stat_type,
+              _width,
+              _height,
+              global_motifs,
+              pathway_dict);
+          }
+        }
+      }
+    }
+  });
 
   var cell = node.append("path").attr("class", "cell");
 
