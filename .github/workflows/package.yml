@@ -90,6 +90,11 @@ jobs:
           APP_PLATFORM="linux"
         fi
         electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite
+        shell: /bin/bash -l {0}
+        env:
+          INPUT_RUN_POST: true
+          CONDA: /Users/runner/miniconda3
+          CONDA_PKGS_DIR: /Users/runner/conda_pkgs_dir
 
     - name: Prepare Test Data
       run: |
