@@ -172,7 +172,7 @@ jobs:
         os_name = os.getenv('RUNNER_OS', 'default_os')
         architecture = os.getenv('MATRIX_ARCHITECTURE', 'default_architecture')
         ref_name = os.getenv('GITHUB_REF_NAME', 'default_ref_name')
-        source_folder = app_path / f'Metaboverse-${{ matrix.architecture }}'
+        source_folder = app_path / f'Metaboverse-{os_name}-{architecture}'
         destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
 
         # Move application package and include test data
