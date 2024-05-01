@@ -223,11 +223,11 @@ jobs:
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ runner.os }}-${{ matrix.architecture }}-app
+        name: Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
         path: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ matrix.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+        files: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
