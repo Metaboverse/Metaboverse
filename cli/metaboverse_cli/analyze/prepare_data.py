@@ -69,7 +69,10 @@ def read_data(
     data = pd.read_csv(
         url,
         sep=delimiter,
-        index_col=0)
+        index_col=0,
+        encoding='utf-8',
+        encoding_errors='backslashreplace'
+    )
 
     data = data.dropna(axis=1, how="all")
     

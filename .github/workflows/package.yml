@@ -1,0 +1,216 @@
+name: Build and Package Application
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            architecture: x64
+          - os: ubuntu-latest
+            architecture: x64
+          - os: macos-latest
+            architecture: x64
+          - os: macos-latest
+            architecture: arm64
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.9
+        architecture: ${{ matrix.architecture }}
+        miniconda-version: "latest"
+        auto-activate-base: false
+      
+    - name: Set Icon Path
+      id: set-icon
+      run: |
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/win32/metaboverse_logo.ico"
+        elif [[ "${{ runner.os }}" == "macOS" ]]; then
+          echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/nix/metaboverse_logo.icns"
+        else
+          echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/png/icon_1024x1024.png"
+        fi
+
+    - name: Update Version Information
+      run: |
+        import json, re, datetime
+        from pathlib import Path
+
+        # Determine the VERSION from Git tag, removing 'v' prefix
+        VERSION = '${{ github.ref_name }}'.lstrip('v')
+        print('Version to set:', VERSION)
+
+        # Paths
+        workspace = Path(r'${{ github.workspace }}')
+        package_json_path = workspace / 'app' / 'package.json'
+        init_py_path = workspace / 'cli' / 'metaboverse_cli' / '__init__.py'
+        citation_cff_path = workspace / 'CITATION.cff'
+        conf_py_path = workspace / 'docs' / 'conf.py'
+
+        # Update Python files
+        init_py_path.write_text(f'__version__ = \"{VERSION}\"')
+
+        # Update JSON
+        data = json.loads(package_json_path.read_text())
+        data['version'] = VERSION
+        package_json_path.write_text(json.dumps(data, indent=4))
+
+        # Update CITATION.cff and conf.py
+        major_minor_version = '.'.join(VERSION.split('.')[:2])
+        current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        conf_py = conf_py_path.read_text()
+        conf_py = re.sub(r'(?<=^version = ).*', f'\"{major_minor_version}\"', conf_py, flags=re.MULTILINE)
+        conf_py = re.sub(r'(?<=^release = ).*', f'\"{VERSION}\"', conf_py, flags=re.MULTILINE)
+        conf_py_path.write_text(conf_py)
+
+        citation_cff = citation_cff_path.read_text()
+        citation_cff = re.sub(r'(?<=^version: ).*', VERSION, citation_cff, flags=re.MULTILINE)
+        citation_cff = re.sub(r'(?<=^date-released: ).*', current_date, citation_cff, flags=re.MULTILINE)
+        citation_cff_path.write_text(citation_cff)
+      shell: python
+
+    - name: Install Python and Node Dependencies
+      run: |
+        conda create -n pyinstaller python=3.9 -y
+        conda activate pyinstaller
+        pip install pyinstaller
+        pip install -r ${GITHUB_WORKSPACE}/cli/requirements.txt
+        cd ${GITHUB_WORKSPACE}/app
+        npm install || true
+        npm audit fix || true
+
+    - name: Build Executable
+      run: |
+        cd ${GITHUB_WORKSPACE}/cli
+        conda activate pyinstaller
+        pyinstaller metaboverse-cli.spec --clean
+
+    - name: Move CLI Executable to Electron App
+      run: |
+        import shutil
+        from pathlib import Path
+
+        # Define paths and executable names based on OS
+        workspace = Path('${{ github.workspace }}')
+        cli_dist_path = workspace / 'cli' / 'dist'
+        app_python_path = workspace / 'app' / 'python'
+
+        os_name = '${{ runner.os }}'
+        if os_name == 'Windows':
+            cli_executable = 'metaboverse-cli-windows.exe'
+        elif os_name == 'macOS':
+            cli_executable = 'metaboverse-cli-darwin'
+        else:
+            cli_executable = 'metaboverse-cli-linux'
+
+        source_path = cli_dist_path / cli_executable
+        dest_path = app_python_path / cli_executable
+
+        # Move the CLI executable
+        shutil.move(str(source_path), str(dest_path))
+
+        # Optionally, print the version if needed
+        import subprocess
+        result = subprocess.run([str(dest_path), '-v'], capture_output=True, text=True)
+        print(result.stdout)
+      shell: python
+
+    - name: Package with Electron
+      run: |
+        cd ${GITHUB_WORKSPACE}/app
+        npm install electron-packager -g
+        OS_NAME="${{ runner.os }}"
+        if [[ $OS_NAME == "Windows" ]]; then
+          APP_PLATFORM="win32"
+        elif [[ $OS_NAME == "macOS" ]]; then
+          APP_PLATFORM="darwin"
+        else
+          APP_PLATFORM="linux"
+        fi
+        electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
+        
+    - name: Prepare and Package Application
+      env:
+        RUNNER_OS: ${{ runner.os }}
+        MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
+      run: |
+        import os, shutil, zipfile
+        from pathlib import Path
+
+        # Define workspace environment variables 
+        workspace = Path(os.getenv('GITHUB_WORKSPACE', 'default_workspace_path'))
+        os_name = os.getenv('RUNNER_OS', 'default_os')
+        architecture = os.getenv('MATRIX_ARCHITECTURE', 'default_architecture')
+        ref_name = os.getenv('GITHUB_REF_NAME', 'default_ref_name')
+
+        app_path = workspace / 'app'
+        data_path = app_path / 'data'
+        test_data_folder = data_path / 'test_data'
+        test_data_zip_path = data_path / 'test_data.zip'
+
+        # Map platform names 
+        if os_name == "Windows":
+            platform = "win32"
+        elif os_name == "macOS":
+            platform = "darwin"
+        else:
+            platform = "linux"
+
+        # Remove existing zip file if it exists
+        if test_data_zip_path.exists():
+            test_data_zip_path.unlink()
+
+        # Zip the test data folder
+        with zipfile.ZipFile(test_data_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(str(test_data_folder)):
+                for file in files:
+                    file_path = Path(root) / file
+                    arcname = file_path.relative_to(data_path)
+                    zipf.write(file_path, arcname)
+
+        # Define paths for moving and zipping application
+        source_folder = app_path / f'Metaboverse-{platform}-{architecture}'
+        destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
+
+        # Move application package and include test data
+        shutil.move(str(source_folder), str(destination_folder))
+        shutil.copy(test_data_zip_path, destination_folder)
+
+        # Zip the final application package
+        final_zip_path = workspace / f'Metaboverse-{os_name}-{architecture}-{ref_name}.zip'
+        with zipfile.ZipFile(final_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(str(destination_folder)):
+                for file in files:
+                    file_path = Path(root) / file
+                    arcname = file_path.relative_to(app_path)
+                    zipf.write(file_path, arcname)
+      shell: python
+ 
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ runner.os }}-${{ matrix.architecture }}-app
+        path: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: ${GITHUB_WORKSPACE}/app/Metaboverse-${{ matrix.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
