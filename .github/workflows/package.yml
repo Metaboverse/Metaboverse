@@ -146,11 +146,20 @@ jobs:
         electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
         
     - name: Prepare and Package Application
+      env:
+        RUNNER_OS: ${{ runner.os }}
+        MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
       run: |
         import os, shutil, zipfile
         from pathlib import Path
 
+        # Define workspace environment variables 
         workspace = Path(os.getenv('GITHUB_WORKSPACE', 'default_workspace_path'))
+        os_name = os.getenv('RUNNER_OS', 'default_os')
+        architecture = os.getenv('MATRIX_ARCHITECTURE', 'default_architecture')
+        ref_name = os.getenv('GITHUB_REF_NAME', 'default_ref_name')
+
         app_path = workspace / 'app'
         data_path = app_path / 'data'
         test_data_folder = data_path / 'test_data'
@@ -169,9 +178,6 @@ jobs:
                     zipf.write(file_path, arcname)
 
         # Define paths for moving and zipping application
-        os_name = os.getenv('RUNNER_OS', 'default_os')
-        architecture = os.getenv('MATRIX_ARCHITECTURE', 'default_architecture')
-        ref_name = os.getenv('GITHUB_REF_NAME', 'default_ref_name')
         source_folder = app_path / f'Metaboverse-{os_name}-{architecture}'
         destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
 
