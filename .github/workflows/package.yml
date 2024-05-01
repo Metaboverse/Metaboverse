@@ -52,7 +52,7 @@ jobs:
         MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
         GITHUB_REF_NAME: ${{ github.ref_name }}
       run: |
-        import json, re, datetime
+        import json, re, datetime, os
         from pathlib import Path
 
         # Define workspace environment variables 
@@ -116,7 +116,7 @@ jobs:
         MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
         GITHUB_REF_NAME: ${{ github.ref_name }}
       run: |
-        import shutil
+        import shutil, os
         from pathlib import Path
 
         # Define workspace environment variables 
