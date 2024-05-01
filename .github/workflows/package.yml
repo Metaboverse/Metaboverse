@@ -70,6 +70,7 @@ jobs:
         init_py_path = workspace / 'cli' / 'metaboverse_cli' / '__init__.py'
         citation_cff_path = workspace / 'CITATION.cff'
         conf_py_path = workspace / 'docs' / 'conf.py'
+        version_path = workspace / 'app' / '__version__.txt'
 
         # Update Python files
         init_py_path.write_text(f'__version__ = \"{VERSION}\"')
@@ -92,6 +93,9 @@ jobs:
         citation_cff = re.sub(r'(?<=^version: ).*', VERSION, citation_cff, flags=re.MULTILINE)
         citation_cff = re.sub(r'(?<=^date-released: ).*', current_date, citation_cff, flags=re.MULTILINE)
         citation_cff_path.write_text(citation_cff)
+
+        # Update version file
+        version_path.write_text(f'v{VERSION}')
       shell: python
 
     - name: Install Python and Node Dependencies
