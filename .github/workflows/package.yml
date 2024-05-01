@@ -21,8 +21,8 @@ jobs:
             architecture: arm64
     defaults:
       run:
-        shell: bash -l {0}  # This line sets the shell to bash in login mode for all run commands
-      
+        shell: bash -l {0}
+
     steps:
     - uses: actions/checkout@v2
 
@@ -46,6 +46,47 @@ jobs:
           echo "::set-output name=ICON_PATH::${GITHUB_WORKSPACE}/app/data/icon/png/icon_1024x1024.png"
         fi
 
+    - name: Update Version Information
+      run: >-
+        python -c "
+    import json, re, datetime
+    from pathlib import Path
+
+    # Determine the VERSION from Git tag, removing 'v' prefix
+    VERSION = '${{ github.ref_name }}'.lstrip('v')
+    print('Version to set:', VERSION)
+
+    # Paths
+    workspace = Path('${{ github.workspace }}')
+    package_json_path = workspace / 'app/package.json'
+    init_py_path = workspace / 'cli/metaboverse_cli/__init__.py'
+    citation_cff_path = workspace / 'CITATION.cff'
+    conf_py_path = workspace / 'docs/conf.py'
+
+    # Update Python files
+    init_py_path.write_text(f'__version__ = \"{VERSION}\"')
+
+    # Update JSON
+    data = json.loads(package_json_path.read_text())
+    data['version'] = VERSION
+    package_json_path.write_text(json.dumps(data, indent=4))
+
+    # Update CITATION.cff and conf.py
+    major_minor_version = '.'.join(VERSION.split('.')[:2])
+    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+    conf_py = conf_py_path.read_text()
+    conf_py = re.sub(r'(?<=^version = ).*', f'\"{major_minor_version}\"', conf_py, flags=re.MULTILINE)
+    conf_py = re.sub(r'(?<=^release = ).*', f'\"{VERSION}\"', conf_py, flags=re.MULTILINE)
+    conf_py_path.write_text(conf_py)
+
+    citation_cff = citation_cff_path.read_text()
+    citation_cff = re.sub(r'(?<=^version: ).*', VERSION, citation_cff, flags=re.MULTILINE)
+    citation_cff = re.sub(r'(?<=^date-released: ).*', current_date, citation_cff, flags=re.MULTILINE)
+    citation_cff_path.write_text(citation_cff)
+    "
+      shell: python
+
     - name: Install Python and Node Dependencies
       run: |
         conda create -n pyinstaller python=3.9 -y
@@ -63,20 +104,35 @@ jobs:
         pyinstaller metaboverse-cli.spec --clean
 
     - name: Move CLI Executable to Electron App
-      run: |
-        OS_NAME="${{ runner.os }}"
-        if [[ $OS_NAME == "Windows" ]]; then
-          CLI_EXECUTABLE="metaboverse-cli-windows.exe"
-          CLI_DEST_PATH="./app/python/metaboverse-cli-windows.exe"
-        elif [[ $OS_NAME == "macOS" ]]; then
-          CLI_EXECUTABLE="metaboverse-cli-darwin"
-          CLI_DEST_PATH="./app/python/metaboverse-cli-darwin"
-        else
-          CLI_EXECUTABLE="metaboverse-cli-linux"
-          CLI_DEST_PATH="./app/python/metaboverse-cli-linux"
-        fi
-        ${GITHUB_WORKSPACE}/cli/dist/$CLI_EXECUTABLE -v
-        cp ${GITHUB_WORKSPACE}/cli/dist/$CLI_EXECUTABLE $CLI_DEST_PATH
+      run: python -c "
+    import shutil
+    from pathlib import Path
+
+    # Define paths and executable names based on OS
+    workspace = Path('${{ github.workspace }}')
+    cli_dist_path = workspace / 'cli' / 'dist'
+    app_python_path = workspace / 'app' / 'python'
+
+    os_name = '${{ runner.os }}'
+    if os_name == 'Windows':
+        cli_executable = 'metaboverse-cli-windows.exe'
+    elif os_name == 'macOS':
+        cli_executable = 'metaboverse-cli-darwin'
+    else:
+        cli_executable = 'metaboverse-cli-linux'
+
+    source_path = cli_dist_path / cli_executable
+    dest_path = app_python_path / cli_executable
+
+    # Move the CLI executable
+    shutil.move(str(source_path), str(dest_path))
+
+    # Optionally, print the version if needed
+    import subprocess
+    result = subprocess.run([str(dest_path), '-v'], capture_output=True, text=True)
+    print(result.stdout)
+    "
+      shell: python
 
     - name: Package with Electron
       run: |
@@ -92,41 +148,51 @@ jobs:
         fi
         electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
         
-    - name: Prepare Test Data
-      run: |
-        cd ${GITHUB_WORKSPACE}/app/data
-        if [ -f test_data.zip ]; then
-          rm test_data.zip
-        fi
-        OS_NAME="${{ runner.os }}"
-        if [[ $OS_NAME == "Windows" ]]; then
-          Compress-Archive -Force -Path "test_data" -DestinationPath "test_data.zip"
-        else
-          zip -r test_data.zip test_data
-        fi
+    - name: Prepare and Package Application
+      run: python -c "
+    import os, shutil, zipfile
+    from pathlib import Path
 
-    - name: Move and Zip Application Package
-      run: |
-        cd ${GITHUB_WORKSPACE}/app
-        OS_NAME="${{ runner.os }}"
-        if [[ $OS_NAME == "Windows" ]]; then
-          APP_PLATFORM="win32"
-        elif [[ $OS_NAME == "macOS" ]]; then
-          APP_PLATFORM="darwin"
-        else
-          APP_PLATFORM="linux"
-        fi
-        OS_NAME="${{ runner.os }}"
-        if [[ $OS_NAME == "Windows" ]]; then
-          Move-Item Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-$APP_PLATFORM-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-          Copy-Item -Path data/test_data.zip -Destination Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-          Compress-Archive -Force -Path Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME} -DestinationPath Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip
-        else
-          mv Metaboverse-$APP_PLATFORM-${{ matrix.architecture }} Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-          cp data/test_data.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-          zip -r Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}.zip Metaboverse-${{ runner.os }}-${{ matrix.architecture }}-${GITHUB_REF_NAME}
-        fi 
+    workspace = Path('${GITHUB_WORKSPACE}')
+    app_path = workspace / 'app'
+    data_path = app_path / 'data'
+    test_data_folder = data_path / 'test_data'
+    test_data_zip_path = data_path / 'test_data.zip'
 
+    # Remove existing zip file if it exists
+    if test_data_zip_path.exists():
+        test_data_zip_path.unlink()
+
+    # Zip the test data folder
+    with zipfile.ZipFile(test_data_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(str(test_data_folder)):
+            for file in files:
+                file_path = Path(root) / file
+                arcname = file_path.relative_to(data_path)
+                zipf.write(file_path, arcname)
+
+    # Define paths for moving and zipping application
+    os_name = '${{ runner.os }}'
+    architecture = '${{ matrix.architecture }}'
+    ref_name = '${{ github.ref_name }}'
+    source_folder = app_path / f'Metaboverse-${{ matrix.architecture }}'
+    destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
+
+    # Move application package and include test data
+    shutil.move(str(source_folder), str(destination_folder))
+    shutil.copy(test_data_zip_path, destination_folder)
+
+    # Zip the final application package
+    final_zip_path = workspace / f'Metaboverse-{os_name}-{architecture}-{ref_name}.zip'
+    with zipfile.ZipFile(final_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(str(destination_folder)):
+            for file in files:
+                file_path = Path(root) / file
+                arcname = file_path.relative_to(app_path)
+                zipf.write(file_path, arcname)
+    "
+      shell: python
+ 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
