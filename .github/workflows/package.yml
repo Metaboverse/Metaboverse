@@ -56,11 +56,11 @@ jobs:
         print('Version to set:', VERSION)
 
         # Paths
-        workspace = Path('${{ github.workspace }}')
-        package_json_path = workspace / 'app/package.json'
-        init_py_path = workspace / 'cli/metaboverse_cli/__init__.py'
+        workspace = Path(r'${{ github.workspace }}')
+        package_json_path = workspace / 'app' / 'package.json'
+        init_py_path = workspace / 'cli' / 'metaboverse_cli' / '__init__.py'
         citation_cff_path = workspace / 'CITATION.cff'
-        conf_py_path = workspace / 'docs/conf.py'
+        conf_py_path = workspace / 'docs' / 'conf.py'
 
         # Update Python files
         init_py_path.write_text(f'__version__ = \"{VERSION}\"')
