@@ -47,44 +47,42 @@ jobs:
         fi
 
     - name: Update Version Information
-      run: >-
-        python -c "
-    import json, re, datetime
-    from pathlib import Path
+      run: |
+        import json, re, datetime
+        from pathlib import Path
 
-    # Determine the VERSION from Git tag, removing 'v' prefix
-    VERSION = '${{ github.ref_name }}'.lstrip('v')
-    print('Version to set:', VERSION)
+        # Determine the VERSION from Git tag, removing 'v' prefix
+        VERSION = '${{ github.ref_name }}'.lstrip('v')
+        print('Version to set:', VERSION)
 
-    # Paths
-    workspace = Path('${{ github.workspace }}')
-    package_json_path = workspace / 'app/package.json'
-    init_py_path = workspace / 'cli/metaboverse_cli/__init__.py'
-    citation_cff_path = workspace / 'CITATION.cff'
-    conf_py_path = workspace / 'docs/conf.py'
+        # Paths
+        workspace = Path('${{ github.workspace }}')
+        package_json_path = workspace / 'app/package.json'
+        init_py_path = workspace / 'cli/metaboverse_cli/__init__.py'
+        citation_cff_path = workspace / 'CITATION.cff'
+        conf_py_path = workspace / 'docs/conf.py'
 
-    # Update Python files
-    init_py_path.write_text(f'__version__ = \"{VERSION}\"')
+        # Update Python files
+        init_py_path.write_text(f'__version__ = \"{VERSION}\"')
 
-    # Update JSON
-    data = json.loads(package_json_path.read_text())
-    data['version'] = VERSION
-    package_json_path.write_text(json.dumps(data, indent=4))
+        # Update JSON
+        data = json.loads(package_json_path.read_text())
+        data['version'] = VERSION
+        package_json_path.write_text(json.dumps(data, indent=4))
 
-    # Update CITATION.cff and conf.py
-    major_minor_version = '.'.join(VERSION.split('.')[:2])
-    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+        # Update CITATION.cff and conf.py
+        major_minor_version = '.'.join(VERSION.split('.')[:2])
+        current_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
-    conf_py = conf_py_path.read_text()
-    conf_py = re.sub(r'(?<=^version = ).*', f'\"{major_minor_version}\"', conf_py, flags=re.MULTILINE)
-    conf_py = re.sub(r'(?<=^release = ).*', f'\"{VERSION}\"', conf_py, flags=re.MULTILINE)
-    conf_py_path.write_text(conf_py)
+        conf_py = conf_py_path.read_text()
+        conf_py = re.sub(r'(?<=^version = ).*', f'\"{major_minor_version}\"', conf_py, flags=re.MULTILINE)
+        conf_py = re.sub(r'(?<=^release = ).*', f'\"{VERSION}\"', conf_py, flags=re.MULTILINE)
+        conf_py_path.write_text(conf_py)
 
-    citation_cff = citation_cff_path.read_text()
-    citation_cff = re.sub(r'(?<=^version: ).*', VERSION, citation_cff, flags=re.MULTILINE)
-    citation_cff = re.sub(r'(?<=^date-released: ).*', current_date, citation_cff, flags=re.MULTILINE)
-    citation_cff_path.write_text(citation_cff)
-    "
+        citation_cff = citation_cff_path.read_text()
+        citation_cff = re.sub(r'(?<=^version: ).*', VERSION, citation_cff, flags=re.MULTILINE)
+        citation_cff = re.sub(r'(?<=^date-released: ).*', current_date, citation_cff, flags=re.MULTILINE)
+        citation_cff_path.write_text(citation_cff)
       shell: python
 
     - name: Install Python and Node Dependencies
@@ -104,34 +102,33 @@ jobs:
         pyinstaller metaboverse-cli.spec --clean
 
     - name: Move CLI Executable to Electron App
-      run: python -c "
-    import shutil
-    from pathlib import Path
+      run: |
+        import shutil
+        from pathlib import Path
 
-    # Define paths and executable names based on OS
-    workspace = Path('${{ github.workspace }}')
-    cli_dist_path = workspace / 'cli' / 'dist'
-    app_python_path = workspace / 'app' / 'python'
+        # Define paths and executable names based on OS
+        workspace = Path('${{ github.workspace }}')
+        cli_dist_path = workspace / 'cli' / 'dist'
+        app_python_path = workspace / 'app' / 'python'
 
-    os_name = '${{ runner.os }}'
-    if os_name == 'Windows':
-        cli_executable = 'metaboverse-cli-windows.exe'
-    elif os_name == 'macOS':
-        cli_executable = 'metaboverse-cli-darwin'
-    else:
-        cli_executable = 'metaboverse-cli-linux'
+        os_name = '${{ runner.os }}'
+        if os_name == 'Windows':
+            cli_executable = 'metaboverse-cli-windows.exe'
+        elif os_name == 'macOS':
+            cli_executable = 'metaboverse-cli-darwin'
+        else:
+            cli_executable = 'metaboverse-cli-linux'
 
-    source_path = cli_dist_path / cli_executable
-    dest_path = app_python_path / cli_executable
+        source_path = cli_dist_path / cli_executable
+        dest_path = app_python_path / cli_executable
 
-    # Move the CLI executable
-    shutil.move(str(source_path), str(dest_path))
+        # Move the CLI executable
+        shutil.move(str(source_path), str(dest_path))
 
-    # Optionally, print the version if needed
-    import subprocess
-    result = subprocess.run([str(dest_path), '-v'], capture_output=True, text=True)
-    print(result.stdout)
-    "
+        # Optionally, print the version if needed
+        import subprocess
+        result = subprocess.run([str(dest_path), '-v'], capture_output=True, text=True)
+        print(result.stdout)
       shell: python
 
     - name: Package with Electron
@@ -149,48 +146,47 @@ jobs:
         electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
         
     - name: Prepare and Package Application
-      run: python -c "
-    import os, shutil, zipfile
-    from pathlib import Path
+      run: |
+        import os, shutil, zipfile
+        from pathlib import Path
 
-    workspace = Path('${GITHUB_WORKSPACE}')
-    app_path = workspace / 'app'
-    data_path = app_path / 'data'
-    test_data_folder = data_path / 'test_data'
-    test_data_zip_path = data_path / 'test_data.zip'
+        workspace = Path('${GITHUB_WORKSPACE}')
+        app_path = workspace / 'app'
+        data_path = app_path / 'data'
+        test_data_folder = data_path / 'test_data'
+        test_data_zip_path = data_path / 'test_data.zip'
 
-    # Remove existing zip file if it exists
-    if test_data_zip_path.exists():
-        test_data_zip_path.unlink()
+        # Remove existing zip file if it exists
+        if test_data_zip_path.exists():
+            test_data_zip_path.unlink()
 
-    # Zip the test data folder
-    with zipfile.ZipFile(test_data_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, files in os.walk(str(test_data_folder)):
-            for file in files:
-                file_path = Path(root) / file
-                arcname = file_path.relative_to(data_path)
-                zipf.write(file_path, arcname)
+        # Zip the test data folder
+        with zipfile.ZipFile(test_data_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(str(test_data_folder)):
+                for file in files:
+                    file_path = Path(root) / file
+                    arcname = file_path.relative_to(data_path)
+                    zipf.write(file_path, arcname)
 
-    # Define paths for moving and zipping application
-    os_name = '${{ runner.os }}'
-    architecture = '${{ matrix.architecture }}'
-    ref_name = '${{ github.ref_name }}'
-    source_folder = app_path / f'Metaboverse-${{ matrix.architecture }}'
-    destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
+        # Define paths for moving and zipping application
+        os_name = '${{ runner.os }}'
+        architecture = '${{ matrix.architecture }}'
+        ref_name = '${{ github.ref_name }}'
+        source_folder = app_path / f'Metaboverse-${{ matrix.architecture }}'
+        destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
 
-    # Move application package and include test data
-    shutil.move(str(source_folder), str(destination_folder))
-    shutil.copy(test_data_zip_path, destination_folder)
+        # Move application package and include test data
+        shutil.move(str(source_folder), str(destination_folder))
+        shutil.copy(test_data_zip_path, destination_folder)
 
-    # Zip the final application package
-    final_zip_path = workspace / f'Metaboverse-{os_name}-{architecture}-{ref_name}.zip'
-    with zipfile.ZipFile(final_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, files in os.walk(str(destination_folder)):
-            for file in files:
-                file_path = Path(root) / file
-                arcname = file_path.relative_to(app_path)
-                zipf.write(file_path, arcname)
-    "
+        # Zip the final application package
+        final_zip_path = workspace / f'Metaboverse-{os_name}-{architecture}-{ref_name}.zip'
+        with zipfile.ZipFile(final_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(str(destination_folder)):
+                for file in files:
+                    file_path = Path(root) / file
+                    arcname = file_path.relative_to(app_path)
+                    zipf.write(file_path, arcname)
       shell: python
  
     - name: Upload Artifacts
