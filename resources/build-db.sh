@@ -70,7 +70,7 @@ parallel -j 4 ${BUILD_EXE} curate --force_new_curation --output ${BUILD_PATH}/{}
 
 # Print metadata from run 
 printf "+ Processing complete...\n"
-printf "Metadata for bulk Metaboverse .mvdb curation:\n" >> ${BUILD_PATH}/README.txt
+printf "Metadata for bulk Metaboverse .mvdb curation:\n" > ${BUILD_PATH}/README.txt
 printf "\nDate: " >> ${BUILD_PATH}/README.txt
 date '+%Y-%m-%d %H:%M:%S' >> ${BUILD_PATH}/README.txt
 printf "\nMetaboverse version: " >> ${BUILD_PATH}/README.txt
@@ -122,6 +122,8 @@ RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
 RSYNC_COMMAND+=("${BUILD_PATH}/" "${BD_DEST}")
 
 # Execute rsync command
+echo -e "Executing rsync command:\n"
+echo -e "${RSYNC_COMMAND[@]}"
 eval "${RSYNC_COMMAND[@]}"
 
 conda deactivate
