@@ -165,6 +165,14 @@ jobs:
         test_data_folder = data_path / 'test_data'
         test_data_zip_path = data_path / 'test_data.zip'
 
+        # Map platform names 
+        if os_name == "Windows":
+            platform = "win32"
+        elif os_name == "macOS":
+            platform = "darwin"
+        else:
+            platform = "linux"
+
         # Remove existing zip file if it exists
         if test_data_zip_path.exists():
             test_data_zip_path.unlink()
@@ -178,7 +186,7 @@ jobs:
                     zipf.write(file_path, arcname)
 
         # Define paths for moving and zipping application
-        source_folder = app_path / f'Metaboverse-{os_name}-{architecture}'
+        source_folder = app_path / f'Metaboverse-{platform}-{architecture}'
         destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
 
         # Move application package and include test data
