@@ -47,16 +47,25 @@ jobs:
         fi
 
     - name: Update Version Information
+      env:
+        RUNNER_OS: ${{ runner.os }}
+        MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
       run: |
         import json, re, datetime
         from pathlib import Path
 
+        # Define workspace environment variables 
+        workspace = Path(os.getenv('GITHUB_WORKSPACE', 'default_workspace_path'))
+        os_name = os.getenv('RUNNER_OS', 'default_os')
+        architecture = os.getenv('MATRIX_ARCHITECTURE', 'default_architecture')
+        ref_name = os.getenv('GITHUB_REF_NAME', 'default_ref_name')
+        
         # Determine the VERSION from Git tag, removing 'v' prefix
-        VERSION = '${{ github.ref_name }}'.lstrip('v')
+        VERSION = ref_name.lstrip('v')
         print('Version to set:', VERSION)
 
         # Paths
-        workspace = Path(r'${{ github.workspace }}')
         package_json_path = workspace / 'app' / 'package.json'
         init_py_path = workspace / 'cli' / 'metaboverse_cli' / '__init__.py'
         citation_cff_path = workspace / 'CITATION.cff'
@@ -102,16 +111,24 @@ jobs:
         pyinstaller metaboverse-cli.spec --clean
 
     - name: Move CLI Executable to Electron App
+      env:
+        RUNNER_OS: ${{ runner.os }}
+        MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
       run: |
         import shutil
         from pathlib import Path
 
+        # Define workspace environment variables 
+        workspace = Path(os.getenv('GITHUB_WORKSPACE', 'default_workspace_path'))
+        os_name = os.getenv('RUNNER_OS', 'default_os')
+        architecture = os.getenv('MATRIX_ARCHITECTURE', 'default_architecture')
+        ref_name = os.getenv('GITHUB_REF_NAME', 'default_ref_name')
+
         # Define paths and executable names based on OS
-        workspace = Path('${{ github.workspace }}')
         cli_dist_path = workspace / 'cli' / 'dist'
         app_python_path = workspace / 'app' / 'python'
 
-        os_name = '${{ runner.os }}'
         if os_name == 'Windows':
             cli_executable = 'metaboverse-cli-windows.exe'
         elif os_name == 'macOS':
