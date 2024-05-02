@@ -8,23 +8,23 @@ Updates
 =================================
 v0.11.3
 =================================
-- Fixes issues accessing pre-built files on Sourceforge and changing to Reactome database file keys (by @j-berg in `#159 <https://github.com/Metaboverse/Metaboverse/issues/159>`_)
-- Removes unnecessary warning on app load/exit (by @j-berg in `#160 <https://github.com/Metaboverse/Metaboverse/issues/160>`_)
+| - Fixes issues accessing pre-built files on Sourceforge and changing to Reactome database file keys (by @j-berg in `#159 <https://github.com/Metaboverse/Metaboverse/issues/159>`_)
+| - Removes unnecessary warning on app load/exit (by @j-berg in `#160 <https://github.com/Metaboverse/Metaboverse/issues/160>`_)
 
 =================================
 v0.11.2
 =================================
-- Entity mapping improvements so user can select between standard display names and user-provided names for metabolites (by @j-berg in `#153 <https://github.com/Metaboverse/Metaboverse/issues/153>`_)
-- Fixes to error on window close (by @j-berg in `c3f153a <https://github.com/Metaboverse/Metaboverse/commit/c3f153aec78d354ace178cf4b8bf6403a6bc9c60>`_)
+| - Entity mapping improvements so user can select between standard display names and user-provided names for metabolites (by @j-berg in `#153 <https://github.com/Metaboverse/Metaboverse/issues/153>`_)
+| - Fixes to error on window close (by @j-berg in `c3f153a <https://github.com/Metaboverse/Metaboverse/commit/c3f153aec78d354ace178cf4b8bf6403a6bc9c60>`_)
 
 =================================
 v0.11.1
 =================================
-- Fixes issues with HMDB ID mapping in back-end (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_, `#146 <https://github.com/Metaboverse/Metaboverse/issues/146>`_)
-- Prints note about using HMDB IDs with MetaboAnalyst API (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_)
-- Updates MetaboAnalyst API address for metabolite name conversion (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_)
-- Reverts to using Reactome metabolite names for visualization (will give the option in the future - `#151 <https://github.com/Metaboverse/Metaboverse/issues/151>`_, but need to handle cases where HMDB IDs are used as these are not very useful for visualization)
-- Updated documentation specifying that Ensembl transcript IDs or names should be used as Ensembl gene IDs do not work well. (`#146 <https://github.com/Metaboverse/Metaboverse/issues/146>`_)
+| - Fixes issues with HMDB ID mapping in back-end (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_, `#146 <https://github.com/Metaboverse/Metaboverse/issues/146>`_)
+| - Prints note about using HMDB IDs with MetaboAnalyst API (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_)
+| - Updates MetaboAnalyst API address for metabolite name conversion (`#144 <https://github.com/Metaboverse/Metaboverse/issues/144>`_)
+| - Reverts to using Reactome metabolite names for visualization (will give the option in the future - `#151 <https://github.com/Metaboverse/Metaboverse/issues/151>`_, but need to handle cases where HMDB IDs are used as these are not very useful for visualization)
+| - Updated documentation specifying that Ensembl transcript IDs or names should be used as Ensembl gene IDs do not work well. (`#146 <https://github.com/Metaboverse/Metaboverse/issues/146>`_)
 
 =================================
 v0.11.0
@@ -33,7 +33,6 @@ v0.11.0
 | - `#134 <https://github.com/Metaboverse/Metaboverse/issues/134>`_, `#136 <https://github.com/Metaboverse/Metaboverse/issues/136>`_: Moves curated files to Sourceforge, adds automated scripts for release building
 | - `#128 <https://github.com/Metaboverse/Metaboverse/issues/128>`_, `#129 <https://github.com/Metaboverse/Metaboverse/issues/129>`_, `#130 <https://github.com/Metaboverse/Metaboverse/issues/130>`_, `#131 <https://github.com/Metaboverse/Metaboverse/issues/131>`_: Returns more information for values not being mapped to networks
 | - Updates to front-end calls to improve performance
-| We are trying to get a better sense of how we can best continue to develop Metaboverse for the community. If you are using Metaboverse, we would appreciate it if you took a few moments to fill out this survey: `https://forms.gle/YdM1caZ7NhLAjxCGA <https://forms.gle/YdM1caZ7NhLAjxCGA>`_. Thank you!
 
 =================================
 v0.10.1
