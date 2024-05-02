@@ -110,6 +110,7 @@ export BD_DEST=j-berg@frs.sourceforge.net:/home/frs/project/metaboverse/v${VERSI
 
 # Update version in app/package.json, cli/metaboverse_cli/__init__.py, CITATION.cff, and docs/conf.py
 echo "v${VERSION}" > ${APP_PATH}/__version__.txt
+echo "__version__='${VERSION}'" > ${CLI_PATH}/metaboverse_cli/__init__.py
 
 # Extract major and minor version (e.g. if VERSION is "0.10.1", this gets "0.10")
 MAJOR_MINOR_VERSION=$(echo "$VERSION" | cut -d'.' -f1,2)
