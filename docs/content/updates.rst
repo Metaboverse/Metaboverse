@@ -2,6 +2,9 @@
 Updates
 ###############
 
+.. note::
+    This page is no longer being updated. Please refer to the release notes for each release on the Metaboverse GitHub page: https://github.com/Metaboverse/Metaboverse/releases
+
 =================================
 v0.11.3
 =================================
