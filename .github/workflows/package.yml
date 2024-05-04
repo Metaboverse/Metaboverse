@@ -173,7 +173,7 @@ jobs:
         RUNNER_OS: ${{ runner.os }}
         MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
         GITHUB_REF_NAME: ${{ github.ref_name }}
-      run: |
+      run: |      
         import os, shutil, zipfile
         from pathlib import Path
 
@@ -191,10 +191,13 @@ jobs:
         # Map platform names 
         if os_name == "Windows":
             platform = "win32"
+            arch=architecture
         elif os_name == "macOS":
             platform = "darwin"
+            arch="universal"
         else:
             platform = "linux"
+            arch=architecture
 
         # Remove existing zip file if it exists
         if test_data_zip_path.exists():
@@ -209,7 +212,7 @@ jobs:
                     zipf.write(file_path, arcname)
 
         # Define paths for moving and zipping application
-        source_folder = app_path / f'Metaboverse-{platform}-{architecture}'
+        source_folder = app_path / f'Metaboverse-{platform}-{arch}'
         destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
 
         # Move application package and include test data
