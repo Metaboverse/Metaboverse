@@ -162,7 +162,7 @@ jobs:
           APP_PLATFORM="win32"
         elif [[ $OS_NAME == "macOS" ]]; then
           APP_PLATFORM="darwin"
-          $ARCH="universal"
+          ARCH="universal"
         else
           APP_PLATFORM="linux"
         fi
