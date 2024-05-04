@@ -162,7 +162,6 @@ jobs:
           APP_PLATFORM="win32"
         elif [[ $OS_NAME == "macOS" ]]; then
           APP_PLATFORM="darwin"
-          ARCH="universal"
         else
           APP_PLATFORM="linux"
         fi
@@ -191,13 +190,10 @@ jobs:
         # Map platform names 
         if os_name == "Windows":
             platform = "win32"
-            arch=architecture
         elif os_name == "macOS":
             platform = "darwin"
-            arch="universal"
         else:
             platform = "linux"
-            arch=architecture
 
         # Remove existing zip file if it exists
         if test_data_zip_path.exists():
@@ -212,7 +208,7 @@ jobs:
                     zipf.write(file_path, arcname)
 
         # Define paths for moving and zipping application
-        source_folder = app_path / f'Metaboverse-{platform}-{arch}'
+        source_folder = app_path / f'Metaboverse-{platform}-{architecture}'
         destination_folder = app_path / f'Metaboverse-{os_name}-{architecture}-{ref_name}'
 
         # Move application package and include test data
