@@ -157,14 +157,16 @@ jobs:
         cd ${GITHUB_WORKSPACE}/app
         npm install electron-packager -g
         OS_NAME="${{ runner.os }}"
+        ARCH="${{ matrix.architecture }}"
         if [[ $OS_NAME == "Windows" ]]; then
           APP_PLATFORM="win32"
         elif [[ $OS_NAME == "macOS" ]]; then
           APP_PLATFORM="darwin"
+          $ARCH="universal"
         else
           APP_PLATFORM="linux"
         fi
-        electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=${{ matrix.architecture }} --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
+        electron-packager . Metaboverse --platform=$APP_PLATFORM --arch=$ARCH --icon=${{ steps.set-icon.outputs.ICON_PATH }} --overwrite || true
         
     - name: Prepare and Package Application
       env:
