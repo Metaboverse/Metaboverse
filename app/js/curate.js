@@ -265,7 +265,11 @@ window.addEventListener("load", function(event) {
   }
 
   async function setOutput() {
-    const result = await ipcRenderer.invoke('save-file-dialog-mvrs');
+    let result = await ipcRenderer.invoke('save-file-dialog-mvrs');
+    if (result.endsWith('.mvrs') === false) {
+      result = result + '.mvrs';
+    }
+
     if (result) {
       console.log(result); // This will print the output location path
       update_session_info("database_url", result);
