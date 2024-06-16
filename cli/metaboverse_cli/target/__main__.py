@@ -60,7 +60,7 @@ except:
     read_network = utils.read_network
 
 
-def __main__(
+def main(
         args_dict):
     """
     INPUTS:

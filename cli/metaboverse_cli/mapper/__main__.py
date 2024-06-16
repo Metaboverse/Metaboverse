@@ -142,7 +142,7 @@ def parse_hmdb_synonyms(
     return hmdb_dictionary, display_dictionary, mapping_dictionary
 
 
-def __main__(
+def main(
         args_dict):
     """Build metabolite name mapping dictionary
     """

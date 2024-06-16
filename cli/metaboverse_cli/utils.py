@@ -30,401 +30,240 @@ SOFTWARE.
 from __future__ import print_function
 from ftplib import FTP
 from contextlib import closing
+import requests
 import pickle
 import json
 import math
 import sys
 import os
 
-try:
-    from __init__ import __version__
-except:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "__version__", os.path.abspath("./metaboverse_cli/__init__.py"))
-    init = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(init)
-    __version__ = init.__version__
+from __init__ import __version__
+SOURCE_URL = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'source_url.txt'), 'r').read().strip()
 
 
 def download_file_ftp(url, output_path):
     """Download a file from an FTP URL to a given output path."""
-    # Parse the URL to extract the FTP server address and file path
     if url.startswith('ftp://'):
         url = url[6:]
     server_address, file_path = url.split('/', 1)
 
-    # Use ftplib to connect to the FTP server and download the file
     with closing(FTP(server_address)) as ftp:
         ftp.login()  # Log in as anonymous user
         with open(output_path, 'wb') as file:
             ftp.retrbinary(f'RETR {file_path}', file.write)
 
 
+
 def init_mvrs_file(args_dict):
-
-    if args_dict['cmd'] == 'electrum':
-        if 'output_file' in args_dict \
-                and safestr(args_dict['output_file']) == 'None':
-            args_dict['output_file'] = args_dict['output'] \
-                + args_dict['organism_id'] \
-                + '-latest.eldb'
-    else:
-        if 'output_file' in args_dict \
-                and safestr(args_dict['output_file']) == 'None':
-            args_dict['output_file'] = args_dict['output'] \
-                + args_dict['organism_id'] \
-                + '.mvrs'
-
+    """Initialize MVRS file based on command."""
+    suffix = '-latest.eldb' if args_dict['cmd'] == 'electrum' else '.mvrs'
+    if 'output_file' in args_dict and safestr(args_dict['output_file']) == 'None':
+        args_dict['output_file'] = os.path.join(args_dict['output'], f"{args_dict['organism_id']}{suffix}")
     return args_dict
 
 
 def get_metaboverse_cli_version():
-    """Get this version of metaboverse-cli
-    """
-
+    """Get this version of metaboverse-cli."""
     return __version__
 
 
 def update_network_vars(args_dict):
-    """Update internal network variables when a pre-curated file is provided
-    """
-
-    # check if file exists
-    if os.path.isfile(args_dict['organism_curation_file']):
-        with open(args_dict['organism_curation_file'], 'rb') as network_file:
+    """Update internal network variables when a pre-curated file is provided."""
+    curation_file = args_dict.get('organism_curation_file')
+    if curation_file and os.path.isfile(curation_file):
+        with open(curation_file, 'rb') as network_file:
             try:
                 network = pickle.load(network_file)
                 args_dict['organism_id'] = network['organism_id']
-                if args_dict['output_file'] == None \
-                        or args_dict['output_file'] == "None" \
-                        or args_dict['output_file'] == "find":
-                    args_dict['output_file'] = args_dict['output'] \
-                        + args_dict['organism_id'] \
-                        + '.mvrs'
-                args_dict['curation'] = args_dict['organism_curation_file'].split(os.path.sep)[-1]
-            except:
-                print(
-                    "Warning: Unable to open organism reference file: " \
-                    + args_dict['organism_curation_file'])
-
+                if not args_dict.get('output_file') or args_dict['output_file'] in ["None", "find"]:
+                    args_dict['output_file'] = os.path.join(args_dict['output'], f"{args_dict['organism_id']}.mvrs")
+                args_dict['curation'] = os.path.basename(curation_file)
+            except Exception as e:
+                print(f"Warning: Unable to open organism reference file: {curation_file}")
+                print(f"Error: {e}")
     return args_dict
 
 
 def update_session_vars(args_dict):
-    """Update session variables when a pre-curated file is provided
-    """
-
-    session_file = args_dict['session_data']
-
-    update_session(
-        session_file=session_file,
-        key='organism_id',
-        value=args_dict['organism_id'])
-    update_session(
-        session_file=session_file,
-        key='output_file',
-        value=args_dict['output_file'])
-    update_session(
-        session_file=session_file,
-        key='curation',
-        value=args_dict['curation'])
-    update_session(
-        session_file=session_file,
-        key='database_url',
-        value=args_dict['output_file'])
-
+    """Update session variables when a pre-curated file is provided."""
+    session_file = args_dict.get('session_data')
+    for key in ['organism_id', 'output_file', 'curation', 'database_url']:
+        update_session(session_file, key, args_dict.get(key))
     return args_dict
 
 
-def read_network(
-        file_path,
-        network_url):
-    """Read in network from previous curation module
-    - was provided as a URL to the file and saved to args_dict['network'] in
-    "curate" sub-module
-    """
-
+def read_network(file_path, network_url):
+    """Read in network from previous curation module."""
     with open(os.path.join(file_path, network_url), 'rb') as network_file:
-        network = pickle.load(network_file)
-
-    return network
+        return pickle.load(network_file)
 
 
-def prepare_output(
-        output):
-    """Get output directory prepared
-    """
-
-    # Check provided path exists
+def prepare_output(output):
+    """Get output directory prepared."""
     if not os.path.isdir(output):
         os.makedirs(output)
-
-    # Clean up path
-    if os.path.abspath(output).endswith(os.path.sep):
-        dir = os.path.abspath(output)
-    else:
-        dir = os.path.abspath(output) + os.path.sep
-
-    return dir
+    return os.path.abspath(output) + os.path.sep
 
 
-def write_database(
-        output,
-        file,
-        database):
-    """Write reactions database to pickle file
-    """
-
-    dir = prepare_output(
-        output=output)
-
-    # Write information to file
+def write_database(output, file, database):
+    """Write reactions database to pickle file."""
+    dir = prepare_output(output)
     with open(os.path.join(dir, file), 'wb') as file_product:
         pickle.dump(database, file_product)
 
 
-def write_database_json(
-        output,
-        file,
-        database):
-    """Write reactions database to JSON file
-    """
-
-    dir = prepare_output(
-        output=output)
-
-    # Write information to file
-    with open(dir + file, 'w') as file_product:
+def write_database_json(output, file, database):
+    """Write reactions database to JSON file."""
+    dir = prepare_output(output)
+    with open(os.path.join(dir, file), 'w') as file_product:
         json.dump(database, file_product, indent=4)
 
 
 def safestr(obj):
-    """Covert ascii text if needed
-    """
-
+    """Convert to ASCII text if needed."""
     return str(obj).encode('ascii', 'ignore').decode('ascii')
 
 
-def update_session(
-        session_file,
-        key,
-        value):
-    """Update session information
-    """
-
-    if os.path.exists(str(session_file)) and str(session_file) != 'None':
-
+def update_session(session_file, key, value):
+    """Update session information."""
+    if os.path.exists(session_file) and session_file != 'None':
         with open(session_file) as json_file:
             session = json.load(json_file)
             session[key] = value
-
         with open(session_file, 'w') as outfile:
             json.dump(session, outfile)
-
     else:
-        print("Session file not found: " + str(session_file))
+        print(f"Session file not found: {session_file}")
 
 
-def get_session_value(
-        session_file,
-        key):
-
-    if os.path.exists(str(session_file)) and str(session_file) != 'None':
-
+def get_session_value(session_file, key):
+    """Get a session value by key."""
+    if os.path.exists(session_file) and session_file != 'None':
         with open(session_file) as json_file:
             session = json.load(json_file)
-            if key in session:
-                return session[key]
-            else:
-                print("Cannot find specified key: " + key)
-                return 'unknown'
-
-    else:
-        print("File at " + str(session_file) + " does not exist.")
-        return 'unknown'
+            return session.get(key, 'unknown')
+    print(f"File at {session_file} does not exist.")
+    return 'unknown'
 
 
-def progress_feed(
-        args_dict=None,
-        process="graph",
-        amount=1):
-    """JS progress feed
-    """
-
-    if args_dict != None:
-        if 'progress_log' in args_dict \
-                and str(args_dict['progress_log']) != 'None':
-            feed_file = args_dict['progress_log']
-
-            if os.path.exists(feed_file) and process != None:
-
-                with open(feed_file) as json_file:
-                    data = json.load(json_file)
-                    data[process] += amount
-                    if data[process] >= 100:
-                        data[process] = 100
-
-                with open(feed_file, 'w') as outfile:
-                    json.dump(data, outfile)
+def progress_feed(args_dict=None, process="graph", amount=1):
+    """JS progress feed."""
+    if args_dict:
+        feed_file = args_dict.get('progress_log')
+        if feed_file and os.path.exists(feed_file) and process:
+            with open(feed_file) as json_file:
+                data = json.load(json_file)
+                data[process] = min(100, data[process] + amount)
+            with open(feed_file, 'w') as outfile:
+                json.dump(data, outfile)
     else:
         print('Could not access local variables during progress_feed() update.')
 
 
-def track_progress(
-        args_dict,
-        _counter,
-        _number,
-        _total):
-    """Keep track of progress of long collapse step
-    """
-
+def track_progress(args_dict, _counter, _number, _total):
+    """Keep track of progress of long collapse step."""
     _counter += 1
-
     if _counter % max(1, math.floor(_number / _total)) == 0:
         progress = math.floor(_total * (_counter / _number))
         progress_feed(args_dict, "graph", min(1, progress))
-
     return _counter
 
 
-def check_directories(
-        input,
-        argument):
-    """Check directory formatting
-    """
-
-    # Check that a file wasn't passed in
-    if os.path.isdir(input) != True:
-        raise Exception(safestr(argument) + ': ' +
-                        safestr(input) + ' is not a directory')
-
-    # Check input directory name is formatted correctly and fix if necessary
+def check_directories(input, argument):
+    """Check directory formatting."""
+    if not os.path.isdir(input):
+        raise Exception(f"{safestr(argument)}: {safestr(input)} is not a directory")
     input = safestr(os.path.abspath(input))
-
-    if not input.endswith(os.path.sep):
-        input += os.path.sep
-
-    return input
+    return input if input.endswith(os.path.sep) else input + os.path.sep
 
 
-def check_files(
-        input,
-        argument):
-    """Check file formatting
-    """
-
-    # Check that a file wasn't passed in
-    if os.path.isfile(input) != True:
-        raise Exception(safestr(argument) + ': ' +
-                        safestr(input) + ' is not a file')
-
-    # Check input directory name is formatted correctly and fix if necessary
-    input = safestr(os.path.abspath(input))
-
-    return input
+def check_files(input, argument):
+    """Check file formatting."""
+    if not os.path.isfile(input):
+        raise Exception(f"{safestr(argument)}: {safestr(input)} is not a file")
+    return safestr(os.path.abspath(input))
 
 
-def check_curate(
-        args_dict):
-    """Check curation arguments
-    """
-
+def check_curate(args_dict):
+    """Check curation arguments."""
     should_exit = False
 
-    if args_dict['organism_id'] == None \
-    or args_dict['organism_id'].lower() == 'none' \
-    or args_dict['organism_id'].lower() == 'null':
-        print('\nIncorrect species identifier provided: ' +
-              safestr(args_dict['organism_id']))
-        print('Please refer to https://reactome.org/ContentService/data/species/all for a valid list of organisms')
+    def print_error(message):
+        nonlocal should_exit
+        print(message)
         should_exit = True
 
-    if args_dict['output'] == None \
-    or not os.path.exists(os.path.dirname(args_dict['output'])):
-        print('\nIncorrect output parameter provided: ' +
-              safestr(args_dict['output']))
-        should_exit = True
+    organism_id = args_dict.get('organism_id')
+    if not organism_id or organism_id.lower() in ['none', 'null']:
+        print_error(f"\nIncorrect species identifier provided: {safestr(organism_id)}")
+        print_error('Please refer to https://reactome.org/ContentService/data/species/all for a valid list of organisms')
 
-    if 'organism_curation_file' in args_dict \
-    and safestr(args_dict['organism_curation_file']) != 'None' \
-    and safestr(args_dict['organism_curation_file']) != None:
-        if safestr(
-                args_dict['organism_curation_file']).split('.')[-1] == 'mvdb':
-            pass
-        elif safestr(
-                args_dict['organism_curation_file']).split('.')[-1] == 'xml' \
-        or safestr(
-                args_dict['organism_curation_file']).split('.')[-1] == 'sbml':
-            pass
-        elif safestr(
-                args_dict['organism_curation_file']).split('.')[-1] == 'json' \
-        and safestr(
-                args_dict['database_source']) == 'custom':
-            pass
-        else:
-            print('\nIncorrect organism curation file type provided : ' +
-                  safestr(args_dict['organism_curation_file']))
-            should_exit = True
+    output = args_dict.get('output')
+    if not output or not os.path.exists(os.path.dirname(output)):
+        print_error(f"\nIncorrect output parameter provided: {safestr(output)}")
 
-    if 'neighbor_dictionary_file' in args_dict \
-    and safestr(args_dict['neighbor_dictionary_file']) != 'None' \
-    and safestr(args_dict['neighbor_dictionary_file']) != None \
-    and safestr(args_dict['neighbor_dictionary_file']).split('.')[-1] != 'nbdb':
-        print('\nIncorrect neighbor dictionary file type provided : ' +
-              safestr(args_dict['neighbor_dictionary_file']))
-        should_exit = True
+    curation_file = args_dict.get('organism_curation_file')
+    if curation_file and safestr(curation_file).split('.')[-1] not in ['mvdb', 'xml', 'sbml', 'json']:
+        print_error(f"\nIncorrect organism curation file type provided: {safestr(curation_file)}")
 
-    if 'graph_template_file' in args_dict \
-    and safestr(args_dict['graph_template_file']) != 'None' \
-    and safestr(args_dict['graph_template_file']) != None \
-    and safestr(args_dict['graph_template_file']).split('.')[-1] != 'mvrs':
-        print('\nIncorrect graph template file type provided : ' +
-              safestr(args_dict['graph_template_file']))
-        should_exit = True
-        
-    elif 'graph_template_file' in args_dict \
-    and safestr(args_dict['graph_template_file']) != 'None' \
-    and safestr(args_dict['graph_template_file']) != None \
-    and safestr(args_dict['graph_template_file']).split('.')[-1] == 'mvrs':
-        should_exit = False
+    neighbor_file = args_dict.get('neighbor_dictionary_file')
+    if neighbor_file and safestr(neighbor_file).split('.')[-1] != 'nbdb':
+        print_error(f"\nIncorrect neighbor dictionary file type provided: {safestr(neighbor_file)}")
 
-    if should_exit == True:
+    template_file = args_dict.get('graph_template_file')
+    if template_file and safestr(template_file).split('.')[-1] != 'mvrs':
+        print_error(f"\nIncorrect graph template file type provided: {safestr(template_file)}")
+
+    if should_exit:
         sys.exit(1)
 
 
-def argument_checks(
-        args_dict):
-    """Run general checks on arguments
-    Not sub-module-specific
-    """
+def argument_checks(args_dict):
+    """Run general checks on arguments."""
+    output = args_dict.get('output', os.getcwd())
+    args_dict['output'] = safestr(output if output.endswith(os.path.sep) else output + os.path.sep)
 
-    # Check output file
-    if 'output' in args_dict \
-            and args_dict['output'] == None:
-        args_dict['output'] = os.getcwd()
-    args_dict['output'] = safestr(args_dict['output'])
-
-    if not args_dict['output'].endswith(os.path.sep):
-        args_dict['output'] = args_dict['output'] + os.path.sep
-
-    # Check user-provided directory formatting
     for key, value in args_dict.items():
-
-        if key == 'cmd' or key == 'organism_id':
-            pass
-
-        elif os.path.isfile(str(value)) == True:
-            args_dict[key] = check_files(
-                args_dict[key],
-                key)
-
-        elif os.path.isdir(str(value)) == True:
-            args_dict[key] = check_directories(
-                args_dict[key],
-                key)
-
-        else:
-            pass
+        if key in ['cmd', 'organism_id']:
+            continue
+        if os.path.isfile(value):
+            args_dict[key] = check_files(value, key)
+        elif os.path.isdir(value):
+            args_dict[key] = check_directories(value, key)
 
     return args_dict
+
+
+def get_reference(args_dict, reference_url):
+    """Download curation reference."""
+    file_path = os.path.join(args_dict['output'], f"{args_dict['organism_id']}.mvdb")
+    
+    print(f"Downloading pre-curated .MVDB database from:\n\t{reference_url}")
+    response = requests.get(reference_url, allow_redirects=True)
+    if response.status_code == 200:
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
+    else:
+        raise Exception(f"Failed to download the file. Status code: {response.status_code}")
+
+    return file_path
+
+
+def construct_reference_url(args_dict):
+    """Construct the reference URL based on arguments."""
+    version = get_metaboverse_cli_version()
+    return f"{SOURCE_URL}v{version}/{args_dict['organism_id']}/{args_dict['organism_id']}.mvdb"
+
+
+def check_url_availability(reference_url):
+    """Check if the URL is accessible."""
+    try:
+        print(f"Checking for pre-curated reference file at: {reference_url}")
+        response = requests.head(reference_url)
+        if response.status_code == 404:
+            print("The reference file does not exist at the provided URL.")
+            return False
+        return True
+    except requests.ConnectionError:
+        print("Unable to access source files from:", reference_url)
+        return False

@@ -34,398 +34,81 @@ import requests
 import re
 import os
 
-"""Import internal dependencies
-"""
-try:
-    from curate.load_reactions_db import __main__ as load_reactions
-    from curate.load_complexes_db import __main__ as load_complexes
-    from utils import progress_feed, write_database, write_database_json, \
-    safestr, get_metaboverse_cli_version, download_file_ftp
-except:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "__main__", os.path.abspath("./metaboverse_cli/curate/load_reactions_db.py"))
-    load_reactions = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(load_reactions)
-    load_reactions = load_reactions.__main__
-
-    spec = importlib.util.spec_from_file_location(
-        "__main__", os.path.abspath("./metaboverse_cli/curate/load_complexes_db.py"))
-    load_complexes = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(load_complexes)
-    load_complexes = load_complexes.__main__
-
-    spec = importlib.util.spec_from_file_location(
-        "", os.path.abspath("./metaboverse_cli/utils.py"))
-    utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(utils)
-    progress_feed = utils.progress_feed
-    write_database = utils.write_database
-    write_database_json = utils.write_database_json
-    safestr = utils.safestr
-    get_metaboverse_cli_version = utils.get_metaboverse_cli_version
-    download_file_ftp = utils.download_file_ftp
+# Import internal dependencies
+from cli.metaboverse_cli.curate.load_reactions import load_reactions
+from cli.metaboverse_cli.curate.load_complexes import (
+    load_complexes, parse_complexes, reference_complex_species, supplement_components
+)
+from cli.metaboverse_cli.curate.synonyms import (
+    parse_ensembl_synonyms, parse_uniprot_synonyms, parse_chebi_synonyms
+)
+from utils import progress_feed, write_database, write_database_json, get_metaboverse_cli_version
 
 
-def parse_table(
-        reference,
-        key,
-        args_dict=None):
-
-    if 'source_id' in reference[key].columns.tolist():
-        column_names = [
-            'analyte_id',
-            'analyte_name',
-            'reaction_id',
-            'reaction_name',
-            'source_id']
-    else:
-        column_names = [
-            'analyte_id',
-            'analyte_name',
-            'reaction_id',
-            'reaction_name']
+def parse_table(reference, key, args_dict=None):
+    """Parse the provided reference table."""
+    column_names = ['analyte_id', 'analyte_name', 'reaction_id', 'reaction_name']
+    if 'source_id' in reference[key].columns:
+        column_names.append('source_id')
 
     reference_parsed = reference[key][column_names].copy()
-    reference_parsed['analyte'] = reference_parsed['analyte_name'].str.split(
-        ' \[').str[0]
-    reference_parsed['compartment'] = reference_parsed['analyte_name'].str.split(
-        ' \[').str[1].str.split('\]').str[0]
+    reference_parsed['analyte'] = reference_parsed['analyte_name'].str.split(' \[').str[0]
+    reference_parsed['compartment'] = reference_parsed['analyte_name'].str.split(' \[').str[1].str.split('\]').str[0]
 
     reference_dictionary = {}
+    total = len(reference_parsed)
 
-    counter = 0
-    total = len(reference_parsed.index.tolist())
+    for counter, (index, row) in enumerate(reference_parsed.iterrows()):
+        ref_dict = {
+            'analyte_id': row['analyte_id'],
+            'reaction_id': row['reaction_id'],
+            'reaction_name': row['reaction_name'],
+            'analyte': row['analyte'],
+            'compartment': row['compartment']
+        }
+        if 'source_id' in reference[key].columns:
+            ref_dict['source_id'] = row['source_id']
 
-    for index, row in reference_parsed.iterrows():
+        reference_dictionary[row['analyte_id']] = ref_dict
 
-        reference_dictionary[row[0]] = {}
-        reference_dictionary[row[0]]['analyte_id'] = row[0]
-        reference_dictionary[row[0]]['reaction_id'] = row[2]
-        reference_dictionary[row[0]]['reaction_name'] = row[3]
-
-        if 'source_id' in reference[key].columns.tolist():
-            reference_dictionary[row[0]]['source_id'] = row[4]
-            reference_dictionary[row[0]]['analyte'] = row[5]
-            reference_dictionary[row[0]]['compartment'] = row[6]
-
-        else:
-            reference_dictionary[row[0]]['analyte'] = row[4]
-            reference_dictionary[row[0]]['compartment'] = row[5]
-
-        if int(counter % (total / 15)) == 0 and args_dict != None:
+        if args_dict and counter % (total // 15) == 0:
             progress_feed(args_dict, "graph")
-
-        counter += 1
 
     return reference_dictionary
 
 
-def parse_complexes(reference):
-
-    def create_pathway_dictionary(
-            complex_pathway_df,
-            complex_key='complex',
-            pathway_key='pathway',
-            top_level_pathway_key='top_level_pathway'):
-        """Creates a dictionary with pathway information."""
-        pathway_dictionary = {}
-        for _, row in complex_pathway_df.iterrows():
-            complex_id = row[complex_key]
-            pathway_dictionary[complex_id] = {
-                'complex': complex_id,
-                'pathway': row[pathway_key],
-                'top_level_pathway': row[top_level_pathway_key]
-            }
-        return pathway_dictionary
-
-    def prepare_complexes_information(
-            complex_participants_df,
-            identifier_key='identifier',
-            name_key='name',
-            participants_key='participants',
-            participating_complex_key='participatingComplex',
-            complex_key='complex',
-            compartment_key='compartment'):
-        """Prepares the complexes information dataframe."""
-        complexes_information = complex_participants_df[[identifier_key, name_key, participants_key, participating_complex_key]].copy()
-        complexes_information[complex_key] = complexes_information[name_key].str.split(' \[', n=1, expand=True)[0]
-        complexes_information[compartment_key] = complexes_information[name_key].str.extract(r'\[(.*?)\]')
-        return complexes_information
-
-    def parse_participants(participants_str):
-        """Parses participants from a string into a dictionary."""
-        participants = {
-            'chebi': [],
-            'uniprot': [],
-            'ensembl': [],
-            'mirbase': [],
-            'ncbi': []
-        }
-        for part in participants_str.split('|'):
-            for key in participants:
-                if key in part:
-                    participants[key].append(part.split(':')[1])
-        return participants
-
-    def create_complex_dictionary(complexes_information, pathway_dictionary):
-        """Creates a dictionary with complex information including participants."""
-        complex_dictionary = {}
-        for _, row in complexes_information.iterrows():
-            complex_id = row['identifier']
-            complex_dictionary[complex_id] = {
-                'complex_id': complex_id,
-                'complex_name': row['complex'],
-                'compartment': row['compartment'] if pd.notna(row['compartment']) else None,
-                'participating_complex': None if row['participatingComplex'] == '-' else row['participatingComplex'],
-                'pathway': pathway_dictionary.get(complex_id, {}).get('pathway', None),
-                'top_level_pathway': pathway_dictionary.get(complex_id, {}).get('top_level_pathway', None),
-                'participants': parse_participants(row['participants'])
-            }
-        return complex_dictionary
-
-    # Main function execution starts here
-    pathway_dictionary = create_pathway_dictionary(reference['complex_pathway'])
-    complexes_information = prepare_complexes_information(reference['complex_participants'])
-    complex_dictionary = create_complex_dictionary(complexes_information, pathway_dictionary)
-    
-    return complex_dictionary
-
-
-def parse_ensembl_synonyms(
-        output_dir,
-        species_id,
-        url='https://reactome.org/download/current/Ensembl2Reactome_PE_All_Levels.txt',
-        file_name='Ensembl2Reactome_PE_All_Levels.txt',
-        reactome_location=3,
-        name_location=2,
-        id_location=0):
-    """Retrieve Ensembl gene entity synonyms
-    """
-    print('Downloading Ensembl synonym database...', '\n\t', url)
-    os.system('curl -kL ' + url + ' -o \"' + output_dir + file_name + '\"')
-    ensembl = pd.read_csv(
-        output_dir + file_name,
-        sep='\t',
-        header=None)
-    os.remove(output_dir + file_name)
-
-    ensembl[name_location] = ensembl[name_location].str.split(
-        ' \[').str[0].tolist()
-    ensembl = ensembl[ensembl[reactome_location].str.contains(species_id)]
-    ensembl_name_dictionary = pd.Series(
-        ensembl[name_location].values,
-        index=ensembl[id_location]).to_dict()
-
-    return ensembl_name_dictionary
-
-
-def parse_uniprot_synonyms(
-        output_dir,
-        species_id,
-        url='https://reactome.org/download/current/UniProt2Reactome_PE_All_Levels.txt',
-        file_name='UniProt2Reactome_PE_All_Levels.txt',
-        reactome_location=3,
-        name_location=2,
-        id_location=0):
-    """Retrieve UniProt protein entity synonyms
-    """
-
-    print('Downloading UniProt synonym database...', '\n\t', url)
-    os.system('curl -kL ' + url + ' -o "' + output_dir + file_name + '"')
-    uniprot = pd.read_csv(
-        output_dir + file_name,
-        sep='\t',
-        header=None)
-    os.remove(output_dir + file_name)
-
-    uniprot[name_location] = uniprot[name_location].str.split(
-        ' \[').str[0].tolist()
-    uniprot = uniprot[uniprot[reactome_location].str.contains(species_id)]
-    uniprot_name_dictionary = pd.Series(
-        uniprot[name_location].values,
-        index=uniprot[id_location]).to_dict()
-
-    return uniprot_name_dictionary
-
-
-def parse_chebi_synonyms(
-        output_dir,
-        url='ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz',
-        file_name='names.tsv',
-        name_string='NAME',
-        id_string='COMPOUND_ID',
-        source_string='SOURCE'):
-    """Retrieve CHEBI chemical entity synonyms."""
-
-    # Download the file
-    print('Downloading ChEBI synonym database...', '\n\t', url)
-    if not output_dir.endswith('/'):
-        output_dir += '/'
-    output_path = f"{output_dir}{file_name}.gz"
-    download_file_ftp(url, output_path)
-    
-    # Read the gzipped TSV file into a pandas DataFrame
-    chebi = pd.read_csv(f"{output_dir}{file_name}.gz", sep='\t', compression='gzip')
-    # Remove the gzipped file after reading
-    os.remove(f"{output_dir}{file_name}.gz")
-
-    # Initialize dictionaries to store the parsed data
-    chebi_dictionary = {}
-    chebi_synonyms = {}
-    uniprot_metabolites = {}
-
-    # Iterate over each row of the DataFrame
-    for index, row in chebi.iterrows():
-        # Check if the source column contains one of the specified keywords
-        if any(keyword in row[source_string].upper() for keyword in ['KEGG', 'CHEM', 'JCBN', 'CHEBI', 'HMDB', 'DRUG', 'IUPAC', 'LIPID', 'METACYC', 'SUBMITTER']):
-            chebi_id = f'CHEBI:{row[id_string]}'
-            chebi_dictionary[row[name_string]] = chebi_id
-            
-            if chebi_id in chebi_synonyms:
-                chebi_synonyms[chebi_id].append(row[name_string])
-            else:
-                chebi_synonyms[chebi_id] = [row[name_string]]
-        else:
-            uniprot_metabolites[row[name_string]] = f'CHEBI:{row[id_string]}'
-
-    return chebi_dictionary, chebi_synonyms, uniprot_metabolites
-
-
-def reference_complex_species(
-        reference,
-        name_database):
-    """Correct complex dictionary keys to be searchable by species ID
-    """
-
-    new_dict = {}
-    for k, v in reference.items():
-        if reference[k]['complex_id'] in list(name_database.keys()):
-            new_dict[name_database[reference[k]['complex_id']]] = reference[k]
-
-    return new_dict
-
-
-def supplement_components(
-        species_database,
-        name_database,
-        components_database,
-        compartment_dictionary,
-        species_id,
-        output_dir,
-        url='https://reactome.org/download/current/ChEBI2Reactome_PE_All_Levels.txt',
-        file_name='ChEBI2Reactome_PE_All_Levels.txt',
-        name_string=2,
-        id_string=1,
-        source_string=3):
-    """
-    """
-
-    print('Downloading ChEBI synonym database...', '\n\t', url)
-    os.system('curl -kL ' + url + ' -o "' + output_dir + file_name + '"')
-    chebi = pd.read_csv(
-        output_dir + file_name,
-        sep='\t',
-        header=None)
-    os.remove(output_dir + file_name)
-
-    chebi = chebi.loc[chebi[source_string].str.contains(species_id)]
-    reversed_compartments = {v:k for k, v in compartment_dictionary.items()}
-
-    for index, row in chebi.iterrows():
-        species_id = 'species_' + row[id_string].split('-')[-1]
-        reactome_id = row[id_string]
-        try:
-            name = row[name_string].split(' [')[0]
-        except:
-            name = row[name_string]
-        
-        try:
-            compartment = row[name_string].split(' [')[1].split(']')[0]
-        except:
-            compartment = None
-        if compartment in reversed_compartments:
-            compartment_id = reversed_compartments[compartment]
-        elif compartment in compartment_dictionary:
-            compartment_id = compartment_dictionary[compartment]
-        else:
-            compartment_id = compartment
-
-        if species_id not in components_database:
-            components_database[species_id] = {
-                'id': species_id, 
-                'reactome_id': reactome_id, 
-                'name': name, 
-                'is': reactome_id, 
-                'isEncodedBy': '', 
-                'hasPart': [], 
-                'type': 'metabolite_component', 
-                'compartment': compartment_id
-            }
-        
-        if species_id not in species_database:
-            species_database[species_id] = name
-        
-        if species_id not in name_database:
-            name_database[species_id] = species_id
-        
-        if name not in name_database:
-            name_database[name] = species_id
-
-    return species_database, name_database, components_database
-
-
 def get_reactome_version():
-    """Get most recent Reactome database version at time of curation
-    """
+    """Get the most recent Reactome database version at the time of curation."""
     reactome_url = "https://reactome.org/tag/release"
-    f = requests.get(reactome_url)
-    matches_old = re.findall(r"\bversion (\d+) released", f.text, re.IGNORECASE)
-    matches_new = re.findall(r"\bv(\d+) released", f.text, re.IGNORECASE)
-    matches = matches_old + matches_new
-    if matches:
-        current_version = max(int(version) for version in matches)
-        print("Current version:", current_version)
-    else:
-        current_version = "Unknown"
-        print("No versions found.")
+    response = requests.get(reactome_url)
+    matches = re.findall(r"\bv(\d+)\s+released", response.text, re.IGNORECASE)
+    current_version = max(map(int, matches)) if matches else "Unknown"
+    print("Current version:", current_version)
     return current_version
 
 
-def add_genes(
-        name_database,
-        ensembl_reference):
-    """Self map all ensembl gene ids for network creation and mapping
-    """
-
-    for k, v in ensembl_reference.items():
-        name_database[v] = v
-
+def add_genes(name_database, ensembl_reference):
+    """Self-map all Ensembl gene IDs for network creation and mapping."""
+    for gene_id in ensembl_reference.values():
+        name_database[gene_id] = gene_id
     return name_database
 
 
-def __main__(
-        args_dict):
-    """Curate database
-    """
-
-    if 'organism_curation_file' in args_dict \
-            and safestr(args_dict['organism_curation_file']) == 'None':
-        args_dict['organism_curation_file'] = args_dict['output'] \
-            + args_dict['organism_id'] \
-            + '.mvdb'
+def main(args_dict):
+    """Curate the database."""
+    if args_dict.get('organism_curation_file') == 'None':
+        args_dict['organism_curation_file'] = os.path.join(args_dict['output'], f"{args_dict['organism_id']}.mvdb")
     args_dict['network'] = args_dict['organism_curation_file']
 
-    # Load reactions
     print('Curating reaction network database. Please be patient, this will take several minutes...')
     print('Loading reactions...')
-    args_dict, pathway_database, reaction_database, species_database, \
-    name_database, compartment_dictionary, components_database = load_reactions(
-            species_id=args_dict['organism_id'],
-            output_dir=args_dict['output'],
-            database_source=args_dict['database_source'],
-            sbml_url=args_dict['organism_curation_file'],
-            args_dict=args_dict)
+    args_dict, pathway_database, reaction_database, species_database, name_database, compartment_dictionary, components_database = load_reactions(
+        species_id=args_dict['organism_id'],
+        output_dir=args_dict['output'],
+        database_source=args_dict['database_source'],
+        sbml_url=args_dict['organism_curation_file'],
+        args_dict=args_dict
+    )
 
     species_database, name_database, components_database = supplement_components(
         species_database=species_database,
@@ -433,62 +116,63 @@ def __main__(
         components_database=components_database,
         compartment_dictionary=compartment_dictionary,
         species_id=args_dict['organism_id'],
-        output_dir=args_dict['output'])
+        output_dir=args_dict['output']
+    )
 
     print('Parsing ChEBI database...')
     chebi_mapper, chebi_synonyms, uniprot_metabolites = parse_chebi_synonyms(
-        output_dir=args_dict['output'])
+        output_dir=args_dict['output'],
+        url='ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv.gz',
+        file_name='names.tsv'
+    )
     progress_feed(args_dict, "graph", 5)
 
     if args_dict['database_source'].lower() == 'reactome':
         print('Loading complex database...')
-        complexes_reference = load_complexes(
-            output_dir=args_dict['output'])
+        complexes_reference = load_complexes(output_dir=args_dict['output'])
         progress_feed(args_dict, "graph", 2)
 
         print('Parsing complex database...')
-        complexes_reference['complex_dictionary'] = parse_complexes(
-            complexes_reference)
+        complexes_reference['complex_dictionary'] = parse_complexes(complexes_reference)
         progress_feed(args_dict, "graph", 1)
 
         print('Finalizing complex database...')
         complexes_reference['complex_dictionary'] = reference_complex_species(
-            reference=complexes_reference['complex_dictionary'],
-            name_database=name_database)
+            complexes_reference['complex_dictionary'], name_database
+        )
         progress_feed(args_dict, "graph", 1)
 
         print('Parsing Ensembl database...')
         ensembl_reference = parse_ensembl_synonyms(
             output_dir=args_dict['output'],
-            species_id=args_dict['organism_id'])
+            species_id=args_dict['organism_id'],
+            url='https://reactome.org/download/current/Ensembl2Reactome_PE_All_Levels.txt',
+            file_name='Ensembl2Reactome_PE_All_Levels.txt'
+        )
         progress_feed(args_dict, "graph", 7)
 
         print('Adding gene IDs to name database...')
-        name_database = add_genes(
-            name_database=name_database,
-            ensembl_reference=ensembl_reference)
+        name_database = add_genes(name_database, ensembl_reference)
         progress_feed(args_dict, "graph", 1)
 
         print('Parsing UniProt database...')
         uniprot_reference = parse_uniprot_synonyms(
             output_dir=args_dict['output'],
-            species_id=args_dict['organism_id'])
+            species_id=args_dict['organism_id'],
+            url='https://reactome.org/download/current/UniProt2Reactome_PE_All_Levels.txt',
+            file_name='UniProt2Reactome_PE_All_Levels.txt'
+        )
         progress_feed(args_dict, "graph", 3)
 
-        database_version = str(get_reactome_version()) + ' (Reactome)'
-        _species_id = args_dict['organism_id']
-
+        database_version = f"{get_reactome_version()} (Reactome)"
     else:
-        complexes_reference = {
-            'complex_dictionary': {}
-        }
+        complexes_reference = {'complex_dictionary': {}}
         ensembl_reference = {}
         uniprot_reference = {}
         database_version = args_dict['database_version']
-        _species_id = args_dict['organism_id']
 
     metaboverse_db = {
-        'organism_id': _species_id,
+        'organism_id': args_dict['organism_id'],
         'pathway_database': pathway_database,
         'reaction_database': reaction_database,
         'species_database': species_database,
@@ -507,22 +191,16 @@ def __main__(
         'database_date': date.today().strftime('%Y-%m-%d')
     }
 
-    # Write database to file
     print('Writing metaboverse database to file...')
     if args_dict['cmd'] == 'curate':
-        args_dict['curation'] = _species_id + '.mvdb'
-        write_database(
-            output=args_dict['output'],
-            file=args_dict['curation'],
-            database=metaboverse_db)
+        args_dict['curation'] = f"{args_dict['organism_id']}.mvdb"
+        write_database(output=args_dict['output'], file=args_dict['curation'], database=metaboverse_db)
     elif args_dict['cmd'] == 'electrum':
-        args_dict['curation'] = _species_id + '.eldb'
-        write_database_json(
-            output=args_dict['output'],
-            file=args_dict['curation'],
-            database=metaboverse_db)
+        args_dict['curation'] = f"{args_dict['organism_id']}.eldb"
+        write_database_json(output=args_dict['output'], file=args_dict['curation'], database=metaboverse_db)
     else:
         raise Exception('Unable to output database file.')
+
     progress_feed(args_dict, "graph", 5)
     print('Metaboverse database curation complete.')
 

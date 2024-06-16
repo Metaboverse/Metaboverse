@@ -32,51 +32,46 @@ import pandas as pd
 import os
 
 
-def get_table(
-        output_dir,
-        url,
-        column_names,
-        organism='Homo sapiens',
-        organism_key='organism'):
-    """Get reactome table from web
+def get_table(output_dir, url, column_names, organism='Homo sapiens', organism_key='organism'):
     """
+    Get Reactome table from the web and filter by organism.
+    
+    Parameters:
+        output_dir (str): Directory to save the downloaded file.
+        url (str): URL to download the table.
+        column_names (list or None): List of column names or None if the file has a header row.
+        organism (str): Name of the organism to filter by.
+        organism_key (str): Column name to use for organism filtering.
+    
+    Returns:
+        pd.DataFrame: Filtered data for the specified organism.
+    """
+    file = unpack_table(url, output_dir)
 
-    # chebi_reactome_reactions
-    file = unpack_table(
-        url=url,
-        output_dir=output_dir)
+    header_type = None if isinstance(column_names, list) else column_names
+
+    data = pd.read_csv(file, sep='\t', header=header_type, low_memory=False)
 
     if isinstance(column_names, list):
-        header_type = None
-    else:
-        header_type = column_names
-
-    data = pd.read_csv(
-        file,
-        sep='\t',
-        header=header_type,
-        low_memory=False)
-
-    if isinstance(column_names, list) \
-            or organism == None:
         data.columns = column_names
         data_organism = data.loc[data[organism_key] == organism]
-
     else:
         data_organism = data
 
     return data_organism
 
 
-"""Open reactome table from web
-"""
-
-
-def unpack_table(
-        url,
-        output_dir='./'):
-
-    file = output_dir + url.split('/')[-1]
-    os.system('curl -kL ' + url + ' -o "' + file + '"')
-
-    return file
+def unpack_table(url, output_dir='./'):
+    """
+    Download a file from a URL and save it to the specified directory.
+    
+    Parameters:
+        url (str): URL to download the file from.
+        output_dir (str): Directory to save the downloaded file.
+    
+    Returns:
+        str: Path to the downloaded file.
+    """
+    file_path = os.path.join(output_dir, os.path.basename(url))
+    os.system(f'curl -kL {url} -o "{file_path}"')
+    return file_path

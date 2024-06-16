@@ -35,28 +35,12 @@ import os
 
 """Import internal dependencies
 """
-try:
-    from __init__ import __version__
-    from utils import check_directories
-    from utils import check_curate
-    from utils import argument_checks
-    from utils import safestr
-except:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "__version__", os.path.abspath("./metaboverse_cli/__init__.py"))
-    version = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(version)
-    __version__ = version.__version__
+from __init__ import __version__
+from utils import check_directories
+from utils import check_curate
+from utils import argument_checks
+from utils import safestr
 
-    spec = importlib.util.spec_from_file_location(
-        "", os.path.abspath("./metaboverse_cli/utils.py"))
-    utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(utils)
-    check_directories = utils.check_directories
-    check_curate = utils.check_curate
-    argument_checks = utils.argument_checks
-    safestr = utils.safestr
 
 __path__ = os.path.dirname(os.path.realpath(__file__))
 url = 'https://raw.githubusercontent.com/j-berg/Metaboverse/master/metaboverse/__init__.py'
