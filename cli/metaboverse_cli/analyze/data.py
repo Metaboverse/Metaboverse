@@ -29,11 +29,12 @@ SOFTWARE.
 """
 from __future__ import print_function
 import pandas as pd
-import numpy as np
+from scipy.stats import gmean
+import statistics
+import math
 import ast
 import sys
 import re
-import statistics
 
 
 def eval_table(table):
@@ -371,3 +372,97 @@ def prepare_data(network, transcriptomics_url, proteomics_url, metabolomics_url,
         unmapped['proteomics_unmapped'] = []
 
     return data, stats, unmapped
+
+
+def remove_nulls(values):
+    if all(None in v for v in values):
+        return []
+    else:
+        for v in values:
+            if None in v:
+                values.remove(v)
+        return values
+
+
+def infer_protein_values(values, length):
+    protein_vals = []
+    for i in range(length):
+        pos = []
+        for j in range(len(values)):
+            if values[j][i] is not None:
+                pos.append(values[j][i])
+        protein_vals.append(statistics.median(pos))
+    return protein_vals
+
+
+def infer_protein_stats(stats, length, stat_type="float"):
+    if stat_type == "array":
+        protein_stats = [None for x in range(length)]
+    else:
+        protein_stats = []
+        for i in range(length):
+            pos = []
+            for j in range(len(stats)):
+                if stats[j][i] is not None:
+                    pos.append(stats[j][i])
+            if len(pos) == 1:
+                this_stat = pos[0]
+            else:
+                this_stat = (math.e * gmean(pos))
+            if this_stat > 1.0:
+                this_stat = 1.0
+            protein_stats.append(this_stat)
+    return protein_stats
+
+
+def prepare_mapping_data(graph, data, stats):
+    n = len(data.columns.tolist())
+    data_renamed, stats_renamed = reindex_data(data, stats)
+    data_max = abs(data_renamed).max().max()
+    
+    if type(stats_renamed.iloc[0,0]) == list:
+        stats_logged = -1 
+        stats_max = -1 
+    else:
+        stats_logged = -1 * np.log10(stats_renamed + 1e-100)
+        stats_max = abs(stats_logged).max().max()
+
+    temp_idx = [''.join(c.lower() for c in str(i) if c.isalnum()) for i in data_renamed.index.tolist()]
+    temp_idx_set = set(temp_idx)
+
+    chebi_mapping = {}
+    for current_id in list(graph.nodes()):
+        map_id = graph.nodes()[current_id]['map_id']
+        name = graph.nodes()[current_id]['name']
+        if 'chebi' in map_id.lower():
+            if name in chebi_mapping:
+                chebi_mapping[name].add(map_id)
+            else:
+                chebi_mapping[name] = set()
+                chebi_mapping[name].add(map_id)
+
+    return data_renamed, stats_renamed, data_max, stats_max, n, temp_idx, temp_idx_set, chebi_mapping
+
+
+def reindex_data(data, stats):
+    data_renamed = data.copy()
+    data_renamed = data_renamed.loc[data_renamed.dropna(axis=0).index.drop_duplicates(keep=False)]
+    d_cols = data_renamed.columns
+    data_renamed[d_cols] = data_renamed[d_cols].apply(pd.to_numeric, errors='coerce')
+
+    stats_renamed = stats.copy()
+    stats_renamed = stats_renamed.loc[stats_renamed.dropna(axis=0).index.drop_duplicates(keep=False)]
+    s_cols = stats_renamed.columns
+    
+    if type(stats_renamed.iloc[0,0]) != list:
+        stats_renamed[s_cols] = stats_renamed[s_cols].apply(pd.to_numeric, errors='coerce')
+
+    if len(data_renamed.index.tolist()) != len(data.index.tolist()) or len(stats_renamed.index.tolist()) != len(stats.index.tolist()):
+        print('Warning: Duplicate row names were found. All duplicate data were \nremoved from downstream processing. Choose one row per name to \nmaintain the duplicated entity in downstream processing.')
+        merge = list(set(data.index.tolist() + stats.index.tolist()))
+        merge_after = list(set(data_renamed.index.tolist() + stats_renamed.index.tolist()))
+        print("\n Unmapped entities:")
+        for x in [y for y in merge if y not in merge_after]:
+            print("\t-> " + str(x))
+
+    return data_renamed, stats_renamed

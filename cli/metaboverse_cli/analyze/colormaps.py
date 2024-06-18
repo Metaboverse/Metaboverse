@@ -22,6 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+
+def convert_rgba(rgba_tuples, N=255):
+    """Convert python RGBA tuple to web-friendly tuple for later visualization."""
+    js = []
+    for rgba in rgba_tuples:
+        rgba_list = list(rgba)
+        rgba_new = [int(value * N) for value in rgba_list[:3]] + [rgba_list[3]]
+        js.append(tuple(rgba_new))
+    return js
+
+def extract_value(value_array, max_value, type="value"):
+    def get_key_value(d, key):
+        if key in d:
+            return d[key]
+        else:
+            return d[max([x for x in d.keys() if x < key])]
+
+    rgba = []
+    for x in value_array:
+        position = (x + max_value) / (2 * max_value)
+        rgba_tuple = get_key_value(CMAP, round(position, 3))
+        rgba.append(tuple(rgba_tuple))
+    return rgba
+
 def get_mpl_colormap(name, alpha=1.0):
     """Retrieve matplotlib colormap
     """
@@ -33,7 +57,6 @@ def get_mpl_colormap(name, alpha=1.0):
         return cmap
     else:
         print(f'Warning: Could not find provided colormap: {name}')
-
 
 
 mpl_cm = {

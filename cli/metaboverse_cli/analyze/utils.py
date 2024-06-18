@@ -28,84 +28,34 @@ SOFTWARE.
 
 """
 from __future__ import print_function
-import pandas as pd
 import os
+import pandas as pd
 
 
-def file_path(
-        input):
-    # Check input is contains full path address
-
+def file_path(input):
+    """Check if input contains full path address and return the absolute path."""
     return os.path.abspath(input)
 
 
-def check_suffix(
-        file):
-    # Get file suffix
-
-    if file.split('.')[-1] == 'csv':
-        suffix = ','
-    elif file.split('.')[-1] == 'tsv':
-        suffix = '\t'
-    elif file.split('.')[-1] == 'txt':
-        suffix = '\t'
+def check_suffix(file):
+    """Get file suffix and return the appropriate delimiter."""
+    if file.endswith('.csv'):
+        return ','
+    elif file.endswith(('.tsv', '.txt')):
+        return '\t'
     else:
-        raise Exception(
-            'Invalid data file provided. Expected a tab- or comma-delimited file')
-
-    return suffix
+        raise Exception('Invalid data file provided. Expected a tab- or comma-delimited file')
 
 
-def add_data(
-        file):
-    # Input data type
-    # Check that file has full path
+def add_data(file):
+    """Read a file and return a pandas DataFrame."""
     file = file_path(file)
-
-    # Figure out file type
     suffix = check_suffix(file)
-
-    # Import dataframe
-    data = pd.read_csv(
-        file,
-        sep=suffix,
-        header=0,
-        index_col=0,
-        low_memory=False)
-
+    data = pd.read_csv(file, sep=suffix, header=0, index_col=0, low_memory=False)
     return data
 
 
-def convert_rgba(
-        rgba_tuples,
-        N=255):
-    """Convert python RGBA tuple to web-friendly tuple for later viz
-    """
-
-    js = []
-    for x in rgba_tuples:
-
-        rgba_list = list(x)
-        rgba_new = []
-        for x in rgba_list[:3]:
-            rgba_new.append(int(x * N))
-
-        rgba_new.append(rgba_list[3])
-
-        js.append(tuple(rgba_new))
-
-    return js
 
 
-def remove_defective_reactions(
-        network):
-    """
-    """
-    no_defective_reactions = {}
-    for key in network['reaction_database'].keys():
-        rxn_name = network['reaction_database'][key]['name'].lower()
-        if 'defective' not in rxn_name \
-                and 'mutant' not in rxn_name:
-            no_defective_reactions[key] = network['reaction_database'][key]
 
-    return no_defective_reactions
+
