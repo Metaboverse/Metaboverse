@@ -1473,16 +1473,16 @@ function enzymeMotif(
   // If largest difference passes, consider as a motif
   // Or if both change in the same direction and pass the threshold, return
   // Considers modifiers by default
+
+  // Array to store all discovered motifs across all samples
   let discovered_motifs = [];
 
-  for (_idx in sample_indices) {
-    // neighbors_dictionary
-    let sample_motifs = new Set();
+  for (let _idx of sample_indices) {
+    // Initialize array for this sample
+    let sample_motifs = [];
 
     for (let neighbor in neighbors_dictionary) {
-      // check each neighbor pair for components (non-metabolite)
       if (neighbor in collapsed_reaction_dict && neighbors_dictionary[neighbor].length > 0) {
-        // Get evaluated reaction info
         let reaction = collapsed_reaction_dict[neighbor];
         let comps = parseComponentsEnzymes(
           reaction,
@@ -1495,14 +1495,13 @@ function enzymeMotif(
           link_neighbors,
           degree_dict,
           blocklist,
-          _idx)
+          _idx
+        );
         comps = comps[0].concat(comps[1]);
 
-        // Get neighboring reaction(s) info
-        for (let n_reaction in neighbors_dictionary[neighbor]) {
-          let this_neighbor = neighbors_dictionary[neighbor][n_reaction];
-          if (this_neighbor in collapsed_reaction_dict) {
-            let neighbor_reaction = collapsed_reaction_dict[this_neighbor];
+        for (let n_reaction of neighbors_dictionary[neighbor]) {
+          if (n_reaction in collapsed_reaction_dict) {
+            let neighbor_reaction = collapsed_reaction_dict[n_reaction];
             let neighbor_comps = parseComponentsEnzymes(
               neighbor_reaction,
               nodes,
@@ -1514,54 +1513,106 @@ function enzymeMotif(
               link_neighbors,
               degree_dict,
               blocklist,
-              _idx)
+              _idx
+            );
             neighbor_comps = neighbor_comps[0].concat(neighbor_comps[1]);
 
-            // Check for conditions
-            let same_diff = get_same_diff(comps, neighbor_comps, threshold);
-            let big_diff = get_big_diff(comps, neighbor_comps, threshold);
-            if (same_diff[0] !== 0 || big_diff[0] !== 0) {
-              let collapsed = "false";
-              if (reaction.collapsed === "true"
-              || neighbor_reaction.collapsed === "true") {
-                collapsed = "true";
-              }
-              let mag_change, p_source, p_target;
-              if (same_diff[0] > big_diff[0] && same_diff[0] !== 0) {
-                mag_change = same_diff[0];
-                p_source = same_diff[1][0][1];
-                p_target = same_diff[1][1][1];
-              } else if (big_diff[0] !== 0) {
-                mag_change = big_diff[0];
-                p_source = big_diff[1][0][1];
-                p_target = big_diff[1][1][1];
-              }
-            sample_motifs.add({
-              'id': reaction.id + "_" + neighbor_reaction.id,
-              'rxn1': $.extend(true, {}, reaction),
-              'rxn2': $.extend(true, {}, neighbor_reaction),
-              'collapsed': collapsed,
-              'magnitude_change': mag_change,
-              'p_values': {
-                'source': p_source,
-                'target': p_target,
-                'agg': aggregate_p_values([p_source, p_target])
-                }
-              })
+            // Extract values and stats, ensuring we get numbers
+            const compValues = comps.map(comp => Math.abs(Number(comp[0])));
+            const neighborValues = neighbor_comps.map(comp => Math.abs(Number(comp[0])));
+            const compStats = comps.map(comp => Number(comp[1]));
+            const neighborStats = neighbor_comps.map(comp => Number(comp[1]));
+
+            // Check if any component in either reaction passes threshold
+            const maxComp = Math.max(...compValues);
+            const maxNeighbor = Math.max(...neighborValues);
+            
+            if (maxComp >= threshold || maxNeighbor >= threshold) {              
+              const motif = {
+                'id': `${reaction.id}_${neighbor_reaction.id}`,
+                'rxn1': $.extend(true, {}, reaction),
+                'rxn2': $.extend(true, {}, neighbor_reaction),
+                'collapsed': reaction.collapsed === "true" || 
+                           neighbor_reaction.collapsed === "true" ? "true" : "false",
+                'magnitude_change': Math.max(maxComp, maxNeighbor),
+                'p_values': {
+                  'source': Math.min(...compStats),
+                  'target': Math.min(...neighborStats),
+                  'agg': aggregate_p_values([
+                    Math.min(...compStats),
+                    Math.min(...neighborStats)
+                  ])
+                },
+                'pathways': (path_mapper[reaction.id] || [])
+                           .concat(path_mapper[neighbor_reaction.id] || [])
+              };
+              
+              sample_motifs.push(motif); // Push directly to array instead of using Set
             }
           }
         }
       }
     }
-    sample_motifs = [...sample_motifs];
-    for (let m in sample_motifs) {
-      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['rxn1']['id']].concat(path_mapper[sample_motifs[m]['rxn2']['id']])
+    
+    console.log(`Found ${sample_motifs.length} motifs for sample ${_idx}`);
+    console.log(`Sample motifs:`, sample_motifs);
+    // Only push if we found motifs
+    if (sample_motifs.length > 0) {
+      const uniqueMotifs = deduplicateMotifs(sample_motifs);
+      // Sort by magnitude change in descending order
+      uniqueMotifs.sort((a, b) => b.magnitude_change - a.magnitude_change);
+
+      // Keep only the essential properties needed by drawTwoReactionSearchResult
+      let processedMotifs = uniqueMotifs.map(motif => ({
+        id: motif.id,
+        rxn1: motif.rxn1,
+        rxn2: motif.rxn2,
+        collapsed: motif.collapsed,
+        magnitude_change: motif.magnitude_change,
+        p_values: motif.p_values,
+        pathways: motif.pathways
+      }));
+
+      discovered_motifs = [uniqueMotifs];  // Wrap in array to match expected structure
+    } else {
+      discovered_motifs = [[]];  // Return empty array with correct structure
     }
-    discovered_motifs.push(sample_motifs);
   }
+
+  console.log('Final motifs structure:', discovered_motifs);
+  console.log(discovered_motifs[0])
+  console.log(discovered_motifs[0][0])
   return discovered_motifs;
 }
 
+function areMotifsDuplicate(motif1, motif2) {
+  // Check if magnitude changes are the same
+  if (motif1.magnitude_change !== motif2.magnitude_change) {
+    return false;
+  }
+
+  // Get reaction IDs for both motifs
+  const motif1Reactions = [motif1.rxn1.id, motif1.rxn2.id].sort();
+  const motif2Reactions = [motif2.rxn1.id, motif2.rxn2.id].sort();
+
+  // Compare sorted reaction IDs
+  return motif1Reactions[0] === motif2Reactions[0] && 
+         motif1Reactions[1] === motif2Reactions[1];
+}
+
+function deduplicateMotifs(motifs) {
+  return motifs.reduce((unique, motif) => {
+    // Check if we already have this motif (in either direction)
+    const isDuplicate = unique.some(existingMotif => 
+      areMotifsDuplicate(existingMotif, motif)
+    );
+
+    if (!isDuplicate) {
+      unique.push(motif);
+    }
+    return unique;
+  }, []);
+}
 
 function activityMotif(
     threshold,
@@ -1585,17 +1636,12 @@ function activityMotif(
   // Considers modifiers by default
   let discovered_motifs = [];
 
-  for (_idx in sample_indices) {
-
-    // neighbors_dictionary
+  // Process each sample index
+  for (let _idx of sample_indices) {
     let sample_motifs = new Set();
 
     for (let neighbor in neighbors_dictionary) {
-
-      // check each neighbor pair for components (non-metabolite)
       if (neighbor in collapsed_reaction_dict && neighbors_dictionary[neighbor].length > 0) {
-
-        // Get evaluated reaction info
         let reaction = collapsed_reaction_dict[neighbor];
         let comps = parseComponentsMetabolites(
           reaction,
@@ -1608,14 +1654,14 @@ function activityMotif(
           link_neighbors,
           degree_dict,
           blocklist,
-          _idx)
+          _idx
+        );
         comps = comps[0].concat(comps[1]);
 
-        // Get neighboring reaction(s) info
-        for (let n_reaction in neighbors_dictionary[neighbor]) {
-          let this_neighbor = neighbors_dictionary[neighbor][n_reaction];
-          if (this_neighbor in collapsed_reaction_dict) {
-            let neighbor_reaction = collapsed_reaction_dict[this_neighbor];
+        // Get neighboring reactions
+        for (let n_reaction of neighbors_dictionary[neighbor]) {
+          if (n_reaction in collapsed_reaction_dict) {
+            let neighbor_reaction = collapsed_reaction_dict[n_reaction];
             let neighbor_comps = parseComponentsMetabolites(
               neighbor_reaction,
               nodes,
@@ -1627,51 +1673,62 @@ function activityMotif(
               link_neighbors,
               degree_dict,
               blocklist,
-              _idx)
+              _idx
+            );
             neighbor_comps = neighbor_comps[0].concat(neighbor_comps[1]);
 
-            // Check for conditions
+            // Check significance
             let same_diff = get_same_diff(comps, neighbor_comps, threshold);
             let big_diff = get_big_diff(comps, neighbor_comps, threshold);
+
             if (same_diff[0] !== 0 || big_diff[0] !== 0) {
-              let collapsed = "false";
-              if (reaction.collapsed === "true"
-              || neighbor_reaction.collapsed === "true") {
-                collapsed = "true";
-              }
+              // Determine magnitude and p-values
               let mag_change, p_source, p_target;
               if (same_diff[0] > big_diff[0] && same_diff[0] !== 0) {
-                mag_change = same_diff[0];
-                p_source = same_diff[1][0][1];
-                p_target = same_diff[1][1][1];
+                [mag_change, [[, p_source], [, p_target]]] = [same_diff[0], same_diff[1]];
               } else if (big_diff[0] !== 0) {
-                mag_change = big_diff[0];
-                p_source = big_diff[1][0][1];
-                p_target = big_diff[1][1][1];
+                [mag_change, [[, p_source], [, p_target]]] = [big_diff[0], big_diff[1]];
               }
-              sample_motifs.add({
-                'id': reaction.id + "_" + neighbor_reaction.id,
+
+              // Create motif
+              const motif = {
+                'id': `${reaction.id}_${neighbor_reaction.id}`,
                 'rxn1': $.extend(true, {}, reaction),
                 'rxn2': $.extend(true, {}, neighbor_reaction),
-                'collapsed': collapsed,
+                'collapsed': reaction.collapsed === "true" || 
+                           neighbor_reaction.collapsed === "true" ? "true" : "false",
                 'magnitude_change': mag_change,
                 'p_values': {
                   'source': p_source,
                   'target': p_target,
                   'agg': aggregate_p_values([p_source, p_target])
-                }
-              })
+                },
+                'pathways': (path_mapper[reaction.id] || [])
+                           .concat(path_mapper[neighbor_reaction.id] || [])
+              };
+
+              sample_motifs.add(motif);
             }
           }
         }
       }
     }
-    sample_motifs = [...sample_motifs];
-    for (let m in sample_motifs) {
-      sample_motifs[m]['pathways'] = path_mapper[sample_motifs[m]['rxn1']['id']].concat(path_mapper[sample_motifs[m]['rxn2']['id']])
+
+    // Process motifs for this sample
+    if (sample_motifs.size > 0) {
+      // Convert Set to Array and deduplicate
+      let uniqueMotifs = deduplicateMotifs([...sample_motifs]);
+      
+      // Sort by magnitude change
+      uniqueMotifs.sort((a, b) => b.magnitude_change - a.magnitude_change);
+
+      discovered_motifs.push(uniqueMotifs);
+    } else {
+      discovered_motifs.push([]);
     }
-    discovered_motifs.push(sample_motifs);
   }
+
+  console.log('Activity motifs found:', discovered_motifs.map(m => m.length));
   return discovered_motifs;
 }
 
