@@ -1563,25 +1563,11 @@ function enzymeMotif(
       uniqueMotifs.sort((a, b) => b.magnitude_change - a.magnitude_change);
 
       // Keep only the essential properties needed by drawTwoReactionSearchResult
-      let processedMotifs = uniqueMotifs.map(motif => ({
-        id: motif.id,
-        rxn1: motif.rxn1,
-        rxn2: motif.rxn2,
-        collapsed: motif.collapsed,
-        magnitude_change: motif.magnitude_change,
-        p_values: motif.p_values,
-        pathways: motif.pathways
-      }));
-
-      discovered_motifs = [uniqueMotifs];  // Wrap in array to match expected structure
+      discovered_motifs[_idx] = uniqueMotifs;
     } else {
-      discovered_motifs = [[]];  // Return empty array with correct structure
+      discovered_motifs[_idx] = [];
     }
   }
-
-  console.log('Final motifs structure:', discovered_motifs);
-  console.log(discovered_motifs[0])
-  console.log(discovered_motifs[0][0])
   return discovered_motifs;
 }
 
@@ -1722,9 +1708,11 @@ function activityMotif(
       // Sort by magnitude change
       uniqueMotifs.sort((a, b) => b.magnitude_change - a.magnitude_change);
 
-      discovered_motifs.push(uniqueMotifs);
+      // Add this condition's motifs to the array
+      discovered_motifs[_idx] = uniqueMotifs;
     } else {
-      discovered_motifs.push([]);
+      // Add empty array for this condition
+      discovered_motifs[_idx] = [];
     }
   }
 
@@ -2519,14 +2507,15 @@ function test() {
       })
     })
 
-    // enzymeMotif()
+    // enzymeMotif tests
     describe('enzymeMotif()', function() {
-      it('should return ...', function() {
-        let test_threshold = 1;
-        let neighbors_dict = make_neighbors_dictionary(
+      it('should find motifs when threshold is met across conditions', function() {
+        const test_threshold = 1;
+        const neighbors_dict = make_neighbors_dictionary(
           test_data,
-          test_degree_dict)
-        let motifs = enzymeMotif(
+          test_degree_dict
+        );
+        const motifs = enzymeMotif(
           test_threshold,
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
@@ -2540,25 +2529,40 @@ function test() {
           [],
           test_sample_indices,
           test_data['nodes']
-        )
-        assert(motifs[0].length === 2)
-        assert(motifs[1].length === 2)
-        if (motifs[0][0]['magnitude_change'] === 3
-        && motifs[0][1]['magnitude_change'] === 3
-        && motifs[1][0]['magnitude_change'] === 3
-        && motifs[1][1]['magnitude_change'] === 3) {} else {
-          assert(false)
-        }
-      })
-    })
+        );
 
-    describe('enzymeMotif()', function() {
-      it('should return ...', function() {
-        let test_threshold = 5;
-        let neighbors_dict = make_neighbors_dictionary(
+        // Test structure
+        assert(Array.isArray(motifs), 'Motifs should be an array');
+        assert(motifs.length === 2, 'Should have motifs for two conditions');
+        
+        // Test each condition's motifs
+        assert(motifs[0].length === 2, 'Condition 1 should have 2 motifs');
+        assert(motifs[1].length === 2, 'Condition 2 should have 2 motifs');
+
+        // Test magnitudes
+        const expectedMagnitude = 3;
+        motifs.forEach((conditionMotifs, idx) => {
+          conditionMotifs.forEach((motif, motifIdx) => {
+            assert(motif.magnitude_change === expectedMagnitude, 
+              `Motif ${motifIdx} in condition ${idx} should have magnitude ${expectedMagnitude}`);
+            
+            // Test required properties
+            assert(motif.id, 'Motif should have id');
+            assert(motif.rxn1, 'Motif should have rxn1');
+            assert(motif.rxn2, 'Motif should have rxn2');
+            assert(motif.pathways, 'Motif should have pathways');
+            assert(motif.p_values, 'Motif should have p_values');
+          });
+        });
+      });
+
+      it('should return empty arrays when threshold is not met', function() {
+        const test_threshold = 5;
+        const neighbors_dict = make_neighbors_dictionary(
           test_data,
-          test_degree_dict)
-        let motifs = enzymeMotif(
+          test_degree_dict
+        );
+        const motifs = enzymeMotif(
           test_threshold,
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
@@ -2572,54 +2576,24 @@ function test() {
           [],
           test_sample_indices,
           test_data['nodes']
-        )
-        assert(motifs[0].length === 0)
-        assert(motifs[1].length === 0)
-      })
-    })
+        );
 
-    // activityMotif()
+        assert(Array.isArray(motifs), 'Should return array even when empty');
+        assert(motifs.length === 2, 'Should have arrays for both conditions');
+        assert(motifs[0].length === 0, 'Condition 1 should have no motifs');
+        assert(motifs[1].length === 0, 'Condition 2 should have no motifs');
+      });
+    });
+
+    // activityMotif tests
     describe('activityMotif()', function() {
-      it('should return 1', function() {
-        let test_threshold = 1;
-        let neighbors_dict = make_neighbors_dictionary(
+      it('should find correct motifs for low threshold across conditions', function() {
+        const test_threshold = 1;
+        const neighbors_dict = make_neighbors_dictionary(
           test_data,
-          test_degree_dict)
-        let motifs = activityMotif(
-          test_threshold,
-          test_data['collapsed_reaction_dictionary'],
-          test_expression_dict,
-          test_stats_dict,
-          "float",
-          0.1,
-          {},
-          neighbors_dict[0],
-          test_path_mapper,
-          test_degree_dict,
-          [],
-          test_sample_indices,
-          test_data['nodes'] 
-        )
-        assert(motifs[0].length === 2)
-        assert(motifs[1].length === 2)
-        if (motifs[0][0]["magnitude_change"] === 6.3
-        && motifs[0][1]["magnitude_change"] === 6.3) {} else {
-          assert(false)
-        }
-        if (motifs[1][0]["magnitude_change"] === 3
-        && motifs[1][1]["magnitude_change"] === 3) {} else {
-          assert(false)
-        }
-      })
-    })
-
-    describe('activityMotif()', function() {
-      it('should return 2', function() {
-        let test_threshold = 4;
-        let neighbors_dict = make_neighbors_dictionary(
-          test_data,
-          test_degree_dict)
-        let motifs = activityMotif(
+          test_degree_dict
+        );
+        const motifs = activityMotif(
           test_threshold,
           test_data['collapsed_reaction_dictionary'],
           test_expression_dict,
@@ -2633,15 +2607,65 @@ function test() {
           [],
           test_sample_indices,
           test_data['nodes']
-        )
-        assert(motifs[0].length === 2)
-        assert(motifs[1].length === 0)
-        if (motifs[0][0]["magnitude_change"] === 6.3
-        && motifs[0][1]["magnitude_change"] === 6.3) {} else {
-          assert(false)
-        }
-      })
-    })
+        );
+
+        // Test structure
+        assert(Array.isArray(motifs), 'Motifs should be an array');
+        assert(motifs.length === 2, 'Should have motifs for two conditions');
+        
+        // Test condition 1
+        assert(motifs[0].length === 2, 'Condition 1 should have 2 motifs');
+        assert(motifs[0][0].magnitude_change === 6.3, 'First motif in condition 1 should have magnitude 6.3');
+        assert(motifs[0][1].magnitude_change === 6.3, 'Second motif in condition 1 should have magnitude 6.3');
+
+        // Test condition 2
+        assert(motifs[1].length === 2, 'Condition 2 should have 2 motifs');
+        assert(motifs[1][0].magnitude_change === 3, 'First motif in condition 2 should have magnitude 3');
+        assert(motifs[1][1].magnitude_change === 3, 'Second motif in condition 2 should have magnitude 3');
+
+        // Test required properties
+        motifs.forEach((conditionMotifs, idx) => {
+          conditionMotifs.forEach((motif, motifIdx) => {
+            assert(motif.id, 'Motif should have id');
+            assert(motif.rxn1, 'Motif should have rxn1');
+            assert(motif.rxn2, 'Motif should have rxn2');
+            assert(motif.pathways, 'Motif should have pathways');
+            assert(motif.p_values, 'Motif should have p_values');
+          });
+        });
+      });
+
+      it('should handle medium threshold correctly', function() {
+        const test_threshold = 4;
+        const neighbors_dict = make_neighbors_dictionary(
+          test_data,
+          test_degree_dict
+        );
+        const motifs = activityMotif(
+          test_threshold,
+          test_data['collapsed_reaction_dictionary'],
+          test_expression_dict,
+          test_stats_dict,
+          "float",
+          0.1,
+          {},
+          neighbors_dict[0],
+          test_path_mapper,
+          test_degree_dict,
+          [],
+          test_sample_indices,
+          test_data['nodes']
+        );
+
+        assert(motifs.length === 2, 'Should have arrays for both conditions');
+        assert(motifs[0].length === 2, 'Condition 1 should have 2 motifs');
+        assert(motifs[1].length === 0, 'Condition 2 should have no motifs');
+        
+        // Test magnitudes for condition 1
+        assert(motifs[0][0].magnitude_change === 6.3, 'First motif should have magnitude 6.3');
+        assert(motifs[0][1].magnitude_change === 6.3, 'Second motif should have magnitude 6.3');
+      });
+    });
 
 
 

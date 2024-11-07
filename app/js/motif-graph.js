@@ -1185,7 +1185,7 @@ class MetaGraph {
         .data([motif_list[i]]);
       tg.exit().remove();
       tg = tg.enter().append("text").merge(tg)
-        .attr("x", start_x + 10)
+        .attr("x", start_x + 3)
         .attr("y", start_y + 45)
         .text(function(d) {
           if (sort_type === "Sort Number of Pathways") {
