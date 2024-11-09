@@ -492,32 +492,81 @@ class MetaGraph {
   }
 
   processIdenticals(exclude=true) {
+    console.log('Starting processIdenticals', this.motif);
 
     for (let i in this.motif) {
-      for (let m = 0; m < this.motif[i].length; m++) {
-        let r = this.motif[i][m].reactants;
-        let p = this.motif[i][m].products;
+        for (let m = 0; m < this.motif[i].length; m++) {
+            const motif = this.motif[i][m];
+            
+            // Check if this is an enzyme motif (has rxn1/rxn2) or regular motif (has reactants/products)
+            if (motif.rxn1 && motif.rxn2) {
+                // Handle enzyme motif case
+                let r1_names = [], p1_names = [], r2_names = [], p2_names = [];
+                
+                // Process rxn1
+                if (motif.rxn1.reactants) {
+                    r1_names = motif.rxn1.reactants
+                        .filter(rr => this.nodes[rr])
+                        .map(rr => this.nodes[rr].map_id);
+                }
+                if (motif.rxn1.products) {
+                    p1_names = motif.rxn1.products
+                        .filter(pp => this.nodes[pp])
+                        .map(pp => this.nodes[pp].map_id);
+                }
 
-        let r_names = [];
-        let p_names = [];
+                // Process rxn2
+                if (motif.rxn2.reactants) {
+                    r2_names = motif.rxn2.reactants
+                        .filter(rr => this.nodes[rr])
+                        .map(rr => this.nodes[rr].map_id);
+                }
+                if (motif.rxn2.products) {
+                    p2_names = motif.rxn2.products
+                        .filter(pp => this.nodes[pp])
+                        .map(pp => this.nodes[pp].map_id);
+                }
 
-        for (let rr in r) {
-          r_names.push(this.nodes[r[rr]].map_id);
+                if (exclude === true) {
+                    const rxn1_identical = JSON.stringify(r1_names.sort()) === JSON.stringify(p1_names.sort());
+                    const rxn2_identical = JSON.stringify(r2_names.sort()) === JSON.stringify(p2_names.sort());
+                    
+                    if (rxn1_identical || rxn2_identical) {
+                        this.motif[i].splice(m, 1);
+                        m--;
+                    }
+                }
+            } else {
+                // Handle regular motif case (original logic)
+                let r_names = [];
+                let p_names = [];
 
+                if (motif.reactants) {
+                    for (let rr in motif.reactants) {
+                        if (this.nodes[motif.reactants[rr]]) {
+                            r_names.push(this.nodes[motif.reactants[rr]].map_id);
+                        }
+                    }
+                }
+
+                if (motif.products) {
+                    for (let pp in motif.products) {
+                        if (this.nodes[motif.products[pp]]) {
+                            p_names.push(this.nodes[motif.products[pp]].map_id);
+                        }
+                    }
+                }
+
+                if (exclude === true && 
+                    JSON.stringify(r_names.sort()) === JSON.stringify(p_names.sort())) {
+                    this.motif[i].splice(m, 1);
+                    m--;
+                }
+            }
         }
-        for (let pp in p) {
-          p_names.push(this.nodes[p[pp]].map_id);
-        }
-
-        if (
-            (JSON.stringify(r_names.sort()) === JSON.stringify(p_names.sort()))
-            &&
-            (exclude === true)) {
-          this.motif[i].splice(m, 1);
-          m--;
-        }
-      }
     }
+    
+    console.log('After processIdenticals', this.motif);
   }
 
   motifSearch() {
@@ -710,7 +759,7 @@ class MetaGraph {
         this.watchMenu();
         this.watchType();
         this.watchExclude();
-        this.drawTwoReactionSearchResult(this.motif, 0, exclude_idx);
+        this.drawTwoReactionSearchResult(0, exclude_idx);
         this.watchExport();
         spinner.stop();
       })
@@ -754,7 +803,7 @@ class MetaGraph {
         this.watchMenu();
         this.watchType();
         this.watchExclude();
-        this.drawTwoReactionSearchResult(this.motif, 0, exclude_idx);
+        this.drawTwoReactionSearchResult(0, exclude_idx);
         this.watchExport();
         spinner.stop();
       })
@@ -910,13 +959,17 @@ class MetaGraph {
     let current_motifs = motifs[indexer];
 
     // Exclude any motifs in multiple time-points/conditions
+    
     let motif_list = get_included_motifs(
       current_motifs,
       motifs,
       exclusion_indexer);
 
-    if (motif_list.length > 1000) {
+    if (motif_list.length > 300) {
       alert(String(motif_list.length) + " reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")
+      
+      // Truncate motif_list to first 300 entries
+      motif_list = motif_list.slice(0, 300);
     }
 
     // Sort motifs based on user input
@@ -1132,7 +1185,7 @@ class MetaGraph {
         .data([motif_list[i]]);
       tg.exit().remove();
       tg = tg.enter().append("text").merge(tg)
-        .attr("x", start_x + 10)
+        .attr("x", start_x + 3)
         .attr("y", start_y + 45)
         .text(function(d) {
           if (sort_type === "Sort Number of Pathways") {
@@ -1150,15 +1203,21 @@ class MetaGraph {
     }
   }
 
-  drawTwoReactionSearchResult(motifs, indexer, exclusion_indexer) {
+  drawTwoReactionSearchResult(indexer, exclusion_indexer) {
 
-    let current_motifs = motifs[indexer];
-
+    console.log('Drawing index:', indexer);
+    console.log('Exclusion index:', exclude_idx);
     // Exclude any motifs in multiple time-points/conditions
+    let current_motifs = this.motif[0];
+    console.log('Current motifs before get_included_motifs:', current_motifs);
+    
     let motif_list = get_included_motifs(
       current_motifs,
-      motifs,
-      exclusion_indexer);
+      this.motif,
+      exclude_idx
+    );
+    console.log('Motif list after get_included_motifs:', motif_list);
+
 
     if (motif_list.length > 1000) {
       alert(String(motif_list.length) + " reaction patterns identified. This may take a while, or you could try increasing the threshold to a more stringent level.")

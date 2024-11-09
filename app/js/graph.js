@@ -246,6 +246,15 @@ d3.select("button#shape_legend")
     div.html("")
   });
 
+function formatStatValue(value) {
+  if (typeof value !== 'number') return value;
+  
+  if (Math.abs(value) < 0.01 && value !== 0) {
+      return value.toExponential(2);
+  }
+  return value.toFixed(2);
+}
+
 function checkReaction(
   reaction,
   element,
@@ -1182,22 +1191,17 @@ function make_graph(
             "</tspan>"
           );
         } else {
-          let display_stat;
-          if (parseFloat(d.stats[sample]) < 0.01) {
-            display_stat = "< 0.01"
-          } else {
-            display_stat = parseFloat(d.stats[sample]).toFixed(2)
-          }
+          let display_stat = parseFloat(d.stats[sample]);
           let output_stat_string = ("<tspan dx='16' y='-.5em' class='bold-text'>" +
             this_name +
             "</tspan>" +
             "<tspan x='16' y='.7em'>Value: " +
-            parseFloat(d.values[sample]).toFixed(2) +
+            parseFloat(d.values[sample]).toFixed(3) +
             "</tspan>");
           if (stat_type !== "array") {
             output_stat_string = (output_stat_string + 
               "<tspan x='16' y='1.7em'>Statistic: " +
-              display_stat +
+              formatStatValue(display_stat) +
               "</tspan>"
               );
           }
@@ -1382,19 +1386,14 @@ function make_graph(
       // Determine the name to display based on toggleName
       let this_name = toggleName && d.user_label ? d.user_label : d.name;
       
-      let display_stat;
-      if (parseFloat(d.stats[sample]) < 0.01) {
-        display_stat = "< 0.01";
-      } else {
-        display_stat = parseFloat(d.stats[sample]).toFixed(2);
-      }
+      let display_stat = parseFloat(d.stats[sample]);
 
       let values = "";
       let stats = "";
       if (toggle_e === true) {
-        values = "<tspan x='16' y='.7em'>Value: " + parseFloat(d.values[sample]).toFixed(2) + "</tspan>";
+        values = "<tspan x='16' y='.7em'>Value: " + parseFloat(d.values[sample]).toFixed(3) + "</tspan>";
         if (stat_type !== "array") {
-          stats = "<tspan x='16' y='1.7em'>Statistic: " + display_stat + "</tspan>";
+          stats = "<tspan x='16' y='1.7em'>Statistic: " + formatStatValue(display_stat) + "</tspan>";
         }
       } 
 

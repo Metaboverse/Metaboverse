@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions",
-    "test": "mocha -r jsdom-global/register",
+    "test": "mocha --require ./test/test-setup.js",
     "start": "electron ."
   },
   "resolutions": {
@@ -29,8 +29,7 @@
     "electron": "^25.9.8",
     "electron-packager": "^17.1.1",
     "got": ">=11.8.5",
-    "jsdom": "^16.4.0",
-    "jsdom-global": "^3.0.2",
+    "jsdom": "^16.7.0",
     "minimist": ">=1.2.6",
     "mocha": "^10.0.0",
     "serialize-javascript": "^3.1.0",
