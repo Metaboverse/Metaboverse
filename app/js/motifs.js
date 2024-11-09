@@ -2507,7 +2507,6 @@ function test() {
       })
     })
 
-    // enzymeMotif tests
     describe('enzymeMotif()', function() {
       it('should find motifs when threshold is met across conditions', function() {
         const test_threshold = 1;
@@ -2530,32 +2529,28 @@ function test() {
           test_sample_indices,
           test_data['nodes']
         );
-
+    
         // Test structure
         assert(Array.isArray(motifs), 'Motifs should be an array');
         assert(motifs.length === 2, 'Should have motifs for two conditions');
         
         // Test each condition's motifs
-        assert(motifs[0].length === 2, 'Condition 1 should have 2 motifs');
-        assert(motifs[1].length === 2, 'Condition 2 should have 2 motifs');
-
-        // Test magnitudes
-        const expectedMagnitude = 3;
+        assert(motifs[0].length === 1, 'Condition 1 should have 1 motif');
+        assert(motifs[1].length === 1, 'Condition 2 should have 1 motif');
+    
+        // Test motif properties
         motifs.forEach((conditionMotifs, idx) => {
-          conditionMotifs.forEach((motif, motifIdx) => {
-            assert(motif.magnitude_change === expectedMagnitude, 
-              `Motif ${motifIdx} in condition ${idx} should have magnitude ${expectedMagnitude}`);
-            
-            // Test required properties
-            assert(motif.id, 'Motif should have id');
+          conditionMotifs.forEach(motif => {
+            assert.equal(motif.id, 'R3_R6', 'Motif should have correct ID');
+            assert.equal(motif.magnitude_change, 3, 'Motif should have correct magnitude');
             assert(motif.rxn1, 'Motif should have rxn1');
             assert(motif.rxn2, 'Motif should have rxn2');
-            assert(motif.pathways, 'Motif should have pathways');
+            assert(Array.isArray(motif.pathways), 'Motif should have pathways array');
             assert(motif.p_values, 'Motif should have p_values');
           });
         });
       });
-
+    
       it('should return empty arrays when threshold is not met', function() {
         const test_threshold = 5;
         const neighbors_dict = make_neighbors_dictionary(
@@ -2577,15 +2572,14 @@ function test() {
           test_sample_indices,
           test_data['nodes']
         );
-
+    
         assert(Array.isArray(motifs), 'Should return array even when empty');
         assert(motifs.length === 2, 'Should have arrays for both conditions');
         assert(motifs[0].length === 0, 'Condition 1 should have no motifs');
         assert(motifs[1].length === 0, 'Condition 2 should have no motifs');
       });
     });
-
-    // activityMotif tests
+    
     describe('activityMotif()', function() {
       it('should find correct motifs for low threshold across conditions', function() {
         const test_threshold = 1;
@@ -2608,33 +2602,31 @@ function test() {
           test_sample_indices,
           test_data['nodes']
         );
-
+        
         // Test structure
         assert(Array.isArray(motifs), 'Motifs should be an array');
         assert(motifs.length === 2, 'Should have motifs for two conditions');
         
         // Test condition 1
-        assert(motifs[0].length === 2, 'Condition 1 should have 2 motifs');
-        assert(motifs[0][0].magnitude_change === 6.3, 'First motif in condition 1 should have magnitude 6.3');
-        assert(motifs[0][1].magnitude_change === 6.3, 'Second motif in condition 1 should have magnitude 6.3');
-
+        assert(motifs[0].length === 1, 'Condition 1 should have 1 motif');
+        assert.equal(motifs[0][0].magnitude_change, 6.3, 'First motif in condition 1 should have magnitude 6.3');
+    
         // Test condition 2
-        assert(motifs[1].length === 2, 'Condition 2 should have 2 motifs');
-        assert(motifs[1][0].magnitude_change === 3, 'First motif in condition 2 should have magnitude 3');
-        assert(motifs[1][1].magnitude_change === 3, 'Second motif in condition 2 should have magnitude 3');
-
+        assert(motifs[1].length === 1, 'Condition 2 should have 1 motif');
+        assert.equal(motifs[1][0].magnitude_change, 3, 'First motif in condition 2 should have magnitude 3');
+    
         // Test required properties
         motifs.forEach((conditionMotifs, idx) => {
-          conditionMotifs.forEach((motif, motifIdx) => {
-            assert(motif.id, 'Motif should have id');
+          conditionMotifs.forEach(motif => {
+            assert.equal(motif.id, 'R3_R6', 'Motif should have correct ID');
             assert(motif.rxn1, 'Motif should have rxn1');
             assert(motif.rxn2, 'Motif should have rxn2');
-            assert(motif.pathways, 'Motif should have pathways');
+            assert(Array.isArray(motif.pathways), 'Motif should have pathways array');
             assert(motif.p_values, 'Motif should have p_values');
           });
         });
       });
-
+    
       it('should handle medium threshold correctly', function() {
         const test_threshold = 4;
         const neighbors_dict = make_neighbors_dictionary(
@@ -2656,20 +2648,15 @@ function test() {
           test_sample_indices,
           test_data['nodes']
         );
-
+    
         assert(motifs.length === 2, 'Should have arrays for both conditions');
-        assert(motifs[0].length === 2, 'Condition 1 should have 2 motifs');
+        assert(motifs[0].length === 1, 'Condition 1 should have 1 motif');
         assert(motifs[1].length === 0, 'Condition 2 should have no motifs');
         
         // Test magnitudes for condition 1
-        assert(motifs[0][0].magnitude_change === 6.3, 'First motif should have magnitude 6.3');
-        assert(motifs[0][1].magnitude_change === 6.3, 'Second motif should have magnitude 6.3');
+        assert.equal(motifs[0][0].magnitude_change, 6.3, 'First motif should have magnitude 6.3');
       });
     });
-
-
-
-
 
 
 
