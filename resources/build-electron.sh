@@ -89,7 +89,7 @@ cd ${DIR}
 
 # Currently, the x64 Electron packager works fine for x64 and arm64, while arm64 does not seem to work at all. This is a temporary workaround
 ARCH=$(uname -m)
-if [[ $ARCH == *"arm64"]]; then 
+if [[ $ARCH == *"arm64" ]]; then 
     ARCH="arm64"
 fi
 

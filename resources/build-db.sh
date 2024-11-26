@@ -111,15 +111,18 @@ cd ${BUILD_PATH}
 echo -e "\nUploading to host..."
 
 # Include other necessary files
-INCLUDE_PATTERN+=("--include=build_env.txt")
-INCLUDE_PATTERN+=("--include=README.txt")
-INCLUDE_PATTERN+=("--include=metaboverse-cli-nix")
+#INCLUDE_PATTERN+=("--include=build_env.txt")
+#INCLUDE_PATTERN+=("--include=README.txt")
+#INCLUDE_PATTERN+=("--include=metaboverse-cli-nix")
 
 # Complete rsync command
-RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh")
-RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
+#RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh")
+#RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
 #RSYNC_COMMAND+=("--exclude=*") # Exclude other directories and files
-RSYNC_COMMAND+=("${BUILD_PATH}/" "${BD_DEST}")
+#RSYNC_COMMAND+=("${BUILD_PATH}/" "${BD_DEST}")
+
+# Complete rsync command
+RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh" "${BUILD_PATH}/" "${BD_DEST}")
 
 # Execute rsync command
 echo -e "Executing rsync command:\n"
