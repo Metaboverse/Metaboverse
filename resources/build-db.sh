@@ -117,7 +117,7 @@ INCLUDE_PATTERN+=("--include=metaboverse-cli-nix")
 
 # Complete rsync command
 RSYNC_COMMAND=("rsync" "-avzv" "-e" "ssh")
-RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
+#RSYNC_COMMAND+=("${INCLUDE_PATTERN[@]}")
 #RSYNC_COMMAND+=("--exclude=*") # Exclude other directories and files
 RSYNC_COMMAND+=("${BUILD_PATH}/" "${BD_DEST}")
 
@@ -127,3 +127,5 @@ echo -e "${RSYNC_COMMAND[@]}"
 eval "${RSYNC_COMMAND[@]}"
 
 conda deactivate
+
+
