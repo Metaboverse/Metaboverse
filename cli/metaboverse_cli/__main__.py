@@ -84,18 +84,36 @@ except ImportError:
         )
     except ImportError:
         try:
-            # Finally try direct imports
+            # Finally try direct imports with frozen path handling
             import importlib.util
-            def load_module(name, path):
-                spec = importlib.util.spec_from_file_location(name, path)
-                if spec is None:
-                    raise ImportError(f"Could not find module at {path}")
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-                return module
+            import os
+            import sys
 
-            base_path = os.path.dirname(__file__)
+            def get_base_path():
+                """Get the base path for the application, handling both frozen and non-frozen cases."""
+                if getattr(sys, 'frozen', False):
+                    # Running in a PyInstaller bundle
+                    return os.path.dirname(sys.executable)
+                else:
+                    # Running in development
+                    return os.path.dirname(os.path.abspath(__file__))
+
+            def load_module(name, path):
+                """Load a module from a file path, handling both frozen and non-frozen cases."""
+                try:
+                    spec = importlib.util.spec_from_file_location(name, path)
+                    if spec is None:
+                        raise ImportError(f"Could not find module at {path}")
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    return module
+                except Exception as e:
+                    print(f"Error loading module {name} from {path}: {str(e)}")
+                    raise
+
+            base_path = get_base_path()
             
+            # Load all required modules
             init = load_module("__init__", os.path.join(base_path, "__init__.py"))
             __version__ = init.__version__
             SOURCE_URL = init.SOURCE_URL
@@ -125,12 +143,8 @@ except ImportError:
             write_database_json = utils.write_database_json
             prepare_output = utils.prepare_output
 
-        except ImportError as e:
-            print(f"Error importing dependencies: {e}")
-            print(f"Current sys.path: {sys.path}")
-            print(f"Current directory: {os.getcwd()}")
-            print(f"File location: {__file__}")
-            print(f"Project root: {project_root}")
+        except Exception as e:
+            print(f"Error during module loading: {str(e)}")
             raise
 
 # Set curation directory

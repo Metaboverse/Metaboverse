@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """License Information
 metaboverse-cli
 Back-end CLI Tool for Curating Metabolic Networks for Metaboverse
@@ -11,8 +13,6 @@ Copyright (c) Jordan A. Berg, The University of Utah
 
 __version__ = '0.11.6'
 
-
-from __future__ import print_function
 import os
 import sys
 from pathlib import Path

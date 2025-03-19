@@ -35,16 +35,74 @@ import json
 import math
 import sys
 import os
+import zipfile
+from pathlib import Path
+
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
+
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
 
 try:
-    from __init__ import __version__
-except:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "__version__", os.path.abspath("./metaboverse_cli/__init__.py"))
-    init = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(init)
-    __version__ = init.__version__
+    # First try normal package imports
+    from metaboverse_cli.analyze.utils import update_progress
+except ImportError:
+    try:
+        # Then try relative imports
+        from analyze.utils import update_progress
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            def load_module(name, path):
+                spec = importlib.util.spec_from_file_location(name, path)
+                if spec is None:
+                    raise ImportError(f"Could not find module at {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
+
+            base_path = os.path.dirname(__file__)
+            analyze_utils = load_module("analyze_utils", os.path.join(base_path, "analyze", "utils.py"))
+            update_progress = analyze_utils.update_progress
+        except ImportError as e:
+            print(f"Error importing dependencies: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            raise
+
+try:
+    # First try normal package imports
+    from metaboverse_cli import __version__
+except ImportError:
+    try:
+        # Then try relative imports
+        from __init__ import __version__
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            init = load_module("__init__", os.path.join(base_path, "__init__.py"))
+            __version__ = init.__version__
+        except ImportError as e:
+            print(f"Error importing version: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            raise
 
 
 def download_file_ftp(url, output_path):
@@ -115,7 +173,10 @@ def update_session_vars(args_dict):
     """Update session variables when a pre-curated file is provided
     """
 
-    session_file = args_dict['session_data']
+    if 'session_data' in args_dict:
+        session_file = args_dict['session_data']
+    else:
+        return args_dict
 
     update_session(
         session_file=session_file,
