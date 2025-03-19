@@ -39,82 +39,119 @@ import requests
 import pickle
 import sys
 import os
+import json
+import zipfile
+from pathlib import Path
 # Includes all imports used throughout metaboverse-cli to ensure packaging by pyinstaller
 
 # Set globals
-# Get source url from local `source_db.txt`
-SOURCE_URL = open(
-    os.path.join(
-        os.path.dirname(
-            os.path.abspath(__file__)),
-        'source_url.txt'),
-    'r').read().strip()
+try:
+    # First try normal package imports
+    from metaboverse_cli import __version__, SOURCE_URL
+    from metaboverse_cli.arguments import parse_arguments
+    from metaboverse_cli.curate.__main__ import __main__ as curate
+    from metaboverse_cli.analyze.__main__ import __main__ as analyze
+    from metaboverse_cli.mapper.__main__ import __main__ as metaboliteMapper
+    from metaboverse_cli.target.__main__ import __main__ as target
+    from metaboverse_cli.utils import (
+        update_session_vars,
+        progress_feed,
+        get_metaboverse_cli_version,
+        safestr,
+        read_network,
+        write_database,
+        write_database_json,
+        prepare_output
+    )
+except ImportError:
+    try:
+        # Then try relative imports
+        from __init__ import __version__, SOURCE_URL
+        from arguments import parse_arguments
+        from curate.__main__ import __main__ as curate
+        from analyze.__main__ import __main__ as analyze
+        from mapper.__main__ import __main__ as metaboliteMapper
+        from target.__main__ import __main__ as target
+        from utils import (
+            update_session_vars,
+            progress_feed,
+            get_metaboverse_cli_version,
+            safestr,
+            read_network,
+            write_database,
+            write_database_json,
+            prepare_output
+        )
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            def load_module(name, path):
+                spec = importlib.util.spec_from_file_location(name, path)
+                if spec is None:
+                    raise ImportError(f"Could not find module at {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
+
+            base_path = os.path.dirname(__file__)
+            
+            init = load_module("__init__", os.path.join(base_path, "__init__.py"))
+            __version__ = init.__version__
+            SOURCE_URL = init.SOURCE_URL
+
+            arguments = load_module("arguments", os.path.join(base_path, "arguments.py"))
+            parse_arguments = arguments.parse_arguments
+
+            curate_main = load_module("curate_main", os.path.join(base_path, "curate", "__main__.py"))
+            curate = curate_main.__main__
+
+            analyze_main = load_module("analyze_main", os.path.join(base_path, "analyze", "__main__.py"))
+            analyze = analyze_main.__main__
+
+            mapper_main = load_module("mapper_main", os.path.join(base_path, "mapper", "__main__.py"))
+            metaboliteMapper = mapper_main.__main__
+
+            target_main = load_module("target_main", os.path.join(base_path, "target", "__main__.py"))
+            target = target_main.__main__
+
+            utils = load_module("utils", os.path.join(base_path, "utils.py"))
+            update_session_vars = utils.update_session_vars
+            progress_feed = utils.progress_feed
+            get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+            safestr = utils.safestr
+            read_network = utils.read_network
+            write_database = utils.write_database
+            write_database_json = utils.write_database_json
+            prepare_output = utils.prepare_output
+
+        except ImportError as e:
+            print(f"Error importing dependencies: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            print(f"Project root: {project_root}")
+            raise
+
 # Set curation directory
 CURATION_DIR='mvdb'
 
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
 
-"""Import internal dependencies
-"""
-try:
-    from __init__ import __version__
-    from arguments import parse_arguments
-    from curate.__main__ import __main__ as curate
-    from analyze.__main__ import __main__ as analyze
-    from mapper.__main__ import __main__ as mapper
-    from target.__main__ import __main__ as curate_target
-    from utils import progress_feed, update_session, \
-        safestr, get_metaboverse_cli_version, init_mvrs_file, \
-        update_network_vars, update_session_vars
-except:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "", os.path.abspath(os.path.join(".", "metaboverse_cli", "__init__.py")))
-    version = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(version)
-    __version__ = version.__version__
-
-    spec = importlib.util.spec_from_file_location(
-        "", os.path.abspath(os.path.join(".", "metaboverse_cli", "arguments.py")))
-    arguments = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(arguments)
-    parse_arguments = arguments.parse_arguments
-
-    spec = importlib.util.spec_from_file_location(
-        "__main__", os.path.abspath(os.path.join(".", "metaboverse_cli", "curate/__main__.py")))
-    curate = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(curate)
-    curate = curate.__main__
-
-    spec = importlib.util.spec_from_file_location(
-        "__main__", os.path.abspath(os.path.join(".", "metaboverse_cli", "analyze/__main__.py")))
-    analyze = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(analyze)
-    analyze = analyze.__main__
-
-    spec = importlib.util.spec_from_file_location(
-        "__main__", os.path.abspath(os.path.join(".", "metaboverse_cli", "mapper/__main__.py")))
-    mapper = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mapper)
-    mapper = mapper.__main__
-
-    spec = importlib.util.spec_from_file_location(
-        "__main__", os.path.abspath(os.path.join(".", "metaboverse_cli", "target/__main__.py")))
-    target = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(target)
-    curate_target = target.__main__
-
-    spec = importlib.util.spec_from_file_location(
-        "", os.path.abspath(os.path.join(".", "metaboverse_cli", "utils.py")))
-    utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(utils)
-    progress_feed = utils.progress_feed
-    update_session = utils.update_session
-    safestr = utils.safestr
-    get_metaboverse_cli_version = utils.get_metaboverse_cli_version
-    init_mvrs_file = utils.init_mvrs_file
-    update_network_vars = utils.update_network_vars
-    update_session_vars = utils.update_session_vars
-
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
 
 def get_reference(
         args_dict,
@@ -161,12 +198,7 @@ def decide_curation_path(args_dict, reference_url):
     """Decide the curation path based on command and file availability.
     """
     
-    if args_dict['cmd'] == 'metaboliteMapper':
-        print('Generating metabolite mapper...')
-        mapper(args_dict)
-    
-    elif args_dict['cmd'] in ['curate', 'electrum']:
-        
+    if args_dict['cmd'] in ['curate', 'electrum']:
         force_new_curation = args_dict.get('force_new_curation', False)
 
         if force_new_curation:
@@ -206,7 +238,7 @@ def decide_curation_path(args_dict, reference_url):
             args_dict['output_file'] = analyze(args_dict)
     
         elif args_dict['cmd'] == 'electrum':
-            curate_target(args_dict)
+            target(args_dict)
     
     else:
         raise Exception('Invalid sub-module selected')
@@ -217,8 +249,14 @@ def main(args=None):
     args, args_dict = parse_arguments(args, __version__)
     progress_feed(args_dict, "graph", 2)
 
-    reference_url = construct_reference_url(args_dict)
-    decide_curation_path(args_dict, reference_url)
+    if args_dict['cmd'] == 'metaboliteMapper':
+        # For metaboliteMapper, we don't need organism-specific files
+        print('Generating metabolite mapper...')
+        metaboliteMapper(args_dict)
+    else:
+        # For other commands that need organism-specific files
+        reference_url = construct_reference_url(args_dict)
+        decide_curation_path(args_dict, reference_url)
 
     # Finalize session
     args_dict = update_session_vars(args_dict)

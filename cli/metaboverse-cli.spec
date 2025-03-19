@@ -12,7 +12,14 @@ a = Analysis(
     os.path.join('metaboverse_cli', '__main__.py'),
     os.path.join('metaboverse_cli', '__init__.py'),
     os.path.join('metaboverse_cli', 'arguments.py'),
-    os.path.join('metaboverse_cli', 'utils.py')
+    os.path.join('metaboverse_cli', 'utils.py'),
+    (
+      os.path.join(
+        'metaboverse_cli',
+        'source_url.txt'
+      ),
+      'metaboverse_cli'
+    )
   ],
   pathex=[
     'metaboverse_cli'
@@ -28,13 +35,6 @@ a = Analysis(
         'analyze',
         'data')
     ),
-    (
-      os.path.join(
-        'metaboverse_cli',
-        'source_url.txt'
-      ),
-      '.'
-    )
   ],
   hiddenimports=[
     'scipy.special.cython_special',

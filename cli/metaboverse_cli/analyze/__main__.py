@@ -34,6 +34,78 @@ from datetime import date
 import requests
 import json
 import os
+import sys
+import pickle
+import zipfile
+from pathlib import Path
+
+
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
+
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
+
+try:
+    # First try normal package imports
+    from metaboverse_cli import __version__, SOURCE_URL
+    from metaboverse_cli.analyze.utils import remove_defective_reactions
+    from metaboverse_cli.utils import progress_feed, track_progress, read_network, \
+        get_metaboverse_cli_version, write_database, safestr, update_session_vars
+except ImportError:
+    try:
+        # Then try relative imports
+        from __init__ import __version__, SOURCE_URL
+        from analyze.utils import remove_defective_reactions
+        from utils import progress_feed, track_progress, read_network, \
+            get_metaboverse_cli_version, write_database, safestr, update_session_vars
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            def load_module(name, path):
+                spec = importlib.util.spec_from_file_location(name, path)
+                if spec is None:
+                    raise ImportError(f"Could not find module at {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
+
+            base_path = os.path.dirname(__file__)
+            
+            init = load_module("__init__", os.path.join(base_path, "..", "__init__.py"))
+            __version__ = init.__version__
+            SOURCE_URL = init.SOURCE_URL
+
+            utils_analyze = load_module("utils_analyze", os.path.join(base_path, "utils.py"))
+            remove_defective_reactions = utils_analyze.remove_defective_reactions
+
+            utils = load_module("utils", os.path.join(base_path, "..", "utils.py"))
+            progress_feed = utils.progress_feed
+            track_progress = utils.track_progress
+            read_network = utils.read_network
+            get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+            write_database = utils.write_database
+            safestr = utils.safestr
+            update_session_vars = utils.update_session_vars
+
+        except ImportError as e:
+            print(f"Error importing dependencies: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            raise
 
 
 # Set globals
