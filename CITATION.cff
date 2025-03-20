@@ -1,4 +1,4 @@
-cff-version: 0.0.0
+cff-version: 0.11.6
 message: "If you use this software, please cite it as below."
 authors:
   - family-names: Berg
@@ -38,6 +38,6 @@ authors:
     given-names: Jared
     orcid: 
 title: "Metaboverse"
-version: 0.0.0
-doi: 10.1101/2020.06.25.171850
-date-released: 2000-00-00
+version: 0.11.6
+doi: 10.1038/s41556-023-01117-9
+date-released: 2025-03-19
