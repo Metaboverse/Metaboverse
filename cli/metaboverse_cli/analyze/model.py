@@ -41,57 +41,84 @@ import math
 import json
 import re
 import os
+import sys
+from pathlib import Path
 
 """Import internal dependencies
 """
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
+
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
+
 try:
-    from analyze.collapse import collapse_nodes
-    from analyze.collapse import generate_updated_dictionary
-    from analyze.mpl_colormaps import get_mpl_colormap
-    from analyze.utils import convert_rgba, remove_defective_reactions
-    from utils import progress_feed, track_progress, get_metaboverse_cli_version
-except:
-    import importlib.util
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "analyze", "collapse.py"
-                     ))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    collapse = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(collapse)
-    collapse_nodes = collapse.collapse_nodes
-    generate_updated_dictionary = collapse.generate_updated_dictionary
+    # First try normal package imports
+    from metaboverse_cli.analyze.collapse import collapse_nodes, generate_updated_dictionary
+    from metaboverse_cli.analyze.mpl_colormaps import get_mpl_colormap
+    from metaboverse_cli.analyze.utils import convert_rgba, remove_defective_reactions
+    from metaboverse_cli.utils import progress_feed, track_progress, get_metaboverse_cli_version
+    from metaboverse_cli.mapper.special_pairs import REDOX_PAIRS
+except ImportError:
+    try:
+        # Then try relative imports
+        from analyze.collapse import collapse_nodes, generate_updated_dictionary
+        from analyze.mpl_colormaps import get_mpl_colormap
+        from analyze.utils import convert_rgba, remove_defective_reactions
+        from utils import progress_feed, track_progress, get_metaboverse_cli_version
+        from mapper.special_pairs import REDOX_PAIRS
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            def load_module(name, path):
+                spec = importlib.util.spec_from_file_location(name, path)
+                if spec is None:
+                    raise ImportError(f"Could not find module at {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
 
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "analyze", "mpl_colormaps.py"
-                     ))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    mpl_colormaps = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mpl_colormaps)
-    get_mpl_colormap = mpl_colormaps.get_mpl_colormap
+            base_path = os.path.dirname(os.path.dirname(__file__))
+            collapse = load_module("collapse", os.path.join(base_path, "analyze", "collapse.py"))
+            collapse_nodes = collapse.collapse_nodes
+            generate_updated_dictionary = collapse.generate_updated_dictionary
 
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "analyze", "utils.py"
-                     ))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    analyze_utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(analyze_utils)
-    convert_rgba = analyze_utils.convert_rgba
-    remove_defective_reactions = analyze_utils.remove_defective_reactions
+            mpl_colormaps = load_module("mpl_colormaps", os.path.join(base_path, "analyze", "mpl_colormaps.py"))
+            get_mpl_colormap = mpl_colormaps.get_mpl_colormap
 
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "utils.py"))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(utils)
-    progress_feed = utils.progress_feed
-    track_progress = utils.track_progress
-    get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+            utils_analyze = load_module("utils_analyze", os.path.join(base_path, "analyze", "utils.py"))
+            convert_rgba = utils_analyze.convert_rgba
+            remove_defective_reactions = utils_analyze.remove_defective_reactions
 
+            utils = load_module("utils", os.path.join(base_path, "utils.py"))
+            progress_feed = utils.progress_feed
+            track_progress = utils.track_progress
+            get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+
+            special_pairs = load_module("special_pairs", os.path.join(base_path, "mapper", "special_pairs.py"))
+            REDOX_PAIRS = special_pairs.REDOX_PAIRS
+        except ImportError as e:
+            print(f"Error importing dependencies: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            raise
 
 CMAP = get_mpl_colormap('seismic')
 REACTION_COLOR = (0.75, 0.75, 0.75, 1)
 MISSING_COLOR = (1, 1, 1, 1)
-
 
 def median(lst):
     n = len(lst)
@@ -704,13 +731,31 @@ def reindex_data(
     return data_renamed, stats_renamed
 
 
+def get_redox_state(map_id, init_syns):
+    redox_pair = None
+    redox_state = None
+    for redox_key, redox_syns in REDOX_PAIRS.items():
+        if map_id in redox_syns['oxidized'] or map_id in redox_syns['reduced']:
+            redox_pair = redox_key
+            redox_state = 'oxidized' if map_id in redox_syns['oxidized'] else 'reduced'
+            break
+        elif any(syn in redox_syns['oxidized'] for syn in init_syns) or any(syn in redox_syns['reduced'] for syn in init_syns):
+            redox_pair = redox_key
+            redox_state = 'oxidized' if any(syn in redox_syns['oxidized'] for syn in init_syns) else 'reduced'
+            break
+    return redox_pair, redox_state
+
+
 def gather_synonyms(
         map_id,
         init_syns,
         metabolite_mapper,
         uniprot_mapper,
         ignore_enantiomers):
-
+    
+    # Check if the current metabolite is part of a redox pair
+    redox_pair, redox_state = get_redox_state(map_id, init_syns)
+    
     if map_id in uniprot_mapper:
         init_syns.append(uniprot_mapper[map_id])
         init_syns.append(uniprot_mapper[map_id].lower())
@@ -720,6 +765,18 @@ def gather_synonyms(
 
     parsed_syns = set()
     for s in init_syns:
+        # Skip if this synonym belongs to a different redox pair
+        if redox_pair:
+            skip_synonym = False
+            for pair_name, forms in REDOX_PAIRS.items():
+                if pair_name != redox_pair:
+                    if s.lower() in [syn.lower() for syn in forms['oxidized']] or \
+                       s.lower() in [syn.lower() for syn in forms['reduced']]:
+                        skip_synonym = True
+                        break
+            if skip_synonym:
+                continue
+                
         parsed_syns.add(s)
         parsed_syns.add(s.lower())
         _s = ''.join(c.lower() for c in str(s) if c.isalnum())
@@ -742,8 +799,6 @@ def gather_synonyms(
                 parsed_syns.add(s.lower().split(l)[1])
 
         if ignore_enantiomers == True:
-            # if _s[0] == 'l' or _s[0] == 'd':
-            #    parsed_syns.add(_s[1:])
             if s[0:2] == 'L-' or s[0:2] == 'D-':
                 parsed_syns.add(s[2:])
             if s.lower()[0:2] == 'l-' or s.lower()[0:2] == 'd-':
@@ -777,50 +832,61 @@ def gather_synonyms(
         parsed_syns_list.append(mapper_id)
     if mapper_id in metabolite_mapper['hmdb_dictionary']:
         for m in metabolite_mapper['hmdb_dictionary'][mapper_id]:
+            # Skip if this synonym belongs to a different redox pair
+            if redox_pair:
+                skip_synonym = False
+                for pair_name, forms in REDOX_PAIRS.items():
+                    if pair_name != redox_pair:
+                        if m.lower() in [syn.lower() for syn in forms['oxidized']] or \
+                           m.lower() in [syn.lower() for syn in forms['reduced']]:
+                            skip_synonym = True
+                            break
+                if skip_synonym:
+                    continue
             parsed_syns_list.append(m)
+
+    # Filter synonyms based on redox state if applicable
+    if redox_pair and redox_state:
+        parsed_syns_list = filter_redox_synonyms(parsed_syns_list, redox_pair, redox_state)
 
     return mapper_id, parsed_syns_list
 
 
-def prepare_mapping_data(graph, data, stats):
-    """
-    """
-
-    n = len(data.columns.tolist())
-
-    # Re-index data and stats
-    data_renamed, stats_renamed = reindex_data(data, stats)
-    data_max = abs(data_renamed).max().max()
+def prepare_mapping_data(
+        graph,
+        data,
+        stats=None):
+    """Prepare data for mapping by handling redox pairs and special cases
     
-    # Allow for lists of stats
-    if type(stats_renamed.iloc[0,0]) == list:
-        stats_logged = -1 
-        stats_max = -1 
-    else:
-        stats_logged = -1 * np.log10(stats_renamed + 1e-100)
-        stats_max = abs(stats_logged).max().max()
-
-    # Make data dict with values and whether or not used
-    temp_idx = [
-        ''.join(
-            c.lower() for c in str(i) if c.isalnum())
-        for i in data_renamed.index.tolist()]
+    Args:
+        graph (NetworkX graph): The metabolic network graph
+        data (pandas DataFrame): The data to map
+        stats (pandas DataFrame, optional): Statistics data to map
+        
+    Returns:
+        tuple: (data_renamed, stats_renamed, data_max, stats_max, n, temp_idx, temp_idx_set, chebi_mapping)
+    """
+    data_renamed = data.copy()
+    stats_renamed = stats.copy() if stats is not None else None
+    
+    # Get dimensions
+    n = len(data_renamed.columns)
+    
+    # Create alphanumeric versions of indices for matching
+    temp_idx = [''.join(c.lower() for c in str(x) if c.isalnum()) for x in data_renamed.index.tolist()]
     temp_idx_set = set(temp_idx)
-
-    # Get cross-species CHEBI synonyms
+    
+    # Create CHEBI mapping dictionary
     chebi_mapping = {}
-    for current_id in list(graph.nodes()):
-        map_id = graph.nodes()[current_id]['map_id']
-        name = graph.nodes()[current_id]['name']
-        if 'chebi' in map_id.lower():
-            if name in chebi_mapping:
-                chebi_mapping[name].add(map_id)
-            else:
-                chebi_mapping[name] = set()
-                chebi_mapping[name].add(map_id)
-
-    return data_renamed, stats_renamed, data_max, stats_max, n, \
-        temp_idx, temp_idx_set, chebi_mapping
+    for node in graph.nodes():
+        if graph.nodes[node]['type'] == 'metabolite_component':
+            chebi_mapping[graph.nodes[node]['name']] = graph.nodes[node]['synonyms']
+    
+    # Get max values for normalization
+    data_max = data_renamed.max().max()
+    stats_max = stats_renamed.max().max() if stats_renamed is not None else None
+    
+    return data_renamed, stats_renamed, data_max, stats_max, n, temp_idx, temp_idx_set, chebi_mapping
 
 
 def map_attributes(
@@ -835,16 +901,28 @@ def map_attributes(
         uniprot_mapper,
         metabolite_mapper,
         ignore_enantiomers=True):
-    """Data overlay
-    - Map repo id to species_id
-    - If a node is a complex, take average of neighbors that are not
-    To do:
-    - Currently, many metabolites that should map are not found in name
-    database
+    """Map data onto network nodes, handling redox pairs and special cases
+    
+    Args:
+        args_dict (dict): Command line arguments
+        graph (NetworkX graph): The metabolic network graph
+        data (pandas DataFrame): The data to map
+        stats (pandas DataFrame): Statistics data to map
+        name_reference (dict): Reference dictionary for name mapping
+        degree_dictionary (dict): Dictionary of node degrees
+        chebi_dictionary (dict): Dictionary of CHEBI IDs
+        chebi_synonyms (dict): Dictionary of CHEBI synonyms
+        uniprot_mapper (dict): Dictionary of UniProt mappings
+        metabolite_mapper (dict): Dictionary of metabolite mappings
+        ignore_enantiomers (bool): Whether to ignore enantiomer prefixes
+        
+    Returns:
+        tuple: (graph, data_max, stats_max, non_mappers)
     """
-
     print("Mapping data onto network...")
     print("Input data dimensions: " + str(data.shape))
+    
+    # Prepare data for mapping
     data_renamed, stats_renamed, data_max, stats_max, n, \
     temp_idx, temp_idx_set, chebi_mapping = prepare_mapping_data(
         graph=graph,
@@ -853,7 +931,6 @@ def map_attributes(
     print("Pre-processed data dimensions: " + str(data_renamed.shape))
     
     mapped_nodes = []
-
     counter = 0
     node_number = len(list(graph.nodes()))
 
@@ -879,7 +956,7 @@ def map_attributes(
         elif map_id != 'none' \
         and backup_mapper in name_reference \
         and (graph.nodes()[x]['type'] == 'protein_component'
-                 or graph.nodes()[x]['type'] == 'gene_component'):
+             or graph.nodes()[x]['type'] == 'gene_component'):
             graph.nodes()[x]['synonyms'].append(backup_mapper)
 
         elif map_id != 'none' \
@@ -887,19 +964,18 @@ def map_attributes(
             graph.nodes()[x]['type'] = 'metabolite_component'
             graph.nodes()[x]['synonyms'].append(map_id)
 
-            # Step 0: Get all CHEBI
+            # Get all CHEBI synonyms
             init_syns = chebi_synonyms[map_id]
             for s in init_syns:
                 graph.nodes()[x]['synonyms'].append(s)
 
-            # Step 2: Get initial CHEBI synonyms
+            # Get initial CHEBI synonyms
             _mapper, _synonyms = gather_synonyms(
                 map_id,
                 init_syns,
                 metabolite_mapper,
                 uniprot_mapper,
-                ignore_enantiomers
-            )
+                ignore_enantiomers)
             graph.nodes()[x]['hmdb_mapper'] = _mapper
 
             if len(_synonyms) > 0:
@@ -914,8 +990,7 @@ def map_attributes(
             colors = [REACTION_COLOR for x in range(n)]
             graph.nodes()[x]['values'] = [None for x in range(n)]
             graph.nodes()[x]['values_rgba'] = colors
-            graph.nodes()[x]['values_js'] = convert_rgba(
-                rgba_tuples=colors)
+            graph.nodes()[x]['values_js'] = convert_rgba(rgba_tuples=colors)
             graph.nodes()[x]['stats'] = [None for x in range(n)]
 
         elif map_id in set(data_renamed.index.tolist()) \
@@ -939,18 +1014,15 @@ def map_attributes(
         and len(backup_mapper) > 1 \
         and graph.nodes()[x]['type'] != 'metabolite_component':
             graph.nodes()[x]['user_label'] = backup_mapper
-            graph.nodes()[
-                x]['values'] = data_renamed.loc[backup_mapper].tolist()
+            graph.nodes()[x]['values'] = data_renamed.loc[backup_mapper].tolist()
             graph.nodes()[x]['values_rgba'] = extract_value(
                 value_array=data_renamed.loc[backup_mapper].tolist(),
                 max_value=data_max)
             graph.nodes()[x]['values_js'] = convert_rgba(
                 rgba_tuples=graph.nodes()[x]['values_rgba'])
-            graph.nodes()[
-                x]['stats'] = stats_renamed.loc[backup_mapper].tolist()
+            graph.nodes()[x]['stats'] = stats_renamed.loc[backup_mapper].tolist()
             mapped_nodes.append(backup_mapper)
 
-        # elif map_id in chebi_synonyms
         elif ('chebi' in map_id.lower() or map_id in chebi_synonyms) \
         and graph.nodes()[x]['type'] == 'metabolite_component':
             _idx = None
@@ -958,30 +1030,67 @@ def map_attributes(
             if graph.nodes()[x]['name'] in chebi_mapping:
                 all_synonyms.extend(chebi_mapping[graph.nodes()[x]['name']])
 
-            for a in all_synonyms:
-                _a = ''.join(c.lower() for c in a if c.isalnum())
-                if _a in temp_idx_set:
-                    _idx = data_renamed.index.tolist()[
-                        temp_idx.index(_a)]
-                elif ignore_enantiomers == True:
-                    if 'D-' + str(a) in data_renamed.index.tolist():
-                        _idx = 'D-' + str(a)
-                    if 'd-' + str(a) in data_renamed.index.tolist():
-                        _idx = 'd-' + str(a)
-                    if 'L-' + str(a) in data_renamed.index.tolist():
-                        _idx = 'L-' + str(a)
-                    if 'l-' + str(a) in data_renamed.index.tolist():
-                        _idx = 'l-' + str(a)
-                    if 'N-' + str(a) in data_renamed.index.tolist():
-                        _idx = 'N-' + str(a)
-                    if 'n-' + str(a) in data_renamed.index.tolist():
-                        _idx = 'n-' + str(a)
+            # Check if this node is part of a redox pair
+            redox_pair, redox_state = get_redox_state(graph.nodes()[x]['name'], all_synonyms)
+            
+            if redox_pair:
+                # First try to match the exact name
+                if graph.nodes()[x]['name'] in data_renamed.index.tolist():
+                    _idx = graph.nodes()[x]['name']
                 else:
-                    pass
+                    # Then try synonyms from the same redox pair
+                    for pair_name, forms in REDOX_PAIRS.items():
+                        if pair_name == redox_pair:
+                            for syn in forms[redox_state]:
+                                if syn in data_renamed.index.tolist():
+                                    _idx = syn
+                                    break
+                            if _idx:
+                                break
+            
+            # If no exact match found for redox pair, proceed with normal matching
+            if not _idx:
+                for a in all_synonyms:
+                    _a = ''.join(c.lower() for c in a if c.isalnum())
+                    if _a in temp_idx_set:
+                        # For redox pairs, verify the match is from the same pair
+                        if redox_pair:
+                            a_lower = a.lower()
+                            a_redox_pair, _ = get_redox_state(a, [a])
+                            if a_redox_pair == redox_pair:
+                                _idx = data_renamed.index.tolist()[temp_idx.index(_a)]
+                                break
+                        else:
+                            _idx = data_renamed.index.tolist()[temp_idx.index(_a)]
+                    elif ignore_enantiomers == True:
+                        if 'D-' + str(a) in data_renamed.index.tolist():
+                            _idx = 'D-' + str(a)
+                        if 'd-' + str(a) in data_renamed.index.tolist():
+                            _idx = 'd-' + str(a)
+                        if 'L-' + str(a) in data_renamed.index.tolist():
+                            _idx = 'L-' + str(a)
+                        if 'l-' + str(a) in data_renamed.index.tolist():
+                            _idx = 'l-' + str(a)
+                        if 'N-' + str(a) in data_renamed.index.tolist():
+                            _idx = 'N-' + str(a)
+                        if 'n-' + str(a) in data_renamed.index.tolist():
+                            _idx = 'n-' + str(a)
+                    else:
+                        pass
 
-            if graph.nodes()[x]['hmdb_mapper'] != None:
-                graph.nodes()[x]['synonyms'] = metabolite_mapper['display_dictionary'][graph.nodes()[
-                    x]['hmdb_mapper']]
+            # Override HMDB mapper if it would cause cross-mapping between redox pairs
+            if graph.nodes()[x]['hmdb_mapper'] is not None:
+                hmdb_mapper = graph.nodes()[x]['hmdb_mapper']
+                if redox_pair:
+                    # Check if the HMDB mapper would cause cross-mapping
+                    hmdb_redox_pair, _ = get_redox_state(hmdb_mapper, [hmdb_mapper])
+                    if hmdb_redox_pair and hmdb_redox_pair != redox_pair:
+                        # Prevent cross-mapping by setting hmdb_mapper to None
+                        graph.nodes()[x]['hmdb_mapper'] = None
+                        graph.nodes()[x]['synonyms'] = [s for s in graph.nodes()[x]['synonyms'] 
+                                                      if get_redox_state(s, [s])[0] == redox_pair]
+                else:
+                    graph.nodes()[x]['synonyms'] = metabolite_mapper['display_dictionary'][hmdb_mapper]
 
             if _idx != None \
             and len(_idx) > 1:
@@ -1389,12 +1498,43 @@ def make_motif_reaction_dictionary(
 def load_metabolite_synonym_dictionary(
         dir=os.path.join(os.path.dirname(__file__), 'data'),
         file='metabolite_mapping.pickle'):
+    """Read metabolite mapper, creating it if necessary"""
+
+    try:
+        from metaboverse_cli.mapper.metaboliteMapper import ensure_metabolite_mapper
+    except ImportError:
+        # Fallback for local development
+        try:
+            sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+            from mapper.metaboliteMapper import ensure_metabolite_mapper
+        except ImportError as e:
+            print(f"Error importing metaboliteMapper: {e}")
+            print(f"Current sys.path: {sys.path}")
+            
+            # Last resort - try direct import
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "", os.path.abspath(os.path.join(
+                    os.path.dirname(os.path.dirname(__file__)),
+                    "mapper",
+                    "metaboliteMapper.py")))
+            if spec is None:
+                raise ImportError(f"Could not find metaboliteMapper.py in {os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'mapper'))}")
+            metaboliteMapper = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(metaboliteMapper)
+            ensure_metabolite_mapper = metaboliteMapper.ensure_metabolite_mapper
 
     print("Reading metabolite mapper...")
-    with zipfile.ZipFile(dir + os.path.sep + file + '.zip', 'r') as zip_ref:
-        metabolite_mapper = pickle.load(
-            zip_ref.open(file)
-        )
+    mapper_file = ensure_metabolite_mapper(dir)
+    
+    try:
+        with zipfile.ZipFile(mapper_file + '.zip', 'r') as zip_ref:
+            metabolite_mapper = pickle.load(
+                zip_ref.open(file)
+            )
+    except Exception as e:
+        print(f"Error reading metabolite mapper: {e}")
+        raise
 
     return metabolite_mapper
 
@@ -1601,15 +1741,16 @@ def __model__(
     print('Mapping user data...')
     G, max_value, max_stat, non_mappers = map_attributes(
         args_dict=args_dict,
-        graph=graph,
+        graph=G,
         data=data,
         stats=stats,
         name_reference=name_reference,
         degree_dictionary=degree_dictionary,
         chebi_dictionary=chebi_dictionary,
-        chebi_synonyms=network['chebi_synonyms'],
+        chebi_synonyms=REDOX_PAIRS,
         uniprot_mapper=uniprot_mapper,
-        metabolite_mapper=metabolite_mapper)
+        metabolite_mapper=metabolite_mapper,
+        ignore_enantiomers=True)
     
     print('Searching for unmapped metabolomics values...')
     if args_dict['metabolomics'].lower() != 'none':
@@ -1620,7 +1761,7 @@ def __model__(
 
         m_non_mapper = m_data[m_data.index.isin(non_mappers)]
         unmapped_file = args_dict['metabolomics'][:-4] + '_unmapped.txt'
-        print(f"\tOutputting {str(len(m_non_mapper.index.tolist()))} unmapped metabolites to:\n\t{unmapped_file}.")
+        print(f"\tOutputting {len(m_non_mapper.index.tolist())} unmapped metabolites to:\n\t{unmapped_file}")
         if len(m_non_mapper.index.tolist()) > 0:
             m_non_mapper.to_csv(
                 unmapped_file,

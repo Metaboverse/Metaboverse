@@ -1,0 +1,23 @@
+Metabolite	log2fc	p-value
+NAD+	1.5	0.01
+NADH	-1.5	0.01
+NADP+	2.0	0.005
+NADPH	-2.0	0.005
+FAD	1.0	0.02
+FADH2	-1.0	0.02
+GSH	0.5	0.03
+GSSG	-0.5	0.03
+ascorbic acid	0.8	0.04
+dehydroascorbic acid	-0.8	0.04
+Cytochrome C (Fe3+)	1.2	0.015
+Cytochrome C (Fe2+)	-1.2	0.015
+CoQ10	0.9	0.025
+ubiquinol-10	-0.9	0.025
+FMN	0.7	0.035
+FMNH2	-0.7	0.035
+glutathione	0.6	0.045
+glutathione disulfide	-0.6	0.045
+lipoic acid	1.1	0.018
+dihydrolipoic acid	-1.1	0.018
+tetrahydrofolate	0.4	0.055
+methylene-THF	-0.4	0.055 
