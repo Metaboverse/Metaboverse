@@ -106,7 +106,7 @@ except ImportError:
             progress_feed = utils.progress_feed
             track_progress = utils.track_progress
             get_metaboverse_cli_version = utils.get_metaboverse_cli_version
-
+            
             special_pairs = load_module("special_pairs", os.path.join(base_path, "mapper", "special_pairs.py"))
             REDOX_PAIRS = special_pairs.REDOX_PAIRS
         except ImportError as e:
@@ -731,19 +731,106 @@ def reindex_data(
     return data_renamed, stats_renamed
 
 
-def get_redox_state(map_id, init_syns):
-    redox_pair = None
-    redox_state = None
-    for redox_key, redox_syns in REDOX_PAIRS.items():
-        if map_id in redox_syns['oxidized'] or map_id in redox_syns['reduced']:
-            redox_pair = redox_key
-            redox_state = 'oxidized' if map_id in redox_syns['oxidized'] else 'reduced'
-            break
-        elif any(syn in redox_syns['oxidized'] for syn in init_syns) or any(syn in redox_syns['reduced'] for syn in init_syns):
-            redox_pair = redox_key
-            redox_state = 'oxidized' if any(syn in redox_syns['oxidized'] for syn in init_syns) else 'reduced'
-            break
-    return redox_pair, redox_state
+def normalize_string(s):
+    """Normalize a string for consistent matching:
+    - Convert to lowercase
+    - Remove whitespace
+    - Remove common punctuation
+    
+    Args:
+        s (str): String to normalize
+        
+    Returns:
+        str: Normalized string
+    """
+    if not s:
+        return ""
+    # Remove whitespace
+    s = s.lower().replace(" ", "")
+    # Remove common punctuation that might vary between representations
+    for char in ['-', '_', ',', '.', '(', ')', '[', ']', '{', '}', ':', ';', '\'', '=', '"', '`']:
+        s = s.replace(char, "")
+    return s
+
+
+def get_redox_state(name, synonyms):
+    """Determine the redox state of a metabolite based on its name or synonyms
+    
+    Args:
+        name (str): The name of the metabolite
+        synonyms (list): List of synonyms for the metabolite
+        
+    Returns:
+        tuple: (redox_pair, redox_state) or (None, None) if not part of a redox pair
+    """
+    name_normalized = normalize_string(name)
+    
+    # Create multiple normalized forms for lookup
+    redox_lookup = {}
+    
+    # Track base forms for ambiguous cases (like "nad" without "+" or "h")
+    base_forms = {}
+    
+    for pair_name, forms in REDOX_PAIRS.items():
+        # Process oxidized forms
+        for term in forms['oxidized']:
+            # Standard normalized form
+            key = normalize_string(term)
+            redox_lookup[key] = (pair_name, 'oxidized')
+            
+            # Special case for NAD+, NADP+, etc. - try without the +
+            if '+' in term:
+                key_without_plus = normalize_string(term.replace('+', ''))
+                redox_lookup[key_without_plus] = (pair_name, 'oxidized')
+                
+                # Store base form for ambiguous matching later
+                base_form = key_without_plus
+                if base_form not in base_forms:
+                    base_forms[base_form] = (pair_name, 'oxidized')  # Default to oxidized for ambiguous cases
+                
+                # Also handle potential space before the + (e.g., "NAD +")
+                key_with_space = normalize_string(term.replace('+', ' +'))
+                redox_lookup[key_with_space] = (pair_name, 'oxidized')
+        
+        # Process reduced forms
+        for term in forms['reduced']:
+            # Standard normalized form
+            key = normalize_string(term)
+            redox_lookup[key] = (pair_name, 'reduced')
+            
+            # Special case for NADH, NADPH, etc. - try without the H
+            if term.lower().endswith('h'):
+                key_without_h = normalize_string(term[:-1])
+                # Don't override oxidized form default for base forms
+                if key_without_h not in redox_lookup:
+                    redox_lookup[key_without_h] = (pair_name, 'reduced')
+                
+                # Store base form (but don't override existing)
+                base_form = key_without_h
+                if base_form not in base_forms:
+                    base_forms[base_form] = (pair_name, 'reduced')
+                
+                # Also handle potential space before the H (e.g., "NAD H")
+                key_with_space = normalize_string(term[:-1] + ' H')
+                redox_lookup[key_with_space] = (pair_name, 'reduced')
+    
+    # Add default mappings for base forms (prefer oxidized state for ambiguous cases)
+    for base_form, (pair, state) in base_forms.items():
+        if base_form not in redox_lookup:
+            redox_lookup[base_form] = (pair, state)
+    
+    # Check if normalized name matches any normalized redox pair term
+    if name_normalized in redox_lookup:
+        return redox_lookup[name_normalized]
+    
+    # Check all normalized synonyms
+    for syn in synonyms:
+        syn_normalized = normalize_string(syn)
+        if syn_normalized in redox_lookup:
+            return redox_lookup[syn_normalized]
+            
+    # Not part of any redox pair that we could detect
+    return None, None
 
 
 def gather_synonyms(
@@ -752,10 +839,11 @@ def gather_synonyms(
         metabolite_mapper,
         uniprot_mapper,
         ignore_enantiomers):
-    
-    # Check if the current metabolite is part of a redox pair
+    """Gather synonyms for a metabolite, considering redox pairs
+    """
+    # Check if this is part of a redox pair
     redox_pair, redox_state = get_redox_state(map_id, init_syns)
-    
+
     if map_id in uniprot_mapper:
         init_syns.append(uniprot_mapper[map_id])
         init_syns.append(uniprot_mapper[map_id].lower())
@@ -765,16 +853,10 @@ def gather_synonyms(
 
     parsed_syns = set()
     for s in init_syns:
-        # Skip if this synonym belongs to a different redox pair
+        # If part of a redox pair, skip synonyms that are in the other redox state
         if redox_pair:
-            skip_synonym = False
-            for pair_name, forms in REDOX_PAIRS.items():
-                if pair_name != redox_pair:
-                    if s.lower() in [syn.lower() for syn in forms['oxidized']] or \
-                       s.lower() in [syn.lower() for syn in forms['reduced']]:
-                        skip_synonym = True
-                        break
-            if skip_synonym:
+            other_state = 'reduced' if redox_state == 'oxidized' else 'oxidized'
+            if s in REDOX_PAIRS[redox_pair][other_state]:
                 continue
                 
         parsed_syns.add(s)
@@ -832,61 +914,62 @@ def gather_synonyms(
         parsed_syns_list.append(mapper_id)
     if mapper_id in metabolite_mapper['hmdb_dictionary']:
         for m in metabolite_mapper['hmdb_dictionary'][mapper_id]:
-            # Skip if this synonym belongs to a different redox pair
+            # If part of a redox pair, skip synonyms from HMDB that match the other state
             if redox_pair:
-                skip_synonym = False
-                for pair_name, forms in REDOX_PAIRS.items():
-                    if pair_name != redox_pair:
-                        if m.lower() in [syn.lower() for syn in forms['oxidized']] or \
-                           m.lower() in [syn.lower() for syn in forms['reduced']]:
-                            skip_synonym = True
-                            break
-                if skip_synonym:
+                other_state = 'reduced' if redox_state == 'oxidized' else 'oxidized'
+                if m in REDOX_PAIRS[redox_pair][other_state]:
                     continue
             parsed_syns_list.append(m)
-
-    # Filter synonyms based on redox state if applicable
-    if redox_pair and redox_state:
-        parsed_syns_list = filter_redox_synonyms(parsed_syns_list, redox_pair, redox_state)
 
     return mapper_id, parsed_syns_list
 
 
-def prepare_mapping_data(
-        graph,
-        data,
-        stats=None):
-    """Prepare data for mapping by handling redox pairs and special cases
+def prepare_mapping_data(graph, data, stats):
+    """Prepare data and stats for mapping
     
     Args:
-        graph (NetworkX graph): The metabolic network graph
-        data (pandas DataFrame): The data to map
-        stats (pandas DataFrame, optional): Statistics data to map
+        graph: NetworkX graph
+        data: Pandas DataFrame of data values
+        stats: Pandas DataFrame of statistics
         
     Returns:
-        tuple: (data_renamed, stats_renamed, data_max, stats_max, n, temp_idx, temp_idx_set, chebi_mapping)
+        tuple: Processed data objects for mapping
     """
-    data_renamed = data.copy()
-    stats_renamed = stats.copy() if stats is not None else None
+    n = len(data.columns.tolist())
+
+    # Re-index data and stats
+    data_renamed, stats_renamed = reindex_data(data, stats)
+    data_max = abs(data_renamed).max().max()
     
-    # Get dimensions
-    n = len(data_renamed.columns)
-    
-    # Create alphanumeric versions of indices for matching
-    temp_idx = [''.join(c.lower() for c in str(x) if c.isalnum()) for x in data_renamed.index.tolist()]
+    # Allow for lists of stats
+    if type(stats_renamed.iloc[0,0]) == list:
+        stats_logged = -1 
+        stats_max = -1 
+    else:
+        stats_logged = -1 * np.log10(stats_renamed + 1e-100)
+        stats_max = abs(stats_logged).max().max()
+
+    # Create normalized versions of indices for consistent matching
+    temp_idx = [normalize_string(str(i)) for i in data_renamed.index.tolist()]
     temp_idx_set = set(temp_idx)
     
-    # Create CHEBI mapping dictionary
+    # Create lookup from normalized index to original index
+    norm_to_orig_idx = {normalize_string(idx): idx for idx in data_renamed.index.tolist()}
+
+    # Get cross-species CHEBI synonyms
     chebi_mapping = {}
-    for node in graph.nodes():
-        if graph.nodes[node]['type'] == 'metabolite_component':
-            chebi_mapping[graph.nodes[node]['name']] = graph.nodes[node]['synonyms']
-    
-    # Get max values for normalization
-    data_max = data_renamed.max().max()
-    stats_max = stats_renamed.max().max() if stats_renamed is not None else None
-    
-    return data_renamed, stats_renamed, data_max, stats_max, n, temp_idx, temp_idx_set, chebi_mapping
+    for current_id in list(graph.nodes()):
+        map_id = graph.nodes()[current_id]['map_id']
+        name = graph.nodes()[current_id]['name']
+        if 'chebi' in map_id.lower():
+            if name in chebi_mapping:
+                chebi_mapping[name].add(map_id)
+            else:
+                chebi_mapping[name] = set()
+                chebi_mapping[name].add(map_id)
+
+    return data_renamed, stats_renamed, data_max, stats_max, n, \
+        temp_idx, temp_idx_set, chebi_mapping, norm_to_orig_idx
 
 
 def map_attributes(
@@ -901,36 +984,25 @@ def map_attributes(
         uniprot_mapper,
         metabolite_mapper,
         ignore_enantiomers=True):
-    """Map data onto network nodes, handling redox pairs and special cases
-    
-    Args:
-        args_dict (dict): Command line arguments
-        graph (NetworkX graph): The metabolic network graph
-        data (pandas DataFrame): The data to map
-        stats (pandas DataFrame): Statistics data to map
-        name_reference (dict): Reference dictionary for name mapping
-        degree_dictionary (dict): Dictionary of node degrees
-        chebi_dictionary (dict): Dictionary of CHEBI IDs
-        chebi_synonyms (dict): Dictionary of CHEBI synonyms
-        uniprot_mapper (dict): Dictionary of UniProt mappings
-        metabolite_mapper (dict): Dictionary of metabolite mappings
-        ignore_enantiomers (bool): Whether to ignore enantiomer prefixes
-        
-    Returns:
-        tuple: (graph, data_max, stats_max, non_mappers)
+    """Data overlay
+    - Map repo id to species_id
+    - If a node is a complex, take average of neighbors that are not
+    To do:
+    - Currently, many metabolites that should map are not found in name
+    database
     """
+
     print("Mapping data onto network...")
     print("Input data dimensions: " + str(data.shape))
-    
-    # Prepare data for mapping
     data_renamed, stats_renamed, data_max, stats_max, n, \
-    temp_idx, temp_idx_set, chebi_mapping = prepare_mapping_data(
+    temp_idx, temp_idx_set, chebi_mapping, norm_to_orig_idx = prepare_mapping_data(
         graph=graph,
         data=data,
         stats=stats)
     print("Pre-processed data dimensions: " + str(data_renamed.shape))
     
     mapped_nodes = []
+
     counter = 0
     node_number = len(list(graph.nodes()))
 
@@ -956,7 +1028,7 @@ def map_attributes(
         elif map_id != 'none' \
         and backup_mapper in name_reference \
         and (graph.nodes()[x]['type'] == 'protein_component'
-             or graph.nodes()[x]['type'] == 'gene_component'):
+                 or graph.nodes()[x]['type'] == 'gene_component'):
             graph.nodes()[x]['synonyms'].append(backup_mapper)
 
         elif map_id != 'none' \
@@ -964,18 +1036,19 @@ def map_attributes(
             graph.nodes()[x]['type'] = 'metabolite_component'
             graph.nodes()[x]['synonyms'].append(map_id)
 
-            # Get all CHEBI synonyms
+            # Step 0: Get all CHEBI
             init_syns = chebi_synonyms[map_id]
             for s in init_syns:
                 graph.nodes()[x]['synonyms'].append(s)
 
-            # Get initial CHEBI synonyms
+            # Step 2: Get initial CHEBI synonyms
             _mapper, _synonyms = gather_synonyms(
                 map_id,
                 init_syns,
                 metabolite_mapper,
                 uniprot_mapper,
-                ignore_enantiomers)
+                ignore_enantiomers
+            )
             graph.nodes()[x]['hmdb_mapper'] = _mapper
 
             if len(_synonyms) > 0:
@@ -1014,13 +1087,15 @@ def map_attributes(
         and len(backup_mapper) > 1 \
         and graph.nodes()[x]['type'] != 'metabolite_component':
             graph.nodes()[x]['user_label'] = backup_mapper
-            graph.nodes()[x]['values'] = data_renamed.loc[backup_mapper].tolist()
+            graph.nodes()[
+                x]['values'] = data_renamed.loc[backup_mapper].tolist()
             graph.nodes()[x]['values_rgba'] = extract_value(
                 value_array=data_renamed.loc[backup_mapper].tolist(),
                 max_value=data_max)
             graph.nodes()[x]['values_js'] = convert_rgba(
                 rgba_tuples=graph.nodes()[x]['values_rgba'])
-            graph.nodes()[x]['stats'] = stats_renamed.loc[backup_mapper].tolist()
+            graph.nodes()[
+                x]['stats'] = stats_renamed.loc[backup_mapper].tolist()
             mapped_nodes.append(backup_mapper)
 
         elif ('chebi' in map_id.lower() or map_id in chebi_synonyms) \
@@ -1030,68 +1105,114 @@ def map_attributes(
             if graph.nodes()[x]['name'] in chebi_mapping:
                 all_synonyms.extend(chebi_mapping[graph.nodes()[x]['name']])
 
-            # Check if this node is part of a redox pair
-            redox_pair, redox_state = get_redox_state(graph.nodes()[x]['name'], all_synonyms)
+            # Check if this node is part of a redox pair to determine its state
+            node_redox_pair, node_redox_state = get_redox_state(graph.nodes()[x]['name'], all_synonyms)
             
-            if redox_pair:
-                # First try to match the exact name
+            # First try to find matches considering redox state
+            if node_redox_pair and node_redox_state:
+                # First check if the exact node name is in data
                 if graph.nodes()[x]['name'] in data_renamed.index.tolist():
                     _idx = graph.nodes()[x]['name']
                 else:
-                    # Then try synonyms from the same redox pair
-                    for pair_name, forms in REDOX_PAIRS.items():
-                        if pair_name == redox_pair:
-                            for syn in forms[redox_state]:
-                                if syn in data_renamed.index.tolist():
-                                    _idx = syn
-                                    break
-                            if _idx:
+                    # Check normalized name against normalized indices
+                    norm_name = normalize_string(graph.nodes()[x]['name'])
+                    if norm_name in norm_to_orig_idx:
+                        _idx = norm_to_orig_idx[norm_name]
+                    else:
+                        # Then check if any synonym from the same redox state is in data
+                        for syn in REDOX_PAIRS[node_redox_pair][node_redox_state]:
+                            if syn in data_renamed.index.tolist():
+                                _idx = syn
+                                break
+                            # Try normalized matching
+                            norm_syn = normalize_string(syn)
+                            if norm_syn in norm_to_orig_idx:
+                                _idx = norm_to_orig_idx[norm_syn]
                                 break
             
-            # If no exact match found for redox pair, proceed with normal matching
-            if not _idx:
+            # If no match found yet, proceed with standard matching logic
+            if _idx is None:
                 for a in all_synonyms:
-                    _a = ''.join(c.lower() for c in a if c.isalnum())
-                    if _a in temp_idx_set:
-                        # For redox pairs, verify the match is from the same pair
-                        if redox_pair:
-                            a_lower = a.lower()
-                            a_redox_pair, _ = get_redox_state(a, [a])
-                            if a_redox_pair == redox_pair:
-                                _idx = data_renamed.index.tolist()[temp_idx.index(_a)]
+                    # Use normalized matching
+                    a_norm = normalize_string(a)
+                    if a_norm in norm_to_orig_idx:
+                        candidate_idx = norm_to_orig_idx[a_norm]
+                        # For redox pairs, make sure we're not cross-mapping
+                        if node_redox_pair:
+                            # Check if this candidate belongs to the correct redox state
+                            cand_pair, cand_state = get_redox_state(candidate_idx, [candidate_idx])
+                            # Only use if it's not from the opposite redox state
+                            if cand_pair is None or (cand_pair == node_redox_pair and cand_state == node_redox_state):
+                                _idx = candidate_idx
                                 break
                         else:
-                            _idx = data_renamed.index.tolist()[temp_idx.index(_a)]
+                            # Not a redox pair, proceed normally
+                            _idx = candidate_idx
+                            break
+                    elif a_norm in temp_idx_set:
+                        # The old lookup way - get from normalized temp_idx
+                        orig_idx = data_renamed.index.tolist()[temp_idx.index(a_norm)]
+                        # For redox pairs, make sure we're not cross-mapping
+                        if node_redox_pair:
+                            # Check if this candidate belongs to the correct redox state
+                            cand_pair, cand_state = get_redox_state(orig_idx, [orig_idx])
+                            # Only use if it's not from the opposite redox state
+                            if cand_pair is None or (cand_pair == node_redox_pair and cand_state == node_redox_state):
+                                _idx = orig_idx
+                                break
+                        else:
+                            # Not a redox pair, proceed normally
+                            _idx = orig_idx
+                            break
                     elif ignore_enantiomers == True:
-                        if 'D-' + str(a) in data_renamed.index.tolist():
-                            _idx = 'D-' + str(a)
-                        if 'd-' + str(a) in data_renamed.index.tolist():
-                            _idx = 'd-' + str(a)
-                        if 'L-' + str(a) in data_renamed.index.tolist():
-                            _idx = 'L-' + str(a)
-                        if 'l-' + str(a) in data_renamed.index.tolist():
-                            _idx = 'l-' + str(a)
-                        if 'N-' + str(a) in data_renamed.index.tolist():
-                            _idx = 'N-' + str(a)
-                        if 'n-' + str(a) in data_renamed.index.tolist():
-                            _idx = 'n-' + str(a)
+                        # Handle enantiomer prefixes with normalized matching
+                        for prefix in ['D-', 'd-', 'L-', 'l-', 'N-', 'n-']:
+                            candidate = prefix + str(a)
+                            cand_norm = normalize_string(candidate)
+                            if cand_norm in norm_to_orig_idx:
+                                orig_idx = norm_to_orig_idx[cand_norm]
+                                # For redox pairs, check that this enantiomer isn't in the wrong state
+                                if node_redox_pair:
+                                    cand_pair, cand_state = get_redox_state(orig_idx, [orig_idx])
+                                    if cand_pair is None or (cand_pair == node_redox_pair and cand_state == node_redox_state):
+                                        _idx = orig_idx
+                                        break
+                                else:
+                                    _idx = orig_idx
+                                    break
+                            elif candidate in data_renamed.index.tolist():
+                                # Direct match without normalization as fallback
+                                # For redox pairs, check that this enantiomer isn't in the wrong state
+                                if node_redox_pair:
+                                    cand_pair, cand_state = get_redox_state(candidate, [candidate])
+                                    if cand_pair is None or (cand_pair == node_redox_pair and cand_state == node_redox_state):
+                                        _idx = candidate
+                                        break
+                                else:
+                                    _idx = candidate
+                                    break
                     else:
                         pass
 
-            # Override HMDB mapper if it would cause cross-mapping between redox pairs
-            if graph.nodes()[x]['hmdb_mapper'] is not None:
+            # Handle HMDB mapper, considering redox state
+            if graph.nodes()[x]['hmdb_mapper'] != None:
                 hmdb_mapper = graph.nodes()[x]['hmdb_mapper']
-                if redox_pair:
-                    # Check if the HMDB mapper would cause cross-mapping
-                    hmdb_redox_pair, _ = get_redox_state(hmdb_mapper, [hmdb_mapper])
-                    if hmdb_redox_pair and hmdb_redox_pair != redox_pair:
-                        # Prevent cross-mapping by setting hmdb_mapper to None
-                        graph.nodes()[x]['hmdb_mapper'] = None
-                        graph.nodes()[x]['synonyms'] = [s for s in graph.nodes()[x]['synonyms'] 
-                                                      if get_redox_state(s, [s])[0] == redox_pair]
+                if node_redox_pair:
+                    # Filter synonyms to only include those from the correct redox state
+                    filtered_syns = []
+                    if hmdb_mapper in metabolite_mapper['display_dictionary']:
+                        for syn in metabolite_mapper['display_dictionary'][hmdb_mapper]:
+                            syn_pair, syn_state = get_redox_state(syn, [syn])
+                            if syn_pair is None or (syn_pair == node_redox_pair and syn_state == node_redox_state):
+                                filtered_syns.append(syn)
+                        graph.nodes()[x]['synonyms'] = filtered_syns
+                    else:
+                        graph.nodes()[x]['synonyms'] = []
                 else:
+                    # Not a redox pair, use all synonyms
                     graph.nodes()[x]['synonyms'] = metabolite_mapper['display_dictionary'][hmdb_mapper]
 
+            # Map values based on the index we found
             if _idx != None \
             and len(_idx) > 1:
                 graph.nodes()[x]['user_label'] = _idx
@@ -1235,10 +1356,9 @@ def compile_node_degrees(
 
 
 def remove_nulls(values):
-
+    """Remove null values from a list of values"""
     if all(None in v for v in values) == True:
         return []
-
     else:
         for v in values:
             if None in v:
@@ -1303,7 +1423,6 @@ def broadcast_values(
         stat_type="float"):
     """
     """
-
     u = graph.to_undirected()
     length = len(categories)
 
@@ -1318,6 +1437,7 @@ def broadcast_values(
                 graph.nodes()[x]['values']
             except:
                 print(graph.nodes()[x])
+                
             if None not in graph.nodes()[x]['values'] \
                     and None not in graph.nodes()[x]['stats']:
                 pass
@@ -1741,13 +1861,13 @@ def __model__(
     print('Mapping user data...')
     G, max_value, max_stat, non_mappers = map_attributes(
         args_dict=args_dict,
-        graph=G,
+        graph=graph,
         data=data,
         stats=stats,
         name_reference=name_reference,
         degree_dictionary=degree_dictionary,
         chebi_dictionary=chebi_dictionary,
-        chebi_synonyms=REDOX_PAIRS,
+        chebi_synonyms=network['chebi_synonyms'],
         uniprot_mapper=uniprot_mapper,
         metabolite_mapper=metabolite_mapper,
         ignore_enantiomers=True)
