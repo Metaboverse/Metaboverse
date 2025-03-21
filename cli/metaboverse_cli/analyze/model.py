@@ -1063,7 +1063,6 @@ def map_attributes(
                 uniprot_mapper,
                 ignore_enantiomers            
                 )
-            graph.nodes()[x]['hmdb_mapper'] = _mapper
 
             if len(_synonyms) > 0:
                 for _s in _synonyms:
@@ -1141,10 +1140,6 @@ def map_attributes(
                         _idx = 'n-' + str(a)
                 else:
                     pass
-
-            if graph.nodes()[x]['hmdb_mapper'] != None:
-                graph.nodes()[x]['synonyms'] = metabolite_mapper['display_dictionary'][graph.nodes()[
-                    x]['hmdb_mapper']]
 
             if _idx != None \
             and len(_idx) > 1:
