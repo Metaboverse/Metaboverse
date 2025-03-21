@@ -208,4 +208,5 @@ if [ "$BUILD_DB" = true ]; then
 fi 
 rm ${APP_PATH}/python/metaboverse-cli-*
 
-echo -e "\nDone.\n"
+# Print date/time 
+echo "Build completed at $(date)"

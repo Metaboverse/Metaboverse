@@ -30,7 +30,44 @@ SOFTWARE.
 from __future__ import print_function
 import pandas as pd
 import os
+import sys
+from pathlib import Path
+import json
 
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
+
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
+
+def update_progress(progress_file, process, amount=1):
+    """Update the progress of a process in the progress file.
+    
+    Args:
+        progress_file (str): Path to the progress file
+        process (str): Name of the process to update
+        amount (int): Amount to increment the progress by
+    """
+    if progress_file and os.path.exists(progress_file):
+        try:
+            with open(progress_file) as json_file:
+                data = json.load(json_file)
+                data[process] = min(100, data.get(process, 0) + amount)
+            with open(progress_file, 'w') as outfile:
+                json.dump(data, outfile)
+        except Exception as e:
+            print(f"Warning: Could not update progress file: {e}")
 
 def file_path(
         input):

@@ -32,31 +32,62 @@ from textwrap import dedent
 import argparse
 import sys
 import os
+from pathlib import Path
 
-"""Import internal dependencies
-"""
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
+
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
+
 try:
-    from __init__ import __version__
-    from utils import check_directories
-    from utils import check_curate
-    from utils import argument_checks
-    from utils import safestr
-except:
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "__version__", os.path.abspath("./metaboverse_cli/__init__.py"))
-    version = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(version)
-    __version__ = version.__version__
+    # First try normal package imports
+    from metaboverse_cli import __version__
+    from metaboverse_cli.utils import check_directories, check_curate, argument_checks, safestr
+except ImportError:
+    try:
+        # Then try relative imports
+        from __init__ import __version__
+        from utils import check_directories, check_curate, argument_checks, safestr
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            def load_module(name, path):
+                spec = importlib.util.spec_from_file_location(name, path)
+                if spec is None:
+                    raise ImportError(f"Could not find module at {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
 
-    spec = importlib.util.spec_from_file_location(
-        "", os.path.abspath("./metaboverse_cli/utils.py"))
-    utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(utils)
-    check_directories = utils.check_directories
-    check_curate = utils.check_curate
-    argument_checks = utils.argument_checks
-    safestr = utils.safestr
+            base_path = os.path.dirname(__file__)
+            init = load_module("__init__", os.path.join(base_path, "__init__.py"))
+            __version__ = init.__version__
+
+            utils = load_module("utils", os.path.join(base_path, "utils.py"))
+            check_directories = utils.check_directories
+            check_curate = utils.check_curate
+            argument_checks = utils.argument_checks
+            safestr = utils.safestr
+
+        except ImportError as e:
+            print(f"Error importing dependencies: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            raise
 
 __path__ = os.path.dirname(os.path.realpath(__file__))
 url = 'https://raw.githubusercontent.com/j-berg/Metaboverse/master/metaboverse/__init__.py'

@@ -41,52 +41,80 @@ import math
 import json
 import re
 import os
+import sys
+from pathlib import Path
 
 """Import internal dependencies
 """
+def get_project_root():
+    """Get the path to the project root directory"""
+    current_file = Path(__file__).resolve()
+    for parent in current_file.parents:
+        if parent.name == 'cli':
+            return parent
+        if parent.name == 'Metaboverse':
+            return parent / 'cli'
+    return current_file.parent.parent.parent
+
+# Add project root to path
+project_root = get_project_root()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+if str(project_root.parent) not in sys.path:
+    sys.path.insert(0, str(project_root.parent))
+
 try:
-    from analyze.collapse import collapse_nodes
-    from analyze.collapse import generate_updated_dictionary
-    from analyze.mpl_colormaps import get_mpl_colormap
-    from analyze.utils import convert_rgba, remove_defective_reactions
-    from utils import progress_feed, track_progress, get_metaboverse_cli_version
-except:
-    import importlib.util
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "analyze", "collapse.py"
-                     ))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    collapse = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(collapse)
-    collapse_nodes = collapse.collapse_nodes
-    generate_updated_dictionary = collapse.generate_updated_dictionary
+    # First try normal package imports
+    from metaboverse_cli.analyze.collapse import collapse_nodes, generate_updated_dictionary
+    from metaboverse_cli.analyze.mpl_colormaps import get_mpl_colormap
+    from metaboverse_cli.analyze.utils import convert_rgba, remove_defective_reactions
+    from metaboverse_cli.utils import progress_feed, track_progress, get_metaboverse_cli_version
+    from metaboverse_cli.mapper.special_pairs import REDOX_PAIRS
+except ImportError:
+    try:
+        # Then try relative imports
+        from analyze.collapse import collapse_nodes, generate_updated_dictionary
+        from analyze.mpl_colormaps import get_mpl_colormap
+        from analyze.utils import convert_rgba, remove_defective_reactions
+        from utils import progress_feed, track_progress, get_metaboverse_cli_version
+        from mapper.special_pairs import REDOX_PAIRS
+    except ImportError:
+        try:
+            # Finally try direct imports
+            import importlib.util
+            def load_module(name, path):
+                spec = importlib.util.spec_from_file_location(name, path)
+                if spec is None:
+                    raise ImportError(f"Could not find module at {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
 
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "analyze", "mpl_colormaps.py"
-                     ))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    mpl_colormaps = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mpl_colormaps)
-    get_mpl_colormap = mpl_colormaps.get_mpl_colormap
+            base_path = os.path.dirname(os.path.dirname(__file__))
+            collapse = load_module("collapse", os.path.join(base_path, "analyze", "collapse.py"))
+            collapse_nodes = collapse.collapse_nodes
+            generate_updated_dictionary = collapse.generate_updated_dictionary
 
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "analyze", "utils.py"
-                     ))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    analyze_utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(analyze_utils)
-    convert_rgba = analyze_utils.convert_rgba
-    remove_defective_reactions = analyze_utils.remove_defective_reactions
+            mpl_colormaps = load_module("mpl_colormaps", os.path.join(base_path, "analyze", "mpl_colormaps.py"))
+            get_mpl_colormap = mpl_colormaps.get_mpl_colormap
 
-    module_path = os.path.abspath(
-        os.path.join(".", "metaboverse_cli", "utils.py"))
-    spec = importlib.util.spec_from_file_location("", module_path)
-    utils = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(utils)
-    progress_feed = utils.progress_feed
-    track_progress = utils.track_progress
-    get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+            utils_analyze = load_module("utils_analyze", os.path.join(base_path, "analyze", "utils.py"))
+            convert_rgba = utils_analyze.convert_rgba
+            remove_defective_reactions = utils_analyze.remove_defective_reactions
 
+            utils = load_module("utils", os.path.join(base_path, "utils.py"))
+            progress_feed = utils.progress_feed
+            track_progress = utils.track_progress
+            get_metaboverse_cli_version = utils.get_metaboverse_cli_version
+            
+            special_pairs = load_module("special_pairs", os.path.join(base_path, "mapper", "special_pairs.py"))
+            REDOX_PAIRS = special_pairs.REDOX_PAIRS
+        except ImportError as e:
+            print(f"Error importing dependencies: {e}")
+            print(f"Current sys.path: {sys.path}")
+            print(f"Current directory: {os.getcwd()}")
+            print(f"File location: {__file__}")
+            raise
 
 CMAP = get_mpl_colormap('seismic')
 REACTION_COLOR = (0.75, 0.75, 0.75, 1)
@@ -704,6 +732,115 @@ def reindex_data(
     return data_renamed, stats_renamed
 
 
+def normalize_string(s):
+    """Normalize a string for consistent matching:
+    - Convert to lowercase
+    - Remove whitespace
+    - Remove common punctuation
+    
+    Args:
+        s (str): String to normalize
+        
+    Returns:
+        str: Normalized string
+    """
+    if not s:
+        return ""
+    
+    s = str(s)
+    s = s.lower() 
+    s = s.replace(" ", "") 
+    
+    # Keep only alphanumeric characters
+    s = ''.join(c for c in s if c.isalnum())
+    
+    # Remove common punctuation that might vary between representations
+    for char in ['-', '_', ',', '.', '(', ')', '[', ']', '{', '}', ':', ';', '\'', '=', '"', '`']:
+        s = s.replace(char, "")
+        
+    return s
+
+
+def get_redox_state(name, synonyms):
+    """Determine the redox state of a metabolite based on its name or synonyms
+    
+    Args:
+        name (str): The name of the metabolite
+        synonyms (list): List of synonyms for the metabolite
+        
+    Returns:
+        tuple: (redox_pair, redox_state) or (None, None) if not part of a redox pair
+    """
+    name_normalized = normalize_string(name)
+    
+    # Create multiple normalized forms for lookup
+    redox_lookup = {}
+    
+    # Track base forms for ambiguous cases (like "nad" without "+" or "h")
+    base_forms = {}
+    
+    for pair_name, forms in REDOX_PAIRS.items():
+        # Process oxidized forms
+        for term in forms['oxidized']:
+            # Standard normalized form
+            key = normalize_string(term)
+            redox_lookup[key] = (pair_name, 'oxidized')
+            
+            # Special case for NAD+, NADP+, etc. - try without the +
+            if '+' in term:
+                key_without_plus = normalize_string(term).replace('+', '')
+                redox_lookup[key_without_plus] = (pair_name, 'oxidized')
+                
+                # Store base form for ambiguous matching later
+                base_form = key_without_plus
+                if base_form not in base_forms:
+                    base_forms[base_form] = (pair_name, 'oxidized')  # Default to oxidized for ambiguous cases
+                
+                # Also handle potential space before the + (e.g., "NAD +")
+                key_with_space = normalize_string(term).replace('+', ' +')
+                redox_lookup[key_with_space] = (pair_name, 'oxidized')
+        
+        # Process reduced forms
+        for term in forms['reduced']:
+            # Standard normalized form
+            key = normalize_string(term)
+            redox_lookup[key] = (pair_name, 'reduced')
+            
+            # Special case for NADH, NADPH, etc. - try without the H
+            if term.lower().endswith('h'):
+                key_without_h = normalize_string(term)[:-1]
+                # Don't override oxidized form default for base forms
+                if key_without_h not in redox_lookup:
+                    redox_lookup[key_without_h] = (pair_name, 'reduced')
+                
+                # Store base form (but don't override existing)
+                base_form = key_without_h
+                if base_form not in base_forms:
+                    base_forms[base_form] = (pair_name, 'reduced')
+                
+                # Also handle potential space before the H (e.g., "NAD H")
+                key_with_space = normalize_string(term)[:-1] + ' H'
+                redox_lookup[key_with_space] = (pair_name, 'reduced')
+    
+    # Add default mappings for base forms (prefer oxidized state for ambiguous cases)
+    for base_form, (pair, state) in base_forms.items():
+        if base_form not in redox_lookup:
+            redox_lookup[base_form] = (pair, state)
+    
+    # Check if normalized name matches any normalized redox pair term
+    if name_normalized in redox_lookup:
+        return redox_lookup[name_normalized]
+    
+    # Check all normalized synonyms
+    for syn in synonyms:
+        syn_normalized = normalize_string(syn)
+        if syn_normalized in redox_lookup:
+            return redox_lookup[syn_normalized]
+            
+    # Not part of any redox pair that we could detect
+    return None, None
+
+
 def gather_synonyms(
         map_id,
         init_syns,
@@ -742,12 +879,9 @@ def gather_synonyms(
                 parsed_syns.add(s.lower().split(l)[1])
 
         if ignore_enantiomers == True:
-            # if _s[0] == 'l' or _s[0] == 'd':
-            #    parsed_syns.add(_s[1:])
-            if s[0:2] == 'L-' or s[0:2] == 'D-':
-                parsed_syns.add(s[2:])
             if s.lower()[0:2] == 'l-' or s.lower()[0:2] == 'd-':
-                parsed_syns.add(s.lower()[2:])
+                parsed_syns.add(s[2:])
+                parsed_syns.add(s[2:].lower())
 
     # Step 1: If ignore_enantiomers, trim off from beginning in data table and dictionaries, but search both with and without
     mapper_id = None
@@ -778,6 +912,35 @@ def gather_synonyms(
     if mapper_id in metabolite_mapper['hmdb_dictionary']:
         for m in metabolite_mapper['hmdb_dictionary'][mapper_id]:
             parsed_syns_list.append(m)
+
+    # Filter synonyms based on redox state
+    if REDOX_PAIRS:
+        # First determine the intended redox state from the primary name
+        primary_name = parsed_syns_list[0] if parsed_syns_list else None
+        primary_redox_pair, primary_redox_state = get_redox_state(primary_name, [])
+        
+        # If we couldn't determine from primary name, try all synonyms
+        if not primary_redox_pair:
+            for syn in parsed_syns_list:
+                pair, state = get_redox_state(syn, [])
+                if pair:
+                    primary_redox_pair, primary_redox_state = pair, state
+                    break
+        
+        # If we found a redox pair, filter out synonyms of the opposite state
+        if primary_redox_pair and primary_redox_state:
+            filtered_syns = []
+            for syn in parsed_syns_list:
+                syn_pair, syn_state = get_redox_state(syn, [])
+                
+                # Keep if:
+                # 1. Not part of a redox pair
+                # 2. Different redox pair
+                # 3. Same redox pair and same state
+                if not syn_pair or syn_pair != primary_redox_pair or syn_state == primary_redox_state:
+                    filtered_syns.append(syn)
+            
+            parsed_syns_list = filtered_syns
 
     return mapper_id, parsed_syns_list
 
@@ -898,9 +1061,8 @@ def map_attributes(
                 init_syns,
                 metabolite_mapper,
                 uniprot_mapper,
-                ignore_enantiomers
-            )
-            graph.nodes()[x]['hmdb_mapper'] = _mapper
+                ignore_enantiomers            
+                )
 
             if len(_synonyms) > 0:
                 for _s in _synonyms:
@@ -978,10 +1140,6 @@ def map_attributes(
                         _idx = 'n-' + str(a)
                 else:
                     pass
-
-            if graph.nodes()[x]['hmdb_mapper'] != None:
-                graph.nodes()[x]['synonyms'] = metabolite_mapper['display_dictionary'][graph.nodes()[
-                    x]['hmdb_mapper']]
 
             if _idx != None \
             and len(_idx) > 1:
@@ -1389,12 +1547,43 @@ def make_motif_reaction_dictionary(
 def load_metabolite_synonym_dictionary(
         dir=os.path.join(os.path.dirname(__file__), 'data'),
         file='metabolite_mapping.pickle'):
+    """Read metabolite mapper, creating it if necessary"""
+
+    try:
+        from metaboverse_cli.mapper.metaboliteMapper import ensure_metabolite_mapper
+    except ImportError:
+        # Fallback for local development
+        try:
+            sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+            from mapper.metaboliteMapper import ensure_metabolite_mapper
+        except ImportError as e:
+            print(f"Error importing metaboliteMapper: {e}")
+            print(f"Current sys.path: {sys.path}")
+            
+            # Last resort - try direct import
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "", os.path.abspath(os.path.join(
+                    os.path.dirname(os.path.dirname(__file__)),
+                    "mapper",
+                    "metaboliteMapper.py")))
+            if spec is None:
+                raise ImportError(f"Could not find metaboliteMapper.py in {os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'mapper'))}")
+            metaboliteMapper = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(metaboliteMapper)
+            ensure_metabolite_mapper = metaboliteMapper.ensure_metabolite_mapper
 
     print("Reading metabolite mapper...")
-    with zipfile.ZipFile(dir + os.path.sep + file + '.zip', 'r') as zip_ref:
-        metabolite_mapper = pickle.load(
-            zip_ref.open(file)
-        )
+    mapper_file = ensure_metabolite_mapper(dir)
+    
+    try:
+        with zipfile.ZipFile(mapper_file + '.zip', 'r') as zip_ref:
+            metabolite_mapper = pickle.load(
+                zip_ref.open(file)
+            )
+    except Exception as e:
+        print(f"Error reading metabolite mapper: {e}")
+        raise
 
     return metabolite_mapper
 
@@ -1609,7 +1798,8 @@ def __model__(
         chebi_dictionary=chebi_dictionary,
         chebi_synonyms=network['chebi_synonyms'],
         uniprot_mapper=uniprot_mapper,
-        metabolite_mapper=metabolite_mapper)
+        metabolite_mapper=metabolite_mapper,
+        ignore_enantiomers=True)
     
     print('Searching for unmapped metabolomics values...')
     if args_dict['metabolomics'].lower() != 'none':
@@ -1620,7 +1810,7 @@ def __model__(
 
         m_non_mapper = m_data[m_data.index.isin(non_mappers)]
         unmapped_file = args_dict['metabolomics'][:-4] + '_unmapped.txt'
-        print(f"\tOutputting {str(len(m_non_mapper.index.tolist()))} unmapped metabolites to:\n\t{unmapped_file}.")
+        print(f"\tOutputting {len(m_non_mapper.index.tolist())} unmapped metabolites to:\n\t{unmapped_file}")
         if len(m_non_mapper.index.tolist()) > 0:
             m_non_mapper.to_csv(
                 unmapped_file,

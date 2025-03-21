@@ -1313,10 +1313,10 @@ function make_graph(
       'class="link collapsed_inhibitor" style="stroke-width: 1.5px;fill: none;stroke: #ff0000; stroke-dasharray: 0, 5 5;"');
     svg_string = svg_string.replace(
       /marker id="protein_component"/g,
-      'marker id="protein_component" fill="#ff4500"');
+      'marker id="protein_component" fill="orange"');
     svg_string = svg_string.replace(
       /class="link protein_component" style="fill: none;"/g,
-      'class="link protein_component" style="stroke-width: 1.5px;fill: none;stroke: #ff4500;stroke-dasharray: 0, 2 1;"');
+      'class="link protein_component" style="stroke-width: 1.5px;fill: none;stroke: orange;stroke-dasharray: 0, 2 1;"');
     svg_string = svg_string.replace(
       /marker id="complex_component"/g,
       'marker id="complex_component" fill="rgba(166, 97, 26, 1)"');
