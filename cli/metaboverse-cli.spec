@@ -35,20 +35,13 @@ datas = [
     (
         os.path.join(
             'metaboverse_cli',
-            'source_url.txt'
-        ),
-        'metaboverse_cli'
-    ),
-    (
-        os.path.join(
-            'metaboverse_cli',
             'analyze',
             'data',
             'metabolite_mapping.pickle.zip'),
         os.path.join(
             'analyze',
             'data')
-    ),
+    )
 ]
 
 # Add all required binaries
