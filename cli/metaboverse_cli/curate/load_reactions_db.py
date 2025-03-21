@@ -174,12 +174,26 @@ def get_metadata(
         sbml_namespace):
     """Get basic metadata for a reaction
     """
-
-    compartment = safestr(reaction.attrib['compartment'])
-    id = safestr(reaction.attrib['id'])
-    name = safestr(reaction.attrib['name'])
-
-    reversible = safestr(reaction.attrib['reversible'])
+    try:
+        compartment = safestr(reaction.attrib['compartment'])
+    except:
+        print('No compartment available for', reaction.attrib)
+        compartment = ''
+    try:
+        id = safestr(reaction.attrib['id'])
+    except:
+        print('No id available for', reaction.attrib)
+        id = ''
+    try:
+        name = safestr(reaction.attrib['name'])
+    except:
+        print('No name available for', reaction.attrib)
+        name = ''
+    try:
+        reversible = safestr(reaction.attrib['reversible'])
+    except:
+        print('No reversible available for', reaction.attrib)
+        reversible = ''
     if reversible == 'false':
         if '<' in name and '>' in name:
             reversible = 'true'
@@ -189,8 +203,8 @@ def get_metadata(
             str(sbml_namespace + 'notes')
         )[0][0].text)
     except:
-        notes = ''
         print('No notes available for', name)
+        notes = ''
 
     try:
         for rank in reaction.iter(str(bqbiol_namespace + 'is')):
