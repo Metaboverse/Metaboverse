@@ -402,4 +402,4 @@ if ($moveSuccess) {
 }
 
 # Script is complete
-Write-Host "Build process completed."
+Write-Host "Build completed at $(Get-Date)"
