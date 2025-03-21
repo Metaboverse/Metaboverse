@@ -108,15 +108,6 @@ except ImportError:
             raise
 
 
-# Set globals
-# Get source url from local `source_db.txt`
-SOURCE_URL = open(
-    os.path.join(
-        os.path.dirname(
-            os.path.abspath(__file__)),
-        '..',
-        'source_url.txt'),
-    'r').read().strip()
 # Set curation directory
 NEIGHBOR_DIR='nbdb'
 TEMPLATE_DIR='mvrs'

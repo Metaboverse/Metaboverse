@@ -110,7 +110,20 @@ export BD_DEST=j-berg@frs.sourceforge.net:/home/frs/project/metaboverse/v${VERSI
 
 # Update version in app/package.json, cli/metaboverse_cli/__init__.py, CITATION.cff, and docs/conf.py
 echo "v${VERSION}" > ${APP_PATH}/__version__.txt
-echo "__version__='${VERSION}'" > ${CLI_PATH}/metaboverse_cli/__init__.py
+
+# Update version in __init__.py without overwriting the entire file
+OS=$(uname -s)
+if [[ $OS == *"Darwin"* ]]; then
+    sed -i '' "s/^__version__=.*/__version__='${VERSION}'/" ${CLI_PATH}/metaboverse_cli/__init__.py
+elif [[ $OS == *"Linux"* ]]; then
+    sed -i "s/^__version__=.*/__version__='${VERSION}'/" ${CLI_PATH}/metaboverse_cli/__init__.py
+elif [[ $OS == *"MINGW"* ]]; then # Windows
+    # Windows sed is more complex, use a temporary file approach
+    sed "s/^__version__=.*/__version__='${VERSION}'/" ${CLI_PATH}/metaboverse_cli/__init__.py > ${CLI_PATH}/metaboverse_cli/__init__.py.tmp
+    mv ${CLI_PATH}/metaboverse_cli/__init__.py.tmp ${CLI_PATH}/metaboverse_cli/__init__.py
+else
+    echo "Unsupported OS: $OS, manually update __version__ in ${CLI_PATH}/metaboverse_cli/__init__.py"
+fi
 
 # Extract major and minor version (e.g. if VERSION is "0.10.1", this gets "0.10")
 MAJOR_MINOR_VERSION=$(echo "$VERSION" | cut -d'.' -f1,2)
