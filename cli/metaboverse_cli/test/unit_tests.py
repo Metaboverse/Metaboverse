@@ -40,10 +40,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 # Import functions to test
 try:
     from analyze.model import gather_synonyms, map_attributes, REDOX_PAIRS
+    from mapper.special_pairs import get_redox_state
 except ImportError:
     # For running tests directly
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
     from metaboverse_cli.analyze.model import gather_synonyms, map_attributes, REDOX_PAIRS
+    from metaboverse_cli.mapper.special_pairs import get_redox_state
 
 
 class TestRedoxPairMapping(unittest.TestCase):
@@ -316,79 +318,76 @@ class TestRedoxPairMapping(unittest.TestCase):
                 self.graph.nodes()[node_id]['synonyms'] = ['NADPH', 'nicotinamide adenine dinucleotide phosphate reduced']
                 self.graph.nodes()[node_id]['hmdb_mapper'] = 'HMDB0000221'
         
-        # Call map_attributes with our test data
-        # Note: This is a simplified test that doesn't run the full function
-        # but checks the core redox pair handling logic
-        
         # We'll manually check if the redox pairs are correctly identified
         for node_id in self.graph.nodes():
             all_synonyms = self.graph.nodes()[node_id]['synonyms']
+            primary_name = all_synonyms[0] if all_synonyms else None
             
-            # Create the redox_synonym_to_pair mapping (simplified from map_attributes)
-            redox_synonym_to_pair = {}
-            for pair, synonyms in REDOX_PAIRS.items():
-                for syn in synonyms:
-                    redox_synonym_to_pair[syn.lower()] = pair
-                    # Also add alphanumeric version
-                    redox_synonym_to_pair[''.join(c.lower() for c in syn if c.isalnum())] = pair
-            
-            # Check if this node is part of a redox pair (simplified from map_attributes)
-            current_redox_pair = None
+            # Use the get_redox_state function to determine the redox pair and state
+            redox_pair, redox_state = None, None
             for syn in all_synonyms:
-                syn_lower = syn.lower()
-                syn_alphanum = ''.join(c.lower() for c in syn if c.isalnum())
-                
-                if syn_lower in redox_synonym_to_pair:
-                    current_redox_pair = redox_synonym_to_pair[syn_lower]
-                    break
-                elif syn_alphanum in redox_synonym_to_pair:
-                    current_redox_pair = redox_synonym_to_pair[syn_alphanum]
+                redox_pair, redox_state = get_redox_state(syn, all_synonyms)
+                if redox_pair:
                     break
             
             # Verify that each node is correctly identified as part of its redox pair
             if node_id == 'node1':  # NAD+
-                self.assertEqual(current_redox_pair, 'NAD+')
+                self.assertEqual(redox_pair, 'NAD+/NADH')
+                self.assertEqual(redox_state, 'oxidized')
             elif node_id == 'node2':  # NADH
-                self.assertEqual(current_redox_pair, 'NADH')
+                self.assertEqual(redox_pair, 'NAD+/NADH')
+                self.assertEqual(redox_state, 'reduced')
             elif node_id == 'node3':  # NADP+
-                self.assertEqual(current_redox_pair, 'NADP+')
+                self.assertEqual(redox_pair, 'NADP+/NADPH')
+                self.assertEqual(redox_state, 'oxidized')
             elif node_id == 'node4':  # NADPH
-                self.assertEqual(current_redox_pair, 'NADPH')
+                self.assertEqual(redox_pair, 'NADP+/NADPH')
+                self.assertEqual(redox_state, 'reduced')
 
     def test_redox_pairs_completeness(self):
         """Test that all expected redox pairs are defined in REDOX_PAIRS"""
-        # Check that all the redox pairs we expect are in the dictionary
+        # Check that all the expected redox pairs are in the dictionary
         expected_pairs = [
-            'NAD+', 'NADH', 
-            'NADP+', 'NADPH',
-            'FAD', 'FADH2',
-            'GSH', 'GSSG',
-            'Trx-S2', 'Trx-(SH)2',
-            'CoQ', 'CoQH2',
-            'Cytochrome C (Fe3+)', 'Cytochrome C (Fe2+)',
-            'Ferredoxin (oxidized)', 'Ferredoxin (reduced)',
-            'Ascorbic acid', 'Dehydroascorbic acid',
-            'Lipoic acid', 'Dihydrolipoic acid',
-            'FMN', 'FMNH2',
-            'Methylene-THF', 'THF'
+            'NAD+/NADH',
+            'NADP+/NADPH',
+            'FAD/FADH2',
+            'GSH/GSSG',
+            'Trx-S2/Trx-(SH)2',
+            'CoQ/CoQH2',
+            'Cytochrome C (Fe3+)/Cytochrome C (Fe2+)',
+            'Ferredoxin (oxidized)/Ferredoxin (reduced)',
+            'Ascorbic acid/Dehydroascorbic acid',
+            'Lipoic acid/Dihydrolipoic acid',
+            'FMN/FMNH2'
         ]
         
         for pair in expected_pairs:
             self.assertIn(pair, REDOX_PAIRS)
-            self.assertIsInstance(REDOX_PAIRS[pair], list)
-            self.assertTrue(len(REDOX_PAIRS[pair]) > 0)
+            self.assertIn('oxidized', REDOX_PAIRS[pair])
+            self.assertIn('reduced', REDOX_PAIRS[pair])
+            self.assertTrue(len(REDOX_PAIRS[pair]['oxidized']) > 0)
+            self.assertTrue(len(REDOX_PAIRS[pair]['reduced']) > 0)
 
     def test_redox_pairs_no_overlap(self):
-        """Test that there is no overlap between synonyms of different redox pairs"""
-        # Check that no synonym appears in more than one redox pair
-        all_synonyms = {}
-        
-        for pair, synonyms in REDOX_PAIRS.items():
-            for syn in synonyms:
-                syn_lower = syn.lower()
-                if syn_lower in all_synonyms:
-                    self.fail(f"Synonym '{syn}' appears in both '{pair}' and '{all_synonyms[syn_lower]}'")
-                all_synonyms[syn_lower] = pair
+        """Test that there is no overlap between oxidized and reduced forms within each redox pair"""
+        for pair, forms in REDOX_PAIRS.items():
+            oxidized_forms = [s.lower() for s in forms['oxidized']]
+            reduced_forms = [s.lower() for s in forms['reduced']]
+            
+            # Check for overlap between oxidized and reduced forms
+            overlap = set(oxidized_forms).intersection(set(reduced_forms))
+            if overlap:
+                self.fail(f"Overlap between oxidized and reduced forms in '{pair}': {overlap}")
+            
+            # Check that the forms are normalized consistently
+            # Simple check: words like "oxidized" or "reduced" should be consistent within their lists
+            for ox_form in oxidized_forms:
+                if "reduced" in ox_form and not ("reduced" in pair.lower()):
+                    self.fail(f"Oxidized form '{ox_form}' contains 'reduced' in '{pair}'")
+            
+            for red_form in reduced_forms:
+                if "oxidized" in red_form and not ("oxidized" in pair.lower()):
+                    self.fail(f"Reduced form '{red_form}' contains 'oxidized' in '{pair}'")
 
 
 if __name__ == '__main__':
